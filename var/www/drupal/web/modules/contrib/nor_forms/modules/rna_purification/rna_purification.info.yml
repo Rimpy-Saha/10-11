@@ -1,0 +1,5 @@
+name: RNA Purification
+description: Custom module for form.
+type: module
+package: Norgen Biotek
+core_version_requirement: ^8.7 || ^9 || ^10

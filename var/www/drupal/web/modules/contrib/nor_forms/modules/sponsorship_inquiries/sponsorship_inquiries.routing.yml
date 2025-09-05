@@ -1,0 +1,7 @@
+sponsorship_inquiries.inquiries_form:
+  path: '/sponsorship-inquiries-form'
+  defaults:
+    _title: 'Sponsorship Inquiries'  # Update title case for consistency
+    _form: '\Drupal\sponsorship_inquiries\Form\SponsorshipInquiryForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

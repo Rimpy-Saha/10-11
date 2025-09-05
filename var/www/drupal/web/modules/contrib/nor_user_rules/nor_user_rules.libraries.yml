@@ -1,0 +1,7 @@
+ga4_user_id_js:
+  version: 1.x
+  js:
+    js/ga4_user_id.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery

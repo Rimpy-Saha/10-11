@@ -1,0 +1,232 @@
+.database-page-form{
+  background-color: #ffffff1a;
+  position: absolute;
+  padding: 20px;
+  border-radius: 10px;
+  left: 0;
+  width: fit-content;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  height: fit-content;
+  margin: auto;
+  box-shadow: 0px 4px 8px 0px #00000080;
+  z-index:3;
+  backdrop-filter: blur(32px);
+  color:white;
+  border:2px solid #ffffff;
+  text-align:center;
+}
+[data-drupal-selector="edit-top"]{
+  max-width:600px;
+}
+.database-page-form .form-top > h1{
+  font-weight: bold;
+  color: white;
+  font-size: 32px;
+}
+.database-page-form .form-top > p > a{
+  color:white;
+  text-decoration: underline;
+}
+.database-page-form .form-control.input-lg{
+  border-radius:16px;
+  background-color:#ffffff33;
+  background:#ffffff33;
+  border:none;
+  font-size:16px;
+  padding:16px 16px 16px 16px;
+  color:white;
+}
+.database-page-form .form-control.input-lg:focus{
+  background-color:#ffffff66;
+  background:#ffffff66;
+  border:none;
+}
+.database-page-form .form-group, .database-page-form .form-item{
+  margin-bottom:0px;
+  margin-top:0px;
+}
+.database-page-form .form-group.form-item > label{
+  /* position: relative;
+  top: 40px; */
+  font-size: 16px;
+  margin-left: 16px;
+  color:#ffffff;
+  text-align:left;
+}
+.database-page-form .form-group.form-item .description{
+  margin-left:16px;
+  font-size:16px;
+}
+.database-page-form input.btn.form-submit{
+  background-color:#ffffff33;
+  background:#ffffff33;
+  padding:16px 16px 16px 16px;
+  width:100%;
+  border:1px solid white;
+  border-radius:8px;
+  margin-top:16px;
+}
+.database-page-form input.btn.form-submit:hover,
+.database-page-form input.btn.form-submit:focus-within{
+  background-color:#ffffff66;
+  background:#ffffff66;
+}
+.views-row{
+  padding:20px;
+  box-shadow:2px 2px 16px -8px #00000047;
+  margin-bottom:20px;
+  border-radius:10px;
+}
+.views-row .category-links, .views-row .rel-prods{
+  list-style-type:none;
+  padding-left:0px;
+}
+.rel-prods{
+  margin-bottom:0px;
+}
+
+.form-item-sort.form-item, 
+.form-item-file-type-filter.form-item,
+.form-item-figure-cat-filter.form-item{
+  position: relative;
+}
+.form-item-sort.form-item > label, 
+.form-item-file-type-filter.form-item > label,
+.form-item-figure-cat-filter.form-item > label{
+  position: absolute;
+  top: 5px;
+  left: 20px;
+  font-size: 12px;
+  color: inherit;
+  font-weight:bold;
+}
+.form-item-sort.form-item > select.form-control.input-lg, 
+.form-item-file-type-filter.form-item > select.form-control.input-lg,
+.form-item-figure-cat-filter.form-item > select.form-control.input-lg{
+  padding-top:22px;
+  height:auto;
+}
+
+.fa-file-pdf{
+  color:#F25C95;
+  margin-right:0.25em;
+}
+
+.form-item-results-info{
+  display:flex;
+  justify-content: space-between;
+}
+.form-item-num-results, .form-item-num-page-results{
+  text-align:right;
+}
+
+[data-drupal-selector="edit-pager"]{
+  display: flex;
+  align-items: center;
+  margin: 0px auto;
+  width: max-content;
+  gap: 5px;
+}
+.form-item-page-select.form-item.form-group{
+  display: flex;
+  align-items: center;
+  margin: 0px auto;
+  width: max-content;
+  gap: 5px;
+}
+.form-item-page-select > label{
+  margin: 0px 0px;
+}
+
+fieldset[data-drupal-selector="edit-search-sort"] .fieldset-wrapper{
+  display:grid;
+  grid-template-columns: auto 1fr 1fr;
+  gap:10px;
+}
+.form-item-search-products .form-group{
+  height:100%;
+}
+.entity-product-request-field{
+  padding: 5px 10px;
+  border-radius: 10px;
+  border: 1px solid #d0d7de;
+  height: 100%;
+}
+
+.views-row .category-links li{
+  display:inline-block;
+  margin-right:5px;
+  margin-bottom:5px;
+  border-radius:10px;
+  padding:5px 10px;
+  background-color:var(--norgen-primary-blue-light);
+}
+.views-row .category-links li > a{
+  color:inherit;
+}
+
+.views-row h3{
+  margin-top:0px;
+}
+
+.views-row h3 > a{
+  word-break: break-word;
+}
+
+.file-type{
+  text-transform: capitalize;
+  margin-bottom:10px;
+  font-weight:bold;
+}
+
+.submit{
+  text-align:center;
+}
+[data-drupal-selector="edit-form-fields"]{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+[data-drupal-selector="edit-form-fields"] .form-item{
+  max-width:300px;
+  text-align:left;
+}
+.form-item-access-code .form-group{
+  margin-bottom:0px;
+}
+
+#vip-loader.animate{
+  animation: vip-loader 4s linear infinite;
+  margin:20px;
+}
+@keyframes vip-loader {
+  0%{
+    transform:rotate(0deg);
+  }
+  50%{
+    transform:rotate(180deg);
+  }
+  100%{
+    transform:rotate(360deg);
+  }
+}
+
+@media only screen and (max-width:992px){
+  fieldset[data-drupal-selector="edit-search-sort"] .fieldset-wrapper{
+    grid-template-columns: 1fr;
+    gap:0px;
+  }
+  .entity-product-request-field{
+    width:100% !important;
+  }
+}
+@media only screen and (max-width:442px){
+  [data-drupal-selector="edit-form-fields"]{
+    grid-template-columns: 1fr;
+  }
+  [data-drupal-selector="edit-form-fields"] .form-item{
+    max-width:100%;
+  }
+}

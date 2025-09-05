@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ *
+ * Default template for norgen publications item.
+ *
+ * Available variables:
+ * - attributes: HTML attributes for the wrapper.
+ * - nor_publications: The rendered nor_publications fields.
+ *   Use 'nor_publications' to print them all, or print a subset such as
+ *   'nor_publications.name'. Use the following code to exclude the
+ *   printing of a given field:
+ *   @code
+ *   {{ nor_publications|without('name') }}
+ *   @endcode
+ * - nor_publications_entity: The nor_publications entity.
+ * - nor_publications_url: The nor_publications URL.
+ *
+ * @ingroup themeable
+ */
+#}
+<article{{ attributes }}>
+  {{ nor_publications }}
+</article>

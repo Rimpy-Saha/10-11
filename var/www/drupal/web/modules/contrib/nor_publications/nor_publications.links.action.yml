@@ -1,0 +1,11 @@
+entity.nor_publications.add_page:
+  route_name: entity.nor_publications.add_page
+  title: 'Add norgen publications item'
+  appears_on:
+    - entity.nor_publications.collection
+
+entity.nor_publications_type.add_form:
+  route_name: entity.nor_publications_type.add_form
+  title: 'Add norgen publications type'
+  appears_on:
+    - entity.nor_publications_type.collection

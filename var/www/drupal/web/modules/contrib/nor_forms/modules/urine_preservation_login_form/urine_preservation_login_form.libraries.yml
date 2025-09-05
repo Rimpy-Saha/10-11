@@ -1,0 +1,6 @@
+urine_preservation_login_form:
+  css:
+    theme:
+      css/urine_preservation_login_form.css: {}
+  dependencies:
+    - core/drupalSettings

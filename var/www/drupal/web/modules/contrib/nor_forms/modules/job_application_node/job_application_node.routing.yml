@@ -1,0 +1,7 @@
+job_application.application_node_form:
+  path: '/job-application-node-form'
+  defaults:
+    _title: 'Job Application'  # Update title case for consistency
+    _form: '\Drupal\job_application_node\Form\JobApplicationNodeForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

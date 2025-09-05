@@ -1,0 +1,6 @@
+services:
+  commerce_nor_cart_popup.cart_subscriber:
+    class: Drupal\commerce_nor_cart_popup\EventSubscriber\CartSubscriber
+    arguments: ['@session', '@messenger']
+    tags:
+      - { name: event_subscriber }

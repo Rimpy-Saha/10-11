@@ -1,0 +1,8 @@
+event_db.db_form:
+  path: '/event-db-form'
+  defaults:
+    _title: 'Event Db Form'  # Update title case for consistency
+    _form: '\Drupal\event_db\Form\EventDbForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access
+    _role: "administrator+content+editor+scientist+manager"

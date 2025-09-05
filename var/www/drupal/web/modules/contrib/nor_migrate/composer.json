@@ -1,0 +1,15 @@
+{
+    "name": "drupal/nor_migrate",
+    "description": "Provides Norgen-specific Migrate handlers.",
+    "type": "drupal-module",
+    "license": "GPL-2.0+",
+    "require": {
+        "drupal/commerce": "^2.0",
+        "drupal/migrate_plus": "^6.0"
+    },
+    "require-dev": {
+        "drupal/coder": "^8",
+        "drupal/migrate_source_csv": "^3.4"
+    },
+    "minimum-stability": "dev"
+}

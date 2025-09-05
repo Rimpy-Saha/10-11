@@ -1,0 +1,55 @@
+commerce_norreferral.admin_settings:
+  path: '/admin/commerce/config/referral-points-config'
+  defaults:
+    _form: '\Drupal\commerce_norreferral\Form\ReferralPointsConfigurationForm'
+    _title: 'Referral Points Configuration'
+  requirements:
+    _permission: 'administer site configuration'
+
+commerce_norreferral.referral_registration:
+  path: '/user/register/referral/{code}'
+  defaults:
+    _controller: '\Drupal\commerce_norreferral\Controller\ReferralLink::registration'
+    _title: 'Create new account'
+  requirements:
+    _permission: 'access content'
+
+commerce_norreferral.admin_form:
+  path: '/admin/config/user-referal-bonus'
+  defaults:
+    _form: '\Drupal\commerce_norreferral\Form\ReferralBonusDetailsForm'
+    _title: 'Referral Bonus Details'
+  requirements:
+    _permission: 'administer site configuration'
+
+commerce_norreferral.admin_user_referral_details_form:
+  path: '/admin/config/user-referals'
+  defaults:
+    _form: '\Drupal\commerce_norreferral\Form\UserReferralDetailsForm'
+    _title: 'User Referral Details'
+  requirements:
+    _permission: 'administer site configuration'
+
+commerce_norreferral.admin_user_points_details_form:
+  path: '\Drupal\commerce_norreferral\Form\UserPointsDetailsForm'
+  defaults:
+    _form: '\Drupal\commerce_norreferral\Form\UserPointsDetailsForm'
+    _title: 'User Points'
+  requirements:
+    _permission: 'administer site configuration'
+
+commerce_norreferral.admin_user_points_details_edit_form:
+  path: '/admin/config/user-point/edit/{id}'
+  defaults:
+    _form: '\Drupal\commerce_norreferral\Form\UserPointsDetailsEditForm'
+    _title: 'User Points Update'
+  requirements:
+    _permission: 'administer site configuration'
+
+commerce_norreferral.admin_user_points_details_delete_form:
+  path: '/admin/config/user-point/delete/{id}'
+  defaults:
+    _form: '\Drupal\commerce_norreferral\Form\UserPointsDetailsDeleteForm'
+    _title: 'User Points Delete'
+  requirements:
+    _permission: 'administer site configuration'

@@ -1,0 +1,454 @@
+<?php 
+
+namespace Drupal\norgenbio_form\Form;
+
+use Drupal\Core\Form\FormBase;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\Core\Ajax\MessageCommand;
+use Drupal\Core\Ajax\AppendCommand;
+use Drupal\Core\Ajax\RedirectCommand;
+use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax\InvokeCommand;
+
+
+
+class NorgenbioForm extends FormBase {
+
+  public function getFormId() {
+    return 'norgenbio_form';
+  }
+
+  // public function buildForm(array $form, FormStateInterface $form_state) {
+
+  //   $form['#prefix'] = '<div id="norgenbio_form-container">';
+
+  //   $form['header'] = [
+  //     '#type' => 'markup',
+  //     '#markup' => '<h1><p style = "color:red;">Dear Valued Customer</p></h1><p>We value your feedback, please describe any issues you are experiencing.</p>',
+  //     '#class' => 'work_pls',
+  //   ];
+
+  //   $form['norgenbio_fname'] = [
+  //     '#type' => 'textfield',
+  //     '#title' => $this->t('First Name'),
+  //     '#required' => TRUE,
+  //   ];
+
+  //   $form['norgenbio_lname'] = [
+  //     '#type' => 'textfield',
+  //     '#title' => $this->t('Last Name'),
+  //     '#required' => TRUE,
+  //   ];
+
+  //   $form['norgenbio_email'] = [
+  //     '#type' => 'email',
+  //     '#title' => $this->t('Email Address'),
+  //     '#required' => TRUE,
+  //   ];
+
+  //   /*$form['norgenbio_company'] = [
+  //     '#type' => 'textfield',
+  //     '#title' => $this->t('Company/Institution'),
+  //   ];
+
+  //   $form['norgenbio_country'] = [
+  //     '#type' => 'textfield',
+  //     '#title' => $this->t('Country'),
+  //     '#required' => TRUE,
+  //   ];
+  
+  //   //add area code options
+  //   $form['norgenbio_phone'] = [
+  //       '#type' => 'tel',
+  //       '#title' => $this->t('Phone Number'),
+  //       '#pattern' => '^\d{10}$', // Regular expression for 10-digit phone numbers
+  //       '#maxlength' => 14, // Limit input to 14 characters
+  //       '#required' => TRUE,
+  //   ];
+
+
+  //   $form['norgenbio_message'] = [
+  //       '#title' => $this->t('Describe your experience and add feedback'),
+  //       '#type' => 'textarea',
+  //       '#description' => 'Please provide your feedback and attach any supporting files to help us improve your experience.',
+  //       '#required' => false, // Optional feedback field
+  //     ];
+
+  //   $form['norgenbio_coverletter'] = [
+  //       '#title' => $this->t('Attach a File (txt, png, jpg, jpeg)'),
+  //       '#type' => 'managed_file',
+  //       '#description' => '',
+  //       '#upload_validators' => [
+  //         'file_validate_extensions' => 'txt png jpg jpeg',
+  //       ],
+  //     ];
+
+  //   // Add reCAPTCHA
+  //   $form['recaptcha'] = [
+  //     '#type' => 'recaptcha',
+  //     '#title' => $this->t('Prove you\'re not a robot'),
+  //     '#site_key' => '6LcUIiYpAAAAAL1KwotqVpYeyk8bQMZjP1ZpjMkr',
+  //     '#secret_key' => '6LcUIiYpAAAAAPNuXVztDgqW0ehLr8juMFJDecjSY',
+  //     '#required' => TRUE,
+  //   ];*/
+
+
+  //   $form['actions']['submit'] = [
+  //     '#type' => 'submit',
+  //     '#value' => $this->t('Submit'),
+  //     '#button_type' => 'primary',
+  //     '#ajax' => ['callback' => '::submit_ajax_form',
+  //       'event' => 'click',]
+  //   ];
+
+  //   $form['#suffix'] = '</div>';
+  //   return $form;
+  // }
+
+
+  // public function validateForm(array &$form, FormStateInterface $form_state) {
+  //   // ... existing validations ...
+  
+  //   // Validate email address
+  //   if (!\Drupal::service('email.validator')->isValid($form_state->getValue('norgenbio_email'))) {
+  //     $form_state->setErrorByName('norgenbio_email', $this->t('Please enter a valid email address.'));
+  //   }
+  // }
+
+  // public function submitForm(array &$form, FormStateInterface $form_state) {
+  //   // $first_name = $form_state->getValue('norgenbio_fname');
+  //   // $last_name = $form_state->getValue('norgenbio_lname');
+  //   // $email = $form_state->getValue('norgenbio_email');
+  //   // $output = '<p><span style="color:red">Test Output 2</span></p><p>This includes html!</p>';
+  //   // // norgenbio_submit_email($output);
+
+  //   // //$Selector = '.norgenbio_form-container';
+  //   // //$Content = '<p>Form Submitted Successfully</p>';
+  //   // $currentURL = \Drupal\Core\Url::fromRoute('<current>');
+  //   // $response = new AjaxResponse();
+  //   // //$response->addCommand(new AppendCommand($Selector,$Content));
+  //   // $response->addCommand(new RedirectCommand($currentURL->toString()));
+  //   // return $response;
+    
+  // }
+  // public function submit_ajax_form(array &$form, FormStateInterface $form_state) {
+  //   $first_name = $form_state->getValue('norgenbio_fname');
+  //   $last_name = $form_state->getValue('norgenbio_lname');
+  //   $email = $form_state->getValue('norgenbio_email');
+  //   $output = '<p><span style="color:red">Test Output 2</span></p><p>This includes html!</p>';
+  //   norgenbio_submit_email($output,'rimpy.saha@norgenbiotek.com');
+
+  //   // //$Selector = '.norgenbio_form-container';
+  //   // //$Content = '<p>Form Submitted Successfully</p>';
+  //   // $currentURL = \Drupal\Core\Url::fromRoute('<current>');
+  //   // $response = new AjaxResponse();
+  //   // //$response->addCommand(new AppendCommand($Selector,$Content));
+  //   // $response->addCommand(new RedirectCommand($currentURL->toString()));
+  //   // return $response;
+    
+  //   $Selector = '#result-message';
+  //   $Content = '<div class="my_top_message">Form Submitted Successfully</div>';
+  //   $response = new AjaxResponse();
+  //   if ($form_state->hasAnyErrors()) {
+  //     $errors = $form_state->getErrors();
+  //     $errors = ['#theme' => 'status_messages', '#message_list' => $errors,];
+  //     $Content .= '<div>' . $errors . '</div>';
+  //     $messages = \Drupal::messenger()->deleteAll();
+  //     $response->addCommand(new ReplaceCommand('#messages', ''));
+  //     //$response->addCommand(new AppendCommand('.region-highlighted', $messages));
+  //   }
+  //   $response->addCommand(new HtmlCommand($Selector,$Content));
+  //   //$response->addCommand(new ReplaceCommand(NULL, $form));
+  //   //$form_state->setRebuild(TRUE);
+  //   $response->addCommand(new InvokeCommand('#edit-norgenbio-fname', 'val', ['']));
+  //   return $response;
+    
+  // }
+  
+  public function buildForm(array $form, FormStateInterface $form_state) {
+    $form['#prefix'] = '<div id="norgen_form-container" class="norgen_form-container">';
+
+
+    $form['header'] = [
+      '#type' => 'markup',
+      '#markup' => '<h1><p style = "color:red;"></p></h1><p>Test Change.</p>',
+      '#class' => 'work_pls',
+    ];
+
+    $form['message'] = [
+      '#type' => 'markup',
+      '#markup' => '<div id="result-message"></div>',
+    ];
+
+
+    $form['norgen_fname'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('First Name'),
+      '#required' => TRUE,
+    ];
+
+    $form['norgen_lname'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Last Name'),
+      '#required' => TRUE,
+    ];
+
+    $form['norgen_email'] = [
+      '#type' => 'email',
+      '#title' => $this->t('Email Address'),
+      '#required' => TRUE,
+    ];
+
+    /*$form['norgen_company'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Company/Institution'),
+    ];
+
+    $form['norgen_country'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Country'),
+      '#required' => TRUE,
+    ];
+  
+    //add area code options
+    $form['norgen_phone'] = [
+        '#type' => 'tel',
+        '#title' => $this->t('Phone Number'),
+        '#pattern' => '^\d{10}$', // Regular expression for 10-digit phone numbers
+        '#maxlength' => 14, // Limit input to 14 characters
+        '#required' => TRUE,
+    ];
+
+
+    $form['norgen_message'] = [
+        '#title' => $this->t('Describe your experience and add feedback'),
+        '#type' => 'textarea',
+        '#description' => 'Please provide your feedback and attach any supporting files to help us improve your experience.',
+        '#required' => false, // Optional feedback field
+      ];
+
+    $form['norgen_coverletter'] = [
+        '#title' => $this->t('Attach a File (txt, png, jpg, jpeg)'),
+        '#type' => 'managed_file',
+        '#description' => '',
+        '#upload_validators' => [
+          'file_validate_extensions' => 'txt png jpg jpeg',
+        ],
+      ];
+
+    // Add reCAPTCHA
+    $form['norgen_recaptcha'] = [
+      '#type' => 'recaptcha',
+      '#title' => $this->t('Prove you\'re not a robot'),
+      '#site_key' => '6LcUIiYpAAAAAL1KwotqVpYeyk8bQMZjP1ZpjMkr',
+      '#secret_key' => '6LcUIiYpAAAAAPNuXVztDgqW0ehLr8juMFJDecjSY',
+      '#required' => TRUE,
+    ];
+    
+        $form['google_recaptcha'] = array(
+      '#prefix' => '<script src="https://www.google.com/recaptcha/api.js"></script><div id="names-fieldset-wrapper">',
+      '#suffix' => '</div>',
+      '#type'=> 'captcha',
+      '#captcha_type' => 'recaptcha/reCAPTCHA',
+      '#site_key' => '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
+      '#secret_key' => '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe',
+      '#description' => '<div class="g-recaptcha" data-sitekey="6LcUIiYpAAAAAL1KwotqVpYeyk8bQMZjP1ZpjMkr"></div>',
+      '#validate' => 'norgenbio_captcha',
+      '#required' => TRUE,
+  );
+    */
+    /*$form['google_recaptcha'] = array(
+      '#type'=> 'captcha',
+      '#captcha_type' => 'recaptcha/reCAPTCHA',
+      '#site_key' => '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
+      '#secret_key' => '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe',
+      '#required' => TRUE,
+      '#element_validate' => ['::validateGoogleRecaptcha'],
+    );*/
+
+
+    $form['actions']['submit'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('Submit'),
+      '#button_type' => 'primary',
+      '#ajax' => ['callback' => '::submitForm',
+        'event' => 'click',
+        'wapper' =>'norgen_form-container',
+        'method' => 'append', 'effect' => 'fade',]
+    ];
+
+    $form['#suffix'] = '</div>';
+
+
+    return $form;
+  }
+
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+     // ... existing validations ...
+     if ($form_state->getValue('norgen_email') != 'david.findlay@norgenbio.com') {
+      $form_state->setErrorByName('norgen_email', t('Please enter a valid email FROM TOOOP address.'));
+    }
+    // Validate email address
+    if (!\Drupal::service('email.validator')->isValid($form_state->getValue('norgen_email'))) {
+      $form_state->setErrorByName('norgen_email', $this->t('Please enter a valid ACTUALLY email address.'));
+    }
+
+
+    // Validate reCAPTCHA
+    // $response = $form_state->getValue('google_recaptcha');
+    // // if (empty($response)) 
+    // {
+    //   $form_state->setErrorByName('google_recaptcha', $this->t('Please complete the reCAPTCHA validation.'));
+    // }
+    // else 
+    // {
+    //   // Validate reCAPTCHA response using the reCAPTCHA service
+    //   $recaptcha = \Drupal::service('recaptcha.validator');
+    //   $result = $recaptcha->verify($response);
+
+    //   if (!$result->isSuccess()) {
+    //     $form_state->setErrorByName('google_recaptcha', $this->t('Failed reCAPTCHA validation. Please try again.'));
+    //   }
+    // }
+
+  }
+
+  public function submit_ajax_form(array &$form, FormStateInterface $form_state) {
+    // $first_name = $form_state->getValue('fname');
+    // $last_name = $form_state->getValue('lname');
+    // $email = $form_state->getValue('email');
+    // $output = '<p><span style="color:red">Test Output 2</span></p><p>This includes html from form 1! <br />First Name: ' . $first_name . ' Last Name: ' . $last_name . '</p>';
+    // norgen_submit_email($output,'rimpy.saha@norgenbiotek.com');
+
+
+    // $Selector = '#result-message';
+    // $Content = '<div class="my_top_message">Form Submitted Successfully</div>';
+    // $response = new AjaxResponse();
+    // if ($form_state->hasAnyErrors()) 
+    // {
+    //   $errors = $form_state->getErrors();
+    //   $errors = ['#theme' => 'status_messages', '#message_list' => $errors,];
+    //   $Content .= '<div>hiiiiiiiiiiii' . $errors . '</div>';
+    //   $messages = \Drupal::messenger()->deleteAll();
+    //   $response->addCommand(new ReplaceCommand('#messages', ''));
+    //   //$response->addCommand(new AppendCommand('.region-highlighted', $messages));
+    // }
+    // $response->addCommand(new HtmlCommand($Selector,$Content));
+    // //$response->addCommand(new ReplaceCommand(NULL, $form));
+    // //$form_state->setRebuild(TRUE);
+    // // $response->addCommand(new InvokeCommand('#edit-norgen-fname', 'val', ['']));
+    // return $response;
+    
+  }
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    $first_name = $form_state->getValue('fname');
+    $last_name = $form_state->getValue('lname');
+    $email = $form_state->getValue('email');
+    $output = '<p><span style="color:red">Test Output 2</span></p><p>This includes html from form 1! <br />First Name: ' . $first_name . ' Last Name: ' . $last_name . '</p>';
+
+
+    //$Selector = '#result-message';
+    $Selector = '#norgen_form-container';
+
+    $Content = '<div class="my_top_message">Form Submitted Successfully</div>';
+    $response = new AjaxResponse();
+    
+    $errors = $form_state->getErrors();
+    $errors_array = json_encode($errors['captcha_response']);
+
+    $google_recaptcha = $form_state->getValue('google_recaptcha');
+    // // // if (empty($response)) 
+    // // {
+    // //   $form_state->setErrorByName('google_recaptcha', $this->t('Please complete the reCAPTCHA validation.'));
+    // // }
+    // // else 
+    // // {
+    // //   // Validate reCAPTCHA response using the reCAPTCHA service
+      $recaptcha = \Drupal::service('recaptcha.validator');
+    //   $result = $recaptcha->verify($google_recaptcha);
+
+    // print_r($errors_array['captcha_response']);
+    // if ($form_state->hasAnyErrors()) 
+    {
+      $response->addCommand(new ReplaceCommand('#norgen_form-container', $form));
+      \Drupal::messenger()->addMessage(t('The form contains errors '.$errors_array." "));
+      return $response;
+      // $errors = $form_state->getErrors();
+      // $errors = ['#theme' => 'status_messages', '#message_list' => $errors,];
+      // $Content .= '<div>' . $errors . '</div>';
+      // $messages = \Drupal::messenger()->deleteAll();
+      // $response->addCommand(new ReplaceCommand('#messages', ''));
+      // $response->addCommand(new AppendCommand('.region-highlighted', $messages));
+      // if ($form_state->getValue('norgen_email') != 'david.findlay@norgenbio.com') 
+      // {
+      //   $form_state->setErrorByName('norgen_email', $this->t('Please enter a valid email FROM TOOOP address.'));
+      // }
+      // // Validate email address
+      // if (!\Drupal::service('email.validator')->isValid($form_state->getValue('norgen_email'))) 
+      // {
+      //   $form_state->setErrorByName('norgen_email', $this->t('Please enter a valid ACTUALLY email address.'));
+      // }
+      // return $response;
+    } 
+    // else 
+    {
+        norgen_submit_email($output);
+    	$response->addCommand(new HtmlCommand($Selector,$Content));
+    	$response->addCommand(new ReplaceCommand(NULL, $form));
+    	//$form_state->setRebuild(TRUE);
+    	//$response->addCommand(new InvokeCommand('#edit-norgen-fname', 'val', ['']));
+    	return $response; 
+    }
+    
+  }
+
+
+  public function norgenbio_captcha(array &$form, FormStateInterface $form_state) {
+    // ... existing validations ...
+
+    $captcha = $_POST['google_recaptcha'];   
+    if ($captcha != '') {
+
+    	if (!function_exists('curl_init')){ die('CURL is not installed!');
+    }
+	  $ch = curl_init();
+	  $url_get = 'https://www.google.com/recaptcha/api/siteverify?secret=6LcUIiYpAAAAAPNuXVztDgqW0ehLr8juMFJDecjSY&response='. $captcha .'&remoteip='.$_SERVER['REMOTE_ADDR'];
+	  curl_setopt($ch, CURLOPT_URL, $url_get);
+	  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	  $response= curl_exec($ch);
+	  curl_close($ch);
+    if($response.'success' ==false) { $form_state->setErrorByName('google_captcha', $this->t('Please complete the captcha to prove you are human. Thank you.')); }
+    } else { $form_state->setErrorByName('google_captcha', $this->t('Please check the captcha to prove you are human. Thank you.')); }
+  
+    // // Validate email address
+    // if (!\Drupal::service('email.validator')->isValid($form_state->getValue('norgen_email'))) {
+    //   $form_state->setErrorByName('norgen_email', $this->t('Please enter a valid email address.'));
+    // }
+  }
+
+
+    // Custom validation function for Google reCAPTCHA
+    public function validateGoogleRecaptcha($element, FormStateInterface $form_state, $form) {
+      // Get the reCAPTCHA response value
+      $response = $form_state->getValue(['captcha', 'recaptcha']);
+  
+      // Perform your custom validation logic here
+      // For example, you might check if the reCAPTCHA response is valid
+  
+      if (!$this->validateRecaptcha($response)) {
+        // Add a validation error
+        $form_state->setError($element, $this->t('Invalid reCAPTCHA. Please this is later yall try again.'));
+      }
+    }
+  
+    // Custom validation logic for reCAPTCHA response
+    private function validateRecaptcha($response) {
+      // Add your validation logic here
+      // You might want to use the reCAPTCHA API to verify the response
+      // For development purposes, you can consider the response valid if it matches a specific value
+      // return $response === 'valid_recaptcha_response';
+      return false;
+    }
+}

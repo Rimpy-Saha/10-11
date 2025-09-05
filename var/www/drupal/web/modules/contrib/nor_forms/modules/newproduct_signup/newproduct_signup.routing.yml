@@ -1,0 +1,7 @@
+newproduct_signup.signup_form:
+  path: '/newproduct_signup-form'
+  defaults:
+    _title: 'Norgenbio Form'  # Update title case for consistency
+    _form: '\Drupal\newproduct_signup\Form\NewProductSignUpForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

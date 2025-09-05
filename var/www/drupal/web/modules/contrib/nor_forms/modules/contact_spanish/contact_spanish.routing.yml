@@ -1,0 +1,7 @@
+contact_spanish.contactspanish_form:
+  path: 'contact-spanish-form'
+  defaults:
+    _title: 'Contacto Norgen Biotek Corp'  # Update title case for consistency
+    _form: '\Drupal\contact_spanish\Form\ContactSpanishForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

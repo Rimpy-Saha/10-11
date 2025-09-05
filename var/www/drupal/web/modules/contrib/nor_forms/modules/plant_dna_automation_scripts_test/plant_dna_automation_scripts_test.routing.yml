@@ -1,0 +1,7 @@
+plant_dna_form_test.automation_form_test:
+  path: '/plant-dna-automation-scripts-form-test'
+  defaults:
+    _title: 'Plant DNA Automation Scripts Form'  # Update title case for consistency
+    _form: '\Drupal\plant_dna_automation_scripts_test\Form\PlantDnaAutomationScriptsFormTest'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

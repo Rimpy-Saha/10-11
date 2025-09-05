@@ -1,0 +1,8 @@
+catalogue_lead_capture.catalogue_lead_capture_form:
+  path: 'catalogue-lead-capture-form'
+  defaults:
+    _title: 'catalogue lead capture'  # Update title case for consistency
+    _form: '\Drupal\catalogue_lead_capture\Form\CatalogueLeadCapture'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access
+    _role: "administrator"

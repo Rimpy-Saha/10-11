@@ -1,0 +1,13 @@
+{
+  "name": "drupal/commerce_norelavon",
+  "type": "drupal-module",
+  "description": "Provides payment gateway for Elavon Virtual Merchant payment service.",
+  "homepage": "http://drupal.org/project/commerce_elavon",
+  "license": "GPL-2.0+",
+  "require": {
+    "ext-curl": "*",
+    "ext-simplexml": "*",
+    "drupal/core": "^8.8 || ^9 || ^10",
+    "drupal/commerce": "^2.14"
+  }
+}

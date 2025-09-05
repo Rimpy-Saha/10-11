@@ -1,0 +1,7 @@
+file_complaint.complaint_form:
+  path: '/file-complaint-form'
+  defaults:
+    _title: 'File Complaint Form'  # Update title case for consistency
+    _form: '\Drupal\file_complaint\Form\FileComplaintForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

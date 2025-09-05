@@ -1,0 +1,6 @@
+name: 'Norgen User Rules'
+type: module
+package: Norgen Biotek
+description: 'Adds or removes user roles based on the country field selected by the user during registration.'
+core_version_requirement: ^8 || ^9 || ^10
+

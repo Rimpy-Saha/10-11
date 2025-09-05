@@ -1,0 +1,9 @@
+  public function selectNumberReferrals($sender) {
+    $query = $this->database->select('user_points_data', 'upd')
+      ->fields('uid')
+      ->condition('uid', $sender)
+      ->countQuery()
+      ->execute();
+
+    return $query->fetchAssoc();
+  }

@@ -1,0 +1,8 @@
+covid_individual.covid_individual:
+  path: '/covid-individual-form'
+  defaults:
+    _title: 'Covid Individual Form'  # Update title case for consistency
+    _form: '\Drupal\covid_individual\Form\CovidIndividualForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access
+    _role: "administrator"

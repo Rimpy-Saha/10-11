@@ -1,0 +1,18 @@
+entity.nor_publications.collection:
+  title: 'Norgen Publications items'
+  route_name: 'entity.nor_publications.collection'
+  parent: 'system.admin_content'
+  description: 'Manage your norgen publications items.'
+  weight: 50
+
+entity.nor_publications_type.collection:
+  title: 'Norgen Publications types'
+  route_name: 'entity.nor_publications_type.collection'
+  parent: 'system.admin_structure'
+  description: 'Manage fields, form and display settings for your norgen publications types.'
+  weight: 50
+
+nor_publications.grouped_entity_links:
+  class: Drupal\nor_publications\Plugin\Menu\GroupedEntityLinks
+  deriver: Drupal\nor_publications\Plugin\Derivative\GroupedEntityLinksDeriver
+  menu_name: nor_publications

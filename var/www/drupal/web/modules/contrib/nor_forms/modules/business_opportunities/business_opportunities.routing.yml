@@ -1,0 +1,7 @@
+business_opportunities.opportunities_form:
+  path: '/business-opportunities-form'
+  defaults:
+    _title: 'Business Relationships Opportunities'  # Update title case for consistency
+    _form: '\Drupal\business_opportunities\Form\BusinessOpportunitiesForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

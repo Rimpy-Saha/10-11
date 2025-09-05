@@ -1,0 +1,8 @@
+contact_japan.contactjapan_form:
+  path: 'contact-japan-form'
+  defaults:
+    _title: 'Contacter Norgen Biotek Corp Japan'  # Update title case for consistency
+    _form: '\Drupal\contact_japan\Form\ContactJapanForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access
+    _role: "administrator"

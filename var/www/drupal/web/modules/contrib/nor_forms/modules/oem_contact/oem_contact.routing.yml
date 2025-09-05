@@ -1,0 +1,8 @@
+oem_contact.oemcontact_form:
+  path: 'oem-contact-form'
+  defaults:
+    _title: 'OEM Contact Form'  # Update title case for consistency
+    _form: '\Drupal\oem_contact\Form\OEMContactForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access
+    _role: 'administrator'

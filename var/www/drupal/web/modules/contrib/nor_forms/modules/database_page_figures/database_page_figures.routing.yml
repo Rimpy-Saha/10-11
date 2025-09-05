@@ -1,0 +1,9 @@
+database_page_figures.dbfigures_form:
+  path: "/database_page_figures"
+  defaults:
+    _form: '\Drupal\database_page_figures\Form\DatabasePageFigures'
+    _title: "All Figures"
+    #_controller: '\Drupal\database_page_figures\Form\DatabasePageFigures::changePage'
+  requirements:
+    #_permission: "administrator"
+    _permission: 'access content'  # Use _permission instead of _access

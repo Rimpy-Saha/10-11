@@ -1,0 +1,7 @@
+rna_form.purification_form:
+  path: '/rna-purification-form'
+  defaults:
+    _title: 'RNA Purification Form'  # Update title case for consistency
+    _form: '\Drupal\rna_purification\Form\RnaPurificationForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

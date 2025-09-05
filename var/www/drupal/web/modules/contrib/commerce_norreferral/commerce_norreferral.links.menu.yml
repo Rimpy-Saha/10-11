@@ -1,0 +1,6 @@
+commerce_norreferral.admin_settings:
+  title: 'Referral Program'
+  description: 'Referral Program admin console'
+  parent: commerce.admin_commerce
+  route_name: commerce_norreferral.admin_settings
+  weight: 100

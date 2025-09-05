@@ -1,0 +1,7 @@
+norgenius_saveworkflow.norgeniussaveworkflow_form:
+  path: 'norgenius-saveworkflow-form'
+  defaults:
+    _title: 'Norgenius Saveworkflow Form'  # Update title case for consistency
+    _form: '\Drupal\norgenius_saveworkflow\Form\NorgeniusSaveworkflowForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

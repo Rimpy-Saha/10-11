@@ -1,0 +1,7 @@
+conference_lead_simplified.lead_form_simplified:
+  path: '/conference-lead-form-simplified'
+  defaults:
+    _title: 'Conference Lead Form Simplified'  # Update title case for consistency
+    _form: '\Drupal\conference_lead_simplified\Form\ConferenceLeadFormSimplified'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

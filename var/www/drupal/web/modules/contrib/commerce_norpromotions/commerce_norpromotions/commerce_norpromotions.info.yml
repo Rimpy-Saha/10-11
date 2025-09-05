@@ -1,0 +1,5 @@
+name: 'Norgen Custom Promotions'
+type: module
+package: Norgen Biotek
+description: 'Create custom promotions to offer more customizable and complex Promotions'
+core_version_requirement: ^8 || ^9 || ^10

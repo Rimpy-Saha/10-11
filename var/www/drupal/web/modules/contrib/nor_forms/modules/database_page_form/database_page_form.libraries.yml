@@ -1,0 +1,6 @@
+database_page_form:
+  css:
+    theme:
+      css/database_page_form.css: {}
+  dependencies:
+    - core/drupalSettings

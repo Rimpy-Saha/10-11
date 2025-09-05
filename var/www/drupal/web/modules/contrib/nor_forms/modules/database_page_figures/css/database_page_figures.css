@@ -1,0 +1,138 @@
+.views-row{
+  padding:20px;
+  box-shadow:2px 2px 16px -8px #00000047;
+  margin-bottom:20px;
+  border-radius:10px;
+}
+.views-row .category-links, .views-row .rel-prods{
+  list-style-type:none;
+  padding-left:0px;
+}
+.rel-prods{
+  margin-bottom:0px;
+}
+
+.form-item-sort.form-item, 
+.form-item-file-type-filter.form-item,
+.form-item-figure-cat-filter.form-item{
+  position: relative;
+}
+.form-item-sort.form-item > label, 
+.form-item-file-type-filter.form-item > label,
+.form-item-figure-cat-filter.form-item > label{
+  position: absolute;
+  top: 5px;
+  left: 20px;
+  font-size: 12px;
+  color: inherit;
+  font-weight:bold;
+}
+.form-item-sort.form-item > select.form-control.input-lg, 
+.form-item-file-type-filter.form-item > select.form-control.input-lg,
+.form-item-figure-cat-filter > select.form-control.input-lg{
+  padding-top:22px;
+  height:auto;
+}
+
+/* .views-row > img[filemime="image/svg+xml"]{
+  margin:-5% 0%;;
+} */
+
+.image-caption-wrapper{
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 20px;
+}
+.figure-image{
+  text-align:center;
+}
+
+.fa-file-pdf{
+  color:#F25C95;
+  margin-right:0.25em;
+}
+
+.form-item-results-info{
+  display:flex;
+  justify-content: space-between;
+}
+.form-item-num-results, .form-item-num-page-results{
+  text-align:right;
+}
+
+[data-drupal-selector="edit-pager"]{
+  display: flex;
+  align-items: center;
+  margin: 0px auto;
+  width: max-content;
+  gap: 5px;
+}
+.form-item-page-select.form-item.form-group{
+  display: flex;
+  align-items: center;
+  margin: 0px auto;
+  width: max-content;
+  gap: 5px;
+}
+.form-item-page-select > label{
+  margin: 0px 0px;
+}
+
+fieldset[data-drupal-selector="edit-search-sort"] .fieldset-wrapper{
+  display:grid;
+  grid-template-columns: auto 1fr 1fr;
+  gap:10px;
+}
+fieldset[data-drupal-selector="edit-search-sort"] .fieldset-wrapper > .form-group{
+  margin-bottom: 0px;
+}
+.form-item-search-products .form-group{
+  height:100%;
+}
+.entity-product-request-field{
+  padding: 5px 10px;
+  border-radius: 10px;
+  border: 1px solid #d0d7de;
+  height: 100%;
+  min-height:45px;
+}
+
+.views-row .category-links li{
+  display:inline-block;
+  margin-right:5px;
+  margin-bottom:5px;
+  border-radius:10px;
+  padding:5px 10px;
+  background-color:var(--norgen-primary-blue-light);
+}
+.views-row .category-links li > a{
+  color:inherit;
+}
+
+.views-row h2{
+  margin-top:0px;
+  font-size:18px;
+}
+
+.views-row h2 > a{
+  word-break: break-word;
+}
+
+.file-type{
+  text-transform: capitalize;
+  margin-bottom:10px;
+  font-weight:bold;
+}
+.form-item-results-info.form-group.form-item{
+  margin:20px 0px;
+}
+
+@media only screen and (max-width:992px){
+  fieldset[data-drupal-selector="edit-search-sort"] .fieldset-wrapper{
+    grid-template-columns: 1fr;
+    gap:0px;
+  }
+  .entity-product-request-field{
+    width:100% !important;
+  }
+}

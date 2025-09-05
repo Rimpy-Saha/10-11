@@ -1,0 +1,28 @@
+nor_erp_api.nor_erp_api_page:
+  path: 'nor-erp-api'
+  defaults:
+    _title: 'ERP API'  # Update title case for consistency
+    _controller: '\Drupal\nor_erp_api\Controller\NorErpApiController::apiPage'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access
+nor_erp_api.nor_erp_comapare_page:
+  path: 'nor-erp-compare'
+  defaults:
+    _title: 'ERP Compare'  # Update title case for consistency
+    _controller: '\Drupal\nor_erp_api\Controller\NorErpCompareController::comparePage'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access
+nor_erp_api.nor_erp_cite_page:
+  path: 'nor-cite'
+  defaults:
+    _title: 'Upload'  # Update title case for consistency
+    _controller: '\Drupal\nor_erp_api\Controller\NorCitationController::citePage'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access
+nor_erp_api.nor_erp_product_ranking:
+  path: 'nor-erp-rank'
+  defaults:
+    _title: 'ERP Ranking'  # Update title case for consistency
+    _controller: '\Drupal\nor_erp_api\Controller\NorProductRankingController::updateProductRankingWithArray'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

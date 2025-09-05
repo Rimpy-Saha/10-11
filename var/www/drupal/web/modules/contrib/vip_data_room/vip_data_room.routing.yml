@@ -1,0 +1,7 @@
+vip_data_room.content:
+  path: '/vip-data-room'
+  defaults:
+    _title: 'VIP Data Room'
+    _controller: '\Drupal\vip_data_room\Controller\GatedContentController::content'
+  requirements:
+    _custom_access: '\Drupal\vip_data_room\Controller\GatedContentController::hasAccess'

@@ -1,0 +1,8 @@
+request_sample:
+  js:
+    js/request_sample.js: {}
+  css:
+    theme:
+      css/request_sample.css: {}
+  dependencies:
+    - core/drupalSettings

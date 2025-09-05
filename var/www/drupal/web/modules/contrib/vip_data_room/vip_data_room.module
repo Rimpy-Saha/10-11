@@ -1,0 +1,45 @@
+<?php
+
+/**
+ * Implements hook_theme().
+ */
+function vip_data_room_theme(&$existing, $type, $theme, $path) {
+    return [
+        'vip_data_room' => [
+            'template' => 'vip-data-room',
+            'variables' => [
+                'content' => [],
+            ],
+            //'path' => Drupal::service('module_handler')->getModule('vip_data_room')->getPath() . '/templates', // if custom
+        ]
+    ];
+}
+
+function vip_data_room_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
+
+  // For page templates
+  if ($hook === 'page' && \Drupal::routeMatch()->getRouteName() === 'vip_data_room.content') {
+    $suggestions[] = 'page__vip_data_room';
+  }
+  
+  // For html templates
+  if ($hook === 'html' && \Drupal::routeMatch()->getRouteName() === 'vip_data_room.content') {
+    $suggestions[] = 'html__vip_data_room';
+  }
+}
+
+function vip_data_room_preprocess_vip_data_room(&$variables) {
+    // Always add view
+    $variables['view'] = views_embed_view('publications_or_citations', 'all_results');
+
+    // Always try to add forms if modules exist
+    if (\Drupal::moduleHandler()->moduleExists('database_page_figures')) {
+        $variables['figures_form'] = \Drupal::formBuilder()
+        ->getForm('Drupal\database_page_figures\Form\DatabasePageFigures');
+    }
+    if (\Drupal::moduleHandler()->moduleExists('database_page_files')) {
+        $variables['files_form'] = \Drupal::formBuilder()
+        ->getForm('Drupal\database_page_files\Form\DatabasePageFiles');
+    }
+}
+

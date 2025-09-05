@@ -1,0 +1,7 @@
+total_rna_form_test.automation_form_test:
+  path: '/total-rna-automation-scripts-form-test'
+  defaults:
+    _title: 'Total RNA Automation Scripts Form'  # Update title case for consistency
+    _form: '\Drupal\total_rna_automation_scripts_test\Form\TotalRnaAutomationScriptsFormTest'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

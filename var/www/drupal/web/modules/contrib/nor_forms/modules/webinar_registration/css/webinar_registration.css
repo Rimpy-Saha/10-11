@@ -1,0 +1,238 @@
+.my_top_message,
+.sample-form-container {
+  margin-top: 20px;
+}
+
+.webinar-registration-form legend {
+  margin-bottom: none;
+  font-size: 18px;
+  line-height: inherit;
+  border: none;
+  color: inherit;
+}
+
+iframe svg {
+  text-align: center;
+}
+
+iframe.svg_animation {
+  border: none;
+  width: 100%;
+}
+
+ /* Product Selection Table */
+ .samples-list-fieldset table > tbody > tr > td{
+  padding: 8px;
+  line-height: 1.42857;
+  vertical-align: top;
+  border-top: 1px solid #e7ecf1;
+ }
+.samples-wrapper{
+  margin:10px 0;
+  max-height:400px;
+  overflow: auto;
+}
+.form-item-samples-search .c-quick-search{
+  border:none;
+}
+.form-item-samples-search .c-quick-search input[type="search"]{
+  border-radius:12px;
+}
+.samples-list-fieldset .js-form-type-search .form-control{
+  height:46px;
+}
+.form-item-samples-search .c-quick-search.has-feedback input.form-control{
+  padding-right:16px;
+}
+.form-item-samples-search .c-quick-search input[type=search]::-webkit-search-cancel-button {
+  height: 1em;
+  width: 1em;
+  border-radius: 50em;
+  background: url(https://web.archive.org/web/20231202211135im_/https://pro.fontawesome.com/releases/v5.10.0/svgs/regular/times.svg) no-repeat 50% 50%;
+  background-size: contain;
+}
+
+.samples-list-fieldset > .fieldset-wrapper{
+  border: 1px solid #eeeeee;
+  padding:10px;
+}
+.samples-list-fieldset > legend{
+  margin-bottom:5px;
+}
+.samples-wrapper > table{
+  margin-bottom:0px;
+}
+
+.samples-wrapper table tbody tr:has(input:checked){
+  background-color:var(--norgen-grey-light);
+}
+
+fieldset.customer-information > .fieldset-wrapper,
+fieldset.customer-application-information > .fieldset-wrapper,
+fieldset.shipping-information > .fieldset-wrapper, 
+fieldset.billing-information > .fieldset-wrapper .billing-toggle-fields > .fieldset-wrapper{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap:20px;
+}
+fieldset.samples-list-fieldset.form-fieldset--error .fieldset-wrapper {
+  border: 1px solid red;
+}
+fieldset.customer-information > .fieldset-wrapper > div:last-child,
+fieldset.customer-information > .fieldset-wrapper > div:nth-last-child(2),
+fieldset.customer-application-information > .fieldset-wrapper > div:last-child{
+  grid-column: 1 / 3;
+}
+@media only screen and (max-width:600px){
+  fieldset.customer-information > .fieldset-wrapper,
+  fieldset.customer-application-information > .fieldset-wrapper,
+  fieldset.shipping-information > .fieldset-wrapper, 
+  fieldset.billing-information > .fieldset-wrapper .billing-toggle-fields > .fieldset-wrapper{
+    grid-template-columns: 1fr;
+  }
+  fieldset.customer-information > .fieldset-wrapper > div:last-child,
+  fieldset.customer-information > .fieldset-wrapper > div:nth-last-child(2),
+  fieldset.customer-application-information > .fieldset-wrapper > div:last-child{
+    grid-column: 1 / 2;
+  }
+}
+
+/* Progress Bar */
+.currentPage, .progressLevel{
+  display:inline-block;
+  vertical-align:middle;
+}
+.progress{
+  display:inline-block;
+  width:50%;
+  min-width:250px;
+  max-width:600px;
+  vertical-align:middle;
+  margin:0 15px;
+  margin-bottom:0px;
+}
+.progress-bar{
+  border-radius:4px;
+  background-color:var(--norgen-primary-blue);
+
+}
+.webinar-registration-form .progress-bar[aria-valuenow="1"]{
+  width:33%;
+}
+.webinar-registration-form .progress-bar[aria-valuenow="2"]{
+  width:67%;
+}
+.webinar-registration-form .progress-bar[aria-valuenow="3"]{
+  width:100%;
+}
+.form-item-hr-separator > hr {
+  border-top: 2px solid;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+/* general form */
+/* .dialog-off-canvas-main-canvas {
+  background-color:var(--norgen-grey-light);
+} */
+
+.webinar-registration-form progress::-moz-progress-bar { 
+  background-color:#004897;
+  background-color:var(--norgen-primary-blue);
+}
+.webinar-registration-form progress::-webkit-progress-bar{
+  background-color:#f7f7f7;
+  background-color:var(--norgen-grey-light);
+}
+.webinar-registration-form progress::-webkit-progress-value{
+  background-color:#004897;
+  background-color:var(--norgen-primary-blue);
+}
+.webinar-registration-form progress{
+  color:#004897;
+  color:var(--norgen-primary-blue);
+  width:100%;
+  height:20px;
+  border-radius:4px;
+  overflow:hidden;
+}
+/* form.webinar-registration-form{
+  background-color: white;
+  padding: 24px;
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+} */
+.form-item.form-item-mailing{
+  margin-bottom:0px;
+}
+.disclaimer{
+  font-size:12px;
+}
+
+.form-group.has-feedback + .form-item--error-message{
+  margin-top:-15px;
+}
+
+fieldset.error > .fieldset-wrapper > div:first-child {
+  color: var(--norgen-secondary-red);
+  background-color: #fbe1e3;
+  border-color: #fbe1e3;
+  padding: 15px;
+  border-radius: 4px;
+  margin-top:-15px;
+}
+#step1 .sample-step-button-container{
+  justify-content:end;
+}
+.form-item-disclaimer > .form-msg{
+  border: 1px solid #eeeeee;
+  padding: 10px;
+}
+.samples-wrapper table{
+  width:100%;
+}
+
+/* radio buttons */
+
+.webinar-registration-form .js-form-type-radio > .form-group{
+  display:inline-block;
+}
+.webinar-registration-form fieldset.form-group,
+.webinar-registration-form .js-form-type-radio.form-group > .form-group {
+  margin-bottom:0px;
+} 
+
+/* Sticky Product Selection Table Head */
+.samples-list-fieldset table {
+  border-collapse: separate;
+  border-top:none;
+}
+.samples-list-fieldset table > thead{
+  position:sticky;
+  top:0;
+  background-color:#ffffff;
+  z-index:1;
+}
+.samples-list-fieldset table > thead > tr > th,
+.samples-list-fieldset table > thead:first-child > tr:first-child > th  {
+  border-bottom:2px solid #eeeeee;
+  border-top:2px solid #eeeeee;
+}
+.samples-list-fieldset table > tbody > tr:first-child > td{
+  border-top:none;
+}
+.samples-list-fieldset table > tbody > tr > td{
+  vertical-align:middle;
+}
+
+#step4 table a{
+  color:#5c6873;
+}
+#step4 table a > p{
+  border: 1px solid #aaaaaa;
+  border-radius: 100%;
+  width: 2em;
+  height: 2em;
+  line-height: 2em;
+  margin: 0.25em;
+}

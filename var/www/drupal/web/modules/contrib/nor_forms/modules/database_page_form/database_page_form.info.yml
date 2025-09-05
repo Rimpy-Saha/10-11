@@ -1,0 +1,5 @@
+name: Database Page Gated Form
+description: gate the database page content
+type: module
+core_version_requirement: ^8.8 || ^9 || ^10
+package: Norgen Biotek

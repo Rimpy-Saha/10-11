@@ -1,0 +1,22 @@
+{#
+/**
+ * @file
+ * Template for the nor_publications add/edit form.
+ *
+ * Available variables:
+ * - form: The form.
+ *
+ * @ingroup themeable
+ */
+#}
+<div class="layout-nor_publication-form clearfix">
+  <div class="layout-region layout-region-nor_publication-main">
+    {{ form|without('advanced', 'actions') }}
+  </div>
+  <div class="layout-region layout-region-nor_publication-secondary">
+    {{ form.advanced }}
+  </div>
+  <div class="layout-region layout-region-nor_publication-footer">
+    {{ form.actions }}
+  </div>
+</div>

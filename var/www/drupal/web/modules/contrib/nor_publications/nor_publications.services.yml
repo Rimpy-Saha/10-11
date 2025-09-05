@@ -1,0 +1,3 @@
+services:
+  nor_publications.utils:
+    class: Drupal\nor_publications\Service\Utils

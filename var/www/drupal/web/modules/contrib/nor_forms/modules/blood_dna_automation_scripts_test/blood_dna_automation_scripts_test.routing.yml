@@ -1,0 +1,7 @@
+blood_dna_form_test.automation_form_test:
+  path: '/blood-dna-automation-scripts-form-test'
+  defaults:
+    _title: 'Blood DNA Automation Scripts Form'  # Update title case for consistency
+    _form: '\Drupal\blood_dna_automation_scripts_test\Form\BloodDnaAutomationScriptsFormTest'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

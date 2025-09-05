@@ -1,0 +1,39 @@
+<?php
+
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implements hook_entity_access().
+ */
+function commerce_nor_permission_entity_access(EntityInterface $entity, $operation, AccountInterface $account) 
+{
+  // Check if the entity is a product.
+  if ($entity->getEntityTypeId() === 'commerce_product' || $entity->getEntityTypeId() === 'node') 
+  {
+    // Check if the operation is 'view'.
+    if ($operation === 'view') 
+    {
+      // Check if the product is unpublished.
+      if (!$entity->isPublished()) 
+      {
+        // Check if the user has the 'editor' role.
+        if ((in_array('editor', $account->getRoles())) ||(in_array('scientist', $account->getRoles())))
+        {
+          // \Drupal::logger('commerce_nor_permission')->error('This was the role'.$account->getRoles().' and the entity was'.$entity->getEntityTypeId());
+          // Allow access to unpublished products.
+          return AccessResult::allowed();
+        }
+      }
+    }
+  }
+  // else
+  // {
+  //   \Drupal::logger('commerce_nor_permission')->error('Entity with no permission: '.$entity->getEntityTypeId());
+  // }
+  
+  // No opinion.
+  return AccessResult::neutral();
+}
+ 

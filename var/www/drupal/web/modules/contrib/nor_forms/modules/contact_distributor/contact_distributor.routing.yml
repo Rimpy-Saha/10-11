@@ -1,0 +1,7 @@
+contact_distributor.contactdistributor_form:
+  path: 'distributor-application-form'
+  defaults:
+    _title: 'Contact Distributor Form'  # Update title case for consistency
+    _form: '\Drupal\contact_distributor\Form\ContactDistributorForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

@@ -1,0 +1,78 @@
+nor_forms_validation:
+  version: 1.x
+  js:
+    js/nor_forms_validation.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/ajax
+
+nor_forms_toggle:
+  version: 1.x
+  js:
+    js/custom_contactForms.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/ajax
+
+recaptcha:
+  version: 1.x
+  js:
+    https://www.google.com/recaptcha/api.js: { type: external, minified: true }
+    js/recaptcha_ajax.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/ajax
+
+ga4_add_to_cart:
+  js:
+    js/ga4_add_to_cart.js: {}
+  dependencies:
+    - core/drupalSettings
+
+ga4_remove_from_cart:
+  js:
+    js/ga4_remove_from_cart.js: {}
+  dependencies:
+    - core/drupalSettings
+
+ga4_purchase:
+  js:
+    js/ga4_purchase.js: {}
+  dependencies:
+    - core/drupalSettings
+
+ga4_add_to_wishlist:
+  js:
+    js/ga4_add_to_wishlist.js: {}
+  dependencies:
+    - core/drupalSettings
+
+ga4_login:
+  js:
+    js/ga4_login.js: {}
+  dependencies:
+    - core/drupalSettings
+
+ga4_sign_up:
+  js:
+    js/ga4_sign_up.js: {}
+  dependencies:
+    - core/drupalSettings
+
+magbead_dnase_promo_popup:
+  js:
+    js/magbead_dnase_promo_popup.js: {}
+  css:
+    theme:
+      css/magbead_promo_popup.css: {}
+  dependencies:
+    - core/drupalSettings
+
+social_media_popup:
+  js:
+    js/social_media_popup.js: {}
+  dependencies:
+    - core/drupalSettings

@@ -1,0 +1,7 @@
+express_order.express_order:
+  path: '/express-order'
+  defaults:
+    _title: 'Express Order Form'  # Update title case for consistency
+    _form: '\Drupal\express_order\Form\ExpressOrderForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

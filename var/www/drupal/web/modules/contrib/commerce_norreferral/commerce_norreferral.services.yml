@@ -1,0 +1,14 @@
+services:
+  commerce_norreferral.user_referral_database:
+    class: Drupal\commerce_norreferral\Database\UserReferralDatabase
+    arguments: ['@database']
+
+  commerce_norreferral.order_complete:
+    class: Drupal\commerce_norreferral\EventSubscriber\OrderCompleteSubscriber
+    arguments: ['@entity_type.manager', '@current_user', '@config.factory', '@commerce_norreferral.user_referral_database']
+    tags:
+      - { name: event_subscriber }
+
+  commerce_norreferral.referral_link:
+    class: Drupal\commerce_norreferral\ReferralLinkService
+

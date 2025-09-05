@@ -1,0 +1,7 @@
+name: 'Commerce Norgen Cart Popup'
+type: module
+description: 'Show cart popup after adding a product to the cart.'
+core_version_requirement: ^10
+package: Custom
+dependencies:
+  - drupal:commerce_cart

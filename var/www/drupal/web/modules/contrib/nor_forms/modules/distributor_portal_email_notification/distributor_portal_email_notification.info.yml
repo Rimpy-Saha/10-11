@@ -1,0 +1,5 @@
+name: Distributor Portal Email Notification Form
+description: Custom module for sending email to notify distributor of the new announcement.
+type: module
+package: Norgen Biotek
+core_version_requirement: ^8.7 || ^9 || ^10

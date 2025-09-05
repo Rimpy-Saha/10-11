@@ -1,0 +1,7 @@
+book_meeting.bookmeeting_form:
+  path: 'book-meeting-form'
+  defaults:
+    _title: 'Book Meeting Form'  # Update title case for consistency
+    _form: '\Drupal\book_meeting\Form\BookMeetingForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

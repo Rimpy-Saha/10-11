@@ -1,0 +1,7 @@
+order_status.status_form:
+  path: '/order-status-form'
+  defaults:
+    _title: 'Order Status Form'  # Update title case for consistency
+    _form: '\Drupal\order_status\Form\OrderStatusForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

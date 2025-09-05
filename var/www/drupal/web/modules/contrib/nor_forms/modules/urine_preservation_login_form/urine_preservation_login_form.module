@@ -1,0 +1,39 @@
+<?php
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\node\NodeInterface;
+
+
+function hasAccess() {
+    return AccessResult::allowedIf(\Drupal::request()->cookies->has('urine_preservation_access_granted'))->addCacheContexts(['cookies:urine_preservation_access_granted']);
+}
+/**
+ * Implements hook_node_access().
+ */
+function urine_preservation_login_form_node_access(NodeInterface $node, $op, AccountInterface $account) {
+  // Restrict access to a specific node (replace 123 with your node ID).
+  if ($node->id() == 2920) {
+    if (!hasAccess()->isAllowed()) {    
+        return AccessResult::forbidden()->addCacheContexts(['cookies:urine_preservation_access_granted']);
+    }
+  }
+  return AccessResult::neutral();
+}
+
+/* // my_module.module
+function my_module_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
+   $node = \Drupal::routeMatch()->getParameter('node');
+  
+  // Check if we're viewing a node and get its ID
+  if ($node instanceof \Drupal\node\NodeInterface) {
+    $nid = $node->id();
+    if($nid == 2736 ){
+        // For html.html.twig overrides
+        if ($hook === 'html') {
+            $suggestions[] = 'html__urine_login';
+        }
+    }
+  }
+  
+} */

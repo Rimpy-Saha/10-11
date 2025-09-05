@@ -1,0 +1,9 @@
+name: Commerce Norgen Referral
+type: module
+description: 'Provides Referral functionality with Commerce for Norgen Referral Program'
+package: Norgen Biotek
+dependencies:
+  - commerce
+  - commerce_store
+configure: commerce_norreferral.admin_settings
+core_version_requirement: ^10.0

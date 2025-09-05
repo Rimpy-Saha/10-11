@@ -1,0 +1,7 @@
+name: 'Commerce Norgen Request Quote'
+type: module
+package: Norgen Biotek
+description: 'Adds request quote button to the checkout flow.'
+core_version_requirement: ^8 || ^9 || ^10
+
+

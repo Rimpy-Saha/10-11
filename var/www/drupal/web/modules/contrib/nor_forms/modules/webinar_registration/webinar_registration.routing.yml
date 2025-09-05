@@ -1,0 +1,7 @@
+webinar_registration.form:
+  path: '/webinar-registration'
+  defaults:
+    _title: 'Webinar Registration Form'  # Update title case for consistency
+    _form: '\Drupal\webinar_registration\Form\WebinarRegistrationForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

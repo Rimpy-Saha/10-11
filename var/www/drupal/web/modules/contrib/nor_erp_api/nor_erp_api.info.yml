@@ -1,0 +1,5 @@
+name: Norgen ERP Api
+description: Custom module for erp.
+type: module
+package: Norgen Biotek
+core_version_requirement: ^8.7 || ^9 || ^10

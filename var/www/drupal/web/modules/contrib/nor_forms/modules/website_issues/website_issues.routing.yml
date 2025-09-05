@@ -1,0 +1,7 @@
+website_issues.websiteissues_form:
+  path: '/website-issues-form'
+  defaults:
+    _title: 'Website Issues Form'  # Update title case for consistency
+    _form: '\Drupal\website_issues\Form\WebsiteIssuesForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

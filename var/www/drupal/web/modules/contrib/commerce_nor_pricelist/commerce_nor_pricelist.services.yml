@@ -1,0 +1,10 @@
+services:
+  commerce_nor_pricelist.custom_pricelist_repository:
+    class: Drupal\commerce_nor_pricelist\Repository\CustomPriceListRepository
+    arguments: ['@entity_type.manager', '@current_user', '@commerce_store.current_store']
+
+  commerce_nor_pricelist.custom_pricelist_price_resolver:
+    class: Drupal\commerce_nor_pricelist\Resolver\CustomPriceListPriceResolver
+    arguments: ['@commerce_nor_pricelist.custom_pricelist_repository']
+    tags:
+      - { name: commerce_price.price_resolver, priority: 1000 }

@@ -1,0 +1,65 @@
+ /* Gated Automation Scripts */
+ #magbead-promo-overlay{
+    display:none;
+    width:100%;
+    height:100vh;
+    left:0;
+    top:0;
+    position:fixed;
+    background-color:rgba(0,0,0,0.5);
+    z-index:999999;
+  }
+  #magbead-promo-overlay.active{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  #magbead-promo-overlay > .magbead-promo-wrapper{
+    background-color:white;
+    width: 600px;
+    max-width: calc(100% - 30px);
+    max-height:95%;
+    overflow:auto;
+    margin: auto auto;
+    padding: 20px 40px;
+    border-radius: 10px;
+    position:relative;
+  }
+
+  #magbead-promo-overlay > .magbead-promo-wrapper .disclaimer{
+    font-size:12px;
+  }
+
+  html.scroll-lock{
+    overflow:hidden;
+  }
+
+
+  .magbead-promo-wrapper > h2{
+    font-weight:bold;
+    font-size:24px;
+  }
+  .magbead-promo-wrapper .img-and-prices{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+  }
+  .magbead-promo-wrapper .img-and-prices > img{
+    max-height:150px;
+  }
+  .magbead-promo-wrapper .img-and-prices > .prices{
+    text-align:right;
+  }
+  .magbead-promo-wrapper .img-and-prices > .prices s,
+  .magbead-promo-wrapper .img-and-prices > .prices b{
+   font-size:24px;;
+  }
+
+  .magbead-promo-wrapper .btn-primary {
+    margin: auto;
+    display: block;
+    width: fit-content;
+  }
+  /* End Gated Automation Scripts */

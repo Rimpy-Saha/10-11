@@ -1,0 +1,7 @@
+web_invoice.webinvoice_form:
+  path: '/web-invoice-form'
+  defaults:
+    _title: 'Invoice'  # Update title case for consistency
+    _form: '\Drupal\web_invoice\Form\WebInvoiceForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

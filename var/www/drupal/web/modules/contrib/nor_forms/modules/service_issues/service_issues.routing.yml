@@ -1,0 +1,7 @@
+service_issues.issues_form:
+  path: '/service-issues-form'
+  defaults:
+    _title: 'Service Issues'  # Update title case for consistency
+    _form: '\Drupal\service_issues\Form\ServiceIssuesForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

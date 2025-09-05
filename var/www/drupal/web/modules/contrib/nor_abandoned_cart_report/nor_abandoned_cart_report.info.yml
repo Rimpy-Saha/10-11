@@ -1,0 +1,7 @@
+name: 'Report Maker'
+type: module
+description: 'A custom module for generating reports based on date range.'
+core_version_requirement: ^8 || ^9 || ^10
+package: Norgen Biotek
+dependencies:
+  - drupal:views

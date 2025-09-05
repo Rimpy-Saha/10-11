@@ -1,0 +1,7 @@
+public_relations.relations_form:
+  path: '/public-relations-form'
+  defaults:
+    _title: 'Public Relation Inquiries'  # Update title case for consistency
+    _form: '\Drupal\public_relations\Form\PublicRelationsForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

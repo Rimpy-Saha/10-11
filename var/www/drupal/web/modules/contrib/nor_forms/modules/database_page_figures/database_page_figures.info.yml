@@ -1,0 +1,5 @@
+name: All Figures
+description: custom display with search sorting and filters for product data figures
+type: module
+core_version_requirement: ^8.8 || ^9 || ^10
+package: Norgen Biotek

@@ -1,0 +1,5 @@
+name: Business Opportunities Form
+description: Custom module for business opportunites form.
+type: module
+package: Norgen Biotek
+core_version_requirement: ^8.7 || ^9 || ^10

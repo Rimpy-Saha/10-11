@@ -1,0 +1,7 @@
+job_application.application_form:
+  path: '/job-application-form'
+  defaults:
+    _title: 'Job Application Form'  # Update title case for consistency
+    _form: '\Drupal\job_application\Form\JobApplicationForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

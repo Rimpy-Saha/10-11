@@ -1,0 +1,7 @@
+pathogen_nucleic_acid_form_test.automation_form_test:
+  path: '/pathogen-nucleic-acid-automation-scripts-form-test'
+  defaults:
+    _title: 'Pathogen Nucleic Acid Automation Scripts Form'  # Update title case for consistency
+    _form: '\Drupal\pathogen_nucleic_acid_automation_scripts_test\Form\PathogenNucleicAcidAutomationScriptsFormTest'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

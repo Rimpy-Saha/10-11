@@ -1,0 +1,7 @@
+soil_dna_form_test.automation_form_test:
+  path: '/soil-dna-automation-scripts-form-test'
+  defaults:
+    _title: 'Soil DNA Automation Scripts Form'  # Update title case for consistency
+    _form: '\Drupal\soil_dna_automation_scripts_test\Form\SoilDnaAutomationScriptsFormTest'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

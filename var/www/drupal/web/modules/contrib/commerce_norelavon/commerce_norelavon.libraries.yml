@@ -1,0 +1,16 @@
+elavon_test:
+  js:
+    "https://api.convergepay.com/hosted-payments/PayWithConverge.js": {}
+
+elavon_live:
+  js:
+    "https://api.convergepay.com/hosted-payments/PayWithConverge.js": {}
+
+OffsiteIFramePayment:
+  js:
+      js/OffsiteIFramePayment.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+    - core/drupalSettings

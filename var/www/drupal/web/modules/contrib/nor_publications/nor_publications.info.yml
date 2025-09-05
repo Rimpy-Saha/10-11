@@ -1,0 +1,18 @@
+name: Norgen Publications
+type: module
+description: 'Defines the Norgen Publications entity and associated features.'
+package: Custom Entity Modules
+core_version_requirement: ^9.3 || ^10
+configure: entity.nor_publications.collection
+dependencies:
+  - entity:entity
+
+# Information added by Drupal.org packaging script on 2023-09-20
+# version: '1.0.0'
+# project: 'nor_publications'
+# datestamp: 1695179399
+
+# Information added by Drupal.org packaging script on 2023-11-08
+version: '1.0.1'
+project: 'nor_publications'
+datestamp: 1699407902

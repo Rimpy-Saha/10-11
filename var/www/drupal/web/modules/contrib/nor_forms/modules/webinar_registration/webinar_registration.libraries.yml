@@ -1,0 +1,6 @@
+webinar_registration:
+  css:
+    theme:
+      css/webinar_registration.css: {}
+  dependencies:
+    - core/drupalSettings

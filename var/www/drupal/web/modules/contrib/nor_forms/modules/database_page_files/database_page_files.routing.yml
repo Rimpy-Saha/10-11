@@ -1,0 +1,14 @@
+database_page_files.dbfiles_form:
+  path: "/database_page_files"
+  defaults:
+    _form: '\Drupal\database_page_files\Form\DatabasePageFiles'
+    _title: "All Files"
+    #_controller: '\Drupal\database_page_files\Form\DatabasePageFiles::changePage'
+  requirements:
+    #_permission: "administrator"
+    _permission: 'access content'  # Use _permission instead of _access
+  options:
+    # This is the magic line:
+    parameters:
+      _wrapper_format: drupal_ajax
+    no_cache: true

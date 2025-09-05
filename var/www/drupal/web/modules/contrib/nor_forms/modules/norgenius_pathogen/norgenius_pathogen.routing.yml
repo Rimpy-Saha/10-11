@@ -1,0 +1,7 @@
+norgenius_pathogen.norgeniuspathogen_form:
+  path: 'norgenius-pathogen-form'
+  defaults:
+    _title: 'Norgenius Pathogen Form'  # Update title case for consistency
+    _form: '\Drupal\norgenius_pathogen\Form\NorgeniusPathogenForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

@@ -1,0 +1,4 @@
+sender_referral_points_percentage: '10'
+sender_bonus_referral_points: '100'
+user_max_redeemable_points: '500'
+points_factor: '10'

@@ -1,0 +1,6 @@
+database_page_files:
+  css:
+    theme:
+      css/database_page_files.css: {}
+  dependencies:
+    - core/drupalSettings

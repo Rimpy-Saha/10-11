@@ -1,0 +1,33 @@
+.oem-contact-form .inquiry-type-fieldset fieldset .fieldset-wrapper .form-checkboxes > div:last-child{
+    margin-bottom:0px;
+}
+/* .form-item-inquiry-type-other,
+.form-item.form-group.form-item-inquiry-type-other{
+    margin-top:0px;
+} */
+.oem-contact-form .inquiry-type-fieldset fieldset > legend{
+    border-bottom:none;
+    color:black;
+    font-size:18px;
+    font-weight:300;
+}
+.oem-contact-form > #ajax-wrapper{
+    margin-bottom:30px;
+}
+.oem-contact-form .grid-fieldset > .fieldset-wrapper{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap:15px;
+}
+.oem-contact-form .grid-fieldset > .fieldset-wrapper > .form-group{
+    margin:5px;
+}
+.oemcontactform-container{
+    max-width:900px;
+    margin:auto;
+}
+@media screen and (max-width:700px){
+    .oem-contact-form .grid-fieldset > .fieldset-wrapper{
+        grid-template-columns: 1fr;
+    }
+}

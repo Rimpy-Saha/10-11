@@ -1,0 +1,7 @@
+cells_and_tissue_dna_form_test.automation_form_test:
+  path: '/cells-and-tissue-dna-automation-scripts-form-test'
+  defaults:
+    _title: 'Cells And Tissue DNA Automation Scripts Form'  # Update title case for consistency
+    _form: '\Drupal\cells_and_tissue_dna_automation_scripts_test\Form\CellsAndTissueDnaAutomationScriptsFormTest'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

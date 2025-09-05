@@ -1,0 +1,5 @@
+name: Conference Lead Form
+description: Custom module for conference inquiries form.
+type: module
+package: Norgen Biotek
+core_version_requirement: ^8.7 || ^9 || ^10

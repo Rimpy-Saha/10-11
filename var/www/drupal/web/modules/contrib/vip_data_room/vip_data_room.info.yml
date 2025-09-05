@@ -1,0 +1,5 @@
+name: 'VIP Data Room'
+type: module
+description: 'Hosts the data room content'
+core_version_requirement: ^9 || ^10
+package: Norgen Biotek

@@ -1,0 +1,7 @@
+request_quote.requestquote_form:
+  path: "/request-quote"
+  defaults:
+    _form: '\Drupal\request_quote\Form\RequestQuoteForm'
+    _title: "Request Quote Form"
+  requirements:
+    _permission: "access content"

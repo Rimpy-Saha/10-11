@@ -1,0 +1,5 @@
+services:
+  nor_user_rules.route_subscriber:
+    class: Drupal\nor_user_rules\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }

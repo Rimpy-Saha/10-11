@@ -1,0 +1,7 @@
+ngs_service.ngsservice_form:
+  path: 'ngs-service-form'
+  defaults:
+    _title: 'NGS Service Form'  # Update title case for consistency
+    _form: '\Drupal\ngs_service\Form\NGSServiceForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

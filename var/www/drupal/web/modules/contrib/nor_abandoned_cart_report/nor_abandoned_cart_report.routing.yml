@@ -1,0 +1,7 @@
+nor_abandoned_cart_report.admin_reports:
+  path: '/admin/reports/ac_report'
+  defaults:
+    _form: '\Drupal\nor_abandoned_cart_report\Form\ReportMakerForm'
+    _title: 'Report Maker'
+  requirements:
+    _permission: 'access manager reports'

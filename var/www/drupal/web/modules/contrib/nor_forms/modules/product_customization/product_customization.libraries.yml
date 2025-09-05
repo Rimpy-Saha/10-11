@@ -1,0 +1,6 @@
+product_customization:
+  css:
+    theme:
+      css/product_customization.css: {}
+  dependencies:
+    - core/drupalSettings

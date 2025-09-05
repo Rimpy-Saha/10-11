@@ -1,0 +1,7 @@
+stool_dna_form_test.automation_form_test:
+  path: '/stool-dna-automation-scripts-form-test'
+  defaults:
+    _title: 'Stool DNA Automation Scripts Form'  # Update title case for consistency
+    _form: '\Drupal\stool_dna_automation_scripts_test\Form\StoolDnaAutomationScriptsFormTest'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

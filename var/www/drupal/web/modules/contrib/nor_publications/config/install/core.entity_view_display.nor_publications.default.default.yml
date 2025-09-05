@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.nor_publications.default.field_body
+    - nor_publications.nor_publications_type.default
+  module:
+    - text
+id: nor_publications.default.default
+targetEntityType: nor_publications
+bundle: default
+mode: default
+content:
+  field_body:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  langcode: true
+  name: true
+  uid: true

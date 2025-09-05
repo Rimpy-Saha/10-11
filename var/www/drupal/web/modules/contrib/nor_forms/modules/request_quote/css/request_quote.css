@@ -1,0 +1,174 @@
+fieldset.customer-information > .fieldset-wrapper, 
+fieldset.customer-application-information > .fieldset-wrapper, 
+fieldset.shipping-information > .fieldset-wrapper, 
+fieldset.billing-information > .fieldset-wrapper .billing-toggle-fields > .fieldset-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 20px;
+}
+
+#customer-info > .form-wrapper,
+[data-drupal-selector="edit-step-3"] .edit-shipping-information > .fieldset-wrapper,
+[data-drupal-selector="edit-step-3"] .edit-billing-information > .fieldset-wrapper{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 20px;
+}
+
+[data-drupal-selector="edit-step-3"] .edit-billing-information > .fieldset-wrapper .form-item-same-as-shipping{
+    grid-column: 1 / 3;
+}
+
+.form-item-hr-separator > hr{
+    border-top: 2px solid;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.form-item.form-item-sample-subscribe{
+    margin-bottom:0px;
+}
+.disclaimer{
+    font-size:12px;
+}
+
+[data-drupal-selector="edit-sample-referred"] .js-form-type-radio{
+    display:flex;
+    gap:10px;
+}
+[data-drupal-selector="edit-sample-referred"] legend {
+    margin-bottom: 0px;
+    font-size: 17px;
+    line-height: inherit;
+    border: none;
+    color: black;
+}
+
+.quote-form-button-container{
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#request-quote-form-container{
+    padding:40px 0px;
+    max-width:900px;
+    margin:auto;
+}
+
+#request-quote-form-container .js-form-type-entity-autocomplete input,
+#request-quote-form-container .js-form-type-number input{
+    border-radius:4px;
+    padding:5px 10px;
+    border: 1px solid #d0d7de;
+}
+#request-quote-form-container .js-form-type-number input{
+    text-align: center;
+}
+
+#request-quote-form-container #names-fieldset-wrapper .form-group,
+#request-quote-form-container #names-fieldset-wrapper .form-item{
+    margin-top:0px;
+    margin-bottom:0px;
+}
+#request-quote-form-container #names-fieldset-wrapper td{
+    padding:20px 10px;
+    vertical-align:middle;
+}
+#request-quote-form-container #names-fieldset-wrapper td .submit > input + .ajax-progress-throbber{
+    position:absolute;
+}
+
+#request-quote-form-container .request-quote-form{
+    border-radius:20px;
+    border:2px solid var(--norgen-grey-light);
+    padding:40px;
+}
+
+#request-quote-form-container .request-quote-form hr{
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+/* Progress Bar */
+.currentPage, .progressLevel{
+    display:inline-block;
+    vertical-align:middle;
+  }
+  .progress{
+    display:inline-block;
+    width:50%;
+    min-width:250px;
+    max-width:600px;
+    vertical-align:middle;
+    margin:0 15px;
+    margin-bottom:0px;
+  }
+  .progress-bar{
+    border-radius:4px;
+    background-color:var(--norgen-primary-blue);
+  
+  }
+  #request-quote-form-container.progress-bar[aria-valuenow="1"]{
+    width:33%;
+  }
+  #request-quote-form-container .progress-bar[aria-valuenow="2"]{
+    width:67%;
+  }
+  #request-quote-form-container .progress-bar[aria-valuenow="3"]{
+    width:100%;
+  }
+  .form-item-hr-separator > hr {
+    border-top: 2px solid;
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
+  
+  #request-quote-form-container progress::-moz-progress-bar { 
+    background-color:#004897;
+    background-color:var(--norgen-primary-blue);
+  }
+  #request-quote-form-container progress::-webkit-progress-bar{
+    background-color:#f7f7f7;
+    background-color:var(--norgen-grey-light);
+  }
+  #request-quote-form-container progress::-webkit-progress-value{
+    background-color:#004897;
+    background-color:var(--norgen-primary-blue);
+  }
+  #request-quote-form-container progress{
+    color:#004897;
+    color:var(--norgen-primary-blue);
+    width:100%;
+    height:20px;
+    border-radius:4px;
+    overflow:hidden;
+  }
+
+  #request-quote-form-container .product-select-wrapper,
+  #request-quote-form-container .selected-product-table-wrapper{
+    overflow:auto;
+  }
+
+  @media screen and (max-width:900px){
+    #request-quote-form-container .entity-product-request-field{
+      width:350px;
+    }
+  }
+  @media screen and (max-width:600px){ /* Mobile */
+    fieldset.customer-information > .fieldset-wrapper, 
+    fieldset.customer-application-information > .fieldset-wrapper, 
+    fieldset.shipping-information > .fieldset-wrapper, 
+    fieldset.billing-information > .fieldset-wrapper .billing-toggle-fields > .fieldset-wrapper {
+        grid-template-columns: 1fr;
+    }
+    #customer-info > .form-wrapper,
+    [data-drupal-selector="edit-step-3"] .edit-shipping-information > .fieldset-wrapper,
+    [data-drupal-selector="edit-step-3"] .edit-billing-information > .fieldset-wrapper{
+        grid-template-columns: 1fr;
+    }
+    [data-drupal-selector="edit-step-3"] .edit-billing-information > .fieldset-wrapper .form-item-same-as-shipping{
+        grid-column: 1 / 2;
+    }
+
+  }

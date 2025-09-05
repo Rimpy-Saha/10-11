@@ -1,0 +1,7 @@
+product_issues.productissues_form:
+  path: '/product-issues-form'
+  defaults:
+    _title: 'Product Issues'  # Update title case for consistency
+    _form: '\Drupal\product_issues\Form\ProductIssuesForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

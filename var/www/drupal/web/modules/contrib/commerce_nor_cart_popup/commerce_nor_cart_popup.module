@@ -1,0 +1,198 @@
+<?php
+use Drupal\commerce_order\Entity\Order;
+use Drupal\profile\Entity\Profile;
+
+function commerce_nor_cart_popup_form_alter(&$form, &$form_state, $form_id) {
+  if($form_id == "views_exposed_form" && $form["#id"] == "views-exposed-form-ajax-filterable-products-block-1"){
+      $user_country = commerce_nor_cart_popup_get_user_country();
+      if($user_country == 'CA' || $user_country == 'US'){
+          $form["field_ce_marked_value"]['#disabled'] = TRUE;
+      }
+  }
+}
+
+function commerce_nor_cart_popup_preprocess_views_view_field(array &$variables) {
+    // Check for the specific view and field (price field) you want to modify.
+    if (
+      ($variables['view']->id() == 'ajax_filterable_products' && ($variables['field']->field == 'price__number' || $variables['field']->field == 'commerce_add_to_cart_link')) || 
+      ($variables['view']->id() == 'wish_list' && ($variables['field']->field == 'price__number' || $variables['field']->field == 'commerce_add_to_cart_link'))
+      ) {
+        if (commerce_norquote_check_restricted_country()) {
+            $variables['output'] = ''; // Hide the price.
+            return;
+        } 
+    }
+    $user_country = commerce_nor_cart_popup_get_user_country();
+    if ($variables['view']->id() == 'ajax_filterable_products' || $variables['view']->id() == 'wish_list') // Wish List
+    {
+        if($user_country == 'CA')
+        {
+            if($variables['field']->table == 'commerce_product_variation_field_data' && $variables['field']->field == 'price__number')
+            {
+                $variables['output'] = ''; // Hide the USD price.
+                return;
+            }
+        }
+        else
+        {
+            if($variables['field']->table == 'commerce_pricelist_item' && $variables['field']->field == 'price__number')
+            {
+                $variables['output'] = ''; // Hide the CAD price.
+                return;
+            }
+
+        }
+           
+    }
+
+    /* if ($variables['view']->id() == 'duplicate_of_ajax_filterable_products' && ($variables['field']->field == 'price__number' || $variables['field']->field == 'commerce_add_to_cart_link')) {
+      if (commerce_norquote_check_restricted_country()) {
+          $variables['output'] = ''; // Hide the price.
+          return;
+      } 
+    }
+    if ($variables['view']->id() == 'duplicate_of_ajax_filterable_products')
+    {
+        if($user_country == 'CA')
+        {
+            if($variables['field']->table == 'commerce_product_variation_field_data')
+            { 
+                $variables['output'] = ''; // Hide the USD price.
+                return;
+            }
+        }
+        else
+        {
+            if($variables['field']->table == 'commerce_pricelist_item')
+            {
+                $variables['output'] = ''; // Hide the CAD price.
+                return;
+            }
+
+        }
+           
+    } */
+    
+}
+
+
+function commerce_nor_cart_popup_get_user_country()
+{
+
+  // Get the current order ID using your custom function
+ /*  $order_id = commerce_norquote_get_current_order_id();
+  // Check if a valid order ID is returned
+  if ($order_id>0) {
+    // Load the order
+    $order = Order::load($order_id);
+
+    // Retrieve the shipping profile from the order
+    $profiles = $order->collectProfiles();
+    $shipping_profile = isset($profiles['shipping']) ? $profiles['shipping'] : NULL;
+
+    // If a shipping profile is found, use its country
+    if ($shipping_profile) {
+      $address = $shipping_profile->get('address')->first()->getValue();
+      $userCountry = $address['country_code'];
+      
+      // Return the shipping country
+      return $userCountry;
+    }
+  }  */
+
+  // Check if the user is logged in
+  if (\Drupal::currentUser()->isAuthenticated()) {
+    // Get the current user
+    $user = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id());
+    $roles = $user->getRoles();
+
+    // If the user has a country field, check it
+    if ($user->hasField('field_country') && $user->get('field_country')->value != null) {
+      $userCountry = $user->get('field_country')->value;
+      // dump($userCountry);
+      /* if(\Drupal::currentUser()->id() == 10100){
+        dump($userCountry.' from account country');
+      } */
+      // Return the user's country
+      return $userCountry;
+    }
+    // LIAM ADDED THIS! 
+    elseif(in_array('canadian', $roles)){
+      /* if(\Drupal::currentUser()->id() == 10100){
+        dump('CA from account role');
+      } */
+      return 'CA';
+    }
+    else { // LIAM ADDED THIS! 
+      // If the user is not logged in, use the Smart IP service to get the country from their IP
+      $location = \Drupal::service('smart_ip.smart_ip_location');
+      $userCountry = $location->get('countryCode');
+      /* if(\Drupal::currentUser()->id() == 10100){
+        dump($userCountry.' from account smart ip');
+      } */
+      // Return the IP-based country (for anonymous users)
+      return $userCountry;
+    }  
+  } 
+  else {
+    // If the user is not logged in, use the Smart IP service to get the country from their IP
+    $location = \Drupal::service('smart_ip.smart_ip_location');
+    $userCountry = $location->get('countryCode');
+    /* if(\Drupal::currentUser()->id() == 10100){
+      dump($userCountry.' from anon smart ip');
+    } */
+    // Return the IP-based country (for anonymous users)
+    return $userCountry;
+  }
+  /* if(\Drupal::currentUser()->id() == 10100){
+    dump('default US');
+  } */
+  // If no conditions match, return US
+  return 'US';
+}
+
+
+/**
+ * Implements hook_form_alter() to check the cart before checkout.
+ */
+// function commerce_nor_cart_popup_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+    
+
+//     \Drupal::messenger()->addMessage(t('The minimum quantity for product_title is min_quantity. Please adjust the quantity in your cart.',), 'error');
+
+//     // Check if the form ID matches the multi-step checkout form ID.
+//     if ($form_id === 'commerce_checkout_flow_multistep_default') {
+//       $order = $form_state->getBuildInfo()['args'][0];
+      
+//     //   dump($form_state);
+//       if ($order instanceof \Drupal\commerce_order\Entity\OrderInterface) {
+//         $minimum_quantities = [
+//           '17200' => 10,
+//         ];
+//         // dump($form);
+//         // $error = FALSE;
+//         // foreach ($order->getItems() as $order_item) {
+//         //   $purchased_entity = $order_item->getPurchasedEntity();
+//         //   $sku = $purchased_entity->getSku();
+//         //   if (isset($minimum_quantities[$sku])) {
+//         //     $min_quantity = $minimum_quantities[$sku];
+//         //     if ($order_item->getQuantity() < $min_quantity) {
+//         //       $error = TRUE;
+//         //       $product_title = $purchased_entity->getTitle();
+//         //       \Drupal::messenger()->addMessage(t('The minimum quantity for @product_title is @min_quantity. Please adjust the quantity in your cart.', [
+//         //         '@product_title' => $product_title,
+//         //         '@min_quantity' => $min_quantity,
+//         //       ]), 'error');
+//         //     }
+//         //   }
+//         // }
+  
+//         // if ($error) {
+//         //   // Redirect to the cart page if there's an error.
+//         //   $form_state->setResponse(new \Symfony\Component\HttpFoundation\RedirectResponse('/cart'));
+//         //   $form_state->setRebuild(TRUE);
+//         // }
+//       }
+//     }
+//   }
+  

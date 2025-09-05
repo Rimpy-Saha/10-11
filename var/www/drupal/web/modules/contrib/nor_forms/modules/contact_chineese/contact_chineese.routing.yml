@@ -1,0 +1,7 @@
+contact_chineese.contactchineese_form:
+  path: 'contact-chineese-form'
+  defaults:
+    _title: 'Contacter Norgen Biotek Corp Chineese'  # Update title case for consistency
+    _form: '\Drupal\contact_chineese\Form\ContactChineeseForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

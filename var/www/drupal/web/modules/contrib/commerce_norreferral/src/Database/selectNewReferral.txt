@@ -1,0 +1,12 @@
+  public function NewReferral($receiver) {
+    $query = $this->database->select('user_referral_details', 'urd')
+      ->fields('updd')
+      ->condition('referral_receiver', receiver)
+      ->condition('referral_sender_points_status', 0)
+      ->condition('referral_sender_update_status', 0)
+      ->condition('referral_status', 1)
+      ->condition('order_id', NULL)
+      ->condition('order_amount', NULL)
+      ->execute();
+    return $query->fetchAssoc();
+  }

@@ -1,0 +1,6 @@
+nor_abandoned_cart_report.admin_reports_link:
+  title: 'Abandoned Cart Report'
+  route_name: nor_abandoned_cart_report.admin_reports
+  parent: system.admin_reports
+  description: 'Abandoned Carts Report Generator'
+  weight: 10

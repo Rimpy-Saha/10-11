@@ -1,0 +1,4155 @@
+<?php
+
+use Drupal\Core\Form\FormBase;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\file\Entity\File;
+use \Drupal\Core\File\FileSystemInterface;
+
+// Cart
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\commerce_cart\CartProviderInterface;
+use Drupal\commerce_cart\CartManagerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\commerce\Context;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\commerce_order\Resolver\OrderTypeResolverInterface;
+use Drupal\commerce_price\Resolver\ChainPriceResolverInterface;
+use Drupal\commerce_product\Entity\ProductInterface;
+use Drupal\commerce_product\Entity\ProductVariationInterface;
+use Drupal\commerce_store\CurrentStoreInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\URL;
+
+// new 
+use Drupal\commerce_price\Price;
+
+use Drupal\views\Entity\View;
+use Drupal\views\Views;
+
+// with multiple forms, checl the url as well
+use Drupal\Core\Routing\RouteMatchInterface;
+
+//eager return used to display numerous forms on same node which in this page acts as the contact us page 
+function nor_forms_form_alter(&$form, $form_state, $form_id) {
+
+  // alter add to cart forms
+  if(isset($form['#theme'][1]) && $form['#theme'][1] === 'commerce_order_item_add_to_cart_form'){
+    foreach (array_keys($form['actions']) as $action) {
+      if ($action != 'preview' && isset($form['actions'][$action]['#type']) && $form['actions'][$action]['#type'] === 'submit') {
+        $form['actions'][$action]['#submit'][] = 'submitAddtoCartRedirect';
+      }
+    }
+  }
+
+ /*  if($form_id == 'sample_request_form'){
+    if(method_exists($form_state,'getStorage')) dump($form_state->getStorage()['sample_current_step_id']);
+  } */
+
+  if ($form_id === 'user_pass' || $form_id === 'user_register_form') {
+    
+    $form['google_recaptcha'] = [
+      '#markup' => '<div class="g-recaptcha" data-sitekey="6Lcr4u0pAAAAAGj32knXkUzuHAXzj3CoAhtbJ1t5"></div>',
+      '#weight' => 50, 
+    ];
+    
+    $form['actions']['submit']['#prefix'] = '<div id="recaptcha-script"></div>';
+
+    $form['#validate'][] = 'nor_forms_user_pass_form_validate';
+  }
+
+  // if ($form_id === 'sample_request_form' || $form_id === 'request_quote_form' || $form_id == 'conference_lead_form') {
+  //   $form['#attached']['library'][] = 'nor_forms/recaptcha';
+  // }
+
+  $current_path = \Drupal::service('path.current')->getPath();
+  // Check if the current path is related to a commerce page using regular expressions.
+  $commerce_page = false;
+
+  // Patterns to match different commerce-related paths.
+  if (preg_match('/^\/checkout\/(\d+)\/order_information/', $current_path) ||
+      preg_match('/^\/checkout\/(\d+)\/review/', $current_path) ||
+      preg_match('/^\/cart/', $current_path)) {
+    $commerce_page = true;
+  }
+
+
+  if ($form_id == 'commerce_checkout_flow_multistep_default' || $form_id == 'sample_request_form' 
+  || $commerce_page) 
+  { } 
+  else 
+  {  
+    // $form['#attached']['library'][] = 'nor_forms/nor_forms_validation'; 
+    $form['#attached']['library'][] = 'nor_forms/recaptcha';
+  }
+
+  // commerce_cart_form
+  if(isset($form_state->getBuildInfo()['base_form_id']) && $form_state->getBuildInfo()['base_form_id'] == 'views_form_commerce_cart_form_default'){
+    foreach($form['remove_button'] as $index=>&$remove_button){
+      if($index!='#tree'){
+        $remove_button['#value'] = 'Remove Product';
+      }
+    }
+  }
+
+  if($form_id == 'request_sample_form'){
+    $form['#attached']['library'][] = 'request_sample/request_sample';
+  }
+  if($form_id == 'webinar_registration_form'){
+    $form['#attached']['library'][] = 'webinar_registration/webinar_registration';
+  }
+
+  return $form;
+}
+
+
+function submitAddtoCartRedirect(array &$form, FormStateInterface &$form_state)
+{
+  $url_query = ['v' => $form_state->getValue('purchased_entity')[0]['variation']];
+  $url = Url::fromRoute('<current>');
+  $url->setOptions(array('query' => $url_query));
+    
+  $form_state->setRedirect(
+    'entity.node.canonical',
+    URL::fromUserInput($url->toString())->getRouteParameters(),
+    URL::fromUserInput($url->toString())->getOptions()
+  );
+}
+
+//Recaptcha Field Validation for Core Forms - Form Alter
+function nor_forms_user_pass_form_validate(&$form, FormStateInterface $form_state) {
+
+  if (isset($_POST['g-recaptcha-response']) && $_POST['g-recaptcha-response'] != '') {
+    $captcha_response = $_POST['g-recaptcha-response'];
+    $remote_ip = $_SERVER['REMOTE_ADDR'];
+
+    
+
+    $result = nor_forms_verifyGoogleRecaptcha($captcha_response, $remote_ip);
+
+    $data = json_decode($result, true);
+
+    if (!$data['success']) {
+        $form_state->setErrorByName('google_recaptcha', t('Please complete the captcha to prove you are human'));
+    }
+  } else {
+      $form_state->setErrorByName('google_recaptcha', t('Please complete the reCAPTCHA verification.'));
+  }
+  if (empty($_POST['g-recaptcha-response'])) {
+      $form_state->setErrorByName('google_recaptcha', t('Please complete the reCAPTCHA verification.'));
+  }
+
+}
+
+//Recaptcha Wiget Validation - called in Recaptcha Field Validation method above 
+function nor_forms_verifyGoogleRecaptcha($response, $remote_ip) {
+  if (!function_exists('curl_init')) {
+      die('CURL is not installed!');
+  }
+
+  $url_get = 'https://www.google.com/recaptcha/api/siteverify?secret=6Lcr4u0pAAAAAKDDRrTBlbkrV3ClMD9hz-z8DCfZ&response=' . $response . '&remoteip=' . $remote_ip;
+
+  $ch = curl_init();
+  curl_setopt($ch, CURLOPT_URL, $url_get);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  $response = curl_exec($ch);
+  curl_close($ch);
+
+  return $response;
+}
+
+function getCountryOptions()
+{
+  // Get countries with codes directly from the CountryRepository service
+  $country_repository = \Drupal::service('address.country_repository');
+  $countries = $country_repository->getList();
+
+  // Format options array with country codes as keys
+  $options = [];
+  foreach ($countries as $country_code => $country_name) {
+    $options[$country_code] = sprintf("%s", $country_name);
+  }
+
+  return $options;
+}
+
+
+function nor_forms_email_redirect($output, $email = '', $subject = '', $cc = null) {
+  $to = $email;
+
+  //$output = '<p><span style="color:red">Test Output</span></p><p>This includes html!</p>';
+  if (\Drupal::moduleHandler()->moduleExists('mimemail')) {
+    $langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
+    $message = \Drupal::service('plugin.manager.mail')->mail('mime_mail', 'test', $to, $langcode, [], NULL, FALSE);
+    $message['body'] = array();
+    $message['body'][] = (string) $output;
+    $message['subject'] = (string) $subject;
+    if($cc!=null){
+      $message['headers'] = array(
+        'Cc' => $cc,
+      );
+    }
+    $mimemail = \Drupal::service('plugin.manager.mail')->createInstance('mime_mail');
+    $smtp = \Drupal::service('plugin.manager.mail')->createInstance('SMTPMailSystem');
+    $message = $mimemail->format($message);
+    $smtp->mail($message);
+  }
+}
+
+//for forms where user can only attach one file
+function nor_forms_submit_attachment($output, $email = '', $file = NULL, $subject = '', $cc = null)
+{
+  $to = $email;
+
+  if (\Drupal::moduleHandler()->moduleExists('mimemail') && !is_null($file)) {
+    $langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
+    $file_path = $file->getFileUri();
+    $message = \Drupal::service('plugin.manager.mail')->mail('mime_mail', 'test', $to, $langcode, [], NULL, FALSE);
+    $message['body'] = array();
+    $message['body'][] = (string) $output;
+    $message['subject'] = (string) $subject;
+    if($cc!=null){
+      $message['headers'] = array(
+        'Cc' => $cc,
+      );
+    }
+
+    // Add attachment if file path is provided
+    if ($file) {
+      $file_extension = pathinfo($file_path, PATHINFO_EXTENSION);
+      $file_mime_type = match ($file_extension) {
+        'jpg', 'jpeg' => 'image/jpeg',
+        'pdf' => 'application/pdf',
+        default => 'application/octet-stream'
+      };
+
+      $message['params']['attachments'][] = [
+        'filepath' => $file_path,
+        'filemime' => $file_mime_type,
+      ];
+    }
+
+    $mimemail = \Drupal::service('plugin.manager.mail')->createInstance('mime_mail');
+    $smtp = \Drupal::service('plugin.manager.mail')->createInstance('SMTPMailSystem');
+    $message = $mimemail->format($message);
+    $smtp->mail($message);
+  }
+}
+
+//This seperate file function to allow for multiple files to be attached for seperation of concerns
+function nor_forms_job_application($output, $email, $files, $subject = '')
+{
+  $to = $email;
+
+  if (\Drupal::moduleHandler()->moduleExists('mimemail')) {
+    $langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
+
+    $message = \Drupal::service('plugin.manager.mail')->mail('mime_mail', 'test', $to, $langcode, [], NULL, FALSE);
+    $message['body'] = array();
+    $message['body'][] = (string) $output;
+    $message['subject'] = (string) $subject;
+
+    // Add attachments
+    $attachments = [];
+    foreach ($files as $file) {
+      if (!is_null($file)) {
+        $file_path = $file->getFileUri();
+        $file_extension = pathinfo($file_path, PATHINFO_EXTENSION);
+        $file_mime_type = match ($file_extension) {
+          'jpg', 'jpeg' => 'image/jpeg',
+          'pdf', 'doc', 'docx' => 'application/octet-stream',
+          default => 'application/octet-stream'
+        };
+
+        $attachments[] = [
+          'filepath' => $file_path,
+          'filemime' => $file_mime_type,
+        ];
+      }
+    }
+
+    $message['params']['attachments'] = $attachments;
+
+    $mimemail = \Drupal::service('plugin.manager.mail')->createInstance('mime_mail');
+    $smtp = \Drupal::service('plugin.manager.mail')->createInstance('SMTPMailSystem');
+    $message = $mimemail->format($message);
+    $smtp->mail($message);
+  }
+}
+
+// Helper function that moves file from current location to destination. Useful for moving form upload attachments from temp folder to private folder.
+//
+// The options variable is an array that can let you pass in optional parameters
+//     Must be written with key values. Available options are:
+//           [
+//            'usage_module' => $usage_module,
+//            'usage_type' => $usage_type, 
+//            'usage_id' => $usage_id,
+//            'move_method' => $move_method,
+//           ]
+//
+// The $move_method variable sets the behavior for when the file already exists in the new location. Options are:
+//     EXISTS_RENAME = 0;   // append number until name is unique
+//     EXISTS_REPLACE = 1;  // replace existing file
+//     EXISTS_ERROR = 2;    // do nothing, return FALSE
+//
+function nor_forms_file_upload_move_permanent(File $file, string $new_location, $options = array()){
+  // initialize variables
+  $move_method = $options['move_method'] ?? FileSystemInterface::EXISTS_RENAME; //default: EXISTS_RENAME
+  $usage_module = $options['usage_module'] ?? 'nor_forms'; // default: nor_forms
+  $usage_type = $options['usage_type'] ?? 'submission'; // default: submission
+  $usage_id = $options['usage_id'] ?? \Drupal::currentUser()->id(); // default: user id
+
+  // Prepare permanent directory
+  \Drupal::service('file_system')->prepareDirectory($new_location, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
+  // Move file to permanent location
+  $destination = $new_location . '/' . $file->getFilename();
+  $file = \Drupal::service('file.repository')->move($file, $destination, $move_method);
+  $file->setPermanent();
+  $file->save();
+
+  // Add file usage to prevent garbage collection
+  \Drupal::service('file.usage')->add(
+    $file,
+    $usage_module,
+    $usage_type,
+    $usage_id
+  );
+
+  return $file;
+}
+// returns a formatted string from email value, to be used as a file system directory name 
+function nor_forms_email_to_directory_name(string $email){
+    // Prepare email field value to be used as a directory name
+    // 1. Lowercase everything first
+    $clean = strtolower($email);
+    // 2. Replace special characters with underscores
+    $clean = preg_replace('/[^a-z0-9]/', '_', $clean);
+    // 3. Remove consecutive underscores, trim, truncate
+    $clean = preg_replace('/_+/', '_', $clean);
+    $clean = trim($clean, '_');
+    $clean = substr($clean, 0, 50); // max length of 50 characters
+    // 4. Add hash for uniqueness and collision prevention since we removed special characters (truncated first 8 letters)
+    $hash = substr(md5($email), 0, 8);
+    return $clean . '_' . $hash;
+}
+
+
+function getCountryNames($country_code = '')
+{
+  // Get countries with codes directly from the CountryRepository service
+  $country_repository = \Drupal::service('address.country_repository');
+  $countries = $country_repository->getList();
+  $country_name = $countries[$country_code];
+  return $country_name;
+}
+
+function nor_forms_user_first_name()
+{
+  $current_user = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id());
+  $first_name = '';
+  if (isset($current_user->field_first_name)) {
+    $first_name = $current_user->field_first_name->value;
+  }
+  return $first_name;
+}
+
+function nor_forms_user_last_name()
+{
+  $current_user = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id());
+  $last_name = '';
+  if (isset($current_user->field_last_name)) {
+    $last_name = $current_user->field_last_name->value;
+  }
+  return $last_name;
+}
+
+/* Newly Added - Liam */
+function nor_forms_user_full_name()
+{
+  $current_user = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id());
+  $full_name = '';
+  if (isset($current_user->field_first_name)) {
+    $full_name .= $current_user->field_first_name->value;
+  }
+  if (isset($current_user->field_last_name)) {
+    if($full_name != ''){
+      $full_name .= ' ';
+    }
+    $full_name .= $current_user->field_last_name->value;
+  }
+  return $full_name;
+}
+
+function nor_forms_user_job_title()
+{
+  $current_user = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id());
+  $job_title = '';
+  if (isset($current_user->field_job_title)) {
+    $job_title = $current_user->field_job_title->value;
+  }
+  return $job_title;
+}
+/* End of newly added */
+
+function nor_forms_user_email()
+{
+  $current_user = \Drupal::currentUser();
+  $email = '';
+  $email = $current_user->getEmail();
+  return $email;
+}
+
+
+
+function nor_forms_submit_email($output, $email = 'david.findlay@norgenbiotek.com', $subject = '') {
+
+  $to = $email;
+
+  //$output = '<p><span style="color:red">Test Output</span></p><p>This includes html!</p>';
+  if (\Drupal::moduleHandler()->moduleExists('mimemail')) {
+    $langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
+    $message = \Drupal::service('plugin.manager.mail')->mail('mime_mail', 'test', $to, $langcode, [], NULL, FALSE);
+    $message['body'] = array();
+    $message['body'][] = (string) $output;
+    $message['subject'] = (string) $subject;
+    $mimemail = \Drupal::service('plugin.manager.mail')->createInstance('mime_mail');
+    $smtp = \Drupal::service('plugin.manager.mail')->createInstance('SMTPMailSystem');
+    $message = $mimemail->format($message);
+    $smtp->mail($message);
+  }
+}
+
+function nor_forms_user_presave($account) {
+  // user signed up for an account
+  if ($account->uid && $account->original == null && $account->status->value == 0) { // user created their account
+    $request = \Drupal::request();
+    $session = $request->getSession();
+    $session_variables['sign_up']['sign_up'] = TRUE;
+    $session_variables['sign_up']['method'] = 'website';
+    $session->set('ga4_account_variables', $session_variables);
+  }
+}
+
+// ga4 login session variable creation after user login
+function nor_forms_user_login($account){
+  $request = \Drupal::request();
+  $session = $request->getSession();
+  $session_variables['login']['login'] = TRUE;
+  $session_variables['login']['method'] = 'website';
+  $session->set('ga4_account_variables', $session_variables);
+}
+
+function nor_forms_ajax_error(array &$form, FormStateInterface $form_state, $Selector = '')
+{
+
+  $response = new AjaxResponse();
+  // Return commands to display errors on the form (e.g., using JavaScript)
+  \Drupal::messenger()->deleteByType('error');
+  $message_list = \Drupal::messenger()->all();
+  $messages = [
+    '#theme' => 'status_messages',
+    '#message_list' => $message_list,
+  ];
+  $scriptSelector = 'script[src*="https://www.google.com/recaptcha/api.js"]';
+  $response->addCommand(new ReplaceCommand($scriptSelector, '<script src="https://www.google.com/recaptcha/api.js" />'));
+  $messages = \Drupal::service('renderer')->render($messages);
+  $response->addCommand(new ReplaceCommand($Selector, $form));
+  $response->addCommand(new HtmlCommand('#result-message', $messages));
+  $messages = \Drupal::messenger()->deleteAll();
+  return $response;
+}
+
+function nor_forms_email_sent_ajax(array &$form, FormStateInterface $form_state, $Selector = '')
+{
+
+  $response = new AjaxResponse();
+
+  // Provide the Lottie animation iframe URL
+  $lottie_div =
+    '<div class="lottie-email-sent-text"><h2>Your Request Has Been Sent To Our Team.</h2>
+      <p>Our Team Will Reach Out To You Soon.</p>
+    </div>';
+  // '<h2>Your Request Has Been Sent To Our Team.</h2>
+  //   <p>Our Team Will Reach Out To You Soon.</p>
+  //   <p class="new_message" onclick="new_message()">Send a new message</p>
+  // </div>';
+
+  // HTML content for Lottie animation
+  $lottie_animation_html = '
+    <dotlottie-player 
+      src="https://lottie.host/597363a0-6990-47f6-94b6-eb8ecc0a80dc/2LkEg3gN6I.json" 
+      background="transparent" 
+      speed="1" 
+      style="width: 300px; height: 300px; margin-left: auto; margin-right: auto;" 
+      autoplay>
+    </dotlottie-player>';
+
+  $gtm_form_submit_event = '
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+      "event": "ajax_form_submit",';
+    if($form['#form_id']) $gtm_form_submit_event .= '"formId": "'.$form['#form_id'].'",';
+  $gtm_form_submit_event .= '});</script>';
+
+  // Load the Lottie player script
+  $response->addCommand(new HtmlCommand($Selector, '<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module" loop="false"></script>'));
+
+  // Add a delay to ensure the script is loaded before replacing the content
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Replace the existing content with the Lottie animation iframe
+  $response->addCommand(new ReplaceCommand($Selector, $lottie_div . $lottie_animation_html . $gtm_form_submit_event));
+
+  // Add a delay to ensure the content is displayed after the form is submitted
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Execute the callback command
+  $response->addCommand(new HtmlCommand($Selector, ''));
+
+  return $response;
+}
+
+function nor_forms_sample_request_sent_ajax(array &$form, FormStateInterface $form_state, $Selector = ''){
+
+  $response = new AjaxResponse();
+
+  $survey_link_terrible = 'https://survey.zohopublic.com/zs/OcCNqJ?user_satisfaction=Terrible';
+  $survey_link_poor = 'https://survey.zohopublic.com/zs/OcCNqJ?user_satisfaction=Poor';
+  $survey_link_neutral = 'https://survey.zohopublic.com/zs/OcCNqJ?user_satisfaction=Neutral';
+  $survey_link_good = 'https://survey.zohopublic.com/zs/OcCNqJ?user_satisfaction=Good';
+  $survey_link_excellent = 'https://survey.zohopublic.com/zs/OcCNqJ?user_satisfaction=Excellent';
+  
+  // Provide the Lottie animation iframe URL
+  $success_markup = '<div class="center form-item form-group"><h2>Thank You For Requesting Your Sample Product</h2>
+  <p>Your request will be processed and you will be contacted by a sales representative via your provided phone number or email address within one week to confirm your order.</p>';
+  
+  
+  $success_markup_two = '<p>If you have any questions or concerns please contact us at <a href="mailto:info@norgenbiotek.com" target="_blank">info@norgenbiotek.com</a>, or by phone at <a href="tel:+19052278848" target="_blank">+1 905 227 8848</a></p>
+    <hr>
+    <table style="margin:auto;">
+      <tbody>
+        <tr>
+          <td colspan="5" align="center">
+            <h2 style="font-size: 1.2em;">How was your experience requesting a sample?</h2>
+          </td>
+        </tr>
+        <tr>
+          <td align="center">
+            <a href="' . $survey_link_terrible . '" style="color:#333333;text-decoration:none;">
+              Terrible
+              <p style="border: 1px solid #AAAAAA;border-radius:100%; width:2em; height:2em; line-height:2em; margin:0.25em;">1</p>
+            </a>
+          </td>
+          <td align="center">
+            <a href="' . $survey_link_poor . '" style="color:#333333;text-decoration:none;">
+              Poor
+              <p style="border: 1px solid #AAAAAA;border-radius:100%; width:2em; height:2em; line-height:2em; margin:0.25em;">2</p>
+            </a>
+          </td>
+          <td align="center">
+            <a href="' . $survey_link_neutral . '" style="color:#333333;text-decoration:none;">
+              Neutral
+              <p style="border: 1px solid #AAAAAA;border-radius:100%; width:2em; height:2em; line-height:2em; margin:0.25em;">3</p>
+            </a>
+          </td>
+          <td align="center">
+            <a href="' . $survey_link_good . '" style="color:#333333;text-decoration:none;">
+              Good
+              <p style="border: 1px solid #AAAAAA;border-radius:100%; width:2em; height:2em; line-height:2em; margin:0.25em;">4</p>
+            </a>
+          </td>
+          <td align="center">
+            <a href="' . $survey_link_excellent . '" style="color:#333333;text-decoration:none;">
+              Excellent
+              <p style="border: 1px solid #AAAAAA;border-radius:100%; width:2em; height:2em; line-height:2em; margin:0.25em;">5</p>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>';
+
+  // '<h2>Your Request Has Been Sent To Our Team.</h2>
+  //   <p>Our Team Will Reach Out To You Soon.</p>
+  //   <p class="new_message" onclick="new_message()">Send a new message</p>
+  // </div>';
+
+  // HTML content for Lottie animation
+  $lottie_animation_html = '
+    <dotlottie-player 
+      src="https://lottie.host/597363a0-6990-47f6-94b6-eb8ecc0a80dc/2LkEg3gN6I.json" 
+      background="transparent" 
+      speed="1" 
+      style="width: 300px; height: 300px; margin-left: auto; margin-right: auto;" 
+      autoplay>
+    </dotlottie-player>';
+
+  $gtm_form_submit_event = '
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+      "event": "ajax_form_submit",';
+    if($form['#form_id']) $gtm_form_submit_event .= '"formID": "'.$form['#form_id'].'",';
+  $gtm_form_submit_event .= '});</script>';
+
+  // Load the Lottie player script
+  $response->addCommand(new HtmlCommand($Selector, '<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module" loop="false"></script>'));
+
+  // Add a delay to ensure the script is loaded before replacing the content
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Replace the existing content with the Lottie animation iframe
+  $response->addCommand(new ReplaceCommand($Selector, $success_markup . $lottie_animation_html . $success_markup_two . $gtm_form_submit_event));
+
+  // Add a delay to ensure the content is displayed after the form is submitted
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Execute the callback command
+  $response->addCommand(new HtmlCommand($Selector, ''));
+
+  return $response;
+}
+
+function nor_forms_quote_request_sent_ajax(array &$form, FormStateInterface $form_state, $Selector = ''){
+
+  $response = new AjaxResponse();
+
+  // Provide the Lottie animation iframe URL
+  $success_markup = '<div class="center request-quote-form"><h2>Thank You For Requesting Your Quote</h2>
+  <p>Your request is being processed and a Norgen representative will contact you within 24 hours.</p>';
+  
+  $survey_link_terrible = 'https://survey.zohopublic.com/zs/HvBUiZ?user_satisfaction=Terrible';
+  $survey_link_poor = 'https://survey.zohopublic.com/zs/HvBUiZ?user_satisfaction=Poor';
+  $survey_link_neutral = 'https://survey.zohopublic.com/zs/HvBUiZ?user_satisfaction=Neutral';
+  $survey_link_good = 'https://survey.zohopublic.com/zs/HvBUiZ?user_satisfaction=Good';
+  $survey_link_excellent = 'https://survey.zohopublic.com/zs/HvBUiZ?user_satisfaction=Excellent';
+  
+  $success_markup_two = '<p>If you have any questions or concerns please contact us at <a href="mailto:info@norgenbiotek.com" target="_blank">info@norgenbiotek.com</a>, or by phone at <a href="tel:+19052278848" target="_blank">+1 905 227 8848</a></p>
+    <hr>
+    <table style="margin:auto;">
+      <tbody>
+        <tr>
+          <td colspan="5" align="center">
+            <h2 style="font-size: 1.2em;">How was your experience requesting a quote?</h2>
+          </td>
+        </tr>
+        <tr>
+          <td align="center">
+            <a href="' . $survey_link_terrible . '" style="color:#333333;text-decoration:none;">
+              Terrible
+              <p style="border: 1px solid #AAAAAA;border-radius:100%; width:2em; height:2em; line-height:2em; margin:0.25em;">1</p>
+            </a>
+          </td>
+          <td align="center">
+            <a href="' . $survey_link_poor . '" style="color:#333333;text-decoration:none;">
+              Poor
+              <p style="border: 1px solid #AAAAAA;border-radius:100%; width:2em; height:2em; line-height:2em; margin:0.25em;">2</p>
+            </a>
+          </td>
+          <td align="center">
+            <a href="' . $survey_link_neutral . '" style="color:#333333;text-decoration:none;">
+              Neutral
+              <p style="border: 1px solid #AAAAAA;border-radius:100%; width:2em; height:2em; line-height:2em; margin:0.25em;">3</p>
+            </a>
+          </td>
+          <td align="center">
+            <a href="' . $survey_link_good . '" style="color:#333333;text-decoration:none;">
+              Good
+              <p style="border: 1px solid #AAAAAA;border-radius:100%; width:2em; height:2em; line-height:2em; margin:0.25em;">4</p>
+            </a>
+          </td>
+          <td align="center">
+            <a href="' . $survey_link_excellent . '" style="color:#333333;text-decoration:none;">
+              Excellent
+              <p style="border: 1px solid #AAAAAA;border-radius:100%; width:2em; height:2em; line-height:2em; margin:0.25em;">5</p>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>';
+
+  // '<h2>Your Request Has Been Sent To Our Team.</h2>
+  //   <p>Our Team Will Reach Out To You Soon.</p>
+  //   <p class="new_message" onclick="new_message()">Send a new message</p>
+  // </div>';
+
+  // HTML content for Lottie animation
+  $lottie_animation_html = '
+    <dotlottie-player 
+      src="https://lottie.host/597363a0-6990-47f6-94b6-eb8ecc0a80dc/2LkEg3gN6I.json" 
+      background="transparent" 
+      speed="1" 
+      style="width: 300px; height: 300px; margin-left: auto; margin-right: auto;" 
+      autoplay>
+    </dotlottie-player>';
+
+  $gtm_form_submit_event = '
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+      "event": "ajax_form_submit",';
+    if($form['#form_id']) $gtm_form_submit_event .= '"formID": "'.$form['#form_id'].'",';
+  $gtm_form_submit_event .= '});</script>';
+
+  // Load the Lottie player script
+  $response->addCommand(new HtmlCommand($Selector, '<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module" loop="false"></script>'));
+
+  // Add a delay to ensure the script is loaded before replacing the content
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Replace the existing content with the Lottie animation iframe
+  $response->addCommand(new ReplaceCommand($Selector, $success_markup . $lottie_animation_html . $success_markup_two . $gtm_form_submit_event));
+
+  // Add a delay to ensure the content is displayed after the form is submitted
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Execute the callback command
+  $response->addCommand(new HtmlCommand($Selector, ''));
+
+  return $response;
+}
+
+
+function nor_forms_webinar_registration_sent_ajax(array &$form, FormStateInterface $form_state, $Selector = '', $webinar_link){
+
+  $response = new AjaxResponse();
+
+  $success_markup = '';
+  // <img src="https://norgenbiotek.com/sites/default/files/images/shipping-truck.png" alt="Shipping truck">
+  $success_markup = '<div class="lottie-email-sent-text"><h3>Thank you for registering!</h3>
+    <p>You can access <a href="'.$webinar_link.'">this link</a> to view the webinar when it\'s live. We\'ve also sent an email reminder with the link!</p>
+  </div>
+  <dotlottie-player src="https://lottie.host/597363a0-6990-47f6-94b6-eb8ecc0a80dc/2LkEg3gN6I.json" background="transparent" speed="1" style="width: 300px; height: 300px; margin-left: auto; margin-right: auto; display:block;" autoplay></dotlottie-player>
+  <p class="center">If you have any questions or concerns please contact us at <a href="mailto:info@norgenbiotek.com" target="_blank">info@norgenbiotek.com</a>, or by phone at <a href="tel:+19052278848" target="_blank">+1 905 227 8848</a></p>
+<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module" loop="false"></script>';
+
+  $gtm_form_submit_event = '
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+      "event": "ajax_form_submit",';
+    if($form['#form_id']) $gtm_form_submit_event .= '"formID": "'.$form['#form_id'].'",';
+  $gtm_form_submit_event .= '});</script>';
+
+  // Load the Lottie player script
+  $response->addCommand(new HtmlCommand($Selector, '<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module" loop="false"></script>'));
+
+  // Add a delay to ensure the script is loaded before replacing the content
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Replace the existing content with the Lottie animation iframe
+  $response->addCommand(new ReplaceCommand($Selector, $success_markup . $gtm_form_submit_event));
+
+  // Add a delay to ensure the content is displayed after the form is submitted
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Execute the callback command
+  $response->addCommand(new HtmlCommand($Selector, ''));
+
+  return $response;
+}
+
+function nor_forms_email_sent_social_media_newsletter_ajax(array &$form, FormStateInterface $form_state, $Selector = '')
+{
+
+  $response = new AjaxResponse();
+
+  // Provide the Lottie animation iframe URL
+  $lottie_div =
+    '<div class="thankyou-social-media-div lottie-email-sent-text">
+      <h2> Use The Code 
+        <span id="promo-code" onclick="copyToClipboard()" class="newsletter-code"> EMAIL10 </span> 
+        to Get 10% Off Your First Order*
+      </h2>
+    </div>';
+
+  // HTML content for Lottie animation
+  $lottie_animation_html = '
+    <dotlottie-player 
+      src="https://lottie.host/597363a0-6990-47f6-94b6-eb8ecc0a80dc/2LkEg3gN6I.json" 
+      background="transparent" 
+      speed="1" 
+      autoplay>
+    </dotlottie-player>';
+
+  $disclaimer = '<p class = "disclaimer"> *Discount cannot be combined with any other discount. One use per customer. Applicable to website orders in Cananda and the US only. Discount not available for distributors. </p>';
+  
+  $gtm_form_submit_event = '
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+    "event": "ajax_form_submit",';
+  if($form['#form_id']) $gtm_form_submit_event .= '"formId": "'.$form['#form_id'].'",';
+  $gtm_form_submit_event .= '});</script>';
+
+  // Load the Lottie player script
+  $response->addCommand(new HtmlCommand($Selector, '<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module" loop="false"></script>'));
+
+  // Add a delay to ensure the script is loaded before replacing the content
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Replace the existing content with the Lottie animation iframe
+  $response->addCommand(new ReplaceCommand($Selector, $lottie_div . $lottie_animation_html . $disclaimer . $gtm_form_submit_event));
+
+  // Add a delay to ensure the content is displayed after the form is submitted
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Execute the callback command
+  $response->addCommand(new HtmlCommand($Selector, ''));
+
+  return $response;
+}
+
+function nor_forms_download_resource_ajax(array &$form, FormStateInterface $form_state, $Selector = '')
+{
+
+  $response = new AjaxResponse();
+
+  // Provide the Lottie animation iframe URL
+  $resourcebtn_div =
+    '<div class="button-resource-downloaded-text"><h2>Thank You For Your Information.</h2>
+      <p>Click The Button To Download Your Resource.</p>
+      <a class="resource-file" href="https://norgenbiotek.com/sites/default/files/services/SampleReport_smallRNA.pdf?_gl=1*6dcleu*_gcl_au*MTQ5NDc0ODQzMS4xNzM3NjQzMzU5LjE3Nzg0OTM5MS4xNzM3NjQzMzU5LjE3Mzc2NDM2OTc" download
+      target="_blank" >Download Resource</a>
+    </div>';
+  // '<h2>Your Request Has Been Sent To Our Team.</h2>
+  //   <p>Our Team Will Reach Out To You Soon.</p>
+  //   <p class="new_message" onclick="new_message()">Send a new message</p>
+  // </div>';
+
+  // HTML content for Lottie animation
+  $lottie_animation_html = '
+    <dotlottie-player 
+      src="https://lottie.host/597363a0-6990-47f6-94b6-eb8ecc0a80dc/2LkEg3gN6I.json" 
+      background="transparent" 
+      speed="1" 
+      style="width: 300px; height: 300px; margin-left: auto; margin-right: auto;" 
+      autoplay>
+    </dotlottie-player>';
+
+    $resourcebtnstyle_html = '
+    <style 
+      margin-top: 12px;
+      display: inline-block;
+      background-color: #004897;
+      text-decoration: none;
+      color: white;
+      margin-bottom: 0;
+      font-weight: normal;
+      text-align: center;
+      vertical-align: middle;
+      touch-action: manipulation;
+      cursor: pointer;
+      background-image: none;
+      border: 1px solid transparent;
+      white-space: nowrap;
+      padding: 6px 12px;
+      font-size: 14px;
+      line-height: 1.42857;
+      border-radius: 4px;
+    </style>';
+
+    $gtm_form_submit_event = '
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+      "event": "ajax_form_submit",';
+    if($form['#form_id']) $gtm_form_submit_event .= '"formId": "'.$form['#form_id'].'",';
+    $gtm_form_submit_event .= '});</script>';
+
+  // Load the Lottie player script
+  $response->addCommand(new HtmlCommand($Selector, '<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module" loop="false"></script>'));
+
+  // Add a delay to ensure the script is loaded before replacing the content
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Replace the existing content with the Lottie animation iframe
+  $response->addCommand(new ReplaceCommand($Selector, $resourcebtn_div . $lottie_animation_html . $resourcebtnstyle_html . $gtm_form_submit_event));
+
+  // Add a delay to ensure the content is displayed after the form is submitted
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Execute the callback command
+  $response->addCommand(new HtmlCommand($Selector, ''));
+
+  return $response;
+}
+
+function nor_forms_download_rna_resource_ajax(array &$form, FormStateInterface $form_state, $Selector = '')
+{
+
+  $response = new AjaxResponse();
+
+  // Provide the Lottie animation iframe URL
+  $resourcebtn_div =
+    '<div class="button-resource-downloaded-text"><h2>Thank You For Your Information.</h2>
+      <p>Click The Button To Download Your Resource.</p>
+      <a class="resource-file" href="https://norgenbiotek.com/sites/default/files/resources/Final__Plasma_exosome_Illumina_RNASEQ.pdf" download
+      target="_blank" >Download Resource</a>
+    </div>';
+  // '<h2>Your Request Has Been Sent To Our Team.</h2>
+  //   <p>Our Team Will Reach Out To You Soon.</p>
+  //   <p class="new_message" onclick="new_message()">Send a new message</p>
+  // </div>';
+
+  // HTML content for Lottie animation
+  $lottie_animation_html = '
+    <dotlottie-player 
+      src="https://lottie.host/597363a0-6990-47f6-94b6-eb8ecc0a80dc/2LkEg3gN6I.json" 
+      background="transparent" 
+      speed="1" 
+      style="width: 300px; height: 300px; margin-left: auto; margin-right: auto;" 
+      autoplay>
+    </dotlottie-player>';
+
+    $resourcebtnstyle_html = '
+    <style 
+      margin-top: 12px;
+      display: inline-block;
+      background-color: #004897;
+      text-decoration: none;
+      color: white;
+      margin-bottom: 0;
+      font-weight: normal;
+      text-align: center;
+      vertical-align: middle;
+      touch-action: manipulation;
+      cursor: pointer;
+      background-image: none;
+      border: 1px solid transparent;
+      white-space: nowrap;
+      padding: 6px 12px;
+      font-size: 14px;
+      line-height: 1.42857;
+      border-radius: 4px;
+    </style>';
+
+    $gtm_form_submit_event = '
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+      "event": "ajax_form_submit",';
+    if($form['#form_id']) $gtm_form_submit_event .= '"formId": "'.$form['#form_id'].'",';
+    $gtm_form_submit_event .= '});</script>';
+
+  // Load the Lottie player script
+  $response->addCommand(new HtmlCommand($Selector, '<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module" loop="false"></script>'));
+
+  // Add a delay to ensure the script is loaded before replacing the content
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Replace the existing content with the Lottie animation iframe
+  $response->addCommand(new ReplaceCommand($Selector, $resourcebtn_div . $lottie_animation_html . $resourcebtnstyle_html . $gtm_form_submit_event));
+
+  // Add a delay to ensure the content is displayed after the form is submitted
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Execute the callback command
+  $response->addCommand(new HtmlCommand($Selector, ''));
+
+  return $response;
+}
+
+function stool_campaign_2024_email_sent_ajax(array &$form, FormStateInterface $form_state, $Selector = '')
+{
+
+  $response = new AjaxResponse();
+
+  // Provide the Lottie animation iframe URL
+  $lottie_div =
+    '<div class="thankyou-stool-div" style="text-align:center;"><h3>Resouce Unlocked!</h3>
+      <p>Thank you for your interest. Please click the button below to download the file.</p>';
+
+  // HTML content for Lottie animation
+  $lottie_animation_html = '
+      <dotlottie-player 
+        src="https://lottie.host/597363a0-6990-47f6-94b6-eb8ecc0a80dc/2LkEg3gN6I.json" 
+        background="transparent" 
+        speed="1" 
+        style="width: 300px; height: 300px;margin:auto;" 
+        autoplay
+      ></dotlottie-player>
+    ';
+
+  $download_html = '<div><a href="/sites/default/files/images/stool-campaign/Stool-Technical-Guide-V1.2-2025-03-26.pdf" download class="btn btn-primary">Download Resource</a></div></div>';
+
+  $gtm_form_submit_event = '
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+    "event": "ajax_form_submit",';
+  if($form['#form_id']) $gtm_form_submit_event .= '"formId": "'.$form['#form_id'].'",';
+  $gtm_form_submit_event .= '});</script>';
+
+  // Load the Lottie player script
+  $response->addCommand(new HtmlCommand($Selector, '<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module" loop="false"></script>'));
+
+  // Add a delay to ensure the script is loaded before replacing the content
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Replace the existing content with the Lottie animation iframe
+  $response->addCommand(new ReplaceCommand($Selector, $lottie_div . $lottie_animation_html . $download_html . $gtm_form_submit_event));
+
+  // Add a delay to ensure the content is displayed after the form is submitted
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Execute the callback command
+  $response->addCommand(new HtmlCommand($Selector, ''));
+
+  return $response;
+}
+
+function extraclean_educational_video_gated_infograph_email_sent_ajax(array &$form, FormStateInterface $form_state, $Selector = '')
+{
+
+  $response = new AjaxResponse();
+
+  // Provide the Lottie animation iframe URL
+  $lottie_div =
+    '<div style="text-align:center;"><h3>Resouce Unlocked!</h3>
+      <p>Thank you for your interest. Please click the button below to download the file.</p>';
+
+  // HTML content for Lottie animation
+  $lottie_animation_html = '
+      <dotlottie-player 
+        src="https://lottie.host/597363a0-6990-47f6-94b6-eb8ecc0a80dc/2LkEg3gN6I.json" 
+        background="transparent" 
+        speed="1" 
+        style="width: 300px; height: 300px;margin:auto;" 
+        autoplay
+      ></dotlottie-player>
+    ';
+
+    $download_html = '<div><a href="/sites/default/files/images/extraclean-campaign/2025-02-27 Extra clean info graphic_PR.pdf" download class="btn btn-primary">Download Resource</a></div></div>';
+
+    $gtm_form_submit_event = '
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+      "event": "ajax_form_submit",';
+    if($form['#form_id']) $gtm_form_submit_event .= '"formId": "'.$form['#form_id'].'",';
+    $gtm_form_submit_event .= '});</script>';
+
+  // Load the Lottie player script
+  $response->addCommand(new HtmlCommand($Selector, '<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module" loop="false"></script>'));
+
+  // Add a delay to ensure the script is loaded before replacing the content
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Replace the existing content with the Lottie animation iframe
+  $response->addCommand(new ReplaceCommand($Selector, $lottie_div . $lottie_animation_html . $download_html . $gtm_form_submit_event));
+
+  // Add a delay to ensure the content is displayed after the form is submitted
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Execute the callback command
+  $response->addCommand(new HtmlCommand($Selector, ''));
+
+  return $response;
+}
+
+function newproduct_signup_email_sent_ajax(array &$form, FormStateInterface $form_state, $Selector = '')
+{
+
+  $response = new AjaxResponse();
+
+  // Provide the Lottie animation iframe URL
+  $lottie_div =
+    '<h2>Thank you for your interest!</h2>
+      <p>Our Team Will React Out To You Soon</p>';
+
+  // HTML content for Lottie animation
+  $lottie_animation_html = '
+      <dotlottie-player 
+        src="https://lottie.host/b3c75ff7-e4d5-4481-87c2-1ff01f1a537e/zKspRCUB9N.json" 
+        background="transparent" 
+        speed="1" 
+        style="width: 300px; height: 300px;" 
+        autoplay
+      ></dotlottie-player>
+    ';
+
+    $gtm_form_submit_event = '
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+      "event": "ajax_form_submit",';
+    if($form['#form_id']) $gtm_form_submit_event .= '"formId": "'.$form['#form_id'].'",';
+    $gtm_form_submit_event .= '});</script>';
+
+  // Load the Lottie player script
+  $response->addCommand(new HtmlCommand($Selector, '<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module" loop="false"></script>'));
+
+  // Add a delay to ensure the script is loaded before replacing the content
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Replace the existing content with the Lottie animation iframe
+  $response->addCommand(new ReplaceCommand($Selector, $lottie_div . $lottie_animation_html . $gtm_form_submit_event));
+
+  // Add a delay to ensure the content is displayed after the form is submitted
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Execute the callback command
+  $response->addCommand(new HtmlCommand($Selector, ''));
+
+  return $response;
+}
+function catalogue_lead_capture_email_sent_ajax(array &$form, FormStateInterface $form_state, $Selector = '', $link = '')
+{
+
+  $response = new AjaxResponse();
+
+  // Provide the Lottie animation iframe URL
+  $lottie_div =
+    '<div class="thankyou" style="text-align:center;"><h3>Resource Unlocked!</h3>
+      <p>Thank you for your interest. Please click the button below to download the file.</p>';
+
+  // HTML content for Lottie animation
+  $lottie_animation_html = '
+      <dotlottie-player 
+        src="https://lottie.host/597363a0-6990-47f6-94b6-eb8ecc0a80dc/2LkEg3gN6I.json" 
+        background="transparent" 
+        speed="1" 
+        style="width: 300px; height: 300px;margin:auto;" 
+        autoplay
+      ></dotlottie-player>
+    ';
+
+  $download_html = '<div><a href="'.$link.'" download class="btn btn-primary">Download Resource</a></div></div>';
+
+  $gtm_form_submit_event = '
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+      "event": "ajax_form_submit",';
+    if($form['#form_id']) $gtm_form_submit_event .= '"formId": "'.$form['#form_id'].'",';
+    $gtm_form_submit_event .= '});</script>';
+
+  // Load the Lottie player script
+  $response->addCommand(new HtmlCommand($Selector, '<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module" loop="false"></script>'));
+
+  // Add a delay to ensure the script is loaded before replacing the content
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Replace the existing content with the Lottie animation iframe
+  $response->addCommand(new ReplaceCommand($Selector, $lottie_div . $lottie_animation_html . $download_html . $gtm_form_submit_event));
+
+  // Add a delay to ensure the content is displayed after the form is submitted
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Execute the callback command
+  $response->addCommand(new HtmlCommand($Selector, ''));
+
+  return $response;
+}
+function distributor_portal_email_notification_email_sent_ajax(array &$form, FormStateInterface $form_state, $Selector = '')
+{
+
+  $response = new AjaxResponse();
+
+  // Provide the Lottie animation iframe URL
+  $lottie_div =
+    '<div class="Updated"><br><p>Email Sent!</p></div>';
+
+  // HTML content for Lottie animation
+  
+
+  // Load the Lottie player script
+  $response->addCommand(new HtmlCommand($Selector, '<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module" loop="false"></script>'));
+
+  // Add a delay to ensure the script is loaded before replacing the content
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Replace the existing content with the Lottie animation iframe
+  $response->addCommand(new ReplaceCommand($Selector, $lottie_div ));
+
+  // Add a delay to ensure the content is displayed after the form is submitted
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Execute the callback command
+  $response->addCommand(new HtmlCommand($Selector, ''));
+
+  return $response;
+}
+function nor_forms_email_sent_job_application(array &$form, FormStateInterface $form_state, $Selector = '') {
+
+  $response = new AjaxResponse();
+
+  // Provide the Lottie animation iframe URL
+  $lottie_div =
+    '<div style="text-align:center;"><h2>Thank You For Your Application.</h2>
+    <p>If your qualifications match our needs, our HR department will reach out to you for an interview.</p></div>';
+
+  // HTML content for Lottie animation
+  $lottie_animation_html = '
+      <dotlottie-player 
+        src="https://lottie.host/597363a0-6990-47f6-94b6-eb8ecc0a80dc/2LkEg3gN6I.json" 
+        background="transparent" 
+        speed="1" 
+        style="width: 300px; height: 300px;margin:auto;" 
+        autoplay
+      ></dotlottie-player>
+    ';
+  
+  // Load the Lottie player script
+  $response->addCommand(new HtmlCommand($Selector, '<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module" loop="false"></script>'));
+
+  // Add a delay to ensure the script is loaded before replacing the content
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Replace the existing content with the Lottie animation iframe
+  $response->addCommand(new ReplaceCommand($Selector, $lottie_div . $lottie_animation_html));
+
+  // Add a delay to ensure the content is displayed after the form is submitted
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Execute the callback command
+  $response->addCommand(new HtmlCommand($Selector, ''));
+
+
+
+  return $response;
+}
+
+function nor_forms_email_sent_norgenius(array &$form, FormStateInterface $form_state, $Selector = ''){
+
+
+  $response = new AjaxResponse();
+
+  // Provide the Lottie animation iframe URL
+  $lottie_div =
+    '<div>';
+
+  // HTML content for Lottie animation
+  $lottie_animation_html = '
+      <dotlottie-player 
+        src="https://lottie.host/4a732250-8157-4da2-8f69-b45597738c3b/dtkpAoPjYT.json" 
+        background="transparent" 
+        speed="1" 
+        style="width: 300px; height: 300px;margin:auto;" 
+        autoplay
+      ></dotlottie-player>
+    ';
+  $lottie_div .=
+    '</div><h3>Email Sent!</h3>
+    <h4>Thank you for using our Norgenius tool</h4><div class="powered_form">
+    <p><strong>Powered by  <img src="https://norgenbiotek.com/sites/default/files/images/norgenius/norgenius_icon.svg" style="width: 50px;">  NorGenius</strong></p>
+  </div>';
+  // Load the Lottie player script
+  $response->addCommand(new HtmlCommand($Selector, '<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module" loop="false"></script>'));
+
+  // Add a delay to ensure the script is loaded before replacing the content
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Replace the existing content with the Lottie animation iframe
+  $response->addCommand(new ReplaceCommand($Selector, $lottie_div . $lottie_animation_html));
+ 
+  // Add a delay to ensure the content is displayed after the form is submitted
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Execute the callback command
+  
+  $response->addCommand(new HtmlCommand($Selector, ''));
+  $form_state->setRebuild(TRUE);
+   //$form_state = form_state_defaults();
+  // $form_build_id = $_POST['form_build_id'];
+  // form_set_cache($form_build_id, $form, $form_state);
+
+
+  return $response;
+  // if (\Drupal::moduleHandler()->moduleExists('norgenius_email')) {
+  //     $variables['norgenius_email'] = \Drupal::formBuilder()->getForm('Drupal\norgenius_email\Form\NorgeniusEmailForm');
+  //   }
+}
+
+function nor_forms_pathogen_sent_norgenius(array &$form, FormStateInterface $form_state, $Selector = ''){
+
+
+  $response = new AjaxResponse();
+
+  // Provide the Lottie animation iframe URL
+  $lottie_div =
+    '<div>';
+
+  // HTML content for Lottie animation
+  $lottie_animation_html = '
+      <dotlottie-player 
+        src="https://lottie.host/4a732250-8157-4da2-8f69-b45597738c3b/dtkpAoPjYT.json" 
+        background="transparent" 
+        speed="1" 
+        style="width: 300px; height: 300px;margin:auto;" 
+        autoplay
+      ></dotlottie-player>
+    ';
+  $lottie_div .=
+    '</div>
+    <div class="powered_form">
+    <p>We have forwarded your request to R&D, for more assistance please contact <a mailto="support@norgenbiotek.com">support@norgenbiotek.com</a></p>
+  </div>';
+  // Load the Lottie player script
+  $response->addCommand(new HtmlCommand($Selector, '<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module" loop="false"></script>'));
+
+  // Add a delay to ensure the script is loaded before replacing the content
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Replace the existing content with the Lottie animation iframe
+  $response->addCommand(new ReplaceCommand($Selector, $lottie_div . $lottie_animation_html));
+ 
+  // Add a delay to ensure the content is displayed after the form is submitted
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Execute the callback command
+  
+  $response->addCommand(new HtmlCommand($Selector, ''));
+  $form_state->setRebuild(TRUE);
+   //$form_state = form_state_defaults();
+  // $form_build_id = $_POST['form_build_id'];
+  // form_set_cache($form_build_id, $form, $form_state);
+
+
+  return $response;
+  // if (\Drupal::moduleHandler()->moduleExists('norgenius_email')) {
+  //     $variables['norgenius_email'] = \Drupal::formBuilder()->getForm('Drupal\norgenius_email\Form\NorgeniusEmailForm');
+  //   }
+}
+
+function nor_forms_email_sent_norgenius_saved(array &$form, FormStateInterface $form_state, $Selector = ''){
+  $response = new AjaxResponse();
+
+  // Provide the Lottie animation iframe URL
+  $lottie_div =
+    '<div>';
+
+  // HTML content for Lottie animation
+  $lottie_animation_html = '
+      <dotlottie-player 
+        src="https://lottie.host/79d9de09-0073-474b-b54c-91019645cd02/HNEHdtPSKd.json" 
+        background="transparent" 
+        speed="1" 
+        style="width: 300px; height: 300px;margin:auto;" 
+        autoplay
+      ></dotlottie-player>
+    ';
+  $lottie_div .=
+    '</div><h3>Workflow Saved!</h3>
+    <h4>Thank you for using our Norgenius tool</h4><div class="powered_form">
+    <p><strong>Powered by  <img src="https://norgenbiotek.com/sites/default/files/images/norgenius/norgenius_icon.svg" style="width: 50px;">  NorGenius</strong></p>
+  </div>';
+  // Load the Lottie player script
+  $response->addCommand(new HtmlCommand($Selector, '<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module" loop="false"></script>'));
+
+  // Add a delay to ensure the script is loaded before replacing the content
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Replace the existing content with the Lottie animation iframe
+  $response->addCommand(new ReplaceCommand($Selector, $lottie_div . $lottie_animation_html));
+
+  // Add a delay to ensure the content is displayed after the form is submitted
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Execute the callback command
+  $response->addCommand(new HtmlCommand($Selector, ''));
+
+  return $response;
+}
+
+function event_db_email_sent_ajax(array &$form, FormStateInterface $form_state, $Selector = '') {
+
+  $response = new AjaxResponse();
+
+  // Provide the Lottie animation iframe URL
+  $lottie_div =
+    '<div class="Updated"><h2>This entry has been updated in the database!</h2><br><p>This change is permanent and cannot be reverted.</div>';
+
+  // HTML content for Lottie animation
+  
+
+ 
+
+  // Load the Lottie player script
+  $response->addCommand(new HtmlCommand($Selector, '<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module" loop="false"></script>'));
+
+  // Add a delay to ensure the script is loaded before replacing the content
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Replace the existing content with the Lottie animation iframe
+  $response->addCommand(new ReplaceCommand($Selector, $lottie_div ));
+
+  // Add a delay to ensure the content is displayed after the form is submitted
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Execute the callback command
+  $response->addCommand(new HtmlCommand($Selector, ''));
+
+  return $response;
+}
+function event_db_delete_email_sent_ajax(array &$form, FormStateInterface $form_state, $Selector = '')
+{
+
+  $response = new AjaxResponse();
+
+  // Provide the Lottie animation iframe URL
+  $lottie_div =
+    '<div class="Updated"><h2>This entry has been deleted from the database!</h2><br><p>This change is permanent and cannot be reverted.</div>';
+
+  // HTML content for Lottie animation
+  
+
+ 
+
+  // Load the Lottie player script
+  $response->addCommand(new HtmlCommand($Selector, '<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module" loop="false"></script>'));
+
+  // Add a delay to ensure the script is loaded before replacing the content
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Replace the existing content with the Lottie animation iframe
+  $response->addCommand(new ReplaceCommand($Selector, $lottie_div ));
+
+  // Add a delay to ensure the content is displayed after the form is submitted
+  $response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+
+  // Execute the callback command
+  $response->addCommand(new HtmlCommand($Selector, ''));
+
+  return $response;
+}
+/* 
+function nor_forms_email_sent_ajax(array &$form, FormStateInterface $form_state, $Selector ='') {
+
+      $response = new AjaxResponse();
+
+      // Provide the Lottie animation iframe URL
+      $lottie_div = 
+        '<h2>Your Request Has Been Sent To Our Team.</h2>
+        <p>Our Team Will Reach Out To You Soon.</p>
+        <p class="new_message" onclick="new_message()">Send a new message</p>
+     </div>';
+
+      //<div class="Email_submission"><div><script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
+      //<dotlottie-player src="https://lottie.host/embed/1732db5f-8a78-455f-94ad-6a061ec08a4a/3w0tTfQC9m.json" background="transparent" speed="1" style="width: 250px; height: 250px;margin:auto" id="mail2"></dotlottie-player></div>
+
+      //$lottie_iframe_src = '<iframe src="https://lottie.host/embed/1732db5f-8a78-455f-94ad-6a061ec08a4a/3w0tTfQC9m.json"></iframe>';
+
+      //<dotlottie-player src="https://lottie.host/4a732250-8157-4da2-8f69-b45597738c3b/dtkpAoPjYT.json" background="transparent" speed="1" style="width: 250px; height: 250px;margin:auto" id="mail2"></dotlottie-player></div>
+
+    
+      // Load the Lottie player script
+      $response->addCommand(new HtmlCommand($Selector, $lottie_div));
+    
+      // Add a delay to ensure the script is loaded before replacing the content
+      //$response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+    
+      // Replace the existing content with the Lottie animation iframe
+      //$response->addCommand(new ReplaceCommand($Selector, $lottie_iframe_src));
+    
+      // Add a delay to ensure the content is displayed after the form is submitted
+      //$response->addCommand(new InvokeCommand($Selector, 'delay', [500]));
+    
+      // Execute the callback command
+      //$response->addCommand(new HtmlCommand($Selector, ''));
+
+      return $response;
+} */
+
+
+//Menu
+function nor_forms_get_menu_parent($link)
+{
+  if ($parent = $link->getParent()) {
+    $parent = \Drupal::service('plugin.manager.menu.link')->createInstance($parent);
+    return $parent;
+  } else {
+    return False;
+  }
+}
+
+/**
+ * Implements hook_entity_view().
+ */
+function nor_forms_entity_view(array &$build, \Drupal\Core\Entity\EntityInterface $entity, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->getEntityTypeId() !== 'node' || $entity===NULL) {
+    return;
+  }
+  // meta description
+  $description = [];
+  if($entity->hasField('field_meta_description') && $entity->get('field_meta_description')->value!== null){
+    $description = [
+      '#tag' => 'meta',
+      '#attributes' => [
+        'name' => 'description',
+        'content' => ['#plain_text' => $entity->get('field_meta_description')->value],
+      ],
+    ];
+  }
+  else if($entity->title && $entity->title->value !== null){
+    $description = [
+      '#tag' => 'meta',
+      '#attributes' => [
+        'name' => 'description',
+        'content' => ['#plain_text' => $entity->title->value],
+      ],
+    ];
+  }
+  // meta tags
+  if($entity->hasField('field_blog_tags') && $entity->get('field_blog_tags')->referencedEntities()[0]){
+    // build tags string. Separate tags by a comma.
+    $tags_string = '';
+    for($i=0; $i<count($entity->get('field_blog_tags')->referencedEntities()); $i++){
+      // don't add comma after the last tag in the list
+      if($i == count($entity->get('field_blog_tags')->referencedEntities())-1){
+        $tags_string .= $entity->get('field_blog_tags')->referencedEntities()[$i]->getName();
+      }
+      else $tags_string .= $entity->get('field_blog_tags')->referencedEntities()[$i]->getName() . ', ';
+    }
+    $tags = [
+      '#tag' => 'meta',
+      '#attributes' => [
+        'name' => 'tags',
+        'content' => ['#plain_text' => $tags_string],
+      ],
+    ];
+  }
+  // blogs
+  if($entity->getType() === 'blog' || $entity->getType() === 'publication_summary' || $entity->getType() === 'customer_story'){
+    // twitter meta
+    $twitter_card = [
+      '#tag' => 'meta',
+      '#attributes' => [
+        'name' => 'twitter:card',
+        'content' => ['#plain_text' => 'summary_large_image'],
+      ],
+    ];
+    if($entity->get('title') && $entity->get('title')->getValue()){
+      $twitter_title = [
+        '#tag' => 'meta',
+        '#attributes' => [
+          'name' => 'twitter:title',
+          'content' => ['#plain_text' => $entity->get('title')->getValue()[0]['value']],
+        ],
+      ];
+      $og_title = [
+        '#tag' => 'meta',
+        '#attributes' => [
+          'name' => 'og:title',
+          'content' => ['#plain_text' => $entity->get('title')->getValue()[0]['value']],
+        ],
+      ];
+    }
+    if($entity->get('field_meta_description') && $entity->get('title')->getValue()){
+      $twitter_description = [
+        '#tag' => 'meta',
+        '#attributes' => [
+          'name' => 'twitter:description',
+          'content' => ['#plain_text' => $entity->get('title')->getValue()[0]['value']],
+        ],
+      ];
+      $og_description = [
+        '#tag' => 'meta',
+        '#attributes' => [
+          'name' => 'og:description',
+          'content' => ['#plain_text' => $entity->get('title')->getValue()[0]['value']],
+        ],
+      ];
+    }
+    $twitter_site = [
+      '#tag' => 'meta',
+      '#attributes' => [
+        'name' => 'twitter:site',
+        'content' => ['#plain_text' => '@NorgenBiotek'],
+      ],
+    ];
+    // open graph meta
+    if($entity->hasField('field_blog_image') && $entity->get('field_blog_image')->referencedEntities()[0] && $entity->get('field_blog_image')->referencedEntities()[0]->hasField('uri') && $entity->get('field_blog_image')->referencedEntities()[0]->get('uri')->value!==null){
+      $img_path = \Drupal::service('file_url_generator')->generateAbsoluteString($entity->get('field_blog_image')->referencedEntities()[0]->get('uri')->value);
+    }
+    if($img_path){
+      $twitter_image = [
+        '#tag' => 'meta',
+        '#attributes' => [
+          'name' => 'twitter:image',
+          'content' => ['#plain_text' => $img_path],
+        ],
+      ];
+      $og_image = [
+        '#tag' => 'meta',
+        '#attributes' => [
+          'name' => 'og:image',
+          'content' => ['#plain_text' => $img_path],
+        ],
+      ];
+    }
+    $og_type = [
+      '#tag' => 'meta',
+      '#attributes' => [
+        'name' => 'og:type',
+        'content' => ['#plain_text' => 'article'],
+      ],
+    ];
+    $article_url = 'https://norgenbiotek.com' . \Drupal::service('path_alias.manager')->getAliasByPath(\Drupal::service('path.current')->getPath());
+    if($article_url != 'https://norgenbiotek.com'){
+      $og_url = [
+        '#tag' => 'meta',
+        '#attributes' => [
+          'name' => 'og:url',
+          'content' => ['#plain_text' => $article_url],
+        ],
+      ];
+    }
+  }
+  if(isset($description)) $build['#attached']['html_head'][] = [$description, 'description'];
+  if(isset($tags)) $build['#attached']['html_head'][] = [$tags, 'tags'];
+  if(isset($twitter_card)) $build['#attached']['html_head'][] = [$twitter_card, 'twitter:card'];
+  if(isset($twitter_image)) $build['#attached']['html_head'][] = [$twitter_image, 'twitter:image'];
+  if(isset($twitter_title)) $build['#attached']['html_head'][] = [$twitter_title, 'twitter:title'];
+  if(isset($twitter_description)) $build['#attached']['html_head'][] = [$twitter_description, 'twitter:description'];
+  if(isset($twitter_site)) $build['#attached']['html_head'][] = [$twitter_site, 'twitter:site'];
+  if(isset($og_titl)) $build['#attached']['html_head'][] = [$og_titl, 'og:title'];
+  if(isset($og_image)) $build['#attached']['html_head'][] = [$og_image, 'og:image'];
+  if(isset($og_type)) $build['#attached']['html_head'][] = [$og_type, 'og:type'];
+  if(isset($og_description)) $build['#attached']['html_head'][] = [$og_description, 'og:description'];
+  if(isset($og_url)) $build['#attached']['html_head'][] = [$og_url, 'og:url'];
+}
+
+/**
+ * Implements hook_preprocess_node().
+ */
+//function only renders when node id is one 
+//tell the node id to use the template
+function nor_forms_preprocess_node(&$variables)
+{
+  /* $node = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
+  $variables['node'] = $node; */
+  /* 
+  // menu
+  $links = \Drupal::service('plugin.manager.menu.link')->loadLinksByRoute('entity.node.canonical', array('node' => $variables['node']->id()));
+  $i = 0;
+  if ($link = reset($links)) { 
+  $parent = nor_forms_get_menu_parent($link); 
+  if ($parent) {
+    $breadcrumbs[$i]['parent_title'] = $parent->getTitle();
+    $breadcrumbs[$i]['parent_url'] = $parent->getUrlObject()->toString();
+    //dump($breadcrumbs[$i]['parent_title'] . ' ' . $breadcrumbs[$i]['parent_url']);
+  }
+  $i = $i+1;
+  } 
+  while ($parent) { $parent = nor_forms_get_menu_parent($parent); 
+  if ($parent) {
+    $breadcrumbs[$i]['parent_title'] = $parent->getTitle();
+    $breadcrumbs[$i]['parent_url'] = $parent->getUrlObject()->toString();
+    //dump($breadcrumbs[$i]['parent_title'] . ' ' . $breadcrumbs[$i]['parent_url']);
+    $i = $i+1;
+  }
+  if ($i > 50) { break; }
+  }
+  $breadcrumb_menu = [
+    '#markup' => '
+    <div id="block-jango-breadcrumbs" class="contextual-region">
+      <div id="block-breadcrumbswhite" class="contextual-region">
+        <div class="field field--name-body field--type-text-with-summary field--label-hidden field__item">
+          <div class="c-layout-breadcrumbs-1 c-fonts-uppercase c-fonts-bold c-bordered c-bordered-both" align="text-left">
+            <div class="c-breadcrumbs-wrapper">
+              <div class="container">
+                <div class="c-page-title c-pull-left">
+                  <h1 class="c-font-uppercase c-font-sbold">Modern purchase design</h1>
+                </div>
+                <nav role="navigation" aria-labelledby="system-breadcrumb">
+                  <ol class="c-page-breadcrumbs c-theme-nav c-pull-right c-fonts-regular">
+                    <li>
+                      <a href="/">Home</a>
+                    </li>
+                    <li>/</li>',
+  ];
+  if($breadcrumbs && is_array($breadcrumbs) && count($breadcrumbs)>0){
+    for($i=(count($breadcrumbs)-1); $i>=0; $i--){
+      $breadcrumb_menu['#markup'] .= '
+        <li><a href="';
+      $breadcrumb_menu['#markup'] .= $breadcrumbs[$i]['parent_url'];
+      $breadcrumb_menu['#markup'] .= '">';
+      $breadcrumb_menu['#markup'] .= $breadcrumbs[$i]['parent_title'];
+      $breadcrumb_menu['#markup'] .= '</a></li><li>/</li>';
+    }
+  }
+  $breadcrumb_menu['#markup'] .= '<li>'.$variables['node']->get('title')->getString().'</li>';
+
+  $breadcrumb_menu['#markup'] .= '
+                </ol>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>';
+  $variables['custom_breadcrumb'] = $breadcrumb_menu; */
+
+  if($variables['node']->getType() === 'webinar'){
+    if (\Drupal::moduleHandler()->moduleExists('webinar_registration')) {
+      $variables['webinar_registration'] = \Drupal::formBuilder()->getForm('Drupal\webinar_registration\Form\WebinarRegistrationForm');
+    }
+  }
+
+  if($variables['node']->getType() === 'job'){
+    if (\Drupal::moduleHandler()->moduleExists('job_application_node')) {
+      $variables['job_application_node_form'] = \Drupal::formBuilder()->getForm('Drupal\job_application_node\Form\JobApplicationNodeForm', $variables['node']->getTitle(), $variables['node']->id());
+    }
+  }
+
+  if ($variables['node']->id() == 2457) {
+    // Extract form markup
+    $variables['#attached']['library'][] = 'nor_forms/nor_forms_toggle';
+
+    if (\Drupal::moduleHandler()->moduleExists('account_issues')) {
+      $variables['account_issues'] = \Drupal::formBuilder()->getForm('Drupal\account_issues\Form\AccountIssuesForm');
+    }
+    if (\Drupal::moduleHandler()->moduleExists('business_opportunities')) {
+      $variables['business_opportunities'] = \Drupal::formBuilder()->getForm('Drupal\business_opportunities\Form\BusinessOpportunitiesForm');
+    }
+    if (\Drupal::moduleHandler()->moduleExists('contact_distributor')) {
+      $variables['contact_distributor'] = \Drupal::formBuilder()->getForm('Drupal\contact_distributor\Form\ContactDistributorForm');
+    }
+    if (\Drupal::moduleHandler()->moduleExists('conference_inquiries')) {
+      $variables['conference_inquiries'] = \Drupal::formBuilder()->getForm('Drupal\conference_inquiries\Form\ConferenceInquiriesForm');
+    }
+    if (\Drupal::moduleHandler()->moduleExists('file_complaint')) {
+      $variables['file_complaint'] = \Drupal::formBuilder()->getForm('Drupal\file_complaint\Form\FileComplaintForm');
+    }
+    if (\Drupal::moduleHandler()->moduleExists('web_invoice')) {
+      $variables['web_invoice'] = \Drupal::formBuilder()->getForm('Drupal\web_invoice\Form\WebInvoiceForm');
+    }
+    if (\Drupal::moduleHandler()->moduleExists('job_application')) {
+      $variables['job_application'] = \Drupal::formBuilder()->getForm('Drupal\job_application\Form\JobApplicationForm');
+    }
+    if (\Drupal::moduleHandler()->moduleExists('newsletter_subscription')) {
+      $variables['newsletter_subscription'] = \Drupal::formBuilder()->getForm('Drupal\newsletter_subscription\Form\NewsletterSubscriptionForm');
+    }
+    if (\Drupal::moduleHandler()->moduleExists('order_status')) {
+      $variables['order_status'] = \Drupal::formBuilder()->getForm('Drupal\order_status\Form\OrderStatusForm');
+    }
+    if (\Drupal::moduleHandler()->moduleExists('product_issues')) {
+      $variables['product_issues'] = \Drupal::formBuilder()->getForm('Drupal\product_issues\Form\ProductIssuesForm');
+    }
+    if (\Drupal::moduleHandler()->moduleExists('public_relations')) {
+      $variables['public_relations'] = \Drupal::formBuilder()->getForm('Drupal\public_relations\Form\PublicRelationsForm');
+    }
+    if (\Drupal::moduleHandler()->moduleExists('web_return')) {
+      $variables['web_return'] = \Drupal::formBuilder()->getForm('Drupal\web_return\Form\WebReturnForm');
+    }
+    if (\Drupal::moduleHandler()->moduleExists('service_consultation')) {
+      $variables['service_consultation'] = \Drupal::formBuilder()->getForm('Drupal\service_consultation\Form\ServiceConsultationForm');
+    }
+    if (\Drupal::moduleHandler()->moduleExists('service_issues')) {
+      $variables['service_issues'] = \Drupal::formBuilder()->getForm('Drupal\service_issues\Form\ServiceIssuesForm');
+    }
+    if (\Drupal::moduleHandler()->moduleExists('sponsorship_inquiries')) {
+      $variables['sponsorship_inquiries'] = \Drupal::formBuilder()->getForm('Drupal\sponsorship_inquiries\Form\SponsorshipInquiryForm');
+    }
+    if (\Drupal::moduleHandler()->moduleExists('technical_support')) {
+      $variables['technical_support'] = \Drupal::formBuilder()->getForm('Drupal\technical_support\Form\TechnicalSupportForm');
+    }
+    if (\Drupal::moduleHandler()->moduleExists('website_issues')) {
+      $variables['website_issues'] = \Drupal::formBuilder()->getForm('Drupal\website_issues\Form\WebsiteIssuesForm');
+    }
+  }
+  if ($variables['node']->id() == 1998) { // careers page
+    if (\Drupal::moduleHandler()->moduleExists('job_application')) {
+      $variables['job_application'] = \Drupal::formBuilder()->getForm('Drupal\job_application\Form\JobApplicationForm');
+    }
+  }
+  if ($variables['node']->id() == 2285) {
+    if (\Drupal::moduleHandler()->moduleExists('rna_purification')) {
+      $variables['rna_purification'] = \Drupal::formBuilder()->getForm('Drupal\rna_purification\Form\RnaPurificationForm');
+    }
+  }
+  if ($variables['node']->id() == 2120) { // Conference Lead Form
+    if (\Drupal::moduleHandler()->moduleExists('conference_lead')) {
+      $variables['conference_lead'] = \Drupal::formBuilder()->getForm('Drupal\conference_lead\Form\ConferenceLeadForm');
+    }
+  }
+  if ($variables['node']->id() == 2853) { // Conference Lead Form
+    if (\Drupal::moduleHandler()->moduleExists('conference_lead_simplified')) {
+      $variables['conference_lead_simplified'] = \Drupal::formBuilder()->getForm('Drupal\conference_lead_simplified\Form\ConferenceLeadFormSimplified');
+    }
+  }
+  if ($variables['node']->id() == 2148) { // COVID Workflow Discounted Bundles Form
+    if (\Drupal::moduleHandler()->moduleExists('covid_workflow')) {
+      $variables['covid_workflow'] = \Drupal::formBuilder()->getForm('Drupal\covid_workflow\Form\CovidWorkflowForm');
+    }
+  }
+  if ($variables['node']->id() == 2172) {
+    if (\Drupal::moduleHandler()->moduleExists('service_consultation')) {
+      $variables['service_consultation'] = \Drupal::formBuilder()->getForm('Drupal\service_consultation\Form\ServiceConsultationForm');
+    }
+  }
+
+  if ($variables['node']->id() == 2066) { //Free Sample survery
+    if (\Drupal::moduleHandler()->moduleExists('service_consultation')) {
+      $variables['service_consultation'] = \Drupal::formBuilder()->getForm('Drupal\service_consultation\Form\ServiceConsultationForm');
+    }
+  }
+  if ($variables['node']->id() == 2239) { //Book a Meeting (30 Minute Consultation)
+    if (\Drupal::moduleHandler()->moduleExists('book_meeting')) {
+      $variables['book_meeting'] = \Drupal::formBuilder()->getForm('Drupal\book_meeting\Form\BookMeetingForm');
+    }
+  }
+  if ($variables['node']->id() == 2558) {
+    // Extract form markup
+    if (\Drupal::moduleHandler()->moduleExists('event_db')) {
+      $variables['event_db'] = \Drupal::formBuilder()->getForm('Drupal\event_db\Form\EventDbForm');
+    }
+    if (\Drupal::moduleHandler()->moduleExists('event_db_delete')) {
+      $variables['event_db_delete'] = \Drupal::formBuilder()->getForm('Drupal\event_db_delete\Form\EventDbDeleteForm');
+    }
+
+    $variables['data3'] = '<h3>fsfsfsfs</h3>';
+    $query = \Drupal::database()->select('forms_to_zoho', 't');
+    $query->fields('t', ['id', 'email','first_name', 'last_name','company','job_title','event_name','lead_sample_type','lead_analyte','lead_application','lead_first_engagement','notes']);
+    $query->condition('form_name', 'Conference Lead');
+    $result = $query->execute();
+    $variables['data2']['#markup'] = '<div class="container"><table id="event-db"><thead><tr><th>ID</th><th>Email</th><th>First Name</th><th>Last Name</th><th>Title</th><th>Company</th><th>Street</th><th>City</th><th>State</th><th>Country</th><th>Zip</th><th>Phone</th><th>Department</th><th>Product Tags</th><th>Marketing Tags</th><th>Workflow Tags</th><th>Sample Tags</th><th>Analyte Tags</th><th>Application Tags</th><th>Notes</th><th>Kit</th><th>Sample</th><th>Conference</th><th>Website</th><th>Opt In</th><th>Inbound Source</th><th>Salesperson</th><th>Lifecycle Stage/status</th><th>Actions</th></tr></thead>';
+
+    $variables['data2']['#markup'] .= '<tbody>';
+    foreach ($result as $row) {
+      $id = $row->id;
+      $email = $row->email;
+      $fname = $row->first_name;
+      $lname = $row->last_name;
+      $company = $row->company;
+      $job = $row->job_title;
+      $event_name = $row->event_name;
+      $sample_type = $row->lead_sample_type;
+      $analyte = $row->lead_analyte;
+      $application = $row->lead_application;
+      $engagement = $row->lead_first_engagement;
+      $notes = $row->notes;
+
+      $variables['data2']['#markup'] .= '<tr><td>' . $id . '</td><td>'.$email.'</td><td>'.$fname.'</td><td>'.$lname.'</td><td>'.$job.'</td><td>'.$company.'</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>'.$sample_type.'</td><td>'.$analyte.'</td><td>'.$application.'</td><td><div class="scrollable">'.$notes.'</div></td><td></td><td></td><td>'.$event_name.'</td><td></td><td></td><td></td><td></td><td></td><td style="display:flex;align-items: center;padding:5px;border-bottom:none;"><button class="action-btn" style="margin:0 10px;padding:0 7px;font-size:14px;" onclick="show_form('.$id.',\''.$fname.'\',\''.$lname.'\',\''.$email.'\',\''.$company.'\',\''.$job.'\',\''.$event_name.'\',\''.trim(preg_replace('/\s+/', ' ', $notes)).'\', '.$id.')"><span class="glyphicon glyphicon-pencil"></span>Edit</button><div class="middle-line"></div><button class="action-btn" style="margin:0 10px;padding:0 7px;font-size:14px;" onclick="delete_entry('.$id.')"><span class="glyphicon glyphicon-trash"></span>Delete</button></td></tr>';
+      // Do something with the results.
+    }
+     $variables['data2']['#markup'] .= '</tbody></table></div>';
+  }
+
+  if ($variables['node']->id() == 2261) { //Free Sample survery
+    if (\Drupal::moduleHandler()->moduleExists('liquid_biopsy')) {
+      $variables['liquid_biopsy'] = \Drupal::formBuilder()->getForm('Drupal\liquid_biopsy\Form\LiquidBiopsyForm');
+    }
+  }
+  if ($variables['node']->id() == 2286) { //Express Order
+    if (\Drupal::moduleHandler()->moduleExists('express_order')) {
+      $variables['express_order'] = \Drupal::formBuilder()->getForm('Drupal\express_order\Form\ExpressOrderForm');
+    }
+    if (\Drupal::moduleHandler()->moduleExists('express_order_file')) {
+      $variables['express_order_file'] = \Drupal::formBuilder()->getForm('Drupal\express_order_file\Form\ExpressOrderFormFile');
+    }
+  }
+  if ($variables['node']->id() == 2419) { //Fr Contact
+    if (\Drupal::moduleHandler()->moduleExists('contacter_norgen')) {
+      $variables['contacter_norgen'] = \Drupal::formBuilder()->getForm('Drupal\contacter_norgen\Form\ContacterNorgenForm');
+    }
+  }
+  if ($variables['node']->id() == 2420) { //Fr Contact
+    if (\Drupal::moduleHandler()->moduleExists('contacter_norgen')) {
+      $variables['contacter_norgen'] = \Drupal::formBuilder()->getForm('Drupal\contacter_norgen\Form\ContacterNorgenForm');
+    }
+  }
+  if ($variables['node']->id() == 2623) { //en Contact
+    if (\Drupal::moduleHandler()->moduleExists('contact_spanish')) {
+      $variables['contact_spanish'] = \Drupal::formBuilder()->getForm('Drupal\contact_spanish\Form\ContactSpanishForm');
+    }
+  }
+  if ($variables['node']->id() == 2685) { //cn Contact
+    if (\Drupal::moduleHandler()->moduleExists('contact_chineese')) {
+      $variables['contact_chineese'] = \Drupal::formBuilder()->getForm('Drupal\contact_chineese\Form\ContactChineeseForm');
+    }
+  }
+  if ($variables['node']->id() == 2743) { //de Contact
+    if (\Drupal::moduleHandler()->moduleExists('contact_german')) {
+      $variables['contact_german'] = \Drupal::formBuilder()->getForm('Drupal\contact_german\Form\ContactGermanForm');
+    }
+  }
+  if ($variables['node']->id() == 2801) { //japan Contact
+    if (\Drupal::moduleHandler()->moduleExists('contact_japan')) {
+      $variables['contact_japan'] = \Drupal::formBuilder()->getForm('Drupal\contact_japan\Form\ContactJapanForm');
+    }
+  }
+  if ($variables['node']->id() == 2346) { //Sample Request 
+    if (\Drupal::moduleHandler()->moduleExists('sample_request')) {
+      $variables['sample_request'] = \Drupal::formBuilder()->getForm('Drupal\sample_request\Form\SampleRequestForm');
+    }
+  }
+
+  if ($variables['node']->id() == 2867) { //New Products v2 
+    if (\Drupal::moduleHandler()->moduleExists('newproduct_signup')) {
+      $variables['newproduct_signup'] = \Drupal::formBuilder()->getForm('Drupal\newproduct_signup\Form\NewProductSignUpForm');
+    }
+  }
+
+  if($variables['node']->id() == 2904){ // OEM and Contract Manufacturing Page
+    if (\Drupal::moduleHandler()->moduleExists('oem_contact')) {
+      $variables['oem_contact'] = \Drupal::formBuilder()->getForm('Drupal\oem_contact\Form\OEMContactForm');
+    }
+  }
+
+  if ($variables['node']->id() == 2354) { //norgenius)
+
+    $logged_in = \Drupal::currentUser()->isAuthenticated();
+    $current_user = \Drupal::currentUser();
+    $email = '';
+    $email = $current_user->getEmail();
+    $variables['email'] = $email;
+    
+    if (\Drupal::moduleHandler()->moduleExists('norgenius_email')) {
+      $variables['norgenius_email'] = \Drupal::formBuilder()->getForm('Drupal\norgenius_email\Form\NorgeniusEmailForm');
+    }
+    if (\Drupal::moduleHandler()->moduleExists('norgenius_saveworkflow')) {
+      $variables['norgenius_saveworkflow'] = \Drupal::formBuilder()->getForm('Drupal\norgenius_saveworkflow\Form\NorgeniusSaveworkflowForm');
+    }
+    if (\Drupal::moduleHandler()->moduleExists('norgenius_pathogen')) {
+      $variables['norgenius_pathogen'] = \Drupal::formBuilder()->getForm('Drupal\norgenius_pathogen\Form\NorgeniusPathogenForm');
+    }
+
+
+    $variables['#cache']['max-age'] = 0;
+    if (isset($_POST['variation_id'])) {
+      $variation = \Drupal::entityTypeManager()->getStorage('commerce_product_variation')->load($_POST['variation_id']);
+      if (isset($variation)) {
+        isset($_POST['quantity']) ? addToCart($variation, $_POST['quantity']) : addToCart($variation, 1);
+      }
+    }
+    
+    $variables['data3'] = '<h3>fsfsfsfs</h3>';
+    
+    $result = \Drupal::database()->select('workflow_results', 'wr');
+    $result->fields('wr', array('product','code','choice','choice_type'));
+    $result = $result->execute();
+
+    $variables['res'] = array(array());
+    $cnt1=0;
+    foreach($result as $r)
+    {
+      $variables['res'][$cnt1][0]=$r->product;
+      $variables['res'][$cnt1][1]=$r->code;
+      $variables['res'][$cnt1][2]=$r->choice;
+      $variables['res'][$cnt1][3]=$r->choice_type;
+      $cnt1++;
+    }
+
+    $np_result = \Drupal::database()->select('workflow_results_nopathogen', 'wr');
+    $np_result->fields('wr', array('product','code','choice','choice_type'));
+    $np_result = $np_result->execute();
+
+    $variables['np_res'] = array(array());
+    $cnt11=0;
+    foreach($np_result as $n_r)
+    {
+      $variables['np_res'][$cnt11][0]=$n_r->product;
+      $variables['np_res'][$cnt11][1]=$n_r->code;
+      $variables['np_res'][$cnt11][2]=$n_r->choice;
+      $variables['np_res'][$cnt11][3]=$n_r->choice_type;
+      $cnt11++;
+    }
+
+
+
+    $selector_data = \Drupal::database()->select('workflow_selector', 'ws');
+    $selector_data->fields('ws', array('category','organism','pathogen','analyte','sample','code'));
+    $selector_data = $selector_data->execute();
+
+    $variables['data'] = array(array());
+    $cnt2=0;
+    foreach($selector_data as $d)
+    {
+      $variables['data'][$cnt2][0]=$d->category;
+      $variables['data'][$cnt2][1]=$d->organism;
+      $variables['data'][$cnt2][2]=$d->pathogen;
+      $variables['data'][$cnt2][3]=$d->analyte;
+      $variables['data'][$cnt2][4]=$d->sample;
+      $variables['data'][$cnt2][5]=$d->code;
+      $cnt2++;
+    }
+
+    $np_selector_data = \Drupal::database()->select('workflow_selector_no_pathogen', 'np_ws');
+    $np_selector_data->fields('np_ws', array('analyte','sample','organism','code'));
+    $np_selector_data = $np_selector_data->execute();
+
+    $variables['np_data'] = array(array());
+    $cnt12=0;
+    foreach($np_selector_data as $n_d)
+    {
+      $variables['np_data'][$cnt12][0]=$n_d->analyte;
+      $variables['np_data'][$cnt12][1]=$n_d->sample;
+      $variables['np_data'][$cnt12][2]=$n_d->organism;
+      $variables['np_data'][$cnt12][3]=$n_d->code;
+
+      $cnt12++;
+    }
+
+
+
+     $category = \Drupal::database()->select('workflow_category', 'wc');
+     $category->fields('wc', array('id','entity_id','category','category_value'));
+     $category = $category->execute();
+
+    $variables['categories'] = array(array());
+    $cnt3=0;
+    foreach($category as $c)
+    {
+      $variables['categories'][$cnt3][0]=$c->id;
+      $variables['categories'][$cnt3][1]=$c->entity_id;
+      $variables['categories'][$cnt3][2]=$c->category;
+      $variables['categories'][$cnt3][3]=$c->category_value;
+      $cnt3++;
+    }
+
+
+
+
+
+
+     $organism = \Drupal::database()->select('workflow_organism', 'wo');
+     $organism->fields('wo', array('id','entity_id','organism','organism_value'));
+     $organism = $organism->execute();
+
+    $variables['organisms'] = array(array());
+    $cnt4=0;
+    foreach($organism as $o)
+    {
+      $variables['organisms'][$cnt4][0]=$o->id;
+      $variables['organisms'][$cnt4][1]=$o->entity_id;
+      $variables['organisms'][$cnt4][2]=$o->organism;
+      $variables['organisms'][$cnt4][3]=$o->organism_value; 
+      $cnt4++;
+    }
+
+    //secondversions
+    $np_organism = \Drupal::database()->select('workflow_selector_nopathogen_organism', 'np_wo');
+     $np_organism->fields('np_wo', array('id','entity_id','organism','organism_value'));
+     $np_organism = $np_organism->execute();
+
+    $variables['nopathogen_organisms'] = array(array());
+    $cnt14=0;
+    foreach($np_organism as $n_o)
+    {
+      $variables['nopathogen_organisms'][$cnt14][0]=$n_o->id;
+      $variables['nopathogen_organisms'][$cnt14][1]=$n_o->entity_id;
+      $variables['nopathogen_organisms'][$cnt14][2]=$n_o->organism;
+      $variables['nopathogen_organisms'][$cnt14][3]=$n_o->organism_value; 
+      $cnt14++;
+    }
+
+
+     $pathogen = \Drupal::database()->select('workflow_pathogen', 'wp');
+     $pathogen->fields('wp', array('id','entity_id','pathogen','pathogen_value','nickname'));
+     $pathogen = $pathogen->execute();
+
+    $variables['pathogens'] = array(array());
+    $cnt5=0;
+    foreach($pathogen as $p)
+    {
+      $variables['pathogens'][$cnt5][0]=$p->id;
+      $variables['pathogens'][$cnt5][1]=$p->entity_id;
+      $variables['pathogens'][$cnt5][2]=$p->pathogen;
+      $variables['pathogens'][$cnt5][3]=$p->pathogen_value;
+      $variables['pathogens'][$cnt5][4]=$p->nickname;
+      $cnt5++;
+    }
+
+
+
+
+     $analyte = \Drupal::database()->select('workflow_analyte', 'wa');
+     $analyte->fields('wa', array('id','entity_id','analyte','analyte_value'));
+     $analyte = $analyte->execute();
+
+    $variables['analytes'] = array(array());
+    $cnt7=0;
+    foreach($analyte as $a)
+    {
+      $variables['analytes'][$cnt7][0]=$a->id;
+      $variables['analytes'][$cnt7][1]=$a->entity_id;
+      $variables['analytes'][$cnt7][2]=$a->analyte;
+      $variables['analytes'][$cnt7][3]=$a->analyte_value;
+      $cnt7++;
+    }
+
+    //secondversions
+    $np_analyte = \Drupal::database()->select('workflow_selector_nopathogen_analytes', 'np_wa');
+     $np_analyte->fields('np_wa', array('id','entity_id','analyte','analyte_value'));
+     $np_analyte = $np_analyte->execute();
+
+    $variables['nopathogen_analytes'] = array(array());
+    $cnt17=0;
+    foreach($np_analyte as $n_a)
+    {
+      $variables['nopathogen_analytes'][$cnt17][0]=$n_a->id;
+      $variables['nopathogen_analytes'][$cnt17][1]=$n_a->entity_id;
+      $variables['nopathogen_analytes'][$cnt17][2]=$n_a->analyte;
+      $variables['nopathogen_analytes'][$cnt17][3]=$n_a->analyte_value;
+      $cnt17++;
+    }
+
+    $wf_ap = \Drupal::database()->select('workflow_analyte_pathogen', 'a_p');
+     $wf_ap->fields('a_p', array('id','pathogen','code'));
+     $wf_ap = $wf_ap->execute();
+
+    $variables['workflow_ap'] = array(array());
+    $cnt27=0;
+    foreach($wf_ap as $ap)
+    {
+      $variables['workflow_ap'][$cnt27][0]=$ap->id;
+      $variables['workflow_ap'][$cnt27][1]=$ap->pathogen;
+      $variables['workflow_ap'][$cnt27][2]=$ap->code;
+      $cnt27++;
+    }
+
+    $wf_np_results = \Drupal::database()->select('workflow_results_nopathogen_results', 'wf_n_results');
+     $wf_np_results->fields('wf_n_results', array('Product','pathogen','choice'));
+     $wf_np_results = $wf_np_results->execute();
+
+    $variables['workflow_np_results'] = array(array());
+    $cnt37=0;
+    foreach($wf_np_results as $np_r)
+    {
+      $variables['workflow_np_results'][$cnt37][0]=$np_r->Product;
+      $variables['workflow_np_results'][$cnt37][1]=$np_r->pathogen;
+      $variables['workflow_np_results'][$cnt37][2]=$np_r->choice;
+      $cnt37++;
+    }
+
+
+
+
+
+    $sample = \Drupal::database()->select('workflow_sample', 'wsa');
+     $sample->fields('wsa', array('id','entity_id','sample','sample_value'));
+     $sample = $sample->execute();
+
+    $variables['samples'] = array(array());
+    $cnt6=0;
+    foreach($sample as $sa)
+    {
+      $variables['samples'][$cnt6][0]=$sa->id;
+      $variables['samples'][$cnt6][1]=$sa->entity_id;
+      $variables['samples'][$cnt6][2]=$sa->sample;
+      $variables['samples'][$cnt6][3]=$sa->sample_value;
+      $cnt6++;
+    }
+
+    //secondverisons
+    $np_sample = \Drupal::database()->select('workflow_selector_nopathogen_sample', 'np_wsa');
+     $np_sample->fields('np_wsa', array('id','entity_id','sample','sample_value'));
+     $np_sample = $np_sample->execute();
+
+    $variables['nopathogen_samples'] = array(array());
+    $cnt16=0;
+    foreach($np_sample as $n_sa)
+    {
+      $variables['nopathogen_samples'][$cnt16][0]=$n_sa->id;
+      $variables['nopathogen_samples'][$cnt16][1]=$n_sa->entity_id;
+      $variables['nopathogen_samples'][$cnt16][2]=$n_sa->sample;
+      $variables['nopathogen_samples'][$cnt16][3]=$n_sa->sample_value;
+      $cnt16++;
+    }
+
+    $url_paths = \Drupal::database()->select('path_alias','ua');
+     $url_paths->fields('ua', array('path','alias'));
+     $url_paths->condition('path', '/node/%', 'LIKE');
+     $url_paths->condition('alias', '/product/%', 'LIKE');
+     $url_paths = $url_paths->execute();
+
+    $variables['urls'] = array(array());
+    $pos = 0;
+    foreach($url_paths as $u)
+    {
+      $variables['urls'][$pos][0]=$str = trim(substr($u->source,5,strlen($u->source))). '';
+      $variables['urls'][$pos++][1]=$u->alias;
+    }
+
+
+    $product = \Drupal::database()->select('node_field_data','n');
+    $product->InnerJoin('commerce_product_variation_field_data','p','p.product_id=n.nid');
+    $product->InnerJoin('commerce_product_variation__attribute_size','fs','fs.entity_id=p.variation_id');
+    $product->LeftJoin('commerce_product_variation__attribute_format','ff','ff.entity_id=p.variation_id');
+    $product->LeftJoin('commerce_product_attribute_value_field_data','as','as.attribute_value_id=fs.attribute_size_target_id');
+    $product->LeftJoin('commerce_product_attribute_value_field_data','av','av.attribute_value_id=ff.attribute_format_target_id');
+    $product->leftJoin('commerce_product_variation__field_product_image', 'field_product_image', 'field_product_image.entity_id = p.variation_id');
+     // Left join file_managed.
+    $product->leftJoin('file_managed', 'file', 'file.fid = field_product_image.field_product_image_target_id');
+    $product->join('path_alias', 'alias', 'CONCAT(\'/node/\', n.nid) = alias.path');
+
+    // $product = \Drupal::database()->select('commerce_product_attribute_value_field_data','av');
+    //     $product->InnerJoin('commerce_product_variation__attribute_format','ff','ff.entity_id=av.attribute_value_id');
+    //     $product->InnerJoin('commerce_product_variation__attribute_size','fs','fs.entity_id=av.attribute_value_id');
+    //     $product->LeftJoin('commerce_product_variation_field_data','p','p.variation_id=ff.entity_id');
+    //     $product->LeftJoin('commerce_product_variation_field_data','p','p.variation_id=fs.entity_id');
+    //     $product->LeftJoin('node_field_data','as','as.attribute_value_id=fs.attribute_size_target_id');
+    //$product->groupBy('c.norproduct_cataloguenumber_value');
+     $product->addField('as', 'name', 'size_name');
+     $product->addField('av', 'name', 'format_name');
+     //$product->addField('node_file_image', 'uri', 'node_file_image_uri');
+     $product->condition('n.status',1);
+     //$product->condition('alias.alias', '/product/%', 'LIKE');
+      $product->fields('n',array('nid', 'type','status','title'));
+      $product->fields('p',array('variation_id', 'product_id','sku','title'));
+      $product->fields('ff',array('entity_id', 'attribute_format_target_id'));
+      $product->fields('fs',array('entity_id', 'attribute_size_target_id'));
+      $product->fields('file', ['uri']);
+      $product->fields('alias', ['alias']);
+      //$product->fields('as',array('attribute_value_id','name'));
+      //$product->fields('av',array('attribute_value_id','name'));
+      
+
+       $product = $product->execute();
+
+    $variables['prods'] = array(array());
+    $cnt=0;
+    foreach($product as $p)
+    {
+      //$variables['prods'][$cnt][0]=$p->entity_id; //same as node in the urls array
+      $variables['prods'][$cnt][1]=$p->variation_id;
+      $variables['prods'][$cnt][2]=$p->product_id;
+      $variables['prods'][$cnt][3]=$p->sku;
+      //$variables['prods'][$cnt][4]=$p->attribute_size_target_id;
+      $variables['prods'][$cnt][5]=$p->size_name;
+      //$variables['prods'][$cnt][6]=$p->attribute_format_target_id;
+      $variables['prods'][$cnt][7]=$p->format_name;
+      $variables['prods'][$cnt][8]=$p->title;
+      $variables['prods'][$cnt][9]=$p->uri. "";
+      $variables['prods'][$cnt][10] = $p->alias . "?v=" . $p->variation_id;
+     // $variables['prods'][$cnt][6]=$p->entity_id;
+     //  $variables['prods'][$cnt][7]=$p->uri;
+     //  $variables['prods'][$cnt][8]=$p->nid;
+     //  $variables['prods'][$cnt][9]=$p->field_format_value;
+
+      // $prods[$cnt][6]=$p->product;
+      // $prods[$cnt][7]=$p->code;
+      // $prods[$cnt][8]=$p->choice;
+      // $prods[$cnt][9]=$p->choice_type;
+
+      $cnt++;
+    }
+
+    
+
+
+
+  }
+  if ($variables['node']->id() == 2358) { //norgenius_saved_workflow)
+
+    $variables['#cache']['max-age'] = 0;
+  if (isset($_POST['variation_id'])) {
+    $variation = \Drupal::entityTypeManager()->getStorage('commerce_product_variation')->load($_POST['variation_id']);
+    if (isset($variation)) {
+      isset($_POST['quantity']) ? addToCart($variation, $_POST['quantity']) : addToCart($variation, 1);
+    }
+  }
+    
+    $variables['data3'] = '<h3>fsfsfsfs</h3>';
+    
+    $result = \Drupal::database()->select('workflow_results', 'wr');
+    $result->fields('wr', array('product','code','choice','choice_type'));
+    $result = $result->execute();
+
+    $variables['res'] = array(array());
+    $cnt1=0;
+    foreach($result as $r)
+    {
+      $variables['res'][$cnt1][0]=$r->product;
+      $variables['res'][$cnt1][1]=$r->code;
+      $variables['res'][$cnt1][2]=$r->choice;
+      $variables['res'][$cnt1][3]=$r->choice_type;
+      $cnt1++;
+    }
+
+    $np_result = \Drupal::database()->select('workflow_results_nopathogen', 'wr');
+    $np_result->fields('wr', array('product','code','choice','choice_type'));
+    $np_result = $np_result->execute();
+
+    $variables['np_res'] = array(array());
+    $cnt11=0;
+    foreach($np_result as $n_r)
+    {
+      $variables['np_res'][$cnt11][0]=$n_r->product;
+      $variables['np_res'][$cnt11][1]=$n_r->code;
+      $variables['np_res'][$cnt11][2]=$n_r->choice;
+      $variables['np_res'][$cnt11][3]=$n_r->choice_type;
+      $cnt11++;
+    }
+
+
+
+
+    $selector_data = \Drupal::database()->select('workflow_selector', 'ws');
+    $selector_data->fields('ws', array('category','organism','pathogen','analyte','sample','code'));
+    $selector_data = $selector_data->execute();
+
+    $variables['data'] = array(array());
+    $cnt2=0;
+    foreach($selector_data as $d)
+    {
+      $variables['data'][$cnt2][0]=$d->category;
+      $variables['data'][$cnt2][1]=$d->organism;
+      $variables['data'][$cnt2][2]=$d->pathogen;
+      $variables['data'][$cnt2][3]=$d->analyte;
+      $variables['data'][$cnt2][4]=$d->sample;
+      $variables['data'][$cnt2][5]=$d->code;
+      $cnt2++;
+    }
+
+    $np_selector_data = \Drupal::database()->select('workflow_selector_no_pathogen', 'np_ws');
+    $np_selector_data->fields('np_ws', array('analyte','sample','organism','code'));
+    $np_selector_data = $np_selector_data->execute();
+
+    $variables['np_data'] = array(array());
+    $cnt12=0;
+    foreach($np_selector_data as $n_d)
+    {
+      $variables['np_data'][$cnt12][0]=$n_d->analyte;
+      $variables['np_data'][$cnt12][1]=$n_d->sample;
+      $variables['np_data'][$cnt12][2]=$n_d->organism;
+      $variables['np_data'][$cnt12][3]=$n_d->code;
+
+      $cnt12++;
+    }
+
+
+
+
+     $category = \Drupal::database()->select('workflow_category', 'wc');
+     $category->fields('wc', array('id','entity_id','category','category_value'));
+     $category = $category->execute();
+
+    $variables['categories'] = array(array());
+    $cnt3=0;
+    foreach($category as $c)
+    {
+      $variables['categories'][$cnt3][0]=$c->id;
+      $variables['categories'][$cnt3][1]=$c->entity_id;
+      $variables['categories'][$cnt3][2]=$c->category;
+      $variables['categories'][$cnt3][3]=$c->category_value;
+      $cnt3++;
+    }
+
+
+
+
+
+
+     $organism = \Drupal::database()->select('workflow_organism', 'wo');
+     $organism->fields('wo', array('id','entity_id','organism','organism_value'));
+     $organism = $organism->execute();
+
+    $variables['organisms'] = array(array());
+    $cnt4=0;
+    foreach($organism as $o)
+    {
+      $variables['organisms'][$cnt4][0]=$o->id;
+      $variables['organisms'][$cnt4][1]=$o->entity_id;
+      $variables['organisms'][$cnt4][2]=$o->organism;
+      $variables['organisms'][$cnt4][3]=$o->organism_value; 
+      $cnt4++;
+    }
+
+//secondversions
+    $np_organism = \Drupal::database()->select('workflow_selector_nopathogen_organism', 'np_wo');
+     $np_organism->fields('np_wo', array('id','entity_id','organism','organism_value'));
+     $np_organism = $np_organism->execute();
+
+    $variables['nopathogen_organisms'] = array(array());
+    $cnt14=0;
+    foreach($np_organism as $n_o)
+    {
+      $variables['nopathogen_organisms'][$cnt14][0]=$n_o->id;
+      $variables['nopathogen_organisms'][$cnt14][1]=$n_o->entity_id;
+      $variables['nopathogen_organisms'][$cnt14][2]=$n_o->organism;
+      $variables['nopathogen_organisms'][$cnt14][3]=$n_o->organism_value; 
+      $cnt14++;
+    }
+
+
+
+     $pathogen = \Drupal::database()->select('workflow_pathogen', 'wp');
+     $pathogen->fields('wp', array('id','entity_id','pathogen','pathogen_value','nickname'));
+     $pathogen = $pathogen->execute();
+
+    $variables['pathogens'] = array(array());
+    $cnt5=0;
+    foreach($pathogen as $p)
+    {
+      $variables['pathogens'][$cnt5][0]=$p->id;
+      $variables['pathogens'][$cnt5][1]=$p->entity_id;
+      $variables['pathogens'][$cnt5][2]=$p->pathogen;
+      $variables['pathogens'][$cnt5][3]=$p->pathogen_value;
+      $variables['pathogens'][$cnt5][4]=$p->nickname;
+      $cnt5++;
+    }
+
+
+
+
+     $analyte = \Drupal::database()->select('workflow_analyte', 'wa');
+     $analyte->fields('wa', array('id','entity_id','analyte','analyte_value'));
+     $analyte = $analyte->execute();
+
+    $variables['analytes'] = array(array());
+    $cnt7=0;
+    foreach($analyte as $a)
+    {
+      $variables['analytes'][$cnt7][0]=$a->id;
+      $variables['analytes'][$cnt7][1]=$a->entity_id;
+      $variables['analytes'][$cnt7][2]=$a->analyte;
+      $variables['analytes'][$cnt7][3]=$a->analyte_value;
+      $cnt7++;
+    }
+
+//secondversions
+    $np_analyte = \Drupal::database()->select('workflow_selector_nopathogen_analytes', 'np_wa');
+     $np_analyte->fields('np_wa', array('id','entity_id','analyte','analyte_value'));
+     $np_analyte = $np_analyte->execute();
+
+    $variables['nopathogen_analytes'] = array(array());
+    $cnt17=0;
+    foreach($np_analyte as $n_a)
+    {
+      $variables['nopathogen_analytes'][$cnt17][0]=$n_a->id;
+      $variables['nopathogen_analytes'][$cnt17][1]=$n_a->entity_id;
+      $variables['nopathogen_analytes'][$cnt17][2]=$n_a->analyte;
+      $variables['nopathogen_analytes'][$cnt17][3]=$n_a->analyte_value;
+      $cnt17++;
+    }
+
+
+
+$sample = \Drupal::database()->select('workflow_sample', 'wsa');
+     $sample->fields('wsa', array('id','entity_id','sample','sample_value'));
+     $sample = $sample->execute();
+
+    $variables['samples'] = array(array());
+    $cnt6=0;
+    foreach($sample as $sa)
+    {
+      $variables['samples'][$cnt6][0]=$sa->id;
+      $variables['samples'][$cnt6][1]=$sa->entity_id;
+      $variables['samples'][$cnt6][2]=$sa->sample;
+      $variables['samples'][$cnt6][3]=$sa->sample_value;
+      $cnt6++;
+    }
+
+    //secondverisons
+    $np_sample = \Drupal::database()->select('workflow_selector_nopathogen_sample', 'np_wsa');
+     $np_sample->fields('np_wsa', array('id','entity_id','sample','sample_value'));
+     $np_sample = $np_sample->execute();
+
+    $variables['nopathogen_samples'] = array(array());
+    $cnt16=0;
+    foreach($np_sample as $n_sa)
+    {
+      $variables['nopathogen_samples'][$cnt16][0]=$n_sa->id;
+      $variables['nopathogen_samples'][$cnt16][1]=$n_sa->entity_id;
+      $variables['nopathogen_samples'][$cnt16][2]=$n_sa->sample;
+      $variables['nopathogen_samples'][$cnt16][3]=$n_sa->sample_value;
+      $cnt16++;
+    }
+
+$current_user = \Drupal::currentUser();
+  $email = '';
+  $email = $current_user->getEmail();
+
+
+$saved = \Drupal::database()->select('saved_ng_workflows', 'saved_ng');
+     $saved->fields('saved_ng', array('email','category','organism','pathogen','analyte','sample','date','wf_name','id'));
+     $saved->condition('email',$email);
+     $saved->orderBy('id', 'DESC');
+     $saved = $saved->execute();
+
+
+    $variables['saves'] = array(array());
+    $cnt15=0;
+    foreach($saved as $sng)
+    {
+      $variables['saves'][$cnt15][0]=$sng->category;
+      $variables['saves'][$cnt15][1]=$sng->organism;
+      $variables['saves'][$cnt15][2]=$sng->pathogen;
+      $variables['saves'][$cnt15][3]=$sng->analyte;
+      $variables['saves'][$cnt15][4]=$sng->sample;
+      $variables['saves'][$cnt15][5]=$sng->date;
+      $variables['saves'][$cnt15][6]=$sng->wf_name;
+      $cnt15++;
+    }
+
+  $user_first_name = nor_forms_user_first_name();
+  $user_last_name = nor_forms_user_last_name();
+
+
+
+
+$url_paths = \Drupal::database()->select('path_alias','ua');
+     $url_paths->fields('ua', array('path','alias'));
+     $url_paths->condition('path', '/node/%', 'LIKE');
+     $url_paths->condition('alias', '/product/%', 'LIKE');
+     $url_paths = $url_paths->execute();
+
+    $variables['urls'] = array(array());
+    $pos = 0;
+  foreach($url_paths as $u)
+  {
+    $variables['urls'][$pos][0]=$str = trim(substr($u->source,5,strlen($u->source))). '';
+    $variables['urls'][$pos++][1]=$u->alias;
+  }
+
+
+$product = \Drupal::database()->select('node_field_data','n');
+    $product->InnerJoin('commerce_product_variation_field_data','p','p.product_id=n.nid');
+    $product->InnerJoin('commerce_product_variation__attribute_size','fs','fs.entity_id=p.variation_id');
+    $product->LeftJoin('commerce_product_variation__attribute_format','ff','ff.entity_id=p.variation_id');
+    $product->LeftJoin('commerce_product_attribute_value_field_data','as','as.attribute_value_id=fs.attribute_size_target_id');
+    $product->LeftJoin('commerce_product_attribute_value_field_data','av','av.attribute_value_id=ff.attribute_format_target_id');
+    $product->leftJoin('commerce_product_variation__field_product_image', 'field_product_image', 'field_product_image.entity_id = p.variation_id');
+     // Left join file_managed.
+    $product->leftJoin('file_managed', 'file', 'file.fid = field_product_image.field_product_image_target_id');
+  $product->join('path_alias', 'alias', 'CONCAT(\'/node/\', n.nid) = alias.path');
+
+// $product = \Drupal::database()->select('commerce_product_attribute_value_field_data','av');
+//     $product->InnerJoin('commerce_product_variation__attribute_format','ff','ff.entity_id=av.attribute_value_id');
+//     $product->InnerJoin('commerce_product_variation__attribute_size','fs','fs.entity_id=av.attribute_value_id');
+//     $product->LeftJoin('commerce_product_variation_field_data','p','p.variation_id=ff.entity_id');
+//     $product->LeftJoin('commerce_product_variation_field_data','p','p.variation_id=fs.entity_id');
+//     $product->LeftJoin('node_field_data','as','as.attribute_value_id=fs.attribute_size_target_id');
+    //$product->groupBy('c.norproduct_cataloguenumber_value');
+     $product->addField('as', 'name', 'size_name');
+     $product->addField('av', 'name', 'format_name');
+     //$product->addField('node_file_image', 'uri', 'node_file_image_uri');
+     $product->condition('n.status',1);
+     //$product->condition('alias.alias', '/product/%', 'LIKE');
+      $product->fields('n',array('nid', 'type','status','title'));
+      $product->fields('p',array('variation_id', 'product_id','sku','title'));
+      $product->fields('ff',array('entity_id', 'attribute_format_target_id'));
+      $product->fields('fs',array('entity_id', 'attribute_size_target_id'));
+      $product->fields('file', ['uri']);
+      $product->fields('alias', ['alias']);
+      //$product->fields('as',array('attribute_value_id','name'));
+      //$product->fields('av',array('attribute_value_id','name'));
+      
+
+       $product = $product->execute();
+
+    $variables['prods'] = array(array());
+    $cnt=0;
+    foreach($product as $p)
+    {
+      //$variables['prods'][$cnt][0]=$p->entity_id; //same as node in the urls array
+      $variables['prods'][$cnt][1]=$p->variation_id;
+      $variables['prods'][$cnt][2]=$p->product_id;
+      $variables['prods'][$cnt][3]=$p->sku;
+      //$variables['prods'][$cnt][4]=$p->attribute_size_target_id;
+      $variables['prods'][$cnt][5]=$p->size_name;
+      //$variables['prods'][$cnt][6]=$p->attribute_format_target_id;
+      $variables['prods'][$cnt][7]=$p->format_name;
+      $variables['prods'][$cnt][8]=$p->title;
+      $variables['prods'][$cnt][9]=$p->uri. "";
+      $variables['prods'][$cnt][10] = $p->alias . "?v=" . $p->variation_id;
+     // $variables['prods'][$cnt][6]=$p->entity_id;
+     //  $variables['prods'][$cnt][7]=$p->uri;
+     //  $variables['prods'][$cnt][8]=$p->nid;
+     //  $variables['prods'][$cnt][9]=$p->field_format_value;
+
+      // $prods[$cnt][6]=$p->product;
+      // $prods[$cnt][7]=$p->code;
+      // $prods[$cnt][8]=$p->choice;
+      // $prods[$cnt][9]=$p->choice_type;
+
+      $cnt++;
+    }
+
+    
+    //need to add saved workflow db
+    //user email code
+
+
+
+  }
+
+
+  // use first and last name
+  $variables['user_first_name'] = nor_forms_user_first_name();
+  $variables['user_last_name'] = nor_forms_user_last_name();
+}
+
+
+//This is done through nano on 06/20/2024
+function nor_forms_preprocess_node__2572(&$variables)
+{ // EXTRAClean campaign
+  $variables['#cache']['max-age'] = 0;
+  if (isset($_POST['variation_id'])) {
+    $variation = \Drupal::entityTypeManager()->getStorage('commerce_product_variation')->load($_POST['variation_id']);
+    if (isset($variation)) {
+      isset($_POST['quantity']) ? addToCart($variation, $_POST['quantity']) : addToCart($variation, 1);
+    }
+  }
+  if (\Drupal::moduleHandler()->moduleExists('newproduct_signup')) {
+      $variables['newproduct_signup'] = \Drupal::formBuilder()->getForm('Drupal\newproduct_signup\Form\NewProductSignUpForm');
+    }
+}
+
+function nor_forms_preprocess_node__2575(&$variables)
+{ // EXTRAClean campaign
+  $variables['#cache']['max-age'] = 0;
+  if (isset($_POST['variation_id'])) {
+    $variation = \Drupal::entityTypeManager()->getStorage('commerce_product_variation')->load($_POST['variation_id']);
+    if (isset($variation)) {
+      isset($_POST['quantity']) ? addToCart($variation, $_POST['quantity']) : addToCart($variation, 1);
+    }
+  }
+  if (\Drupal::moduleHandler()->moduleExists('newproduct_signup')) {
+      $variables['newproduct_signup'] = \Drupal::formBuilder()->getForm('Drupal\newproduct_signup\Form\NewProductSignUpForm');
+    }
+}
+function nor_forms_preprocess_node__2571(&$variables)
+{ // EXTRAClean campaign
+  $variables['#cache']['max-age'] = 0;
+  if (isset($_POST['variation_id'])) {
+    $variation = \Drupal::entityTypeManager()->getStorage('commerce_product_variation')->load($_POST['variation_id']);
+    if (isset($variation)) {
+      isset($_POST['quantity']) ? addToCart($variation, $_POST['quantity']) : addToCart($variation, 1);
+    }
+  }
+}
+
+function nor_forms_preprocess_node__2593(&$variables)
+{ // backtoschool
+  $variables['#cache']['max-age'] = 0;
+  // \Drupal::logger('back_to_School')->error('the variation_id is : '.json_encode($_POST));
+  if (isset($_POST['variation_id'])) {
+    
+    $variation = \Drupal::entityTypeManager()->getStorage('commerce_product_variation')->load($_POST['variation_id']);
+    if (isset($variation)) {
+      isset($_POST['quantity']) ? addToCart($variation, $_POST['quantity']) : addToCart($variation, 1);
+    }
+  }
+}
+
+function nor_forms_preprocess_node__2598(&$variables)
+{ // backtoschool
+  $variables['#cache']['max-age'] = 0;
+  // \Drupal::logger('back_to_School')->error('the variation_id is : '.json_encode($_POST));
+  if (isset($_POST['variation_id'])) {
+    
+    $variation = \Drupal::entityTypeManager()->getStorage('commerce_product_variation')->load($_POST['variation_id']);
+    if (isset($variation)) {
+      isset($_POST['quantity']) ? addToCart($variation, $_POST['quantity']) : addToCart($variation, 1);
+    }
+  }
+}
+
+function nor_forms_preprocess_node__2580(&$variables)
+{ // one health campaign
+  $variables['#cache']['max-age'] = 0;
+  if (isset($_POST['variation_id'])) {
+    $variation = \Drupal::entityTypeManager()->getStorage('commerce_product_variation')->load($_POST['variation_id']);
+    if (isset($variation)) {
+      isset($_POST['quantity']) ? addToCart($variation, $_POST['quantity']) : addToCart($variation, 1);
+    }
+  }
+}
+
+function nor_forms_preprocess_node__2859(&$variables)
+{ // RNA PROMOTION
+  $variables['#cache']['max-age'] = 0;
+  if (isset($_POST['variation_id'])) {
+    $variation = \Drupal::entityTypeManager()->getStorage('commerce_product_variation')->load($_POST['variation_id']);
+    if (isset($variation)) {
+      isset($_POST['quantity']) ? addToCart($variation, $_POST['quantity']) : addToCart($variation, 1);
+    }
+  }
+}
+
+function nor_forms_preprocess_node__2911(&$variables)
+{ // Resource Database Page (All Product Documentation, Citations, Data Figures)
+  /* $current_uri = \Drupal::request()->getRequestUri();
+  $url_components = parse_url($current_uri);
+  $params = array();
+  if(isset($url_components['query'])) parse_str($url_components['query'], $params);
+  $access = isset($params['access'])?true:false;
+
+  if(!$access) throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException();
+
+  if (\Drupal::moduleHandler()->moduleExists('database_page_figures')) {
+    $variables['database_page_figures'] = \Drupal::formBuilder()->getForm('Drupal\database_page_figures\Form\DatabasePageFigures');
+  }
+  if (\Drupal::moduleHandler()->moduleExists('database_page_files')) {
+    $variables['database_page_files'] = \Drupal::formBuilder()->getForm('Drupal\database_page_files\Form\DatabasePageFiles');
+  } */
+  if (\Drupal::moduleHandler()->moduleExists('database_page_form')) {
+    $variables['database_page_form'] = \Drupal::formBuilder()->getForm('Drupal\database_page_form\Form\DatabasePageForm');
+  }
+}
+
+function nor_forms_preprocess_node__2922(&$variables)
+{ // Urine database page
+  if (\Drupal::moduleHandler()->moduleExists('urine_preservation_login_form')) {
+    $variables['urine_login_form'] = \Drupal::formBuilder()->getForm('Drupal\urine_preservation_login_form\Form\UrinePreservationLoginForm');
+  }
+}
+
+function nor_forms_preprocess_node__2921(&$variables)
+{ // testing autmation scripts for magbead promo page
+  if (\Drupal::moduleHandler()->moduleExists('total_rna_automation_scripts_test')) {
+    $variables['total_rna_automation_scripts_test'] = \Drupal::formBuilder()->getForm('Drupal\total_rna_automation_scripts_test\Form\TotalRnaAutomationScriptsFormTest');
+  }
+  if (\Drupal::moduleHandler()->moduleExists('plant_dna_automation_scripts_test')) {
+    $variables['plant_dna_automation_scripts_test'] = \Drupal::formBuilder()->getForm('Drupal\plant_dna_automation_scripts_test\Form\PlantDnaAutomationScriptsFormTest');
+  }
+  if (\Drupal::moduleHandler()->moduleExists('saliva_dna_automation_scripts_test')) {
+    $variables['saliva_dna_automation_scripts_test'] = \Drupal::formBuilder()->getForm('Drupal\saliva_dna_automation_scripts_test\Form\SalivaDnaAutomationScriptsFormTest');
+  }
+  if (\Drupal::moduleHandler()->moduleExists('stool_dna_automation_scripts_test')) {
+    $variables['stool_dna_automation_scripts_test'] = \Drupal::formBuilder()->getForm('Drupal\stool_dna_automation_scripts_test\Form\StoolDnaAutomationScriptsFormTest');
+  }
+  if (\Drupal::moduleHandler()->moduleExists('soil_dna_automation_scripts_test')) {
+    $variables['soil_dna_automation_scripts_test'] = \Drupal::formBuilder()->getForm('Drupal\soil_dna_automation_scripts_test\Form\SoilDnaAutomationScriptsFormTest');
+  }
+  if (\Drupal::moduleHandler()->moduleExists('cells_and_tissue_dna_automation_scripts_test')) {
+    $variables['cells_and_tissue_dna_automation_scripts_test'] = \Drupal::formBuilder()->getForm('Drupal\cells_and_tissue_dna_automation_scripts_test\Form\CellsAndTissueDnaAutomationScriptsFormTest');
+  }
+  if (\Drupal::moduleHandler()->moduleExists('blood_dna_automation_scripts_test')) {
+    $variables['blood_dna_automation_scripts_test'] = \Drupal::formBuilder()->getForm('Drupal\blood_dna_automation_scripts_test\Form\BloodDnaAutomationScriptsFormTest');
+  }
+  if (\Drupal::moduleHandler()->moduleExists('pathogen_nucleic_acid_automation_scripts_test')) {
+    $variables['pathogen_nucleic_acid_automation_scripts_test'] = \Drupal::formBuilder()->getForm('Drupal\pathogen_nucleic_acid_automation_scripts_test\Form\PathogenNucleicAcidAutomationScriptsFormTest');
+  }
+}
+
+
+function get_cart_item_count(ContainerInterface $container)
+{
+
+  // Load the current user's shopping cart order.
+  $order_storage = $container->get('entity_type.manager')->getStorage('commerce_order');
+  try {
+    $cart_provider = \Drupal::service('commerce_cart.cart_provider');
+    $orders = $cart_provider->getCart('default');
+
+    // Get the first cart order if it exists.
+    if (!empty($orders)) {
+      $item_count = 0;
+      foreach ($orders->order_items->referencedEntities() as $order_item) {
+        $item_count += $order_item->getQuantity();
+      }
+      return $item_count;
+    }
+  } catch (Exception $e) {
+    return 0;
+  }
+  // If there's no cart order, return 0.
+  return 0;
+
+}
+
+
+/*function nor_forms_preprocess_commerce_product(&$variables)
+{
+  if (isset($variables['elements']['#commerce_product'])) {
+   //print('<pre>'); dump($variables['elements']['#commerce_product']); print('</pre>');
+   $product_id = $variables['elements']['#commerce_product']->Id();
+   $query = \Drupal::entityQuery('node')
+    ->accessCheck(FALSE)
+    ->condition('type', 'norproduct')
+    ->condition('status', 1)
+    ->condition('field_commerce_product.entity.product_id', $product_id);
+    $nids = $query->execute();
+    if (count($nids) > 0) { foreach ($nids as $nidkey => $nidvalue) { $nid = $nidvalue; } }
+    $variables['davidtest'] = $product_id;
+    $node = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
+    $variables['node'] = $node;
+  }
+
+}*/
+// function nor_forms_preprocess_views_view__taxonomy_term(&$variables) {
+//   // Get the node ID from the view's arguments.
+//   $view = $variables['views_view__taxonomy_term'];
+//   $args = $view->args;
+//   $nid = isset($args[0]) ? $args[0] : NULL;
+
+//     echo $args;
+
+//   if ($nid) {
+//       // Fetch the alias for the node ID.
+//       $alias = \Drupal::service('path_alias.manager')->getAliasByPath('/node/' . $nid);
+//       // Add the alias to the variables array to make it available in the template.
+//       $variables['node_alias'] = $alias;
+//   }
+// }
+
+
+function nor_forms_preprocess_views_view__commerce_cart_block(&$variables)
+{
+  /*   $cart_provider = \Drupal::service('commerce_cart.cart_provider');
+  $orders = $cart_provider->getCart('default');
+  if($orders){
+    $variables['checkout_url'] = '/checkout/'.$orders->id().'/order_information';
+  }
+  dump($orders);
+  dump($variables['checkout_url']); */
+}
+
+function nor_forms_preprocess_html(&$variables)
+{
+
+  /*  $cart_provider = \Drupal::service('commerce_cart.cart_provider');
+  $orders = $cart_provider->getCart('default');
+  dump($orders->id());
+  $variables['checkout_url'] = '/checkout/'.$orders->id().'/order_information';
+  dump($variables['checkout_url']); */
+  //['order_id']
+
+  // Login.
+  $is_authenticated = \Drupal::currentUser()->isAuthenticated() ? TRUE : FALSE;
+  $variables['is_authenticated'] = $is_authenticated;
+
+  // Cart.
+  $cart_count = 0;
+  $count_text = '';
+  $cart_total_price = '';
+  $cart_block = FALSE;
+  if (\Drupal::moduleHandler()->moduleExists('commerce')) {
+
+    $container = \Drupal::getContainer();
+    $cart_count = get_cart_item_count($container);
+    //$cart_count = 5;
+
+    //$cart_total_price = $this->getCartTotalPrice();
+    $count_text = $cart_count == 1 ? $cart_count . ' item' : $cart_count . ' items';
+    $block = \Drupal\block\Entity\Block::load('jango_cart');
+    //$block = \Drupal::entityTypeManager()->getStorage('block')->load('jango_cart');
+    if ($block) {
+      $cart_block = \Drupal::entityTypeManager()->getViewBuilder('block')->view($block);
+      //$cart_block = \Drupal::service('renderer')->renderRoot($cart_view);
+    }
+    $variables['cart_block'] = $cart_block;
+    $variables['cart_count'] = $cart_count;
+  }
+
+  $variables['#attached']['library'][] = 'nor_forms/social_media_popup';
+  
+  if (\Drupal::moduleHandler()->moduleExists('social_media_popup')) {
+    $variables['social_media_popup'] = \Drupal::formBuilder()->getForm('Drupal\social_media_popup\Form\SocialMediaPopupForm');
+  }
+  if($is_authenticated){
+    $id = \Drupal::currentUser()->id();
+    $variables['mailing_optin'] = \Drupal::entityTypeManager()->getStorage('user')->load($id)->get('field_mail_opt_in')->value;
+  }
+
+
+  $cart_view = '';
+  $variables['order_id'] = 'NA';
+  if (\Drupal::moduleHandler()->moduleExists('commerce')) {
+    $cart_provider = \Drupal::service('commerce_cart.cart_provider');
+    $cart = $cart_provider->getCart('default');
+    if ($cart) {
+      // Load and render the cart view.
+      // $view = \Drupal\views\Views::getView('duplicate_of_cart_form');
+       $view = \Drupal\views\Views::getView('commerce_cart_form');
+      //  // Set contextual filter value.
+       $order_id = $cart->id();
+       
+        $variables['order_id'] =$order_id;
+      //  dump( $view->storage->get('display'));
+      // //  dump($view->storage->get('display'));
+      if ($view) {
+
+        // $view->setDisplay('default'); // Use the appropriate display ID here.
+        $view->setDisplay('block_2');
+        $view->setArguments([$order_id]);
+        $view->preExecute();
+        $view->execute();
+        $cart_view = $view->render();
+        // // Debugging the view object and display ID
+        // dump($view->storage->get('display'));
+        // // dump($view);
+        // // dump($view->render());
+        $cart_view = \Drupal::service('renderer')->render($cart_view);
+      }
+    }
+  }
+
+  $variables['nor_forms_module_cart_view'] = $cart_view;
+  // Logo
+  // Get the admin logo path from the theme settings.
+  $path_logo_admin = theme_get_setting('logo.url');
+  // Pass the path of the admin logo to the template.
+  $variables['logo_path'] = $path_logo_admin;
+
+  // Search.
+  $variables['search_block'] = FALSE;
+  $search_block = FALSE;
+  // if (\Drupal::moduleHandler()->moduleExists('search')) {
+  //   $search_block = \Drupal::formBuilder()->getForm(\Drupal\search\Form\SearchBlockForm::class);
+  //   $search_block['keys']['#attributes']['placeholder'] = t('Type to search...');
+  //   //$search_block = $this->render($form);
+  //   $variables['search_block'] = $search_block;
+  // }
+
+  $database = \Drupal::database();
+
+/*   // Select query.
+  $query = $database->select('commerce_product_variation_field_data', 'variation');
+
+  // Join commerce_product__variations.
+  $query->join('commerce_product__variations', 'variations', 'variations.variations_target_id = variation.variation_id');
+
+  // Join commerce_product.
+  $query->join('commerce_product', 'product', 'product.product_id = variations.entity_id');
+
+  // Join node__field_commerce_product.
+  $query->join('node__field_commerce_product', 'field_commerce_product', 'field_commerce_product.field_commerce_product_target_id = product.product_id');
+
+  // Join node.
+  $query->join('node_field_data', 'n', 'n.nid = field_commerce_product.entity_id');
+
+  // Join path_alias.
+  $query->join('path_alias', 'alias', 'CONCAT(\'/node/\', n.nid) = alias.path');
+
+  // Join menu weight.
+  $query->join('menu_link_content_data', 'menu', 'CONCAT(\'entity:node/\', n.nid) = menu.link__uri');
+
+
+
+  // Add conditions.
+  $query->condition('variation.status', 1);
+  $query->condition('n.status', 1);
+  $query->condition('alias.alias', '/product/%', 'LIKE');
+  // Add more conditions as needed.
+
+  // Add fields to select.
+  $query->fields('variation', ['sku', 'title', 'variation_id']);
+  $query->fields('n', ['nid']);
+  $query->fields('alias', ['alias']);
+  // Order by menu weight.
+  $query->orderBy('menu.weight');
+  $result = $query->execute();
+
+  // Fetch the results.
+  $data1 = $result->fetchAll(); */
+
+  // need to use query() method in order to use MIN() function within nested select condition.
+  // Added condition to filter menu weights to come from only the breadcrumb menu, which removes duplicates from products listed under multiple menus
+  // MIN() function was used to grab only the first menu item for a given node link, which removes menu item duplicates.
+  // We should also manually remove any duplicates from the breadcrumb menu configuration just to make sure we are using the correct menu and associated weight. No need for duplicate menu entries.
+  $query = $database->query("
+    SELECT variation.sku, variation.title, variation.variation_id, n.nid, alias.alias, menu.menu_name  
+    FROM commerce_product_variation_field_data variation 
+    JOIN node__field_commerce_product field_commerce_product ON field_commerce_product.field_commerce_product_target_id = variation.product_id 
+    JOIN node_field_data n ON n.nid = field_commerce_product.entity_id 
+    JOIN path_alias alias ON CONCAT('/node/', n.nid) = alias.path 
+    LEFT JOIN (SELECT MIN(menu_sub.id), menu_sub.menu_name, menu_sub.link__uri FROM menu_link_content_data menu_sub GROUP BY menu_sub.menu_name, menu_sub.link__uri) menu ON CONCAT('entity:node/', n.nid) = menu.link__uri AND menu.menu_name = 'menu-breadcrumb-menu'
+    WHERE variation.status = 1 
+    AND n.status = 1
+    AND n.type = 'norproduct'
+    ORDER BY variation.variation_id ASC;
+  ");
+  $data1 = $query->fetchAll();
+
+  $prd_name_num = array();
+  $cnt = 0;
+  foreach ($data1 as $a) {
+    $prd_name_num[$cnt][0] = $a->sku . " " . $a->title;
+    $prd_name_num[$cnt++][1] = $a->alias . "?v=" . $a->variation_id;
+  }
+  $variables['search_block'] = $prd_name_num;
+}
+
+/* New helper function for fetching product page URLs based on provided variation or product id */
+/* $type = 'variation' or 'product' */
+function nor_forms_node_alias_from_id($id, $type = 'variation'){
+  $variation_id = null;
+  if($type == 'product'){ // get alias
+    $product_path_query = \Drupal::database()->select('node__field_commerce_product', 'nfcp');
+    $product_path_query->leftJoin('path_alias', 'pa', "CONCAT('/node/',nfcp.entity_id) = pa.path");
+    $product_path_query->condition('nfcp.deleted', 0, '=');
+    $product_path_query->condition('pa.status', 1, '=');
+    $product_path_query->condition('nfcp.field_commerce_product_target_id', $id, '=');
+    $product_path_query->fields('pa', ['alias']);
+    $related_product_path = $product_path_query->execute();
+    $variation_id = null;
+  }
+  elseif($type == 'variation'){ // get alias through parent product id
+    $product_path_query = \Drupal::database()->select('commerce_product_variation_field_data', 'cpvfd');
+    $product_path_query->leftJoin('node__field_commerce_product', 'nfcp', 'cpvfd.product_id = nfcp.field_commerce_product_target_id');
+    $product_path_query->leftJoin('path_alias', 'pa', "CONCAT('/node/',nfcp.entity_id) = pa.path");
+    $product_path_query->condition('cpvfd.variation_id', $id, '=');
+    $product_path_query->condition('cpvfd.product_id', NULL, 'IS NOT NULL');
+    $product_path_query->condition('cpvfd.status', 1, '=');
+    $product_path_query->condition('nfcp.deleted', 0, '=');
+    $product_path_query->condition('pa.status', 1, '=');
+    $product_path_query->fields('pa', ['alias']);
+    $related_product_path = $product_path_query->execute();
+    $variation_id = $id;
+  }
+  // set custom variable for each related product entity object
+  if($related_product_path){
+    $product_page_alias = $related_product_path->fetchField();
+    if($variation_id!=null)  $product_page_alias.='?v=' . $variation_id;
+    return $product_page_alias;
+  }
+}
+
+function nor_forms_block_build_block_content_alter(array &$build, Drupal\Core\Block\BlockPluginInterface $block){
+  if($block->label() === 'Home Banner' && \Drupal::currentUser()->isAnonymous()){
+    /* $build['#cache']['max-age'] = 0;
+    $build['#cache']['contexts'][] = 'session'; */
+    \Drupal::service('page_cache_kill_switch')->trigger();
+  }
+}
+
+function nor_forms_preprocess_page(&$variables){
+
+  // GA4 TRACKING EVENTS //
+  if(\Drupal::service('session')->get('ga4_cart_variables')){ // cart event fired
+    // \Drupal::logger('back_to_School2')->error('the variation_id is : '.json_encode($_POST));
+    foreach(\Drupal::service('session')->get('ga4_cart_variables') as $cart_event_type=>$cart_variables){ // check all cart events
+      switch ($cart_event_type){ // execute appropriate code based on cart event
+        case 'add_to_cart':  // insert add_to_cart GA4 event code snippet, using session variables
+          // attach ga4 event library, and set the configuration variables
+          $variables['#attached']['library'][] = 'nor_forms/ga4_add_to_cart';
+          $variables['#attached']['drupalSettings']['nor_forms']['ga4_add_to_cart'] = $cart_variables;
+        break;
+        case 'remove_from_cart':  // insert remove_from_cart GA4 event code snippet, using session variables
+          // attach ga4 event library, and set the configuration variables
+          $variables['#attached']['library'][] = 'nor_forms/ga4_remove_from_cart';
+          $variables['#attached']['drupalSettings']['nor_forms']['ga4_remove_from_cart'] = $cart_variables;
+        break;
+      }
+    }
+    \Drupal::service('session')->remove('ga4_cart_variables'); // remove the session variable.
+  }
+  if(\Drupal::service('session')->get('ga4_checkout_variables')){ // checkout event fired
+    foreach(\Drupal::service('session')->get('ga4_checkout_variables') as $checkout_event_type=>$checkout_variables){ // check all checkout events
+      switch ($checkout_event_type){ // execute appropriate code based on checkout event
+        case 'purchase':  // insert add_to_cart GA4 event code snippet, using session variables
+          // attach ga4 event library, and set the configuration variables
+          $variables['#attached']['library'][] = 'nor_forms/ga4_purchase';
+          $variables['#attached']['drupalSettings']['nor_forms']['ga4_purchase'] = $checkout_variables;
+        break;
+      }
+    }
+    \Drupal::service('session')->remove('ga4_checkout_variables'); // remove the session variable.
+  }
+  if(\Drupal::service('session')->get('ga4_other_commerce_variables')){ // checkout event fired
+    foreach(\Drupal::service('session')->get('ga4_other_commerce_variables') as $commerce_event_type=>$commerce_variables){ // check all other commerce events
+      switch ($commerce_event_type){ // execute appropriate code based on event
+        case 'add_to_wishlist':  // insert add_to_wishlist GA4 event code snippet, using session variables
+          // attach ga4 event js file, and set the configuration variables
+          $variables['#attached']['library'][] = 'nor_forms/ga4_add_to_wishlist';
+          $variables['#attached']['drupalSettings']['nor_forms']['ga4_add_to_wishlist'] = $commerce_variables;
+        break;
+      }
+    }
+    \Drupal::service('session')->remove('ga4_other_commerce_variables'); // remove the session variable.
+  }
+  if(\Drupal::service('session')->get('ga4_account_variables')){
+    foreach(\Drupal::service('session')->get('ga4_account_variables') as $account_event_type=>$account_variables){ // check all checkout events
+      switch ($account_event_type){ // execute appropriate code based on checkout event
+        case 'login':
+          // attach ga4 event js file, and set the configuration variables
+          $variables['#attached']['library'][] = 'nor_forms/ga4_login';
+          $variables['#attached']['drupalSettings']['nor_forms']['ga4_login'] = $account_variables;
+        break;
+        case 'sign_up':
+          // attach ga4 event js file, and set the configuration variables
+          $variables['#attached']['library'][] = 'nor_forms/ga4_sign_up';
+          $variables['#attached']['drupalSettings']['nor_forms']['ga4_sign_up'] = $account_variables;
+        break;
+      }
+    }
+    \Drupal::service('session')->remove('ga4_account_variables'); // remove the session variable.
+  }
+  // END GA4 TRACKING EVENTS //
+
+  // Magnetic Bead/Dnase Bundle Deal Promo //
+  if(\Drupal::service('session')->get('magbead_dnase_bundle_promo')){
+    $necessary_info = \Drupal::service('session')->get('magbead_dnase_bundle_promo');
+    $magbead_sku = $necessary_info['sku'];
+    $magbead_product_title = $necessary_info['magbead_product_title'];
+    $usd_discount = 0;
+    $cad_discount = 0;
+    $dnase_variation_id = null;
+    // set the values
+    // discount_ids refer to the promotion id for CAD and USD for each product discount - UPDATE THESE VALUES FOR THE LIVE SITE
+    if($magbead_sku == 75500){  // DNase SKU: 25720
+      $dnase_variation_id = 493;
+      $usd_discount_id = 83;
+      $cad_discount_id = 84;
+    }
+    elseif($magbead_sku == 75400){ // DNase SKU: 25710    
+      $dnase_variation_id = 79;
+      $usd_discount_id = 85;
+      $cad_discount_id = 86;
+    }
+    if($dnase_variation_id == null) return;
+
+    $product_variation = \Drupal::entityTypeManager()->getStorage('commerce_product_variation')->load($dnase_variation_id);
+
+    $price_resolver = \Drupal::service('commerce_pricelist.price_resolver');
+    $container = \Drupal::getContainer();
+    $currentUser = $container->get('current_user');
+    $currentStore = $container->get('commerce_store.current_store');
+    $store = selectStore($product_variation, $currentStore);
+    $context = new Context($currentUser, $store);
+    $pricelist_price = $price_resolver->resolve($product_variation, 1, $context);
+    
+    $discounted_price = $pricelist_price;
+    // get the promotion and retrieve the offer amount value (fixed dollar value)
+    if($pricelist_price && $pricelist_price->getCurrencyCode() == "CAD"){
+      $promotion = \Drupal::entityTypeManager()->getStorage('commerce_promotion')->load($cad_discount_id);
+      if($promotion){
+        $discount_amount = new Price($promotion->getOffer()->getConfiguration()['offer_amount']['number'], $promotion->getOffer()->getConfiguration()['offer_amount']['currency_code']);
+        $discounted_price = $pricelist_price->subtract($discount_amount,'CAD');
+      }
+    }
+    else{ // USD default
+      $pricelist_price = $product_variation->getPrice();
+      $promotion = \Drupal::entityTypeManager()->getStorage('commerce_promotion')->load($usd_discount_id);
+      if($promotion){
+        $discount_amount = new Price($promotion->getOffer()->getConfiguration()['offer_amount']['number'], $promotion->getOffer()->getConfiguration()['offer_amount']['currency_code']);
+        $discounted_price = $pricelist_price->subtract($discount_amount,'USD');
+      }
+    }
+
+    $currency_formatter = \Drupal::service('commerce_price.currency_formatter');
+    $formatted_price = $currency_formatter->format($pricelist_price->getNumber(), $pricelist_price->getCurrencyCode());
+    $formatted_discounted_price = $currency_formatter->format($discounted_price->getNumber(), $discounted_price->getCurrencyCode());
+
+    $magbead_dnase_promo_info = [
+      'dnase_product_title' => $product_variation->getTitle(),
+      'dnase_product_id' => $product_variation->getProductId(),
+      'dnase_sku' => $product_variation->getSKU(),
+      'dnase_size' => $product_variation->getAttributeValue('attribute_size')->getName(),
+      'dnase_url' => nor_forms_node_alias_from_id($dnase_variation_id),
+      'dnase_price' => $formatted_price,
+      'dnase_discounted_price' => $formatted_discounted_price,
+      'dnase_variation_id' => $dnase_variation_id,
+      'magbead_product_title' => $magbead_product_title,
+    ];
+    $variables['#attached']['library'][] = 'nor_forms/magbead_dnase_promo_popup';
+    $variables['magbead_dnase_promo_info'] = $magbead_dnase_promo_info;
+    \Drupal::service('session')->remove('magbead_dnase_bundle_promo'); // remove the session variable.
+  }
+  // END MAGBEAD PROMO //
+
+  // menu
+  if (isset($variables['node'])) {
+    $links = \Drupal::service('plugin.manager.menu.link')->loadLinksByRoute('entity.node.canonical', array('node' => $variables['node']->id()));
+    $i = 0;
+    $breadcrumbs = array();
+    if ($link = reset($links)) {
+      $parent = nor_forms_get_menu_parent($link);
+      if ($parent) {
+        $breadcrumbs[] = [
+          'title' => $parent->getTitle(),
+          'url' => $parent->getUrlObject()->toString(),
+        ];
+        //dump($breadcrumbs[$i]['parent_title'] . ' ' . $breadcrumbs[$i]['parent_url']);
+      }
+      $i = $i + 1;
+      if ($parent) {
+        $parent = nor_forms_get_menu_parent($parent);
+        if ($parent) {
+          $breadcrumbs[] = [
+            'title' => '...',
+            'url' => $parent->getUrlObject()->toString(),
+          ];
+          //dump($breadcrumbs[$i]['parent_title'] . ' ' . $breadcrumbs[$i]['parent_url']);
+          $i = $i + 1;
+        }
+      }
+    }
+    $breadcrumb_menu = [
+      '#markup' => '
+      <div id="block-jango-breadcrumbs" class="contextual-region">
+        <div id="block-breadcrumbswhite" class="contextual-region">
+          <div class="field field--name-body field--type-text-with-summary field--label-hidden field__item">
+            <div class="c-layout-breadcrumbs-1 c-fonts-uppercase c-fonts-bold c-bordered c-bordered-both" align="text-left">
+              <div class="c-breadcrumbs-wrapper">
+                <div class="container">
+                  <div class="c-page-title c-pull-left">
+                    <h1 class="c-font-uppercase c-font-sbold">' . $variables['node']->get('title')->getString() . '</h1>
+                  </div>
+                  <nav role="navigation" aria-labelledby="system-breadcrumb">
+                    <ol class="c-page-breadcrumbs c-theme-nav c-pull-right c-fonts-regular">
+                      <li>
+                        <a href="/">Home</a>
+                      </li>
+                      <li>/</li>',
+    ];
+
+    // Add dynamic breadcrumbs based on the retrieved items
+    if (!empty($breadcrumbs)) {
+      $last_index = count($breadcrumbs) - 1;
+      for ($i = $last_index; $i >= 0; $i--) {
+        $breadcrumb_menu['#markup'] .= '
+          <li><a href="' . $breadcrumbs[$i]['url'] . '">' . $breadcrumbs[$i]['title'] . '</a></li><li>/</li>';
+      }
+    }
+
+    // Add the current page title to the breadcrumb trail
+    $breadcrumb_menu['#markup'] .= '<li>' . $variables['node']->get('title')->getString() . '</li>';
+
+    // Close the breadcrumb HTML structure
+    $breadcrumb_menu['#markup'] .= '
+                  </ol>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>';
+    $variables['custom_breadcrumb'] = $breadcrumb_menu;
+  }
+}
+
+function nor_forms_preprocess_views_view_table(&$variables){
+  // Cart.
+  $cart_count = 0;
+  $count_text = '';
+  $cart_total_price = '';
+  $cart_block = FALSE;
+  if (\Drupal::moduleHandler()->moduleExists('commerce')) {
+
+    $container = \Drupal::getContainer();
+    $cart_count = get_cart_item_count($container);
+    //$cart_count = 5;
+
+    $cart_count > 1 ? $variables['multiple_cart_items'] = true: $variables['multiple_cart_items'] = false;
+    $variables['cart_count'] = $cart_count;
+  }
+}
+
+function nor_forms_preprocess_commerce_checkout_form__with_sidebar(&$variables){
+  // Cart.
+  $cart_count = 0;
+  if (\Drupal::moduleHandler()->moduleExists('commerce')) {
+    $container = \Drupal::getContainer();
+    $cart_count = get_cart_item_count($container);
+    //$cart_count = 5;
+    $cart_count > 1 ? $variables['multiple_cart_items'] = true: $variables['multiple_cart_items'] = false;
+    $variables['cart_count'] = $cart_count;
+  }
+}
+
+
+function nor_forms_preprocess_menu(&$variables, $hook)
+{
+  // Get the admin logo path from the theme settings.
+  $path_logo_admin = theme_get_setting('logo.url');
+  // Pass the path of the admin logo to the template.
+  $variables['logo_path'] = $path_logo_admin;
+
+  // Cart.
+  $cart_count = 0;
+  $count_text = '';
+  $cart_total_price = '';
+  $cart_block = FALSE;
+  if (\Drupal::moduleHandler()->moduleExists('commerce')) {
+
+    $container = \Drupal::getContainer();
+    $cart_count = get_cart_item_count($container);
+    //$cart_count = 5;
+
+    //$cart_total_price = $this->getCartTotalPrice();
+    $count_text = $cart_count == 1 ? $cart_count . ' item' : $cart_count . ' items';
+    $block = \Drupal\block\Entity\Block::load('jango_cart');
+    //$block = \Drupal::entityTypeManager()->getStorage('block')->load('jango_cart');
+    if ($block) {
+      $cart_block = \Drupal::entityTypeManager()->getViewBuilder('block')->view($block);
+      //$cart_block = \Drupal::service('renderer')->renderRoot($cart_view);
+    }
+    $variables['cart_block'] = $cart_block;
+    $variables['cart_count'] = $cart_count;
+  }
+
+  // Login.
+  $is_authenticated = \Drupal::currentUser()->isAuthenticated() ? TRUE : FALSE;
+  $variables['is_authenticated'] = $is_authenticated;
+
+  $menu_name = 'main';
+  if (isset($variables['menu_name']) && $variables['menu_name'] == $menu_name) {
+    // Menu.
+    if (\Drupal::moduleHandler()->moduleExists('tb_megamenu')) {
+      $tb_megamenu_theme = [
+        '#theme' => 'tb_megamenu',
+        '#menu_name' => $menu_name,
+      ];
+      $menu = \Drupal::service('renderer')->render($tb_megamenu_theme);
+    } else {
+
+      $menu_tree = \Drupal::menuTree();
+      // Build the typical default set of menu tree parameters.
+      $parameters = $menu_tree->getCurrentRouteMenuTreeParameters($menu_name);
+      $tree = \Drupal::menuTree()->load($menu_name, $parameters);
+      // Transform the tree using the manipulators you want.
+      $manipulators = [
+        // Only show links that are accessible for the current user.
+        ['callable' => 'menu.default_tree_manipulators:checkAccess'],
+        // Use the default sorting of menu links.
+        ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
+      ];
+      $tree = $menu_tree->transform($tree, $manipulators);
+      $menu = $tree;
+      //$menu = \Drupal::service('renderer')->render($menu);
+    }
+    $variables['menu'] = $menu;
+  }
+}
+function nor_forms_preprocess_node__2503(&$variables)
+{ // HOME PAGE
+  $variables['#cache']['max-age'] = 0;
+  if (isset($_POST['variation_id'])) {
+    $variation = \Drupal::entityTypeManager()->getStorage('commerce_product_variation')->load($_POST['variation_id']);
+    if (isset($variation)) {
+      isset($_POST['quantity']) ? addToCart($variation, $_POST['quantity']) : addToCart($variation, 1);
+    }
+  }
+}
+function nor_forms_preprocess_node__2529(&$variables)
+{ // stool campaign
+  $variables['#cache']['max-age'] = 0;
+  if (isset($_POST['variation_id'])) {
+    $variation = \Drupal::entityTypeManager()->getStorage('commerce_product_variation')->load($_POST['variation_id']);
+    if (isset($variation)) {
+      isset($_POST['quantity']) ? addToCart($variation, $_POST['quantity']) : addToCart($variation, 1);
+    }
+  }
+  if (\Drupal::moduleHandler()->moduleExists('stool_campaign_lead_capture_2024')) {
+    $variables['stool_campaign_lead_capture_2024'] = \Drupal::formBuilder()->getForm('Drupal\stool_campaign_lead_capture_2024\Form\StoolCampaignLeadCapture2024');
+  }
+}
+function nor_forms_preprocess_node__2569(&$variables)
+{ // stool campaign
+  $variables['#cache']['max-age'] = 0;
+  if (isset($_POST['variation_id'])) {
+    $variation = \Drupal::entityTypeManager()->getStorage('commerce_product_variation')->load($_POST['variation_id']);
+    if (isset($variation)) {
+      isset($_POST['quantity']) ? addToCart($variation, $_POST['quantity']) : addToCart($variation, 1);
+    }
+  }
+}
+function nor_forms_preprocess_node__2554(&$variables)
+{ // stool campaign
+  if (\Drupal::moduleHandler()->moduleExists('stool_campaign_lead_capture_2024')) {
+    $variables['stool_campaign_lead_capture_2024'] = \Drupal::formBuilder()->getForm('Drupal\stool_campaign_lead_capture_2024\Form\StoolCampaignLeadCapture2024');
+  }
+}
+
+function nor_forms_preprocess_node__2872(&$variables)
+{ // Extraclean Infograph Leads
+  if (\Drupal::moduleHandler()->moduleExists('extraclean_educational_video_gated_infograph')) {
+    $variables['extraclean_educational_video_gated_infograph'] = \Drupal::formBuilder()->getForm('Drupal\extraclean_educational_video_gated_infograph\Form\ExtracleanEducationalVideoGatedInfograph');
+  }
+}
+
+function nor_forms_preprocess_node__2543(&$variables)
+{ // stool campaign test page
+  $variables['#cache']['max-age'] = 0;
+  if (isset($_POST['variation_id'])) {
+    $variation = \Drupal::entityTypeManager()->getStorage('commerce_product_variation')->load($_POST['variation_id']);
+    if (isset($variation)) {
+      isset($_POST['quantity']) ? addToCart($variation, $_POST['quantity']) : addToCart($variation, 1);
+    }
+  }
+  if (\Drupal::moduleHandler()->moduleExists('stool_campaign_lead_capture_2024')) {
+    $variables['stool_campaign_lead_capture_2024'] = \Drupal::formBuilder()->getForm('Drupal\stool_campaign_lead_capture_2024\Form\StoolCampaignLeadCapture2024');
+  }
+}
+function nor_forms_preprocess_node__2547(&$variables)
+{ // saliva campaign test page
+  $variables['#cache']['max-age'] = 0;
+  if (isset($_POST['variation_id'])) {
+    $variation = \Drupal::entityTypeManager()->getStorage('commerce_product_variation')->load($_POST['variation_id']);
+    if (isset($variation)) {
+      isset($_POST['quantity']) ? addToCart($variation, $_POST['quantity']) : addToCart($variation, 1);
+    }
+  }
+
+}
+
+function nor_forms_preprocess_node__2864(&$variables)
+{ // NGS sale
+  if (\Drupal::moduleHandler()->moduleExists('ngs_service')) {
+    $variables['ngs_service'] = \Drupal::formBuilder()->getForm('Drupal\ngs_service\Form\NGSServiceForm');
+  }
+}
+
+function nor_forms_preprocess_node__2865(&$variables)
+{ // NGS sale
+  if (\Drupal::moduleHandler()->moduleExists('ngs_service')) {
+    $variables['ngs_service'] = \Drupal::formBuilder()->getForm('Drupal\ngs_service\Form\NGSServiceForm');
+  }
+}
+
+function nor_forms_preprocess_node__2866(&$variables)
+{ // NGS sale
+  if (\Drupal::moduleHandler()->moduleExists('ngs_service')) {
+    $variables['ngs_service'] = \Drupal::formBuilder()->getForm('Drupal\ngs_service\Form\NGSServiceForm');
+  }
+}
+
+function nor_forms_preprocess_node__2550(&$variables)
+{ //catalogue lead capture form
+  
+  if (\Drupal::moduleHandler()->moduleExists('catalogue_lead_capture')) {
+    $variables['catalogue_lead_capture'] = \Drupal::formBuilder()->getForm('Drupal\catalogue_lead_capture\Form\CatalogueLeadCapture');
+  }
+}
+function nor_forms_preprocess_node__2532(&$variables)
+{ // HOME PAGE
+  $variables['#cache']['max-age'] = 0;
+  if (isset($_POST['variation_id'])) {
+    $variation = \Drupal::entityTypeManager()->getStorage('commerce_product_variation')->load($_POST['variation_id']);
+    if (isset($variation)) {
+      isset($_POST['quantity']) ? addToCart($variation, $_POST['quantity']) : addToCart($variation, 1);
+    }
+  }
+}
+function nor_forms_preprocess_node__1874(&$variables)
+{ // VIROID DETECTION
+  $variables['#cache']['max-age'] = 0;
+  if (isset($_POST['variation_id'])) {
+    $variation = \Drupal::entityTypeManager()->getStorage('commerce_product_variation')->load($_POST['variation_id']);
+    if (isset($variation)) {
+      isset($_POST['quantity']) ? addToCart($variation, $_POST['quantity']) : addToCart($variation, 1);
+    }
+  }
+}
+function nor_forms_preprocess_node__1985(&$variables)
+{ // TOTAL NUCLEIC ACID PRESERVATION TUBES
+  $variables['#cache']['max-age'] = 0;
+  if (isset($_POST['variation_id'])) {
+    $variation = \Drupal::entityTypeManager()->getStorage('commerce_product_variation')->load($_POST['variation_id']);
+    if (isset($variation)) {
+      isset($_POST['quantity']) ? addToCart($variation, $_POST['quantity']) : addToCart($variation, 1);
+    }
+  }
+}
+function nor_forms_preprocess_node__2055(&$variables)
+{ // LIAM TESTING PAGE
+  $variables['#cache']['max-age'] = 0;
+  $variables['random_number'] = rand(1, 100);
+  /* dump($variables);
+  dump($_POST); */
+  if (isset($_POST['variation_id'])) {
+    $variation = \Drupal::entityTypeManager()->getStorage('commerce_product_variation')->load($_POST['variation_id']);
+    if (isset($variation)) {
+      isset($_POST['quantity']) ? addToCart($variation, $_POST['quantity']) : addToCart($variation, 1);
+    }
+  }
+}
+function nor_forms_preprocess_node__2158(&$variables)
+{ // SMART SAVE PAGE
+  $variables['#cache']['max-age'] = 0;
+  if (isset($_POST['variation_id'])) {
+    $variation = \Drupal::entityTypeManager()->getStorage('commerce_product_variation')->load($_POST['variation_id']);
+    if (isset($variation)) {
+      isset($_POST['quantity']) ? addToCart($variation, $_POST['quantity']) : addToCart($variation, 1);
+    }
+  }
+}
+function nor_forms_preprocess_node__2689(&$variables)
+{ // scells campaign
+  $variables['#cache']['max-age'] = 0;
+  if (isset($_POST['variation_id'])) {
+    $variation = \Drupal::entityTypeManager()->getStorage('commerce_product_variation')->load($_POST['variation_id']);
+    if (isset($variation)) {
+      isset($_POST['quantity']) ? addToCart($variation, $_POST['quantity']) : addToCart($variation, 1);
+    }
+  }
+  
+}
+function nor_forms_preprocess_node__2588(&$variables)
+{ // SMART SAVE PAGE
+  $variables['#cache']['max-age'] = 0;
+  if (isset($_POST['variation_id'])) {
+    $variation = \Drupal::entityTypeManager()->getStorage('commerce_product_variation')->load($_POST['variation_id']);
+    if (isset($variation)) {
+      isset($_POST['quantity']) ? addToCart($variation, $_POST['quantity']) : addToCart($variation, 1);
+    }
+  }
+}
+function nor_forms_preprocess_node__2591(&$variables)
+{ // URINE PROMO 2024
+  $variables['#cache']['max-age'] = 0;
+  if (isset($_POST['variation_id'])) {
+    $variation = \Drupal::entityTypeManager()->getStorage('commerce_product_variation')->load($_POST['variation_id']);
+    if (isset($variation)) {
+      isset($_POST['quantity']) ? addToCart($variation, $_POST['quantity']) : addToCart($variation, 1);
+    }
+  }
+}
+function nor_forms_preprocess_node__2826(&$variables)
+{ // URINE PROMO 2024
+  $variables['#cache']['max-age'] = 0;
+  if (isset($_POST['variation_id'])) {
+    $variation = \Drupal::entityTypeManager()->getStorage('commerce_product_variation')->load($_POST['variation_id']);
+    if (isset($variation)) {
+      isset($_POST['quantity']) ? addToCart($variation, $_POST['quantity']) : addToCart($variation, 1);
+    }
+  }
+}
+function nor_forms_preprocess_node__2831(&$variables)
+{ // URINE PROMO 2024
+  $variables['#cache']['max-age'] = 0;
+  if (isset($_POST['variation_id'])) {
+    $variation = \Drupal::entityTypeManager()->getStorage('commerce_product_variation')->load($_POST['variation_id']);
+    if (isset($variation)) {
+      isset($_POST['quantity']) ? addToCart($variation, $_POST['quantity']) : addToCart($variation, 1);
+    }
+  }
+}
+
+function nor_forms_preprocess_node__2070(&$variables)
+{
+  $variables['events'] = views_embed_view('events', 'block_1');
+}
+
+function nor_forms_preprocess_node__1998(&$variables)
+{
+  $variables['job_postings_view'] = views_embed_view('job', 'block_1');
+  /*$view = \Drupal::entityTypeManager()
+  ->getStorage('view')
+  ->load('job')
+  ->getExecutable();
+  
+  $view->initDisplay();
+  $view->setDisplay('block_1');
+  $view->execute();
+
+  if (count($view->result)) {
+    $variables['job_posting_test'] = $view->buildRenderable('job_posting_test');
+  } */
+}
+
+
+function nor_to_lowerCase($string) 
+{
+  $mapping = 
+  [
+      'A' => 'a', 'B' => 'b', 'C' => 'c', 'D' => 'd', 'E' => 'e',
+      'F' => 'f', 'G' => 'g', 'H' => 'h', 'I' => 'i', 'J' => 'j',
+      'K' => 'k', 'L' => 'l', 'M' => 'm', 'N' => 'n', 'O' => 'o',
+      'P' => 'p', 'Q' => 'q', 'R' => 'r', 'S' => 's', 'T' => 't',
+      'U' => 'u', 'V' => 'v', 'W' => 'w', 'X' => 'x', 'Y' => 'y',
+      'Z' => 'z', 'À' => 'à', 'Â' => 'â', 'Æ' => 'æ', 'Ç' => 'ç',
+      'È' => 'è', 'É' => 'é', 'Ê' => 'ê', 'Ë' => 'ë', 'Î' => 'î',
+      'Ï' => 'ï', 'Ô' => 'ô', 'Œ' => 'œ', 'Ù' => 'ù', 'Û' => 'û',
+      'Ü' => 'ü', 'Ÿ' => 'ÿ'
+  ];
+
+  $loweredString = '';
+  $length = strlen($string);
+  for ($i = 0; $i < $length; $i++) 
+  {
+      $char = $string[$i];
+      if (isset($mapping[$char])) 
+      {
+          $char = $mapping[$char];
+      }
+      $loweredString .= $char;
+  }
+
+  return $loweredString;
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for node templates.
+ */
+function nor_forms_preprocess_node__2500(&$variables)
+{
+  $variables['#cache']['max-age'] = 0;
+
+  // $database = \Drupal::database();
+
+  // // Select query.
+  // $query = $database->select('commerce_product_variation_field_data', 'variation');
+
+  // //Join commerce_product_variation__attribute_size.
+  // //$query->join('commerce_product_variation__attribute_size', 'attribute_size', 'variation.variation_id = attribute_size.entity_id');
+  // $query->leftjoin('commerce_product_variation__attribute_size', 'attribute_size', 'variation.variation_id = attribute_size.entity_id');
+
+  // // Join commerce_product_attribute_value_field_data.
+  // //$query->join('commerce_product_attribute_value_field_data', 'size', 'attribute_size.attribute_size_target_id = size.attribute_value_id');
+  // $query->leftJoin('commerce_product_attribute_value_field_data', 'size', 'attribute_size.attribute_size_target_id = size.attribute_value_id');
+
+  // // Join commerce_product_variation__attribute_format.
+  // //$query->join('commerce_product_variation__attribute_format', 'attribute_format', 'variation.variation_id = attribute_format.entity_id');
+  // $query->leftJoin('commerce_product_variation__attribute_format', 'attribute_format', 'variation.variation_id = attribute_format.entity_id');
+
+  // // Join commerce_product_attribute_value_field_data.
+  // //$query->join('commerce_product_attribute_value_field_data', 'format', 'attribute_format.attribute_format_target_id = format.attribute_value_id');
+  // $query->leftJoin('commerce_product_attribute_value_field_data', 'format', 'attribute_format.attribute_format_target_id = format.attribute_value_id');
+
+
+  // // Join commerce_product__variations.
+  // $query->join('commerce_product__variations', 'variations', 'variations.variations_target_id = variation.variation_id');
+
+  // // Join commerce_product.
+  // $query->join('commerce_product', 'product', 'product.product_id = variations.entity_id');
+
+  // // Join node__field_commerce_product.
+  // $query->join('node__field_commerce_product', 'field_commerce_product', 'field_commerce_product.field_commerce_product_target_id = product.product_id');
+
+  // // Join node.
+  // $query->join('node_field_data', 'n', 'n.nid = field_commerce_product.entity_id');
+
+  // // Left join commerce_product_variation__field_product_image.
+  // $query->leftJoin('commerce_product_variation__field_product_image', 'field_product_image', 'field_product_image.entity_id = variation.variation_id');
+
+  // // Left join file_managed.
+  // $query->leftJoin('file_managed', 'file', 'file.fid = field_product_image.field_product_image_target_id');
+
+  // // Join node__body.
+  // $query->join('node__body', 'body', 'body.entity_id = n.nid');
+
+  // // Left join node__norproduct_imagekit.
+  // $query->leftJoin('node__norproduct_imagekit', 'node_product_image', 'node_product_image.entity_id = n.nid');
+
+  // // Left join file_managed.
+  // $query->leftJoin('file_managed', 'node_file_image', 'node_file_image.fid = node_product_image.norproduct_imagekit_target_id');
+
+  // // Join path_alias.
+  // $query->join('path_alias', 'alias', 'CONCAT(\'/node/\', n.nid) = alias.path');
+
+  // // Join menu weight.
+  // $query->join('menu_link_content_data', 'menu', 'CONCAT(\'entity:node/\', n.nid) = menu.link__uri');
+
+  // //Add fields
+
+  // $query->addField('size', 'name', 'size_name');
+  // $query->addField('format', 'name', 'format_name');
+  // $query->addField('node_file_image', 'uri', 'node_file_image_uri');
+
+  // // Add conditions.
+  // //only main menu
+  // $query->condition('menu.menu_name', 'menu-breadcrumb-menu');
+  // //only one image
+  // $query->condition('node_product_image.delta', 0);
+  // $query->condition('field_product_image.delta', 0);
+
+  // $query->condition('variation.status', 1);
+  // $query->condition('n.status', 1);
+  // $query->condition('alias.alias', '/product/%', 'LIKE');
+  // // Add more conditions as needed.
+
+  // // Add fields to select.
+  // $query->fields('variation');
+  // // $query->fields('size', ['name']);
+  // // $query->fields('format', ['name']);
+  // // $query->fields('variation', ['variation_id']);
+  // $query->fields('product', ['product_id']);
+  // $query->fields('n', ['nid']);
+  // $query->fields('body', ['body_value']);
+  // $query->fields('alias', ['alias']);
+  // $query->fields('file', ['uri']);
+  // $query->fields('menu', ['weight']);
+  // // $query->range(0, 25);
+  // // Order by menu weight.
+  // $query->orderBy('menu.weight');
+  // $result = $query->distinct()->execute();
+  $database = \Drupal::database();
+
+  // Select query.
+  $query = $database->select('commerce_product_variation_field_data', 'variation');
+  
+  // Left join commerce_product_variation__attribute_size.
+  $query->leftJoin('commerce_product_variation__attribute_size', 'attribute_size', 'variation.variation_id = attribute_size.entity_id');
+  
+  // Left join commerce_product_attribute_value_field_data.
+  $query->leftJoin('commerce_product_attribute_value_field_data', 'size', 'attribute_size.attribute_size_target_id = size.attribute_value_id');
+  
+  // Left join commerce_product_variation__attribute_format.
+  $query->leftJoin('commerce_product_variation__attribute_format', 'attribute_format', 'variation.variation_id = attribute_format.entity_id');
+  
+  // Left join commerce_product_attribute_value_field_data.
+  $query->leftJoin('commerce_product_attribute_value_field_data', 'format', 'attribute_format.attribute_format_target_id = format.attribute_value_id');
+  
+  // Join node__field_commerce_product.
+  $query->join('node__field_commerce_product', 'field_commerce_product', 'field_commerce_product.field_commerce_product_target_id = variation.product_id');
+  
+  // Join node_field_data.
+  $query->join('node_field_data', 'n', 'n.nid = field_commerce_product.entity_id');
+  
+  // Left join commerce_product_variation__field_product_image.
+  $query->leftJoin('commerce_product_variation__field_product_image', 'field_product_image', 'field_product_image.entity_id = variation.variation_id');
+  
+  // Left join file_managed.
+  $query->leftJoin('file_managed', 'file', 'file.fid = field_product_image.field_product_image_target_id');
+  
+  // Join node__body.
+  $query->join('node__body', 'body', 'body.entity_id = n.nid');
+  
+  // // Left join node__norproduct_imagekit.
+  // $query->leftJoin('node__norproduct_imagekit', 'node_product_image', 'node_product_image.entity_id = n.nid');
+  
+  // // Left join file_managed.
+  // $query->leftJoin('file_managed', 'node_file_image', 'node_file_image.fid = node_product_image.norproduct_imagekit_target_id');
+
+  // Left join a subquery for the first available node file image.
+  $subquery0 = $database->select('node__norproduct_imagekit', 'node_product_image');
+  $subquery0->innerJoin('file_managed', 'node_file_image', 'node_file_image.fid = node_product_image.norproduct_imagekit_target_id');
+  $subquery0->fields('node_file_image', ['uri']);
+  $subquery0->addField('node_product_image', 'entity_id', 'nid');
+  $subquery0->condition('node_product_image.delta', 0); // Ensure it's the first image.
+  $subquery0->orderBy('node_file_image.fid', 'ASC'); // Pick the smallest fid.
+  $subquery0->range(0, 1); // Limit to the first result.
+  $query->leftJoin($subquery0, 'node_file_image', 'node_file_image.nid = n.nid');
+  
+  
+  // Join path_alias.
+  $query->join('path_alias', 'alias', 'CONCAT(\'/node/\', n.nid) = alias.path');
+  
+  // Subquery for menu_link_content_data.
+  $subquery = $database->select('menu_link_content_data', 'menu_sub');
+  $subquery->fields('menu_sub', ['menu_name', 'weight', 'link__uri']);
+  $subquery->addExpression('MIN(menu_sub.id)', 'min_id');
+  $subquery->groupBy('menu_sub.menu_name');
+  $subquery->groupBy('menu_sub.link__uri');
+  
+  $query->leftJoin($subquery, 'menu', 'CONCAT(\'entity:node/\', n.nid) = menu.link__uri AND menu.menu_name = :menu_name', [':menu_name' => 'menu-breadcrumb-menu']);
+  
+  // Add fields.
+  $query->addField('size', 'name', 'size_name');
+  $query->addField('format', 'name', 'format_name');
+  $query->addField('node_file_image', 'uri', 'node_file_image_uri');
+  
+  // Add conditions.
+  // $query->condition('node_product_image.delta', 0);
+  $query->condition('field_product_image.delta', 0);
+  $query->condition('variation.status', 1);
+  $query->condition('n.status', 1);
+  $query->condition('alias.alias', '/product/%', 'LIKE');
+  
+  // Add fields to select.
+  $query->fields('variation');
+  $query->fields('n', ['nid']);
+  $query->fields('body', ['body_value']);
+  $query->fields('alias', ['alias']);
+  $query->fields('file', ['uri']);
+  $query->fields('menu', ['weight']);
+  
+  // Order by menu weight.
+  $query->orderBy('menu.weight');
+  
+  $result = $query->distinct()->execute();
+
+
+  // Fetch the results.
+  $data1 = $result->fetchAll(); 
+
+
+  $all_info = array(array());
+  $cnt = 0;
+  $size = array();
+  $size_tag = ['prep', 'ml', 'μL', '96-well plate', 'reaction', 'units'];
+  $norprods = array(array());
+  $category1 = ['Sample Collection and Preservation Kits', 'Purification and Isolation Kits', 'Clean-up and Concentration Kits', 'Detection Kits', 'Standards', 'Buffers and Reagents', 'Ladders', 'Lab Essentials'];
+  $comparecat = ['collection,preservation', 'purification,isolation,depletion', 'clean-up,concentration', 'detection,tm', 'standards,standard', 'reagents,reagent,buffer,buffers', 'ladders,ladder', 'ee'];
+  $category_each1 = array();
+  $sample_each1 = array();
+  $samples2 = ['RNA', 'DNA', 'Protein', 'Exosome/Exosomes/Exosomal', 'Stool', 'Urine', 'Blood', 'Plasma/Serum', 'Saliva', 'Plant', 'Fungi', 'Soil'];
+  $samples22 = ['RNA', 'DNA', 'Protein', 'Exosomes', 'Stool', 'Urine', 'Blood', 'Plasma/Serum', 'Saliva', 'Plant', 'Fungi', 'Soil'];
+  $DR = array(); //Diagnostic or research
+  $da = array();
+  $sku_num = array();
+  $category_each2 = array();
+  $pos = 0;
+
+  foreach ($data1 as $a) {
+    $cnt2 = 0;
+    $size[$cnt] = strtolower($a->size_name);
+    $all_info[$cnt][$cnt2++] = $a->sku;
+    $all_info[$cnt][$cnt2++] = $a->nid;
+    // if($a->uri!='')
+    // {
+    //     $all_info[$cnt][$cnt2++]= $a->uri."";
+    // }
+    // else
+    // {
+    $all_info[$cnt][$cnt2++] = $a->uri . "";
+    // }
+    $all_info[$cnt][$cnt2++] = $a->body_value;
+    $all_info[$cnt][$cnt2++] = $a->alias . "?v=" . $a->variation_id;
+    $all_info[$cnt][$cnt2++] = $a->title; //6 cat 7 size
+    $flag = 0;
+    for ($i = 0; $i < count($category1); $i++) {
+      if ($i == (count($category1) - 1)) {
+        $all_info[$cnt][$cnt2++] = $category1[$i];
+        $all_info[$cnt][$cnt2++] = strtolower($a->size_name);
+        break;
+      }
+      $ch = strtolower($a->title . '' . $a->sku);
+      $pie = explode(",", $comparecat[$i]);
+
+      foreach ($pie as $p) {
+        if (strpos($ch, $p) === false) {
+        } else {
+          $all_info[$cnt][$cnt2++] = $category1[$i];
+          $all_info[$cnt][$cnt2++] = strtolower($a->size_name);
+          $flag = 1;
+          break;
+        }
+      }
+      if ($flag == 1) {
+        break;
+      }
+    }
+    $category_each2[$cnt] =  $all_info[$cnt][6];
+    // $sku_num[$cnt] = $all_info[$cnt][5];
+    $da[$cnt][0] =  $all_info[$cnt][0] . " " .  $all_info[$cnt][5];
+    $da[$cnt][1] = $a->alias . '?v=' . $a->variation_id;
+
+    $sample_each1[$cnt] = "";
+    $flag = 0;
+    $all_info[$cnt][$cnt2] = "";
+    for ($j = 0; $j < count($samples2); $j++) {
+      $ch = strtolower($all_info[$cnt][5] . '');
+      if (strpos(strtolower($samples2[$j]), "/") === false) {
+        $pie = [strtolower($samples2[$j])];
+      } else {
+        $pie = explode("/", strtolower($samples2[$j]));
+      }
+      foreach ($pie as $p) {
+        if (strpos($ch, $p) === false) {
+        } else if (strpos($ch, $p) >= 0) {
+
+          if ($sample_each1[$cnt] == "") {
+            $sample_each1[$cnt] = $samples22[$j];
+            $all_info[$cnt][$cnt2] = $samples22[$j];
+          } else {
+            $sample_each1[$cnt] = $sample_each1[$cnt] . "," . $samples22[$j];
+            $all_info[$cnt][$cnt2] =  $sample_each1[$cnt];
+          }
+          break;
+        }
+      }
+    }
+    $cnt2++;
+    if (strpos($all_info[$cnt][0], "Dx") === false) {
+      $DR[$cnt] = 0;
+      $all_info[$cnt][$cnt2++] = 0;
+    } else {
+      $DR[$cnt] = 1;
+      $all_info[$cnt][$cnt2++] = 1;
+    }
+    // $all_info[$cnt][$cnt2+2]=0;
+    $weight = 0;
+    if (isset($a->weight) && $a->weight != "") {
+      $weight = $a->weight;
+    }
+    $all_info[$cnt][$cnt2++] = $weight * (-0.01);
+    $all_info[$cnt][$cnt2++] = nor_to_lowerCase(($a->format_name)."");
+    $cnt++;
+  }
+
+  $Quan_TAG_VAL = array(array());
+  $Quan_VAL = array();
+  $size = array_column($all_info, 7);
+  // echo '<pre>';
+  // print_r($all_info);
+  // echo '</pre>';
+  for ($i = 0; $i < count($size); $i++) {
+    // $Quan_TAG_VAL[$i][0] =similarity($size[$i],$size_tag);
+    $st = $size[$i];
+    if (strpos($st, "X") != False) {
+      $pieces = explode("X", $st);
+    } else if (strpos($st, " ") == False) {
+      $Quan_TAG_VAL[$i][0] = "UNITS";
+    } else if (strpos($st, "(") != False) {
+      $pos = strpos($st, "(");
+      $use_string = substr($st, 0, $pos - 1);
+      $pieces = explode("X", $use_string);
+    } else {
+      $pieces = explode(" ", $st);
+    }
+    $val = "";
+    $val = $pieces[(count($pieces) - 1)];
+    $pieces[(count($pieces) - 1)] = '';
+    $size_val = implode('', $pieces);
+    if ($val == "RXNS" || $val == "RNXS" || $val == "RXN" || $val == "RNX") {
+      $Quan_TAG_VAL[$i][0] = 4; //"REACTION"
+    }
+
+    $max = -1;
+    $pos = -1;
+    for ($j = 0; $j < count($size_tag); $j++) {
+      $v1 = $size_tag[$j];
+      similar_text($v1, $val, $perc);
+      if (strtolower(str_replace(' ', '', $v1)) == strtolower(str_replace(' ', '', $val))) {
+        $max = 100;
+        $pos = $j;
+        break;
+      } else if ($perc > $max) {
+        $max = $perc;
+        $pos = $j;
+      }
+    }
+    if ($max <= 50) {
+      $pos = 5; //UNITS
+    }
+    $Quan_TAG_VAL[$i][0] = $size_tag[$pos];
+
+    $string = str_split($size[$i]);
+    $Quan_TAG_VAL[$i][1] = first_numbers($string);
+    $Quan_TAG_VAL[$i][2] = $size[$i];
+    $Quan_VAL[$i] = $Quan_TAG_VAL[$i][1];
+  }
+
+
+  /**
+   * Form GET area
+   */
+  $search_value = '';
+  $sample_type = '';
+  $category_val = '';
+  $res_dia_type_val = '';
+  $min = '';
+  $max = '';
+  $size_unit_val = '';
+  $hidden0 = array();
+  $hidden1 = array();
+  $hidden2 = array();
+  $hidden3 = array();
+  $hidden4 = array();
+  $flag = false;
+  //ADDED
+  if(isset($_GET['search']) ) {
+   $variables['search_value'] = $_GET['search']; }
+
+  $search_value = $_GET['search'];
+  // if(count($_GET)>1)
+  // {
+  // 	$flag = true;
+  // }
+  // if(isset($_GET['search']) )
+  // {
+  //     $search_value = $_GET['search'];
+  //     $flag = true;
+  //       // add Search Schema
+  //     echo '<!-- Search Query Schema -->';
+  //     echo '<script type="application/ld+json">
+  //     {
+  //     "@context": "https://schema.org",
+  //     "@type": "SearchAction",
+  //     "query-input": "name='.$search_value.'"
+  //     }
+  //     </script>';
+  // }
+  if (isset($_GET['sample_opt'])) {
+    $sample_type = $_GET['sample_opt'];
+    $flag = true;
+  }
+  if (isset($_GET['use_type'])) {
+    $res_dia_type_val = $_GET['use_type'];
+    $flag = true;
+  }
+  if (isset($_GET['cat'])) {
+    $category_val = $_GET['cat'];
+    $flag = true;
+  }
+  if (isset($_GET['minimum'])) {
+    $min = $_GET['minimum'];
+    $flag = true;
+  }
+  if (isset($_GET['maximum'])) {
+    $max = $_GET['maximum'];
+    $flag = true;
+  }
+  if (isset($_GET['size_unit'])) {
+    $size_unit_val = $_GET['size_unit'];
+    $flag = true;
+  }
+  // echo("<pre>");
+  // print($flag);
+  // foreach ($_GET as $key => $value) {
+  //     echo "Field ".htmlspecialchars($key)." is ".htmlspecialchars($value)."<br>";
+  // }
+  // echo("</pre>");
+
+
+  $variables['hidden0'] = $hidden0;
+  $variables['hidden1'] = $hidden1;
+  $variables['hidden2'] = $hidden2;
+  $variables['hidden3'] = $hidden3;
+  $variables['hidden4'] = $hidden4;
+  $variables['DR'] = $DR;
+  $variables['da'] = $da;
+  $variables['size_tag'] = $size_tag;
+  $variables['Quan_TAG_VAL'] = $Quan_TAG_VAL;
+  $variables['samples22'] = $samples22;
+  $variables['sample_each1'] = $sample_each1;
+  $variables['all_info'] = $all_info;
+  $variables['Quan_VAL'] = $Quan_VAL;
+  $variables['sku_num'] = $sku_num;
+  $variables['category1'] = $category1;
+  $variables['category_val'] = $category_val;
+  $variables['sample_type'] = $sample_type;
+  $variables['category_val'] = $category_val;
+  $variables['res_dia_type_val'] = $res_dia_type_val;
+
+  // $variables['flag']=$flag;
+  // $variables['search_value']=$search_value;
+
+  $variables['search_all_data'] = $data1;
+
+}
+
+
+function first_numbers($a)
+{
+  $s = 0;
+  $flag = 0;
+  $cnt = 10;
+  for ($i = 0; $i < count($a); $i++) {
+    if (is_numeric($a[$i])) {
+      if ($flag == 0) {
+        $s = $s * 10 + floatval($a[$i]);
+      } else {
+        $s = $s + floatval($a[$i]) / $cnt;
+        $cnt = $cnt * 10;
+      }
+    } else if ($a[$i] == '.') {
+      $flag = 1;
+    } else if ($a[$i] != ',') {
+      break;
+    }
+  }
+  return $s;
+}
+
+
+
+
+function customStrToLower($string)
+{
+  if (is_string($string)) {
+    $result = '';
+    $length = strlen($string);
+    for ($i = 0; $i < $length; ++$i) {
+      $char = $string[$i];
+      // Check if the character is an uppercase letter (ASCII range 65-90).
+      if (ord($char) >= 65 && ord($char) <= 90) {
+        $result .= chr(ord($char) + 32); // Convert to lowercase.
+      } else {
+        $result .= $char;
+      }
+    }
+    return $result;
+  }
+  return null;
+}
+
+
+/**
+ * Helper function to get the index of a column in an array.
+ */
+function getColumnIndex(array $columns, array $columnTitles)
+{
+  foreach ($columnTitles as $title) {
+    $lowercaseTitle = customStrToLower($title);
+
+    // Search for the lowercase title in the lowercase columns.
+    $index = array_search($lowercaseTitle, array_map('customStrToLower', $columns));
+
+    // If the index is found, return it.
+    if ($index !== false) {
+      return $index;
+    }
+  }
+
+  // If none of the titles are found, return false.
+  return false;
+}
+function getVariationIdBySku($sku)
+{
+  $query = \Drupal::database()->select('commerce_product_variation_field_data', 'v');
+  $query->fields('v', ['variation_id']);
+  $query->condition('v.sku', $sku);
+  $result = $query->execute()->fetchField();
+
+  return $result;
+}
+
+function addToCart(ProductVariationInterface $commerce_product_variation, $quantity = 1)
+{
+  // Get necessary services.
+  $container = \Drupal::getContainer();
+  $cartManager = $container->get('commerce_cart.cart_manager');
+  $cartProvider = $container->get('commerce_cart.cart_provider');
+  $orderTypeResolver = $container->get('commerce_order.chain_order_type_resolver');
+  $currentStore = $container->get('commerce_store.current_store');
+  $chainPriceResolver = $container->get('commerce_price.chain_price_resolver');
+  $currentUser = $container->get('current_user');
+
+  $order_item = $cartManager->createOrderItem($commerce_product_variation, $quantity);
+
+  $store = selectStore($commerce_product_variation, $currentStore);
+  $context = new Context($currentUser, $store);
+  $resolved_price = $chainPriceResolver->resolve($commerce_product_variation, $quantity, $context);
+  $order_item->setUnitPrice($resolved_price);
+
+  $order_type_id = $orderTypeResolver->resolve($order_item);
+  $cart = $cartProvider->getCart($order_type_id, $store);
+  if (!$cart) {
+    $cart = $cartProvider->createCart($order_type_id, $store);
+  }
+  $cartManager->addOrderItem($cart, $order_item, TRUE); // Assuming $combine is always TRUE.
+
+  $product_information = [
+    'currency' => $commerce_product_variation->getPrice()->getCurrencyCode(),
+    'value' => $commerce_product_variation->getPrice()->getNumber() * $quantity,
+    'sku' => $commerce_product_variation->getSku(),
+    'title' => $commerce_product_variation->getTitle(),
+    'price' => round($commerce_product_variation->getPrice()->getNumber(), 2),
+    'quantity' => $quantity,
+  ];
+
+  return [$cart->id(), $product_information];
+}
+
+/**
+ * Selects the store for the given variation.
+ *
+ * If the variation is sold from one store, then that store is selected.
+ * If the variation is sold from multiple stores, and the current store is
+ * one of them, then that store is selected.
+ *
+ * @param \Drupal\commerce_product\Entity\ProductVariationInterface $variation
+ *   The variation being added to cart.
+ * @param \Drupal\commerce_store\CurrentStoreInterface $currentStore
+ *   The current store service.
+ *
+ * @throws \Exception
+ *   When the variation can't be purchased from the current store.
+ *
+ * @return \Drupal\commerce_store\Entity\StoreInterface
+ *   The selected store.
+ */
+function selectStore(ProductVariationInterface $variation, CurrentStoreInterface $currentStore)
+{
+  $stores = $variation->getStores();
+  if (count($stores) === 1) {
+    return reset($stores);
+  }
+
+  $store = $currentStore->getStore();
+  if (!in_array($store, $stores)) {
+    throw new \Exception("The given entity can't be purchased from the current store.");
+  }
+
+  return $store;
+}

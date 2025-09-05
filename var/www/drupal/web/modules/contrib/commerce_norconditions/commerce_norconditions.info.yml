@@ -1,0 +1,5 @@
+name: 'Norgen Custom Conditions'
+type: module
+package: Norgen Biotek
+description: 'Create custom conditions to control the availability of Promotions'
+core_version_requirement: ^8 || ^9 || ^10

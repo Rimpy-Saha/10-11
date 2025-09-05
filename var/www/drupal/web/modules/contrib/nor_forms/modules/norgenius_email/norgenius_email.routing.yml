@@ -1,0 +1,7 @@
+norgenius_email.norgeniusemail_form:
+  path: 'norgenius-email-form'
+  defaults:
+    _title: 'Norgenius Email Form'  # Update title case for consistency
+    _form: '\Drupal\norgenius_email\Form\NorgeniusEmailForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

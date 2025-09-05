@@ -1,0 +1,6 @@
+services:
+  nor_forms.exception.subscriber:
+    class: Drupal\nor_forms\EventSubscriber\NorExceptionSubscriber
+    arguments: ['@logger.factory']
+    tags:
+      - { name: event_subscriber }

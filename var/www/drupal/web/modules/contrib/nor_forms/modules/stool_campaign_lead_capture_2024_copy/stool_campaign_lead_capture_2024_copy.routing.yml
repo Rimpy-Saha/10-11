@@ -1,0 +1,7 @@
+stool_campaign_lead_capture_2024_copy.stool_campaign_lead_capture_2024_copy_form:
+  path: '/ready-set-scoop-form-testing'
+  defaults:
+    _title: 'Ready, Set, Scoop!'  # Update title case for consistency
+    _form: '\Drupal\stool_campaign_lead_capture_2024_copy\Form\StoolCampaignLeadCapture2024copy'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

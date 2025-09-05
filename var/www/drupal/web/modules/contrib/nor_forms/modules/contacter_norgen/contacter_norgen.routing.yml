@@ -1,0 +1,7 @@
+contacter_norgen.contacternorgen_form:
+  path: 'contacter-norgen-form'
+  defaults:
+    _title: 'Contacter Norgen Biotek Corp'  # Update title case for consistency
+    _form: '\Drupal\contacter_norgen\Form\ContacterNorgenForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

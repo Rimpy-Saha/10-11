@@ -1,0 +1,8 @@
+contact_german.contactgerman_form:
+  path: 'contact-german-form'
+  defaults:
+    _title: 'Contacter Norgen Biotek Corp German'  # Update title case for consistency
+    _form: '\Drupal\contact_german\Form\ContactGermanForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access
+    _role: "administrator"

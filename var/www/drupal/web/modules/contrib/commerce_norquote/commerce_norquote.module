@@ -1,0 +1,1710 @@
+<?php
+
+/**
+ * @module file
+ * The module provides the below functionalities:
+ * Create a button "Request Quote" on the Cart and Order Information page.
+ *       - Trigger an email to the User when a Quote is requested.
+ *       - Trigger an email to our Team with all the user details when a Quote is requested.
+ *       - Insert the form data into the Zoho database.
+ *       - Implement security by validating that a Quote is not requested more than 10 times from the same IP.
+ *       - Implement Merge Carts functionality.
+ *       - Default the country of the User as the Shipping and Billing Country in the checkout.
+ *       - Validate that the User registers an account by selecting a Country.
+ *       - Hide the Coupon section from the Review page.
+ *	 - Hide Add to Cart button from Product Page for certain Countries.
+ */
+
+use Drupal\commerce_order\Entity\Order;
+use Drupal\commerce_shipping\Entity\ShipmentInterface;
+use Drupal\Core\Entity\Entity\EntityViewDisplay;
+use Drupal\commerce_order\Entity\OrderInterface;
+use Drupal\commerce_order\Entity\OrderItemInterface;
+use Drupal\commerce_product\Entity\ProductVariationInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AnonymousUserSession;
+use Drupal\Core\Database\Database;
+use Drupal\Core\Url;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
+//for anonymous guest
+use Drupal\commerce_cart\CartProviderInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
+//for product page caching
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Session\SessionInterface;
+
+
+/**
+ * Implements hook_user_login().
+ */
+function commerce_norquote_user_login($account)
+{
+    // Assign the anonymous user's carts to the logged-in account.
+    // This will only affect the carts that are in the user's session.
+    try {
+        $anonymous = new AnonymousUserSession();
+        $anon_carts = \Drupal::service('commerce_cart.cart_provider')->getCarts($anonymous);
+        $store = \Drupal\commerce_store\Entity\Store::load(1);
+        $cart = \Drupal::service('commerce_cart.cart_provider')->getCart('default', $store, $account);
+        if (count($anon_carts) > 0 && count($anon_carts)) {
+            foreach ($anon_carts as $anon_cart) {
+                commerce_norquote_combineCarts($anon_cart, $cart, true);
+            }
+        }
+    } catch (EntityStorageException $e) {
+        \Drupal::logger('commerce_norquote_user_login')->info('Caught EntityStorageException ' . $e);
+    } catch (TypeError $e) {
+        \Drupal::logger('commerce_norquote_user_login')->info('Caught TypeError' . $e);
+    } catch (Error $e) {
+        \Drupal::logger('commerce_norquote_user_login')->info('Caught Error' . $e);
+    } catch (Exception $e) {
+        \Drupal::logger('commerce_norquote_user_login')->info('Caught exception ' . $e);
+    }
+}
+
+/**
+ * Alter the flow to make sure our hook runs first. Note, events can do this through weights
+ * however drupal does not currently have a login/logout event dispatcher
+ */
+function commerce_norquote_module_implements_alter(&$implementations, $hook)
+{
+    if ($hook == 'user_login') {
+
+        // Move my_module_form_alter() to the end of the list.
+        // \Drupal::moduleHandler()->getImplementationInfo()
+        // iterates through $implementations with a foreach loop which PHP iterates
+        // in the order that the items were added, so to move an item to the end of
+        // the array, we remove it and then add it.
+        $implementation_quote = array('commerce_norquote' => $implementations['commerce_norquote']);
+        unset($implementations['commerce_norquote']);
+        $implementations = $implementation_quote + $implementations;
+    }
+}
+
+/**
+ * Combines another cart into the main cart and optionally deletes the other
+ * cart.
+ *
+ * @param \Drupal\commerce_order\Entity\OrderInterface $main_cart
+ *The main cart.
+ * @param \Drupal\commerce_order\Entity\OrderInterface $other_cart
+ *The other cart.
+ * @param bool $delete
+ *TRUE to delete the other cart when finished, FALSE to save it as empty.
+ *
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ */
+function commerce_norquote_combineCarts(OrderInterface $main_cart, OrderInterface $other_cart, $delete = FALSE)
+{
+    if ($main_cart->id() === $other_cart->id()) {
+        return;
+    }
+
+    foreach ($other_cart->getItems() as $item) {
+        $other_cart->removeItem($item);
+        $item->get('order_id')->entity = $main_cart;
+        $combine = commerce_norquote_shouldCombineItem($item);
+        $saved_order_item = \Drupal::service('commerce_cart.cart_manager')->addOrderItem($main_cart, $item, $combine);
+
+        if ($item->id() != $saved_order_item->id()) {
+            // We didn't need to update the order_id field, so undo that.
+            $item->get('order_id')->entity = $other_cart;
+            \Drupal::service('commerce_cart.cart_manager')->removeOrderItem($other_cart, $item, FALSE);
+        }
+    }
+
+    $main_cart->save();
+
+    if ($delete) {
+        $other_cart->delete();
+    } else {
+        $other_cart->save();
+    }
+}
+
+/**
+ * Determine if a line item should be combined with like items.
+ *
+ * @param OrderItemInterface $item
+ *   The order item.
+ *
+ * @return bool
+ *   TRUE if items should be combined, FALSE otherwise.
+ */
+function commerce_norquote_shouldCombineItem(OrderItemInterface $item)
+{
+    /** @var \Drupal\commerce_product\Entity\ProductVariationInterface $purchased_entity */
+    $purchased_entity = $item->getPurchasedEntity();
+
+    // Do not combine products which are no longer available in system.
+    if (!($purchased_entity instanceof ProductVariationInterface)) {
+        return FALSE;
+    }
+
+    $product = $purchased_entity->getProduct();
+    $entity_display = EntityViewDisplay::load($product->getEntityTypeId() . '.' . $product->bundle() . '.default');
+    $combine = TRUE;
+
+    if ($component = $entity_display->getComponent('variations')) {
+        $combine = !empty($component['settings']['combine']);
+    }
+
+    return $combine;
+}
+
+
+
+
+/**
+ * Implements hook_preprocess_commerce_cart_block().
+ */
+function commerce_norquote_preprocess_commerce_cart_block(array &$variables)
+{
+    if (!empty($variables['content'][0]['#arguments'][0])) {
+        $order_id = $variables['content'][0]['#arguments'][0];
+        $checkout_path = 'internal:/checkout/' . $order_id . '/order_information';
+        $variables['checkout_link'][] = [
+            '#type' => 'link',
+            '#title' => t('Checkout'),
+            '#url' => \Drupal\Core\Url::fromUri($checkout_path, [
+                'attributes' => [
+                    'class' => [
+                        'btn btn-md c-btn btn-primary c-font-white c-font-bold c-center c-font-uppercase',
+                    ],
+                ],
+            ]),
+        ];
+    }
+}
+
+function commerce_norquote_preprocess_html(&$variables){
+    if (commerce_norquote_check_restricted_country()) {
+        $variables['#cache']['contexts'][] = 'session';
+        $variables['restricted_country'] = commerce_norquote_check_restricted_country();
+    }
+}
+
+
+/**
+ * Implements hook_preprocess_html__cart().
+ */
+function commerce_norquote_preprocess_html__cart(&$variables)
+{
+    //Redirect cart to distributor page if restricted country
+    if (commerce_norquote_check_restricted_country()) {
+        // Create the URL object.
+        $url = Url::fromUri('internal:/resources/distributors');
+
+        // Get the URL string.
+        $redirect_url = $url->toString();
+
+        // Redirect to the specified URL.
+        $response = new RedirectResponse($redirect_url);
+        $response->send();
+        return;
+    }
+}
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function commerce_norquote_preprocess_node(&$variables)
+{
+     $variables['#cache']['contexts'][] = 'session';
+    //Hide be a distributor and add to cart buttons if restricted country
+    // 2503 - Home page || 1785 - Distributor page
+    // Promotion Pages: Urine - 2591, Lyophilized - 2598, Blood/Plasma - 2588
+    if ($variables['node']->id() == '2503' || $variables['node']->id() == '1785' ||
+        $variables['node']->id() == '2591' || $variables['node']->id() == '2598' || $variables['node']->id() == '2588') {
+        //$variables['#cache']['contexts'][] = 'session';
+        $variables['restricted_country'] = commerce_norquote_check_restricted_country();
+    }
+}
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function commerce_norquote_preprocess_commerce_product(&$variables)
+{
+   /*  $variables['#cache']['contexts'][] = "languages:language_interface";
+    $variables['#cache']['contexts'][] = "user.roles:authenticated"; */
+    $variables['#cache']['max-age'] = 0;
+
+   /*  if(\Drupal::currentUser()->id() == 10100){ // only dumps for liam
+        $variables['#cache']['max-age'] = 0;
+        dump(commerce_norquote_check_restricted_country());
+        dump(commerce_nor_cart_popup_get_user_country());
+        dump($variables['#cache']);
+    } */
+    //Hide pricing from products page if restricted country
+    $variables['restricted_country'] = commerce_norquote_check_restricted_country();
+    $variables['user_country'] = commerce_nor_cart_popup_get_user_country();
+    /* if(\Drupal::currentUser()->id() == 10100){
+        dump($variables['restricted_country']);
+    } */
+    $excluded_country_codes = [
+        'CN', // China  
+        'MX', // Mexico   
+        'DE', // Germany 
+        'IL', // Israel 
+        'KR', // South Korea
+        'JP', // Japan
+        'KE', // Kenya
+        'GB', // UK
+        'TR', // Turkey
+        'AZ', // Azerbaijan
+        'CH', // Switzerland
+        'HK', // Hong Kong
+        'MO', // Macau
+        'AU', // Australia
+        'DK', // Denmark
+        'FI', // Finland
+        'NO', // Norway
+        'SE', // Sweden
+        'NL', // The Netherlands
+        'SG', // Singapore
+        'ID', // Indonesia
+        'MM', // Myanmar
+        'IT', // Italy
+        'ES', // Spain
+    ];
+
+    $variables['test_restricted_country'] = false;
+    $variables['test_restricted_country_method'] = 'default';
+
+    // Check if the user is logged in.
+    if (\Drupal::currentUser()->isAuthenticated()) {
+        // Get the current user.
+        $user = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id());
+        $roles = $user->getRoles();
+
+        // Check if the user has a country field.
+        if ($user->hasField('field_country') && $user->get('field_country')->value != null) {
+            // Get the user's country.
+            $userCountry = $user->get('field_country')->value;
+
+            // Check if the user's country is in the list of excluded country codes.
+            if (in_array($userCountry, $excluded_country_codes)) {
+                $variables['test_restricted_country'] = true;
+                $variables['test_restricted_country_method'] = 'account country';
+            }
+        }
+        // Check Canadian role - LIAM ADDED THIS! 
+        elseif(in_array('canadian', $roles)){
+            $variables['test_restricted_country'] = false;
+            $variables['test_restricted_country_method'] = 'account role';
+        }
+        else { // User smart ip - LIAM ADDED THIS! 
+            // If the user is not logged in, use the Smart IP service to get the country from their IP
+            $location = \Drupal::service('smart_ip.smart_ip_location');
+            $userCountry = $location->get('countryCode');
+            // Return the IP-based country (for anonymous users)
+            if (in_array($userCountry, $excluded_country_codes)) {
+                $variables['test_restricted_country'] = true;
+                $variables['test_restricted_country_method'] = 'account smart ip';
+            }
+        }  
+    } else { //User is not logged in.
+        $location = \Drupal::service('smart_ip.smart_ip_location');
+        $userCountry = $location->get('countryCode');
+        // Check if the user's country is in the list of excluded country codes.
+        if (in_array($userCountry, $excluded_country_codes)) {
+            $variables['test_restricted_country'] = true;
+            $variables['test_restricted_country_method'] = 'anon smart ip';
+        }
+    }
+}
+
+function commerce_norquote_preprocess_views_view__commerce_cart_form(&$variables) 
+{
+    if (isset($variables['display_id']) && $variables['display_id'] == 'default' && isset($variables['rows']['coupon_redemption'])) {
+        if (!isset($variables['rows']['footer'])) {
+        $variables['rows']['footer'] = []; }
+        $variables['rows']['footer']['summary_and_coupon'] = [
+            '#type' => 'fieldset',
+            '#attributes' => array('class' => array('summary_and_coupon')),
+        ];
+        $variables['rows']['footer']['summary_and_coupon']['commerce_order_total'] = $variables['rows']['footer']['commerce_order_total'];
+        $variables['rows']['footer']['summary_and_coupon']['coupon_redemption'] = $variables['rows']['coupon_redemption'];
+        $variables['rows']['footer']['#prefix'] = '<div class="cart-form-sidebar"><h2 class="checkout_h c-font-uppercase">Checkout</h2>';
+        $variables['rows']['footer']['#suffix'] = '</div>';
+        unset($variables['rows']['coupon_redemption']);
+        unset($variables['rows']['footer']['commerce_order_total']);
+    }
+    if (isset($variables['rows']['actions'])) {
+        $variables['rows']['footer']['actions'] = $variables['rows']['actions'];
+        $variables['rows']['footer']['actions']['#attributes']['class'][] = 'notranslate';
+        unset($variables['rows']['actions']);
+    }
+
+}
+
+
+function commerce_norquote_preprocess_views_view_fields__wishlist(&$variables){
+    
+    // Kostia
+    $variables['#cache']['contexts'][] = 'session';
+    
+    // check if person have restricted country 
+    $variables['restricted_country'] = commerce_norquote_check_restricted_country();
+    
+    // product
+    $product = $variables['row']->_entity;
+   
+    
+    // array for variations
+    $variables['product_variations'] = [];
+    
+    // product have variations ? 
+    if (!empty($product->variations)) {
+        foreach ($product->variations as $variation) {
+            // variation
+            if (!$variables['restricted_country']) {
+                $variables['product_variations'][] = $variation;
+            } else {
+                // hiden price
+                $variation->price = 'N/A';
+                $variables['product_variations'][] = $variation;
+            }
+        }
+    }     
+ 
+     $variables['variations'] = $product->get('variations')->referencedEntities();
+
+}
+
+
+
+/**
+ * Custom function to check if country is in restricted list.
+ */
+function commerce_norquote_check_restricted_country()
+{
+    $variables['#cache']['contexts'][] = 'headers:smart_ip_country';
+    // if (\Drupal::request()->query->get('restricted') === 'true') {
+    //     return true;
+    // }
+
+    //Restricting display of prices for the below countries 
+    $excluded_country_codes = [
+        'CN', // China  
+        'MX', // Mexico   
+        'DE', // Germany 
+        'IL', // Israel 
+        'KR', // South Korea
+        'JP', // Japan
+        'KE', // Kenya
+        'GB', // UK
+        'TR', // Turkey
+        'AZ', // Azerbaijan
+        'CH', // Switzerland
+        'HK', // Hong Kong
+        'MO', // Macau
+        'AU', // Australia
+        'DK', // Denmark
+        'FI', // Finland
+        'NO', // Norway
+        'SE', // Sweden
+        'NL', // The Netherlands
+        'SG', // Singapore
+        'ID', // Indonesia
+        'MM', // Myanmar
+        'IT', // Italy
+        'ES', // Spain
+    ];
+
+    // Get the current order ID using your custom function
+   /*  $order_id = commerce_norquote_get_current_order_id();
+    // Check if a valid order ID is returned
+    if ($order_id>0) {
+        // Load the order
+        $order = Order::load($order_id);
+
+        // Retrieve the shipping profile from the order
+        $profiles = $order->collectProfiles();
+        $shipping_profile = isset($profiles['shipping']) ? $profiles['shipping'] : NULL;
+
+        // If a shipping profile is found, use its country
+        if ($shipping_profile) {
+            $address = $shipping_profile->get('address')->first()->getValue();
+            $userCountry = $address['country_code'];
+            
+            // Return the shipping country
+            if (in_array($userCountry, $excluded_country_codes)) {
+                return true;
+            }
+        }
+    }  */
+
+    // Check if the user is logged in.
+    if (\Drupal::currentUser()->isAuthenticated()) {
+        // Get the current user.
+        $user = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id());
+        $roles = $user->getRoles();
+
+        // Check if the user has a country field.
+        if ($user->hasField('field_country') && $user->get('field_country')->value != null) {
+            // Get the user's country.
+            $userCountry = $user->get('field_country')->value;
+
+            // Check if the user's country is in the list of excluded country codes.
+            if (in_array($userCountry, $excluded_country_codes)) {
+                /* if(\Drupal::currentUser()->id() == 10100){
+                    dump('account country');
+                } */
+                return true;
+            }
+        }
+        // Check Canadian role - LIAM ADDED THIS! 
+        elseif(in_array('canadian', $roles)){
+            /* if(\Drupal::currentUser()->id() == 10100){
+                dump('account role');
+            } */
+            return false;
+        }
+        else { // User smart ip - LIAM ADDED THIS! 
+            // If the user is not logged in, use the Smart IP service to get the country from their IP
+            $location = \Drupal::service('smart_ip.smart_ip_location');
+            $userCountry = $location->get('countryCode');
+            // Return the IP-based country (for anonymous users)
+            if (in_array($userCountry, $excluded_country_codes)) {
+                /* if(\Drupal::currentUser()->id() == 10100){
+                    dump('account smart ip');
+                } */
+                return true;
+            }
+        }  
+    } else { //User is not logged in.
+        $location = \Drupal::service('smart_ip.smart_ip_location');
+        $userCountry = $location->get('countryCode');
+        // Check if the user's country is in the list of excluded country codes.
+        if (in_array($userCountry, $excluded_country_codes)) {
+            /* if(\Drupal::currentUser()->id() == 10100){
+                dump('anon smart ip');
+            } */
+            return true;
+        }
+    }
+    /* if(\Drupal::currentUser()->id() == 10100){
+        dump('default false');
+    } */
+    return false;
+}
+
+function commerce_norquote_preprocess_commerce_checkout_pane__review(&$checkout_pane){
+    $order_id = commerce_norquote_get_current_order_id();
+    $order = Order::load($order_id);
+  
+    $coupons = [];
+    foreach($order->get('coupons') as $coupon){
+        $coupons[] = $coupon;
+    }
+    $field_quote_number = $order->field_quote_number->getValue();
+    $field_special_instructions = $order->field_special_instructions->getValue();
+  
+    // shipping method entity render array retrieval
+    $shipment = $order->get('shipments')->referencedEntities()[0];
+  
+    $shipping_rates = $shipment->getShippingMethod()->getPlugin()->calculateRates($shipment);
+    $selected_shipping_rate = null;
+  
+    foreach($shipping_rates as $shipping_rate){
+        if($shipping_rate->getService()->getId() == $shipment->getShippingService()){
+            $selected_shipping_rate = $shipping_rate;
+            break;
+        }
+    }
+    if(isset($selected_shipping_rate)) $checkout_pane['elements']['shipping_method'] = $selected_shipping_rate;
+
+    // add custom values 
+    $checkout_pane['field_quote_number'] = $field_quote_number;
+    $checkout_pane['field_special_instructions'] = $field_special_instructions;
+  
+}
+
+function commerce_norquote_preprocess_form(&$variables){
+    if(str_contains($variables['element']['#id'], 'commerce-cart-form')){
+        $variables['element']['footer']['#markup'] = '';
+    }
+}
+
+
+
+function commerce_norquote_preprocess_form_element_label(&$variables){
+    $element = $variables['element'];
+    if (isset($element['#title']) && $element['#title'] == 'Street address line 2') {
+        $variables['title'] = [
+            '#markup' => 'Apt, Unit, Suite, etc',
+        ];
+    }
+    if (isset($element['#title']) && $element['#title'] == 'Coupon code') {
+        $variables['title'] = [
+            '#markup' => ' Apply Coupon',
+        ];
+    }
+}
+
+
+/**
+ * Implements hook_form_alter().
+ */
+function commerce_norquote_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id)
+{
+
+    //Product Page form id match
+    if (strpos($form_id, 'commerce_order_item_add_to_cart_form_commerce_product') === 0) {
+        //Hiding Add to Cart button in product page for the below countries 
+        // Also creating new distributor button
+        /* $converted_res = commerce_norquote_check_restricted_country() ? 'true' : 'false';
+        $location = \Drupal::service('smart_ip.smart_ip_location');
+        $userCountry = $location->get('countryCode');    
+        \Drupal::logger('caching_issue_test: commerce_norquote_form_alter')->notice('Restrcited country? @restricted_country. Country code from popup: %country_code. Country code smart_ip: @smrt',
+        array(
+            '@restricted_country' => $converted_res,
+            '%country_code' => commerce_nor_cart_popup_get_user_country(),
+            '@smrt' => $userCountry,
+        )
+        ); */
+        /* if(\Drupal::currentUser()->id() == 10100){
+            dump(commerce_norquote_check_restricted_country());
+            dump(commerce_nor_cart_popup_get_user_country());
+            dump($form);
+        } */
+        if (commerce_norquote_check_restricted_country()) {
+            $form['actions']['submit']['#access'] = FALSE;
+            $form['actions']['contact_distributor'] = [
+                '#type' => 'link',
+                '#title' => t('Contact Distributor'),
+                '#url' => Url::fromUri('internal:/resources/distributors'),
+                '#attributes' => [
+                    'class' => ['button', 'btn-medium', 'btn', 'btn-mod', 'c-btn', 'c-theme-btn', 'c-font-bold', 'c-font-uppercase', 'c-font-white', 'button--primary'],
+                ],
+            ];
+            $form['quantity']['#access'] = FALSE;
+        }
+    }
+ 
+   /*  if ($form_id == 'user_form' || $form_id == 'user_register_form') {
+        // Find the country dropdown element.
+        if (isset($form['field_country'])) {
+            // Add a custom validation function to the country dropdown.
+            $form['#validate'][] = 'commerce_norquote_custom_country_validation';
+        }
+    } */
+
+    if (str_contains($form_id, 'commerce_cart_form') and isset($form['actions']['checkout']['#order_id'])) {
+       
+        $form['actions']['send_email'] = [
+            '#type' => 'submit',
+            '#value' => t('Request Quote'),
+            '#button_type' => 'primary',
+            '#submit' => array('::submitForm', 'commerce_checkout_order_item_views_form_submit'),
+            "#update_cart" => true,
+            "#show_update_message" => false,
+            "#order_id" => $form['actions']['checkout']['#order_id'],
+        ];
+      
+    }
+
+ 
+
+
+
+    if ($form_id == 'commerce_checkout_flow_multistep_default') {
+        if(isset($form['contact_information']) && isset($form['contact_information']['#title'])) $form['contact_information']['#title'] = t('Contact');
+        if(isset($form['shipping_information']) && isset($form['shipping_information']['#title'])) $form['shipping_information']['#title'] = t('Shipping');
+        if(isset($form['payment_information']) && isset($form['payment_information']['#title']))$form['payment_information']['#title'] = t('Billing');
+        if(isset($form['order_fields:checkout']) && isset($form['order_fields:checkout']['#title']))$form['order_fields:checkout']['#title'] = t('Additional');
+
+        $logged_in = \Drupal::currentUser()->isAuthenticated();
+        // Get the current path.
+        $current_path = \Drupal::service('path.current')->getPath();
+
+        if (substr($current_path, -18) === '/order_information' || substr($current_path, -7) === '/review') {
+
+            // Check if the current path ends with "/order_information".
+            //Get the order id of the cart the user is on
+            //$url = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            preg_match('/checkout\/(\d+)/', $current_path, $matches);
+            if (isset($matches[0])) {
+                $order_id = intval($matches[1]);
+                //Get the current order
+                $order = Order::load($order_id);
+
+                if ($order->hasField('shipments')) {
+                    /** @var \Drupal\commerce_shipping\Entity\ShipmentInterface $shipment */
+                    foreach ($order->shipments->referencedEntities() as $shipment) {
+                        if ($shipment instanceof ShipmentInterface) {
+                            // Fetch the shipping profile from Order
+                            $shipping_profile = $shipment->getShippingProfile();
+                            $shipment_address = $shipping_profile->get('address')->first();
+                            $countryCode = $shipment_address->getCountryCode();
+
+                            // if (!$logged_in && $countryCode == 'CA') {
+                            //     \Drupal::messenger()->addError('Please Log in or create an account to access Canadian Pricing.');
+                            // }
+                            // break;
+                        }
+                    }
+                }
+                
+                // review page
+                if(substr($current_path, -7) === '/review'){
+                    if (isset($form['review'])) {
+                        if (isset($form['review']['order_fields:checkout'])) {
+                            $form['review']['order_fields:checkout']['#access'] = FALSE;
+                        }
+                    }
+                    // If the current path ends with "/review", hide the coupon.
+                    if (isset($form['sidebar'])) {
+                      /*   if (isset($form['sidebar']['coupon_redemption'])){ // remove sidebar coupon field, because we've added it to the order summary footer instead
+                            unset($form['sidebar']['coupon_redemption']);
+                        } */
+                        if (isset($form['sidebar']['coupon_redemption']['form']['coupons']) && count($form['sidebar']['coupon_redemption']['form']['coupons']) > 0) {// if at least one coupon code has been applied, show coupon field, but remove ability to edit them
+                            foreach($form['sidebar']['coupon_redemption']['form']['coupons'] as &$coupon){
+                                unset($coupon['remove_button']); // drop the remove button
+                            }
+                        }
+                        else{ // else, if no coupon codes have been applied, hide the coupon field completely
+                            unset($form['sidebar']['coupon_redemption']['form']); /* unset form, but still render container for order summary bottom border */
+                        }
+                    }
+
+                    $form['sidebar']['back_link'] = [
+                        '#type' => 'markup',
+                        '#markup' => '<div class="return_b" ><a href="/checkout/'.$order_id.'/order_information"  class="button_to_cart c-font-uppercase" style="display: inline-block; padding: 10px 20px; background-color: grey; color: white; text-align: center; text-decoration: none; border-radius: 5px;">return to edit</a></div>',
+                    ];
+                }//end review page
+
+                // order information page
+                if (substr($current_path, -18) === '/order_information') {
+                    // If the current path ends with "/order_information", show the button.
+                    $form['actions']['send_email'] = [
+                        '#type' => 'submit',
+                        '#value' => t('Request Quote'),
+                        '#name' => 'request-quote',
+                        '#button_type' => 'primary',
+                        '#submit' => ['commerce_norquote_send_email_ajax_callback'],
+                    ];
+                    
+                    // // Modify the 'next' button to change its label.
+                    //   if (isset($form['actions']['next']['#value'])) {
+                    //     $form['actions']['next']['#value'] = t('Continue to Payment');
+                    // }
+
+                    // Ensure 'send_email' appears before 'next'.
+                    $next_button = $form['actions']['next'];
+                    unset($form['actions']['next']);
+                    $form['actions']['next'] = $next_button;
+
+                    // If the form has the field 'field_customer_accepted_terms'.
+                    if (isset($form['order_fields:checkout']['field_customer_accepted_terms'])) {
+                        // Add a custom validation function to the boolean field.
+                        $form['#validate'][] = 'commerce_norquote_custom_terms_validation';
+                    }
+
+                    $form['sidebar']['back_link'] = [
+                        '#type' => 'markup',
+                        '#markup' => '<div class="return_b" ><a href="/cart"  class="button_to_cart c-font-uppercase" style="display: inline-block; padding: 10px 20px; background-color: grey; color: white; text-align: center; text-decoration: none; border-radius: 5px;">return to cart</a></div>',
+                    ];
+                    $profiles = $order->collectProfiles();
+                    if (!isset($profiles['billing']) && !isset($profiles['shipping'])) {
+
+                        if ($logged_in) {
+                            $user = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id());
+                            if ($user->hasField('field_country')) {
+                                $userCountry = $user->get('field_country')->value;
+
+                                //Shipping 
+                                $form['shipping_information']['shipping_profile']['address']['widget'][0]['address']['#default_value']['country_code'] = $userCountry;
+
+                                //Billing
+                                $form['payment_information']['billing_information']['address']['widget'][0]['address']['#default_value']['country_code'] = $userCountry;
+                            }
+                        } else {
+                            $location = \Drupal::service('smart_ip.smart_ip_location');
+                            $userCountry_default = $location->get('countryCode');
+                    
+
+                            if ($userCountry_default == 'CA') 
+                            {
+                                    //Shipping 
+                                $form['shipping_information']['shipping_profile']['address']['widget'][0]['address']['#default_value']['country_code'] = 'CA';
+
+                                //Billing
+                                $form['payment_information']['billing_information']['address']['widget'][0]['address']['#default_value']['country_code'] = 'CA';
+                            }
+                            else
+                            {
+                                //Shipping 
+                                $form['shipping_information']['shipping_profile']['address']['widget'][0]['address']['#default_value']['country_code'] = 'US';
+
+                                //Billing
+                                $form['payment_information']['billing_information']['address']['widget'][0]['address']['#default_value']['country_code'] = 'US';
+
+                            }
+                            
+                        }
+                    }
+                }// end order information page
+            }
+        }
+
+    }
+}
+
+/**
+ * Custom validation function for the Privacy Policy boolean field.
+ */
+function commerce_norquote_custom_terms_validation($form, FormStateInterface $form_state)
+{
+    // Get the value of the terms acceptance field.
+    $accepted_terms = $form_state->getValue(['order_fields:checkout', 'field_customer_accepted_terms']);
+
+    // Check if the terms acceptance field is not checked.
+    if ($accepted_terms['value'] == 0) {
+        //Throw a status message
+        //\Drupal::messenger()->addStatus('Please accept the Privacy Policy.');
+        // Throw a form error.
+        $form_state->setErrorByName('order_fields:checkout][field_customer_accepted_terms', t('Please accept the Privacy Policy.'));
+    }
+}
+
+/**
+ * Get the current order ID for an anonymous user.
+ */
+function commerce_norquote_get_current_order_id() {
+    // Get the current path.
+    $current_path = \Drupal::service('path.current')->getPath();
+    
+    // Check if the path matches the order information or review pages.
+    if (preg_match('/checkout\/(\d+)\/order_information/', $current_path, $matches)) {
+      $order_id = $matches[1];
+    }
+    else if (preg_match('/checkout\/(\d+)\/review/', $current_path, $matches)) {
+      $order_id = $matches[1];
+    }
+    else {
+      // If not on specific pages, get the current cart for the anonymous user.
+      $cart_provider = \Drupal::service('commerce_cart.cart_provider');
+      $cart = $cart_provider->getCart('default');
+      
+      if ($cart) {
+        // Get the order ID from the cart.
+        $order_id = $cart->id();
+      }
+      else {
+        $order_id = 0;
+      }
+    }
+  
+    return $order_id;
+  }
+
+/**
+ * Custom function being called in custom module commerce_nor_pricelist, to override pricelist
+ */
+function commerce_norquote_check_canada_guest() {
+    // Restricting display of prices for the below countries
+    $excluded_country_codes = ['CA']; // Canada
+
+    // Get the current user.
+    $current_user = \Drupal::currentUser();
+    // $user = User::load($current_user->id());
+
+    // Check if the user is logged in.
+    if ($current_user->isAuthenticated()) {
+        // If the user is authenticated, you might want to check something related to the user's profile or order history.
+        return false;
+    } 
+    else {
+        // User is not logged in.
+        // Get the user's country using the Smart IP service.
+        $location = \Drupal::service('smart_ip.smart_ip_location');
+        $userCountry = $location->get('countryCode');
+        $is_guest_canada = true;
+
+        // Check if the user's country is in the list of excluded country codes.
+        if (!in_array($userCountry, $excluded_country_codes)) {
+            $is_guest_canada =  false;
+        }
+
+        $order_id = commerce_norquote_get_current_order_id();
+        // dump($order_id);
+        if ($order_id>0) 
+        {
+            // Load the order.
+            $order = Order::load($order_id);
+            if ($order) 
+            {
+                $profiles = $order->collectProfiles();
+                $shipping_profile = isset($profiles['shipping']) ? $profiles['shipping'] : NULL;
+               
+                if ($shipping_profile) 
+                {
+                    // Extract the address field.
+                    $address = $shipping_profile->get('address')->first()->getValue();
+                    // dump($address);
+                    // Check if the shipping country is not Canada.
+                    if ($address['country_code'] != 'CA') 
+                    {
+                        $is_guest_canada =  false;
+                    }
+                    else
+                    {
+                        $is_guest_canada = true;
+                    }
+                }
+            }
+        }
+
+        //if the shipping country is set then it needs to check that first
+        // before sending a result just based on the ip
+
+        
+        return $is_guest_canada;
+
+        
+    }
+          
+    // Default to allowing guest checkout if all checks pass.
+    return true;
+}
+
+function commerce_norquote_custom_country_validation($form, FormStateInterface $form_state)
+{
+    // Get the selected country code.
+    if ($form_state->hasValue(['field_country', 0, 'value'])) {
+        $selected_country_code = $form_state->getValue(['field_country', 0, 'value']);
+
+        // Check if the selected country is '- None -'.
+        if (empty($selected_country_code)) {
+            // Throw a form error.
+            $form_state->setErrorByName('field_country', t('Please select a country.'));
+        }
+
+    }
+}
+
+/**
+ * Submit callback to send the quote email.
+ */
+function commerce_norquote_send_email_ajax_callback($form, \Drupal\Core\Form\FormStateInterface $form_state)
+{
+
+    // Need this because for whatever reason, Drupal will incorrectly attribute triggeringElement if a button is clicked before the page has finished loading.
+    // Real issue: clicking coupon buttons before order_information page has finished loading will submit a quote request
+    $request = \Drupal::request();
+    $quote_button = $request->request->get('request-quote'); // The raw POST data
+    //\Drupal::logger('commerce_norquote')->error('Checkout form. Actual click: @click', ['@click' => $quote_button]);
+    if(!isset($quote_button)) return;
+    ///////////////////////////////////////
+
+    $logged_in = \Drupal::currentUser()->isAuthenticated();
+    $email_address_user = "";
+
+    //Get the order id of the cart the user is on
+    $url = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+    preg_match('/checkout\/(\d+)/', $url, $matches);
+    if (isset($matches[1])) {
+        $order_id = intval($matches[1]);
+
+        //Get the current order
+        $order = Order::load($order_id);
+
+        if ($order && $order->hasField('field_quoted')) {
+            $order->set('field_quoted', TRUE);
+        }
+
+        if ($logged_in) {
+            $user = \Drupal::currentUser();
+            $email_address_user = $user->getEmail();
+        } else {
+            $form_values = $form_state->getValues();
+            // Access the email address value.
+            $email_address_user = $form_values['contact_information']['email'];
+
+            if ($order) {
+                // Update the email address.
+                $order->setEmail($email_address_user);
+            }
+        }
+
+        // Save the order entity.
+        $order->save();
+
+        // Fetch the billing profile from Order
+        $billing_profile = $order->getBillingProfile();
+        // Fetch the shipping profile from Order
+        $shipping_profile = null;
+
+        if ($order->hasField('shipments')) {
+            /** @var \Drupal\commerce_shipping\Entity\ShipmentInterface $shipment */
+            foreach ($order->shipments->referencedEntities() as $shipment) {
+                if ($shipment instanceof ShipmentInterface) {
+                    // Fetch the shipping profile from Order
+                    $shipping_profile = $shipment->getShippingProfile();
+                    break;
+                }
+            }
+        }
+    }
+
+    //Process Billing Profile and gather required values to be populated in the quote email
+    $billing_data = array(
+        'first_name' => '',
+        'last_name' => '',
+        'street' => '',
+        'street2' => '',
+        'city' => '',
+        'state' => '',
+        'zip' => '',
+        'country' => '',
+    );
+
+    if (isset($billing_profile) && $billing_profile !== null) {
+        $billing_address = $billing_profile->get('address')->first();
+        if ($billing_address) {
+            $billing_data['first_name'] = substr($billing_address->getGivenName(), 0, 50);
+            $billing_data['last_name'] = substr($billing_address->getFamilyName(), 0, 50);
+            $billing_data['organization'] = substr($billing_address->getOrganization(), 0, 50);
+            $billing_data['street'] = substr($billing_address->getAddressLine1(), 0, 30);
+            $billing_data['street2'] = substr($billing_address->getAddressLine2(), 0, 30);
+            $billing_data['city'] = substr($billing_address->getLocality(), 0, 30);
+            $billing_data['state'] = substr($billing_address->getAdministrativeArea(), 0, 30);
+            $billing_data['zip'] = substr($billing_address->getPostalCode(), 0, 9);
+            $billing_data['country'] = $billing_address->getCountryCode();
+        }
+    } else {
+        $form_values = $form_state->getValues();
+        // Extract billing information from the form values.
+        $billing_information = $form_values['payment_information']['billing_information']['address'][0]['address'];
+        if (isset($billing_information) && $billing_information !== null) {
+            // Populate billing data from the form values.
+            $billing_data = array(
+                'first_name' => substr($billing_information['given_name'] ?? '', 0, 50),
+                'last_name' => substr($billing_information['family_name'] ?? '', 0, 50),
+                'organization' => substr($billing_information['organization'] ?? '', 0, 50),
+                'street' => substr($billing_information['address_line1'] ?? '', 0, 30),
+                'street2' => substr($billing_information['address_line2'] ?? '', 0, 30),
+                'city' => substr($billing_information['locality'] ?? '', 0, 30),
+                'state' => substr($billing_information['administrative_area'] ?? '', 0, 30),
+                'zip' => substr($billing_information['postal_code'] ?? '', 0, 9),
+                'country' => $billing_information['country_code'],
+            );
+        }
+
+    }
+
+    //Process Shipping Profile and gather required values to be populated in the quote email
+    $shipping_data = array(
+        'full_name' => '',
+        'first_name' => '',
+        'last_name' => '',
+        'street' => '',
+        'street2' => '',
+        'city' => '',
+        'state' => '',
+        'zip' => '',
+        'country' => '',
+    );
+
+    if ($shipping_profile) {
+        //Set up : Shipping Address Information
+        $shipment_address = $shipping_profile->get('address')->first();
+        if ($shipment_address) {
+            $shipping_data['full_name'] = substr($shipment_address->getGivenName(), 0, 50) . ' ' . substr($shipment_address->getFamilyName(), 0, 50);
+            $shipping_data['first_name'] = substr($shipment_address->getGivenName(), 0, 50);
+            $shipping_data['last_name'] = substr($shipment_address->getFamilyName(), 0, 50);
+            $shipping_data['organization'] = substr($shipment_address->getOrganization(), 0, 50);
+            $shipping_data['street'] = substr($shipment_address->getAddressLine1(), 0, 30);
+            $shipping_data['street2'] = substr($shipment_address->getAddressLine2(), 0, 30);
+            $shipping_data['city'] = substr($shipment_address->getLocality(), 0, 30);
+            $shipping_data['state'] = substr($shipment_address->getAdministrativeArea(), 0, 30);
+            $shipping_data['zip'] = substr($shipment_address->getPostalCode(), 0, 9);
+            $shipping_data['country'] = $shipment_address->getCountryCode();
+        }
+    }
+
+    //Process Line Item values and gather required values to be populated in the quote email
+    // Get the line items from the order.
+    $line_items = $order->getItems();
+
+    // Initialize products array
+    $products = [];
+
+    foreach ($line_items as $line_item) {
+
+        // Product Information array
+        $product_data = array(
+            'product_name' => '',
+            'sku' => '',
+            'size' => '',
+            'quantity' => '',
+        );
+
+        // Get product information
+        $product_data['product_name'] = $line_item->getPurchasedEntity()->getTitle();
+        $product_data['sku'] = $line_item->getPurchasedEntity()->getsku();
+        $product_data['quantity'] = $line_item->getQuantity();
+
+        // 'attribute_size' is an entity reference field.
+        $size_reference_item = $line_item->getPurchasedEntity()->get('attribute_size')->entity;
+        // Check if the referenced item exists.
+        if ($size_reference_item) {
+            // 'name' is the field on the referenced entity containing the size value.
+            $size_value = $size_reference_item->get('name')->value;
+
+            // $product_data['size'] contain the actual size value.
+            $product_data['size'] = $size_value;
+        } else {
+            // Referenced item is not found.
+            $product_data['size'] = 'N/A';
+        }
+
+        // Add product data to products array
+        $products[] = $product_data;
+
+    }
+
+    //NEW TEMPLATE
+    $num_selected = 1;
+    $full_name = $shipping_data['full_name'];
+
+    //language specific
+
+    $path = $_SERVER['REQUEST_URI'];
+    $site_language_url = "en";
+    if (strpos($path, '/fr/') !== false) {
+        $site_language_url = "fr";
+    }
+    elseif(strpos($path, '/es/') !== false){
+        $site_language_url = "es";
+    }
+    elseif(strpos($path, '/cn/') !== false){
+        $site_language_url = "cn";
+    }
+    elseif(strpos($path, '/de/') !== false){
+        $site_language_url = "de";
+    }
+    elseif(strpos($path, '/ja/') !== false){
+        $site_language_url = "ja";
+    }
+    
+    if ($site_language_url == "en") {
+        $thank_you_message = 'Thank You For Requesting a Quote';
+        $greeting_message = 'Hello';
+        $processing_message = 'Your request is being processed. A Norgen representative will be in touch within 24 hours of receiving this email using the information you have provided.';
+        $experience_question = 'How was your experience requesting a quote?';
+        $stay_connected = 'Stay Connected';
+        $terrible = 'Terrible';
+        $poor = 'Poor';
+        $neutral = 'Neutral';
+        $good = 'Good';
+        $excellent = 'Excellent';
+        $contact_us = 'If you have any questions or concerns please contact us at';
+        $you_are_receiving = 'This is a message from Norgen Biotek Corp.<br>3430 Schmon Pkwy, Thorold, ON L2V 4Y6.<br>Copyright &copy; 2022 Norgen Biotek Corp.<br>';
+        $privacy_policy = 'Privacy Policy';
+        $contact = 'Contact';
+        $unsubscribe = 'Unsubscribe';
+        $selected_product = 'Selected Product';
+        $sku = 'SKU';
+        $quantity = 'Quantity';
+    } elseif($site_language_url == "fr") {
+        $thank_you_message = 'Merci davoir demandé un devis'; 
+        $greeting_message = 'Bonjour'; 
+        $processing_message = 'Votre demande est en cours de traitement. Un représentant de Norgen vous contactera dans les 24 heures suivant la réception de cet e-mail en utilisant les informations que vous avez fournies.'; 
+        $experience_question = 'Comment s’est passée votre expérience de demande de devis ?'; 
+        $stay_connected = 'Restez connecté'; 
+        $terrible = 'Terrible'; 
+        $poor = 'Pauvre'; 
+        $neutral = 'Neutre'; 
+        $good = 'Bien'; 
+        $excellent = 'Excellent'; 
+        $contact_us = 'Si vous avez des questions ou des préoccupations, veuillez nous contacter à info@norgenbiotek.com ou par téléphone au +1 905 227 8848.'; 
+        $you_are_receiving = 'Ceci est un message de Norgen Biotek Corp. 3430 Schmon Pkwy, Thorold, ON L2V 4Y6.<br>Copyright &copy; 2024 Norgen Biotek Corp.<br>'; 
+        $privacy_policy = 'Politique de Confidentialité'; 
+        $contact = 'Contact'; 
+        $unsubscribe = 'se désabonner'; 
+        $selected_product = 'Produit sélectionné';
+        $sku = 'SKU';
+        $quantity = 'Quantité';
+    }
+    elseif ($site_language_url == "es"){
+        $thank_you_message = 'Gracias por solicitar una cotización'; 
+        $greeting_message = 'Buen día'; 
+        $processing_message = 'Su solicitud está siendo procesada. Un representante de Norgen se comunicará con usted dentro de las 24 horas posteriores a la recepción de este correo electrónico utilizando la información que usted proporcionó.'; 
+        $experience_question = '¿Cómo fue tu experiencia al solicitar cotización?'; 
+        $stay_connected = 'Mantente conectado'; 
+        $terrible = 'Horrible'; 
+        $poor = 'Pobre'; 
+        $neutral = 'Neutral'; 
+        $good = 'BIEN'; 
+        $excellent = 'Excelente'; 
+        $contact_us = 'Si tiene alguna pregunta o inquietud, comuníquese con nosotros en info@norgenbiotek.com o por teléfono al +1 905 227 8848.'; 
+        $you_are_receiving = 'Este es un mensaje de Norgen Biotek Corp. 3430 Schmon Pkwy, Thorold, ON L2V 4Y6.<br>Copyright &copy; 2024 Norgen Biotek Corp.<br>'; 
+        $privacy_policy = 'política de privacidad'; 
+        $contact = 'Contacto'; 
+        $unsubscribe = 'darse de baja'; 
+        $selected_product = 'Producto seleccionado';
+        $sku = 'SKU';
+        $quantity = 'Cantidad';
+    }
+    elseif ($site_language_url == "cn") {
+        $thank_you_message = '感谢您索取报价'; 
+        $greeting_message = '再会'; 
+        $processing_message = '正在处理您的请求。 Norgen 代表将在收到此电子邮件后 24 小时内使用您提供的信息与您联系。'; 
+        $experience_question = '您在请求报价时有什么经历？'; 
+        $stay_connected = '保持联系'; 
+        $terrible = '可怕'; 
+        $poor = '贫穷的'; 
+        $neutral = '中性的'; 
+        $good = '好的'; 
+        $excellent = '出色的'; 
+        $contact_us = '如果您有任何问题或疑虑，请通过 info@norgenbiotek.com 或致电 +1 905 227 8848 联系我们。'; 
+        $you_are_receiving = '这是来自 Norgen Biotek Corp. 3430 Schmon Pkwy, Thorold, ON L2V 4Y6 的消息。<br>版权所有 &copy; 2024 诺根生物技术公司.<br>'; 
+        $privacy_policy = '隐私政策'; 
+        $contact = '接触'; 
+        $unsubscribe = '取消订阅'; 
+        $selected_product = '所选产品';
+        $sku = 'SKU';
+        $quantity = '数量';
+    }
+     elseif ($site_language_url == "de") {
+        $thank_you_message = 'Vielen Dank für Ihre Angebotsanfrage'; 
+        $greeting_message = 'Hallo'; 
+        $processing_message = 'Ihre Anfrage wird bearbeitet. Ein Norgen-Vertreter wird sich innerhalb von 24 Stunden nach Erhalt dieser E-Mail unter Verwendung der von Ihnen angegebenen Informationen mit Ihnen in Verbindung setzen.'; 
+        $experience_question = 'Wie war Ihre Erfahrung mit der Angebotsanfrage?'; 
+        $stay_connected = 'Bleiben Sie in Verbindung'; 
+        $terrible = 'Terrible'; 
+        $poor = 'Arm'; 
+        $neutral = 'Neutral'; 
+        $good = 'Gut'; 
+        $excellent = 'Exzellent'; 
+        $contact_us = 'Wenn Sie Fragen oder Bedenken haben, kontaktieren Sie uns bitte unter info@norgenbiotek.com oder +1 905 227 8848'; 
+        $you_are_receiving = 'Dies ist eine Nachricht von Norgen Biotek Corp.<br>3430 Schmon Pkwy, Thorold, ON L2V 4Y6.<br>Copyright &copy; 2022 Norgen Biotek Corp.<br>'; 
+        $privacy_policy = 'Datenschutzrichtlinie'; 
+        $contact = 'Kontakt'; 
+        $unsubscribe = 'Abbestellen'; 
+        $selected_product = 'Ausgewähltes Produkt';
+        $sku = 'SKU';
+        $quantity = 'Menge';
+    }
+    elseif ($site_language_url == "ja") {
+        $thank_you_message = '見積もりをご依頼いただきありがとうございます'; 
+        $greeting_message = 'こんにちは'; 
+        $processing_message = 'お客様のリクエストは現在処理中です。このメールを受け取ってから 24 時間以内に、ご提供いただいた情報を使用して Norgen の担当者がご連絡いたします。'; 
+        $experience_question = '見積もりの​​ご依頼はいかがでしたか?'; 
+        $stay_connected = '引き続きご連絡ください'; 
+        $terrible = 'ひどい'; 
+        $poor = '悪い'; 
+        $neutral = '普通'; 
+        $good = '良い'; 
+        $excellent = '素晴らしい'; 
+        $contact_us = 'ご質問やご不明な点がございましたら、こちらまでお問い合わせください +1 905 227 8848'; 
+        $you_are_receiving = 'これは Norgen Biotek Corp. からのメッセージです。<br>3430 Schmon Pkwy, Thorold, ON L2V 4Y6.<br>Copyright &copy; 2022 Norgen Biotek Corp.<br>'; 
+        $privacy_policy = 'プライバシー ポリシー'; 
+        $contact = 'お問い合わせ'; 
+        $unsubscribe = '登録解除'; 
+        $selected_product = '選択した製品';
+        $sku = 'SKU';
+        $quantity = '数量';
+    }
+
+    $output = '
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" style="font-family: \'Montserrat\',\'Ubuntu\',sans-serif;">
+        <tbody>
+            <tr>
+                <td>
+                    <table width="600" align="center" style="width:600px;background-repeat: no-repeat;background-size: 100% 6px, 6px 100%, 100% 6px, 6px 100%;background-position: 0 0, 100% 0, 100% 100%, 0 100%;background-image: linear-gradient(to right,#ec1d25 0%,#004897 50%,#0f6b7a 100%),linear-gradient(to bottom,#0f6b7a 0%,#004897 50%,#ec1d25 100%),linear-gradient(to left,#ec1d25 0%,#004897 50%,#0f6b7a 100%),linear-gradient(to top,#0f6b7a 0%,#004897 50%,#ec1d25 100%);">
+                        <tbody>
+                            <tr><td>&nbsp;</td></tr>
+                            <tr>
+                                <td>
+                                <table align="center">
+                                    <tbody>
+                                    <tr>
+                                        <td style="width:300px;"><img src="https://norgenbiotek.com/sites/default/files/norgen-logo.png" style="width:300px;"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                </td>
+                            </tr>
+                            <tr><td style="padding-left: 50px;padding-right: 50px;"><h1 style="font-size: 1.75em;text-align:center;">' . $thank_you_message;
+    if ($num_selected > 1) { // plural
+        $output .= 's';
+    }
+    $output .= '</h1></td></tr>';
+    '<tr style="text-align: center;"><td><img src="https://norgenbiotek.com/sites/default/files/images/shipping-truck.png" style="max-height: 30vh;"></td></tr>';
+    $output .= '<tr><td><hr style="width:calc(100% - 6px);background-color:#ddd;height:1px;border:none;"></td></tr>
+                        <tr>
+                            <td>
+                            <table style="font-size:14px; line-height:1.8;padding-left:50px; padding-right:50px;">
+                                <tbody>';
+    $output .= '<tr><td><p>' . ($logged_in ? $greeting_message . ' ' . $full_name : $greeting_message) . ', <br><br>' . $processing_message . '</p></td></tr>
+                                    <tr>
+                                    <td>
+                                        <table style="width:100%;border-spacing:0px">
+                                         <thead>
+                                            <tr><th align="left" style="border: 1px solid #ddd;margin: 0px;border-spacing: 0px;padding: 0.5em;">' . $selected_product . '</th><th align="left" style="border: 1px solid #ddd;border-left:none;margin: 0px;border-spacing: 0px;padding: 0.5em;">' . $sku . '</th><th align="left" style="border: 1px solid #ddd;border-left:none;margin: 0px;border-spacing: 0px;padding: 0.5em;">' . $quantity . '</th></tr>
+                                        </thead>
+                                        <tbody>';
+    // loop and display selected sample products
+    foreach ($products as $product) {
+        if (isset($product['sku'])) {
+            $output .= '<tr>';
+            $output .= '<td style="border:1px solid #ddd;border-top:none;padding:0.5em;">' . $product['product_name'] . '</td>';
+            $output .= '<td style="border:1px solid #ddd;border-top:none;border-left:none;padding: 0.5em;">' . $product['sku'] . '</td>';
+            $output .= '<td style="border:1px solid #ddd;border-top:none;border-left:none;padding:0.5em;">' . $product['quantity'] . '</td>';
+            $output .= '</tr>';
+        }
+    }
+    $output .= '
+                                        </tbody>
+                                        </table>
+                                    </td>
+                                    </tr>';
+    $output .= '
+                                        <tr>
+                                        <td><p>' . $contact_us . ' <a href="mailto:info@norgenbiotek.com">info@norgenbiotek.com</a>, or by phone at <a href="tel:+19052278848">+1 905 227 8848</a></p></td>
+                                        </tr>
+                                        <tr><td>&nbsp;</td></tr>
+                                        <tr><td><hr style="width:100%;background-color:#ddd;height:1px;border:none;"></td></tr>
+                                        <tr><td>&nbsp;</td></tr>
+                                        <tr>
+                                            <td>
+                                                <table style="width:100%">
+                                                <tbody>
+                                                    <tr><td colspan="5" align="center"><h2 style="font-size: 1.2em;">' . $experience_question . '</h2></td></tr>
+                                                    <tr>
+                                                    <td align="center">
+                                                        <a href="https://survey.zohopublic.com/zs/HvBUiZ?user_satisfaction=Terrible" style="color:#333333;text-decoration:none;">
+                                                        ' . $terrible . '
+                                                        <p style="border: 1px solid #AAAAAA;border-radius:100%; width:2em; height:2em; line-height:2em; margin:0.25em;">1</p>
+                                                        </a>
+                                                    </td>
+                                                    <td align="center">
+                                                        <a href="https://survey.zohopublic.com/zs/HvBUiZ?user_satisfaction=Poor" style="color:#333333;text-decoration:none;">
+                                                        ' . $poor . '
+                                                        <p style="border: 1px solid #AAAAAA;border-radius:100%; width:2em; height:2em; line-height:2em; margin:0.25em;">2</p>
+                                                        </a>
+                                                    </td>
+                                                    <td align="center">
+                                                        <a href="https://survey.zohopublic.com/zs/HvBUiZ?user_satisfaction=Neutral" style="color:#333333;text-decoration:none;">
+                                                        ' . $neutral . '
+                                                        <p style="border: 1px solid #AAAAAA;border-radius:100%; width:2em; height:2em; line-height:2em; margin:0.25em;">3</p>
+                                                        </a>
+                                                    </td>
+                                                    <td align="center">
+                                                        <a href="https://survey.zohopublic.com/zs/HvBUiZ?user_satisfaction=Good" style="color:#333333;text-decoration:none;">
+                                                        ' . $good . '
+                                                        <p style="border: 1px solid #AAAAAA;border-radius:100%; width:2em; height:2em; line-height:2em; margin:0.25em;">4</p>
+                                                        </a>
+                                                    </td>
+                                                    <td align="center">
+                                                        <a href="https://survey.zohopublic.com/zs/HvBUiZ?user_satisfaction=Excellent" style="color:#333333;text-decoration:none;">
+                                                        ' . $excellent . '
+                                                        <p style="border: 1px solid #AAAAAA;border-radius:100%; width:2em; height:2em; line-height:2em; margin:0.25em;">5</p>
+                                                        </a>
+                                                    </td>
+                                                    </tr>
+                                                </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr><td>&nbsp;</td></tr>
+                                        <tr>
+                                            <td>
+                                                <table width="100%" style="text-align:center;">
+                                                <tbody>
+                                                    <tr><td style="text-align:center;"><h2 style="font-size: 1.2em;">' . $stay_connected . '</h2></td></tr>
+                                                    <tr>
+                                                    <td><a href="http://facebook.com/norgenbiotek"><img style="padding-right:10px;" src="https://norgenbiotek.com/sites/default/files/images/icons/facebook-icon-36px.png" alt="Facebook Icon"></a><a href="http://twitter.com/norgenbiotek"><img style="padding-right:10px;" src="https://norgenbiotek.com/sites/default/files/images/icons/twitter-icon-36px.png" alt="Twitter Icon"></a><a href="http://instagram.com/norgen.biotek/"><img style="padding-right:10px;" src="https://norgenbiotek.com/sites/default/files/images/icons/instagram-icon-36px.png" alt="Instagram Icon"></a><a href="https://www.linkedin.com/company/norgenbiotek/"><img style="padding-right:10px;" src="https://norgenbiotek.com/sites/default/files/images/icons/linkedin-icon-36px.png" alt="LinkedIn Icon"></a><a href="https://www.youtube.com/user/norgenbiotek"><img style="padding-right:10px;" src="https://norgenbiotek.com/sites/default/files/images/icons/youtube-icon-36px.png" alt="YouTube Icon"></a></td>
+                                                    </tr>
+                                                </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr><td>&nbsp;</td></tr>
+                                    </tbody>
+                                </table>
+                                </td>
+                            </tr>';
+    $output .= '<tr><td>&nbsp;</td></tr>';
+    $output .= '<tr><td><hr style="width:100%;background-color:#ddd;height:1px;border:none;"></td></tr>';
+    $output .= '<tr><td>&nbsp;</td></tr>';
+    $output .= '<tr><td style="font-size:12px;text-align:center;"><p>' . $you_are_receiving . '</p></td></tr>';
+    $output .= '<tr><td style="font-size:12px;text-align:center;"><p><a href="https://norgenbiotek.com/privacy-policy">' . $privacy_policy . '</a> | <a href="https://norgenbiotek.com/">' . $contact . '</a></p></td></tr>';
+    $output .= '<tr><td style="font-size:12px;text-align:center;"><p><a href="https://norgenbiotek.com/unsubscribe">' . $unsubscribe . '</a></p></td></tr>';
+    $output .= '<tr><td>&nbsp;</td></tr>';
+    $output .= '</tbody></table></td></tr></tbody></table>';
+
+    $email_message_user = $output;
+    $email_subject_user = ($site_language_url == "en") 
+    ? 'Thank You for Your Quote Request' 
+    : 'Merci davoir demandé un devis';
+
+    /*If the "field_quoted_value" is set "1" against the Entity Id in the commerce_order__field_quoted table, the user submitted a Quote.
+     *If there are more than 10 quotes from the same IP within the last 10 minutes, don't send the email to user.
+     */
+
+    $currentUnixTime = time();
+    $tenMinutesAgo = $currentUnixTime - (10 * 60); // 10 minutes ago
+    $ip_address_user = \Drupal::request()->getClientIp();
+
+    // Get the database connection.
+    // $connection = Database::getConnection();
+    // $query = $connection->select('forms_to_zoho', 'fz');
+    // $query->fields('fz', ['ip_address']);
+    // $query->condition('fz.form_name', 'Request Quote Form');
+    // $query->condition('fz.timestamp', $tenMinutesAgo, '>');
+    // $query->condition('fz.ip_address', $ip_address_user);
+    // $result = $query->execute()->fetchAll();
+
+
+    $query = \Drupal::database()->select('forms_to_zoho');
+    $query->condition('form_name', 'Request Quote Form');
+    $query->condition('timestamp', strtotime('today midnight'), '>=');
+    $query->condition('timestamp', time(), '<');
+    $count = $query->countQuery()->execute()->fetchField();
+    // \Drupal::logger('node')->error($count);
+
+    $ipAddressCount = 0;
+
+    // Iterate over the result set and count occurrences of the user IP address
+    // foreach ($result as $record) {
+    //     $ipAddressCount++;
+    // }
+
+    $message = ($site_language_url == "en")?'Thank you for requesting a quote. We have received your request and will get back to you shortly.':'Merci davoir demandé un devis. Nous avons reçu votre demande et vous répondrons sous peu.';
+   
+    // if ($ipAddressCount < 11)
+    if ($count <= 100)
+    {
+        //Send Email to User
+        nor_forms_submit_email($email_message_user, $email_address_user, $email_subject_user);
+        \Drupal::messenger()->addMessage(t($message));
+    } else {
+        \Drupal::messenger()->addMessage(t($message));
+    }
+
+    //Email to the Team
+    $first_name = '';
+    $last_name = '';
+    $email = $email_address_user;
+    $phone = '';
+    $institution = '';
+    $opt_in_mail_list = 0;
+
+    $billing_same_as_shipping = 'No';
+    if ($form['payment_information']['billing_information']['copy_fields']['enable']['#default_value'] == 1) {
+        $billing_same_as_shipping = 'Yes';
+    }
+
+    if ($logged_in) {
+        $user_details = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id());
+        // Check if the user entity is loaded.
+        if ($user_details) {
+            // Get the field values.
+            $first_name = $user_details->get('field_first_name')->value;
+            $last_name = $user_details->get('field_last_name')->value;
+            $phone = $user_details->get('field_phone_number')->value;
+            $institution = $user_details->get('field_company_institution')->value;
+            $opt_in = $user_details->get('field_mail_opt_in')->value;
+            if ($opt_in == 'Yes') {
+                $opt_in_mail_list = 1;
+            } else {
+                $opt_in_mail_list = 0;
+            }
+        }
+    } else if ($billing_same_as_shipping == 'Yes') {
+        $first_name = $shipping_data['first_name'];
+        $last_name = $shipping_data['last_name'];
+        $phone = 'NA';
+        $institution = $shipping_data['organization'];
+    } else {
+        $first_name = $billing_data['first_name'];
+        $last_name = $billing_data['last_name'];
+        $phone = 'NA';
+        $institution = $billing_data['organization'];
+    }
+
+    //Fetching Special Instructions from Form
+
+    $form_values = $form_state->getValues();
+
+    $special_instructions = $form_values['order_fields:checkout']['field_special_instructions'][0]['value'];
+
+    if ($order) {
+
+        // Update the special instructions to the Order
+
+        $order->set('field_special_instructions', $special_instructions);
+
+        $order->save();
+
+    }
+
+    // Customer Information
+    $email_body = '<table width="100%" border="0" cellpadding="0" cellspacing="0" style="font-family:\'Montserrat\',\'Ubuntu\',sans-serif;border-collapse: separate;">
+                    <tbody>
+                      <tr>
+                        <td>
+                          <table width="600" align="center" style="width:600px;margin:auto;background-repeat:no-repeat;background-image: none;background-size:100% 6px,6px 100%,100% 6px,6px 100%;background-position:0 0,100% 0,100% 100%,0 100%;background-image:linear-gradient(to right,#ec1d25 0%,#004897 50%,#0f6b7a 100%),linear-gradient(to bottom,#0f6b7a 0%,#004897 50%,#ec1d25 100%),linear-gradient(to left,#ec1d25 0%,#004897 50%,#0f6b7a 100%),linear-gradient(to top,#0f6b7a 0%,#004897 50%,#ec1d25 100%);">
+                            <tbody>
+                              <tr>
+                                <td>&nbsp;</td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <table align="center" style="margin:auto;border-collapse: separate;">
+                                    <tbody>
+                                      <tr>
+                                        <td style="width:300px"><img src="https://norgenbiotek.com/sites/default/files/norgen-logo.png" style="width:300px"></td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td style="padding-left:50px;padding-right:50px">
+                                  <h1 style="font-size:1.75em;text-align:center">New Quote Request</h1>
+                                </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <hr style="width:calc(100% - 6px);background-color:#ddd;height:1px;border:none">
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <table style="font-size:14px;line-height:1.8;padding-left:50px;padding-right:50px;border-collapse: separate;">
+                                  <tbody>';
+    $customer_information = '<tr><td><h2 style="margin-bottom:0px;">Customer Information</h2></td></tr><tr><td><table style="border-spacing:0px;border-bottom:1px solid grey;"><tbody>';
+    if (!empty($first_name)) {
+        $customer_information .= '<tr><td style="border:1px solid grey;border-bottom:0px;padding:6px;">First Name:</td><td style="border:1px solid grey;border-bottom:0px;border-left:0px;padding:6px;">' . $first_name . '</td></tr>';
+    }
+    if (!empty($last_name)) {
+        $customer_information .= '<tr><td style="border:1px solid grey;border-bottom:0px;padding:6px;">Last Name:</td><td style="border:1px solid grey;border-bottom:0px;border-left:0px;padding:6px;">' . $last_name . '</td></tr>';
+    }
+    if (!empty($email)) {
+        $customer_information .= '<tr><td style="border:1px solid grey;border-bottom:0px;padding:6px;">Email:</td><td style="border:1px solid grey;border-bottom:0px;border-left:0px;padding:6px;">' . $email . '</td></tr>';
+    }
+    if (!empty($phone)) {
+        $customer_information .= '<tr><td style="border:1px solid grey;border-bottom:0px;padding:6px;">Phone:</td><td style="border:1px solid grey;border-bottom:0px;border-left:0px;padding:6px;">' . $phone . '</td></tr>';
+    }
+    if (!empty($institution)) {
+        $customer_information .= '<tr><td style="border:1px solid grey;border-bottom:0px;padding:6px;">Company/Institution:</td><td style="border:1px solid grey;border-bottom:0px;border-left:0px;padding:6px;">' . $institution . '</td></tr>';
+    }
+    /*if($form_state['step_2_values']['referred_radios']==0){
+      $customer_information .= '<tr><td style="border:1px solid grey; border-bottom:0px;padding:6px;">Referred by Employee:</td><td style="border:1px solid grey;border-bottom:0px;border-left:0px;padding:6px;">Yes</td></tr>'; 
+      if(!empty($form_state['step_2_values']['name_of_employee'])){
+        $customer_information .= '<tr><td style="border:1px solid grey; border-bottom:0px;padding:6px;">Employee Name:</td><td style="border:1px solid grey;border-bottom:0px;border-left:0px;padding:6px;">'.$form_state['step_2_values']['name_of_employee'].'</td></tr>'; 
+      }
+    }*/
+    if ($opt_in_mail_list == 1) {
+        $customer_information .= '<tr><td style="border:1px solid grey; border-bottom:0px;padding:6px;">Opt in to mailing list:</td><td style="border:1px solid grey;border-bottom:0px;border-left:0px;padding:6px;">Yes</td></tr>';
+    } else {
+        $customer_information .= '<tr><td style="border:1px solid grey; border-bottom:0px;padding:6px;">Opt in to mailing list:</td><td style="border:1px solid grey;border-bottom:0px;border-left:0px;padding:6px;">No</td></tr>';
+    }
+    /*if(!empty($form_state['step_2_values']['additional_message'])){ $customer_information .= '<tr><td style="border:1px solid grey; border-bottom:0px;padding:6px;">Message:</td><td style="border:1px solid grey;border-bottom:0px;border-left:0px;padding:6px;">'.$form_state['step_2_values']['additional_message'].'</td></tr>'; $message = $form_state['step_2_values']['additional_message'];}*/
+    $customer_information .= '</tbody></table></td></tr><tr><td>&nbsp;</td></tr><tr><td><hr style="width:100%;background-color:#ddd;height:1px;border:none"></td></tr>';
+
+    // Shipping Information
+    $shipping_information = '<tr><td><h2 style="margin-bottom:0px;">Shipping Information</h2></td></tr><tr><td><table style="border-spacing:0px;border-bottom:1px solid grey;"><tbody>';
+    if (!empty($shipping_data['street'])) {
+        $shipping_information .= '<tr><td style="border:1px solid grey; border-bottom:0px;padding:6px;">Street Address:</td><td style="border:1px solid grey;border-bottom:0px;border-left:0px;padding:6px;">' . $shipping_data['street'] . '</td></tr>';
+    }
+    if (!empty($shipping_data['street2'])) {
+        $shipping_information .= '<tr><td style="border:1px solid grey; border-bottom:0px;padding:6px;">Apt., Suite, etc.:</td><td style="border:1px solid grey;border-bottom:0px;border-left:0px;padding:6px;">' . $shipping_data['street2'] . '</td></tr>';
+    }
+    if (!empty($shipping_data['city'])) {
+        $shipping_information .= '<tr><td style="border:1px solid grey; border-bottom:0px;padding:6px;">City / Town:</td><td style="border:1px solid grey;border-bottom:0px;border-left:0px;padding:6px;">' . $shipping_data['city'] . '</td></tr>';
+    }
+    if (!empty($shipping_data['state'])) {
+        $shipping_information .= '<tr><td style="border:1px solid grey; border-bottom:0px;padding:6px;">State / Province:</td><td style="border:1px solid grey;border-bottom:0px;border-left:0px;padding:6px;">' . $shipping_data['state'] . '</td></tr>';
+    }
+    if (!empty($shipping_data['zip'])) {
+        $shipping_information .= '<tr><td style="border:1px solid grey; border-bottom:0px;padding:6px;">Zip / Postal Code:</td><td style="border:1px solid grey;border-bottom:0px;border-left:0px;padding:6px;">' . $shipping_data['zip'] . '</td></tr>';
+    }
+    if (!empty($shipping_data['country'])) {
+        $shipping_information .= '<tr><td style="border:1px solid grey; border-bottom:0px;padding:6px;">Country / Region:</td><td style="border:1px solid grey;border-bottom:0px;border-left:0px;padding:6px;">' . $shipping_data['country'] . '</td></tr>';
+    }
+    $shipping_information .= '</tbody></table></td></tr><tr><td>&nbsp;</td></tr><tr><td><hr style="width:100%;background-color:#ddd;height:1px;border:none"></td></tr>';
+
+    // Billing Information
+    $billing_information = '<tr><td><h2 style="margin-bottom:0px;">Billing Information</h2></td></tr><tr><td><table style="border-spacing:0px;border-bottom:1px solid grey;"><tbody>';
+    $billing_information .= '<tr><td style="border:1px solid grey; border-bottom:0px;padding:6px;">Billing Address = Shipping Address:</td><td style="border:1px solid grey;border-bottom:0px;border-left:0px;padding:6px;">' . $billing_same_as_shipping . '</td></tr>';
+    if ($billing_same_as_shipping == 'No') { // if billing != shipping
+        if (!empty($billing_data['street'])) {
+            $billing_information .= '<tr><td style="border:1px solid grey; border-bottom:0px;padding:6px;">Street Address:</td><td style="border:1px solid grey;border-bottom:0px;border-left:0px;padding:6px;">' . $billing_data['street'] . '</td></tr>';
+        }
+        if (!empty($billing_data['street2'])) {
+            $billing_information .= '<tr><td style="border:1px solid grey; border-bottom:0px;padding:6px;">Apt., Suite, etc.:</td><td style="border:1px solid grey;border-bottom:0px;border-left:0px;padding:6px;">' . $billing_data['street2'] . '</td></tr>';
+        }
+        if (!empty($billing_data['city'])) {
+            $billing_information .= '<tr><td style="border:1px solid grey; border-bottom:0px;padding:6px;">City / Town:</td><td style="border:1px solid grey;border-bottom:0px;border-left:0px;padding:6px;">' . $billing_data['city'] . '</td></tr>';
+        }
+        if (!empty($billing_data['state'])) {
+            $billing_information .= '<tr><td style="border:1px solid grey; border-bottom:0px;padding:6px;">State / Province:</td><td style="border:1px solid grey;border-bottom:0px;border-left:0px;padding:6px;">' . $billing_data['state'] . '</td></tr>';
+        }
+        if (!empty($billing_data['zip'])) {
+            $billing_information .= '<tr><td style="border:1px solid grey; border-bottom:0px;padding:6px;">Zip / Postal Code:</td><td style="border:1px solid grey;border-bottom:0px;border-left:0px;padding:6px;">' . $billing_data['zip'] . '</td></tr>';
+        }
+        if (!empty($billing_data['country'])) {
+            $billing_information .= '<tr><td style="border:1px solid grey; border-bottom:0px;padding:6px;">Country / Region:</td><td style="border:1px solid grey;border-bottom:0px;border-left:0px;padding:6px;">' . $billing_data['country'] . '</td></tr>';
+        }
+    }
+    $billing_information .= '</tbody></table></td></tr><tr><td>&nbsp;</td></tr><tr><td><hr style="width:100%;background-color:#ddd;height:1px;border:none"></td></tr>';
+
+    // Special Instructions
+
+    $special_instruction = '<tr><td><h2 style="margin-bottom:0px;">Additional Information</h2></td></tr><tr><td><table style="border-spacing:0px;border-bottom:1px solid grey;"><tbody>';
+
+    $special_instruction .= '<tr><td style="border:1px solid grey; border-bottom:0px;padding:6px;">Special Instructions:</td><td style="border:1px solid grey;border-bottom:0px;border-left:0px;padding:6px;">' . $special_instructions . '</td></tr>';
+
+    $special_instruction .= '</tbody></table></td></tr><tr><td>&nbsp;</td></tr><tr><td><hr style="width:100%;background-color:#ddd;height:1px;border:none"></td></tr>';
+
+    // Product Information
+    $product_information = '<tr><td><h2 style="margin-bottom:0px;">Product Information</h2></td></tr><tr><td><table style="border-spacing:0px;border-bottom:1px solid grey;">';
+    $product_information .= '<thead><tr><th style="border:1px solid grey; border-bottom:0px;padding:6px;">SKU</th><th style="border:1px solid grey;border-bottom:0px;border-left:0px;padding:6px;">Title</th><th style="border:1px solid grey;border-bottom:0px;border-left:0px;padding:6px;">Size</th><th style="border:1px solid grey;border-bottom:0px;border-left:0px;padding:6px;">Quantity</th></tr></thead><tbody>';
+    foreach ($products as $product) {
+        $product_information .= '<tr>';
+
+        $product_information .= '<td style="border:1px solid grey; border-bottom:0px;padding:6px;">' . $product['sku'] . '</td>';
+
+        if (isset($product['product_name'])) {
+            $product_information .= '<td style="border:1px solid grey;border-bottom:0px;border-left:0px;padding:6px;">' . $product['product_name'] . '</td>';
+        }
+        if (isset($product['size'])) {
+            $product_information .= '<td style="border:1px solid grey;border-bottom:0px;border-left:0px;padding:6px;">' . $product['size'] . '</td>';
+        }
+        // don't need to check if quantity field is empty since field has minimum value of 1 
+        $product_information .= '<td style="border:1px solid grey;border-bottom:0px;border-left:0px;padding:6px;">' . $product['quantity'] . '</td>';
+        $product_information .= '</tr>';
+    }
+    $product_information .= '</tbody></table></td></tr><tr><td>&nbsp;</td></tr>';
+
+    $email_body .= $customer_information;
+    $email_body .= $shipping_information;
+    $email_body .= $billing_information;
+    $email_body .= $special_instruction;
+    $email_body .= $product_information;
+
+    $email_body .= '</tbody></table></td></tr></tbody></table></td></tr></tbody></table>';
+
+    //Sending email
+    $email_message_team = $email_body;
+
+    //Insert the form data to Database
+
+    $date = date("Ymd");
+    $form_name = \Drupal::translation()->translate('Request Quote Form');
+
+    if (!isset($first_name)) {
+        $first_name = 'NULL';
+    }
+    if (!isset($last_name)) {
+        $last_name = 'NULL';
+    }
+    if (!isset($email_address_user)) {
+        $email_address_user = 'NULL';
+    }
+    if (!isset($shipping_data['street'])) {
+        $shipping_data['street'] = 'NULL';
+    }
+    if (!isset($shipping_data['street2'])) {
+        $shipping_data['street2'] = 'NULL';
+    }
+    if (!isset($shipping_data['city'])) {
+        $shipping_data['city'] = 'NULL';
+    }
+    if (!isset($shipping_data['zip'])) {
+        $shipping_data['zip'] = 'NULL';
+    }
+    if (!isset($shipping_data['state'])) {
+        $shipping_data['state'] = 'NULL';
+    }
+    if (!isset($shipping_data['country'])) {
+        $shipping_data['country'] = 'NULL';
+    }
+    if (!isset($institution)) {
+        $institution = 'NULL';
+    }
+    if (!isset($opt_in_mail_list)) {
+        $opt_in_mail_list = 'NULL';
+    }
+
+    $query = \Drupal::database()->insert('forms_to_zoho');
+    $query->fields(['created_on', 'form_name', 'first_name', 'last_name', 'email', 'street1', 'street2', 'city', 'zip', 'state', 'country', 'company', 'opt_in', 'timestamp', 'ip_address', 'record','products']);
+    $query->values([$date, $form_name, $first_name, $last_name, $email_address_user, $shipping_data['street'], $shipping_data['street2'], $shipping_data['city'], $shipping_data['zip'], $shipping_data['state'], $shipping_data['country'], $institution, $opt_in_mail_list, time(), $ip_address_user, '','order_id|'.$order_id]);
+    $result = $query->execute();
+    $id= is_numeric($result)? $result : '00';
+
+    //Update the Email address of our Team to which the emails should be triggered.
+    $email_address_team = 'orders@norgenbiotek.com';
+    $email_subject_team = 'New Quote Request: Action Required #'.$id;
+
+    
+    //Send Emails
+    nor_forms_submit_email($email_message_team, $email_address_team, $email_subject_team);
+    
+}
+
+// function commerce_norquote_node_view_alter(&$build) 
+// {
+//     if (isset($build['#node']) && $build['#node'] instanceof \Drupal\node\NodeInterface) 
+//     {
+//         // Get the current node.
+//         $node = $build['#node'];
+
+//         // Retrieve the content type of the node.
+//         $content_type = $node->bundle();
+
+//         if(isset($content_type) && $content_type == 'norproduct')
+//         {
+
+//             // Get the session ID.
+//             $session_id = \Drupal::request()->getSession()->getId();
+
+//             // Ensure the session is started if it's not already.
+//             if (empty($session_id)) {
+//                 // Start the session manually if not started.
+//                 $session = \Drupal::service('session');
+//                 $session->start();
+//                 $session_id = \Drupal::request()->getSession()->getId(); // Retrieve the newly created session ID.
+//             }
+
+//             // Log the session ID for debugging.
+//             \Drupal::logger('cache_norquote')->info('Session ID: @session', ['@session' => $session_id]);
+
+//             // Create cacheability metadata.
+//             $cacheability = new CacheableMetadata();
+
+//             // Add session context to vary the cache by session.
+//             $cacheability->addCacheContexts(['session']);
+
+//             // If no session ID is available, disable caching entirely.
+//             if (empty($session_id)) {
+//                 $cacheability->setCacheMaxAge(0);
+//             }
+            
+//             // Apply cacheability metadata to the build.
+//             $cacheability->applyTo($build);
+
+//             // Get the current URL.
+//             $current_url = \Drupal::request()->getUri();
+
+//             // Log a message including the URL.
+//             \Drupal::logger('cache_norquote')->info('@url, @session_id', [
+//                 '@url' => $current_url,
+//                 '@session_id' => $session_id,
+//             ]);
+
+//         }
+//     }
+// }

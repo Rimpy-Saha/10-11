@@ -1,0 +1,117 @@
+<?php
+
+use Drupal\user\Entity\User;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\Core\Url;
+use Drupal\Core\Form\FormStateInterface;
+
+
+
+
+/**
+ * Implements hook_form_FORM_ID_alter() for the login form.
+ */
+function nor_user_rules_form_user_login_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+    // Add a custom validation handler to block login if IP is not allowed.
+    $form['#validate'][] = 'nor_user_rules_login_validate_ip';
+}
+  
+
+/**
+ * Custom validation handler to block login if the user's IP is not allowed.
+ */
+function nor_user_rules_login_validate_ip(array &$form, FormStateInterface $form_state) {
+    // Define allowed IP addresses.
+    // $allowed_ips = ['68.71.17.146']; // Replace with your allowed IP addresses.
+  
+    // // Get the current user's IP.
+    // $current_ip = \Drupal::request()->getClientIp();
+  
+    // // Load the username entered by the user.
+    // $username = $form_state->getValue('name');
+    // $account = user_load_by_name($username);
+  
+    // if ($account->id() == 1) 
+    // {
+      return;
+    // }
+  
+  
+    $allowed_roles = ['administrator', 'manager', 'editor', 'orders', 'content'];
+
+    if ($account && array_intersect($allowed_roles, $account->getRoles())) {
+  
+        // If the user's IP isn't allowed, block the login.
+        if (!in_array($current_ip, $allowed_ips)) {
+    
+            // Display a custom error message.
+            \Drupal::messenger()->addError(t('We are having trouble logging you in. Please contact the administrator. '));
+    
+            // Log the failed login attempt.
+            \Drupal::logger('admin_access')->error('Login blocked for ' . $username . ' from IP ' . $current_ip);
+    
+            // Prevent the form submission by setting an error on the username field.
+            $form_state->setErrorByName('name', t('Access denied.'));
+        }
+    }
+}
+  
+
+/**
+ * Implements hook_ENTITY_TYPE_presave() for user entities.
+ */
+function nor_user_rules_user_presave(\Drupal\user\UserInterface $user)
+{
+    // Account form update
+    /* if ($user->isAnonymous()) { return; } // previous method relied on country field existing before adding role, which also guaranteed user was not anon
+    $country_code = commerce_nor_cart_popup_get_user_country(); // in this order: checks shipping address, then user country, role, ip location, else default US
+    $roles = $user->getRoles();
+    if (!in_array('canadian', $roles) && $country_code == 'CA') {
+        $user->addRole('canadian');
+    } else if (in_array('canadian', $roles) && $country_code != 'CA') {
+        $user->removeRole('canadian');
+    } */
+    
+    if ($user->hasField('field_country') && !$user->field_country->isEmpty()) {
+        $country_code = $user->field_country->value;
+        $roles = $user->getRoles();
+        if (!in_array('canadian', $roles) && $country_code == 'CA') {
+            $user->addRole('canadian');
+        } else if (in_array('canadian', $roles) && $country_code != 'CA') {
+            $user->removeRole('canadian');
+        }
+    }
+}
+
+
+/**
+ * Implements hook_user_update().
+ */
+function nor_user_rules_user_update(\Drupal\user\UserInterface $user)
+{
+    // Manipulate status messages to hide those related to rebuilding permissions.
+    $status_messages = \Drupal::messenger()->messagesByType('status');
+    \Drupal::messenger()->deleteByType('status');
+    foreach ($status_messages as $status_message) {
+        if (str_contains(strtolower($status_message), 'rebuild permissions')) {
+        } else {
+            \Drupal::messenger()->addMessage($status_message, 'status');
+        }
+    }
+}
+
+/**
+* Implements hook_page_attachments().
+*/
+function nor_user_rules_page_attachments(array &$attachments) {
+ // Check if the user is logged in.
+ $current_user = \Drupal::currentUser();
+ if ($current_user->isAuthenticated()) {
+   // Attach the JavaScript library for logged-in users.
+   $attachments['#attached']['library'][] = 'nor_user_rules/ga4_user_id_js';
+    // Pass the current user ID to drupalSettings.
+    $attachments['#attached']['drupalSettings']['nor_user_rules'] = [
+        'currentUserId' => $current_user->id(),
+      ];
+ }
+}

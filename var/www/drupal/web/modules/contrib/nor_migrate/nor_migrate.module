@@ -1,0 +1,75 @@
+<?php
+
+/**
+ * @file
+ * Contains nor_migrate.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\field\Plugin\migrate\source\d7\Field;
+use Drupal\field\Plugin\migrate\source\d7\FieldInstance;
+use Drupal\field\Plugin\migrate\source\d7\FieldInstancePerFormDisplay;
+use Drupal\field\Plugin\migrate\source\d7\FieldInstancePerViewMode;
+use Drupal\field\Plugin\migrate\source\d7\ViewMode;
+use Drupal\migrate\Exception\RequirementsException;
+use Drupal\migrate_drupal\Plugin\migrate\FieldMigration;
+use Drupal\node\Plugin\migrate\source\d7\Node;
+use Drupal\taxonomy\Plugin\migrate\source\d7\Term;
+use Drupal\taxonomy\Plugin\migrate\source\d7\TermLocalizedTranslation;
+
+/**
+ * Implements hook_help().
+ */
+function nor_migrate_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the nor_migrate module.
+    case 'help.page.nor_migrate':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p><strong>' . t('Norgen Migrate 1.x') . '</strong></p>';
+      $output .= '<p>' . t('The Norgen Migrate module fixes errors during migration.') . '</p>';
+      $output .= '<ul>';
+      $output .= '<li>' . t('Migrate field plugins for the Norgen Biotek Site.') . '</li>';
+      $output .= '</ul>';
+      $output .= '<p><strong>' . t('Commerce Migrate documentation') . '</strong></p>';
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_migration_plugins_alter().
+ */
+function nor_migrate_migration_plugins_alter(array &$migrations) {
+  $pathauto_update_actions = [
+    'pathauto_file_update_action',
+    'pathauto_node_update_action',
+    'pathauto_taxonomy_term_update_action',
+  ];
+  //'pathauto_user_update_action',
+  foreach ($pathauto_update_actions as $pathauto_update_action) {
+    $migrations['d7_action']['process']['plugin'][0]['map'][$pathauto_update_action] = 'pathauto_update_alias';
+  }
+
+    //$migrations['d7_action']['process']['plugin'][0]['map']['pathauto_user_update_action'] = 'skip';
+    //$migrations['d7_action']['process']['plugin'][0]['map']['commerce_purchase_order_validate_action'] = 'skip';
+    //$migrations['d7_action']['process']['plugin'][0]['map']['country_disable_action'] = 'skip';
+    //$migrations['d7_action']['process']['plugin'][0]['map']['country_enable_action'] = 'skip';
+    //$migrations['d7_action']['process']['plugin'][0]['map']['mailchimp_lists_add_to_segment_action'] = 'skip';
+
+
+    //$migrations['d7_field']['process']['entity_type'][0]['map']['field_data_field_size'] = 'field_data_field_size';
+    //$migrations['d7_field']['process']['entity_type'][0]['map']['field_data_field_format'] = 'field_data_field_format';
+
+    $migrations['d7_file']['source']['constants']['source_base_path'] = 'http://drupal2.norgenbiotek.com';
+
+
+
+    $migrations['commerce1_order']['process']['billing_profile'][0]['migration'] = 'upgrade_commerce1_profile_billing';
+    $migrations['commerce1_order']['process']['shipping_profile'][0]['migration'] = 'upgrade_commerce1_profile_shipping';
+    //$migrations['commerce1_product']['source']['plugin'][0]['migration'] = 'upgrade_commerce1_profile_shipping';
+    //$migrations['d7_field_instance']['entity_type'][0]['map']['field1'] = 'field1';
+
+
+
+
+}

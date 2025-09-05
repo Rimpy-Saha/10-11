@@ -1,0 +1,9 @@
+name: 'Commerce Norgen Price List'
+type: module
+description: 'Custom modifications for price list based on user location.'
+core_version_requirement: ^10
+package: Custom
+dependencies:
+  - drupal:commerce
+  - drupal:commerce_pricelist
+  - drupal:commerce_norquote

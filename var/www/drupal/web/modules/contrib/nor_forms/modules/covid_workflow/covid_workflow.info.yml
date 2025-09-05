@@ -1,0 +1,5 @@
+name: Covid Workflow Form
+description: Custom module for Covid Workflow.
+type: module
+package: Norgen Biotek
+core_version_requirement: ^8.7 || ^9 || ^10

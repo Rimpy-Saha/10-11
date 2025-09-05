@@ -1,0 +1,7 @@
+liquid_biopsy.biopsy_form:
+  path: '/liquid-biopsy-form'
+  defaults:
+    _title: 'Norgenbio Form'  # Update title case for consistency
+    _form: '\Drupal\liquid_biopsy\Form\LiquidBiopsyForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

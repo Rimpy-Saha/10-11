@@ -1,0 +1,382 @@
+<?php
+
+
+use Drupal\Core\Database\Database;
+use Drupal\Core\Updates\UpdateManagerInterface;
+
+
+/**
+ * Implements hook_schema().
+ */
+function commerce_norreferral_schema()
+{
+  $schema['user_points_referral'] = [
+    'description' => 'The base table containing referral links for each user',
+    'fields' => [
+      'id' => [
+        'description' => 'The primary identifier for referral',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'uid' => [
+        'description' => 'User ID',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'referral_link_code' => [
+        'description' => 'Referral link',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'timestamp' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Time of user registration',
+      ],
+      'status' => [
+        'description' => 'Active/Deactive status',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+    ],
+    'primary key' => ['id'],
+  ];
+
+  // Create referral details table.
+  $schema['user_referral_details'] = [
+    'description' => 'Stores user referral details along with order information for the referred person',
+    'fields' => [
+      'referral_sender' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Referral sender user ID',
+      ],
+      'referral_receiver' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Referral receiver user ID',
+      ],
+      'referral_sender_points_status' => [
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Valid/Invalid sender points status',
+      ],
+      'referral_sender_update_status' => [
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Sender updated about awarded points',
+      ],
+      'referral_status' => [
+        'type' => 'int',
+        'size' => 'tiny',
+        'default' => 1,
+        'description' => 'Referral status',
+      ],
+      'order_id' => [
+        'type' => 'int',
+        'description' => 'Order ID of the referred users first order',
+      ],
+      'order_amount' => [
+        'type' => 'float',
+        'description' => 'Order total amount of referred users first order',
+      ],
+    ],
+    'primary key' => ['referral_sender', 'referral_receiver'],
+  ];
+
+  // Define the referral_bonus_details table.
+  $schema['referral_bonus_details'] = [
+    'description' => 'Stores referral bonus details',
+    'fields' => [
+      'referral_sender' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Referral sender user ID',
+      ],
+      'referral_receiver' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Referral receiver user ID',
+      ],
+      'user_points' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Bonus points for the first referral',
+      ],
+      'referral_bonus_status' => [
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Referral bonus status (1 - Valid/0 - Invalid)',
+      ],
+      'bonus_date' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Timestamp indicating the bonus awarded date',
+      ],
+    ],
+    'primary key' => ['referral_sender', 'referral_receiver'],
+  ];
+
+  // Define the user_points_data table.
+  $schema['user_points_data'] = [
+    'description' => 'Table for storing all user points details',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Auto-increment ID',
+      ],
+      'title' => [
+        'description' => 'Comments about awarded points',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'earned_points' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Awarded points',
+      ],
+      'points_acquisition_date' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Awarded points date',
+      ],
+      'point_status' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Valid/Invalid status',
+      ],
+      'user_message' => [
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => TRUE,
+        'description' => 'User message about points',
+      ],
+      'point_type' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'Referral/Bonus type',
+      ],
+      'used_points' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Consumed points',
+      ],
+      'uid' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'User ID',
+      ],
+    ],
+    'primary key' => ['id'],
+  ];
+
+  return $schema;
+}
+
+/**
+ * Create referral details tables.
+ */
+function commerce_norreferral_update_9001()
+{
+  // Check if the table exists, and create it if it doesn't.
+  $schema = Database::getConnection()->schema();
+  if (!$schema->tableExists('user_referral_details')) {
+    custom_user_referral_schema();
+  }
+  if (!$schema->tableExists('referral_bonus_details')) {
+    custom_user_referral_bonus_schema();
+  }
+  if (!$schema->tableExists('user_points_data')) {
+    user_points_data_table_schema();
+  }
+}
+
+/**
+ * Helper function to define the schema.
+ */
+function custom_user_referral_schema()
+{
+  $schema = Database::getConnection()->schema();
+  $table_name = 'user_referral_details';
+
+  if (!$schema->tableExists($table_name)) {
+    $schema->createTable($table_name, [
+      'description' => 'Stores user referral details',
+      'fields' => [
+        'referral_sender' => [
+          'type' => 'int',
+          'not null' => TRUE,
+          'description' => 'Referral sender user ID',
+        ],
+        'referral_receiver' => [
+          'type' => 'int',
+          'not null' => TRUE,
+          'description' => 'Referral receiver user ID',
+        ],
+        'referral_sender_points_status' => [
+          'type' => 'int',
+          'size' => 'tiny',
+          'not null' => TRUE,
+          'default' => 0,
+          'description' => 'Valid/Invalid sender points status',
+        ],
+        'referral_sender_update_status' => [
+          'type' => 'int',
+          'size' => 'tiny',
+          'not null' => TRUE,
+          'default' => 0,
+          'description' => 'Sender updated about awarded points',
+        ],
+        'referral_status' => [
+          'type' => 'int',
+          'size' => 'tiny',
+          'default' => 1,
+          'description' => 'Referral status',
+        ],
+        'order_id' => [
+          'type' => 'int',
+          'description' => 'Order ID of the referred users first order',
+        ],
+        'order_amount' => [
+          'type' => 'int',
+          'description' => 'Order total amount of referred users first order',
+        ],
+      ],
+      'primary key' => ['referral_sender', 'referral_receiver'],
+    ]);
+  }
+}
+
+/**
+ * Helper function to define the schema.
+ */
+function custom_user_referral_bonus_schema()
+{
+  $schema = Database::getConnection()->schema();
+  $table_name = 'referral_bonus_details';
+
+  if (!$schema->tableExists($table_name)) {
+    $schema->createTable($table_name, [
+      'description' => 'Stores referral bonus details',
+      'fields' => [
+        'referral_sender' => [
+          'type' => 'int',
+          'not null' => TRUE,
+          'description' => 'Referral sender user ID',
+        ],
+        'referral_receiver' => [
+          'type' => 'int',
+          'not null' => TRUE,
+          'description' => 'Referral receiver user ID',
+        ],
+        'user_points' => [
+          'type' => 'int',
+          'not null' => TRUE,
+          'description' => 'Bonus points for the first referral',
+        ],
+        'referral_bonus_status' => [
+          'type' => 'int',
+          'size' => 'tiny',
+          'not null' => TRUE,
+          'default' => 0,
+          'description' => 'Referral bonus status (1 - Valid/0 - Invalid)',
+        ],
+        'bonus_date' => [
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'default' => 0,
+          'description' => 'Timestamp indicating the bonus awarded date',
+        ],
+      ],
+      'primary key' => ['referral_sender', 'referral_receiver'],
+    ]);
+  }
+}
+
+/**
+ * Helper function to define the schema.
+ */
+function user_points_data_table_schema()
+{
+  $schema = Database::getConnection()->schema();
+  $table_name = 'user_points_data';
+
+  if (!$schema->tableExists($table_name)) {
+    $schema->createTable($table_name, [
+      'description' => 'Table for storing user points data',
+      'fields' => [
+        'id' => [
+          'type' => 'serial',
+          'not null' => TRUE,
+          'description' => 'Auto-increment ID',
+        ],
+        'title' => [
+          'description' => 'Comments about awarded points',
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+        ],
+        'earned_points' => [
+          'type' => 'int',
+          'not null' => TRUE,
+          'description' => 'Awarded points',
+        ],
+        'points_acquisition_date' => [
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'default' => 0,
+          'description' => 'Awarded points date',
+        ],
+        'point_status' => [
+          'type' => 'int',
+          'not null' => TRUE,
+          'description' => 'Valid/Invalid status',
+        ],
+        'user_message' => [
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => TRUE,
+        'description' => 'User message about points',
+        ],
+        'point_type' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+          'description' => 'Referral/Bonus type',
+        ],
+        'used_points' => [
+          'type' => 'int',
+          'not null' => TRUE,
+          'description' => 'Consumed points',
+        ],
+        'uid' => [
+          'type' => 'int',
+          'not null' => TRUE,
+          'description' => 'User ID',
+        ],
+      ],
+      'primary key' => ['id'],
+    ]);
+  }
+}

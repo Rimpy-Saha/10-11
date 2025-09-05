@@ -1,0 +1,7 @@
+account_issues.accountissues_form:
+  path: 'account-issues-form'
+  defaults:
+    _title: 'Account Issues Form'  # Update title case for consistency
+    _form: '\Drupal\account_issues\Form\AccountIssuesForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

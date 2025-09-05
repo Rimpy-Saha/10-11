@@ -1,0 +1,5 @@
+name: Job Application Node Form
+description: Custom module for job application form. Specifically, the form on job nodes that will submit job title with application.
+type: module
+package: Norgen Biotek
+core_version_requirement: ^8.7 || ^9 || ^10

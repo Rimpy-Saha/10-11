@@ -1,0 +1,9 @@
+name: Norgen Migrate
+type: module
+description: Provides various Norgen-specific Migrate handlers.
+core_version_requirement: '>=9.3 || 10'
+package: Norgen Biotek
+dependencies:
+  - drupal:migrate
+  - drupal:telephone
+  - migrate_plus:migrate_plus

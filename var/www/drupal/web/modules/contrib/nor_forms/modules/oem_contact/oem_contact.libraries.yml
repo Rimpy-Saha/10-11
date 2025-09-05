@@ -1,0 +1,6 @@
+oem_contact:
+  css:
+    theme:
+      css/oem_contact.css: {}
+  dependencies:
+    - core/drupalSettings

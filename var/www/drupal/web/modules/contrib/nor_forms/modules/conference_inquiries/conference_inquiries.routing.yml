@@ -1,0 +1,7 @@
+conference_inquiries.inquiries_form:
+  path: '/conference-inquiries-form'
+  defaults:
+    _title: 'Conference Inquiries Form'  # Update title case for consistency
+    _form: '\Drupal\conference_inquiries\Form\ConferenceInquiriesForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

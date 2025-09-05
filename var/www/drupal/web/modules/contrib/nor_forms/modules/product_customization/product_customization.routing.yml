@@ -1,0 +1,8 @@
+product_customization.productcustomization_form:
+  path: "/product-customization-form"
+  defaults:
+    _form: '\Drupal\product_customization\Form\ProductCustomizationForm'
+    _title: "Product customization Form"
+  requirements:
+    _permission: "access content"
+    _role: "administrator"

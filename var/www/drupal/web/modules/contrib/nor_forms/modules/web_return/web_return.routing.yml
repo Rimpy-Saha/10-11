@@ -1,0 +1,7 @@
+web_return.webreturn_form:
+  path: '/web-return-form'
+  defaults:
+    _title: 'Return a Product'  # Update title case for consistency
+    _form: '\Drupal\web_return\Form\WebReturnForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

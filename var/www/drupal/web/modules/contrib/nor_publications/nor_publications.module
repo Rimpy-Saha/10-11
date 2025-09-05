@@ -1,0 +1,45 @@
+<?php
+
+/**
+ * @file
+ * Defines the NorPublication entity and associated features.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
+
+/**
+ * Implements hook_theme().
+ */
+function nor_publications_theme() {
+  return [
+    'nor_publications_template' => [
+      'render element' => 'elements',
+    ],
+    'nor_publications_template_form' => [
+      'render element' => 'form',
+    ],
+  ];
+}
+
+/**
+ * Prepares variables for nor_publications templates.
+ *
+ * Default template: nor_publication-template.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing rendered fields.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_nor_publications_template(array &$variables) {
+  /** @var Drupal\nor_publications\Entity\NorPublicationInterface $nor_publications */
+  $nor_publications = $variables['elements']['#nor_publications'];
+
+  $variables['nor_publications_entity'] = $nor_publications;
+  $variables['nor_publications_url'] = $nor_publications->isNew() ? '' : $nor_publications->toUrl();
+  $variables['nor_publications'] = [];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['nor_publications'][$key] = $variables['elements'][$key];
+  }
+}

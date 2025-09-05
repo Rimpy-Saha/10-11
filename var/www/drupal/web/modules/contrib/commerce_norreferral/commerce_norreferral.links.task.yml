@@ -1,0 +1,19 @@
+commerce_norreferral.admin_settings:
+  title: 'Referral Points Configuration'
+  route_name: commerce_norreferral.admin_settings
+  base_route: commerce_norreferral.admin_settings
+
+commerce_norreferral.admin_user_referral_details:
+  title: 'View User Referrals'
+  route_name: commerce_norreferral.admin_user_referral_details_form
+  base_route: commerce_norreferral.admin_settings
+
+commerce_norreferral.admin_bonus_referral_details:
+  title: 'View User Bonus Points'
+  route_name: commerce_norreferral.admin_form
+  base_route: commerce_norreferral.admin_settings
+
+commerce_norreferral.admin_user_points_details:
+  title: 'Manage User Points'
+  route_name: commerce_norreferral.admin_user_points_details_form
+  base_route: commerce_norreferral.admin_settings

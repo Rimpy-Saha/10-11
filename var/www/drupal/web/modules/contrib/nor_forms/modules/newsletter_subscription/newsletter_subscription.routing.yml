@@ -1,0 +1,8 @@
+newsletter_subscription.subscription_form:
+  path: 'newsletter-subscription-form'
+  defaults:
+    _title: 'Newsletter Subscription Form'  # Update title case for consistency
+    _form: '\Drupal\newsletter_subscription\Form\NewsletterSubscriptionForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access
+    _role: "administrator"

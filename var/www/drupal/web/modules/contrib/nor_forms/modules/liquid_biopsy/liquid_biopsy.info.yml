@@ -1,0 +1,5 @@
+name: Liquid Biopsy Form
+description: Custom module for access free content forms.
+type: module
+package: Norgen Biotek
+core_version_requirement: ^8.7 || ^9 || ^10

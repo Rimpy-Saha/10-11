@@ -1,0 +1,8 @@
+distributor_portal_email_notification.email_notification_form:
+  path: '/distributor-portal-email-notification-form'
+  defaults:
+    _title: 'Distributor Portal Email Notification Form'  # Update title case for consistency
+    _form: '\Drupal\distributor_portal_email_notification\Form\DistributorPortalEmailNotificationForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access
+    _role: "administrator"

@@ -1,0 +1,7 @@
+technical_support.support_form:
+  path: '/technical-support-form'
+  defaults:
+    _title: 'Technical Support'  # Update title case for consistency
+    _form: '\Drupal\technical_support\Form\TechnicalSupportForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

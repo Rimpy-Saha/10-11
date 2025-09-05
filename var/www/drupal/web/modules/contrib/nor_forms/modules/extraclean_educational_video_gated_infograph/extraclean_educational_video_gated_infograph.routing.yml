@@ -1,0 +1,7 @@
+extraclean_educational_video_gated_infograph.extraclean_educational_video_gated_infograph_form:
+  path: '/extraclean-educational-video-gated-form'
+  defaults:
+    _title: 'Extraclean Infograph'  # Update title case for consistency
+    _form: '\Drupal\extraclean_educational_video_gated_infograph\Form\ExtracleanEducationalVideoGatedInfograph'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

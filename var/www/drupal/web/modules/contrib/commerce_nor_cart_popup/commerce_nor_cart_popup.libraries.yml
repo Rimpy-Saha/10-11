@@ -1,0 +1,6 @@
+cart_popup:
+  version: 1.x
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings

@@ -1,0 +1,296 @@
+<?php
+
+/**
+ * @file
+ * Provides Commerce User Points functionality.
+ */
+
+use Drupal\user\Entity\User;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function commerce_norreferral_user_insert($entity)
+{
+  /*  Add Referral details to "user_referral_details" table when the user register using a referral link */
+
+  // Get user registration points.
+  $referralService = \Drupal::service('commerce_norreferral.referral_link');
+  $referral = $referralService->addLink($entity->id());
+
+  $current_path = \Drupal::request()->getRequestUri();
+  $pathParameters = explode("referral/", $current_path);
+
+  // Add referral points if user joint by referral link.
+  if (isset($pathParameters[1]) && !empty($pathParameters[1])) {
+    // Get user referral points.
+    $sender_referral_points_percentage = \Drupal::config('commerce_norreferral.user_referral_points_settings')->get('sender_referral_points_percentage');
+
+    if ($sender_referral_points_percentage != 0) {
+      $referralService = \Drupal::service('commerce_norreferral.referral_link');
+      $referral = $referralService->getLinkUser($pathParameters[1]);
+      // Add the referral details in table once user get register.
+      $userReferralDatabase = \Drupal::service('commerce_norreferral.user_referral_database');
+      $userReferralDatabase->insertRecord([
+        'referral_sender' => $referral['uid'],
+        'referral_receiver' => $entity->id(),
+        'referral_sender_points_status' => 0,
+      ]);
+    }
+  }
+}
+
+/**
+ * Implements hook_node_form_alter().
+ *
+ * To add the validation for the commerce user points.
+ */
+function commerce_norreferral_form_node_form_alter(array &$form, FormStateInterface $form_state)
+{
+  /*  Add a custom validation when admin edits User's points   */
+
+  // Check for the node form type.
+  if ($form['#form_id'] == 'node_user_points_edit_form' || $form['#form_id'] == 'node_user_points_form') {
+    $form['#validate'][] = '_commerce_norreferral_node_form_validate';
+  }
+}
+
+/**
+ * Validate callback for the user points node form.
+ */
+function _commerce_norreferral_node_form_validate($form, FormStateInterface $form_state)
+{
+  /*  Validation method for admin - user's points edit form   */
+
+  $node = '';
+  $earnedPoints = $usedPoints = [];
+
+  // Get the node object for the user points.
+  $node = $form_state->getFormObject()->getEntity();
+
+  // Check for the node type.
+  if ($node->getType() == 'user_points') {
+
+    // To get the form values.
+    $values = $form_state->getValues();
+
+    // Check the earned points value.
+    if (!empty($values['field_earned_points'])) {
+      $earnedPoints = $values['field_earned_points'][0]['value'];
+    }
+
+    // Check the used points value.
+    if (!empty($values['field_used_points'])) {
+      $usedPoints = $values['field_used_points'][0]['value'];
+    }
+
+    // Set the validation for the field used points.
+    if ($usedPoints > $earnedPoints) {
+      $form_state->setErrorByName('field_used_points', t('Points used cannot exceed the earned points balance'));
+    }
+  }
+}
+
+/**
+ * Implements hook_theme().
+ *
+ * Register a user's referral link theme implementations.
+ */
+function commerce_norreferral_theme($existing, $type, $theme, $path)
+{
+  /* Theme the User profile page to include the referral link and specify the threshold amount */
+
+  return [
+    'user_referral_link' => [
+      'template' => 'user-referral-link-block',
+      'path' => $path . '/templates',
+      'variables' => ['referral_link' => NULL, 'sender_referral_points_percentage' => NULL, 'available_points' => NULL,'total_earned_points' => NULL, 'total_used_points' => NULL],
+      '#attached' => [
+        'library' => [
+          'commerce_norreferral/referral_link_library',
+        ],
+      ],
+    ],
+  ];
+}
+
+/**
+ * Get user connection data.
+ */
+//Not used to remove
+function _commerce_norreferral_point_insert($uid, $title, $point_type, $points, $user_message)
+{
+  /*  Add Referral points details to "user_points_data" table when the user is awarded referral points */
+
+  $pointsData = [
+    'title' => $title,
+    'earned_points' => $points,
+    'uid' => $uid,
+    'points_acquisition_date' => time(),
+    'point_status' => 1,
+    'user_message' => $user_message,
+    'point_type' => $point_type,
+    'used_points' => 0,
+  ];
+  // Add user points.
+  $userReferralDatabase = \Drupal::service('commerce_norreferral.user_referral_database');
+  $userReferralDatabase->insertUserPointsRecord($pointsData);
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function commerce_norreferral_user_login($account)
+{
+  /* Show message to alert user about awarded referral points when their next login after a successfull referral */
+
+  // Check if the login was successful.
+  if ($account->id()) {
+    $userReferralDatabase = \Drupal::service('commerce_norreferral.user_referral_database');
+    $conditions = ['referral_sender' => $account->id(), 'referral_sender_update_status' => 0];
+    $records = $userReferralDatabase->selectRecords($conditions);
+    // Notify about bonus credit.
+    $bonusDetails = $userReferralDatabase->selectReferralBonus($account->id());
+    if (!empty($bonusDetails) && $bonusDetails['referral_bonus_status'] == 0) {
+      // Update the user that they have recieved new referral point.
+      $referredUser = User::load($bonusDetails['referral_receiver']);
+      if ($referredUser) {
+        $sender_referral_points = $bonusDetails['user_points'];
+        \Drupal::messenger()->addMessage(
+          t(
+            'You have recieved @earnedPoints bonus points for your first successfull referral of user @referredUser',
+            ['@referredUser' => $referredUser->getAccountName(), '@earnedPoints' => $sender_referral_points]
+          )
+        );
+        // Update the bonus status.
+        $userReferralDatabase->updateReferralBonusStatus($account->id(), 1);
+      }
+    }
+
+    if (!empty($records)) {
+      foreach ($records as $record) {
+        // Update the user that they have recieved new referral point.
+        $referredUser = User::load($record['referral_receiver']);
+        if ($referredUser && $record['referral_status'] != 0) {
+          $sender_referral_points = \Drupal::config('commerce_norreferral.user_referral_points_settings')->get('sender_referral_points');
+          \Drupal::messenger()->addMessage(t('You have recieved @earnedPoints referral point for referring user @referredUser', ['@referredUser' => $referredUser->getAccountName(), '@earnedPoints' => $sender_referral_points]));
+          // Update table to make sure the message only show once.
+          $userReferralDatabase->updateRecord(
+            ['referral_sender_update_status' => 1],
+            ['referral_sender' => $account->id(), 'referral_receiver' => $record['referral_receiver']]
+          );
+        }
+      }
+
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_Type_view().
+ */
+function commerce_norreferral_user_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode)
+{
+  /* Display the Referral Block on the user profile page */
+
+  // if ($view_mode == 'full') {
+  //   // Load the block plugin.
+  //   $block_manager = \Drupal::service('plugin.manager.block');
+  //   $block = $block_manager->createInstance('user_referral_link');
+  //   $block_render_array = $block->build();
+  //   $build['custom_user_block'] = [
+  //     '#markup' => \Drupal::service('renderer')->render($block_render_array),
+  //     '#weight' => -1,
+  //   ];
+  // }
+}
+
+/**
+ * Implements hook_views_data().
+ */
+function commerce_norreferral_views_data() {
+
+  $data = [];
+
+  $data['user_points_data']['table']['group'] = t('Custom Tables');
+  $data['user_points_data']['table']['base'] = [
+    'title' => t('User Points Data'),
+    'help' => t('Custom user points data table'),
+  ];
+
+  $fields = [
+    'id' => [
+      'title' => t('Auto-increment ID'),
+      'field' => [
+        'id' => 'standard',
+      ],
+    ],
+    'title' => [
+      'title' => t('Comments about awarded points'),
+      'field' => [
+        'id' => 'standard',
+      ],
+    ],
+    'earned_points' => [
+      'title' => t('Awarded points'),
+      'field' => [
+        'id' => 'numeric',
+      ],
+    ],
+    'points_acquisition_date' => [
+      'title' => t('Awarded points date'),
+      'field' => [
+        'id' => 'numeric',
+      ],
+    ],
+    'point_status' => [
+      'title' => t('Valid/Invalid status'),
+      'field' => [
+        'id' => 'numeric',
+      ],
+    ],
+    'user_message' => [
+      'title' => t('Message'),
+      'field' => [
+        'id' => 'standard',
+      ],
+    ],
+    'point_type' => [
+      'title' => t('Referral/Bonus type'),
+      'field' => [
+        'id' => 'standard',
+      ],
+    ],
+    'used_points' => [
+      'title' => t('Consumed points'),
+      'field' => [
+        'id' => 'numeric',
+      ],
+    ],
+    'uid' => [
+      'title' => t('User ID'),
+      'field' => [
+        'id' => 'numeric',
+      ],
+      'relationship' => [
+        'base' => 'users_field_data',
+        'base field' => 'uid',
+        'id' => 'standard',
+        'label' => t('Users points relationship'),
+      ],
+    ],
+  ];
+
+  foreach ($fields as $field_name => $field_data) {
+    $data['user_points_data'][$field_name] = array_merge([
+      'title' => $field_data['title'],
+    ], $field_data);
+  }
+
+  return $data;
+}
+
+

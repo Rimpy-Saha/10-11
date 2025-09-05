@@ -1,0 +1,8 @@
+covid_workflow.covidworkflow_form:
+  path: 'covid-workflow-form'
+  defaults:
+    _title: 'Covid Workflow Form'  # Update title case for consistency
+    _form: '\Drupal\covid_workflow\Form\CovidWorkflowForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access
+    _role: "administrator"

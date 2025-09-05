@@ -1,0 +1,5 @@
+name: Extraclean Eductaion Video Gated Infograph
+description: Custom module for lead capture form for the Extraclean Eductaion Video Gated Infograph.
+type: module
+package: Norgen Biotek
+core_version_requirement: ^8.7 || ^9 || ^10

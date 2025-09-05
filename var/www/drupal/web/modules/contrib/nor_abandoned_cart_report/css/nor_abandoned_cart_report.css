@@ -1,0 +1,37 @@
+/* mymodule.css */
+.summary-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .summary-container > div {
+    flex: 1;
+    text-align: center;
+  }
+  .container{
+    margin-left:7% !important;
+  }
+  .date_container{
+    display: grid;
+    grid-template-areas: "form-item-from-date form-item-to-date";
+    gap: 100px;
+    justify-content: space-between;
+  }
+  .button_container{
+    display: grid;
+    /* grid-template-areas: "form-item-from-date form-item-to-date";
+    gap: 100px; */
+    justify-content: space-between;
+    color: white;
+  }
+  .filters_container{
+    width: max-content;
+  }
+  #edit-export{
+    background-color: #0b596754;
+    border: #0b596754;
+  }
+  #edit-submit{
+    background-color: #0049976b;
+    border: #0049976b;
+  }

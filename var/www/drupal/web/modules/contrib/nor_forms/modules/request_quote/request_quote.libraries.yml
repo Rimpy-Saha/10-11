@@ -1,0 +1,6 @@
+request_quote:
+  css:
+    theme:
+      css/request_quote.css: {}
+  dependencies:
+    - core/drupalSettings

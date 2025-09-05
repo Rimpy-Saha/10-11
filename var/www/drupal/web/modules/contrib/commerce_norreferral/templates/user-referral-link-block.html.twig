@@ -1,0 +1,655 @@
+{# commerce_norreferral/templates/user-referral-link-block.html.twig #}
+
+{% set current_path = path('<current>') %}
+
+{% if '/fr' in current_path %}
+  {# French Content #}
+  <div class="total_points">
+    <div>
+      <h3 class="heading-3">Votre Total de Points Disponibles</h3>
+      <h4>{{ available_points }} points</h4>
+      <p>Répartition des points <img id="info-icon" src="https://norgenbiotek.com/sites/default/files/images/information.png" style="width:25px;" onclick="open_breakdown();"></p>
+    </div>
+  </div>
+  <div id="point_breakdown">
+    <a class="close" href="#" onclick="close_breakdown();return false;" style="font-size:70px;">×</a>
+    {{ drupal_view('user_points_data', 'page_1') }}
+  </div>
+
+  <div class="refer-div">
+    <div class="bg-gray">
+      <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+      <dotlottie-player src="https://lottie.host/06cc7bbf-7c6d-4afc-a19a-aedb51e2a158/enLiT0tBEP.json" background="transparent" speed="1" style="height: 300px;" loop autoplay></dotlottie-player>
+      <div style="width:90%;margin:auto;">
+        <p>Comment ça marche ?</p>
+        <ol>
+          <li>Pour votre premier parrainage, vous recevrez 15 000 points plus 10 % de la valeur de la première commande de votre filleul en points.</li>
+          <li>Pour tous les parrainages suivants, vous recevrez 10 % de la valeur de la première commande de chaque filleul en points.</li>
+          <li>Chacun de vos filleuls recevra une réduction de 15 % sur sa première commande et 5 000 points.</li>
+          <li>Il y a aussi des points spéciaux pour atteindre différents jalons. Consultez les <a href="#" onclick="open_additional();return false;">Bonus de Jalons ici.</a></li>
+        </ol>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;justify-content: space-between;padding: 25px;">
+      <h3 class="heading-3">Référez et Gagnez</h3>
+      <p>Référez un ami et vous obtiendrez 15k points + 10 % de la valeur de sa commande en points</p>
+
+      <div id="user-referral-link">
+        <p>Copiez et partagez pour commencer à gagner des points.</p>
+        <div>
+          {{ referral_link }}
+        </div>
+        <button type="button" class="btn btn-primary" id="copy-referral-link">Copier le lien</button>
+      </div>
+
+      <p>Informations supplémentaires ? <img id="info-icon" src="https://norgenbiotek.com/sites/default/files/images/information.png" style="width:25px;" onclick="open_additional();"></p>
+      <p style="font-size:14px;line-height:1.2;">*Avertissement : Votre parrain doit passer une commande pour que vous puissiez bénéficier de ces avantages</p>
+    </div>
+  </div>
+
+  <div class="disclaimer_popup">
+    <a class="close" href="#" onclick="close_additional();return false;" style="font-size:70px;">×</a>
+    <h3 class="heading-3"><strong>Bonus de Jalons</strong></h3>
+    <table>
+      <tr>
+        <th>Jalon</th>
+        <th>Bonus</th>
+      </tr>
+      <tr>
+        <td>5ème Lead Invité</td>
+        <td>Client A reçoit 5 000 points plus 10 % des ventes de ce lead.</td>
+      </tr>
+      <tr>
+        <td>10ème Lead Invité</td>
+        <td>Client A reçoit 10 000 points plus 10 % des ventes de ce lead.</td>
+      </tr>
+      <tr>
+        <td>20ème Lead Invité</td>
+        <td>Client A reçoit 20 000 points plus 10 % des ventes de ce lead.</td>
+      </tr>
+      <tr>
+        <td>30ème Lead Invité</td>
+        <td>Client A reçoit 30 000 points plus 10 % des ventes de ce lead.</td>
+      </tr>
+      <tr>
+        <td>40ème Lead Invité</td>
+        <td>Client A reçoit 40 000 points plus 10 % des ventes de ce lead.</td>
+      </tr>
+      <tr>
+        <td>50ème Lead Invité</td>
+        <td>Client A reçoit 50 000 points plus 10 % des ventes de ce lead.</td>
+      </tr>
+    </table>
+    <p><u>Veuillez : Note Pas plus de 50 invitations</u></p>
+  </div>
+  <div id="overlay" onclick="close_additional();"></div>
+  <div id="overlay2" onclick="close_breakdown();"></div>
+  
+{% elseif '/es' in current_path %}
+  {# Spanish Content #}
+  <div class="total_points">
+    <div>
+      <h3 class="heading-3">Tu Total de Puntos Disponibles</h3>
+      <h4>{{ available_points }} puntos</h4>
+      <p>Desglose de puntos <img id="info-icon" src="https://norgenbiotek.com/sites/default/files/images/information.png" style="width:25px;" onclick="open_breakdown();"></p>
+    </div>
+  </div>
+  <div id="point_breakdown">
+    <a class="close" href="#" onclick="close_breakdown();return false;" style="font-size:70px;">×</a>
+    {{ drupal_view('user_points_data', 'page_1') }}
+  </div>
+
+  <div class="refer-div">
+    <div class="bg-gray">
+      <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+      <dotlottie-player src="https://lottie.host/06cc7bbf-7c6d-4afc-a19a-aedb51e2a158/enLiT0tBEP.json" background="transparent" speed="1" style="height: 300px;" loop autoplay></dotlottie-player>
+      <div style="width:90%;margin:auto;">
+        <p>¿Cómo funciona?</p>
+        <ol>
+          <li>En tu primer referido, recibirás 15,000 puntos más el 10% del valor del primer pedido de tu referido en puntos.</li>
+          <li>En todos los referidos siguientes, recibirás el 10% del valor del primer pedido de cada referido en puntos.</li>
+          <li>Cada uno de tus referidos recibirá un descuento del 15% en su primer pedido y 5,000 puntos.</li>
+          <li>También hay puntos especiales por alcanzar diferentes hitos. Consulta los <a href="#" onclick="open_additional();return false;">Bonos de Hitos aquí.</a></li>
+        </ol>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;justify-content: space-between;padding: 25px;">
+      <h3 class="heading-3">Refiere y Gana</h3>
+      <p>Refiere a un amigo y obtendrás 15k puntos + el 10% del valor de su pedido en puntos</p>
+
+      <div id="user-referral-link">
+        <p>Copie y comparta para comenzar a ganar puntos.</p>
+        <div>
+          {{ referral_link }}
+        </div>
+        <button type="button" class="btn btn-primary" id="copy-referral-link">Copiar enlace</button>
+      </div>
+
+      <p>¿Información adicional? <img id="info-icon" src="https://norgenbiotek.com/sites/default/files/images/information.png" style="width:25px;" onclick="open_additional();"></p>
+      <p style="font-size:14px;line-height:1.2;">*Advertencia: Su referido debe realizar un pedido para que pueda beneficiarse de estas ventajas</p>
+    </div>
+  </div>
+
+  <div class="disclaimer_popup">
+    <a class="close" href="#" onclick="close_additional();return false;" style="font-size:70px;">×</a>
+    <h3 class="heading-3"><strong>Bonos de Hitos</strong></h3>
+    <table>
+      <tr>
+        <th>Hito</th>
+        <th>Bonos</th>
+      </tr>
+      <tr>
+        <td>5º Lead Invitado</td>
+        <td>El Cliente A recibe 5,000 puntos más el 10% de las ventas de este lead.</td>
+      </tr>
+      <tr>
+        <td>10º Lead Invitado</td>
+        <td>El Cliente A recibe 10,000 puntos más el 10% de las ventas de este lead.</td>
+      </tr>
+      <tr>
+        <td>20º Lead Invitado</td>
+        <td>El Cliente A recibe 20,000 puntos más el 10% de las ventas de este lead.</td>
+      </tr>
+      <tr>
+        <td>30º Lead Invitado</td>
+        <td>El Cliente A recibe 30,000 puntos más el 10% de las ventas de este lead.</td>
+      </tr>
+      <tr>
+        <td>40º Lead Invitado</td>
+        <td>El Cliente A recibe 40,000 puntos más el 10% de las ventas de este lead.</td>
+      </tr>
+      <tr>
+        <td>50º Lead Invitado</td>
+        <td>El Cliente A recibe 50,000 puntos más el 10% de las ventas de este lead.</td>
+      </tr>
+    </table>
+    <p><u>Por favor: No más de 50 invitaciones</u></p>
+  </div>
+  <div id="overlay" onclick="close_additional();"></div>
+  <div id="overlay2" onclick="close_breakdown();"></div>
+
+
+{% elseif '/cn' in current_path %}
+  {# Chineese Content #}
+  <div class="total_points">
+    <div>
+      <h3 class="heading-3">您的总可用积分</h3>
+      <h4>{{ available_points }} 点</h4>
+      <p>点细分 <img id="info-icon" src="https://norgenbiotek.com/sites/default/files/images/information.png" style="width:25px;" onclick="open_breakdown();"></p>
+    </div>
+  </div>
+  <div id="point_breakdown">
+    <a class="close" href="#" onclick="close_breakdown();return false;" style="font-size:70px;">×</a>
+    {{ drupal_view('user_points_data', 'page_1') }}
+  </div>
+
+  <div class="refer-div">
+    <div class="bg-gray">
+      <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+      <dotlottie-player src="https://lottie.host/06cc7bbf-7c6d-4afc-a19a-aedb51e2a158/enLiT0tBEP.json" background="transparent" speed="1" style="height: 300px;" loop autoplay></dotlottie-player>
+      <div style="width:90%;margin:auto;">
+        <p>它是如何运作的？</p>
+        <ol>
+          <li>首次推荐时，您将获得 15,000 积分，外加您推荐的第一笔订单价值的 10% 积分。</li>
+          <li>对于所有后续推荐，您将获得每个推荐第一笔订单价值的 10% 积分。</li>
+          <li>您推荐的每个人都将获得首笔订单 15% 的折扣和 5,000 点积分。</li>
+          <li>达到不同的里程碑也有特殊的积分。在此处查看<a href="#" onclick="open_additional();return false;">里程碑奖金。</a></li>
+        </ol>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;justify-content: space-between;padding: 25px;">
+      <h3 class="heading-3">推荐并赚取</h3>
+      <p>推荐朋友，您将获得 15k 积分 + 他们订单价值的 10% 积分</p>
+
+      <div id="user-referral-link">
+        <p>复制并分享即可开始赚取积分。</p>
+        <div>
+          {{ referral_link }}
+        </div>
+        <button type="button" class="btn btn-primary" id="copy-referral-link">复制链接</button>
+      </div>
+
+      <p>附加信息？<img id="info-icon" src="https://norgenbiotek.com/sites/default/files/images/information.png" style="width:25px;" onclick="open_additional();"></p>
+      <p style="font-size:14px;line-height:1.2;">*警告：您的推荐人必须下订单才能享受这些福利</p>
+    </div>
+  </div>
+
+  <div class="disclaimer_popup">
+    <a class="close" href="#" onclick="close_additional();return false;" style="font-size:70px;">×</a>
+    <h3 class="heading-3"><strong>里程碑奖金</strong></h3>
+    <table>
+      <tr>
+        <th>里程碑</th>
+        <th>奖金</th>
+      </tr>
+      <tr>
+        <td>第五位嘉宾领衔</td>
+        <td>客户 A 获得 5,000 点积分以及该潜在客户销售额的 10%</td>
+      </tr>
+      <tr>
+        <td>第十位嘉宾领衔</td>
+        <td>客户 A 获得 10,000 点积分以及该潜在客户销售额的 10%。</td>
+      </tr>
+      <tr>
+        <td>第20期 嘉宾主持</td>
+        <td>客户 A 获得 20,000 点积分以及该潜在客户销售额的 10%。</td>
+      </tr>
+      <tr>
+        <td>第30期 嘉宾主持</td>
+        <td>客户 A 获得 30,000 点积分以及该潜在客户销售额的 10%。</td>
+      </tr>
+      <tr>
+        <td>第 40 期 嘉宾主持</td>
+        <td>客户 A 获得 40,000 点积分以及该潜在客户销售额的 10%。</td>
+      </tr>
+      <tr>
+        <td>第 50 期 嘉宾主持</td>
+        <td>客户 A 获得 50,000 点积分以及该潜在客户销售额的 10%。</td>
+      </tr>
+    </table>
+    <p><u>请：邀请数量不超过 50 个</u></p>
+  </div>
+  <div id="overlay" onclick="close_additional();"></div>
+  <div id="overlay2" onclick="close_breakdown();"></div>
+
+{% elseif '/de' in current_path %}
+{# English Content #}
+<div class="total_points">
+  <div>
+    <h3 class="heading-3">Ihre insgesamt verfügbaren Punkte</h3>
+    <h4>{{ available_points }} Punkte</h4>
+    <p>Punkteaufschlüsselung <img id="info-icon" src="https://norgenbiotek.com/sites/default/files/images/information.png" style="width:25px;" onclick="open_breakdown();"></p>
+  </div>
+</div>
+<div id="point_breakdown">
+    <a class="close" href="#" onclick="close_breakdown();return false;" style="font-size:70px;">×</a>
+    {{drupal_view('user_points_data', 'page_1')}}
+</div>
+
+  <div class="refer-div">
+    <div class="bg-gray">
+      <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
+
+        <dotlottie-player src="https://lottie.host/06cc7bbf-7c6d-4afc-a19a-aedb51e2a158/enLiT0tBEP.json" background="transparent" speed="1" style=" height: 300px;" loop autoplay></dotlottie-player>
+        <div style="width:90%;margin:auto;">
+      <p>Wie funktioniert es?</p>
+      <ol>
+        <li>Bei Ihrer ersten Empfehlung erhalten Sie 15.000 Punkte plus 10 % des Erstbestellwerts Ihrer Empfehlung in Punkten.</li>
+        <li>Bei allen weiteren Empfehlungen erhalten Sie jeweils 10 % des Erstbestellwerts Ihrer Empfehlung in Punkten.</li>
+        <li>Jeder Ihrer Empfehlungsgeber erhält 15 % Rabatt auf die erste Bestellung und 5.000 Punkte.</li>
+        <li>Es gibt auch spezielle Punkte für das Erreichen verschiedener Meilensteine. Sehen Sie sich hier die <a href="#" onclick="open_additional();return false;">Meilenstein-Boni an.</a></li>
+      </ol>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;    justify-content: space-between;    padding: 25px;">
+      <h3 class="heading-3">Empfehlen und verdienen</h3>
+      <p>Empfehlen Sie einen Freund und Sie erhalten 15.000 Punkte + 10 % seines Bestellwerts als Empfehlungspunkte </p>
+      
+      <div id = "user-referral-link">
+        <p>Einfach kopieren und teilen, um Punkte zu sammeln.</p>
+        <div>
+        {{ referral_link }}
+        </div>
+        <button type="button" class = "btn btn-primary" id = "copy-referral-link" > Link kopieren </button>
+      </div>
+      
+      <p>Weitere Informationen? <img id="info-icon" src="https://norgenbiotek.com/sites/default/files/images/information.png" style="width:25px;" onclick="open_additional();"></p>
+      <p style="font-size:14px;line-height:1.2;">*Haftungsausschluss: Um diese Vorteile nutzen zu können, muss Ihre Empfehlung eine Bestellung aufgeben</p>
+    </div>
+  </div>
+
+  <div class="disclaimer_popup">
+      <a class="close" href="#" onclick="close_additional();return false;" style="font-size:70px;">×</a>
+      <h3 class="heading-3"><strong>Meilensteinboni</strong></h3>
+      <table>
+        <tr>
+          <th>Meilenstein</th>
+          <th>Bonus</th>
+        </tr>
+        <tr>
+          <td>5. eingeladener Lead</td>
+          <td>Kunde A erhält 5.000 Punkte plus 10 % des Umsatzes aus diesem Lead.</td>
+        </tr>
+        <tr>
+          <td>10. eingeladener Lead</td>
+          <td>Kunde A erhält 10.000 Punkte plus 10 % des Umsatzes aus diesem Lead.</td>
+        </tr>
+        <tr>
+          <td>20. eingeladener Lead</td>
+          <td>Kunde A erhält 20.000 Punkte plus 10 % des Umsatzes aus diesem Lead.</td>
+        </tr>
+        <tr>
+          <td>30. eingeladener Lead</td>
+          <td>Kunde A erhält 30.000 Punkte plus 10 % des Umsatzes aus diesem Lead.</td>
+        </tr>
+        <tr>
+          <td>40. eingeladener Lead</td>
+          <td>Kunde A erhält 40.000 Punkte plus 10 % des Umsatzes aus diesem Lead.</td>
+        </tr>
+        <tr>
+          <td>50. eingeladener Lead</td>
+          <td>Kunde A erhält 50.000 Punkte plus 10 % des Umsatzes aus diesem Lead.</td>
+        </tr>
+        
+      </table>
+      <p><u>Bitte beachten Sie: Nicht mehr als 50 Einladungen</u></p>
+  </div>
+<div id="overlay" onclick="close_additional();"></div>
+<div id="overlay2" onclick="close_breakdown();"></div>
+
+{% elseif '/ja' in current_path %}
+{# English Content #}
+<div class="total_points">
+  <div>
+    <h3 class="heading-3">利用可能な合計ポイント</h3>
+    <h4>{{ available_points }} ポイント</h4>
+    <p>イントの内訳 <img id="info-icon" src="https://norgenbiotek.com/sites/default/files/images/information.png" style="width:25px;" onclick="open_breakdown();"></p>
+  </div>
+</div>
+<div id="point_breakdown">
+    <a class="close" href="#" onclick="close_breakdown();return false;" style="font-size:70px;">×</a>
+    {{drupal_view('user_points_data', 'page_1')}}
+</div>
+
+  <div class="refer-div">
+    <div class="bg-gray">
+      <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
+
+        <dotlottie-player src="https://lottie.host/06cc7bbf-7c6d-4afc-a19a-aedb51e2a158/enLiT0tBEP.json" background="transparent" speed="1" style=" height: 300px;" loop autoplay></dotlottie-player>
+        <div style="width:90%;margin:auto;">
+      <p>仕組みは?</p>
+      <ol>
+        <li>初めて紹介すると、15,000 ポイントと紹介者の初回注文額の 10% に相当するポイントが付与されます。</li>
+        <li>それ以降のすべての紹介では、紹介者の最初の注文額の 10% がポイントとして付与されます。</li>
+        <li>紹介された方には、初回注文時に 15% の割引と 5,000 ポイントが付与されます。</li>
+        <li>さまざまなマイルストーンを達成すると、特別なポイントも獲得できます。マイルストーン ボーナスについては、こちらをご覧 <a href="#" onclick="open_additional();return false;">ください.。</a></li>
+      </ol>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;    justify-content: space-between;    padding: 25px;">
+      <h3 class="heading-3">紹介して獲得</h3>
+      <p>友達を紹介すると、紹介ポイントとして15,000ポイント+注文額の10%を獲得できます。</p>
+      
+      <div id = "user-referral-link">
+        <p>コピーして共有するだけでポイントを獲得できます。</p>
+        <div>
+        {{ referral_link }}
+        </div>
+        <button type="button" class = "btn btn-primary" id = "copy-referral-link" > リンクをコピー </button>
+      </div>
+      
+      <p>追加情報？ <img id="info-icon" src="https://norgenbiotek.com/sites/default/files/images/information.png" style="width:25px;" onclick="open_additional();"></p>
+      <p style="font-size:14px;line-height:1.2;">*免責事項：これらの特典を利用するには、紹介者が注文を行う必要があります</p>
+    </div>
+  </div>
+
+  <div class="disclaimer_popup">
+      <a class="close" href="#" onclick="close_additional();return false;" style="font-size:70px;">×</a>
+      <h3 class="heading-3"><strong>イルストーンボーナス</strong></h3>
+      <table>
+        <tr>
+          <th>マイルストーン</th>
+          <th>ボーナス</th>
+        </tr>
+        <tr>
+          <td>5位招待リード</td>
+          <td>クライアント A は、このリードからの売上の 10% に加えて 5,000 ポイントを受け取ります。</td>
+        </tr>
+        <tr>
+          <td>10位招待リード</td>
+          <td>クライアント A は、このリードから 10,000 ポイントと売上の 10% を受け取ります。</td>
+        </tr>
+        <tr>
+          <td>第20回招待リード</td>
+          <td>クライアント A は、このリードから 20,000 ポイントと売上の 10% を受け取ります。</td>
+        </tr>
+        <tr>
+          <td>第30回招待リード</td>
+          <td>クライアント A は、このリードから 30,000 ポイントと売上の 10% を受け取ります。</td>
+        </tr>
+        <tr>
+          <td>第40回招待リード</td>
+          <td>クライアント A は、このリードから 40,000 ポイントと売上の 10% を受け取ります。</td>
+        </tr>
+        <tr>
+          <td>第50回招待リード</td>
+          <td>クライアント A は、このリードから 50,000 ポイントと売上の 10% を受け取ります。</td>
+        </tr>
+        
+      </table>
+      <p><u>注意:招待は50件までです</u></p>
+  </div>
+<div id="overlay" onclick="close_additional();"></div>
+<div id="overlay2" onclick="close_breakdown();"></div>
+
+{% else %}
+  {# English Content #}
+<div class="total_points">
+	<div>
+		<h3 class="heading-3">Your Total Points Available</h3>
+		<h4>{{ available_points }} points</h4>
+		<p>Points Breakdown <img id="info-icon" src="https://norgenbiotek.com/sites/default/files/images/information.png" style="width:25px;" onclick="open_breakdown();"></p>
+	</div>
+</div>
+<div id="point_breakdown">
+		<a class="close" href="#" onclick="close_breakdown();return false;" style="font-size:70px;">×</a>
+		{{drupal_view('user_points_data', 'page_1')}}
+</div>
+
+	<div class="refer-div">
+		<div class="bg-gray">
+			<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
+
+    		<dotlottie-player src="https://lottie.host/06cc7bbf-7c6d-4afc-a19a-aedb51e2a158/enLiT0tBEP.json" background="transparent" speed="1" style=" height: 300px;" loop autoplay></dotlottie-player>
+    		<div style="width:90%;margin:auto;">
+			<p>How it works?</p>
+			<ol>
+				<li>On your first referral, you will receive 15,000 points plus 10% of your referral’s first order value in points.</li>
+				<li>On all subsequent referrals, you will receive 10% of each of your referral’s first order value in points.</li>
+				<li>Each of your referrals will receive a 15% discount on their first order and 5,000 points.</li>
+				<li>There are also special points for hitting different milestones.Check out the <a href="#" onclick="open_additional();return false;">Milestone Bonuses here.</a></li>
+			</ol>
+			</div>
+		</div>
+		<div style="display:flex;flex-direction:column;    justify-content: space-between;    padding: 25px;">
+			<h3 class="heading-3">Refer And Earn</h3>
+			<p>Refer a friend and you get 15k points + 10% of their order value as referral points </p>
+			
+			<div id = "user-referral-link">
+				<p>Simply copy and share to start earning points.</p>
+				<div>
+				{{ referral_link }}
+				</div>
+				<button type="button" class = "btn btn-primary" id = "copy-referral-link" > Copy Link </button>
+			</div>
+			
+			<p>Additional Information? <img id="info-icon" src="https://norgenbiotek.com/sites/default/files/images/information.png" style="width:25px;" onclick="open_additional();"></p>
+			<p style="font-size:14px;line-height:1.2;">*Disclaimer : Your referral needs to place an order for you to redeem these benefits</p>
+		</div>
+	</div>
+
+	<div class="disclaimer_popup">
+  		<a class="close" href="#" onclick="close_additional();return false;" style="font-size:70px;">×</a>
+  		<h3 class="heading-3"><strong>Milestone Bonuses</strong></h3>
+  		<table>
+  			<tr>
+  				<th>Milestone</th>
+  				<th>Bonus</th>
+  			</tr>
+  			<tr>
+  				<td>5th Invited Lead</td>
+  				<td>Client A receives 5,000 points plus 10% of the sales from this lead.</td>
+  			</tr>
+  			<tr>
+  				<td>10th Invited Lead</td>
+  				<td>Client A receives 10,000 points plus 10% of the sales from this lead.</td>
+  			</tr>
+  			<tr>
+  				<td>20th Invited Lead</td>
+  				<td>Client A receives 20,000 points plus 10% of the sales from this lead.</td>
+  			</tr>
+  			<tr>
+  				<td>30th Invited Lead</td>
+  				<td>Client A receives 30,000 points plus 10% of the sales from this lead.</td>
+  			</tr>
+  			<tr>
+  				<td>40th Invited Lead</td>
+  				<td>Client A receives 40,000 points plus 10% of the sales from this lead.</td>
+  			</tr>
+  			<tr>
+  				<td>50th Invited Lead</td>
+  				<td>Client A receives 50,000 points plus 10% of the sales from this lead.</td>
+  			</tr>
+  			
+  		</table>
+  		<p><u>Please:NoteNo more than 50 invites</u></p>
+	</div>
+<div id="overlay" onclick="close_additional();"></div>
+<div id="overlay2" onclick="close_breakdown();"></div>
+{% endif %}
+
+<style>
+#block-jango-content{
+	display:none;
+}
+.total_points{
+	display: flex;
+    padding: 20px;
+    border: 1px solid gray;
+    border-radius: 12px;
+    align-items: center;
+    justify-content: center;
+    gap:20px;
+}
+.total_points > div{
+	text-align:center;
+}
+.total_points h4{
+	    font-size: 28px;
+    color: green;
+    font-size:500;
+}
+#block-jango-referrallink h2{
+	display:none;
+}
+#info-icon:hover{
+	cursor:pointer;
+}
+.refer-div{
+	display: grid;
+    grid-template-columns: 50% 45%;
+    gap: 20px;
+        border: 1px solid #80808069;
+    border-radius: 12px;
+        margin: 50px 0;
+}
+.bg-gray{
+	background: #F8FAFC;
+	    padding: 10px 25px 20px;
+	    border-radius: 12px;
+}
+.heading-3{
+	font-size:30px;
+	font-weight:600;
+	text-align:center;
+}
+#user-referral-link > div{
+	background:  #F8FAFC;
+    padding: 18px;
+    overflow: hidden;
+}
+#user-referral-link > .btn{
+	font-size:21px;
+	font-weight:600;
+}
+#copy-referral-link{
+	width: -webkit-fill-available;
+}
+.refer-div li{
+	margin-bottom:15px;
+}
+.disclaimer_popup {
+    position: absolute;
+    background: white;
+    top: -15%;
+    width: 60%;
+    padding: 40px;
+    left: 25%;
+    right: 25%;
+    display: none;
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        z-index:3;
+}
+#overlay {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+    cursor: pointer;
+}
+#overlay2 {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+    cursor: pointer;
+}
+@media only screen and (max-width: 700px) {
+	.refer-div{
+		 display: flex;
+        flex-direction: column-reverse;
+	}
+	.disclaimer_popup{
+		width:90%;
+		left:3%;
+	}
+	.contextual-region{
+		overflow:scroll;
+	}
+}
+#point_breakdown{
+	position: absolute;
+    background: white;
+    top: -15%;
+    width: 60%;
+    padding: 40px;
+    left: 25%;
+    right: 25%;
+    display: none;
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        z-index:3;
+}
+</style>
+
+<script>
+	function open_additional(){
+		document.getElementsByClassName("disclaimer_popup")[0].style.display = "block";
+		document.getElementById("overlay").style.display = "block";
+	}
+	function close_additional(){
+		document.getElementsByClassName("disclaimer_popup")[0].style.display = "none";
+		document.getElementById("overlay").style.display = "none";
+	}
+
+	function open_breakdown(){
+		document.getElementById("point_breakdown").style.display = "block";
+		document.getElementById("overlay2").style.display = "block";
+	}
+	function close_breakdown(){
+		document.getElementById("point_breakdown").style.display = "none";
+		document.getElementById("overlay2").style.display = "none";
+	}
+
+</script>

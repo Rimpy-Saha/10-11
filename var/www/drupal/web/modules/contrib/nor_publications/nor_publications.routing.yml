@@ -1,0 +1,7 @@
+nor_publications.import_form:
+  path: '/admin/content/import-publications'
+  defaults:
+    _form: '\Drupal\nor_publications\Form\NorPublicationsImportForm'
+    _title: 'Import Publications from Bioz Data'
+  requirements:
+    _permission: 'administer site configuration'

@@ -1,0 +1,7 @@
+social_media_popup.socialmediapopup_form:
+  path: 'social-media-subscription-form'
+  defaults:
+    _title: 'Newsletter Subscription Form'  # Update title case for consistency
+    _form: '\Drupal\social_media_popup\Form\SocialMediaPopupForm'
+  requirements:
+    _permission: 'access content'  # Use _permission instead of _access

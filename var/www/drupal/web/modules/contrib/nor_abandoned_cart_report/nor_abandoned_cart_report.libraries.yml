@@ -1,0 +1,5 @@
+nor_abandoned_cart_report:
+  version: 1.x
+  css:
+    theme:
+      css/nor_abandoned_cart_report.css: {}

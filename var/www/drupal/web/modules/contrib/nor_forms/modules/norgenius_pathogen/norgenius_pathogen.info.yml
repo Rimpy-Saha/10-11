@@ -1,0 +1,5 @@
+name: Norgenius Pathogen Form
+description: Custom module for norgenius pathogen email.
+type: module
+package: Norgen Biotek
+core_version_requirement: ^8.7 || ^9 || ^10
