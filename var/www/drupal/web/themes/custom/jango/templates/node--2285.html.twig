@@ -1,0 +1,986 @@
+{#
+/**
+* @file
+* Default theme implementation to display a node.
+*
+* Available variables:
+* - node: The node entity with limited access to object properties and methods.
+* Only method names starting with "get", "has", or "is" and a few common
+* methods such as "id", "label", and "bundle" are available. For example:
+* - node.getCreatedTime() will return the node creation timestamp.
+* - node.hasField('field_example') returns TRUE if the node bundle includes
+* field_example. (This does not indicate the presence of a value in this
+* field.)
+* - node.isPublished() will return whether the node is published or not.
+* Calling other methods, such as node.delete(), will result in an exception.
+* See \Drupal\node\Entity\Node for a full list of public properties and
+* methods for the node object.
+* - label: (optional) The title of the node.
+* - content: All node items. Use {{ content }} to print them all,
+* or print a subset such as {{ content.field_example }}. Use
+* {{ content|without('field_example') }} to temporarily suppress the printing
+* of a given child element.
+* - author_picture: The node author user entity, rendered using the "compact"
+* view mode.
+* - metadata: Metadata for this node.
+* - date: (optional) Themed creation date field.
+* - author_name: (optional) Themed author name field.
+* - url: Direct URL of the current node.
+* - display_submitted: Whether submission information should be displayed.
+* - attributes: HTML attributes for the containing element.
+* The attributes.class element may contain one or more of the following
+* classes:
+* - node: The current template type (also known as a "theming hook").
+* - node--type-[type]: The current node type. For example, if the node is an
+* "Article" it would result in "node--type-article". Note that the machine
+* name will often be in a short form of the human readable label.
+* - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+* teaser would result in: "node--view-mode-teaser", and
+* full: "node--view-mode-full".
+* The following are controlled through the node publishing options.
+* - node--promoted: Appears on nodes promoted to the front page.
+* - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+* teaser listings.
+* - node--unpublished: Appears on unpublished nodes visible only to site
+* admins.
+* - title_attributes: Same as attributes, except applied to the main title
+* tag that appears in the template.
+* - content_attributes: Same as attributes, except applied to the main
+* content tag that appears in the template.
+* - author_attributes: Same as attributes, except applied to the author of
+* the node tag that appears in the template.
+* - title_prefix: Additional output populated by modules, intended to be
+* displayed in front of the main title tag that appears in the template.
+* - title_suffix: Additional output populated by modules, intended to be
+* displayed after the main title tag that appears in the template.
+* - view_mode: View mode; for example, "teaser" or "full".
+* - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+* - page: Flag for the full page state. Will be true if view_mode is 'full'.
+* - readmore: Flag for more state. Will be true if the teaser content of the
+* node cannot hold the main body content.
+* - logged_in: Flag for authenticated user status. Will be true when the
+* current user is a logged-in member.
+* - is_admin: Flag for admin user status. Will be true when the current user
+* is an administrator.
+*
+* @see template_preprocess_node()
+*
+* @ingroup themeable
+*/
+#}
+<article{{ attributes }}>
+
+  {{ title_prefix }}
+  {% if label and not page %}
+  <h2{{ title_attributes }}>
+    <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+    </h2>
+    {% endif %}
+    {{ title_suffix }}
+
+    {% if display_submitted %}
+    <footer>
+      {{ author_picture }}
+      <div{{ author_attributes }}>
+        {% trans %}Submitted by {{ author_name }} on {{ date }}{% endtrans %}
+        {{ metadata }}
+        </div>
+    </footer>
+    {% endif %}
+
+    <div{{ content_attributes }}>
+      {{ content.body }}
+      </div>
+
+      </article>
+
+      <style>
+        .center-div {
+          width: fit-content;
+          margin: auto;
+        }
+
+        /* Main Grid + Grid Sections */
+        #grid-div {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          grid-column-gap: 3em;
+          grid-row-gap: 2em;
+          padding: 1em;
+          margin-bottom: 3em;
+        }
+
+        #form-container {
+          padding: 3%;
+        }
+
+        #booklet-images,
+        #form-container,
+        #table-of-contents,
+        #more-info {
+          position: relative;
+        }
+
+        /* Table of Contents */
+        #table-of-contents {
+          column-width: 495px;
+        }
+
+        #table-of-contents h3 {
+          font-size: 18px;
+          margin-bottom: 0px;
+          margin-top: 0px;
+        }
+
+        #table-of-contents h4 {
+          font-size: 14px;
+          margin-bottom: 0px;
+          margin-top: 0px;
+        }
+
+        .content-line {
+          display: flex;
+          justify-content: space-between;
+          margin: 1em 0;
+        }
+
+        .double-vert-margin {
+          margin: 2em 0;
+        }
+
+        #contents-main-title {
+          color: #004897;
+        }
+
+        #contents-plasma-serum-workflow {
+          color: #1e85b3;
+        }
+
+        #contents-case-study {
+          color: #ea262a;
+        }
+
+        #contents-urine-workflow {
+          color: #d0a95f;
+        }
+
+        #contents-recommended-workflow {
+          color: #3bbdaa;
+        }
+
+        #contents-recommended-workflow:after {
+          color: #000;
+        }
+
+        .content-line .section-title {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .content-line .section-title:after {
+          content: "............................................................................................................................................................................................................................................................................................................................";
+        }
+
+        .content-line .page-number {
+          flex-shrink: 0;
+        }
+
+        #booklet-images {
+          position: relative;
+          margin: auto;
+          margin-top: 0px;
+          min-width: 220px;
+          max-width: 1920px;
+          display: flex;
+          flex-direction: column;
+          justify-content: end;
+        }
+
+        .key-points {
+          padding: 50px 0px 0px;
+          background: #fff;
+          border-radius: 36px;
+          padding: 36px;
+          margin: 5% auto;
+          width: 100%;
+          opacity: 95%;
+          /*position: absolute;*/
+          left: 0;
+          right: 0;
+          margin-bottom: 50px;
+          box-shadow: 0px 0px 50px 0px rgb(0 0 0 / 25%);
+          transition: visibility 0s, opacity 0.5s linear 0.5s;
+          transition: transform 0.8s;
+        }
+
+        .key-points:hover {
+          transform: scale(1.01);
+        }
+
+        .key-points:hover::after {
+          transition: all 1s;
+        }
+
+        #booklet-cover,
+        #booklet-table-of-contents {
+          margin: auto;
+          border: 2px solid #004897;
+        }
+
+        #booklet-table-of-contents {
+          transform: rotateY(180deg);
+        }
+
+        /* Registration Form */
+        #form-container .form-table {
+          width: 500px;
+          margin: auto;
+          position: relative;
+        }
+
+        #form-container input {
+          padding: 8px;
+          border: 1px solid #c6c6c6;
+        }
+
+        .input-lg  {
+          height: 34px;
+          margin-bottom: 1em;
+        }
+
+        #form-container input[type="radio"] {
+          width: fit-content;
+          min-width: auto;
+          height: auto;
+        }
+
+        #form-container label,
+        #form-container input {
+          border-radius: 36px;
+        }
+
+        #form-container button#submit,
+        #form-container button#download {
+          color: #fff;
+          background: #004897;
+          padding: 10px 20px;
+          border: none;
+          transition: all 0.5s;
+        }
+
+        #form-container button#submit:hover,
+        #form-container button#download:hover {
+          background-color: #3276b1;
+          border-color: #285e8e;
+        }
+
+        #form-container input:focus,
+        #form-container select:focus,
+        #form-container input:focus-visible,
+        #form-container select:focus-visible {
+          box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%), 0 0 8px rgb(102 175 233 / 60%);
+          border: solid 1px #1A3C93 !important;
+          outline: none;
+        }
+
+        /* Background Hexagon SVGs */
+        #table-of-contents svg {
+          position: absolute;
+          bottom: 0px;
+          right: -270px;
+          pointer-events: none;
+        }
+
+        #more-info {
+          grid-column: 1 / 3;
+          max-width: 900px;
+          margin: auto;
+        }
+
+        #more-info svg {
+          position: absolute;
+          top: -360px;
+          left: -180px;
+          pointer-events: none;
+        }
+
+        /* Thank You Screen */
+        .thankyou-screen {
+          position: fixed;
+          opacity: 0;
+          visibility: hidden;
+          transform: scaleX(0) scaleY(0);
+          transition: opacity 500ms ease-in-out 0s, visibility linear 500ms, transform 0s linear;
+          text-align: center;
+          z-index: 99;
+          top: 150px;
+          left: 0;
+          right: 0;
+          /* margin: 18%; */
+          background: white;
+          padding: 1%;
+          width: 100%;
+          max-width: 700px;
+          margin: 20px auto 150px;
+          border: #12508b;
+          border-style: solid;
+          box-shadow: 0 4px 40px 0 rgb(0 0 0 / 9%), 0 6px 20px 0 rgb(0 0 0 / 17%);
+          border-radius: 20px;
+          border-bottom-color: #1d7280;
+          border-right-color: #126b7a;
+        }
+
+        .thankyou-screen.display {
+          transition: opacity 500ms ease-in-out 0s, visibility linear 500ms, transform 0s linear 500ms;
+          opacity: 1;
+          visibility: visible;
+          transform: scaleX(1) scaleY(1);
+        }
+
+        /* Thank You Screen */
+        .download-screen {
+          position: fixed;
+          opacity: 0;
+          visibility: hidden;
+          transform: scaleX(0) scaleY(0);
+          transition: opacity 500ms ease-in-out 0s, visibility linear 500ms, transform 0s linear;
+          text-align: center;
+          z-index: 99;
+          top: 400px;
+          left: 0;
+          right: 0;
+          /* margin: 18%; */
+          background: white;
+          padding: 1%;
+          width: 100%;
+          max-width: 700px;
+          margin: 20px auto 150px;
+          border: #12508b;
+          border-style: solid;
+          box-shadow: 0 4px 40px 0 rgb(0 0 0 / 9%), 0 6px 20px 0 rgb(0 0 0 / 17%);
+          border-radius: 20px;
+          border-bottom-color: #1d7280;
+          border-right-color: #126b7a;
+        }
+
+        .download-screen.display {
+          transition: opacity 500ms ease-in-out 0s, visibility linear 500ms, transform 0s linear 500ms;
+          opacity: 1;
+          visibility: visible;
+          transform: scaleX(1) scaleY(1);
+        }
+
+        .image-logo {
+          max-width: 40%;
+          padding-bottom: 1%;
+          text-align: center;
+          margin: auto;
+          margin-bottom: 1em;
+        }
+
+        /* Loader Animation */
+        .loader {
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 0;
+          bottom: 0;
+          margin: auto;
+          border: 20px solid #EAF0F6;
+          border-radius: 50%;
+          border-top: 20px solid #004897;
+          width: 125px;
+          height: 125px;
+          animation: spinner 4s linear infinite;
+        }
+
+        @keyframes spinner {
+          0% {
+            transform: rotate(0deg);
+          }
+
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+
+        /* Media Queries */
+        @media only screen and (max-width:1200px) {
+          #grid-div {
+            grid-template-columns: 1fr;
+            grid-gap: 1em;
+          }
+
+          #more-info {
+            grid-column: 1;
+          }
+
+        }
+
+        @media only screen and (max-width: 700px) {
+          #booklet-images {
+            margin: 0px auto 200px auto;
+          }
+
+          .key-points {
+            margin-bottom: -150px;
+            opacity: 90%;
+          }
+        }
+
+        @media only screen and (max-width:600px) {
+          #form-container .form-table {
+            width: auto;
+            width: fit-content;
+            min-width: 230px;
+          }
+
+          #form-container input,
+          #form-container select {
+            width: auto;
+            width: fit-content;
+            min-width: 230px;
+          }
+        }
+
+        @media only screen and (max-width:400px) {
+          #table-of-contents {
+            column-width: 240px;
+          }
+        }
+
+        /* new style */
+        .form-item label {
+          font-weight: 600;
+          font-size: 15px;
+        }
+
+        .has-feedback {
+          text-align: center;
+          
+        }
+
+        .btn-medium {
+          padding: 10px 20px !important;
+        }
+
+        .form-item{
+          margin-right: 30px;
+        }
+
+        #form-container input{
+        }
+        .form-item-rna-mailing{
+          display:flex;
+          gap:10px;
+        }
+      </style>
+
+      <div class="container" style="margin-top:2em;">
+        <div id="grid-div">
+          <div id="booklet-images">
+            <picture>
+              <source
+                srcset="https://norgenbiotek.com/sites/default/files/catalogs_ebooks/RNA-Purification-Technology/infographic-preview.webp 1130w, https://norgenbiotek.com/sites/default/files/catalogs_ebooks/RNA-Purification-Technology/infographic-preview-small.webp 565w, https://norgenbiotek.com/sites/default/files/catalogs_ebooks/RNA-Purification-Technology/infographic-preview-smallest.webp 283w"
+                type="image/webp">
+              <source
+                srcset="https://norgenbiotek.com/sites/default/files/catalogs_ebooks/RNA-Purification-Technology/infographic-preview.jpg 1130w, https://norgenbiotek.com/sites/default/files/catalogs_ebooks/RNA-Purification-Technology/infographic-preview-small.jpg 565w, https://norgenbiotek.com/sites/default/files/catalogs_ebooks/RNA-Purification-Technology/infographic-preview-smallest.jpg 283w"
+                type="image/jpeg">
+              <img id="booklet-cover"
+                src="https://norgenbiotek.com/sites/default/files/catalogs_ebooks/RNA-Purification-Technology/infographic-preview.jpg"
+                srcset="https://norgenbiotek.com/sites/default/files/catalogs_ebooks/RNA-Purification-Technology/infographic-preview.jpg 1130w, https://norgenbiotek.com/sites/default/files/catalogs_ebooks/RNA-Purification-Technology/infographic-preview-small.jpg 565w, https://norgenbiotek.com/sites/default/files/catalogs_ebooks/RNA-Purification-Technology/infographic-preview-smallest.jpg 283w"
+                alt="infographic preview" title="Best-in-Class RNA Purification Technology">
+            </picture>
+            <div class="key-points dnapoints key-text" style="opacity: 1; visibility: visible;">
+              <p><b>Download this infographic to learn:</b></p>
+              <ul>
+                <li><span>What is Norgen's RNA purification technology</span></li>
+                <li><span>4 Key Advantages of using Norgen products</span></li>
+                <li><span>How to optimize your workflow</span></li>
+                <li><span>And more!</span></li>
+              </ul>
+            </div>
+          </div>
+          <div id="form-container">
+            <h2 style="margin-top:0px;">Access Free Content</h2>
+            <p>After entering your information below, you will be granted access to our exclusive RNA Purification
+              Technology infographic!</p>
+            {{rna_purification}}
+            {# <form action="" method="post" id="rna-technology-register-form">
+              <div class="form-table">
+                <label for="fname">First name<span class="required-asterisk">*</span></label>
+                <input type="text" id="fname" name="fname" placeholder="First name (required)" required="">
+
+                <label for="lname">Last name<span class="required-asterisk">*</span></label>
+                <input type="text" id="lname" name="lname" placeholder="Last name (required)" required="">
+
+                <!-- <label for="job_title">Job title<span class="required-asterisk">*</span></label>
+                    <input type="text" id="job_title" name="job_title" placeholder="Job title (required)" required="">  -->
+
+                <label for="email">Email<span class="required-asterisk">*</span></label>
+                <input type="email" id="email" name="email" placeholder="Email (required)" required="">
+
+                <label for="company">Company/Insitution<span class="required-asterisk">*</span></label>
+                <input type="text" id="company" name="company" placeholder="Company/Insitution (required)" required="">
+
+                <!--  <label for="company_size">Company/Institution size</label>
+                    <select id="company_size" name="company_size"> 
+                        <option value="" disabled="" selected="">-Please Select-</option>
+                        <option value="&lt;10">&lt;10</option>
+                        <option value="10-49">10-49</option>
+                        <option value="50-249">50-249</option>
+                        <option value="250+">250+</option>
+                    </select> -->
+
+                <!-- <label for="country">Country<span class="required-asterisk">*</span></label>
+                    <select id="country" name="country" required="">
+                        <option value="" disabled="" selected="">-Please Select (required)-</option>
+                        <option value="Afganistan">Afghanistan</option>
+                        <option value="Albania">Albania</option>
+                        <option value="Algeria">Algeria</option>
+                        <option value="American Samoa">American Samoa</option>
+                        <option value="Andorra">Andorra</option>
+                        <option value="Angola">Angola</option>
+                        <option value="Anguilla">Anguilla</option>
+                        <option value="Antigua &amp; Barbuda">Antigua &amp; Barbuda</option>
+                        <option value="Argentina">Argentina</option>
+                        <option value="Armenia">Armenia</option>
+                        <option value="Aruba">Aruba</option>
+                        <option value="Australia">Australia</option>
+                        <option value="Austria">Austria</option>
+                        <option value="Azerbaijan">Azerbaijan</option>
+                        <option value="Bahamas">Bahamas</option>
+                        <option value="Bahrain">Bahrain</option>
+                        <option value="Bangladesh">Bangladesh</option>
+                        <option value="Barbados">Barbados</option>
+                        <option value="Belarus">Belarus</option>
+                        <option value="Belgium">Belgium</option>
+                        <option value="Belize">Belize</option>
+                        <option value="Benin">Benin</option>
+                        <option value="Bermuda">Bermuda</option>
+                        <option value="Bhutan">Bhutan</option>
+                        <option value="Bolivia">Bolivia</option>
+                        <option value="Bonaire">Bonaire</option>
+                        <option value="Bosnia &amp; Herzegovina">Bosnia &amp; Herzegovina</option>
+                        <option value="Botswana">Botswana</option>
+                        <option value="Brazil">Brazil</option>
+                        <option value="British Indian Ocean Ter">British Indian Ocean Ter</option>
+                        <option value="Brunei">Brunei</option>
+                        <option value="Bulgaria">Bulgaria</option>
+                        <option value="Burkina Faso">Burkina Faso</option>
+                        <option value="Burundi">Burundi</option>
+                        <option value="Cambodia">Cambodia</option>
+                        <option value="Cameroon">Cameroon</option>
+                        <option value="Canada">Canada</option>
+                        <option value="Canary Islands">Canary Islands</option>
+                        <option value="Cape Verde">Cape Verde</option>
+                        <option value="Cayman Islands">Cayman Islands</option>
+                        <option value="Central African Republic">Central African Republic</option>
+                        <option value="Chad">Chad</option>
+                        <option value="Channel Islands">Channel Islands</option>
+                        <option value="Chile">Chile</option>
+                        <option value="China">China</option>
+                        <option value="Christmas Island">Christmas Island</option>
+                        <option value="Cocos Island">Cocos Island</option>
+                        <option value="Colombia">Colombia</option>
+                        <option value="Comoros">Comoros</option>
+                        <option value="Congo">Congo</option>
+                        <option value="Cook Islands">Cook Islands</option>
+                        <option value="Costa Rica">Costa Rica</option>
+                        <option value="Cote DIvoire">Cote DIvoire</option>
+                        <option value="Croatia">Croatia</option>
+                        <option value="Cuba">Cuba</option>
+                        <option value="Curaco">Curacao</option>
+                        <option value="Cyprus">Cyprus</option>
+                        <option value="Czech Republic">Czech Republic</option>
+                        <option value="Denmark">Denmark</option>
+                        <option value="Djibouti">Djibouti</option>
+                        <option value="Dominica">Dominica</option>
+                        <option value="Dominican Republic">Dominican Republic</option>
+                        <option value="East Timor">East Timor</option>
+                        <option value="Ecuador">Ecuador</option>
+                        <option value="Egypt">Egypt</option>
+                        <option value="El Salvador">El Salvador</option>
+                        <option value="Equatorial Guinea">Equatorial Guinea</option>
+                        <option value="Eritrea">Eritrea</option>
+                        <option value="Estonia">Estonia</option>
+                        <option value="Ethiopia">Ethiopia</option>
+                        <option value="Falkland Islands">Falkland Islands</option>
+                        <option value="Faroe Islands">Faroe Islands</option>
+                        <option value="Fiji">Fiji</option>
+                        <option value="Finland">Finland</option>
+                        <option value="France">France</option>
+                        <option value="French Guiana">French Guiana</option>
+                        <option value="French Polynesia">French Polynesia</option>
+                        <option value="French Southern Ter">French Southern Ter</option>
+                        <option value="Gabon">Gabon</option>
+                        <option value="Gambia">Gambia</option>
+                        <option value="Georgia">Georgia</option>
+                        <option value="Germany">Germany</option>
+                        <option value="Ghana">Ghana</option>
+                        <option value="Gibraltar">Gibraltar</option>
+                        <option value="Great Britain">Great Britain</option>
+                        <option value="Greece">Greece</option>
+                        <option value="Greenland">Greenland</option>
+                        <option value="Grenada">Grenada</option>
+                        <option value="Guadeloupe">Guadeloupe</option>
+                        <option value="Guam">Guam</option>
+                        <option value="Guatemala">Guatemala</option>
+                        <option value="Guinea">Guinea</option>
+                        <option value="Guyana">Guyana</option>
+                        <option value="Haiti">Haiti</option>
+                        <option value="Hawaii">Hawaii</option>
+                        <option value="Honduras">Honduras</option>
+                        <option value="Hong Kong">Hong Kong</option>
+                        <option value="Hungary">Hungary</option>
+                        <option value="Iceland">Iceland</option>
+                        <option value="Indonesia">Indonesia</option>
+                        <option value="India">India</option>
+                        <option value="Iran">Iran</option>
+                        <option value="Iraq">Iraq</option>
+                        <option value="Ireland">Ireland</option>
+                        <option value="Isle of Man">Isle of Man</option>
+                        <option value="Israel">Israel</option>
+                        <option value="Italy">Italy</option>
+                        <option value="Jamaica">Jamaica</option>
+                        <option value="Japan">Japan</option>
+                        <option value="Jordan">Jordan</option>
+                        <option value="Kazakhstan">Kazakhstan</option>
+                        <option value="Kenya">Kenya</option>
+                        <option value="Kiribati">Kiribati</option>
+                        <option value="Korea North">Korea North</option>
+                        <option value="Korea Sout">Korea South</option>
+                        <option value="Kuwait">Kuwait</option>
+                        <option value="Kyrgyzstan">Kyrgyzstan</option>
+                        <option value="Laos">Laos</option>
+                        <option value="Latvia">Latvia</option>
+                        <option value="Lebanon">Lebanon</option>
+                        <option value="Lesotho">Lesotho</option>
+                        <option value="Liberia">Liberia</option>
+                        <option value="Libya">Libya</option>
+                        <option value="Liechtenstein">Liechtenstein</option>
+                        <option value="Lithuania">Lithuania</option>
+                        <option value="Luxembourg">Luxembourg</option>
+                        <option value="Macau">Macau</option>
+                        <option value="Macedonia">Macedonia</option>
+                        <option value="Madagascar">Madagascar</option>
+                        <option value="Malaysia">Malaysia</option>
+                        <option value="Malawi">Malawi</option>
+                        <option value="Maldives">Maldives</option>
+                        <option value="Mali">Mali</option>
+                        <option value="Malta">Malta</option>
+                        <option value="Marshall Islands">Marshall Islands</option>
+                        <option value="Martinique">Martinique</option>
+                        <option value="Mauritania">Mauritania</option>
+                        <option value="Mauritius">Mauritius</option>
+                        <option value="Mayotte">Mayotte</option>
+                        <option value="Mexico">Mexico</option>
+                        <option value="Midway Islands">Midway Islands</option>
+                        <option value="Moldova">Moldova</option>
+                        <option value="Monaco">Monaco</option>
+                        <option value="Mongolia">Mongolia</option>
+                        <option value="Montserrat">Montserrat</option>
+                        <option value="Morocco">Morocco</option>
+                        <option value="Mozambique">Mozambique</option>
+                        <option value="Myanmar">Myanmar</option>
+                        <option value="Nambia">Nambia</option>
+                        <option value="Nauru">Nauru</option>
+                        <option value="Nepal">Nepal</option>
+                        <option value="Netherland Antilles">Netherland Antilles</option>
+                        <option value="Netherlands">Netherlands (Holland, Europe)</option>
+                        <option value="Nevis">Nevis</option>
+                        <option value="New Caledonia">New Caledonia</option>
+                        <option value="New Zealand">New Zealand</option>
+                        <option value="Nicaragua">Nicaragua</option>
+                        <option value="Niger">Niger</option>
+                        <option value="Nigeria">Nigeria</option>
+                        <option value="Niue">Niue</option>
+                        <option value="Norfolk Island">Norfolk Island</option>
+                        <option value="Norway">Norway</option>
+                        <option value="Oman">Oman</option>
+                        <option value="Pakistan">Pakistan</option>
+                        <option value="Palau Island">Palau Island</option>
+                        <option value="Palestine">Palestine</option>
+                        <option value="Panama">Panama</option>
+                        <option value="Papua New Guinea">Papua New Guinea</option>
+                        <option value="Paraguay">Paraguay</option>
+                        <option value="Peru">Peru</option>
+                        <option value="Phillipines">Philippines</option>
+                        <option value="Pitcairn Island">Pitcairn Island</option>
+                        <option value="Poland">Poland</option>
+                        <option value="Portugal">Portugal</option>
+                        <option value="Puerto Rico">Puerto Rico</option>
+                        <option value="Qatar">Qatar</option>
+                        <option value="Republic of Montenegro">Republic of Montenegro</option>
+                        <option value="Republic of Serbia">Republic of Serbia</option>
+                        <option value="Reunion">Reunion</option>
+                        <option value="Romania">Romania</option>
+                        <option value="Russia">Russia</option>
+                        <option value="Rwanda">Rwanda</option>
+                        <option value="St Barthelemy">St Barthelemy</option>
+                        <option value="St Eustatius">St Eustatius</option>
+                        <option value="St Helena">St Helena</option>
+                        <option value="St Kitts-Nevis">St Kitts-Nevis</option>
+                        <option value="St Lucia">St Lucia</option>
+                        <option value="St Maarten">St Maarten</option>
+                        <option value="St Pierre &amp; Miquelon">St Pierre &amp; Miquelon</option>
+                        <option value="St Vincent &amp; Grenadines">St Vincent &amp; Grenadines</option>
+                        <option value="Saipan">Saipan</option>
+                        <option value="Samoa">Samoa</option>
+                        <option value="Samoa American">Samoa American</option>
+                        <option value="San Marino">San Marino</option>
+                        <option value="Sao Tome &amp; Principe">Sao Tome &amp; Principe</option>
+                        <option value="Saudi Arabia">Saudi Arabia</option>
+                        <option value="Senegal">Senegal</option>
+                        <option value="Seychelles">Seychelles</option>
+                        <option value="Sierra Leone">Sierra Leone</option>
+                        <option value="Singapore">Singapore</option>
+                        <option value="Slovakia">Slovakia</option>
+                        <option value="Slovenia">Slovenia</option>
+                        <option value="Solomon Islands">Solomon Islands</option>
+                        <option value="Somalia">Somalia</option>
+                        <option value="South Africa">South Africa</option>
+                        <option value="Spain">Spain</option>
+                        <option value="Sri Lanka">Sri Lanka</option>
+                        <option value="Sudan">Sudan</option>
+                        <option value="Suriname">Suriname</option>
+                        <option value="Swaziland">Swaziland</option>
+                        <option value="Sweden">Sweden</option>
+                        <option value="Switzerland">Switzerland</option>
+                        <option value="Syria">Syria</option>
+                        <option value="Tahiti">Tahiti</option>
+                        <option value="Taiwan">Taiwan</option>
+                        <option value="Tajikistan">Tajikistan</option>
+                        <option value="Tanzania">Tanzania</option>
+                        <option value="Thailand">Thailand</option>
+                        <option value="Togo">Togo</option>
+                        <option value="Tokelau">Tokelau</option>
+                        <option value="Tonga">Tonga</option>
+                        <option value="Trinidad &amp; Tobago">Trinidad &amp; Tobago</option>
+                        <option value="Tunisia">Tunisia</option>
+                        <option value="Turkey">Turkey</option>
+                        <option value="Turkmenistan">Turkmenistan</option>
+                        <option value="Turks &amp; Caicos Is">Turks &amp; Caicos Is</option>
+                        <option value="Tuvalu">Tuvalu</option>
+                        <option value="Uganda">Uganda</option>
+                        <option value="United Kingdom">United Kingdom</option>
+                        <option value="Ukraine">Ukraine</option>
+                        <option value="United Arab Erimates">United Arab Emirates</option>
+                        <option value="United States of America">United States of America</option>
+                        <option value="Uraguay">Uruguay</option>
+                        <option value="Uzbekistan">Uzbekistan</option>
+                        <option value="Vanuatu">Vanuatu</option>
+                        <option value="Vatican City State">Vatican City State</option>
+                        <option value="Venezuela">Venezuela</option>
+                        <option value="Vietnam">Vietnam</option>
+                        <option value="Virgin Islands (Brit)">Virgin Islands (Brit)</option>
+                        <option value="Virgin Islands (USA)">Virgin Islands (USA)</option>
+                        <option value="Wake Island">Wake Island</option>
+                        <option value="Wallis &amp; Futana Is">Wallis &amp; Futana Is</option>
+                        <option value="Yemen">Yemen</option>
+                        <option value="Zaire">Zaire</option>
+                        <option value="Zambia">Zambia</option>
+                        <option value="Zimbabwe">Zimbabwe</option>
+                    </select> -->
+
+                <div>
+                  <p style="font-size: 16px;"><strong>Sign up for our mailing list?<span
+                        class="required-asterisk">*</span></strong><br>Receive free newsletters, promotions, and be the
+                    first to learn about new exciting content.</p>
+                  <div class="responses">
+                    <fieldset style="margin-bottom:0px;">
+                      <label for="mailing_list_yes"><input type="radio" id="mailing_list_yes" value="1" name="opt_in"
+                          required="">
+                        <span style="padding: 1%;font-size: 16px;">Yes</span>
+                      </label>
+                      <label for="mailing_list_no"><input type="radio" id="mailing_list_no" value="0" name="opt_in">
+                        <span style="padding: 1%; font-size: 16px;">No</span>
+                      </label>
+                    </fieldset>
+                  </div>
+                </div>
+                <p style="padding-top:0px;">It is our responsibility to protect and guarantee that your data will be
+                  completely confidential. You can unsubscribe from Norgen emails at any time by clicking the link in
+                  the footer of our emails. For more information please view our <a href="/about/privacy"
+                    target="_blank">Privacy Policy</a>.</p>
+
+                <!--  5 UTM Parameters  -->
+                <input id="utm_source" name="utm_source" type="hidden">
+                <input id="utm_medium" name="utm_medium" type="hidden">
+                <input id="utm_campaign" name="utm_campaign" type="hidden">
+                <input id="utm_term" name="utm_term" type="hidden">
+                <input id="utm_content" name="utm_content" type="hidden">
+
+                <div class="loader" style="display: none;"></div>
+              </div>
+              <div class="center-div" style="padding-bottom: 15px;">
+                <button type="submit" id="submit" name="submit" onclick="loader_anim();">Access Content</button>
+              </div>
+            </form> #}
+          </div>
+          <div id="more-info">
+            <svg xmlns="http://www.w3.org/2000/svg" width="590.579" height="483.426" viewBox="0 0 590.579 483.426">
+              <g id="Hexagons" transform="translate(-301.686 -1208.085) rotate(29)" opacity="0.2">
+                <path id="Polygon_1" data-name="Polygon 1" d="M123.75,0,165,73.5,123.75,147H41.25L0,73.5,41.25,0Z"
+                  transform="translate(982.025 1002.343)" fill="#3e8fba" opacity="0.5" />
+                <path id="Polygon_4" data-name="Polygon 4" d="M123.75,0,165,73.5,123.75,147H41.25L0,73.5,41.25,0Z"
+                  transform="translate(1239.865 694)" fill="#3e8fba" opacity="0.2" />
+                <path id="Polygon_2" data-name="Polygon 2" d="M123.75,0,165,74l-41.25,74H41.25L0,74,41.25,0Z"
+                  transform="translate(1111.593 771.949)" fill="#3e8fba" opacity="0.5" />
+                <path id="Polygon_5" data-name="Polygon 5" d="M123.75,0,165,74l-41.25,74H41.25L0,74,41.25,0Z"
+                  transform="translate(1110.329 1079.069)" fill="#3e8fba" opacity="0.2" />
+                <path id="Polygon_3" data-name="Polygon 3" d="M123.75,0,165,74l-41.25,74H41.25L0,74,41.25,0Z"
+                  transform="translate(1111.593 924.949)" fill="#3e8fba" opacity="0.7" />
+              </g>
+            </svg>
+            <h2 style="margin-bottom:0px;">Best-in-Class RNA Purification</h2>
+            <!-- <h3 style="margin-top:0px;">Solutions for Early Cancer Detection and NIPT</h3> -->
+            <p>
+              Register with the above form to gain access to our new, exclusive informational infographic all about
+              Norgen's RNA purification technology and what advantages it hold over traditional
+              methods for RNA extraction. This infographic offers valuable insights into our technology, the key
+              advantages, and how to optimize your workflow.
+              Our goal is to empower you with knowledge and offer practical solutions for your laboratory needs.
+            </p>
+            <p>
+              At Norgen Biotek, We believe that researchers deserve the best tools and technology to help them achieve
+              their goals.
+              That's why we've invested heavily in research and development to ensure that our RNA purification and
+              extraction technology is unparalleled in the market.
+              Register today by completing the above form to access the infographic and learn more about how Norgen
+              products can fit into your workflow, and what makes our technology so special!
+            </p>
+          </div>
+          <!-- <div id="table-of-contents">
+            <svg xmlns="http://www.w3.org/2000/svg" width="365.251" height="343.254" viewBox="0 0 365.251 343.254">
+                <g id="Hexagons" transform="matrix(-0.875, 0.485, -0.485, -0.875, 1711.72, 399.512)" opacity="0.15">
+                    <path id="Polygon_1" data-name="Polygon 1" d="M123.75,0,165,73.5,123.75,147H41.25L0,73.5,41.25,0Z" transform="translate(1240.593 847.949)" fill="#3e8fba" opacity="0.5"/>
+                    <path id="Polygon_2" data-name="Polygon 2" d="M123.75,0,165,74l-41.25,74H41.25L0,74,41.25,0Z" transform="translate(1111.593 771.949)" fill="#3e8fba"/>
+                    <path id="Polygon_3" data-name="Polygon 3" d="M123.75,0,165,74l-41.25,74H41.25L0,74,41.25,0Z" transform="translate(1111.593 924.949)" fill="#3e8fba" opacity="0.68"/>
+                </g>
+            </svg>
+            <h2>Table of Contents</h2>
+
+            <div class="content-line"><span class="section-title">ABOUT NORGEN</span><span class="page-number">5</span></div>
+
+            <div class="double-vert-margin"><h3 id="contents-main-title"><b>LIQUID BIOPSY: SOLUTIONS FOR EARLY CANCER DETECTION & NIPT</b></h3></div>
+
+            <div class="content-line"><span class="section-title">INTRODUCTION</span><span class="page-number">6</span></div>
+
+            <div><h4 id="contents-plasma-serum-workflow"><b>COMPLETE PLASMA/SERUM CELL-FREE WORKFLOW</b></h4></div>
+            <div class="content-line"><span class="section-title">CF-DNA/CF-RNA </span><span class="page-number">8</span></div>
+            <div class="content-line"><span class="section-title">CELL-FREE RNA PURIFICATION FROM PLASMA/SERUM</span><span class="page-number">9</span></div>
+            <div class="content-line"><span class="section-title">CELL-FREE DNA ISOLATION FROM PLASMA/SERUM</span><span class="page-number">12</span></div>
+            <div class="content-line"><span class="section-title"><b>LAB BENCH GUIDE</b></span><span class="page-number">15</span></div>
+            <div class="content-line"><span class="section-title"><b>RECOMMENDED WORKFLOW FOR SMALL RNA-SEQ</b></span><span class="page-number">18</span></div>
+
+            <div class="content-line double-vert-margin"><span class="section-title"><span id="contents-case-study">CASE STUDY</span>: Improving Cancer Diagnostics with Exosomal ctDNA</span><span class="page-number">20</span></div>
+
+            <div><h4 id="contents-urine-workflow"><b>COMPLETE URINE CELL-FREE WORKFLOW</b></h4></div>
+            <div class="content-line"><span class="section-title">URINE COLLECTION & PRESERVATION DEVICES</span><span class="page-number">22</span></div>
+            <div class="content-line"><span class="section-title">CELL-FREE RNA PURIFICATION FROM URINE</span><span class="page-number">23</span></div>
+            <div class="content-line"><span class="section-title">CELL-FREE DNA ISOLATION FROM URINE</span><span class="page-number">25</span></div>
+            <div class="content-line"><span class="section-title"><b>RECOMMENDED WORKFLOW SMALL RNA-SEQ</b></span><span class="page-number">26</span></div>
+
+            <div class="content-line double-vert-margin"><span class="section-title" id="contents-recommended-workflow"><b>RECOMMENDED WORKFLOW FOR NIPT</b></span><span class="page-number">28</span></div>
+
+            <div class="content-line"><span class="section-title"><b>SELECT PUBLICATIONS</b></span><span class="page-number">21</span></div>
+        </div> -->
+
+        </div>
+      </div>
+
+      <script>
+        document.getElementsByClassName("loader")[0].style.display = 'none';
+
+
+        function validateEmail(email) {
+          var re = /\S+@\S+\.\S+/;
+          return re.test(email);
+        }
+
+        function loader_anim() {
+          var a = document.getElementById("fname").value;
+          var b = document.getElementById("lname").value;
+          // var c = document.getElementById("job_title").value;
+          var h = document.getElementById("company").value;
+          var d = document.getElementById("email").value;
+          // var e = document.getElementById("country").value;
+          var f = document.getElementById("mailing_list_yes").value;
+          var g = document.getElementById("mailing_list_no").value;
+          if (validateEmail(d) == true) {
+            if (a != "" && b != "" && d != "" && (f != "" || g != "") && h != "") {
+              document.getElementsByClassName('form-table')[0].style.opacity = '0.5';
+              document.getElementsByClassName("loader")[0].style.display = 'block';
+            }
+          }
+
+        }
+        function success_in() {
+          document.querySelector('.thankyou-screen').classList.add('display');
+
+          var currentURL = window.location.href;//Get current URL
+          if (!currentURL.includes('#access')) {
+            var newURL = currentURL + '#access';
+            window.location.href = newURL;
+          }
+
+        }
+        function downloaded_screen() {
+          document.querySelector('.thankyou-screen').classList.remove('display');
+          document.querySelector('.download-screen').classList.add('display');
+        }
+        function hidedownloadScreen() {
+          document.querySelector('.download-screen').classList.remove('display');
+        }
+        function hideThankYouScreen() {
+          let thankyou_screen = document.querySelector('#thankyou-screen');
+          thankyou_screen.classList.remove('display');
+        }
+        function download_anim() {
+          document.getElementsByClassName("fa-download")[0].style.display = 'none';
+          document.getElementsByClassName("lds-facebook")[0].style.display = 'block';
+          setTimeout('hide_d_anim()', 500);
+        }
+
+        function hide_d_anim() {
+          document.getElementsByClassName("fa-check")[0].style.visibility = 'visible';
+          document.getElementsByClassName("fa-check")[0].style.opacity = '1';
+          document.getElementsByClassName("lds-facebook")[0].style.display = 'none';
+        }
+
+        // Get UTM Parameters
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        if (urlParams.has('utm_source')) {
+          let utm_source = document.querySelector('input#utm_source');
+          if (utm_source) {
+            utm_source.value = urlParams.get('utm_source');
+          }
+        }
+        if (urlParams.has('utm_medium')) {
+          let utm_medium = document.querySelector('input#utm_medium');
+          if (utm_medium) {
+            utm_medium.value = urlParams.get('utm_medium');
+          }
+        }
+        if (urlParams.has('utm_campaign')) {
+          let utm_campaign = document.querySelector('input#utm_campaign');
+          if (utm_campaign) {
+            utm_campaign.value = urlParams.get('utm_campaign');
+          }
+        }
+        if (urlParams.has('utm_term')) {
+          let utm_term = document.querySelector('input#utm_term');
+          if (utm_term) {
+            utm_term.value = urlParams.get('utm_term');
+          }
+        }
+        if (urlParams.has('utm_content')) {
+          let utm_content = document.querySelector('input#utm_content');
+          if (utm_content) {
+            utm_content.value = urlParams.get('utm_content');
+          }
+        }
+      </script>

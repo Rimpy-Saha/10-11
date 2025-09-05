@@ -1,0 +1,271 @@
+<style>
+.oauth-login-link {
+  display: inline-block;
+  background: white;
+  color: #444;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: background 0.2s ease-in-out;
+}
+
+.oauth-login-link:hover {
+  background-color: #f5f5f5;
+  text-decoration: none;
+}
+
+.google-icon {
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+</style>
+
+<div class="c-shop-login-register-1" style="padding:5% 0;">
+  <div class="row">
+    <div class="col-md-6 fixed-element" style="text-align:center;">
+      <div class="interested">
+      <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+      <dotlottie-player src="https://lottie.host/31b7ea34-dec1-4a45-ac46-8fcc7c56245d/24fV3coqIw.json" background="transparent" speed="1" style="width: 300px; height: 300px;margin:auto;" loop="" autoplay="" class="svg-element"></dotlottie-player>
+      {% set oauth_login_link = '
+        <a href="/moLogin?destination=/user" class="oauth-login-link">
+          <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" class="google-icon">
+          Continue with Google
+        </a>
+        <br>' %}
+        
+      {% if ('/fr/' in url)  %}
+      <h2>Vous avez déjà un compte?</h2>
+      {% elseif ('/es/' in url)  %}
+      <h2>¿Ya tienes una cuenta?</h2>
+      {% elseif ('/cn/' in url)  %}
+      <h2>您已经有帐户了吗？</h2>
+      {% elseif ('/de/' in url)  %}
+      <h2>Sie haben bereits ein Konto?</h2>
+
+      {% elseif ('/ja/' in url)  %}
+      <h2>すでにアカウントをお持ちですか?</h2>
+
+
+      {% else %}
+      <h2>Already Have an Account?</h2>
+      {% endif %}
+      <div class="c-form-register">
+        <a href="{{ url('user.login') }}" class="c-theme-link btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button js-form-submit form-submit">{{ 'Login'|t }}</a>
+        <p style = "margin-bottom:0px;">or</p>
+        {{ oauth_login_link|raw }}
+      </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="panel panel-default c-panel">
+        <div class="panel-body c-panel-body">
+          {% if ('/fr/' in url)  %}
+          <h1 style="text-align:center;font-size:30px;font-weight:600;">Créez votre compte</h1>
+          <p style="font-size:14px;text-align:center;">Inscrivez-vous aujourd'hui pour recevoir une <b>réduction exclusive de 15 %</b> sur votre première commande. Rejoignez notre réseau et restez à la pointe de l'innovation biotechnologique.</p>
+          {% elseif ('/es/' in url)  %}
+          <h1 style="text-align:center;font-size:30px;font-weight:600;">Crea tu cuenta</h1>
+          <p style="font-size:14px;text-align:center;">Regístrese hoy para recibir un <b>descuento exclusivo del 15 %</b> en su primer pedido. Únase a nuestra red y manténgase a la vanguardia de la innovación biotecnológica.</p>
+          {% elseif ('/cn/' in url)  %}
+          <h1 style="text-align:center;font-size:30px;font-weight:600;">创建您的帐户</h1>
+          <p style="font-size:14px;text-align:center;">立即註冊即可享有首筆訂單 <b>15% 的獨家折扣</b>。加入我們的網路並保持在生物技術創新的最前沿。</p>
+          {% elseif ('/de/' in url)  %}
+          <h1 style="text-align:center;font-size:30px;font-weight:600;">Erstellen Sie Ihr Konto</h1>
+          <p style="font-size:14px;text-align:center;">Registrieren Sie sich noch heute, um einen <b>exklusiven Rabatt von 15 %</b> auf Ihre erste Bestellung zu erhalten. Treten Sie unserem Netzwerk bei und bleiben Sie an der Spitze der Biotech-Innovation.</p>
+
+          {% elseif ('/ja/' in url)  %}
+          <h1 style="text-align:center;font-size:30px;font-weight:600;">アカウントを作成する</h1>
+          <p style="font-size:14px;text-align:center;">今すぐ登録して、最初の注文で<b>特別 15% 割引</b> を受けましょう。当社のネットワークに参加して、バイオテクノロジーの革新の最前線に立ち続けましょう。</p>
+
+          {% else %}
+          <h1 style="text-align:center;font-size:30px;font-weight:600;">Create Your Account</h1>
+          <p style="font-size:14px;text-align:center;">Register today to receive an <b>exclusive 15% discount</b> on your first order. Join our network and stay at the forefront of biotech innovation.</p>
+          {% endif %}
+          <div style="margin:5% 0;">
+          {{ rendered }}
+          </div>
+          <div class="activate-account-msg">
+            <h2>Activate Your Account</h2>
+            <p>After creating your new account, you will receive an activation email. Please click the link in the email to activate your account.</p>
+            <p><b>Tip:</b> Check your spam or junk folder if you don't see the email within a few minutes. Oherwise, <a href="/contact#account-issues">contact support</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% if toggle_checkbox %}
+      <div class="col-md-6">
+        <div class="panel panel-default c-panel">
+          <div class="panel-body c-panel-body">
+            <div class="c-content-title-1">
+              <h3 class="c-left">
+                <i class="icon-user"></i>{{ 'Don\'t have an account yet?'|t }}</h3>
+              <div class="c-line-left c-theme-bg"></div>
+              <p>{{ 'Join us and enjoy shopping online today.'|t }}</p>
+            </div>
+            <div class="c-margin-fix">
+              {{ toggle_checkbox }}
+            </div>
+            <div class="c-form-register">
+              <a href="{{ url('user.register') }}" class="c-theme-link">{{ 'User Register Form'|t }}</a>.
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+
+/* New */
+/* .form-item-pass{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-column-gap:10px;
+}
+.form-item-pass .form-group {
+  margin-bottom:0px;
+}
+.form-item-pass > .description{
+  grid-column: 1 / 3;
+}
+.activate-account-msg{
+  font-size:14px;
+  background-color:var(--norgen-primary-blue-light);
+  padding:1em;
+  border-radius:10px;
+} */
+/* End of New */
+
+#block-jango-primary-local-tasks{
+  display:none;
+}
+#edit-account{
+  grid-area:email_password;
+}
+#edit-field-first-name-wrapper{
+  grid-area:first_name;
+}
+#edit-field-last-name-wrapper{
+  grid-area:last_name;
+}
+#edit-field-phone-number-wrapper{
+  grid-area:phone;
+}
+#edit-field-company-institution-wrapper{
+  grid-area:company;
+}
+#edit-field-how-did-you-hear-about-nor-wrapper{
+  grid-area:how_did_you_hear;
+}
+#edit-field-mail-opt-in-wrapper{
+  grid-area:mail_opt;
+}
+#edit-field-job-title-wrapper{
+  grid-area:job;
+}
+#edit-field-country-wrapper{
+  grid-area:country;
+}
+.layout__region.layout__region--content{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-gap:10px;
+  grid-template-areas: 'first_name last_name'
+                       'company job'
+                       'phone country'
+                       'email_password email_password'
+                       'how_did_you_hear how_did_you_hear'
+                       'mail_opt mail_opt';
+}
+/* .layout__region.layout__region--content{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-column-gap:10px;
+  grid-template-areas: 'first_name last_name'
+                       'email_password email_password'
+                       'mail_opt mail_opt';
+} */
+.password-suggestions ul{
+  list-style: decimal;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 5px;
+  width:90%;
+  margin:10px auto;
+}
+.password-suggestions ul li{
+  margin:0px 25px;
+}
+.password-suggestions{
+  background:#f6f6f6;
+  padding:3%;
+}
+.c-shop-login-register-1 #edit-field-mail-opt-in-wrapper #edit-field-mail-opt-in--wrapper .fieldset-wrapper{
+  display:flex;
+  flex-direction: column-reverse;
+}
+.c-shop-login-register-1 .form-control.input-lg{
+  border-radius:4px !important;
+}
+
+.fixed-element{
+  position:sticky;
+  top:100px;
+}
+.c-shop-login-register-1 #edit-field-mail-opt-in-wrapper #edit-field-mail-opt-in--wrapper legend span{
+  color:black;
+}
+#edit-field-mail-opt-in{
+  margin:5px 0 0;
+}
+ @media only screen and (max-width: 992px) {
+    .fixed-element{
+      position:relative;
+      margin:0 0 3%;
+    }
+  }
+   @media only screen and (max-width: 520px) {
+    .svg-element{
+    width:200px !important;
+    height:200px !important;
+    }
+    .layout__region.layout__region--content{
+      grid-template-columns:1fr;
+      grid-template-areas: 'first_name'
+                           'last_name'
+                           'company'
+                           'job'
+                           'phone'
+                           'country'
+                           'email_password'
+                           'how_did_you_hear'
+                           'mail_opt';
+    }
+    /* .layout__region.layout__region--content{
+      grid-template-columns:1fr;
+      grid-template-areas: 'first_name'
+                           'last_name'
+                           'email_password'
+                           'mail_opt';
+    } */
+    .password-suggestions ul{
+ 
+      grid-template-columns: 1fr;
+  
+    }
+  }
+     @media only screen and (max-width: 280px) {
+    .svg-element{
+      width:100px !important;
+      height:100px !important;
+    }
+    
+  }
+</style>
+

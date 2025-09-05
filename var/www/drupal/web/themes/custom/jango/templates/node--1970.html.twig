@@ -1,0 +1,576 @@
+{#
+/**
+* @file
+* Default theme implementation to display a node.
+*
+* Available variables:
+* - node: The node entity with limited access to object properties and methods.
+* Only method names starting with "get", "has", or "is" and a few common
+* methods such as "id", "label", and "bundle" are available. For example:
+* - node.getCreatedTime() will return the node creation timestamp.
+* - node.hasField('field_example') returns TRUE if the node bundle includes
+* field_example. (This does not indicate the presence of a value in this
+* field.)
+* - node.isPublished() will return whether the node is published or not.
+* Calling other methods, such as node.delete(), will result in an exception.
+* See \Drupal\node\Entity\Node for a full list of public properties and
+* methods for the node object.
+* - label: (optional) The title of the node.
+* - content: All node items. Use {{ content }} to print them all,
+* or print a subset such as {{ content.field_example }}. Use
+* {{ content|without('field_example') }} to temporarily suppress the printing
+* of a given child element.
+* - author_picture: The node author user entity, rendered using the "compact"
+* view mode.
+* - metadata: Metadata for this node.
+* - date: (optional) Themed creation date field.
+* - author_name: (optional) Themed author name field.
+* - url: Direct URL of the current node.
+* - display_submitted: Whether submission information should be displayed.
+* - attributes: HTML attributes for the containing element.
+* The attributes.class element may contain one or more of the following
+* classes:
+* - node: The current template type (also known as a "theming hook").
+* - node--type-[type]: The current node type. For example, if the node is an
+* "Article" it would result in "node--type-article". Note that the machine
+* name will often be in a short form of the human readable label.
+* - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+* teaser would result in: "node--view-mode-teaser", and
+* full: "node--view-mode-full".
+* The following are controlled through the node publishing options.
+* - node--promoted: Appears on nodes promoted to the front page.
+* - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+* teaser listings.
+* - node--unpublished: Appears on unpublished nodes visible only to site
+* admins.
+* - title_attributes: Same as attributes, except applied to the main title
+* tag that appears in the template.
+* - content_attributes: Same as attributes, except applied to the main
+* content tag that appears in the template.
+* - author_attributes: Same as attributes, except applied to the author of
+* the node tag that appears in the template.
+* - title_prefix: Additional output populated by modules, intended to be
+* displayed in front of the main title tag that appears in the template.
+* - title_suffix: Additional output populated by modules, intended to be
+* displayed after the main title tag that appears in the template.
+* - view_mode: View mode; for example, "teaser" or "full".
+* - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+* - page: Flag for the full page state. Will be true if view_mode is 'full'.
+* - readmore: Flag for more state. Will be true if the teaser content of the
+* node cannot hold the main body content.
+* - logged_in: Flag for authenticated user status. Will be true when the
+* current user is a logged-in member.
+* - is_admin: Flag for admin user status. Will be true when the current user
+* is an administrator.
+*
+* @see template_preprocess_node()
+*
+* @ingroup themeable
+*/
+#}
+<article{{ attributes }}>
+
+  {{ title_prefix }}
+  {% if label and not page %}
+  <h2{{ title_attributes }}>
+    <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+    </h2>
+    {% endif %}
+    {{ title_suffix }}
+
+    {% if display_submitted %}
+    <footer>
+      {{ author_picture }}
+      <div{{ author_attributes }}>
+        {% trans %}Submitted by {{ author_name }} on {{ date }}{% endtrans %}
+        {{ metadata }}
+        </div>
+    </footer>
+    {% endif %}
+
+    <div{{ content_attributes }}>
+      {{ content.body }}
+      </div>
+
+      </article>
+
+
+
+      <style>
+        .img-header.darken::before {
+
+          background: rgb(7 8 12 / 15%) !important;
+          /* opacity: 0.5; */
+          /*backdrop-filter: blur(2px);*/
+        }
+
+        .clear-card {
+          padding: 24px;
+        }
+
+        div.trim {
+          max-height: 200px;
+          overflow: hidden;
+          max-height: 100%;
+          min-width: 300px;
+        }
+
+        trimmed {
+          padding: 10%;
+        }
+
+        .flex-containing {
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr;
+          grid-gap: 50px;
+          margin: 5%;
+          text-align: center;
+          align-items: center;
+          justify-content: center;
+          /*padding: 0 15%;*/
+        }
+
+        .flex-containing>div {
+          width: auto;
+          margin: auto;
+          text-align: center;
+          margin: 40px 6px 20px 6px;
+        }
+
+        .name {
+          font-size: 24px;
+          font-family: "Montserrat";
+          position: absolute;
+          left: 24px;
+          text-align: left;
+        }
+
+        .prices {
+          font-size: 18px;
+          /*font-family: "Montserrat";*/
+          margin: 15px;
+        }
+
+        .sub {
+          border-radius: 24px;
+          /*  background: #BE1E2D; */
+          background: #004897;
+          border: none;
+          padding: 0 12px 0 12px;
+        }
+
+        .disc {
+          font-size: 32px;
+          font-family: "Montserrat";
+          margin: 24px;
+          padding-top: 24px;
+        }
+
+        .containing {
+          position: relative;
+          width: 100%;
+          height: 400px;
+          margin-bottom: 48px;
+          background: #BE1E2D;
+        }
+
+        .image {
+          opacity: 1;
+          display: block;
+          width: 100%;
+          height: auto;
+          transition: .5s ease;
+          backface-visibility: hidden;
+        }
+
+        .middle {
+          transition: .5s ease;
+          opacity: 0;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          -ms-transform: translate(-50%, -50%);
+          text-align: center;
+        }
+
+        .containing .middle {
+          opacity: 1;
+        }
+
+        .containing:hover .image {
+          opacity: 0.5;
+        }
+
+        .containing:hover .middle {
+          opacity: 1;
+        }
+
+        .tag {
+          color: #fff;
+          font-size: 55px;
+          padding: 12px 32px;
+        }
+
+        .tagtext {
+          color: #fff;
+          font-size: 47px;
+          padding: 16px 32px;
+          letter-spacing: 6px;
+        }
+
+
+        .overlay {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          background-color: #004897a3;
+          overflow: hidden;
+          width: 100%;
+          height: 0;
+          transition: .5s ease;
+          height: 120px;
+        }
+
+        .contain:hover .overlay {
+          background-color: #004897;
+        }
+
+        .text-block {
+
+          color: white;
+          font-size: 20px;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          -webkit-transform: translate(-50%, -50%);
+          -ms-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+          white-space: nowrap;
+        }
+
+        .text-block2 {
+          position: absolute;
+          top: 6em;
+          right: 2px;
+          padding-right: 2em;
+          border-radius: 0px;
+          background: #BE1E2D;
+          /*border-radius: 0px 0 0px 100%;*/
+          color: white;
+          /*margin-right: 20px;*/
+          overflow: hidden;
+          height: 0px;
+          width: 0px;
+          transition: width 0.2s, height 0s;
+          transition-delay: 0s, 0.2s;
+        }
+
+        .text-block2 span {
+          opacity: 0;
+          transition: opacity 0s;
+        }
+
+        .contain:hover .text-block2 {
+          height: 80px;
+          width: 250px;
+          text-align: right;
+          padding-top: 12px;
+          transition: width 0.2s, height 0s;
+        }
+
+        .contain:hover .text-block2 span {
+          margin-top: 24px;
+          opacity: 1;
+          transition: opacity 0.1s;
+          transition-delay: 0.2s;
+        }
+
+        .contain {
+          position: relative;
+        }
+
+        @media only screen and (max-width: 815px) {
+          .flex-containing {
+            grid-template-columns: 1fr 1fr;
+          }
+        }
+
+        @media only screen and (max-width: 500px) {
+          .flex-containing {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        @media only screen and (max-height: 720px) {
+          .name {
+            font-size: 20px;
+          }
+
+          .prices {
+            font-size: 14px;
+          }
+
+          .contain:hover .overlay {
+            background-color: #004897a3;
+          }
+
+          .contain:hover .text-block2 {
+            height: 0px;
+            width: 0px;
+          }
+
+          .contain:hover .text-block2 span {
+            opacity: 0;
+          }
+        }
+
+        @media only screen and (max-width: 420px) {
+          .name {
+            font-size: 20px;
+          }
+
+          .prices {
+            font-size: 14px;
+          }
+
+          .contain:hover .overlay {
+            background-color: #004897a3;
+          }
+
+          .contain:hover .text-block2 {
+            height: 0px;
+            width: 0px;
+            padding-top: 0px;
+          }
+
+          .contain:hover .text-block2 span {
+            opacity: 0;
+          }
+        }
+
+        .clearance-card {
+          background: white;
+          border: 1px solid #d5d2d2;
+          /*width: 20%;*/
+          margin: 5%;
+          border-radius: 20px;
+        }
+
+        .clearance-card-img {
+          width: 90%;
+          margin: 3% auto;
+          border-bottom: 1px solid #d5d2d2;
+          padding: 2%;
+
+        }
+
+        .clearance-card-text {
+          text-align: center;
+        }
+
+        .clearance-card-btn input {
+          width: -webkit-fill-available;
+          border-radius: 0;
+          padding: 2%;
+          color: white;
+          height: 50px;
+          border-bottom-right-radius: 20px;
+          border-bottom-left-radius: 20px;
+          margin-top: 3%;
+        }
+
+        .sub {
+          width: -webkit-fill-available;
+          border-radius: 0;
+          padding: 2%;
+          color: white;
+          height: 50px;
+          border-bottom-left-radius: 20px;
+          border-bottom-right-radius: 20px;
+          margin-top: 3%;
+        }
+
+        /*.price{
+      display: flex;
+    justify-content: space-evenly;
+
+}*/
+        .sale-price {
+          color: #be1e2d;
+          font-size: 18px;
+          font-weight: 600;
+        }
+
+        .discount-number {
+          background: #be1e2d;
+          padding: 2% 10%;
+          color: white;
+        }
+
+        .clearance-card-text>h3 {
+          font-size: 18px;
+        }
+
+        .img-header {
+          width: 100%;
+          text-align: center;
+          background-size: cover;
+          background-repeat: no-repeat;
+          background-position: center;
+          /* padding: 166px 50px; */
+          position: relative;
+          background: url(/sites/default/files/images/clearance/clearance3.png);
+          height: 625px;
+          background-position: center;
+          background-size: cover;
+          background-repeat: no-repeat;
+          position: relative;
+        }
+
+        .expiration {
+          font-style: italic;
+          font-size: 14px;
+          background: yellow;
+          padding: 0 1%;
+        }
+
+        .disclaimers {
+          /*background: aliceblue;*/
+          padding: 2%;
+          box-shadow: 0px -20px 20px -15px #e6e6e6;
+          margin: 0 !important;
+        }
+
+        .img-header.darken>.header-text {
+          padding: 4%;
+          background: white;
+          position: absolute;
+          width: 60%;
+          left: 0;
+          right: 0;
+          top: 0;
+          bottom: 0;
+          margin: auto;
+          height: fit-content;
+          box-shadow: 0 4px 40px 0 rgb(0 0 0 / 9%), 0 6px 20px 0 rgb(0 0 0 / 17%);
+        }
+
+        @media only screen and (max-width: 773px) {
+          .header-text {
+            width: 100%;
+            left: 0;
+            right: 0;
+          }
+
+          .img-header {
+            padding-left: 0;
+            padding-right: 0;
+          }
+        }
+
+        @media only screen and (max-width: 393px) {
+          .header-text>h1 {
+            font-size: min(3vmax, 50px) !important;
+          }
+        }
+
+        @media only screen and (max-width: 303px) {
+          .header-text>h1 {
+            font-size: 35px !important;
+          }
+        }
+
+        @media only screen and (max-width: 1089px) and (max-height: 721px) {
+          .header-text>h1 {
+            font-size: min(3vmax, 50px) !important;
+          }
+
+          .header-text {
+            width: 100%;
+            left: 0;
+            right: 0;
+          }
+
+          .img-header {
+            padding-left: 0;
+            padding-right: 0;
+          }
+        }
+
+        @media only screen and (max-width: 273px) and (max-height: 721px) {
+          .header-text>h1 {
+            font-size: 20px !important;
+          }
+
+        }
+      </style>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+      <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+      <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+      <section class="img-header darken">
+        <div class="header-text">
+          <h1 style="text-shadow: none;font-size: max(3vw, 32px);font-weight: 700;color:#be1e2d;letter-spacing: 8px;">
+            CLEARANCE</h1>
+          <hr>
+          <h4 style="font-weight: 600;margin-bottom: 0;">Save big on some of our most popular products nearing expiry*
+          </h4>
+          <p style="text-shadow: none;color: black; font-size: 14px;"><i>Until Stock Lasts</i></p>
+        </div>
+      </section>
+
+      <div class="trimmed">
+
+        <!--  <div class="clearance-card">
+    <div class="clearance-card-img">
+      <img width=auto height=auto src="https://norgenbiotek.com/sites/default/files/styles/original/public/swabs_0.jpg">
+    </div>
+    <div class="clearance-card-text">
+      <h3>Nasopharyngeal Flocked Swab (CM-FS913) </h3>
+      <p><strong><span class="discount-number">43% off!</span></strong></p>
+      <div class="price">
+      <p class="original-price"><s>$1.75</s></p>
+      <p class="sale-price">$1</p>
+    </div>
+    </div>
+    <div class="clearance-card-btn">
+      <span><input class = "sub" type="submit" id="edit-submit--6" name="op" value="Order"></span>
+    </div>
+  </div> -->
+
+        <div class="flex-containing">
+          <!-- <form class="clearance-card" autocomplete="off" action="#" method="post" id="commerce-cart-add-to-cart-form-1333" accept-charset="UTF-8">
+    <input type="hidden" name="product_id" value="1333">
+    <input type="hidden" name="quantity" value="1">
+    <div class="clearance-card-img">
+      <img width=auto height=auto src="https://norgenbiotek.com/sites/default/files/styles/original/public/swabs_0.jpg">
+    </div>
+    <div class="clearance-card-text">
+      <h3>Nasopharyngeal Flocked Swab (CM-FS913) </h3>
+      <p><strong><span class="discount-number">43% off!</span></strong></p>
+      <div class="price">
+        <p class="original-price"><s>$1.75</s></p>
+        <p class="sale-price">$1</p>
+      </div>
+    </div>
+    <div class="clearance-card-btn">
+      <span><input class = "sub" type="submit" id="edit-submit--6" name="op" value="Order Now"></span>
+    </div>
+  </form> -->
+
+        </div>
+      </div>
+
+      <div class="center disclaimers" style="margin: 24px;">
+        <p>*Limited time offer and limited quantities/stock available. Not available for international customers. Please
+          contact your <a href="https://norgenbiotek.com/resources/distributors">distributor</a> to find out if you are
+          eligible for this offer. Products purchased with this promotion are <u>final sale</u>. Please contact us for
+          more information about clearance products.</p>
+        <!-- <p>*Not available for international customers. Please contact your <a href="/distributors">distributor</a> to find out if you are eligible for this offer.</p>
+  <p>*Products purchased with this promotion are <u>final sale</u>.</p>
+  <p>*Please contact us for more information about clearance products.</p> -->
+      </div>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

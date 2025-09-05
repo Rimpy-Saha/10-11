@@ -1,0 +1,72 @@
+{#
+/**
+ * @file
+ * Theme override for a field.
+ *
+ * To override output, copy the "field.html.twig" from the templates directory
+ * to your theme's directory and customize it, just like customizing other
+ * Drupal templates such as page.html.twig or node.html.twig.
+ *
+ * Instead of overriding the theming for all fields, you can also just override
+ * theming for a subset of fields using
+ * @link themeable Theme hook suggestions. @endlink For example,
+ * here are some theme hook suggestions that can be used for a field_foo field
+ * on an article node type:
+ * - field--node--field-foo--article.html.twig
+ * - field--node--field-foo.html.twig
+ * - field--node--article.html.twig
+ * - field--field-foo.html.twig
+ * - field--text-with-summary.html.twig
+ * - field.html.twig
+ *
+ * Available variables:
+ * - attributes: HTML attributes for the containing element.
+ * - label_hidden: Whether to show the field label or not.
+ * - title_attributes: HTML attributes for the title.
+ * - label: The label for the field.
+ * - multiple: TRUE if a field can contain multiple items.
+ * - items: List of all the field items. Each item contains:
+ *   - attributes: List of HTML attributes for each item.
+ *   - content: The field item's content.
+ * - entity_type: The entity type to which the field belongs.
+ * - field_name: The name of the field.
+ * - field_type: The type of the field.
+ * - label_display: The display settings for the label.
+ *
+ * @see template_preprocess_field()
+ */
+#}
+
+
+
+
+{% if field_type == "boolean" and mutiple == false and items.0.content['#markup'] == "On" %}
+  <div {{ attributes.addClass('promo-div-div') }}> {# adding these classes lets the display update on variation change #}
+ 	
+  {# Microbiome #}
+  {# {% if default_variation in ['27650', '55700', '27600', '45670-B', '49500', '63100', '45660', '45600', '65600', '63700', 'RU35720', 'RU55400', 'RU45400', '46200', '69100', '69200', '45690-B', 'RU53800', 'RU35200', 'RU49000', '65400', '65300', 'RU62900', '69300', '64100'] %}
+  <a href="/promotions/save-microbiome-products#products-section"><div class="promo-div"><span class="glyphicon glyphicon-tag"></span><p>Save up to 20%</p></div></a>
+  {% endif %} #}
+
+  {# Magnetic Bead #}
+  {# {% if default_variation in ['75500','75400','60200','62700','60300','63000','72900','72950','RU55400','RU62900','59800','62600','62500','59100','62400','58200','58100','62800','55700','63100','60200','62700','60300','63000'] %}
+  <a href="/promotions/magnetic-bead-automation"><div class="promo-div"><span class="glyphicon glyphicon-tag"></span><p>Save 20%</p></div></a>
+  {% endif %} #}
+
+  {# Back to Class #}
+  {% if default_variation in ['35600','28299','28300','28296','28301','28302','12800','11900','11400','11300','11200','11500','11600','11800','12000','11700','12100','13525','53210','21550','14400','24800','45700','18100','50100','48800','26200','26900','58200','62400','26250','17900','17950','27300','27350','27600','55700','63100','65600','13100','13300','46500','46600','46400','60300','63000','24700','24750','24770','22700','21900','52200','46300','51400','31200','46350','59800','62600','46380','36000','34500','34400','46800','46850','46200','RU45400','RU35200','55100','55500','55600','55800','47400','53100','57300','59100','62500','50600','51200','51300','54500','26560','47050','25710','25720','28113','28114','28115','28007','54400','54420','17300','17400','21600','52300','10300','17700','17500','22800','22200','30300','15002','15003','22550','54700','21000','37400','25800','31350','31900','25850','24400','25700','25300','25400','21200','37800','21250','21300','23600','25100','43200','61000','17200','37500','24300','17250','24350','17270','24370','24380','75400','75500','26450','26400','26480','23800','43400','55000','56100','56200','29000','27750','26800','29650','29600','34100','35300','35350','36200','48500','48300','48400','51700','47700','51600','43500','48700','50300','55200','47200','48200','49500','45600','29500','42800','51000','50900','51800','54300','RU49000','18118','18122','18113','18126','18129','38300','45660','44800','54410','54415','56300','56400','56500','57200','56900','57000','57100','56600','56700','56800','RU55400','RU62900','58100','62800','57400','57500','57600','57700','57800','57900','58900','58000','59000','58400','58700','58800','60200','62700','58300','58500','58600','59200','59300','59400','59500','59600','59700','59900','60000','60100','27650','60700','60900','60800','61100','61400','61200','61300','49000','60400','60600','RU53800','61500','TM33740','RU35720','61700','61900','TM29250','TM29210','TM32150','TM32110','62000','Dx45400','TM33150','TM33110','TM33750','TM33710','TM47910','TM47950','TM36350','TM36310','TM37650','TM37610','TM38610','TM38650','TM41450','TM41410','TM39150','TM39110','TM43850','TM43810','62300','Dx45660','TM41350','TM41310','TM29450','TM29410','TM33350','TM33310','TM29350','TM29310','Dx27600','Dx49500','TM39910','45670-B','Dx17200','Dx24300','Dx24350','Dx24380','Dx48800','63800','TM62250','TM62210','63700','TM38810','TM38850','TM32950','TM32910','TM36950','TM36910','TM33050','TM33010','TM36150','TM36110','TM31450','TM31410','TM42550','TM42510','TM35150','TM35110','TM38750','TM38710','TM31550','TM31510','TM32250','TM32210','TM42050','TM42010','TM38950','TM38910','TM30450','TM30410','TM42150','TM42110','TM34950','TM34910','TM33250','TM33210','TM33450','TM33410','TM30650','TM30610','TM30750','TM30710','TM30850','TM30810','TM44750','TM44710','TM44250','TM44210','TM35450','TM35410','TM36550','TM36510','TM39350','TM39310','TM34050','TM34010','TM37150','TM37110','TM42750','TM42710','TM41050','TM41010','TM35550','TM35510','TM47650','TM47610','TM50550','TM50510','TM39750','TM39710','TM32650','TM32610','TM31750','TM31710','TM32450','TM32410','TM27950','TM27910','TM37250','TM37210','TM34850','TM34810','TM30950','TM30910','TM39650','TM39610','TM42810','TM42850','TM53750','TM53710','TM52050','TM52010','TM34250','TM34210','TM39050','TM39010','TM48050','TM48010','TM38550','TM38510','TM36750','TM36710','TM34750','TM34710','TM42610','TM42650','64000','45690-B','64100','TM64450','TM64410','TM62150','TM62110','65400','63950','TM64310','TM64350','TM65850','TM65810','65300','Dx63950','63200','63300','63250','66100','TM64210','TM64250','TM66250','TM66210','67200','28340','28341','67600','17260','17265','TM67050','TM67010','67900','68200','68000','68100','68300','68400','TM67100','TM67120','TM67200','TM67240','69200','69300','69100','Dx69100','Dx69300','53800','Dx69200','69400','DxTM67100','DxTM67120','TM67300','TM67320','TM67400','DxTM67200','Dx55800','Dx55500','Dx55600','Dx55100','DxTM67300','RU69800','TM69950','TM69910','Dx25300','Dx29600','Dx42800','Dx46300','Dx47400','Dx54300','RU69900','DxTM62200','DxTM39100','DxTM43800','DxTM30400','DxTM32100','DxTM36900','DxTM37100','DxTM42100','DxTM38500','DxTM34000','DxTM39700','DxTM32600','DxTM32400','DxTM27900','DxTM37200','DxTM41400','DxTM39600','DxTM36700','DxTM44200','DxTM41000','TM72450','TM72550','TM72650','DxTM62100','DxTM64400','72900','72950','73100','73110','73120','73600','73520','73510','73500','72800','73200','73210','73220','73420','73410','73400','73300','73310','73320','TM32350','TM32310','28447','68910','73700','73710','73720','63980','28001','28002','28014','28015','28016','73900','73910','73920','TM65950','TM65910','28394','74100','74200','74300','74500','74600','74700','74800','74850','74900','75000','75100','75200'] %}
+  <a href="/promotions/backtoschool"><div class="promo-div"><span class="glyphicon glyphicon-tag"></span><p>Save 20%</p></div></a>
+  {% endif %}
+  
+
+  {#rna#}
+  {# {% if (default_variation == '72800' or default_variation == '73100' or default_variation == '73600' or default_variation == '73700' or default_variation == '73400' or default_variation == '73710' or default_variation == '73110' or default_variation == '73120' or default_variation == '73200' or default_variation == '73210' or default_variation == '73220' or default_variation == '73300' or default_variation == '73310' or default_variation == '73320' or default_variation == '73410' or default_variation == '73420' or default_variation == '73500' or default_variation == '73510' or default_variation == '73520' or default_variation == '73720' or default_variation == '73900' or default_variation == '73910' or default_variation == '73920' or default_variation == '58000' or default_variation == '57400' or default_variation == '60400' or default_variation == '58300' or default_variation == '57700' or default_variation == '47200' or default_variation == '57800' or default_variation == '60600' or default_variation == '58500' or default_variation == '58600' or default_variation == '57500' or default_variation == '57600' or default_variation == '59500' or default_variation == '61100' or default_variation == '57900' or default_variation == '60700' or default_variation == '65300' or default_variation == '68400' or default_variation == '58400' or default_variation == '59400' or default_variation == '59600' or default_variation == '60800' or default_variation == '61200' or default_variation == '61300' or default_variation == '65400' or default_variation == '58700' or default_variation == '58800' or default_variation == '59200' or default_variation == '59300' or default_variation == '60900' or default_variation == '61400' or default_variation == '17200' or default_variation == '37500' or default_variation == '48500' or default_variation == '48400' or default_variation == '17250' or default_variation == '48300' or default_variation == '35300' or default_variation == '24300' or default_variation == '75400' or default_variation == '75500' or default_variation == '35350' or default_variation == '17270' or default_variation == '26800' or default_variation == '25370' or default_variation == '24350' or default_variation == '24380' or default_variation == '61000' or default_variation == '25100' or default_variation == '51800' or default_variation == '21000' or default_variation == '25800' or default_variation == '29000' or default_variation == '25700' or default_variation == '29650' or default_variation == '27750' or default_variation == '62000' or default_variation == '23600' or default_variation == '25850' or default_variation == '55000' ) %}
+  <a href="https://norgenbiotek.com/promotions/rna-promotion"><div class="promo-div"><span class="glyphicon glyphicon-tag"></span><p>Save up to 50% off* & more</p></div></a> #}
+  {# liquid biopsy 2025 #}
+  {# {% if (default_variation == 'RU49000' or default_variation == '65400' or default_variation == 'RU35720' or default_variation == '46200' or default_variation == '65300' or default_variation == 'RU53800' or default_variation == '69100' or default_variation == '69300' or default_variation == 'RU45400' or default_variation == 'RU55400' or default_variation == '69200' or default_variation == '45690-B' or default_variation == 'RU35200' or default_variation == 'RU62900' or default_variation == '63950' or default_variation == '50600' or default_variation == '51200' or default_variation == '55100' or default_variation == '55500' or default_variation == '55600' or default_variation == '55800' or default_variation == '55200' or default_variation == '68300' or default_variation == '68000' or default_variation == '29500' or default_variation == '42800' or default_variation == '51000' or default_variation == '50900' or default_variation == '55000' or default_variation == '56100' or default_variation == '56200' or default_variation == '59500' or default_variation == '59600' or default_variation == '58300' or default_variation == '58500' or default_variation == '58600' or default_variation == '68200' or default_variation == '59700' or default_variation == '57400' or default_variation == '57500' or default_variation == '57600' or default_variation == '56300' or default_variation == '51300' or default_variation == '56500' or default_variation == '68100' or default_variation == '56400' or default_variation == '73100' or default_variation == '73110' or default_variation == '73120' or default_variation == '73400' or default_variation == '73410' or default_variation == '73420' or default_variation == '73720' or default_variation == '73700' or default_variation == '73710' or default_variation == '73720' or default_variation == '31200' or default_variation == '46300' or default_variation == '46380' or default_variation == '51400' or default_variation == '46350' or default_variation == '59800' or default_variation == '62600' or default_variation == '36000' or default_variation == '43400' or default_variation == '43500' or default_variation == '21200' or default_variation == '21250' or default_variation == '18113' or default_variation == '18118' or default_variation == '18122' or default_variation == '18129' or default_variation == '18126' or default_variation == '18100' or default_variation == '50100' or default_variation == '48800' or default_variation == '47050' or default_variation == '56600' or default_variation == '56700' or default_variation == '56800' or default_variation == '22550' or default_variation == '29000' or default_variation == '29600' or default_variation == '29650' or default_variation == '56900' or default_variation == '57000' or default_variation == '57100' or default_variation == '47200' or default_variation == '57700' or default_variation == '58700' or default_variation == '58400' or default_variation == '57800' or default_variation == '57900' or default_variation == '59900' or default_variation == '21600' or default_variation == '73210' or default_variation == '73200' or default_variation == '17400' or default_variation == '52300' or default_variation == '58800' or default_variation == '60000' or default_variation == '60100' or default_variation == '59300' or default_variation == '59200' or default_variation == '67900' or default_variation == '59400' or default_variation == '72900' or default_variation == '73220' or default_variation == '73500' or default_variation == '73510' or default_variation == '73520' or default_variation == '73900' or default_variation == '73910' or default_variation == '73920') %}
+    <a href="https://norgenbiotek.com/liquidbiopsy"><div class="promo-div"><span class="glyphicon glyphicon-tag"></span><p>Save on Shipping </p></div></a>
+  {% endif %} #}
+  </div>
+{% else %}
+  <div {{ attributes.addClass('data', 'price', 'smart-save', 'empty') }}></div>
+{% endif %}

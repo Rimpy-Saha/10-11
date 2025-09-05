@@ -1,0 +1,1159 @@
+
+
+<style>
+.fa-chevron-down{
+    font-size:10px;
+    padding-left:5px;
+}
+.fa-chevron-down:hover{
+    cursor: pointer;
+    color:#2a6496;
+}
+    form.search-form.front-search div.form-actions{
+        margin:0;
+    }
+    li.dropdown.open ul.dropdown-menu{
+        display: inline-block;
+    }
+    @keyframes fade-text-in{
+        from {
+            opacity: 0%;
+        }
+        to{
+            opacity: 100%;
+        }
+    }
+    .sticky-wrapper{
+        height:75px;
+    }
+    #block-search-form .content div fieldset.captcha-admin-links{
+        display: none;
+    }
+    a span.menu-item-text{
+        color: #000;
+        font-weight: normal;
+        font-size: inherit;
+        letter-spacing: 0.5px;
+    }
+    ul.main-nav {
+        display: flex;
+        list-style-type: none;
+        margin-left: 1em;
+        float: left;
+        height: 75px;
+        margin-bottom: 0;
+        /*position: relative;*/
+    }
+    ul.main-nav li.main-nav-item{
+        display: flex;
+        align-items: center;
+        /*white-space: nowrap;*/
+        /*position:relative;*/
+    }
+    a.main-nav-tab:not(.btn), .sub-menu a:not(.btn){
+        color: #000;
+        font-weight: normal;
+    }
+    ul.search-nav{
+        display: flex;
+        list-style-type: none;
+        float: right;
+        margin-bottom: 0;
+        align-items: center;
+        white-space: nowrap;
+        flex-grow: 1;
+        height: 75px;
+        justify-content: flex-end;
+        gap:10px;
+    }
+    ul.search-nav li a{
+        text-align: center;
+    }
+    ul.main-nav li a{
+        font-size: 16px;
+    }
+    .site-logo img{
+        min-width:150px;
+    }
+    div.form-item-search-block-form, #edit-actions--2{
+        margin:0;
+    }
+    
+    ul.main-nav li, .dropdown-section li {
+        padding-left: 10px;
+        padding-right: 15px;
+    }
+    ul.main-nav .sub-menu li{
+        padding: 0px 0px;
+    }
+    ul.main-nav .sub-menu li a{
+        font-size: 16px;
+        padding:10px 10px;
+        display:block;
+        width:100%;
+            color: #004897;
+       
+    }
+    #a-heading{
+        font-size: 18px;
+        padding:5px 10px;
+        display:block;
+        width:100%;
+        font-weight: 600;
+        color: black;
+        
+    }.a-heading-parent:hover{
+        background: none !important;
+    }
+    #first-dropdowns .first-dropdown ul li, #second-dropdowns .second-dropdown ul li, #third-dropdowns .third-dropdown ul li, .fourth-dropdown ul li{
+        float:none;
+        padding: 0px;
+        width: 100%;
+        height: fit-content;
+    }
+    ul.dropdown-menu li.menu-item{
+        float: none;
+    }
+    /* The container <div> - needed to position the dropdown content */
+    .header-dropdown {
+        position: relative;
+        display: flex;
+        justify-content:space-between;
+        align-items: flex-end;
+        height:75px;
+        z-index:101;
+    }
+    
+    /* Dropdown Content (Hidden by Default) */
+    #dropdown-section, .first-dropdown, .second-dropdown, .third-dropdown, .fourth-dropdown {
+        display: none;
+    }
+    .first-dropdown-item.is-active, .second-dropdown-item.is-active, 
+    .third-dropdown-item.is-active, .fourth-dropdown-item.is-active{
+        cursor: pointer;
+        background-color: #e6e6e6;
+        /* background-color: rgba(21,74,148,0.5); */
+    }
+    .first-dropdown-item.nav-image.is-active, .second-dropdown-item.nav-image.is-active, 
+    .third-dropdown-item.nav-image.is-active, .fourth-dropdown-item.nav-image.is-active{
+        cursor: pointer;
+        background-color: transparent;
+    }
+    .first-dropdown-item.nav-image:hover, .second-dropdown-item.nav-image:hover, 
+    .third-dropdown-item.nav-image:hover, .fourth-dropdown-item.nav-image:hover{
+        background-color: #e6e6e6;
+    }
+  
+    /* HOV-RNA */
+    .first-dropdown-item.hov-rna.is-active, .second-dropdown-item.hov-rna.is-active, .third-dropdown-item.hov-rna.is-active{
+        background-color: rgba(190,30,45,0.3);
+    }
+    /* HOV-MOL */
+        /* hov-mol-red */
+        .first-dropdown-item.hov-mol-red.is-active, .second-dropdown-item.hov-mol-red.is-active, .third-dropdown-item.hov-mol-red.is-active{
+            background-color: rgba(190,30,45,0.3);
+        }
+        /* hov-mol-yellow */
+        .first-dropdown-item.hov-mol-yellow.is-active, .second-dropdown-item.hov-mol-yellow.is-active, .third-dropdown-item.hov-mol-yellow.is-active{
+            background-color: rgba(251,191,19,0.3);
+        }
+    /* HOV-PRO */
+    .first-dropdown-item.hov-pro.is-active, .second-dropdown-item.hov-pro.is-active, .third-dropdown-item.hov-pro.is-active{
+        background-color: rgba(98,173,42,0.3);
+    }
+    /* HOV-MULTI */
+    .first-dropdown-item.hov-multi.is-active, .second-dropdown-item.hov-multi.is-active, .third-dropdown-item.hov-multi.is-active{
+        background-color: rgba(102,45,145,0.3);
+    }
+    /* HOV-EXO */
+    .first-dropdown-item.hov-exo.is-active, .second-dropdown-item.hov-exo.is-active, .third-dropdown-item.hov-exo.is-active{
+        background-color: rgba(98,204,180,0.3);
+    }
+    /* HOV-NGS */
+    .first-dropdown-item.hov-ngs.is-active, .second-dropdown-item.hov-ngs.is-active, .third-dropdown-item.hov-ngs.is-active{
+        background: linear-gradient(to right,rgba(245,245,245,0.8),rgba(144,146,169,0.8));
+    }
+    /* HOV-VIRUS */
+    .first-dropdown-item.hov-virus.is-active, .second-dropdown-item.hov-virus.is-active, .third-dropdown-item.hov-virus.is-active{
+        background-color: rgba(102,45,145,0.3);
+    }
+    /* HOV-MICRO */
+    .first-dropdown-item.hov-micro.is-active, .second-dropdown-item.hov-micro.is-active, .third-dropdown-item.hov-micro.is-active{
+        background-color: rgba(230,153,55,0.3);
+    }
+    /* HOV-QUAN */
+    .first-dropdown-item.hov-quan.is-active, .second-dropdown-item.hov-quan.is-active, .third-dropdown-item.hov-quan.is-active{
+        background-color: rgba(102,45,145,0.3);
+    }
+    /* HOV-PCR */
+    .first-dropdown-item.hov-pcr.is-active, .second-dropdown-item.hov-pcr.is-active, .third-dropdown-item.hov-pcr.is-active{
+        background-color: rgba(58,194,91,0.3);
+    }
+    /* HOV-LAB */
+    .first-dropdown-item.hov-lab.is-active, .second-dropdown-item.hov-lab.is-active, .third-dropdown-item.hov-lab.is-active{
+        background-color: rgba(159,159,159,0.3);
+    }
+    /* HOV-LADDER */
+    .first-dropdown-item.hov-ladder.is-active, .second-dropdown-item.hov-ladder.is-active, .third-dropdown-item.hov-ladder.is-active{
+        background-color: rgba(190,30,45,0.3);
+    }
+    /* HOV-ISO */
+    .first-dropdown-item.hov-iso.is-active, .second-dropdown-item.hov-iso.is-active, .third-dropdown-item.hov-iso.is-active{
+        background: linear-gradient(to right,rgba(245,245,245,0.8),rgba(190,30,45,0.6));
+    }
+    /* HOV-MDX */
+    .first-dropdown-item.hov-mdx.is-active, .second-dropdown-item.hov-mdx.is-active, .third-dropdown-item.hov-mdx.is-active{
+        background: linear-gradient(to right,rgba(245,245,245,0.8),rgba(251,191,19,0.6));
+    }
+    /* HOV-OEM */
+    .first-dropdown-item.hov-oem.is-active, .second-dropdown-item.hov-oem.is-active, .third-dropdown-item.hov-oem.is-active{
+        background: linear-gradient(to right,rgba(245,245,245,0.8),rgba(0,0,0,0.6));
+    }
+    .dropdown .main-nav-item:hover, 
+    #dropdown-section.is-active #first-dropdowns .first-dropdown-item:hover, 
+    #dropdown-section.is-active #second-dropdowns .second-dropdown-item:hover, 
+    #dropdown-section.is-active #third-dropdowns .third-dropdown-item:hover{
+        cursor: pointer;
+        color: #004897;
+    }
+
+    /* Change color of dropdown links on hover */
+    .dropdown-flyout a:hover {background-color: #3848da}
+
+    /* .main-nav .main-nav-item .main-nav-tab:hover, #first-dropdowns .first-dropdown-item .first-dropdown-tab:hover,
+    #second-dropdowns .second-dropdown-item .second-dropdown-tab:hover, #third-dropdowns .third-dropdown-item .third-dropdown-tab:hover{
+        color: #ec1d25;
+    } */
+
+    /* display menu when the element has the menu-active class */
+    #dropdown-section.is-active  {
+        display: block;
+        background-color: #ffffff;
+        width: 100%;
+        box-shadow: 0px 10px 10px -10px rgba(0,0,0,0.2);
+        z-index: 100;
+        padding: 25px 0px;
+        position: relative;
+    }
+    .first-dropdown.is-active ul li, .second-dropdown.is-active ul li, .third-dropdown.is-active ul li, .fourth-dropdown.is-active ul li{
+        animation-name: fade-text-in;
+        animation-duration: 0.5s;
+        display: block;
+    }
+    .dropdown ul li a, .first-dropdown ul li a, .second-dropdown ul li a, .third-dropdown ul li a, .fourth-dropdown ul li a{
+        display: block;
+        width: 100%;
+        padding: 12px;
+    }
+    .first-dropdown-item.is-active .first-dropdown-tab,
+    .second-dropdown-item.is-active .second-dropdown-tab,
+    .third-dropdown-item.is-active .third-dropdown-tab,
+    .fourth-dropdown-item.is-active .fourth-dropdown-tab,{
+        color: #004897;
+    }
+    .main-nav-item.is-active .main-nav-tab, .first-dropdown-item.is-active .first-dropdown-tab span.menu-item-text,
+    .second-dropdown-item.is-active .second-dropdown-tab span.menu-item-text,
+    .third-dropdown-item.is-active .third-dropdown-tab span.menu-item-text,
+    .fourth-dropdown-item.is-active .fourth-dropdown-tab span.menu-item-text{
+        color: #004897;
+        text-decoration: underline;
+    }
+    .first-dropdown-item.nav-image.is-active .first-dropdown-tab,
+    .second-dropdown-item.nav-image.is-active .second-dropdown-tab, 
+    .third-dropdown-item.nav-image.is-active .third-dropdown-tab,
+    .fourth-dropdown-item.nav-image.is-active .fourth-dropdown-tab{
+        color: black;
+        text-decoration: none;
+    }
+    .first-dropdown.is-active, .second-dropdown.is-active{
+        display: flex;
+        flex: 1;
+        justify-content: flex-start;
+        left: 0;
+        z-index: 100;
+        padding: 5px;
+        border-right: 1px solid #c6c6c6;
+    }
+    .third-dropdown.is-active, .second-dropdown.is-active#img-card{
+        display: flex;
+        flex: 1;
+        justify-content: flex-start;
+        left: 0;
+        z-index: 100;
+        padding: 5px;
+        border-right: 0px;
+    }
+    .fourth-dropdown.is-active, .third-dropdown.is-active#img-card{
+        display: flex;
+        flex: 1;
+        justify-content: flex-start;
+        left: 0;
+        z-index: 100;
+        padding: 5px;
+    }
+    #first-dropdowns .first-dropdown ul, #second-dropdowns .second-dropdown ul, #third-dropdowns .third-dropdown ul{
+        list-style-type: none;
+        width: 100%;
+    }
+    .grey{
+        color: #868686;
+        float: right;
+    }
+    #first-dropdowns.is-active, #second-dropdowns.is-active, #third-dropdowns.is-active, #fourth-dropdowns.is-active{
+        width:25%;
+    }
+    #first-dropdowns, #second-dropdowns, #third-dropdowns, #fourth-dropdowns{
+        display: flex;
+        justify-content: space-evenly;
+        max-width: 640;
+    }
+    #second-dropdowns .second-dropdown.is-active ul.menu-flex-card,
+    #third-dropdowns .third-dropdown.is-active ul.menu-flex-card, #fourth-dropdowns .fourth-dropdown.is-active ul.menu-flex-card{
+        display: flex;
+    }
+    .second-dropdown.is-active .second-dropdown-item .second-dropdown-tab .nav-image p.title,
+    .third-dropdown.is-active .third-dropdown-item .third-dropdown-tab .nav-image p.title{
+        font-size: 2rem;
+    }
+    .nav-image{
+        height: 200px;
+        background-size: contain;
+        background-repeat: no-repeat;
+    }
+    #edit-search-block-form {
+        width: calc(100% - 75px);
+    }
+    @media only screen and (max-width: 1600px){
+        ul.main-nav li a, ul.search-nav li a{
+            font-size: 16px;
+        }
+    }
+    @media only screen and (max-width: 1400px){
+        ul.main-nav li a, ul.search-nav li a{
+            font-size: 14px;
+        }
+    }
+    @media only screen and (max-width: 1280px){
+        ul.main-nav li a, ul.search-nav li a{
+            font-size: 16px;
+        }
+    }
+    @media only screen and (max-width:1100px){
+        .header-dropdown{
+            display: none;
+            height:75px;
+        }
+        #edit-search-block-form {
+            width: calc(100% - 50px);
+        }
+    }
+    @media only screen and (max-height:720px) and (max-width: 1280px){
+        .header-dropdown{
+            display: none;
+            height:75px;
+        }
+        #edit-search-block-form {
+            width: calc(100% - 50px);
+        }
+    }
+    
+</style>
+
+<style>
+
+.sub-menu{
+    display:none;
+    position: absolute;
+    top: 75px;
+    left: 0;
+    list-style: none;
+    background-color: white;
+    margin-left:0px;
+    padding-top:0px;
+    box-shadow: 0px 10px 10px 0px rgb(0 0 0 / 20%);
+    border-top:#ddd;
+    width: 100%;
+    padding: 3%;
+    overflow:auto;
+    /*height:calc(100vh - 75px);*/
+}
+.sub-menu > div{
+        width: 100%;
+    margin: auto;
+    display: flex;
+    gap: 50px;
+}
+.sub-menu > div > div{
+    width: 30%;
+}
+.sub-menu li{
+    padding:6px 12px;
+}
+.sub-menu li:hover, .main-nav-item:hover{
+    background-color:#E5ECF4;
+}
+.main-nav-item:hover > .sub-menu {
+    display:block;
+}
+
+/*the container must be positioned relative:*/
+.dropdown {
+  position: relative;
+  /*display: inline-block;*/
+}
+.auto {
+  position: relative;
+  display: inline-block;
+  border-left: 1px transparent;
+  border-bottom: 1px transparent;
+  border-top: 1px transparent;
+}
+select{
+    /* width: 90px; */
+    /*background-color: #f1f1f1;*/
+}
+select option:disabled {
+    display:none;
+}
+
+
+/* input[type=text] {
+  background-color: #f1f1f1;
+} */
+
+
+.submit {
+    border: 1px solid transparent;
+  padding: 10px;
+  font-size: 16px;
+  background-color: DodgerBlue;
+  color: #fff;
+  cursor: pointer;
+}
+.dropdown_list_el {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    cursor: pointer;
+    /*position the autocomplete items to be the same width as the container:*/
+    top: 50px;
+    left: 0px;
+    right: 0;
+    max-height:200px;
+    overflow-y:auto;
+    box-shadow: 0 0 0 1px rgb(0 0 0 / 4%), 0 8px 16px rgb(0 0 0 / 15%);
+    width: calc(100% - 5em - 0px);
+    overflow-x:hidden;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px
+}
+.dropdown_list_el div {
+  font-size:11px;
+  padding: 15px !important;
+  cursor: pointer;
+  background-color: #fff; 
+  border-bottom: 1px solid #d4d4d4; 
+  border-radius: 0 !important;
+}
+
+/*when hovering an item:*/
+.dropdown_list_el div:hover {
+  background-color: #e9e9e9; 
+}
+
+/*when navigating through the items using the arrow keys:*/
+.dropdown_el_active {
+  background-color: #d4d4d4 !important; 
+  /* color: #ffffff;  */
+}
+
+
+.search-input {
+  border: none;
+  appearance: none;
+  outline: none;
+  width: 100%;
+  font-size: 1.2em;
+  line-height: 1.2em;
+  margin:10px 1em;
+  margin-left:45px;
+}
+
+.search-input:focus {
+  box-shadow: 0px 2px 0px 0px #004897;
+}
+
+
+.search-button-advance {
+    flex-grow: 1;
+    height: -webkit-fill-available;
+    line-height: 0px;
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: 100;
+    color: black;
+    transition: background-color 0.8s ease;
+    margin: auto;
+    box-shadow:0 0 5px hsl(0 0% 78%);
+    display:inline;
+    border:none;
+    background-color:#f9f9f9;
+    border-radius:12px;
+    padding:1em;
+    width:5em;
+    border-bottom-left-radius:0px;
+    border-top-left-radius:0px;
+}
+
+.search-button-advance:hover {
+  background-color: #0048976b;
+}
+/* select{
+    width: 268px;
+    padding: 5px;
+    font-size: 16px;
+    line-height: 1;
+    border: 0;    
+    background: url(http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png) no-repeat right;
+}  */
+
+
+/*new*/
+@-moz-document url-prefix() {
+  .bar > div {
+ 
+  width: -moz-available;
+ 
+}
+}
+#overlay-search {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: transparent;
+    z-index: 2;
+}
+.bar{
+  background:white;
+  box-shadow:0 0 5px hsl(0 0% 78%);
+  height:50px;
+  border-radius:12px;
+  display:flex;
+  justify-content:center;
+  /*margin:0px 25px 50px 25px;*/
+}
+
+.bar div{
+  /* padding:1rem 20px 0 3.5rem; */
+  font-size:14px;
+}
+
+/* .bar div:hover{
+  background:hsl(0 0% 94%);
+} */
+
+.location{
+  /* width:34%; */
+}
+
+input[type="text"]:focus{
+  outline:none;
+}
+
+::placeholder{
+  font-size:16px;
+  font-family: arial;
+}
+
+
+.location span{
+  position:absolute;
+  top:50%;
+  right:0px;
+  transform:translateY(-50%);
+  background:#004897;
+  color:white;
+  font-size:14px;
+  /*padding:0.7rem;*/
+  border-radius:42px;
+}
+.location{
+  position: relative;
+  /* padding:1rem 0 0 0rem !important;  */ 
+}
+.location:focus {
+    box-shadow: 0px 2px 0px 0px #004897;
+}
+.bar>div{
+  position:relative;
+  width: -webkit-fill-available;
+  display:flex;
+}
+
+
+.bar>div::before{
+  position:absolute;
+  content:"";
+  left:0;
+  top:50%;
+  transform:translateY(-50%);
+  width:1px;
+  height:55%;
+  background:hsl(0 0% 90%);
+}
+
+.bar>div:nth-of-type(1)::before{
+   background:transparent;
+}
+
+
+.bar>div:hover::before{
+  background:transparent;
+}
+
+.right_advanced { 
+    grid-area: right_side; 
+}
+
+.search-input option{   
+    color: black;
+}
+
+.bar:focus{
+  /* width: 800px; */
+}
+.bar{
+  -webkit-transition: width 0.4s ease-in-out;
+  transition: width 0.4s ease-in-out;
+}
+.mobNav, .mobileHide {
+    display: none;
+}
+@media only screen and (max-width:1280px) and (min-height:720px){
+    .sub-menu{
+        height:calc(100vh * (100/75));
+    }
+}
+
+@media only screen and (max-width: 1100px) {
+    .bar {
+        margin: 0px 25px 50px 25px;
+        width:auto;
+    }
+    .bar > div{
+        width:100%;
+    }
+    .mobileHide {
+        display: inline;
+    }
+    .mobNav {
+        display: block;
+        text-align: center;
+        width: 100%;
+        margin: 0;
+    }
+    .navbar-nav > li {
+        float: none;
+    }
+}
+#section-header .container{
+    width:100%;
+}
+.c-cart-number {
+    margin-left: 5px;
+    position: relative;
+    top: -3px;
+    display: inline-block;
+    border-radius: 20px;
+    text-align: center;
+    padding: 3px 0;
+    height: 25px;
+    font-size: 15px;
+    width: 25px;
+    color: #ffffff;
+}
+
+</style>
+<header class="c-layout-header c-layout-header-4 c-layout-header-light-mobile c-layout-header-default-mobile {{ add_class ? 'body-desktop-cart-sidebar' : '' }}">
+    <div id="overlay-search" onclick="close_nav()"></div>
+    <div class="c-topbar c-topbar-topbar-dark container">
+        <div style="padding:0 10px;">
+            <!-- BEGIN: INLINE NAV -->
+            <nav class="c-top-menu c-pull-left">
+                <ul class="social-list c-icons c-theme-ul">
+                    <li class="content-social">
+                        <a target="_blank" data-placement="auto" data-toggle="tooltip" title="" href="http://facebook.com/norgenbiotek" class="dtooltip social-icon fbclick" data-original-title="Facebook" aria-label="Facebook"><span><i class="fa-facebook fab" alt="Facebook"></i></span></a>
+                    </li>
+                    <li class="content-social">
+                        <a target="_blank" data-placement="auto" data-toggle="tooltip" title="" href="http://twitter.com/norgenbiotek" class="dtooltip social-icon twclick" data-original-title="Twitter" aria-label="Twitter">
+                            <span>
+                                <svg style="max-width: 15px; max-height: 15px; position: relative; top: 1px;" width="1200" height="1227" viewBox="0 0 1200 1227" fill="var(--norgen-primary-blue)" xmlns="http://www.w3.org/2000/svg" aria-labelledby="twitter-footer-title">
+                                    <title id="twitter-footer-title" lang="en">
+                                    X formerly known as Twitter
+                                    </title>
+                                    <path d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z">
+                                    </path>
+                                </svg>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="content-social">
+                        <a target="_blank" data-placement="auto" data-toggle="tooltip" title="" href="http://instagram.com/norgen.biotek" class="dtooltip social-icon igclick" data-original-title="Instagram" aria-label="Instagram"><span><i class=" fa-instagram fab" alt="Instagram"></i></span></a>
+                    </li>
+                    <li class="content-social">
+                        <a target="_blank" data-placement="auto" data-toggle="tooltip" title="" href="https://www.youtube.com/@norgenbiotek?sub_confirmation=1" class="dtooltip social-icon ytclick" data-original-title="Youtube" aria-label="YouTube"><span><i class=" fa-youtube fab" alt="YouTube"></i></span></a>
+                    </li>
+                    <li class="content-social">
+                        <a target="_blank" data-placement="auto" data-toggle="tooltip" title="" href="https://www.linkedin.com/company/norgenbiotek/" class="dtooltip social-icon liclick" data-original-title="LinkedIn" aria-label="LinkedIn"><span><i class="fa-linkedin fab" alt="LinkedIn"></i></span></a>
+                    </li>
+                </ul>
+            </nav> 
+            <!-- END: INLINE NAV -->
+
+            <!-- BEGIN: INLINE NAV -->
+            <nav class="c-top-menu c-pull-right">
+                <ul class="c-ext c-theme-ul">
+                    <li style="font-size:15px;">
+                        <a href="/es/Contacte" target="_blank">Contactar</a>
+                    </li>
+                    <li>|</li>
+                    <li style="font-size:15px;">
+                        <a href="/es/distribuidor" target="_blank">Encontrar un distribuidor</a>
+                    </li>
+                    <li class="c-lang dropdown c-last">
+                        <a href="#">es</a>
+                        <!-- Language list menu -->
+                        <ul class="language-switcher-language-url dropdown-menu pull-right">
+                            <li hreflang="es" class="es"><a href="/es" class="language-link is-active" hreflang="es">Spanish</a></li>
+                            <li hreflang="fr" class="fr"><a href="/fr" class="fr is-active" hreflang="fr">Fran&ccedil;ais</a></li>
+                            <li hreflang="en" data-drupal-link-system-path="node/117" class="en is-active"><a href="/" class="language-link" hreflang="en" data-drupal-link-system-path="node/117">English</a></li>
+                            <li hreflang="cn" class="es"><a href="/cn" class="language-link" hreflang="cn">Chinese</a></li>
+
+                           <!-- <li hreflang="es" class="es"><a href="/es" class="language-link is-active" hreflang="es">Spanish</a></li> -->
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <!-- END: INLINE NAV -->
+        </div>
+    </div>
+    <section class="dexp-section dexp-sticky main-hide" style="background-color: #fff;"><!--font-size:12px !important; -->
+        <div class="container" style="padding-left: 0; padding-right: 0;box-shadow: 0px 10px 10px -10px rgb(0 0 0 / 20%)">
+            <div class="mobileHide row" style="padding-left: 1em; padding-right: 1em;">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="background:#fff; position: absolute;padding-left:0; padding-right:0;">
+                    <div style="display:block;padding:0px 20px;">
+                        <!-- <a href="/" class="site-logo active"><img src="/sites/default/files/logo.png" alt="Norgen Biotek Logo" width="150" ></a> -->
+                       <!-- <a href="/es" class="site-logo active"><img src="/sites/default/files/norgen-logo.svg" alt="Norgen Biotek Corp." width="150" height="47" style="top:-4px;position:relative;"></a>-->
+                                            <div style="display:inline-flex;gap:10px;width:100%;justify-content:space-between;align-items: center;flex-wrap:wrap;">
+                            <a href="/fr" class="site-logo active"><img src="/sites/default/files/norgen-logo.svg" alt="Norgen Biotek Corp." width="150" height="47" style="top:-4px;position:relative;"></a>
+                            <div style="display:flex;gap:10px;align-items: center;">
+                                <div >
+                        <a href="javascript:void(0)" onclick="toggleCart()" class="c-btn-icon c-cart-toggler">
+                            <i class="icon-handbag c-cart-icon"></i>
+                            <span class="c-cart-number c-theme-bg">{{ cart_count }}</span>
+                        </a>
+                        <!-- cart_block -->
+                        {% if cart_block != FALSE %}
+                        {% set existing_classes =  attributes.addClass('c-cart-menu', 'desktop') %}
+
+                        <div id = 'cart-sidebar-desktop-header' class="{{ existing_classes.class }}{{ add_class ? ' desktop-cart-sidebar' : '' }}">
+                            <div class="c-cart-menu-title">
+                                <p class="c-cart-menu-float-l c-font-sbold">{{ count_text }}</p>
+                                <p class="c-cart-menu-float-r c-theme-font c-font-sbold">{{ cart_total_price }}</p>
+                            
+                            </div>
+                            <div style="display:flex;    align-items: center;">
+                            <div style="width:120%;padding: 0 10px;">
+                                <h2 style="font-weight:600;">VOTRE PANIER, {{ cart_count }} article(s)</h2>
+                            </div>
+                            <div style="width:100%;text-align: right;">
+                                <button style="border-radius:4px;border-width:0!important;color:#7F8C97;background-color: transparent;font-size:40px" id="close-cart-desktop" onclick='closecart(this)'>&times;</button>
+                            </div>
+                            
+                            </div>
+
+                            <div style="display:flex;justify-content: space-between;padding:10px 10px;">
+                            <p style="letter-spacing:1px;font-size:12px;">PRODUCT</p>
+                            <!--<p style="letter-spacing:1px;font-size:12px;">TOTAL</p>-->
+                            </div>
+                            <hr style="width:90%;margin:auto auto 10px;">
+                               
+                                {{ nor_forms_module_cart_view }}
+                                {# 
+                                
+                                {% if order_id is not empty and order_id != 'NA' %}
+                                {{ drupal_view('cart_form_rimpy_2', 'block_1', order_id) }}
+                                {% else %}
+                                <p>Products added to cart will show up here.</p>
+                                {% endif %} #}
+                            </div>
+                        {% endif %}
+                    </div>
+                         <a href="/es/user" style=""><i class="icon-user"></i></a>
+                    <nav aria-label="mobile navigation">
+                        <ul class="mobNav nav navbar-nav" style="padding-left: 1em; padding-right: 1em;box-shadow: 0px 10px 10px -10px rgb(0 0 0 / 20%);">
+                            <li class="menu-item dropdown">   
+                               <button data-toggle="dropdown" class="fa fa-bars fa-2x" type="button" aria-label="Navigation Menu"></button>
+                                <ul class="dropdown-menu" style="padding:0px 20px; margin-top:5px; overflow-y:auto; max-height:calc(100vh - 172px); width: fit-content;background:white;z-index:1000;position:absolute;left:-200px;">      
+                                    <hr>
+                                    <li class="menu-item"><a href="/es/productos-principales">Productos principales</a></li>
+                                    <hr>
+                                    <li class="menu-item"><a href="/es/servicios">Servicios de laboratorio</a></li>
+                                    <hr>
+                                    <li class="menu-item"><a href="/es/acerca-de">Acerca de</a></li>
+                                    <hr>
+                                    <li class="menu-item"><a href="/es/distribuidor">Encontrar un distribuidor</a></li>
+                                    <hr>
+                                    <li class="menu-item"><a href="/es/Contacte">Contactar con Norgen</a></li>
+                                    <hr>
+                                </ul>  
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>                    
+            </div>
+
+                    
+                </div>
+            </div>
+            </div>
+            <div class="header-dropdown container">
+                <div class="mbImg" style="line-height: 55px; padding-left: 1em; align-self:center;"><!-- <a href="/" class="site-logo active"><img src="/sites/default/files/logo.png" alt="Norgen Biotek Logo" width="150" ></a> -->
+                    <div style="display: flex;list-style-type: none;margin-left: 1em;float: left; margin-bottom: 0;gap: 33px;">
+                            <a href="/es" class="site-logo active" aria-label="Go to Home Page"><img src="https://norgenbiotek.com/themes/custom/jango/logo.svg" alt="Norgen Biotek Corp." width="150"></a>
+                            <!--<img src="/sites/default/files/images/homepage-fr/Norgen_25th_no-Norgen.png" alt="Norgen Biotek Corp." style="max-width: 100px;">-->
+                    </div>
+                </div>
+                <!-- Nav Bar Main Headers -->
+                <nav aria-label="main navigation" itemtype="https://schema.org/SiteNavigationElement" itemscope="itemscope">
+                    <ul class="main-nav">
+                        <li class="main-nav-item relatedMenu" dropdown="events">
+                            <div class="man-nav-tab-container"><a class="main-nav-tab" href="/es/productos-principales">Productos principales</a><i class="fa fa-chevron-down"></i></div>
+                            <ul class="sub-menu">
+                                <div>
+                                <div>
+                                <li class="a-heading-parent"><p id="a-heading">Recogida y conservación de muestras</p></li>
+                                <hr style="border-top: 1px solid #c5bbbb;margin: 1%;">
+                                <!--cfdna-->
+                                <li><a href="https://norgenbiotek.com/es/Productos/tubos-conservantes-de-cf-adncf-arn">Tubos conservantes de cf-ADN/cf-ARN</a></li>
+                                <!--urine-->
+                                <li><a href="https://norgenbiotek.com/es/Productos/dispositivos-de-recogida-y-conservacion-de-orina">Dispositivos de recogida y conservación de orina</a></li>
+                                <!--stool tubes-->
+                                <li><a href="https://norgenbiotek.com/es/Productos/tubos-de-recogida-y-conservacion-de-acidos-nucleicos-en-heces">Tubos de recogida y conservación de ácidos nucleicos en heces</a></li>
+
+                                <!--stool tubes-->
+                                <!-- <li><a href="https://development.norgenbiotek.com/fr/produit/Système-de-collecte-et-de-préservation-de-l'acide-nucléique-des-selles">Système de collecte et de préservation de l'acide nucléique des selles   </a></li> -->
+                                <!--saliva dna-->
+                                <li><a href="https://norgenbiotek.com/es/Productos/dispositivos-de-recogida-y-conservacion-de-adn-de-la-saliva">Dispositivos de recogida y conservación de ADN de la saliva</a></li>
+                                
+                                <!--saliva rna-->
+                                <li><a href="https://norgenbiotek.com/es/Productos/dispositivos-de-recogida-y-conservacion-de-arn-de-la-saliva">Dispositivos de recogida y conservación de ARN de la saliva</a></li>
+                                <!--total nucliec acid-->
+                                <li><a href="https://norgenbiotek.com/es/Productos/tubos-de-conservacion-total-de-acidos-nucleicos">Tubos de conservación total de ácidos nucleicos  </a></li>
+                                <!--swab collection and dna preservation-->
+                                <li><a href="https://norgenbiotek.com/es/Productos/sistema-de-recogida-de-hisopos-y-conservacion-de-adn">Sistema de recogida de hisopos y conservación de ADN</a></li>
+                                
+                                <!--fecal tubes-->
+                                <li><a href="https://norgenbiotek.com/es/Productos/minitubos-de-recogida-y-conservacion-de-adn-fecal">Minitubos de recogida y conservación de ADN fecal</a></li>
+                                <!--fecal system-->
+                                <!-- <li><a href="https://development.norgenbiotek.com/fr/produit/Système-de-collecte-et-de-préservation-des-écouvillons-fécaux">Système de collecte et de préservation des écouvillons fécaux</a></li> -->
+                        
+                            </div>
+                            <div>
+                                <li class="a-heading-parent"><p id="a-heading">Aislamiento y purificación
+    </p></li>
+                                <hr style="border-top: 1px solid #c5bbbb;margin: 1%;">
+                                <li><a href="https://norgenbiotek.com/es/Productos/kit-de-purificacion-de-arn-total">Kit de purificación de ARN total</a></li>
+                                <!--plasma rna-->
+                                <li><a href="https://norgenbiotek.com/es/Productos/kits-de-purificacion-de-arn-de-plasmasuero">Kits de purificación de ARN de plasma/suero</a></li>
+                                <!--plasma exosomal rna-->
+                                <li><a href="https://norgenbiotek.com/es/Productos/kits-de-purificacion-de-exosomas-de-plasmasuero-y-aislamiento-de-arn">Kits de purificación de exosomas de plasma/suero y aislamiento de ARN</a></li>
+                                <!--exosomal rna-->
+                                <li><a href="https://norgenbiotek.com/es/Productos/kit-de-aislamiento-de-arn-exosomico">Kit de aislamiento de ARN exosómico</a></li>
+                                <!--cytoplasmic-->
+                                <li><a href="https://norgenbiotek.com/es/Productos/purificacion-de-arn-citoplasmaticonuclear">Purificación de ARN citoplasmático/nuclear</a></li>
+                                <!--single cell-->
+                                <li><a href="https://norgenbiotek.com/es/Productos/kit-de-purificacion-de-arn-unicelular">Kit de purificación de ARN unicelular</a></li>
+                                <li><a href="https://norgenbiotek.com/es/Productos/kits-de-limpieza-y-concentracion-de-arn">Kits de limpieza y concentración de ARN</a></li>
+                                <!--plasma cellfree dna-->
+                                <li><a href="https://norgenbiotek.com/es/Productos/kits-de-purificacion-de-adn-circulante-libre-de-celulas-de-plasmasuero">Kits de purificación de ADN circulante libre de células de plasma/suero</a></li>
+                                <!--stool dna isolation kit-->
+                                <li><a href="https://norgenbiotek.com/es/Productos/kits-de-aislamiento-de-adn-en-heces">Kits de aislamiento de ADN en heces</a></li>
+                                <!--phage-->
+                                <li><a href="https://norgenbiotek.com/es/Productos/kit-de-aislamiento-de-adn-fagico">Kit de aislamiento de ADN fágico</a></li>
+                                <!-- <li><a href="/fr/product/plasmaserum-exosome-purification-and-rna-isolation-kits">NGS Normalization 96-Well Kit</a></li> -->
+                            </div>
+                            <div>
+                                <li class="a-heading-parent"><p id="a-heading">Diagnóstico molecular</p></li>
+                                <hr  style="border-top: 1px solid #c5bbbb;margin: 1%;">
+                                <li><a href="https://norgenbiotek.com/es/Productos/kits-de-deteccion-pcr-taqman-del-virus-del-papiloma-humano-vph-alto-y-bajo-riesgo">Kit de détection TaqMan PCR du papillomavirus humain (PVH) (risque élevé et faible)</a></li>
+                                <li><a href="https://norgenbiotek.com/es/Productos/kits-de-deteccion-pcr-taqman-de-chlamydianeisseria-gonorrhoeae">Kits de detección PCR TaqMan de Chlamydia/Neisseria gonorrhoeae</a></li>
+                                <li><a href="https://norgenbiotek.com/es/Productos/kits-de-deteccion-pcr-taqman-del-virus-del-herpes-simple-1-vhs-1">Kits de detección PCR TaqMan del virus del herpes simple 1 (VHS-1)</a></li>
+                                <li><a href="https://norgenbiotek.com/es/Productos/kits-de-deteccion-rt-pcr-taqman-del-viroide-latente-del-lupulo-hlvd">Kits de detección RT-PCR TaqMan del viroide latente del lúpulo (HLVd)</a></li>
+                                <li><a href="https://norgenbiotek.com/es/Productos/kits-de-deteccion-pcr-taqman-de-saccharomyces-cerevisiae">Kits de detección PCR TaqMan de Saccharomyces cerevisiae</a></li>
+                                <li><a href="https://norgenbiotek.com/es/Productos/kits-de-deteccion-rt-pcr-taqman-del-viroide-de-la-mancha-solar-del-aguacate-asbvd">Kits de detección RT-PCR TaqMan del viroide de la mancha solar del aguacate (ASBVd)</a></li>
+                                <li><a href="https://norgenbiotek.com/es/Productos/kits-de-deteccion-pcr-taqman-de-streptococcus-agalactiaeR">Kits de detección PCR TaqMan de Streptococcus agalactiae</a></li>
+                                <li><a href="https://norgenbiotek.com/es/Productos/kits-de-deteccion-pcr-taqman-de-listeria-monocytogenes">Kits de detección PCR TaqMan de Listeria monocytogenes</a></li>
+                                <li><a href="https://norgenbiotek.com/es/Productos/kits-de-deteccion-rt-pcr-taqman-de-cryptosporidium">Kits de detección RT-PCR TaqMan de Cryptosporidium</a></li>
+                                <li><a href="https://norgenbiotek.com/es/Productos/kits-de-deteccion-rt-pcr-taqman-de-giardia-intestinalis">Kits de detección RT-PCR TaqMan de Giardia intestinalis</a></li>
+                                <li><a href="https://norgenbiotek.com/es/Productos/legionella-sp-kits-de-deteccion-pcr-taqman">Legionella sp. Kits de detección PCR TaqMan</a></li>
+                            </div>
+                            
+                            </div>
+                            </ul>
+                        
+                        </li>
+                        <li class="main-nav-item relatedMenu" dropdown="products">
+                            <div class="man-nav-tab-container"><a class="main-nav-tab" href="/es/servicios">Servicios de laboratorio</a></div>
+                        </li> 
+                        <li class="main-nav-item relatedMenu" dropdown="about">
+                            <div class="man-nav-tab-container"><a class="main-nav-tab" href="/es/acerca-de">Acerca de</a><i class="fa fa-chevron-down"></i></div>
+                            <ul class="sub-menu">
+                                <div>
+                                <div>
+                                    <li class="a-heading-parent"><p id="a-heading">Acerca de Norgen</p></li>
+                                    <hr style="border-top: 1px solid #c5bbbb;margin: 1%;">
+                                    <li><a href="/es/acerca-de#aboutcompany">Acerca de la empresa</a></li>
+                                    <li><a href="/es/acerca-de#abouttech">Tecnología Norgen</a></li>
+                                    <li><a href="/es/acerca-de#aboutmanufacturing">Capacidad de fabricación, fabricación por contrato y OEM</a></li>
+                                    <li><a href="/es/acerca-de#aboutproduct">cGMP</a></li>
+                                </div>
+                                <div>
+                                    <li class="a-heading-parent"><p id="a-heading">Declaración de misión</p></li>
+                                    <hr style="border-top: 1px solid #c5bbbb;margin: 1%;">
+                                    <li><a href="/es/acerca-de#aboutmission">Nuestra misión</a></li>
+                                    <li><a href="/es/acerca-de#aboutpromise">Nuestras prioridades</a></li>
+                                </div>
+                                <div>
+                                    <li class="a-heading-parent"><p id="a-heading">Productos y servicios principales</p></li>
+                                    <hr style="border-top: 1px solid #c5bbbb;margin: 1%;">
+                                    <li><a href="/es/acerca-de#coreprods">Productos básicos</a></li>
+                                    <li><a href="/es/acerca-de#coreprods">Servicios básicos</a></li>
+                                </div>
+                                <div>
+                                    <li class="a-heading-parent"><p id="a-heading">Certificados</p></li>
+                                    <hr style="border-top: 1px solid #c5bbbb;margin: 1%;">
+                                    <li><a href="/es/acerca-de#aboutcert">Certificaciones ISO</a></li>
+                                </div>
+                                <div>
+                                    <li class="a-heading-parent"><p id="a-heading">distribuidor</p></li>
+                                    <hr style="border-top: 1px solid #c5bbbb;margin: 1%;">
+                                    <li><a class="main-nav-tab" href="/distribuidor">Conoce a un distribuidor</a></li>
+                                </div>
+                            </div>
+                            </ul>
+                        </li>
+                        <!--<li class="main-nav-item relatedMenu" dropdown="resources">
+                            <div class="man-nav-tab-container"><a class="main-nav-tab" href="/es/distribuidor">Trouver un distributeur</a></i></div>
+                        </li>-->
+                        
+                    </ul>
+                </nav>
+                <ul class="search-nav">
+                    <li style="position:relative; padding-right:0.75em; flex-grow:1;"></li>
+                    {# <li style="position:relative; padding-right:0.75em;">
+                        <a href="/es/user" style="padding:10px 12px; border-radius:25px;color:black; font-weight:normal; display:inline-block;  font-size:14px; display:flex; align-items:center;gap:10px;"><i class="icon-handbag c-cart-icon"></i></a>
+                    </li> #}
+                    <li class="c-cart-toggler-wrapper">
+                            <a href="javascript:void(0)" onclick="toggleCart()" class="c-btn-icon c-cart-toggler">
+                                <i class="icon-handbag c-cart-icon"></i>
+                                <span class="c-cart-number c-theme-bg">{{ cart_count }}</span>
+                            </a>
+                            <!-- cart_block -->
+                            {% if cart_block != FALSE %}
+                            {% set existing_classes =  attributes.addClass('c-cart-menu', 'desktop') %}
+
+                            <div id = 'cart-sidebar-desktop-header' class="{{ existing_classes.class }}{{ add_class ? ' desktop-cart-sidebar' : '' }}">
+                                    <div class="c-cart-menu-title">
+                                        <p class="c-cart-menu-float-l c-font-sbold">{{ count_text }}</p>
+                                        <p class="c-cart-menu-float-r c-theme-font c-font-sbold">{{ cart_total_price }}</p>
+                                    
+                                    </div>
+                                    <div style="display:flex;    align-items: center;">
+                                    <div style="padding: 0 10px;">
+                                       <h2 style="font-weight:600;font-size:18px;">Tu Carrito, {{ cart_count }} Artículos(s)</h2>
+                                    </div>
+                                    <div style="width:100%;text-align: right;">
+                                        <button style="border-radius:4px;border-width:0!important;color:#7F8C97;background-color: transparent;font-size:40px" id="close-cart-desktop" onclick='closecart(this)'>&times;</button>
+                                    </div>
+                                    
+                                    </div>
+
+                                    <div style="display:flex;justify-content: space-between;padding:10px 10px;">
+                                    <p style="letter-spacing:1px;font-size:12px;">PRODUCTO</p>
+                                    <!--<p style="letter-spacing:1px;font-size:12px;">TOTAL</p>-->
+                                    </div>
+                                    <hr style="width:90%;margin:auto auto 0px;">
+                                       
+                                        {{ nor_forms_module_cart_view }}
+
+                                </div>
+                            {% endif %}
+                        </li>
+                    <li style="position:relative; padding-right:0.75em;">
+                        <a href="/es/user" style="padding:10px 12px; border-radius:25px;color:black; font-weight:normal; display:inline-block;  font-size:14px; display:flex; align-items:center;border:1px solid;gap:10px;"><i class="icon-user"></i> Cuenta</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <!-- end of page header -->
+</header>
+
+
+
+<script>
+
+    function drop_click(elm,inpt)
+    {
+        var inp =  document.getElementById(inpt);
+        inp.value = elm.getElementsByTagName("input")[0].value;
+        search_inpt.focus();
+        search_submit.click();
+    }
+
+    function jaro_similarity(s1, s2) 
+    {
+        var m = 0;
+        if (s1.length === 0 || s2.length === 0) {
+            return 0;
+        }
+
+        if (s1 === s2 || s1.includes(s2)) {
+            return 1;
+        }
+
+        var range = (Math.floor(Math.max(s1.length, s2.length) / 2)) - 1,
+            s1Matches = new Array(s1.length),
+            s2Matches = new Array(s2.length);
+
+        for (i = 0; i < s1.length; i++) {
+            var low = (i >= range) ? i - range : 0,
+                high = (i + range <= s2.length) ? (i + range) : (s2.length - 1);
+
+            for (j = low; j <= high; j++) {
+                if (s1Matches[i] !== true && s2Matches[j] !== true && s1[i] === s2[j]) {
+                    ++m;
+                    s1Matches[i] = s2Matches[j] = true;
+                    break;
+                }
+            }
+        }
+
+        if (m === 0) {
+            return 0;
+        }
+
+        var k = n_trans = 0;
+
+        for (i = 0; i < s1.length; i++) {
+            if (s1Matches[i] === true) {
+                for (j = k; j < s2.length; j++) {
+                    if (s2Matches[j] === true) {
+                        k = j + 1;
+                        break;
+                    }
+                }
+
+                if (s1[i] !== s2[j]) {
+                    ++n_trans;
+                }
+            }
+        }
+
+        var weight = (m / s1.length + m / s2.length + (m - (n_trans / 2)) / m) / 3,
+            l = 0,
+            p = 0.1;
+
+        if (weight > 0.7) {
+            while (s1[l] === s2[l] && l < 4) {
+                ++l;
+            }
+
+            weight = weight + l * p * (1 - weight);
+        }
+
+        return weight;
+    }
+        
+    function checkInView(elem, container) 
+    {
+        var contHeight = $(container).height();
+        var contTop = $(container).scrollTop();
+        var contBottom = contTop + contHeight;
+        if($(elem).offset() && $(container).offset().top)
+        {
+            var elemTop = $(elem).offset().top - $(container).offset().top;
+            var elemBottom = elemTop + $(elem).height();
+            var isTotal = (elemTop >= 0 && elemBottom <= contHeight);
+            return isTotal;
+        }
+        return true;
+        
+    }
+
+</script>
+<!-- ends-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script id="header">
+  
+var search_block_form = document.getElementsByClassName('form-text');
+for(let i  = 0; i < search_block_form.length;i++){
+    search_block_form[i].setAttribute('required', '');
+}
+
+
+
+function closecart(e) {
+    // e.preventDefault(); // Uncomment if needed
+
+   /* console.log('Function triggered.');
+
+    // Select the cart menu element
+    const cartMenu = document.querySelector('.c-cart-menu.desktop:not(.mobile)');
+    if (cartMenu) {
+        cartMenu.classList.remove('desktop-cart-sidebar');
+    } 
+    else {
+        console.log('Cart menu element not found.');
+    }
+
+    // Select the off-canvas main canvas element
+    const mainCanvas = document.querySelector(".dialog-off-canvas-main-canvas");
+    if (mainCanvas) {
+        console.log('Main canvas element founddrfgthdfrgth:', mainCanvas.style);
+       // mainCanvas.style = "margin-right:0!important";
+        // document.getElementsByClassName("dialog-off-canvas-main-canvas")[0].style.marginRight = "390px"; 
+        //document.getElementsByClassName("c-navbar-wrapper clearfix")[0].style.marginRight = "0px";
+        document.querySelector('.dialog-off-canvas-main-canvas').classList.remove('body-desktop-cart-sidebar');
+        document.querySelector('header').classList.remove('body-desktop-cart-sidebar');
+        
+        console.log('Margin reset.', mainCanvas.classList);
+    } else {
+        console.log('Main canvas element not found.', mainCanvas.style);
+    }*/
+    toggleCart()
+}
+
+function toggleCart()
+
+{
+    $('.c-cart-menu.desktop:not(.mobile)').toggleClass('desktop-cart-sidebar');
+    $('.dialog-off-canvas-main-canvas').toggleClass('body-desktop-cart-sidebar');
+    $('header').toggleClass('body-desktop-cart-sidebar');
+    if ($('.c-cart-menu.desktop:not(.mobile)').hasClass('desktop-cart-sidebar')) {
+        document.cookie = "user_choice_for_cart=opened; path=/";
+    } else {
+        document.cookie = "user_choice_for_cart=closed; path=/";
+    }
+}
+</script>

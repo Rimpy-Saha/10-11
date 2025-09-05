@@ -1,0 +1,878 @@
+{#
+/**
+* @file
+* Default theme implementation to display a node.
+*
+* Available variables:
+* - node: The node entity with limited access to object properties and methods.
+* Only method names starting with "get", "has", or "is" and a few common
+* methods such as "id", "label", and "bundle" are available. For example:
+* - node.getCreatedTime() will return the node creation timestamp.
+* - node.hasField('field_example') returns TRUE if the node bundle includes
+* field_example. (This does not indicate the presence of a value in this
+* field.)
+* - node.isPublished() will return whether the node is published or not.
+* Calling other methods, such as node.delete(), will result in an exception.
+* See \Drupal\node\Entity\Node for a full list of public properties and
+* methods for the node object.
+* - label: (optional) The title of the node.
+* - content: All node items. Use {{ content }} to print them all,
+* or print a subset such as {{ content.field_example }}. Use
+* {{ content|without('field_example') }} to temporarily suppress the printing
+* of a given child element.
+* - author_picture: The node author user entity, rendered using the "compact"
+* view mode.
+* - metadata: Metadata for this node.
+* - date: (optional) Themed creation date field.
+* - author_name: (optional) Themed author name field.
+* - url: Direct URL of the current node.
+* - display_submitted: Whether submission information should be displayed.
+* - attributes: HTML attributes for the containing element.
+* The attributes.class element may contain one or more of the following
+* classes:
+* - node: The current template type (also known as a "theming hook").
+* - node--type-[type]: The current node type. For example, if the node is an
+* "Article" it would result in "node--type-article". Note that the machine
+* name will often be in a short form of the human readable label.
+* - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+* teaser would result in: "node--view-mode-teaser", and
+* full: "node--view-mode-full".
+* The following are controlled through the node publishing options.
+* - node--promoted: Appears on nodes promoted to the front page.
+* - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+* teaser listings.
+* - node--unpublished: Appears on unpublished nodes visible only to site
+* admins.
+* - title_attributes: Same as attributes, except applied to the main title
+* tag that appears in the template.
+* - content_attributes: Same as attributes, except applied to the main
+* content tag that appears in the template.
+* - author_attributes: Same as attributes, except applied to the author of
+* the node tag that appears in the template.
+* - title_prefix: Additional output populated by modules, intended to be
+* displayed in front of the main title tag that appears in the template.
+* - title_suffix: Additional output populated by modules, intended to be
+* displayed after the main title tag that appears in the template.
+* - view_mode: View mode; for example, "teaser" or "full".
+* - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+* - page: Flag for the full page state. Will be true if view_mode is 'full'.
+* - readmore: Flag for more state. Will be true if the teaser content of the
+* node cannot hold the main body content.
+* - logged_in: Flag for authenticated user status. Will be true when the
+* current user is a logged-in member.
+* - is_admin: Flag for admin user status. Will be true when the current user
+* is an administrator.
+*
+* @see template_preprocess_node()
+*
+* @ingroup themeable
+*/
+#}
+
+<style>
+  .view-blog-landing .view-content,
+  .view-clone-of-blog-landing .view-content,
+  .view-taxonomy-term .view-content,
+  .view-new-pub-summaries .view-content {
+    display: -ms-grid;
+    -ms-grid-columns: 1fr (24px 1fr) [3];
+    -ms-grid-rows: 1fr 40px 1fr;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 24px;
+    margin-bottom: 24px;
+  }
+
+  #section-main-content {
+    width: 75%;
+    margin: 5% auto;
+  }
+
+  @media only screen and (max-width: 850px) {
+
+    .view-blog-landing .view-content,
+    .view-clone-of-blog-landing .view-content,
+    .view-taxonomy-term .view-content,
+    .view-new-pub-summaries .view-content {
+      -ms-grid-columns: 1fr (24px 1fr) [2];
+      -ms-grid-rows: 1fr (40px 1fr) [2];
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media only screen and (max-width: 650px) {
+
+    .view-blog-landing .view-content,
+    .view-clone-of-blog-landing .view-content,
+    .view-taxonomy-term .view-content,
+    .view-new-pub-summaries .view-content {
+      -ms-grid-columns: 1fr 24px 1fr;
+      -ms-grid-rows: 1fr (24px 1fr) [3];
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+
+  #edit-search input[type="text"]::-webkit-input-placeholder {
+    color: #ff0000;
+    display: block !important;
+  }
+
+  #edit-search input[type="text"]::-webkit-input-placeholder::after {
+    content: "\2716";
+    /* "X" */
+    font-size: 18px;
+    color: #ff0000;
+    padding-right: 0;
+    float: right;
+    display: block !important;
+  }
+
+  #edit-search input[type="text"]::-webkit-input-placeholder::after {
+    content: "\2714";
+    /* checkmark */
+    font-size: 18px;
+    color: #438d5b;
+    padding-right: 0;
+    float: right;
+    display: block !important;
+  }
+
+  #edit-search input[type="text"]::-webkit-input-placeholder::after {
+    visibility: visible;
+    display: block !important;
+  }
+
+  .page_title_no_sub {
+    display: none;
+  }
+
+  .container {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+
+  .btn-primary a {
+    color: #fff;
+  }
+
+  /* .form-item-search input{
+        color:#000;
+    } */
+  /*     .form-item-search input::placeholder,
+    .form-item-search input:not(:focus)::placeholder,
+    .form-item-search input:not(:focus-visible)::placeholder,
+    .form-item-search input:not(:target)::placeholder,
+    .form-item-search input::-webkit-input-placeholder,
+    .form-item-search input:not(:focus)::-webkit-input-placeholder,
+    .form-item-search input:not(:focus-visible)::-webkit-input-placeholder,
+    .form-item-search input:not(:target)::-webkit-input-placeholder{
+        color:#555!important;
+        opacity:1!important;
+        visibility: visible!important;
+    } */
+
+  #section-main-content .container {
+    width: 100% !important;
+  }
+
+  .carousel-caption-blog {
+    position: absolute;
+    z-index: 10;
+    top: 10%;
+    left: 15%;
+    right: 15%;
+    text-align: left;
+    -webkit-text-shadow: none;
+    text-shadow: none;
+  }
+
+  .blog-pretitle {
+    float: left;
+  }
+
+  .blog-pretitle h3 {
+    font-size: 32px;
+  }
+
+  .blog-pretitle p,
+  .blog-prebody p,
+  .blog-prebody a {
+    font-size: 16px;
+  }
+
+  .blog-prebody {
+    border-top: 2px solid #d24781;
+    padding-top: 15px;
+    float: left;
+  }
+
+  /* SEARCH STUFF */
+  .sort-by-date {
+    position: relative;
+    list-style: none;
+    width: 150px;
+    margin-bottom: 20px;
+    display: inline-block;
+    z-index: 10;
+    top: 0px;
+  }
+
+  .sort-by-date li button {
+    padding: 0px 10px;
+  }
+
+  .sort-by-dropdown {
+    display: none;
+    list-style: none;
+    margin-left: 0;
+  }
+
+  .sort-by-dropdown.active {
+    display: block;
+  }
+
+  .sort-by-dropdown li {
+    text-align: left;
+  }
+
+  .sort button {
+    width: 100%;
+  }
+
+  .display-active {
+    background: #004897;
+    color: #fff;
+    text-align: left;
+    border: none;
+    height: 34px;
+    width: 100%;
+    border-radius: 18px;
+  }
+
+  .display-active.active {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .dropdown-button {
+    text-align: left;
+    background: #fff;
+    color: #000;
+    border: 1px solid #000;
+    height: 34px;
+  }
+
+  .sort.active {
+    display: list-item;
+  }
+
+  .view-blog-landing {
+    overflow: hidden;
+  }
+
+  .more-blogs {
+    margin-bottom: 0px;
+  }
+
+  .sort-by-header {
+    display: inline-block;
+    margin: 0px 20px;
+    margin-bottom: 15px;
+    margin-top: 10px;
+  }
+
+  .sort-by-header-mobile {
+    display: inline-block;
+    margin: 0px 20px;
+    margin-bottom: 15px;
+    margin-top: 10px;
+  }
+
+  .sort-by-date-mobile {
+    position: relative;
+    list-style: none;
+    width: 150px;
+    margin-bottom: 20px;
+    display: inline-block;
+    z-index: 10;
+    top: 0px;
+  }
+
+  .sort-by-date-mobile li button {
+    padding: 0px 10px;
+  }
+
+  .flex-blog {
+    display: flex;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: fit-content;
+  }
+
+  /* New filters CSS */
+  .views-exposed-form{
+    margin:auto;
+    margin-bottom:60px;
+    width:fit-content;
+    padding:0px 15px;
+  }
+  #edit-sort-by{
+    display:none;
+  }
+  .form-item-sort-by.form-group.form-item{
+    display:none;
+  }
+  .views-exposed-form .form-group, .views-exposed-form .form-actions{
+    display:inline-block;
+  }
+  .views-exposed-form .form-group.form-item-search .form-group,
+  .views-exposed-form .form-group.form-item-combine .form-group{ /* Keep search label display:block */
+    display:block;
+  }
+  .views-exposed-form .form-actions .form-submit{
+    margin-top:0px;
+    font-size:14px;
+    padding:12px 12px;
+  }
+  /* End New filters CSS */
+
+  fieldset.captcha-admin-links {
+    display: none;
+  }
+
+  @media only screen and (min-width: 480px) and (max-width: 600px) {
+    a.btn.btn-bloglnd {
+      margin-top: 0px;
+      font-size: 12px;
+    }
+  }
+
+  .views-field-field-body-p-summary- {
+    padding-left: 15px;
+    padding-right: 15px;
+    grid-column: span 2;
+  }
+
+  .saliva-campaign {
+    margin: auto;
+    width: fit-content;
+    padding: 3em;
+  }
+
+  .subscribe-CTA-box {
+    display: flex;
+    width: 100%;
+    text-align: left;
+    overflow: hidden;
+    padding-top: 10%;
+    margin-top: -10%;
+  }
+
+  .CTA-img {
+    /* display: none; */
+    position: absolute;
+    bottom: 0%;
+    max-height: calc(150% + 10vh);
+    bottom: -10vh;
+    max-width: 30%;
+  }
+
+  .CTA-bg-shape {
+    position: absolute;
+    bottom: 0;
+    right: 56%;
+    height: 100%;
+  }
+
+  .CTA-text-container {
+    position: relative;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    /* background-color: #aee8f1; */
+    /* background-color: #004897; */
+    /* background: linear-gradient(90deg, #307a9a, #004897); */
+    /* background: linear-gradient(90deg, #000, #004897); */
+    background: linear-gradient(-90deg, #022954, #1e6ab0);
+    color: #fff;
+  }
+
+  .CTA-text-box {
+    display: grid;
+    margin-left: auto;
+    margin-right: 0;
+    width: 60%;
+    text-align: left;
+    padding: 2em 0;
+    margin: auto;
+  }
+
+  /* CTA box */
+  @media only screen and (min-width: 1280px) {
+      .CTA-img {
+        right: 73%;
+      }
+    }
+
+  @media only screen and (max-width: 768px) {
+    .CTA-img {
+      position: absolute;
+      bottom: -10vw;
+      max-width: 30%;
+    }
+  }
+
+
+  @media only screen and (max-width: 1440px) {
+    .CTA-img {
+      position: absolute;
+      bottom: -2vw;
+      max-width: 30%;
+      right: 73%;
+    }
+  }
+
+  @media only screen and (max-width: 1024px) {
+    .CTA-img {
+      max-width: 40%;
+      right: 66%;
+    }
+
+    .CTA-text-box {
+      width: 50%;
+    }
+  }
+
+  @media only screen and (max-width: 768px) {
+    .CTA-img {
+      max-width: 50%;
+      right: 57%;
+    }
+
+    .CTA-text-box {
+      width: 40%;
+    }
+  }
+
+  @media only screen and (max-width: 600px) {
+    #edit-search-wrapper div.form-item-search input {
+      border-bottom-right-radius: 36px;
+      border-top-right-radius: 36px;
+      border-right: 1px solid #ccc;
+    }
+
+    .CTA-img {
+      display: none;
+    }
+
+    .CTA-bg-shape {
+      position: absolute;
+      bottom: 0;
+      right: 56%;
+      height: 100%;
+      display: none;
+    }
+
+    .CTA-text-box {
+      display: block;
+      margin-left: auto;
+      margin-right: 0;
+      width: 100%;
+      text-align: left;
+      /* background-color: #aee8f1; */
+      height: 100%;
+      padding: 2em;
+    }
+
+    .webinar {
+      padding: 15px;
+      display: block;
+      align-items: center;
+    }
+
+    .carousel-caption-ncov h5 {
+      font-size: 40px;
+      margin-bottom: 0;
+    }
+
+    .carousel-caption-ncov p {
+      font-size: 20px !important;
+    }
+
+    .mobileSort {
+      display: flex;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 180px;
+      margin: auto;
+      width: fit-content;
+    }
+
+    .sort-by-header {
+      display: none;
+    }
+
+    .sort-by-date {
+      display: none;
+    }
+
+    #edit-search-wrapper,
+    .views-widget,
+    .form-item-search,
+    #edit-search {
+      width: 100%;
+    }
+
+    #edit-search-wrapper {
+      flex-grow: 1;
+    }
+
+    .mobileSort {
+      display: flex;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 180px;
+      margin: auto;
+      width: fit-content;
+    }
+
+    .sort-by-header {
+      display: none;
+    }
+
+    .sort-by-date {
+      display: none;
+    }
+
+    div.views-exposed-widgets {
+      display: grid;
+    }
+
+    #edit-search-wrapper,
+    .views-widget,
+    .form-item-search,
+    #edit-search {
+      width: 100%;
+    }
+
+    #edit-search-wrapper {
+      flex-grow: 1;
+    }
+
+    .btn-blog-search {
+      border-top-left-radius: 18px;
+      border-bottom-left-radius: 18px;
+      width: 100%;
+    }
+  }
+
+  @media only screen and (min-width: 480px) and (max-width: 600px) {
+    a.btn.btn-bloglnd {
+      margin-top: 0px;
+      font-size: 12px;
+    }
+  }
+
+  @media only screen and (min-width: 420px) and (min-height: 720px) {
+    .mobileSort {
+      top: 140px;
+    }
+  }
+
+  @media only screen and (max-width: 360px) and (max-height: 720px) {
+    .mobileSort {
+      top: 230px;
+    }
+  }
+
+  @media only screen and (max-width: 312px) {
+    .CTA-text-box {
+      display: block;
+      margin-left: auto;
+      margin-right: 0;
+      width: 100%;
+      text-align: left;
+      height: 100%;
+      padding: 2em;
+      width: inherit;
+      margin-left: 0px;
+    }
+
+    .CTA-text-box>h5 {
+      display: none !important;
+    }
+  }
+
+  @media only screen and (max-width: 800px) {
+    .blog-car .saliva-campaign>p:first-child {
+      display: block !important;
+    }
+  }
+
+  @media only screen and (max-width: 500px) {
+    .carousel-caption-ncov h5 {
+      font-size: 30px;
+      margin-bottom: 0;
+    }
+
+    .saliva-campaign {
+      padding: 0;
+    }
+  }
+
+  @media only screen and (max-width: 400px) {
+    .carousel-caption-ncov h5 {
+      font-size: 25px;
+      margin-bottom: 0;
+    }
+  }
+
+  @media only screen and (max-width: 288px) {
+    .carousel-caption-ncov h5 {
+      font-size: 22px;
+      margin-bottom: 0;
+    }
+
+    .carousel-caption-ncov p {
+      font-size: 16px !important;
+    }
+  }
+
+  .saliva-campaign>.slider-line {
+    display: block !important;
+  }
+
+  @media only screen and (max-width: 990px) {
+    .front-indicators .carousel-inner {
+      height: 650px !important;
+    }
+  }
+
+  .blog-car {
+    position: unset;
+  }
+
+  .pre-read {
+    color: #1a3c93;
+    font-weight: 800;
+    font-size: 16px;
+    text-align: right;
+    padding-top: 10px;
+  }
+
+  .bl-land-list .views-field-view-node {
+    width: 100%;
+    grid-column: span 1;
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .bl-land-list .views-field-view-node .btn-primary {
+    width: max-content;
+  }
+
+  .views-field-field-edit-date {
+    display: flex;
+  }
+
+  @media only screen and (max-width: 1238px) and (max-height: 720px) {
+
+    .view-blog-landing .view-content,
+    .view-clone-of-blog-landing .view-content,
+    .view-taxonomy-term .view-content {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media only screen and (max-width: 930px) and (max-height: 720px) {
+
+    .view-blog-landing .view-content,
+    .view-clone-of-blog-landing .view-content,
+    .view-taxonomy-term .view-content {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media only screen and (max-width: 851px) and (max-height: 720px) {
+
+    .view-blog-landing .view-content,
+    .view-clone-of-blog-landing .view-content,
+    .view-taxonomy-term .view-content {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media only screen and (max-width: 622px) and (max-height: 720px) {
+
+    .view-blog-landing .view-content,
+    .view-clone-of-blog-landing .view-content,
+    .view-taxonomy-term .view-content {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+
+  .show-pl {
+    display: block !important;
+  }
+
+  /* new styles */
+
+  .btn-services {
+    border-color: #e19829;
+    background-color: #e19829;
+  }
+
+  .btn {
+    padding: 12px 20px;
+    border-radius: 12px;
+    white-space: normal;
+  }
+
+  .CTA-text-box h4 {
+    font-size: 20px;
+  }
+
+  .CTA-text-box h5,
+  .CTA-text-box h4 {
+    margin-bottom: 15px;
+  }
+
+  .letter-space {
+    letter-spacing: 12px;
+  }
+
+  .saliva-campaign h2 {
+    font-size: 70px;
+  }
+
+  .saliva-campaign h5 {
+    font-weight: 100;
+  }
+
+
+  .blog-title h2 {
+    font-size: 32px;
+    text-align: center;
+    margin-top: 3%;
+    margin-bottom: 3%;
+  }
+
+
+  @media only screen and (max-width: 1440px) {
+    .view-content {
+      -ms-grid-columns: 1fr (24px 1fr) [2];
+      -ms-grid-rows: 1fr (40px 1fr) [2];
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+  }
+
+  @media only screen and (max-width: 900px) {
+    .view-content {
+      -ms-grid-columns: 1fr 24px 1fr;
+      -ms-grid-rows: 1fr (24px 1fr) [3];
+      grid-template-columns: repeat(1, 1fr) !important;
+    }
+  }
+
+  .container:before,
+  .container:after {
+    content: " ";
+    display: none;
+  }
+
+
+.btn-primary1 a {
+  color: white;
+  display: block;
+  text-decoration: none;
+  background-color: #004897;
+  border: 1px solid #004897;
+  border-radius: 12px;
+  text-align: center;
+  padding: 5px 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  width: 180px;
+  height: 50px;
+  line-height: 37px;
+}
+
+
+.btn-primary1 a:hover {
+  background-color: #0b63c1;
+  padding: 5px 5px;
+  border-color: #0b63c1;
+}
+
+</style>
+
+<div class="dexp-grid-item mb-40" style="padding-left: 0px; padding-right: 0px">
+  <div class="saliva-campaign">
+    <p align="center" style="color: #000; width: fit-content; margin: auto">
+      <i style="font-size: 47px" class="fas fa-book-reader"></i>
+    </p>
+    <h2 style="color: #000; width: fit-content; margin: auto; text-align:center;" class="slider-caption letter-space">
+      Customer Success
+    </h2>
+    <h3 style="color: #000; width: fit-content; margin: auto; font-size: 42px" class="slider-line">
+      Explore Norgen's Latest Entry.
+    </h3>
+    <!-- <p class="entry-title">"Exosome Therapeutics: Diagnostics and Treatment with Exosomes"</p>
+        <a href="/blog/exosome-therapeutics-diagnostics-and-treatment-exosomes" class="btn btn-bloglnd" role="button">Discover Now</a> -->
+  </div>
+  <div class="subscribe-CTA-box">
+    <div class="CTA-text-container">
+      <img class="CTA-img" src="https://norgenbiotek.com/sites/default/files/images/blog/Header_banner/PCR_Lab_S.O.png"
+        srcset="
+        https://norgenbiotek.com/sites/default/files/images/blog/Header_banner/PCR_Lab_S.O.png  1120w,
+        https://norgenbiotek.com/sites/default/files/images/blog/Header_banner/PCR_Lab_S.O.png  560w,
+        https://norgenbiotek.com/sites/default/files/images/blog/Header_banner/PCR_Lab_S.O.png  280w
+      " />
+      <div class="CTA-text-box">
+        <h3 style="margin-top: 0; color: #fff; font-size: 42px">
+          Want to hear more from Norgen?
+        </h3>
+        <h3 style="margin-top: 0; color: #fff">
+          Join over 10,000 scientists, bioinformaticians, and researchers who
+          receive our exclusive deals, industry updates, and more, directly to
+          their inbox.
+        </h3>
+        <p>For a limited time, subscribe and <strong style="font-size:28px;text-decoration:underline;">SAVE 10%</strong> on your next purchase!</strong></p>
+        <a class="btn btn-services newsletter-signup-page"
+          style="width: fit-content; color: #000; height: fit-content; z-index: 100;" href="https://zc.vg/9JRX7">
+          <p style="margin-bottom: 0; font-size: 24px">Sign Me Up!</p>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    {{drupal_view('customer_stories', 'block_1')}}
+  </div>
+</div>
+<!--------------------------------------------------------------------------****---------------------------------------------------------------------------------->
+<script>
+  function toggleClose() {
+    var email_bar_closed = document.querySelector('.email-us');
+    var email_bar_open = document.querySelector('.email-us.open');
+    if (email_bar_open != null) {
+      email_bar_open.classList.remove('open');
+      document.querySelector('.drawer-icon.drawer-icon.glyphicon.glyphicon-chevron-left').classList.remove('open');
+    }
+    else if (email_bar_closed != null) {
+      email_bar_closed.classList.add('open');
+      document.querySelector('.drawer-icon.drawer-icon.glyphicon.glyphicon-chevron-left').classList.add('open');
+    }
+
+  }
+  document.addEventListener("DOMContentLoaded", function (event) {
+    console.log(document.getElementsByClassName("view-content")[0]);
+    document.getElementsByClassName("view-content")[0].classList.add("container");
+  });
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

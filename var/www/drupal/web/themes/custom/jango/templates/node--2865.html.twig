@@ -1,0 +1,3064 @@
+<!DOCTYPE html>
+<html>
+<head>   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .machine-title {
+          font-weight: 1000;
+          font-size: 55px;
+          text-align: center;
+          margin-top:0px;
+
+          color: #3f444a;
+        }
+
+        .intro {
+          width:90%;
+          text-align: center;
+        
+        }
+
+        .intro p {
+          font-size:22px;
+        }
+
+        .features {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap; 
+            margin-top: 30px;
+            align-items:center;
+        }
+
+        .feature {
+            width: 30%; 
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) { 
+          .features {
+            flex-direction: column; 
+            align-items: center;     
+          }
+
+          .feature {
+            width: 80%; 
+          }
+        }
+
+
+      
+
+.btn+.btn {
+    margin-left: 0px;
+}
+.resources-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+    .resources {
+      display: inline-flex;
+      /*justify-content: center;*/
+      align-items: center;
+      position: relative;
+      margin-top: 40px;
+      margin-bottom: 70px;
+    }
+    .resource h3 {
+      color: #3f444a;
+      margin-bottom: 20px; 
+      /*padding: 0 10px;*/ 
+      /*padding-bottom: 90px;*/
+      font-weight: bold; 
+      width:265px;
+      font-size:25px;
+      text-align:center;
+    }
+    .resource{
+      place-items:center;
+    }
+
+    .resource img {
+      max-width: 100%;
+      height: 300px;
+      padding: 10px; 
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+      transition: opacity 0.3s ease-in-out;
+      cursor: pointer;
+      border-radius:14px;
+
+    }
+    .resource img:hover {
+      transform: translateY(-2px); 
+      -webkit-transition:  all 0.2s ease-out;
+      
+
+    }
+    .poster-resource img:hover {
+      transform: translateY(-2px); 
+      -webkit-transition:  all 0.2s ease-out;
+      
+    }
+    
+    
+
+
+
+.resource:nth-of-type(1) {
+  transform: rotate(-20deg) translateX(50px) translateY(35px)!important;
+  z-index: 2;
+}
+
+
+.resource:nth-child(2) {
+  transform: rotate(10deg) translateX(-30px) translateY(25px)!important;
+  z-index: 2;
+}
+
+#poster-container{
+    gap: 20px;
+}
+.poster-resource img{
+      max-width: 100%;
+    height: 400px;
+    padding: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.3sease-in-out;
+    cursor: pointer;
+    border-radius: 14px;
+}
+
+.poster-resource h3 {
+color: #3f444a;
+    margin-bottom: 20px;
+    /* padding: 0 10px; */
+    /* padding-bottom: 90px; */
+    font-weight: bold;
+    width: 265px;
+    font-size: 21px;
+    text-align: center;
+}
+
+
+    .resource-info{
+    
+    text-align: center;
+    padding: 20px;
+    position: relative;
+    margin-top:20px;
+    background-color: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.3s ease-in-out;
+    border-radius:14px;
+    }
+
+    .container:before, .container:after {
+        content: " ";
+        display: none;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+    .info-box {    
+        display: flex;
+        flex-direction: column; 
+        align-items: center;
+        background-color: #ebf1f7;
+        padding: 35px 50px; 
+        margin-top:0px;
+    }
+
+
+    .buttons { 
+      display: flex;
+      justify-content: center; 
+      margin-top: 20px;
+      
+    }
+
+
+  .buttons button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    background-color: #004897;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    
+  }
+    .buttons button:hover {
+      background-color: #0056b3; 
+      color:white;
+      transform: translateY(-2px); 
+      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); 
+      -webkit-transition:  all 0.2s ease-out;
+  }
+
+  @media (max-width: 572px) {
+    .buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+}
+  .feature h3{
+    font-weight:bold;
+    font-size:20px;
+  }
+
+
+  .workflow-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 10px;
+      justify-content: center; 
+      margin-bottom:35px;
+      align-items:baseline;
+      margin-top:45px;
+  }
+
+        .workflow-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #007bff; 
+        }
+
+        
+        .cell {
+            padding: 16px;
+            text-align: center;
+            background-color:white;
+            cursor:pointer;
+            transition: transform 0.3s ease; 
+            box-shadow:0px 4px 8px rgba(0, 0, 0, 0.2);
+            min-height: 190.82px;
+            border-radius:14px;
+
+        }
+        .cell:hover {
+          transform: translateY(-5px); 
+          box-shadow:0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+
+        
+.cell-content {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.5s ease-in-out; 
+}
+
+.cell.active .cell-content {
+  max-height: none; 
+}
+
+.cell-content p {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.cell.active .cell-content p {
+  opacity: 1;
+    min-height: auto; 
+
+}
+      .active{
+        height:-webkit-fill-available;
+      }
+
+      .cell h2 {
+          color: black; 
+          font-size: 1.35em;
+          margin-bottom: 10px;
+          margin-top:-20px;
+          font-weight:bold;
+          font-family: Montserrat;
+      }
+
+        .cell p {
+            font-size: 18px;
+            line-height: 1.4;
+        }
+
+        .workflow-title h2{
+            text-align: center;
+            font-size: 55px; 
+            margin-bottom: 0px;
+            color: #3f444a;
+            font-weight: 800;
+            font-family: Montserrat;
+        }
+
+      ul, ol{
+        text-align:left;
+      }
+
+      .row-carousel{
+        margin-left:-15px;
+        margin-right:-15px;
+        font-size:55px;
+      }
+      .row-carousel h3{
+        font-size:55px;
+      }
+
+      .our-customers{
+        filter:none;
+        opacity:1;
+        transition:0.2s;
+      }
+
+      .center{
+        text-align:center;
+        font-weight:bold;
+        font-size:22px;
+      }
+      
+      .carousel{
+        position: relative;
+
+      
+      }
+      .corousel-inner{
+        position: relative;
+        overflow: visible;
+        width: 100% !important;
+        height: auto;
+      }
+      .cell img{
+        
+        max-width:100%;
+        height:100px;
+      }
+
+
+    .content-wrapper {
+      display: flex;
+      align-items: flex-start; 
+    }
+
+    .figure {
+      margin-bottom: 20px;
+      flex: 0 0 40%; 
+      margin-right: 20px; 
+    }
+
+    .figure img {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid #ccc;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+    }
+
+    .figure figcaption {
+      font-size: 0.8em;
+      color: #666;
+      margin-top: 10px;
+      line-height: 1.4;
+      text-align: left;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: 15px;
+      flex: 1; 
+    }
+
+    .grid-item {
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+
+    .grid-item img {
+      max-width: 100%;
+      height: auto;
+      opacity:0.5;
+      transition: opacity 0.3s
+    }
+
+
+
+  #main-image{
+    width:500px;
+    border-radius:15px;
+    box-shadow: 0 0 20px 7px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.3s ease-in-out;
+    padding:15px;
+
+  }
+    .bioinformatics-analysis {
+  text-align: center;
+  margin-top: 40px;
+  font-family: Montserrat;
+}
+
+.bioinformatics-analysis h2 {
+    text-align: center;
+    font-size: 55px;
+    margin-bottom: 40px;
+    color: #3f444a;
+    font-weight: 800;
+    font-family: Montserrat;
+}
+
+.bioinformatics-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.displayfig img {
+  width: 390px;
+  height: auto;
+  border-radius: 80px;
+  box-shadow: 0 0 20px 6px rgba(0, 0, 0, 0.1);
+}
+
+.graphs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  height:225px;
+  align-items:center;
+}
+
+.graphs img {
+  width: 100px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease; 
+}
+
+.graphs img:hover{
+  transform: translateY(-5px); 
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+  cursor: pointer;
+}
+
+.description-container {
+  display: flex;
+  justify-content: center; 
+  margin-top:30px;
+}
+
+.fig-description {
+  margin-top: 30px;
+  color: #555;
+  line-height: 1.5;
+  width: 70%;
+  font-size:20px;
+}
+
+
+@media (max-width: 480px) {
+  .bioinformatics-analysis h2 {
+    font-size: 33px; 
+  }
+  .workflow-title h2{
+    font-size: 35px; 
+  }
+  .row-carousel h3{
+    font-size: 35px; 
+  }
+}
+
+
+
+
+
+
+        .products-title {
+            text-align:center;
+            
+        }
+
+        .products-title h1 {
+          text-align: center;
+          font-size: 40px;
+          margin-bottom: 20px;
+          color: black;
+          font-weight: 800;
+          font-family: Montserrat
+        }
+
+        .products-title p {
+            font-size: 1em;
+            color: #666;
+        }
+
+        .button-container {
+            display: flex;
+  justify-content: center; 
+  margin-top: 20px; 
+  gap: 20px; 
+        }
+
+        .button-container button {
+          display: inline-block;
+          background-color:#004897;
+          text-decoration:none;
+          color: white;
+          margin-bottom: 0;
+          font-weight: normal;
+          text-align: center;
+          vertical-align: middle;
+          touch-action: manipulation;
+          cursor: pointer;
+          background-image: none;
+          border: 1px solid transparent;
+          white-space: nowrap;
+          padding: 6px 12px;
+          font-size: 14px;
+          line-height: 1.42857;
+          border-radius: 4px;
+            flex-grow:1;
+        }
+
+        .button-container button:hover {
+            background-color: #0056b3; 
+            color:white;
+            transform: translateY(-2px); 
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); 
+            -webkit-transition:  all 0.2s ease-out;
+        }
+        .new-container{
+          border-bottom: 1px solid gray;
+        }
+        .new-button-container button {
+          display: inline-block;
+          text-decoration:none;
+          
+          color: #004897;
+          margin-bottom: 0;
+          font-weight: normal;
+          text-align: center;
+          vertical-align: middle;
+          touch-action: manipulation;
+          cursor: pointer;
+          flex-grow:1;
+          padding: 10px;
+    list-style-type: none;
+    text-align: center
+        }
+
+        .new-button-container button:hover {
+            background-color: #0056b3; 
+            color:white;
+            transform: translateY(-2px); 
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); 
+            -webkit-transition:  all 0.2s ease-out;
+        }
+
+
+
+
+      .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #004897;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        margin-top: 15px;
+        font-size: 17px;
+      }
+
+      .btn:hover {
+            background-color: #0056b3; 
+            color:white;
+            transform: translateY(-2px); 
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); 
+          }
+
+
+
+        .cards {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px;
+        }
+
+        .card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            width: 300px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .card img {
+            width: 100%;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .card-content {
+            padding: 15px;
+        }
+
+        .card-content h3 {
+            font-size: 1.7rem;
+            color: black;
+            font-weight:bold;
+        }
+
+        .card-content p {
+            font-size: 1.3rem;
+            color: #666;
+            margin: 10px 0;
+        }
+
+        .card-buttons {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+        }
+
+        .card-buttons a {
+          display: inline-block;
+          background-color:#004897;
+          text-decoration:none;
+          color: white;
+          margin-bottom: 0;
+          font-weight: normal;
+          text-align: center;
+          vertical-align: middle;
+          touch-action: manipulation;
+          cursor: pointer;
+          background-image: none;
+          border: 1px solid transparent;
+          white-space: nowrap;
+          padding: 6px 12px;
+          font-size: 14px;
+          line-height: 1.42857;
+          border-radius: 4px;
+        }
+
+        .card-buttons a:hover {
+            background-color: #0056b3; 
+            color:white;
+            transform: translateY(-2px); 
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); 
+            -webkit-transition:  all 0.2s ease-out;
+        }
+
+        .card.hidden {
+          display: none; 
+          opacity: 0;
+        }
+
+        .card.selected-card {
+          animation: fadeIn 0.3s ease-in-out; 
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+.resource-buttons {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 15px;
+
+}
+
+  .poster-resource-buttons {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+  }
+
+
+
+
+
+
+
+
+.faq-container {
+  padding-bottom:50px;
+}
+
+.faq-container h2 {
+  font-size: 2.0em;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #3f444a;
+}
+
+.faq-item {
+    border-top: 5px solid #dfdfdf;
+    padding: 20px 20px 0;
+    margin-top: 20px;
+}
+
+.faq-header {
+    font-size: 22px;
+    font-weight: normal;
+    font-family: "Montserrat", "Ubuntu", sans-serif;
+    display: block;
+    color: #004897;
+    cursor: pointer;
+    display:flex
+}
+.faq-header a{
+  margin-top:3px;
+  margin-left:3px;
+}
+
+.faq-title{
+    margin-top:3px;
+  margin-left:3px;
+}
+
+.faq-arrow {
+  max-width: 100%;
+  height: 30px;
+  transition: transform 0.3s;
+
+}
+
+.faq-answer {
+  display: none;
+  padding: 10px 0 0;
+  font-size: 16px;
+  color: #555;
+  line-height: 1.6;
+  /*border-bottom: 1px solid #ddd;*/
+  margin-top: 10px;
+  
+}
+
+.faq-header.active .faq-arrow {
+  transform: rotate(180);
+}
+
+
+
+.fig-box{
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+}
+
+#image-link{
+  margin-top:12px;
+  display: inline-block;
+  background-color:#004897;
+  text-decoration:none;
+  color: white;
+  margin-bottom: 0;
+  font-weight: normal;
+  text-align: center;
+  vertical-align: middle;
+  touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  padding: 6px 12px;
+  font-size: 17px;
+  line-height: 1.42857;
+  border-radius: 4px;
+}
+#image-link:hover{
+  background-color: #0056b3; 
+  color:white;
+  transform: translateY(-2px); 
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); 
+  -webkit-transition:  all 0.2s ease-out;
+  
+}
+
+
+
+
+.filters ul {
+    display: flex;
+    border-bottom: 1px solid gray;
+    width: 100%;
+    color: gray;
+    gap: 10px;
+    justify-content: space-between;
+}
+.filters li {
+    padding: 10px;
+    list-style-type: none;
+    text-align: center;
+}
+.filters li.selected {
+    color: #004897;
+    border-bottom: 5px solid #004897;
+}
+.filters li label {
+    font-size: 20px;
+    font-weight: 600;
+}
+.filters input[type=radio] {
+    display: none;
+}
+label {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+
+
+
+
+        #overlay {
+            display: none; 
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); 
+            z-index: 1000; 
+        }
+
+        #ngs-form {
+            position: fixed;
+            top:55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 35px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 90%; 
+            max-width: 500px; 
+            display: none; 
+            z-index: 1001; 
+            box-sizing: border-box;
+            overflow-y:scroll;
+            height:600px;
+        }
+
+        
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #333;
+            cursor: pointer;
+        }
+
+
+
+
+
+
+
+
+
+.hero-section {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  color: #004897;
+  overflow: hidden;
+  height: 760px; 
+  background: white; 
+  background-image: url('/sites/default/files/images/Asset 4.png'); /
+  background-position: center; 
+  margin-bottom: 75px;
+  background-repeat: no-repeat; 
+  background-size:contain;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.hero-section h1 {
+  font-size: 6.5rem;
+  color: #004897;
+  margin: 0;
+  font-family: Montserrat;
+  font-weight: 700;
+  margin-bottom: 45px;
+}
+
+.hero-section p.subtext {
+  font-size: 24px;
+  margin: 10px 0 10px;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #004897;
+  font-family: Montserrat;
+  margin-bottom:0px;
+}
+
+.cta-box {
+  background: rgb(255 255 255 / 15%);
+  padding: 40px 30px;
+  border-radius: 12px;
+  text-align: left;
+  backdrop-filter: blur(50px);
+  align-content: center;
+  margin-top:0px;
+  border:2px Solid #004897;
+}
+
+.cta-box h2 {
+  font-size: 4.0rem;
+  color: #004897;
+  font-weight: 700;
+}
+
+.trial-statement {
+  font-size: 3.0rem;
+  color: #004897;
+  margin: 20px 0;
+  
+  margin-bottom:0px; 
+  margin-top:0px;
+  line-height: 1.3;
+}
+.contact-statement {
+  font-size: 24px;
+  color: #004897;
+  margin-bottom: 10px;
+  margin-top: 0px;
+}
+
+
+
+.cta-box a.cta-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #990000;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.cta-box a.cta-button:hover {
+  background-color: #cc0000;
+  -webkit-transition: all 0.2s ease-out;
+  transform: translateY(-2px);
+}
+
+
+
+
+
+
+.reminder-section {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  color: #004897;
+  overflow: hidden;
+  height: 550px;
+}
+
+.reminder-background-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  object-fit: cover; 
+  z-index: 1;
+  top: 200px;
+}
+
+.reminder-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.reminder-section h1 {
+  font-size: 5.5rem;
+  color: #004897;
+  margin: 0;
+  font-family: Montserrat;
+  font-weight: 700;
+  margin-bottom: 45px;
+}
+
+.reminder-section p.subtext {
+  font-size: 22px;
+  margin: 10px 0 10px;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #004897;
+  font-family: Montserrat;
+}
+
+.reminder-cta-box {
+  background: rgb(215 213 213 / 15%);
+  padding: 40px 50px;
+  border-radius: 12px;
+  text-align: left;
+  backdrop-filter: blur(50px);
+  align-content: center;
+}
+
+.reminder-cta-box h2 {
+  font-size: 8.0rem;
+  color: #004897;
+  margin-top: 0px;
+  margin-bottom: -10px;
+  font-weight: 700;
+}
+
+
+
+
+.reminder-statement {
+  font-size: 30px;
+  color: #004897;
+  margin: 20px 0;
+  line-height: 1.3;
+}
+
+.reminder-contact p {
+  font-size:3.5rem;
+  color: #004897;
+  margin: 20px 0;
+}
+.reminder-statement2 {
+  font-size:3.5rem;
+  color: #004897;
+  margin: 20px 0;
+}
+
+.reminder-cta-box a.reminder-cta-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #990000;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.reminder-cta-box a.reminder-cta-button:hover {
+  background-color: #cc0000;
+  transform: translateY(-2px);
+  -webkit-transition: all 0.2s ease-out;
+}
+
+.reminder-disclaimer{
+  text-align:center;
+}
+
+
+
+@media (max-width: 1200px) {
+  .hero-section {
+    height: 650px; 
+  }
+
+  .background-img {
+    width: 650px; 
+    height: 650px; 
+  }
+
+  .hero-section h1 {
+    font-size: 4.5rem; 
+    margin-bottom: 35px;
+  }
+
+  .hero-section p.subtext {
+    font-size: 1.3rem; 
+  }
+
+  .cta-box {
+    padding: 25px; 
+  }
+
+  .cta-box h2 {
+    font-size: 3.0rem; 
+  }
+
+  .cta-box p {
+    font-size: 16px; 
+  }
+
+  .cta-box a.cta-button {
+    font-size: 16px; 
+    padding: 12px 24px; 
+  }
+}
+
+
+@media (max-width: 1144px) {
+  .hero-section h1 {
+    font-size: 8.5rem; 
+    margin-bottom: 30px;
+  }
+
+}
+@media (max-width: 1024px) {
+  .hero-section {
+    height: 550px; 
+  }
+
+  .background-img {
+    width: 500px; 
+    height: 500px; 
+  }
+
+  .hero-section h1 {
+    font-size: 6.0rem; 
+    margin-bottom: 30px;
+  }
+
+  .hero-section p.subtext {
+    font-size: 2.3rem; 
+  }
+
+  .cta-box {
+    padding: 20px;
+  }
+
+  .cta-box h2 {
+    font-size: 3.8rem; 
+  }
+
+  .cta-box p {
+    font-size: 22px; 
+  }
+
+  .cta-box a.cta-button {
+    font-size: 16px; 
+    padding: 12px 24px; 
+  }
+}
+
+
+@media (max-width: 768px) {
+  .hero-section {
+    height: 500px; 
+  }
+
+  .background-img {
+    width: 450px; 
+    height: 450px;
+  }
+
+  .hero-section h1 {
+    font-size: 4.5rem; 
+    margin-bottom: 25px;
+  }
+
+  .hero-section p.subtext {
+    font-size: 2.2rem; 
+  }
+
+  .cta-box {
+    padding: 15px;
+  }
+
+  .cta-box h2 {
+    font-size: 3.5rem; 
+  }
+
+  .cta-box p {
+    font-size: 20px; 
+  }
+
+  .cta-box a.cta-button {
+    font-size: 14px; 
+    padding: 10px 20px; 
+  }
+}
+
+
+
+@media (max-width: 480px) {
+  .hero-section {
+    height: 550px; 
+  }
+
+  .background-img {
+    width: 350px; 
+    height: 350px;
+  }
+
+  .hero-section h1 {
+    font-size: 5.0rem; 
+    margin-bottom: 20px;
+  }
+
+  .hero-section p.subtext {
+    font-size: 2.1rem; 
+  }
+  .hero-content{
+    margin-left:5px;
+  }
+
+  .cta-box {
+    padding: 15px;
+  }
+
+  .cta-box h2 {
+    font-size: 3.0rem; 
+  }
+
+  .cta-box p {
+    font-size: 18px; 
+  }
+
+  .cta-box a.cta-button {
+    font-size: 14px; 
+    padding: 10px 20px; 
+  }
+}
+
+@media (max-width: 542px) {
+  .hero-section h1 {
+    font-size: 3.5rem; 
+  }
+}
+@media (max-width: 426px) {
+  .hero-section h1 {
+    font-size: 3.0rem; 
+  }
+}
+
+@media (max-width: 400px) {
+  .hero-section h1 {
+    font-size: 2.7rem; 
+  }
+  .hero-section p.subtext{
+    font-size:1.6rem;
+  }
+  .cta-box h2{
+    font-size:2.5rem;
+  }
+}
+@media (max-width: 400px) {
+  .hero-section {
+    height: 650px; 
+  }
+}
+
+
+@media (max-width: 480px) {
+  .machine-title {
+    font-size: 40px; 
+  }
+}
+
+
+
+@media (max-width: 1200px) {
+  .reminder-section {
+    height: 650px;  
+  }
+
+  .reminder-background-img {
+    top: 160px;
+    height: 65%; 
+  }
+
+  .reminder-section h1 {
+    font-size: 4.5rem; 
+    margin-bottom: 35px;
+  }
+
+  .reminder-section p.subtext {
+    font-size: 2.2rem; 
+  }
+
+  .reminder-cta-box {
+    padding: 25px;
+  }
+
+  .reminder-cta-box h2 {
+    font-size: 5.5rem; 
+  }
+
+  .reminder-statement2 {
+    font-size: 30px; 
+  }
+  .reminder-statement {
+    font-size: 20px; 
+  }
+  .reminder-contact{
+    font-size:18px;
+  }
+
+  .reminder-cta-box a.reminder-cta-button {
+    font-size: 16px; 
+    padding: 12px 24px; 
+  }
+}
+
+
+@media (max-width: 1024px) {
+  .reminder-section {
+    height: 600px; 
+  }
+
+  .reminder-background-img {
+    top: 160px;
+    height: 65%; 
+  }
+
+  .reminder-section h1 {
+    font-size: 4.0rem; 
+    margin-bottom: 30px;
+  }
+
+  .reminder-section p.subtext {
+    font-size: 2.3rem; 
+  }
+
+  .reminder-cta-box {
+    padding: 20px;  
+  }
+
+  .reminder-cta-box h2 {
+    font-size: 6.2rem;
+  }
+
+  .reminder-statement2 {
+    font-size: 28px; 
+  }
+  .reminder-statement {
+    font-size: 22px; 
+  }
+  .reminder-contact{
+    font-size:20px;
+  }
+
+  .reminder-cta-box a.reminder-cta-button {
+    font-size: 16px; 
+    padding: 12px 24px; 
+  }
+}
+
+
+@media (max-width: 768px) {
+  .reminder-section {
+    height: 600px;  
+  }
+
+  .reminder-background-img {
+    top: 160px;
+    height: 65%;;
+  }
+
+  .reminder-section h1 {
+    font-size: 3.5rem; 
+    margin-bottom: 25px;
+  }
+
+  .reminder-section p.subtext {
+    font-size: 2.0rem; 
+  }
+  .reminder-statement2 {
+    font-size: 27px; 
+  }
+  .reminder-statement {
+    font-size: 20px; 
+  }
+  .reminder-contact{
+    font-size:18px;
+  }
+
+  .reminder-cta-box {
+    padding: 15px;
+  }
+
+  .reminder-cta-box h2 {
+    font-size: 5.8rem; 
+  }
+
+
+
+  .reminder-cta-box a.reminder-cta-button {
+    font-size: 14px; 
+    padding: 10px 20px; 
+  }
+}
+
+@media (max-width: 578px) {
+  .reminder-section{
+    height:650px;
+  }
+}
+
+@media (max-width: 480px) {
+  .reminder-section {
+    height: 450px; 
+  }
+
+  .reminder-background-img {
+    top: 160px;
+    height: 65%; 
+  }
+
+  .reminder-section h1 {
+    font-size: 3.0rem; 
+    margin-bottom: 20px;
+  }
+  .reminder-content{
+    margin-left:5px;
+  }
+  .reminder-section p.subtext {
+    font-size: 2.1rem; 
+  }
+
+  .reminder-cta-box {
+    padding: 15px;
+  }
+
+  .reminder-cta-box h2 {
+    font-size: 4.3rem; 
+  }
+
+  .reminder-cta-box p:nth-child(1){
+      font-size:2.5rem;
+    }
+  .reminder-statement2 {
+    font-size: 24px; 
+  }
+  .reminder-statement {
+    font-size: 18px; 
+  }
+  .reminder-contact{
+    font-size:16px;
+  }
+
+  .reminder-cta-box a.reminder-cta-button {
+    font-size: 14px; 
+    padding: 10px 20px; 
+  }
+}
+@media (max-width: 430px) {
+  .reminder-cta-box h2 {
+    font-size: 3.3rem; 
+
+  }
+  .reminder-section p.subtext{
+    font-size:1.6rem;
+  }
+}
+
+    @media only screen and (max-width: 768px) { 
+      .workflow-container {
+        grid-template-columns: repeat(1,1fr); 
+        width: 35%; 
+        margin: 20px auto;           
+      }
+    }
+
+
+    @media only screen and (max-width: 1200px) { 
+      .workflow-container {
+        grid-template-columns: repeat(1,1fr); 
+        width: 35%; 
+        margin: 20px auto;           
+      }
+    }
+
+    @media only screen and (max-width: 768px) { 
+      .resources {
+      grid-template-columns: 1fr; 
+        width: 100%; 
+        margin: 20px auto;   
+                
+      }
+      .resources-container{
+        display:grid;
+        justify-content:center;
+      }
+      .resource-buttons{
+        margin-top:30px;
+      }
+
+      #poster-container{
+          gap: 0px;
+      }
+
+    }
+
+@media only screen and (max-width: 480px) { 
+  .resources {
+    margin: 10px auto; 
+    flex-direction:column;
+  }
+
+  .resource h3 {
+    font-size: 20px; 
+    width: 220px;
+  }
+
+
+  .resource-info {
+    padding: 10px; 
+  }
+
+  .resource-buttons {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+  }
+
+.resource:nth-of-type(1) {
+  transform: rotate(0deg) translateX(0px) translateY(0px)!important;
+  z-index: 2;
+}
+
+
+.resource:nth-child(2) {
+  transform: rotate(0deg) translateX(0px) translateY(0px)!important;
+  z-index: 2;
+}
+
+
+  .btn {
+    font-size: 14px; 
+  }
+}
+
+    @media only screen and (max-width: 768px){
+      .button-container{
+        flex-direction:column;
+        align-content:center;
+      }
+    }
+        @media only screen and (max-width: 768px) { 
+          .cards {
+            flex-direction: column; 
+            align-items: center;     
+          }
+
+          .card {
+            width: 300px; 
+          }
+        }
+
+    @media only screen and (max-width: 768px) { 
+      .intro {
+        width: 75%; 
+      }
+    }
+
+@media (max-width: 480px) {
+  .intro p {
+    font-size: 20px; 
+  }
+}
+        .button{
+          font-family: Montserrat;
+
+        }
+
+
+.anchorSection {
+    padding: 40px 70px;
+}
+
+.vd-wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+
+table.norpublication {
+    width: 100%;
+    padding: 0;
+    border-spacing: 0;
+    border-collapse: collapse;
+    font-size:18px;
+}
+.norpublication>tbody>tr.title {
+    background: #f9f9f9;
+}
+.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td {
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+}
+
+.vd-wrapper h2{
+      font-size: 2.0em;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #3f444a;
+}
+
+@media (min-width: 768px) {
+    .vd-wrapper {
+        width: 750px;
+    }
+}
+
+@media (min-width: 992px) {
+    .vd-wrapper {
+        width: 970px;
+    }
+}
+@media (min-width: 1200px) {
+    .vd-wrapper {
+        width: 1170px;
+    }
+}
+
+
+.ngs-promo-banner {
+  background: white;
+  padding: 40px 20px;
+  position: relative;
+  overflow: hidden;
+}
+#ngs-promo-banner {
+    background-image: url(/sites/default/files/images/ngs-promo-right-img.png);
+    background-position: right;
+    background-size: 53%;
+    background-repeat: no-repeat;
+    height:750px;
+}
+.ngs-promo-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: auto;
+  justify-content: center;
+    position: absolute;
+  left: 0;
+}
+.ngs-promo-container .ngs-promo-main{
+  font-size: 73px;
+  font-weight: 600;
+  line-height: 1.0;
+  color: #79a3d6;
+  margin-top: -14px
+}
+.ngs-promo-right {
+  position: relative;
+  padding: 20px;
+
+}
+.ngs-promo-left {
+  padding: 0px;
+  width: 630px;
+
+}
+.ngs-promo-info {
+  background-color: #004897;
+  color: white;
+  font-weight: bold;
+  font-size: 34px;
+  padding: 30px 20px 30px 116px;
+  z-index: 10;
+  position: relative;
+}
+
+.ngs-promo-image {
+    bottom: -2px;
+    max-width: 100%;
+    margin-top: 20px;
+    height: 861px;
+    z-index: 6;
+    position: absolute;
+    left: -19px;
+}
+
+.ngs-promo-header {
+  margin-bottom: 10px;
+  margin-top: 30px;
+  font-size: 35px;
+}
+
+
+.ngs-promo-main .ngs-promo-red {
+  color: var(--norgen-tertiary-rna-red);;
+}
+
+.ngs-promo-main .ngs-promo-blue {
+  color: var(--norgen-primary-blue);;
+}
+
+.ngs-promo-sub {
+  font-size: 30px;
+  font-weight: 500;
+  margin-top: -10px;
+}
+.ngs-reminder-background-img {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    object-fit: cover;
+    z-index: 1;
+    top: 535px;
+}
+.ngs-promo-subtext-img{
+  height: 70px;
+}
+.ngs-promo-subtext{
+  font-size: 30px;
+}
+.norgen-logo-text{
+text-transform: uppercase;
+    color: var(--norgen-primary-blue);
+    letter-spacing: 1.2px;
+    font-weight:500;
+}
+.promo-type-text{
+  color: #79a3d6;
+  text-transform: uppercase;
+  letter-spacing: 5.0px;
+  font-weight: 700;
+}
+
+@media (max-width: 1800px) {
+.ngs-promo-right{
+  text-align:center;
+}
+.ngs-promo-info{
+  padding: 30px 20px 30px 30px;
+  text-align: center;
+}
+.ngs-promo-header{
+  margin-top:0px;
+}
+}
+
+@media (max-width: 1024px) {
+  .ngs-promo-left {
+    width: 100%;
+    padding: 10px;
+  }
+.ngs-promo-container .ngs-promo-main{
+  font-size:58px;
+}
+  .ngs-promo-info {
+    padding: 20px;
+    font-size: 28px;
+    text-align: center;
+  }
+
+  .ngs-promo-header {
+    font-size: 28px;
+    text-align: center;
+    margin-top:40px;
+  }
+
+  .ngs-promo-main {
+    text-align: center;
+  }
+
+  .ngs-promo-sub {
+    font-size: 22px;
+    text-align: center;
+  }
+
+  .ngs-promo-image {
+    height: 600px;
+    left: 0;
+  }
+
+  .ngs-reminder-background-img {
+    top: 615px;
+  }
+}
+
+@media (max-width: 768px) {
+  .ngs-promo-container {
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+  }
+.ngs-promo-container .ngs-promo-main{
+  font-size:52px;
+}
+
+  .ngs-promo-subtext-img {
+    height: 50px;
+  }
+
+  .ngs-promo-subtext {
+    font-size: 24px;
+    text-align: center;
+  }
+
+  .ngs-promo-info {
+    font-size: 24px;
+    padding: 15px;
+  }
+
+  .ngs-promo-header {
+    font-size: 24px;
+  }
+
+  .ngs-promo-sub {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 580px) {
+  .ngs-reminder-background-img {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .ngs-promo-info {
+    font-size: 20px;
+    padding: 10px;
+  }
+
+  .ngs-promo-header {
+    font-size: 20px;
+  }
+
+  .ngs-promo-main {
+    font-size: 22px;
+  }
+
+  .ngs-promo-sub {
+    font-size: 16px;
+  }
+
+  .ngs-promo-subtext-img {
+    height: 40px;
+  }
+
+  .ngs-promo-subtext {
+    font-size: 20px;
+  }
+}
+
+
+    </style>
+</head>
+
+
+<body>
+
+{# <section class="home-banner ngs-promo-banner" id="ngs-promo-banner">
+  <img src="/sites/default/files/images/glove-hand.png" alt="Gloved Hand Holding Tube" class="ngs-promo-image">
+
+  <p class="ngs-promo-subtext">
+    <img src="/sites/default/files/images/norgen-dna-logo.png" alt="Background Image" class="ngs-promo-subtext-img">
+    <span class="promo-type-text">Sequencing Services</span>
+  </p>
+  <div class="ngs-promo-container">
+            
+    <div class="ngs-promo-left">
+      <div class="ngs-promo-info">
+        If we receive your samples<br>in July or August 2025
+      </div>
+    </div>
+    <div class="ngs-promo-right">
+      <h2 class="ngs-promo-header">
+        For RNA and small RNA Sequencing
+      </h2>
+      <h1 class="ngs-promo-main">
+        WE WILL PERFORM<br>
+        <span class="ngs-promo-red">RNA ISOLATION</span> <span class="ngs-promo-blue">AT 50% OFF</span>
+      </h1>
+      <p class="ngs-promo-sub">
+        Where others give up, we excel. Low input, high quality, half the price
+      </p>
+    </div>
+  </div>
+  <img src="/sites/default/files/images/Asset 1.svg" alt="Background Image" class="ngs-reminder-background-img">
+</section> #}
+
+
+<section class="hero-section">
+   <div class="hero-content container" >
+      <p class="subtext">Sequencing Services</p>
+      <h1>Small RNA Sequencing</h1>
+      <div class="cta-box">
+         <h2>Pushing boundaries where others draw the line</h2>
+          <p class = "trial-statement"><b>Free</b> 6 samples pilot trial RNA and Small RNA sequencing on applicable projects&ast;</p>
+          <p class = "contact-statement"style="margin-top:0px; color:black;">Contact us today at <a>service@norgenbiotek.com</a> to get your free consultation.</p>
+          <a href="https://norgenbiotek.com/content/service-consultation-request?utm_source=ngs-services-small-rna-seq&utm_medium=internal_link&utm_campaign=service_inquiry" class="cta-button">Book Consultation</a>
+      </div>
+   </div>
+</section>
+
+
+
+<section style = "background-color:white;">
+   <div >
+      {# <div style = "text-align:center;" class = "machine-title">
+         <h1  class = "machine-title">Key Features</h1>
+      </div> #}
+      {# <img style = "max-width: 30%; display: block; margin-left: auto; margin-right: auto; margin-bottom:-0px;"src="/sites/default/files/images/icons/micro-rna-device.png" alt="Header Image">  #}
+    <div style = "background-color:#ebf1f7;">
+      <div class = "info-box container">
+         <div class="intro">
+          <div style = "text-align:center;" class = "machine-title">
+            <h2  class = "machine-title">Key Features</h2>
+          </div>
+              <p>Our state-of-the-art laboratory provides comprehensive start to end Next-Generation Sequencing (NGS) services. With over 25 years of experience, our accredited team is ready to deliver top-notch solutions!</p>
+          </div>
+         <div class="features">
+            
+            <div class="feature">
+               <img style = "width:40px;" src="/sites/default/files/images/icons/expression.png" alt="Icon 4" <a href="https://www.flaticon.com/free-icons/gene" title="Gene icons created by Iconjam - Flaticon"></a>
+               <h3>RNA Extraction Service Available Upon Request</h3>
+            </div>
+
+            <div class="feature">
+               <img style = "width:35px;"src="/sites/default/files/images/icons/workflow.png" alt="Icon 2"> 
+               <h3>Sequence Ultra-Low Inputs from Liquid Biopsies and Extracellular Vesicles</h3>
+            </div>
+
+            <div class="feature">
+               <img style = "width:50px;"src="/sites/default/files/images/icons/rna.png" alt="Icon 1"> 
+               <h3 style = "">Capture Complete Range of Small RNA Species</h3>
+            </div>
+
+
+            <div class="feature">
+               <img style = "width:40px;" src="/sites/default/files/images/icons/sequencing.png" alt="Icon 3" <a href="https://www.flaticon.com/free-icons/sequence" title="Sequence icons created by IwitoStudio - Flaticon"></a> 
+               <h3>Illumina® Sequencing Platform</h3>
+            </div>
+
+
+
+            <div class="feature">       
+               <img style = "width:50px;" src="/sites/default/files/images/icons/bioinf.png" alt="Icon 5" <a href="https://www.flaticon.com/free-icons/bioinformatic" title="bioinformatic icons created by Iconjam - Flaticon"></a>
+               <h3>Examine Differential Expression, Discover Novel Biomarkers and Understand Post-Transcriptional Regulation of Expression</h3>
+            </div>
+
+            <div class="feature" >
+               <img style = "width:50px; " src="/sites/default/files/images/icons/fast-time.png" alt="Icon 6"> 
+               <h3>Fast Turn Around Time <br>4-6 weeks</h3>
+            </div>
+
+         </div>
+         <div class="buttons"> 
+            <button onclick="location.href='#custom-workflow'">Your Custom Workflow</button>
+            <button onclick="window.location.href='https://norgenbiotek.com/content/service-consultation-request?utm_source=ngs-services-small-rna-seq&utm_medium=internal_link&utm_campaign=service_inquiry'">Request a Consultation</button>
+         </div>
+      </div>
+    </div>
+      {# 
+      <div id="ngs-form">
+         {{ngs_service}}
+         <button class="close-btn" onclick="toggleForm()">×</button>
+      </div>
+      #}
+      <div class="resources-container">
+         <!-- Resources Section -->
+         <div class="resources">
+            <div class="resource">
+               <h3>New Application Note</h3>
+               <div class="resource-info">
+                  <a href="https://norgenbiotek.com/sites/default/files/resources/App-Note-99-Small-RNA-Seq-Application%20Note.pdf" target="_blank">
+                  <img src="/sites/default/files/images/app-note-99.png" alt="Application Note">
+                  </a>
+               </div>
+            </div>
+            <div class="resource">
+               <h3>Sample Report</h3>
+               <div class="resource-info">
+                  <img src="/sites/default/files/images/sample-report.png" alt="Sample Report" onclick="toggleForm()">
+               </div>
+            </div>
+         </div>
+         <!-- Buttons Section -->
+         <div class="resource-buttons">
+            <a href="https://norgenbiotek.com/sites/default/files/resources/App-Note-99-Small-RNA-Seq-Application%20Note.pdf" class="btn" target="_blank">Download Application Note</a>
+            <a  class="btn" target="_blank" onclick="toggleForm()">Download Sample Report </a>
+         </div>
+      </div>
+
+
+      <div class="resources-container" id = "poster-container">
+         <!-- Resources Section -->
+         <div class="resources">
+            <div class="poster-resource" style = "place-items: center;">
+               <h3>RNA NGS Data From Different Sample Types</h3>
+               <div class="resource-info">
+                  <a href="https://norgenbiotek.com/sites/default/files/resources/2024-11-05-Comparison of Small RNA Sequencing  Profiles of Exosomal RNA Extracted from Plasma, Urine and Saliva_Proof 3.pdf" target="_blank">
+                  <img src="/sites/default/files/images/comparison-of-small-rna-sequencing.png" alt="Sample Report" onclick="toggleForm()">
+               </div>
+            </div>
+         </div>
+         <!-- Buttons Section -->
+         <div class="poster-resource-buttons ">
+            <a href="https://norgenbiotek.com/sites/default/files/resources/2024-11-05-Comparison of Small RNA Sequencing  Profiles of Exosomal RNA Extracted from Plasma, Urine and Saliva_Proof 3.pdf" class="btn" target="_blank">Download Poster</a>
+         </div>
+      </div>
+
+      
+   </div>
+</section>
+
+<!-- Overlay and Form (ngs_service) -->
+<!-- The overlay element covering the page -->
+<div id="overlay" style="display: none;">
+    <div id="ngs-form">
+        <!-- Close button for the form -->
+        <button class="close-btn" onclick="toggleForm()">×</button>
+        
+        <!-- The dynamically injected form (ngs_service) -->
+        {{ngs_service}} <!-- This is where the form will be injected or rendered -->
+    </div>
+</div>
+
+
+
+<section class="row-carousel" style="padding:25px 25px 25px; background-color:white;">
+  <h3 style="font-family:Montserrat; font-weight:800; color:#3f444a; margin-bottom:0px;" align="center" >Our NGS Clients</h3>
+  <div id="Carouselprod" class="carousel slide carousel-fade1 container" data-ride="carousel" data-interval="2500" data-pause="hover">
+    <div class="carousel-inner carousel-inner-feat">
+      <div class="item">
+        <div class="row">
+        <div class="col-xs-1 col-md-1 our-customers"></div>
+          <div class="col-xs-4 col-md-2 our-customers">
+            <img class="lazy" data-src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" src="https://norgenbiotek.com/sites/default/files/services/service-customer/nih.png" alt="NIH Health and Sciences">
+          </div>
+          <div class="col-xs-4 col-md-2 our-customers">
+            <img class="lazy" data-src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" src="https://norgenbiotek.com/sites/default/files/services/service-customer/roswell.png" alt="Roswell Park Cancer Research">
+          </div>
+          <div class="col-xs-4 col-md-2 our-customers">
+            <img class="lazy" data-src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" src="https://norgenbiotek.com/sites/default/files/services/service-customer/sinai.png" alt="Mount Sinai Beth Israel">
+          </div>
+          <div class="col-xs-4 col-md-2 our-customers">
+            <img class="lazy" data-src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" src="https://norgenbiotek.com/sites/default/files/services/service-customer/mayo.png" alt="Mayo Clinic">
+          </div>
+          <div class="col-xs-4 col-md-2 our-customers">
+            <img class="lazy" data-src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" src="https://norgenbiotek.com/sites/default/files/services/service-customer/magee.png" alt="Magee Women's Research Institute">
+          </div>
+          <div class="col-xs-1 col-md-1 our-customers"></div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="row">
+          <div class="col-xs-1 col-md-1 our-customers"></div>
+          <div class="col-xs-4 col-md-2 our-customers">
+            <img class="lazy" data-src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" src="https://norgenbiotek.com/sites/default/files/services/service-customer/brainstorm.png" alt="Brainstorm Cell Therapeutics">
+          </div>
+          <div class="col-xs-4 col-md-2 our-customers">
+            <img class="lazy" data-src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" src="https://norgenbiotek.com/sites/default/files/services/service-customer/bwh.png" alt="Brigham and Women's Hospital">
+          </div>
+          <div class="col-xs-4 col-md-2 our-customers">
+            <img class="lazy" data-src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" src="https://norgenbiotek.com/sites/default/files/services/service-customer/jefferson.png" alt="Thomas Jefferson University">
+          </div>
+          <div class="col-xs-4 col-md-2 our-customers">
+            <img class="lazy" data-src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" src="https://norgenbiotek.com/sites/default/files/services/service-customer/guelph.png" alt="University of Guelph">
+          </div>
+          <div class="col-xs-4 col-md-2 our-customers">
+            <img class="lazy" data-src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" src="https://norgenbiotek.com/sites/default/files/services/service-customer/planck.png" alt="Max Planck Institute for Medical Research">
+          </div>
+
+        </div>
+      </div>
+      <div class="item active">
+        <div class="row">
+        <div class="col-xs-1 col-md-2 our-customers"></div>
+          <div class="col-xs-4 col-md-2 our-customers">
+            <img class="lazy" data-src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" src="https://norgenbiotek.com/sites/default/files/services/service-customer/warsaw.png" alt="University of Warsaw">
+          </div>
+          <div class="col-xs-4 col-md-2 our-customers">
+            <img class="lazy" data-src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" src="https://norgenbiotek.com/sites/default/files/services/service-customer/zenbio.png" alt="ZenBio">
+          </div>
+          <div class="col-xs-4 col-md-2 our-customers">
+            <img class="lazy" data-src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" src="https://norgenbiotek.com/sites/default/files/services/service-customer/maryland.png" alt="University of Maryland School of Medicine">
+          </div>
+          <div class="col-xs-4 col-md-2 our-customers">
+            <img class="lazy" data-src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" src="https://norgenbiotek.com/sites/default/files/services/service-customer/queens.png" alt="Queen's University">
+          </div>
+        <div class="col-xs-1 col-md-1 our-customers"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<section style="background-color: white; padding:40px;" id="custom-workflow">
+    <div class="workflow-title">
+          <h2>Your Custom Workflow</h2>
+    </div>
+  <div class="workflow-container container">
+    
+
+    <div class="cell">
+      <img src="/sites/default/files/images/icons/chat.png" alt="icon" <a href="https://www.flaticon.com/free-icons/chat" title="Chat icons created by Freepik - Flaticon"></a>
+      <h2>1. Consultation</h2>
+      <div class="cell-content">
+        <p>Request a free consultation with our NGS experts to discuss your research goals and receive tailored recommendations.</p>
+        <a href="https://norgenbiotek.com/content/service-consultation-request?utm_source=ngs-services-small-rna-seq&utm_medium=internal_link&utm_campaign=service_inquiry" class="btn">Request a Consultation</a>
+      </div>
+    </div>
+
+    <div class="cell">
+      <img src="/sites/default/files/images/icons/shipping.png" alt="icon" <a href="https://www.flaticon.com/free-icons/delivery-car" title="Delivery car icons created by BomSymbols - Flaticon"></a>
+      <h2>2. Sample Submission</h2>
+      <div class="cell-content">
+      <p>For sample preparation guidelines, check out these links.</p>
+        <ol>
+          <li><a href="https://norgenbiotek.com/sites/default/files/services/table-collect.html" target="_blank">I still need to collect my samples</a></li>
+          <li><a href="https://norgenbiotek.com/sites/default/files/services/specimens.html" target="_blank">I will send specimens</a></li>
+          <li><a href="https://norgenbiotek.com/sites/default/files/services/purified-rna.html" target="_blank">I will send purified RNA</a></li>
+        </ol>
+        <p>Use our shipping guidelines to ship samples from anywhere in the world.</p>
+        {# <p>For extra guidelines check out these links for sample submission.</p> #}
+      </div>
+    </div>
+
+    <div class="cell">
+      <img src="/sites/default/files/images/icons/samples.png" alt="icon">
+      <h2>3. Sample Isolation</h2>
+      <div class="cell-content">
+        <p style="margin-top:10px;">Our team specializes in isolating RNA from a wide range of sample types, with a particular focus on ultra-low and poor-quality RNA.</p> 
+        <p>Isolation is performed using Norgen Biotek's proprietary silicon carbide technology.</p>
+      </div>
+    </div>
+
+    <div class="cell">
+      <img src="/sites/default/files/images/icons/checkmark.png" alt="icon">
+      <h2>4. Quality Control</h2>
+      <div class="cell-content">
+        <p style="margin-top:10px;">Our projects include continuous quality checks with real time updates.</p>
+      </div>
+    </div>
+
+    <div class="cell">
+      <img src="/sites/default/files/images/icons/books.png" alt="icon" <a href="https://www.flaticon.com/free-icons/vector" title="vector icons created by Ylivdesign - Flaticon"></a>
+      <h2>5. Library Preparation</h2>
+      <div class="cell-content">
+        <p>High-quality libraries have been our hallmark, starting with the development of Norgen Biotek's Small RNA Library Preparation Kit for Illumina.</p>
+      </div>
+    </div>
+
+    <div class="cell">
+      <img src="/sites/default/files/images/icons/machine.png" alt="icon"<a href="https://www.flaticon.com/free-icons/sequence" title="Sequencing icons created by Freepik - Flaticon"></a>
+      <h2>6. Sequencing</h2>
+      <div class="cell-content">
+        <p style="margin-top:10px;">All sequencing is performed on Illumina platforms.</p>
+      </div>
+    </div>
+
+    <div class="cell">
+      <img src="/sites/default/files/images/icons/analysis2.png" alt="icon">
+      <h2>7. Bioinformatics Analysis</h2>
+      <div class="cell-content">
+        <p>Our basic analysis includes cleaning, filtering, mapping and quantification.</p>
+        <p>We also offer Differential Expression, KEGG/GO, and Novel miRNA Prediction.</p> 
+        <p>If you require a custom pipeline, just ask.</p>
+      </div>
+    </div>
+
+    <div class="cell">
+      <img src="/sites/default/files/images/icons/documentation.png" alt="icon">
+      <h2>8. Final Report</h2>
+      <div class="cell-content">
+        <p style="margin-top:10px;">We deliver a detailed report of methods and results in a clear, publication-ready format.</p>
+        <a  class="btn" target="_blank" onclick="toggleForm()">Download Sample Report </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# <img id="figure-3-ngs-(1).jpg" src="/sites/default/files/images/figure-3-ngs (1).jpg" alt="Graph 2" class="grid-image">
+                <img id="figure-7-ngs-(2).jpg" src="/sites/default/files/images/figure-7-ngs (2).jpg" alt="Graph 6" class="grid-image">
+        <img id="figure-4-ngs-(1).jpg" src="/sites/default/files/images/figure-4-ngs (1).jpg" alt="Graph 3" class="grid-image">
+        <img id="figure-1-ngs-(1).jpg" src="/sites/default/files/images/figure-1-ngs (1).jpg" alt="Graph 7" class="grid-image"> #}
+        
+
+
+
+
+  <section class="bioinformatics-analysis" style = "background-color:white;">
+    <div class="container">
+    <h2>Bioinformatics Analysis</h2>
+    <div class="bioinformatics-content">
+      <div class="fig-box">
+        <img id="main-image" src="/sites/default/files/images/Pie Chart - smallRNA.png" alt="Pie Chart">
+        <a id="image-link" href="/sites/default/files/images/Pie Chart - smallRNA.png" target="_blank">Open High Resolution Image</a>
+      </div>
+      <div class="graphs">
+        <img id="Pie Chart - smallRNA.png" src="/sites/default/files/images/Pie Chart - smallRNA.png" alt="Graph 8" class="grid-image">
+        <img id="figure-8-ngs-(1).jpg" src="/sites/default/files/images/figure-8-ngs (1).jpg" alt="Graph 8" class="grid-image">
+
+        <img id="figure-2-ngs-(1).jpg" src="/sites/default/files/images/figure-2-ngs (1).jpg" alt="Graph 1" class="grid-image">
+        <img id="figure-6-ngs-(1).jpg" src="/sites/default/files/images/figure-6-ngs (1).jpg" alt="Graph 5" class="grid-image">
+        <img id="volcano_plot.png" src="/sites/default/files/images/Volcano_Plot_exosome_SV18831.png" alt="Graph 8" class="grid-image">
+        <img id="figure-5-ngs-(1).jpg" src="/sites/default/files/images/figure-5-ngs (1).jpg" alt="Graph 4" class="grid-image">
+
+      </div>
+    </div>
+  <div class="container">
+    <div class="description-container">
+      <p class="fig-description">
+        <b>Figure 1.</b> Pie Chart: Shows the distribution of reads after initial adapter trimming and quality filter steps. The majority of the reads will be used for alignment to the human genome.
+      </p>
+    </div>
+  </div>
+  </div>
+  </section>
+
+
+
+<section class="reminder-section">
+  <img src="/sites/default/files/images/Asset 1.svg" alt="Background Image" class="reminder-background-img">
+  <div class="reminder-content container">
+    <p class="subtext">Sequencing Services</p>
+    <div class="reminder-cta-box">
+      <h2>DON'T MISS OUT!</h2>
+            {# <p class = "reminder-statement2"style="margin-bottom:0px; margin-top:0px; font-weight:700;">Pushing boundaries where others draw the line</p> #}
+
+      <p class="reminder-statement" style="margin-bottom:0px; margin-top:0px; font-weight:700;">Free 6 samples pilot trial RNA and Small RNA sequencing on applicable projects*</p>
+      <p class = "reminder-contact"style="margin-top:0px; color:black; font-weight:500;">Contact us today at service@norgenbiotek.com to get your free consultation.</p>
+      <a href="https://norgenbiotek.com/content/service-consultation-request?utm_source=ngs-services-small-rna-seq&utm_medium=internal_link&utm_campaign=service_inquiry" class="reminder-cta-button">Book Consultation</a>
+    </div>
+  </div>
+
+</section>
+
+  <div class = "reminder-disclaimer">
+    <p>&ast;Disclaimer: Offer valid until December 31, 2025. Requests will be evaluated on a case-by-case basis on applicable projects.</p>
+  </div>
+
+
+{# <section>
+  <div class="container" style = "padding:20px; padding-top:40px; padding-bottom:40px;">
+    <div class="products-title">
+          <h1> Quality In <img src="/sites/default/files/images/icons/right-arrow.png" alt="Arrow" style="width:50px; vertical-align:middle; "> Quality Out</h1>
+        <p>We believe that the best research starts with quality sample collection and preservation.</p>
+        <p>Select your sample type.</p>
+    </div>
+  <div class="button-container">
+    <button class="prod-btn" data-product="saliva">Saliva/Swab</button>
+    <button class="prod-btn" data-product="stool">Stool/Swab</button>
+    <button class="prod-btn" data-product="urine">Urine</button>
+    <button class="prod-btn" data-product="blood">Blood/Plasma</button>
+  </div>
+
+  {# Saliva/Swab Selection#}
+  {#<div class="cards">
+    <div class="card" data-product="saliva">
+      <img src="https://norgenbiotek.com/sites/default/files/styles/original/public/RU53800%20blue%20-%20web.jpg" alt="Saliva Product 1">
+      <div class="card-content">
+        <h3>Saliva RNA Collection and Preservation Devices Dx</h3>
+        <p>(Cat. 53800) <br> CE-IVD marked in accordance with EU Directive 98/79/EC</p>
+      </div>
+      <div class="card-buttons">
+        <a href = "https://norgenbiotek.com/product/saliva-rna-collection-and-preservation-devices-dx"class="prod-btn">Buy Now</a>
+        <a href = "https://norgenbiotek.com/product/saliva-rna-collection-and-preservation-devices"class="prod-btn">Research Use</a>
+      </div>
+    </div>
+
+    <div class="card" data-product="saliva">
+      <img src="https://norgenbiotek.com/sites/default/files/styles/original/public/68800-web_2.jpg?itok=-wWvxvko%22" alt="Saliva Product 2">
+      <div class="card-content">
+        <h3>Total Nucleic Acid Preservation Tubes Dx</h3>
+        <p>(Cat. Dx69200) <br> CE-IVD marked in accordance with EU Directive 98/79/EC</p>
+      </div>
+      <div class="card-buttons">
+        <a href = "https://norgenbiotek.com/product/total-nucleic-acid-preservation-tubes-dx"class="prod-btn">Buy Now</a>
+        <a href = "https://norgenbiotek.com/product/total-nucleic-acid-preservation-tubes"class="prod-btn">Research Use</a>
+      </div>
+    </div>
+
+  {# Stool/Swab Selection#}
+
+
+    {#<div class="card" data-product="stool">
+      <img src="https://norgenbiotek.com/sites/default/files/styles/original/public/45630_0.png" alt="Saliva Product 1">
+      <div class="card-content">
+        <h3>Stool Nucleic Acid Collection and Preservation Devices Dx</h3>
+        <p>(Cat. Dx45660) <br> CE-IVD marked in accordance with EU Directive 98/79/EC</p>
+      </div>
+      <div class="card-buttons">
+        <a href = "https://norgenbiotek.com/product/stool-nucleic-acid-collection-and-preservation-devices-dx"class="prod-btn">Buy Now</a>
+        <a href = "https://norgenbiotek.com/product/stool-nucleic-acid-collection-and-preservation-tubes"class="prod-btn">Research Use</a>
+      </div>
+    </div>
+
+    <div class="card" data-product="stool">
+      <img src="https://norgenbiotek.com/sites/default/files/styles/original/public/63700_2.jpg" alt="Saliva Product 2">
+      <div class="card-content">
+        <h3>Stool Nucleic Acid Collection and Preservation System</h3>
+        <p>(Cat. 63700) <br> For Research Use</p>
+      </div>
+      <div style = "margin-top:23px"class="card-buttons">
+        <a href = "https://norgenbiotek.com/product/stool-nucleic-acid-collection-and-preservation-system"class="prod-btn" style = "padding:10px 101px;">Buy Now</a>
+      </div>
+    </div>
+
+
+    <div class="card" data-product="stool">
+      <img src="https://norgenbiotek.com/sites/default/files/styles/original/public/45670_700_0.jpg?itok=v_un1wXT%22" alt="Saliva Product 2">
+      <div class="card-content">
+        <h3>Fecal Swab Collection and Preservation System</h3>
+        <p>(Cat. 45670) <br> For Research Use</p>
+      </div>
+      <div style = "margin-top:23px" class="card-buttons">
+        <a href = "https://norgenbiotek.com/product/fecal-swab-collection-and-preservation-system"class="prod-btn" style = "padding:10px 101px;">Buy Now</a>
+      </div>
+    </div>
+    
+
+  {# Urine Selection#}
+
+
+    {#<div class="card" data-product="urine">
+      <img src="https://norgenbiotek.com/sites/default/files/styles/original/public/urine-tubes_700.jpg" alt="Saliva Product 1">
+      <div class="card-content">
+        <h3>Urine Preservation</h3>
+        <p>(Cat. 18116, 18118, 18120) <br> For Research Use</p>
+      </div>
+      <div style = "margin-top:26px" class="card-buttons">
+        <a href = "https://norgenbiotek.com/product/urine-collection-and-preservation-devices"class="prod-btn" style = "padding:10px 101px;">Buy Now</a>
+      </div>
+    </div>
+
+    <div class="card" data-product="urine">
+      <img src="https://norgenbiotek.com/sites/default/files/styles/original/public/urine120cc_0.jpg" alt="Saliva Product 2">
+      <div class="card-content">
+        <h3>Urine Collection and Preservation Cup</h3>
+        <p>(Cat. 18116, 18118, 18120) <br> For Research Use</p>
+      </div>
+      <div class="card-buttons">
+        <a href = "https://norgenbiotek.com/product/urine-collection-and-preservation-devices"class="prod-btn" style = "padding:10px 101px;">Buy Now</a>
+      </div>
+    </div>
+
+
+
+
+    {# Blood/Plasma#}
+
+
+    {#<div class="card" data-product="blood">
+      <img src="https://norgenbiotek.com/sites/default/files/styles/original/public/cftube2web_0.jpg" alt="Saliva Product 1">
+      <div class="card-content">
+        <h3>cf-DNA/cf-RNA Preservative Tubes Dx</h3>
+        <p>(Cat. Dx63950) <br> CE-IVD marked in accordance with EU Directive 98/79/EC</p>
+      </div>
+      <div class="card-buttons">
+        <a href = "https://norgenbiotek.com/product/cf-dnacf-rna-preservative-tubes-dx"class="prod-btn">Buy Now</a>
+        <a href = "https://norgenbiotek.com/product/cf-dnacf-rna-preservative-tubes"class="prod-btn">Research Use</a>
+      </div>
+    </div>
+
+
+  </div>
+</section> #}
+
+
+
+<section style = "background-color: white; padding: 40px 70px;">
+<div class="container">
+  <div style = "padding-top 50px; padding-bottom 50px;" class="faq-container">
+    <h2>Frequently Asked Questions</h2>
+
+    <div class="faq-item">
+      <div class="faq-header">
+        <img src="/sites/default/files/images/icons/down-arrow.png" alt="Arrow" class="faq-arrow">
+        <span class="faq-title">Do you offer RNA extraction services?</span>
+      </div>
+      <div class="faq-answer">
+        <p>Yes, we provide extraction services tailored to meet your NGS application requirements. RNA extraction can be included as part of any RNA-Seq project for an additional fee.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-header">
+        <img src="/sites/default/files/images/icons/down-arrow.png" alt="Arrow" class="faq-arrow">
+        <span class="faq-title">My core facility declined my samples due to insufficient RNA amounts. Can Norgen still process them?</span>
+      </div>
+      <div class="faq-answer">
+        <p>Yes! We accept samples that do not meet the minimum RNA requirements of other core facilities. We understand that certain sample types, such as exosomes, yield low RNA amounts. Our NGS services team specializes in working with limited RNA inputs. Using our small RNA sequencing library workflow, we can generate high-quality sequencing data from as little as 50 pg of RNA.</p>
+      </div>
+    </div>
+
+
+    <div class="faq-item">
+      <div class="faq-header">
+        <img src="/sites/default/files/images/icons/down-arrow.png" alt="Arrow" class="faq-arrow">
+        <span class="faq-title">How much bodily fluid is needed for cell-free or exosomal small RNA sequencing?</span>
+      </div>
+      <div class="faq-answer">
+        <p>The required sample volume for cf-RNA or exosomal RNA extraction depends on the biological fluid type. We have optimized protocols specifying both the minimum and recommended volumes for plasma, serum, and other bodily fluids. For project-specific requirements, please contact us at services@norgenbiotek.com.</p>
+      </div>
+    </div>
+
+
+    <div class="faq-item">
+      <div class="faq-header">
+        <img src="/sites/default/files/images/icons/down-arrow.png" alt="Arrow" class="faq-arrow">
+        <span class="faq-title">I have archived samples but am unsure which extraction method is best for small RNA sequencing. Can you help?</span>
+      </div>
+      <div class="faq-answer">
+        <p>Yes! At Norgen, we have developed and optimized protocols specifically for extracting RNA from archived samples. Our highly trained NGS service team can help determine the best approach to ensure the highest quality RNA yield from your archived material.</p>
+      </div>
+    </div>
+
+
+    <div class="faq-item">
+      <div class="faq-header">
+        <img src="/sites/default/files/images/icons/down-arrow.png" alt="Arrow" class="faq-arrow">
+        <span class="faq-title">What are your sample submission requirements?</span>
+      </div>
+      <div class="faq-answer">
+        <p>Our requirements for sample submission can be found under Step 2: Sample Submission on our small RNA NGS Service page.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-header">
+        <img src="/sites/default/files/images/icons/down-arrow.png" alt="Arrow" class="faq-arrow">
+        <span class="faq-title">What sequencing platform do you sequence on?</span>
+      </div>
+      <div class="faq-answer">
+        <p>We sequence all RNA Sequencing projects on the Illumina® platform.</p>
+      </div>
+    </div>
+
+
+    <div class="faq-item">
+      <div class="faq-header">
+        <img src="/sites/default/files/images/icons/down-arrow.png" alt="Arrow" class="faq-arrow">
+        <span class="faq-title">Does the price include bioinformatics analysis?</span>
+      </div>
+      <div class="faq-answer">
+        <p>Yes. Our comprehensive service includes a basic bioinformatics analysis with trimming, filter and mapping of the raw reads. The analysis results are delivered as images, in the PDF report, and the final mapping results files on a secure link from which you can download. Advanced analysis and custom script development for RNA Sequencing, comes with an additional fee.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-header">
+        <img src="/sites/default/files/images/icons/down-arrow.png" alt="Arrow" class="faq-arrow">
+        <span class="faq-title">What is the typical turnaround time?</span>
+      </div>
+      <div class="faq-answer">
+        <p>Our standard turnaround time is 4-6 weeks from the date of sample receipt. However, turnaround time may vary depending on the size and complexity of your project. For a more accurate estimate, please contact services@norgenbiotek.com.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-header">
+        <img src="/sites/default/files/images/icons/down-arrow.png" alt="Arrow" class="faq-arrow">
+        <span class="faq-title">Norgen is based in Canada. Do you accept samples from other countries?</span>
+      </div>
+      <div class="faq-answer">
+        <p>Yes! We accept samples from around the world. Our NGS team is happy to assist with international shipping arrangements to ensure a smooth process.</p>
+      </div>
+    </div>
+
+
+    <div class="faq-item">
+      <div class="faq-header">
+        <img src="/sites/default/files/images/icons/down-arrow.png" alt="Arrow" class="faq-arrow">
+        <span class="faq-title">Will my samples be safe during shipping? How can I ensure their quality is not compromised?</span>
+      </div>
+      <div class="faq-answer">
+        <p>We work closely with trusted shipping companies to ensure that your samples arrive in optimal condition. If you have specific concerns regarding sample integrity during transit, please contact services@norgenbiotek.com to discuss the best shipping options and procedures.</p>
+      </div>
+    </div>
+
+
+    <div class="faq-item">
+      <div class="faq-header">
+        <img src="/sites/default/files/images/icons/down-arrow.png" alt="Arrow" class="faq-arrow">
+        <span class="faq-title">If I opt for an extraction service, how can I be sure of the quality of the extraction?</span>
+      </div>
+      <div class="faq-answer">
+        <p>At Norgen, we implement multiple quality control (QC) checks throughout the sequencing workflow. The first QC check involves assessing RNA quality using a Bioanalyzer and/or Qubit to ensure high-quality extraction.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-header">
+        <img src="/sites/default/files/images/icons/down-arrow.png" alt="Arrow" class="faq-arrow">
+        <span class="faq-title">What are the quality control (QC) checkpoints in the NGS workflow?</span>
+      </div>
+      <div class="faq-answer">
+        <p>Our NGS service includes multiple QC steps to ensure high-quality sequencing results:</p>
+          <ol>
+            <li>Initial RNA Quality Assessment: RNA is analyzed using a Bioanalyzer and/or Qubit.</li>
+            <li>Library Preparation QC: Once RNA meets quality standards, sequencing libraries are prepared. These libraries undergo quantification and qualification using a Bioanalyzer and PCR.</li>
+            <li>Final QC Check Before Sequencing: Only libraries that pass the quality assessment proceed to sequencing.</li>
+          </ol>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-header">
+        <img src="/sites/default/files/images/icons/down-arrow.png" alt="Arrow" class="faq-arrow">
+        <span class="faq-title">What if I want to perform additional services after completing my small RNA sequencing project?</span>
+      </div>
+      <div class="faq-answer">
+        <p>After your project is completed, we store your RNA samples at our facility for 6 months. If you require additional services or wish to have your samples returned, please let us know. If no request is made within 6 months, the samples will be discarded.</p>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</section>
+
+
+{# <section>
+  <div class="container">
+    <div class="faq-container">
+      <h1>Citations</h1>
+      <div class="faq-item">
+        <div style = "" class="faq-header">
+          <img src="/sites/default/files/images/icons/down-arrow.png" alt="Arrow" class="faq-arrow">
+          <a href="https://www.mdpi.com/2073-4409/12/11/1505" target="_blank">Systems Genomics Reveals microRNA
+                Regulation of ICS Response in Childhood Asthma</a>
+        </div>
+        <div class="faq-answer">
+          <p><b>Cells.</b> 2023.<br>Sharma, R., Tiwari, A., Kho, A. T., Celedón, J. C., Weiss, S. T., Tantisira, K. G., &amp; McGeachie, M. J.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div style = "" class="faq-header">
+          <img src="/sites/default/files/images/icons/down-arrow.png" alt="Arrow" class="faq-arrow">
+          <a href="https://www.mdpi.com/1422-0067/24/4/3194" target="_blank">Characterization of Extracellular
+                Vesicle-Coupled miRNA Profiles in Seminal Plasma of Boars with Divergent Semen Quality Status</a>
+        </div>
+        <div class="faq-answer">
+          <p><b>International Journal of Molecular Sciences.</b> 2023.<br>Dlamini, Notsile H., et al.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div style = "" class="faq-header">
+          <img src="/sites/default/files/images/icons/down-arrow.png" alt="Arrow" class="faq-arrow">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/35488079/" target="_blank">Alteration of miRNAs in Small
+                Neuron‑Derived Extracellular Vesicles of Alzheimer's Disease Patients and the Effect of Extracellular
+                Vesicles on Microglial Immune Responses</a>
+        </div>
+        <div class="faq-answer">
+          <p><b>Journal of Molecular Neuroscience.</b> 2022.<br>Durur, Devrim Yagmur, et al.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div style = "" class="faq-header">
+          <img src="/sites/default/files/images/icons/down-arrow.png" alt="Arrow" class="faq-arrow">
+          <a href="https://journals.sagepub.com/doi/full/10.1177/19476035221113959" target="_blank">Hydrogel-Embedded Poly(Lactic-co-Glycolic Acid) Microspheres for the Delivery of
+                hMSC-Derived Exosomes to Promote Bioactive Annulus Fibrosus Repair</a>
+        </div>
+        <div class="faq-answer">
+          <p><b>Cartilage. </b> 2022.<br>DiStefano, Tyler J., et al.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div style = "" class="faq-header">
+          <img src="/sites/default/files/images/icons/down-arrow.png" alt="Arrow" class="faq-arrow">
+          <a href="https://onlinelibrary.wiley.com/doi/full/10.1002/advs.202104296" target="_blank"> Bioactivity and
+                miRNome Profiling of Native Extracellular Vesicles in Human Induced Pluripotent Stem Cell-Cardiomyocyte
+                Differentiation</a>
+        </div>
+        <div class="faq-answer">
+          <p><b>Advanced Science.</b> 2022.<br>DiStefano, Tyler J., et al.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div style = "" class="faq-header">
+          <img src="/sites/default/files/images/icons/down-arrow.png" alt="Arrow" class="faq-arrow">
+          <a href="https://doi.org/10.1164/ajrccm-conference.2022.205.1_MeetingAbstracts.A4626" target="_blank">Exosomal miR122, a Potential Prognostic Marker and Therapeutic Target in COPD</a>
+        </div>
+        <div class="faq-answer">
+          <p><b>ATS Journals.</b> 2022.<br>G. Kaur,, K. P. Maremanda, M. A. Campos, H. S. Chand, F. Li, N. Hirani, M. Haseeb, I. Rahman</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div style = "" class="faq-header">
+          <img src="/sites/default/files/images/icons/down-arrow.png" alt="Arrow" class="faq-arrow">
+          <a href="https://doi.org/10.3389/fphys.2020.588313" target="_blank">High Throughput Sequencing of MicroRNA
+                in Rainbow Trout Plasma, Mucus, and Surrounding Water Following Acute Stress</a>
+        </div>
+        <div class="faq-answer">
+          <p><b>Frontiers in Physiology. </b> 2021.<br>Heather Ikert, Michael D. J. Lynch, Andrew C. Doxey, John P. Giesy, Mark R. Servos, Barbara A. Katzenback, Paul M. Craige</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div style = "" class="faq-header">
+          <img src="/sites/default/files/images/icons/down-arrow.png" alt="Arrow" class="faq-arrow">
+          <a href="https://doi.org/10.3390/ijms222111830" target="_blank">Distinct Exosomal miRNA Profiles from BALF
+                and Lung Tissue of COPD and IPF Patients</a>
+        </div>
+        <div class="faq-answer">
+          <p><b>International Journal of Molecular Sciences.</b> 2021.<br>Gagandeep Kaur, Krishna Prahlad Maremanda, Michael Campos, Hitendra S. Chand, Feng Li, Nikhil Hirani, M. A. Haseeb, Dongmei Li, Irfan Rahman</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div style = "" class="faq-header">
+          <img src="/sites/default/files/images/icons/down-arrow.png" alt="Arrow" class="faq-arrow">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/32991224/" target="_blank">Distinctive Cellular Transcriptomic
+                Signature and MicroRNA Cargo of Extracellular Vesicles of Horse Adipose and Endometrial Mesenchymal Stem
+                Cells from the Same Donors</a>
+        </div>
+        <div class="faq-answer">
+          <p><b>Cellular Reprogramming. </b> 2020.<br>Navarrete, Felipe, et al</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div style = "" class="faq-header">
+          <img src="/sites/default/files/images/icons/down-arrow.png" alt="Arrow" class="faq-arrow">
+          <a href="https://doi.org/10.1186/s12920-020-00748-3" target="_blank">Exosomal microRNAs are novel
+                circulating biomarkers in cigarette, waterpipe smokers, E-cigarette users and dual smokers</a>
+        </div>
+        <div class="faq-answer">
+          <p><b>BMC Medical Genomics.</b> 2020.<br>Kameshwar P. Singh, Krishna P. Maremanda, Dongmei Li & Irfan Rahman</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div style = "" class="faq-header">
+          <img src="/sites/default/files/images/icons/down-arrow.png" alt="Arrow" class="faq-arrow">
+          <a href="https://doi.org/10.1080/20013078.2019.1684816" target="_blank">Small RNA-sequence analysis of
+                plasma-derived extracellular vesicle miRNAs in smokers and patients with chronic obstructive pulmonary
+                disease as circulating biomarkers</a>
+        </div>
+        <div class="faq-answer">
+          <p><b>Journal of Extracellular Vesicles.</b> 2019.<br>Isaac Kirubakaran Sundar, Dongmei Li, Irfan Rahman</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div style = "" class="faq-header">
+          <img src="/sites/default/files/images/icons/down-arrow.png" alt="Arrow" class="faq-arrow">
+          <a href="https://doi.org/10.1172/jci.insight.128846" target="_blank">Extracellular vesicles from
+                endometriosis patients are characterized by a unique miRNA-lncRNA signature</a>
+        </div>
+        <div class="faq-answer">
+          <p><b>JCI Insight.</b> 2019.<br>Kasra Khalaj, Jessica E Miller, Harshavardhan Lingegowda, Asgerally T Fazleabas, Steven L Young, Bruce A Lessey, Madhuri Koti, Chandrakant Tayade</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> #}
+
+
+
+<section class="row anchorSection">
+  <div class="vd-wrapper">
+    <a name="scp-anchor7" class="anchorTag"></a>
+    <h2>Citations</h2>
+    <table class="table norpublication">
+      <tbody>
+        <tr class="title">
+          <td class="norpublicationlabel">Title</td>
+          <td><a href="https://doi.org/10.1038/s41525-025-00510-7" target="_blank">Serum microRNA expression quantitative trait loci in children with asthma colocalize with asthma-related GWAS results</a></td>
+        </tr>
+        <tr>
+          <td class="norpublicationlabel">Journal</td>
+          <td><strong>npj Genom. Med.</strong> 2025.</td>
+        </tr>
+        <tr>
+          <td class="norpublicationlabel">Authors</td>
+          <td>Hecker, J., Tiwari, A., Sharma, R. et al.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="table norpublication">
+      <tbody>
+        <tr class="title">
+          <td class="norpublicationlabel">Title</td>
+          <td><a href="https://www.mdpi.com/2073-4409/12/11/1505" target="_blank">Systems Genomics Reveals microRNA
+              Regulation of ICS Response in Childhood Asthma</a></td>
+        </tr>
+        <tr>
+          <td class="norpublicationlabel">Journal</td>
+          <td><strong>Cells</strong>. 2023.</td>
+
+        </tr>
+        <tr>
+          <td class="norpublicationlabel">Authors</td>
+          <td>Sharma, R., Tiwari, A., Kho, A. T., Celedón, J. C., Weiss, S. T., Tantisira, K. G., &amp; McGeachie, M. J.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+
+    <table class="table norpublication">
+      <tbody>
+        <tr class="title">
+          <td class="norpublicationlabel">Title</td>
+          <td><a href="https://www.mdpi.com/1422-0067/24/4/3194" target="_blank">Characterization of Extracellular
+              Vesicle-Coupled miRNA Profiles in Seminal Plasma of Boars with Divergent Semen Quality Status</a></td>
+        </tr>
+        <tr>
+          <td class="norpublicationlabel">Journal</td>
+          <td><strong>International Journal of Molecular Sciences</strong>. 2023.</td>
+
+        </tr>
+        <tr>
+          <td class="norpublicationlabel">Authors</td>
+          <td>Dlamini, Notsile H., et al.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="table norpublication">
+      <tbody>
+        <tr class="title">
+          <td class="norpublicationlabel">Title</td>
+          <td><a href="https://pubmed.ncbi.nlm.nih.gov/35488079/" target="_blank">Alteration of miRNAs in Small
+              Neuron‑Derived Extracellular Vesicles of Alzheimer's Disease Patients and the Effect of Extracellular
+              Vesicles on Microglial Immune Responses</a></td>
+        </tr>
+        <tr>
+          <td class="norpublicationlabel">Journal</td>
+          <td><strong>Journal of Molecular Neuroscience</strong>. 2022.</td>
+
+        </tr>
+        <tr>
+          <td class="norpublicationlabel">Authors</td>
+          <td>Durur, Devrim Yagmur, et al.</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table norpublication">
+      <tbody>
+        <tr class="title">
+          <td class="norpublicationlabel">Title</td>
+          <td><a href="https://journals.sagepub.com/doi/full/10.1177/19476035221113959" target="_blank">Hydrogel-Embedded Poly(Lactic-co-Glycolic Acid) Microspheres for the Delivery of
+              hMSC-Derived Exosomes to Promote Bioactive Annulus Fibrosus Repair</a></td>
+        </tr>
+        <tr>
+          <td class="norpublicationlabel">Journal</td>
+          <td><strong>Cartilage</strong>. 2022.</td>
+
+        </tr>
+        <tr>
+          <td class="norpublicationlabel">Authors</td>
+          <td>DiStefano, Tyler J., et al.</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table norpublication">
+      <tbody>
+        <tr class="title">
+          <td class="norpublicationlabel">Title</td>
+          <td><a href="https://onlinelibrary.wiley.com/doi/full/10.1002/advs.202104296" target="_blank"> Bioactivity and
+              miRNome Profiling of Native Extracellular Vesicles in Human Induced Pluripotent Stem Cell-Cardiomyocyte
+              Differentiation</a></td>
+        </tr>
+        <tr>
+          <td class="norpublicationlabel">Journal</td>
+          <td><strong>Advanced Science</strong>. 2022.</td>
+
+        </tr>
+        <tr>
+          <td class="norpublicationlabel">Authors</td>
+          <td>DiStefano, Tyler J., et al.</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table norpublication">
+      <tbody>
+        <tr class="title">
+          <td class="norpublicationlabel">Title</td>
+          <td><a href="https://doi.org/10.1164/ajrccm-conference.2022.205.1_MeetingAbstracts.A4626" target="_blank">Exosomal miR122, a Potential Prognostic Marker and Therapeutic Target in COPD</a></td>
+        </tr>
+        <tr>
+          <td class="norpublicationlabel">Journal</td>
+          <td><strong>ATS Journals</strong>. 2022.</td>
+
+        </tr>
+        <tr>
+          <td class="norpublicationlabel">Authors</td>
+          <td>G. Kaur,, K. P. Maremanda, M. A. Campos, H. S. Chand, F. Li, N. Hirani, M. Haseeb, I. Rahman</td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <table class="table norpublication">
+      <tbody>
+        <tr class="title">
+          <td class="norpublicationlabel">Title</td>
+          <td><a href="https://doi.org/10.3389/fphys.2020.588313" target="_blank">High Throughput Sequencing of MicroRNA
+              in Rainbow Trout Plasma, Mucus, and Surrounding Water Following Acute Stress</a></td>
+        </tr>
+        <tr>
+          <td class="norpublicationlabel">Journal</td>
+          <td><strong>Frontiers in Physiology</strong>. 2021.</td>
+
+        </tr>
+        <tr>
+          <td class="norpublicationlabel">Authors</td>
+          <td>Heather Ikert, Michael D. J. Lynch, Andrew C. Doxey, John P. Giesy, Mark R. Servos, Barbara A. Katzenback,
+            Paul M. Craige</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table norpublication">
+      <tbody>
+        <tr class="title">
+          <td class="norpublicationlabel">Title</td>
+          <td><a href="https://doi.org/10.3390/ijms222111830" target="_blank">Distinct Exosomal miRNA Profiles from BALF
+              and Lung Tissue of COPD and IPF Patients</a></td>
+        </tr>
+        <tr>
+          <td class="norpublicationlabel">Journal</td>
+          <td><strong>International Journal of Molecular Sciences</strong>. 2021.</td>
+
+        </tr>
+        <tr>
+          <td class="norpublicationlabel">Authors</td>
+          <td>Gagandeep Kaur, Krishna Prahlad Maremanda, Michael Campos, Hitendra S. Chand, Feng Li, Nikhil Hirani, M.
+            A. Haseeb, Dongmei Li, Irfan Rahman</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table norpublication">
+      <tbody>
+        <tr class="title">
+          <td class="norpublicationlabel">Title</td>
+          <td><a href="https://pubmed.ncbi.nlm.nih.gov/32991224/" target="_blank">Distinctive Cellular Transcriptomic
+              Signature and MicroRNA Cargo of Extracellular Vesicles of Horse Adipose and Endometrial Mesenchymal Stem
+              Cells from the Same Donors</a></td>
+        </tr>
+        <tr>
+          <td class="norpublicationlabel">Journal</td>
+          <td><strong> Cellular Reprogramming</strong>. 2020.</td>
+
+        </tr>
+        <tr>
+          <td class="norpublicationlabel">Authors</td>
+          <td>Navarrete, Felipe, et al</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="table norpublication">
+      <tbody>
+        <tr class="title">
+          <td class="norpublicationlabel">Title</td>
+          <td><a href="https://doi.org/10.1186/s12920-020-00748-3" target="_blank">Exosomal microRNAs are novel
+              circulating biomarkers in cigarette, waterpipe smokers, E-cigarette users and dual smokers</a></td>
+        </tr>
+        <tr>
+          <td class="norpublicationlabel">Journal</td>
+          <td><strong>BMC Medical Genomics</strong>. 2020.</td>
+
+        </tr>
+        <tr>
+          <td class="norpublicationlabel">Authors</td>
+          <td>Kameshwar P. Singh, Krishna P. Maremanda, Dongmei Li &amp; Irfan Rahman</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table norpublication">
+      <tbody>
+        <tr class="title">
+          <td class="norpublicationlabel">Title</td>
+          <td><a href="https://doi.org/10.1080/20013078.2019.1684816" target="_blank">Small RNA-sequence analysis of
+              plasma-derived extracellular vesicle miRNAs in smokers and patients with chronic obstructive pulmonary
+              disease as circulating biomarkers</a></td>
+        </tr>
+        <tr>
+          <td class="norpublicationlabel">Journal</td>
+          <td><strong>Journal of Extracellular Vesicles</strong>. 2019.</td>
+
+        </tr>
+        <tr>
+          <td class="norpublicationlabel">Authors</td>
+          <td>Isaac Kirubakaran Sundar, Dongmei Li, Irfan Rahman</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table norpublication">
+      <tbody>
+        <tr class="title">
+          <td class="norpublicationlabel">Title</td>
+          <td><a href="https://doi.org/10.1172/jci.insight.128846" target="_blank">Extracellular vesicles from
+              endometriosis patients are characterized by a unique miRNA-lncRNA signature</a></td>
+        </tr>
+        <tr>
+          <td class="norpublicationlabel">Journal</td>
+          <td><strong>JCI Insight</strong>. 2019.</td>
+
+        </tr>
+        <tr>
+          <td class="norpublicationlabel">Authors</td>
+          <td>Kasra Khalaj, Jessica E Miller, Harshavardhan Lingegowda, Asgerally T Fazleabas, Steven L Young, Bruce A
+            Lessey, Madhuri Koti, Chandrakant Tayade</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<script>
+function toggleForm() {
+    var overlay = document.getElementById("overlay");
+    var form = document.getElementById("ngs-form");
+
+    // If the overlay is currently not displayed, show it
+    if (overlay.style.display === "none" || overlay.style.display === "") {
+        overlay.style.display = "flex";  // Show the overlay
+        form.style.display = "block";    // Show the form
+    } else {
+        overlay.style.display = "none";  // Hide the overlay
+        form.style.display = "none";     // Hide the form
+    }
+}
+
+// Close the form if the user clicks outside the form
+document.getElementById("overlay").addEventListener("click", function(event) {
+    var form = document.getElementById("ngs-form");
+
+    // Close the form if the click is outside the form (but inside the overlay)
+    if (event.target === this) {
+        toggleForm();  // This will close the form
+    }
+});
+
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+
+
+  
+  // FAQ functionality
+  const faqHeaders = document.querySelectorAll(".faq-header");
+
+  faqHeaders.forEach(header => {
+    const answer = header.nextElementSibling; 
+    const arrow = header.querySelector(".faq-arrow"); 
+
+    header.addEventListener("click", () => {
+      const isOpen = answer.style.display === "block";
+      
+      answer.style.display = isOpen ? "none" : "block";
+      header.classList.toggle("active");
+
+      if (!isOpen) {
+        arrow.style.transform = "rotate(-90deg)";
+      } else {
+        arrow.style.transform = "rotate(0deg)";
+      }
+    });
+  });
+
+  // Image description functionality
+  const imageDescriptions = {
+    "Pie Chart - smallRNA.png": "<b>Figure 1.</b> Pie Chart:  Shows the distribution of reads after initial adapter trimming and quality filter steps. The majority of the reads will be used for alignment to the human genome.",
+    "figure-8-ngs-(1).jpg": "<b>Figure 2.</b> Stacked Bar Graph: Shows the smallRNA biotype composition per sample detected across the project.",
+    "figure-2-ngs-(1).jpg": "<b>Figure 3.</b> Clustered Heatmap: Top 50 miRNAs are clustered together based on sample similarity to visualize differences in expression. Samples with higher miRNA expression to the mean expression are represented with green while lower expression is in red.",
+    "figure-6-ngs-(1).jpg": "<b>Figure 4.</b> PCA (Principle Component Analysis) visualizes the similarity of samples within a group and the differences between groups in 2 dimensions.",
+    "volcano_plot.png": "<b>Figure 5.</b> Volcano Plot shows the differential expressed miRNA between the samples, with the X-axis representing log2 fold change and the Y-axis showing -log10 p-value. Red dots represent significantly upregulated miRNAs and the green dots represent the downregulated miRNAs.",
+    "figure-5-ngs-(1).jpg": "<b>Figure 6.</b> GO bubble plot: shows the gene function type (as  biological processes, molecular functions, or cellular components), and regulation level of the gene between the samples. The X-axis shows fold enrichment or GeneRatio, while the Y-axis lists enriched GO terms.",
+
+    
+  };
+
+  const gridImages = document.querySelectorAll('.graphs img'); 
+  const mainImage = document.getElementById('main-image');
+  const imageLink = document.getElementById('image-link');
+
+  gridImages.forEach(image => {
+    image.addEventListener('click', () => {
+      mainImage.style.opacity = 0; 
+
+      setTimeout(() => {
+        mainImage.src = image.src;
+        mainImage.alt = image.alt;
+        mainImage.style.opacity = 1;
+        imageLink.href = image.src; 
+
+        const figdescription = imageDescriptions[image.id]; 
+        document.querySelector('.fig-description').innerHTML = figdescription; 
+      }, 300); 
+    });
+  });
+
+
+
+  // Cell expand/collapse functionality
+const cells = document.querySelectorAll('.cell');
+
+document.querySelectorAll('.cell a').forEach(link => {
+  link.addEventListener('click', (event) => {
+    event.stopPropagation(); // Stops the event from bubbling up to the .cell
+  });
+});
+
+cells.forEach(cell => {
+  cell.addEventListener('click', () => {
+    const content = cell.querySelector('.cell-content');
+
+    // Check if content exists
+    if (content && content.textContent.trim() !== '') {
+      // Close all other active cells smoothly
+      cells.forEach(otherCell => {
+        if (otherCell !== cell && otherCell.classList.contains('active')) {
+          otherCell.classList.remove('active');
+          otherCell.querySelector('.cell-content').style.maxHeight = '0';
+        }
+      });
+
+      // Toggle the current cell
+      cell.classList.toggle('active');
+
+      if (cell.classList.contains('active')) {
+        content.style.maxHeight = '0px'; // Set to 0 first
+        setTimeout(() => {
+          content.style.maxHeight = content.scrollHeight + 'px'; // Apply height after a tiny delay
+        }, 10); 
+      } else {
+        content.style.maxHeight = '0';
+      }
+    }
+  });
+});
+
+});
+
+
+  </script>
+</body>
+
+
+</html>
+      {# if (content && content.textContent.trim() !== '') {
+        // Toggle the current cell
+        cell.classList.toggle('active');
+
+        if (cell.classList.contains('active')) {
+          content.style.maxHeight = content.scrollHeight + 'px';
+        } else {
+          content.style.maxHeight = '0';
+        }
+      } #}

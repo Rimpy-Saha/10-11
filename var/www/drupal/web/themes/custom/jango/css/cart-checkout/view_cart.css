@@ -1,0 +1,816 @@
+[id^="views-form-commerce-cart-form-default"] {
+  position: relative;
+}
+
+
+
+
+.table {border: 0px !important;margin-bottom:0px !important}
+.coupon-redemption-form__coupons.coupon-redemption-form__coupons--multiple{display:grid;}
+/*Fields_in_card*/
+
+
+/*format and size*/
+.fontset {
+margin: 0 0 0 0px !important;
+font-size: 14px !important;
+white-space: normal !important ; 
+overflow: visible !important;
+text-overflow: initial !important;
+max-width: none !important;
+word-wrap: break-word !important; 
+margin-block-start: 2px;
+margin-block-end: 2px;
+}
+
+.fontset_s{
+
+margin: 0 0 0 0px !important;
+font-size: 14px !important;
+white-space: normal !important ; 
+overflow: visible !important;
+text-overflow: initial !important;
+max-width: none !important;
+word-wrap: break-word !important; 
+margin-block-start: 2px;
+margin-block-end: 2px;
+display: block;
+flex-shrink: 0;
+white-space: nowrap;
+align-self: flex-start !important;
+}
+
+
+p {margin: 0 0 2px !important;}
+
+.product-details .field__item,
+.product-details .field__label {
+display: inline-block; 
+max-width: 180px; /* 180px */
+vertical-align: top; 
+}
+
+
+
+
+
+/* Unit price and quantity */
+
+.product-details [headers="view-unit-price-number-table-column"],
+.product-details [headers="view-edit-quantity-table-column"] {
+display: inline-grid;
+grid-auto-flow: column; 
+grid-gap: 10px; 
+align-items: center; 
+}
+
+[headers="view-total-price-number-table-column"] div {
+display: none;
+}
+.product-details [headers="view-unit-price-number-table-column"] { font-weight: 600;  }
+.product-details [headers="view-edit-quantity-table-column"] {
+margin-left: 10px !important;
+}
+
+.unit_price__number{font-size:24px;font-weight:600; }
+
+
+/*  Buttons for quantity    */
+/* Hide the spinner buttons in number inputs for WebKit browsers */
+.quantity-edit-input.form-number.required::-webkit-outer-spin-button,
+.quantity-edit-input.form-number.required::-webkit-inner-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+
+/* Hide the spinner buttons in number inputs for Firefox */
+.quantity-edit-input.form-number.required {
+-moz-appearance: textfield;
+}
+
+/* Styles for the number input field */
+[id^="edit-edit-quantity"]{
+margin-top: 0%;
+width: 60px; /* Width of the input field */
+text-align: center; /* Center the text in the input field */
+height: 40px; /* Height of the input field */
+border-top: 1px solid #004893; /* Top border color */
+border-bottom: 1px solid #004893; /* Bottom border color */
+border-left: 0px solid #004893; /* Left border color */
+border-right: 0px solid #004893; /* Right border color */
+box-sizing: border-box; /* Include padding and border in the element's total width and height */
+
+
+justify-content: center;
+align-items: center;
+display: flex;
+margin-top: 0px !important;
+margin-bottom: 0px !important;
+}
+
+.quantity-field [disabled] {
+  opacity: 0.6;
+  pointer-events: none;
+  background-color: #f0f0f0;
+  color: #999;
+}
+.form-item .form-group  #edit-edit-quantity-2 {
+margin-bottom: 0px !important;
+margin-top: 0px !important;
+}
+
+
+
+/* Styles for the "-" button */
+.quantity-field .quantity-button.subtract {
+width: 40px !important; /* Width of the button */
+height: 40px; /* Height of the button */
+background-color: white; /* Background color of the button */
+border: 1px solid #004893; /* Border color of the button */
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+user-select: none; /* Prevent text selection when clicking the button */
+font-size: 20px; /* Font size of the symbol */
+font-weight: 600; /* Font weight of the symbol */
+color: #004893; /* Color of the symbol */
+border-top-left-radius: 5px; /* Round the top-left corner */
+border-bottom-left-radius: 5px; /* Round the bottom-left corner */
+}
+
+/* Styles for the "+" button */
+.quantity-field .quantity-button.add {
+width: 40px;
+height: 40px;
+background-color: white;
+border: 1px solid #004893;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+user-select: none;
+font-size: 20px;
+font-weight: 600;
+color: #004893;
+border-top-right-radius: 5px;
+border-bottom-right-radius: 5px;
+}
+
+
+
+/* Change button color on hover and focus */
+.quantity-button.subtract:hover,
+.quantity-button.add:hover,
+.quantity-button.subtract:focus,
+.quantity-button.add:focus {
+background-color: #004893; /* Change background to blue */
+color: white; /* Change symbol color to white */
+}
+
+
+
+
+
+/* Style for the second child in the product details */
+/* .product-details > div:nth-of-type(2) {
+font-weight: 600 !important;} /* Make the second child bold */
+
+
+/* Grid layout for quantity controls without gap */
+
+/*
+.product-details > div:nth-last-child(2) > div {
+display: grid;
+grid-template-columns: 60px; /* Set up three columns for - input + */
+/*   align-items: center; 
+gap: 0; /* Remove the gap between the elements} */
+
+
+
+
+
+
+/*Card-body*/
+
+.card-body {
+  grid-template-areas:
+      "image title title"
+      "image details price";
+  display: grid ;
+  grid-template-columns: 2fr 3fr 2fr;
+  align-items: center;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px #3f444a40; 
+  background-color: #fff;
+  border: none; 
+  position: relative;
+  grid-column-gap: 10px ;
+}
+
+.cart-form{
+  margin: 40px 0px;
+}
+
+.cart-form img {grid-area: image; align-self:baseline;}
+.card-body .title {grid-area: title;width: calc(100% - 30px);}
+.card-body .product-details{grid-area: details;}
+.card-body .price-quantity{grid-area: price;}
+
+.cart-form .views-form > form{
+  display:grid;
+  grid-template-columns: 7fr 5fr;
+  grid-gap:40px;
+}
+@media only screen and (max-width:992px){
+  .cart-form .views-form > form{
+    grid-template-columns:1fr;
+  }
+}
+
+
+@media (max-width: 1200px) { .card-body{grid-column-gap:5px;}} 
+
+
+
+.card-body .product-details { 
+margin-top: 10px;
+flex-grow: 1;
+word-wrap: break-word;
+}
+
+/*  title  */
+.card-body .title > a{
+  font-weight:600;
+}
+
+
+/* Cross in card   */
+.price-quantity > div.form-group.has-feedback.submit{
+  position: absolute;
+  justify-self: end;
+  order: 1;
+  float: right;
+  margin-bottom: 0px;
+  top: 10px;
+  right: 10px;
+}
+.delete-order-item.btn-medium.btn.btn-mod.c-btn.c-theme-btn.c-font-bold.c-font-uppercase.c-font-white.button.js-form-submit.form-submit {
+  width: 35px;
+  height: 35px;
+  border: none;
+  padding: 10px;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-image: url('/themes/custom/jango/img/cross.png');
+  background-position: center;
+  z-index: 10;
+  margin-top: 0px;
+  color: transparent !important;
+}
+
+
+
+/*   column num 3 in cart body  */
+.quantity-field{display:flex;margin-right: 0px;margin-bottom: 0px;}
+.form-item {margin-top: 0px;}
+.form-group {margin-bottom: 0px;}
+.price-quantity{  align-self: end;
+justify-self:end;margin-left: 0px;margin-bottom: 0px; }
+
+/*     Card_body_end            */
+
+
+/*separeting for two block our page and space between   */
+.field__items {
+    height: auto !important;
+}
+.col-md-7 .field__wrapper {
+    display: table;
+    width: 100%;
+}
+
+
+.col-md-7 .paddings {
+    padding: 10px;
+}
+.product-container {
+  margin-top: 20px; 
+}
+.product-container:first-child{
+  margin-top:0px;
+}
+
+/*.field__label + .field__item { font-weight: 400 ;}   */
+
+
+/* buttons Under order block */
+
+/* Request quote */
+
+.cart-form .form-actions input{
+  height:50px;
+}
+
+#edit-send-email {
+  background: white;
+  color: #004893 !important;
+}
+.cart-form .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap ; 
+    gap:10px;
+}
+.cart-form .form-actions .form-group{
+  margin-bottom:0px;
+}
+
+.form-actions .btn-medium {
+  margin-right: 0px;
+  margin-left: 0;
+  position: relative ;
+} 
+
+
+.cart-form .views-form > form .form-actions input{
+  margin:0 0 0 0;
+}
+
+/* Update cart */
+  
+.form-group.has-feedback.submit input#edit-submit[value="Update cart"] {
+  background-color: gray;
+  color: #ffffff;
+  border-radius: 5px;
+  border: none;
+}
+
+.border{
+  padding: 20px 20px 0px 20px;
+}
+
+
+
+
+
+/* Your cart section */
+
+.cart-form .views-form > form .field__wrapper.paddings div h2 {
+  visibility: hidden; 
+  position: relative;
+}
+
+
+
+
+/* Your cart section end */
+
+ .product-details { position:relative !important; }
+
+
+
+/*media for order block */
+
+/* 
+@media (min-width: 1000px) and (max-width: 1200px) {
+.order-total-wrapper {
+    width: 350px;
+}
+
+
+#edit-coupon-redemption{padding:0px 20px 20px 20px !important}
+} */
+
+
+
+/* Coupon */
+
+
+
+input[data-drupal-selector="edit-coupon-redemption-apply"] {
+  height:45px;
+}
+
+
+/* .mt-20{display:none;} */
+
+[data-drupal-selector="edit-coupon-redemption"] .form-group{
+  margin:0 0 0 0;
+}
+
+#edit-coupon-redemption {
+  gap:10px;
+  display:flex;
+  justify-content:space-between;
+  padding-top:20px;
+}
+#edit-coupon-redemption .container{
+  display:none;
+}
+#edit-coupon-redemption td {padding:0px !important;padding-top: 8px !important;}
+#edit-coupon-redemption tbody tr td{
+  vertical-align:middle;
+  border:none;
+}
+#edit-coupon-redemption tbody tr td:nth-child(2) {
+  width: 20%;
+  text-align:right;
+}
+#edit-coupon-redemption > .form-item-coupon-redemption-code,
+#edit-coupon-redemption > .coupon-redemption-form__coupons {
+  flex-grow:1;
+}
+#edit-coupon-redemption > .form-group.has-feedback.submit {   
+  height:fit-content;
+}
+/* Position coupon throbber for both states */
+#edit-coupon-redemption .coupon-redemption-form__coupons .form-group.submit .ajax-progress-throbber,
+#edit-coupon-redemption .form-group.submit .ajax-progress-throbber{ /* prevent ajax coupon throbber from affecting layout */
+  position:absolute;
+}
+#edit-coupon-redemption .coupon-redemption-form__coupons .form-group.submit .ajax-progress-throbber{
+  bottom:-25px;
+  left:-10px;
+}
+#edit-coupon-redemption .form-group.submit .ajax-progress-throbber{
+  bottom:-25px;
+  left:-10px;
+}
+
+.container{grid-column:1/3;}
+
+.mt-20{margin-bottom:-1px !important;}
+
+
+fieldset.summary_and_coupon{
+  padding:20px;
+  border-radius:12px;
+  border:1px solid #ccc;
+  background-color:#f7f7f7;
+  margin-bottom:20px;
+}
+
+
+
+
+/* @media (max-width: 1400px) {
+
+  .order-total-wrapper{margin-left: 0px;width:440px;}
+  #edit-coupon-redemption{margin-left: 0px;width:440px;}
+  #edit-send-email{left:0px;}
+  #edit-checkout{margin-top: 20px;
+    left: -10px !important;
+}
+  .form-actions{display: block !important;}
+  .checkout_h{margin-left: 0px !important;}
+
+} */
+
+/* @media (max-width: 1200px) {
+  .order-total-wrapper{margin-left: 0px;width:350px;}
+  .form-actions{display: grid !important;grid-template-columns: 1fr 1fr;}
+  #edit-checkout {
+    left: 175px !important;
+} 
+
+
+} */
+
+/* @media screen and (min-width: 990px) and (max-width: 1199px) {
+
+  .form-group.has-feedback.submit input#edit-submit{margin-left: 34%!important;}
+
+
+  #edit-coupon-redemption{
+    width: 350px;
+  }
+
+
+
+
+
+}
+ */
+
+
+/* @media screen  and (max-width: 991px) {
+.c-layout-footer.c-layout-footer-1 .c-prefooter{margin-top: 100px;}
+#edit-coupon-redemption {
+    margin-right: 0px !important;
+    margin-top: -1% !important;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-radius: 0 0 10px 10px;
+    padding: 0 20px 40px 20px;
+    padding-bottom: 10px;
+    border-top: none;
+    margin-bottom: 10px;
+    float: none !important;
+    margin-left: 0% !important;
+    width: 100% !important;
+  }
+.field--type-commerce-price{padding: 0px !important;}
+.order-total-wrapper {
+  width: auto;margin-left: 0px;
+}
+
+
+.form-actions {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+#edit-checkout {margin-top: 5px;left:-10px !important;}
+
+
+} */
+
+/* @media screen and (min-width: 400px) and (max-width: 991px) {
+#edit-submit{margin-left: -15% !important;} } */
+
+@media screen and (min-width: 400px) and (max-width: 800px) {
+
+
+.c-layout-footer.c-layout-footer-1 .c-prefooter{margin-top: 200px;}
+.order-total-wrapper{width: auto;margin-left: auto;}
+#edit-coupon-redemption{margin-left: auto;width:100%;}
+/* 
+#edit-send-email{margin-top: 22%;margin-left:-340px !important;}
+#edit-checkout{margin-top: 22%;margin-left: -170px !important;}
+.form-group.has-feedback.submit input#edit-submit{top: calc(58% + 10px);left: 28% !important;} */
+
+}
+
+
+/* @media screen and  (max-width: 600px) {
+
+#edit-coupon-redemption{margin-left: auto;width:100%;}
+.form-group.has-feedback.submit input#edit-submit{left:21% !important;}
+.views-form{padding: 0px !important;}
+.col-md-12{padding-left: 0px !important;padding-right: 0px !important;}
+.appear-animate.c-layout-header-mobile-fixed.c-layout-header-topbar.c-layout-header-topbar-collapse.c-header-not-fixed.c-page-on-scroll.toolbar-vertical{
+
+padding-left: 10px;padding-right: 10px;
+
+
+}
+} */
+
+@media (min-width: 400px) and (max-width: 500px) {
+/* #edit-checkout,
+#edit-send-email {
+  margin-top: 47% !important;
+} */
+.form-item--error-message {height:40px !important;}
+}
+
+
+/* @media (max-width: 399px) {
+  .order-total-wrapper {
+    margin-left: 0;
+    width: 100% !important;
+  }
+} */
+
+
+
+.cart-form .views-form > form .form-item label{
+  color:inherit;
+}
+
+/* Coupon icon */
+#edit-coupon-redemption label::before, #edit-coupon-redemption h3::before{
+  content: '';
+  display: inline-block;
+  height: 35px;
+  width: 35px;
+  bottom: -6px;
+  position: relative;
+  background-image: url(/themes/custom/jango/images/cupon.png);
+  background-size: contain;
+}
+#edit-coupon-redemption label{
+  font-size: 17px;
+  font-weight: 600;
+  color: inherit;
+}
+
+/* SCROLL */
+
+.cart-form .views-form > form .field__wrapper.paddings::-webkit-scrollbar {
+  width: 8px;
+  transition: width 0.9s ease-in-out, opacity 0.9s ease-in-out; /* Smooth transition for scrollbar appearance */
+}
+
+/* Customize the appearance of the scrollbar thumb */
+.cart-form .views-form > form .field__wrapper.paddings::-webkit-scrollbar-thumb {
+  background-color: #4B5563; /* scroll button color */
+  border-radius: 10px; /* Rounded corners for the thumb */
+  /* box-sizing: content-box;  */
+}
+
+/* Customize the appearance of the scrollbar track */
+.cart-form .views-form > form .field__wrapper.paddings::-webkit-scrollbar-track {
+  background-color: #E5E7EB; /* background color */
+  border-radius: 10px; /* Rounded corners for the track */
+  margin: 5px 0px;
+  /* box-sizing: content-box;  */
+}
+
+/* General styles for the container */
+.cart-form .views-form > form .field__wrapper.paddings {
+  padding: 10px; /* Inner padding of the container - need for box-shadow to show */
+  padding-bottom:15px;
+  display: flex; 
+  flex-direction: column; /* Arrange items in a column */
+  overflow-y: auto; /* Enable vertical scrolling */
+  scroll-behavior: smooth; /* Smooth scrolling behavior */
+  position: relative; /* Relative positioning */
+  max-height: 550px; /* Limit the maximum height of the container */
+  margin-top: -5px;
+}
+
+/* use after element for mask so the mask does not interact with the scroll bar - no margins needed */
+.cart-form .views-form > form .cart-items{
+  position: relative;
+}
+/* .cart-form .views-form > form .cart-items::after{
+  content:'';
+  height:40px;
+  width: calc(100% - 10px);
+  position:absolute;
+  bottom:0px;
+  background-image:linear-gradient(to top, white 0px, transparent 100%);
+}  */
+
+/* Remove the scrollbar buttons */
+/* .field__wrapper.paddings.row::-webkit-scrollbar-button {
+display: none !important;}  */
+
+
+
+/* Remove arrow buttons from scrollbar */
+
+
+
+
+
+/* #edit-actions { margin-left: 11%;  } */
+
+
+
+/* Format field */
+.size_format {
+display: flex;
+flex-wrap: wrap; /* Enable wrapping for long text */
+align-items: center;
+width: 100%;
+margin-bottom: 0px !important;
+row-gap: 0px; /* Gap between rows when wrapping */
+column-gap: 10px; /* Gap between items on the same row */
+}
+
+.size_format .field--name-attribute-format {
+flex-grow: 1;
+flex-shrink: 1;
+min-width: 100px; /* Minimum width before wrapping */
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: normal; /* Allow wrapping */
+word-wrap: break-word; 
+}
+
+.size_format .field--name-attribute-size {
+flex-shrink: 0;
+white-space: nowrap; 
+min-width: 50px; 
+margin-left: auto; 
+}
+
+
+div[headers="view-attribute-format-table-column"]:empty {
+display: none; 
+}
+
+@media (min-height: 1000px) {
+
+/* #edit-checkout{ margin-top:-100px;} */
+/*#edit-send-email{margin-top:-100px;} */
+}
+
+
+
+
+
+#edit-coupon-redemption .form-group.submit input{background-color: grey;border-color: grey;height:45px;}
+#edit-coupon-redemption .form-group.submit input[value="Apply"] {margin-top:47px; }
+
+
+
+
+.coupon-redemption-form__coupons.coupon-redemption-form__coupons--multiple span {  
+
+font-size: 17px;
+font-weight: 500;
+background-image: url(/themes/custom/jango/images/cupon.png);
+background-repeat: no-repeat;
+background-size: 45px auto;
+background-position: left center;
+padding-left: 50px;
+display: inline-block;
+line-height: 45px;
+color:#5C6873;
+
+} 
+
+
+/* rules fore keyboard */
+/* .btn {
+outline: 2px solid blue !important;
+-webkit-transition: all 0.2s ease-out;
+-moz-transition: all 0.2s ease-out;
+-o-transition: all 0.2s ease-out;
+transition: all 0.2s ease-out;
+} */
+
+/* a:focus, a:hover, a:active {
+outline: 2px solid #007bff !important;
+} */
+
+input:focus, textarea:focus, select:focus {
+outline: 2px solid grey ;}
+
+a.button_to_cart:focus {
+outline: 2px solid grey !important;
+}
+
+.coupon-code{font-size:17px;font-weight:500;color:#5C6873 !important;}
+
+
+.col-md-7 h2:first-of-type { margin-top:25px !important; }
+
+
+/*form div.form-group.has-feedback:nth-of-type(4) {
+display: none;
+}*/
+
+
+/* 
+
+.form-group.js-form-item.form-item.js-form-type-number.form-item-edit-quantity-0.js-form-item-edit-quantity-0.form-no-label{margin-top: 0px !important;margin-bottom: 0px !important;}
+.form-group.js-form-item.form-item.js-form-type-number.form-item-edit-quantity-1.js-form-item-edit-quantity-1.form-no-label.form-item {margin-top: 0px;margin-bottom: 0 !important;} */
+
+
+/* 
+
+.form-group.js-form-item.form-item.js-form-type-number.form-item-edit-quantity-0.js-form-item-edit-quantity-0.form-no-label .form-group.has-feedback {
+margin-bottom: 0px;
+} */
+.form-group[class*="js-form-item-edit-quantity-"].form-no-label .form-group.has-feedback {
+margin-bottom: 0;
+}
+.form-group.js-form-item.form-item.js-form-type-number[class*="form-item-edit-quantity-"].form-no-label {
+margin-top: 0px !important;
+margin-bottom: 0px !important;
+}
+
+.dialog-off-canvas-main-canvas{min-height: 600px;}
+.dialog-off-canvas-main-canvas.body-desktop-cart-sidebar{margin-right: 0px !important;}
+
+/* @media screen and (min-width: 700px) and (max-width: 800px) { .form-group.has-feedback.submit input#edit-submit{top:calc(50% + 80px)  !important }} */
+/* @media screen and (min-width: 400px) and (max-width: 700px) { .form-group.has-feedback.submit input#edit-submit{top:calc(60% + 10px)  !important }} */
+
+
+.form-tel, .input-lg {border-radius:6px !important;}
+.toolbar-fixed .body-desktop-rimpy {margin-right:0px !important}
+.cart-form img {width:auto;}
+
+
+.form-item--error-message {
+color: var(--norgen-secondary-red);
+background-color: transparent;
+border-color: transparent;
+padding: 0;
+border-radius: 0px;
+}
+
+ .c-cart-toggler-wrapper { display: block !important;}
+
+
+
+
+#edit-coupon-redemption .container .alert.mt-20 {
+  display: none;
+}
+[data-drupal-selector^="search-block-form"] [data-drupal-selector="edit-actions"] {
+    display: none !important;
+}
+
+legend{border-bottom: 1px solid #ccc !important;}
+.form-group.has-feedback.submit .btn{padding: 6px 20px 4px 20px};
+
+
+
+

@@ -1,0 +1,45 @@
+{#
+  /**
+  * @file
+  * Default theme implementation for checkout panes.
+  *
+  * Available variables:
+  * - elements: The checkout pane's form elements.
+  *
+  * @ingroup themeable
+  */
+#}
+<style>
+  .selected-shipping-method{
+    display:flex;
+  }
+</style>
+<fieldset class="checkout-pane checkout-pane-order-information js-form-item form-item js-form-wrapper form-wrapper form-group">
+  <legend><span class="fieldset-legend">Order Information</span><a href="/checkout/{{ current_id }}/order_information" class="edit-button">Edit</a></legend>
+  <div class="fieldset-wrapper">
+    {{ elements.contact_information }}
+    <div class="shipping_pay">
+      <div class="ship"><h3 class="titles">Shipping Address</h3>{{ elements.shipping_information }}</div>
+      <div class="pay"><h3 class="titles">Billing Address</h3>{{ elements.payment_information }}</div>
+    </div>
+    <div>
+      <h3 class="titles">Shipping Method</h3> 
+      <div class="selected-shipping-method">
+        <div>{{ elements.shipping_method.getDescription|raw }}</div>
+        <div>{{ elements.shipping_method.getService().label }}</div>
+      </div>
+    </div>
+    {% if field_quote_number[0]['value'] is not empty %}
+    <div class="quote_num">
+      <p class="quo">Quote Number</p>
+      <p>{{ field_quote_number[0]['value'] }}</p>
+    </div>
+    {% endif %}
+    {% if field_special_instructions[0]['value'] is not empty %}
+    <div class="special">
+      <p class="spe">Special Instructions</p>
+      <p>{{ field_special_instructions[0]['value'] }}</p>
+    </div>
+    {% endif %}
+  </div>
+</fieldset>

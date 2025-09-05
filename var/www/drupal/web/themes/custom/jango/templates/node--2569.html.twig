@@ -1,0 +1,1058 @@
+<style>
+:root {
+  --number-of-logos: 16;
+  --logo-width: 150px;
+  --institutions-logos-gap: 2em;
+  --institutions-loop-start: 0px;
+  --institutions-loop-end: calc(-1*((150px + 2em + 1px)*var(--number-of-logos)) - 1em - 15px - (1px*(var(--number-of-logos))));
+}
+
+@keyframes institutions-loop{
+  0%{
+    left: var(--institutions-loop-start);
+  }
+  100%{
+    left: var(--institutions-loop-end);
+  }
+}
+.institution-logos-container {
+  left: 0;
+  right: 0;
+  margin: auto;
+  overflow: hidden;
+}
+.institution-logos-container {
+  left: 15px;
+  white-space: nowrap;
+  gap: var(--institutions-logos-gap);
+  position: relative;
+}
+.institution-logos-container::before {
+  content: '';
+  background-image: linear-gradient(to right, rgb(255, 255, 255), rgba(255, 255, 255, 0));
+  width: 10%;
+  height: 100%;
+  z-index: 1;
+  position: absolute;
+  left: 0;
+  margin: auto;
+}
+.institution-logos-container::after {
+  content: '';
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+  width: 10%;
+  height: 100%;
+  z-index: 1;
+  position: absolute;
+  right: 0;
+  margin: auto;
+}
+.institution-logos:first-child {
+  margin-right: var(--institutions-logos-gap);
+}
+.institution-logos {
+  position: relative;
+  left: 0;
+  display: inline-block;
+  white-space: nowrap;
+  margin-top: 42px;
+  height: 75px;
+  padding-left: 20px; 
+  padding-right: 20px; 
+  width: calc(((150px + 2em + 1px)*var(--number-of-logos)) + 1em);
+  animation: institutions-loop 30s infinite linear;
+}
+.institution-logos img {
+  width: var(--logo-width);
+  object-fit: contain;
+  display: inline;
+  height: 75px;
+  margin-right: var(--institutions-logos-gap);
+}
+  
+.home-client-success-slider .home-client-success, .home-client-success-slider .home-client-success blockquote footer, .home-client-success-slider .home-client-success h2, .client-success-section, .client-success-section .c-content-title-1 > p {
+  color: white;
+}
+.home-client-success-slider .home-client-success, .home-client-success-slider .home-client-success blockquote footer, .home-client-success-slider .home-client-success h2, .client-success-section, .client-success-section .c-content-title-1 > p {
+  color: white;
+}
+.home-client-success-slider .home-client-success {
+  max-width: 900px;
+  margin: auto;
+}
+.home-client-success-slider blockquote {
+  border-left: none;
+}
+.home-client-success-slider .owl-carousel.c-theme .owl-controls .owl-dot.active {
+  background-color: white;
+  outline: 1px solid black;
+}
+.exosome-banner{
+  background:linear-gradient(rgba(0, 0, 0, 1.5), rgba(0, 0, 0, 0.5)), url("/sites/default/files/images/exosome campaign/banner.jpg");
+  background: url("/sites/default/files/images/exosome campaign/banner.jpg");
+  height:600px;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.banner-grid{
+  display:flex;
+  gap:10px;
+  justify-content: center;
+}
+.exosome-banner h1{
+  color:white;
+  font-weight:700;
+  font-size: 65px;
+  line-height: 1;
+}
+.container-heading p{
+  color:white;
+}
+.container-heading{
+  text-align:center;
+  width:80%;
+  margin:auto;
+}
+.banner-grid > div{
+  background:#07252780;
+  opacity:0.9;
+  backdrop-filter:blur(10px);
+  padding:5px 15px;
+  text-align:center;
+  border-radius:5px;
+}
+.banner-grid > div > h3{
+  font-size:35px;
+  font-weight:700;
+  color: white;
+}
+.banner-grid > div > p{
+  color: white;
+}
+.banner-grid > div > hr{
+  margin:0;
+}
+@property --num {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
+}
+
+#count1 {
+  counter-set: num var(--num);
+  font-size: 40px;
+  font-weight: bold;
+  animation:scale 2s ease-out;
+   display: inline-block;
+}
+
+#count1:after {
+  content: counter(num);
+}
+
+#count2 {
+  counter-set: num var(--num);
+  font-size: 40px;
+  font-weight: bold;
+  animation:scale 2s ease-out;
+  display: inline-block;
+}
+
+#count2:after {
+  content: counter(num);
+}
+#count3 {
+  counter-set: num var(--num);
+  font-size: 40px;
+  font-weight: bold;
+  animation:scale 2s ease-out;
+  display: inline-block;
+}
+
+#count3:after {
+  content: counter(num);
+}
+
+@keyframes scale{
+  0%{
+    transform:scale(1);
+  }
+  50%{
+    transform:scale(2);
+  }
+  100%{
+    transform:scale(1);
+  }
+}
+@keyframes underline{
+  0%{
+    text-decoration:none;
+  }
+  100%{
+    text-decoration:underline;
+  }
+}
+
+.dollar{
+
+animation: underline 4s forwards;
+}
+.owl-nav{
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  transform: translateY(-325%);
+}
+.owl-nav button{
+  background:white;
+  border:none;
+}
+.owl-nav button span{
+  font-size:50px;
+}
+.owl-dots{
+  display:none;
+}
+.caption{
+  font-size:12px;
+  text-transform: uppercase;
+  margin: 0;
+}
+.my-5{
+  margin:50px auto;
+}
+.my-5 h2{
+  font-size: 35px;
+  font-weight: 700;
+  margin-top: 0;
+}
+.stool-technical-guide-div {
+  background: #0048920a;
+  padding: 25px 50px 25px 80px;
+  margin:60px 0;
+  position:relative;
+}
+.stool-technical-guide-div-grid {
+  display: flex;
+  gap: 60px;
+  align-items: center;
+  justify-content: center;
+}
+.stool-technical-guide-div .img-div {
+  width: 700px;
+  position: relative;
+}
+.stool-technical-guide-div img {
+  width: inherit;
+  position: absolute;
+  top: -185px;
+  transform: rotate(10deg);
+  filter: drop-shadow(2px 4px 6px gray);
+}
+.selling-points > div{
+  display:flex;
+  align-items: baseline;
+  flex-direction: column;
+}
+.key-features-div{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  justify-items: center;
+  margin:150px 0;
+  gap:40px;
+}
+.exosome-svg-div{
+  position: relative;
+  bottom: -10%;
+}
+.key-features-div h2{
+  font-size: 35px;
+  font-weight: 700;
+  margin-top: 0;
+}
+.selling-points img{
+  width:50px;
+}
+
+.exosomes-svg{
+  position: absolute;
+  bottom: 0;
+  /* width: unset; */
+  width: 811px;
+}
+#exosome-img{
+  width:1000px;
+}
+
+@keyframes glass_moving_exosome {
+  0%{
+    opacity:1;
+    left:20%;
+  }
+  50%{
+    opacity:1;
+    left:50%;
+  }
+  100%{
+    opacity:1;
+    left:20%;
+  }
+}
+.magnifying_glass_exosome{
+  opacity:0;
+  position:absolute;
+  width:200px;
+  left:50%;
+  bottom:10%;
+  animation: glass_moving_exosome 16s infinite;
+  animation-delay:2.75s;
+
+}
+
+.procedure-img{
+  background:url('/sites/default/files/images/exosome campaign/exosome-procedure.png');
+  background-size: cover;
+  width: 250px;
+  height: 575px;
+  background-position: 0px 45px;
+}
+.procedure-img-anim{
+  animation: 10s spit forwards;
+  animation-delay: 1s;
+}
+.procedure{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 40px;
+  justify-content: center;
+  justify-items: center;
+}
+.procedure h2{
+  font-size: 35px;
+  font-weight: 700;
+  margin: 0px 0px 20px;
+}
+@keyframes spit{
+  0% {
+    background-position: 0px 45px;
+  }
+  20% {
+    background-position: 0px -500px;
+  }
+  40% {
+    background-position: 0px -1000px;
+  }
+  60% {
+    background-position: 0px -1500px;
+  }
+  80% {
+    background-position: 0px -2000px;
+  }
+  100% {
+    background-position: 0px -2500px;
+  }
+}
+#steps{
+  font-size: 20px;
+  font-weight: 700;
+  text-decoration: underline;
+}
+.steps-anim:before{
+  content:'Step 1 ';
+  animation: changetext 10s forwards;
+  animation-delay:1s;
+}
+#steps:before{
+  content:'Step 1 ';
+}
+@keyframes changetext{
+  0%{
+    content:'Step 1';
+  }
+  20%{
+    content:'Step 2';
+  }
+  40%{
+    content:'Step 3';
+  }
+  60%{
+    content:'Step 4';
+  }
+  80%{
+    content:'Step 5';
+  }
+  100%{
+    content:'Step 6';
+  }
+}
+.heading-container{
+  top: 50%;
+  position: relative;
+  transform: translateY(-50%);
+}
+#exosome-img1{
+  position: absolute;
+  top: -10%;
+  width: 150px;
+  left: -2%; 
+}
+#exosome-img2{
+  position: absolute;
+  bottom: -10%;
+  width: 300px;
+  right: -2%;
+}
+
+.disclaimer_popup{
+  position: absolute;
+  background: white;
+  top: 3%;
+  width: 50%;
+  padding: 40px;
+  left: 25%;
+  right: 25%;
+  display:none
+}
+#disclaimer_btn{
+  text-align: center;
+  color: white;
+  text-decoration: underline;
+}
+#disclaimer_btn:hover{
+  cursor:pointer;
+}
+.close {
+  float: right;
+  font-size: 21px;
+  font-weight: bold;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  opacity: 0.2;
+  filter: alpha(opacity = 20);
+}
+
+@media only screen and (max-width: 1180px){
+  #exosome-img2{
+    position: absolute;
+    bottom: -15%;
+    width: 300px;
+    right: -13%;
+  }
+}
+@media only screen and (max-width: 850px){
+  .banner-grid {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .exosome-banner{
+    height:700px;
+  }
+  .key-features-div{
+    grid-template-columns: 1fr;
+  }
+  .procedure {
+    grid-template-columns: 1fr;
+  }
+  #exosome-img2{
+    display:none;
+  }
+  .exosome-svg-div{
+    display:none;
+  }
+  .stool-technical-guide-div-grid {
+    flex-direction: column;
+  }
+  .img-div img {
+    position: initial;
+    width:350px;
+  }
+  #exosome-img1{
+    display:none;
+  }
+}
+@media only screen and (max-width: 750px){
+  .exosome-banner{
+    height:800px;
+  }
+  .blog-card-grid {
+    flex-direction: column;
+  }
+}
+@media (max-width: 600px) {
+  .container-heading h1{
+    font-size:50px;
+  }
+
+  .img-div img {
+      position: initial;
+  }
+  .img-div{
+    text-align:center;
+  }
+  .stool-technical-guide-div-grid {
+    flex-direction: column;
+  }
+  .disclaimer_popup {
+    position: absolute;
+    background: white;
+    top: 2%;
+    width: 90%;
+    padding: 40px;
+    left: 5%;
+    right: 5%;
+  }
+}
+
+@media only screen and (max-width: 502px){
+  .container-heading p{
+    display:none;
+  }
+  #exosome-img3{
+    display:none;
+  }
+}
+
+.blog-card-grid{
+  display:flex;
+  gap:10px;
+  justify-content: space-between;
+}
+.applications{
+  padding:50px 0 100px;
+}
+.application-heading{
+  text-align:center;
+}
+.application-heading h2{
+  font-size: 35px;
+  font-weight: 700;
+  margin-top: 0;
+}
+.consultation h2{
+  font-size: 35px;
+  font-weight: 700;
+  margin-top: 0;
+}
+.consultation{
+  background:aliceblue;
+  padding:60px 0;
+}
+.blog-card{
+  width:100%;
+}
+.blog-card-img{
+  width: 100%;
+  height: 200px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+#exosome-img3{
+  position: absolute;
+  bottom: 0;
+  right: -1%;
+  top: 85%;
+  width: 150px;
+  filter: none;
+}
+html{
+  overflow-x:hidden;
+}
+.item > a > h3{
+  color:#004897;
+}
+.item{
+  display: grid;
+  grid-template-rows: auto 100px auto auto;
+  align-items: center;
+}
+</style>
+<div class="exosome-banner">
+  <div class="container heading-container">
+    <div class="container-heading">
+      <h1>Express Exosome Purification</h1>
+      <p>Tired of long and costly exosome isolation processes? Use our convenient Exosome Isolation Kits to get high-quality exosomes in under 30 minutes.</p>
+    </div>
+    <div class="banner-grid">
+      <div>
+        <h3><div id="count1"></div>% Off*</h3>
+        <hr>
+        <p>When you spend <span class="dollar"><b>$1000</b></span></p>
+      </div>
+      <div>
+        <h3><div id="count2"></div>% Off*</h3>
+        <hr>
+        <p>When you spend <span class="dollar"><b>$1500</b></span></p>
+      </div>
+      <div>
+        <h3><div id="count3"></div>% Off*</h3>
+        <hr>
+        <p>When you spend <span class="dollar"><b>$2000</b></span></p>
+      </div>
+    </div>
+    <p id="disclaimer_btn" onClick="open_disclaimer()";>*Disclaimer</p>
+    <div style="text-align:center;margin:30px auto;">
+      <a href="#products"><p style="margin:0;color:white;">View Products</p></a>
+      <a href="#products"><img src="/sites/default/files/images/exosome campaign/down-arrow.png" style="width:50px;filter: invert(1);"></a>
+    </div>
+  </div>
+
+</div>
+
+<div class="disclaimer_popup">
+  <a class="close" href="#" onclick="closedisclaimer();return false;" style="font-size:70px;">×</a>
+  <p><strong>*Disclaimer</strong></p>
+  <p>This promotion applies only to select exosome purification & exosomal RNA isolation products. Promotion is available only to customers in Canada or the U.S. Discount not available to Norgen Biotek distributors. Offer cannot be combined with other existing promotions. Offer valid until August 31st, 2024.</p>
+</div>
+
+<section id="products" class="text-center py-1" style="padding:60px 0;">
+    <div class="container">
+        <div class="header my-5">
+          <p class="caption">Exosome Purification and isolation kits</p>
+            <h2 class="text-dark">Save Time and More!</h2>
+            <p>Norgen Biotek has a variety of exosome purification and exosomal RNA isolation kits like intact exosome purification, exosomal RNA isolation and more!</p>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+
+                <div class="owl-carousel owl-theme">
+                    <!-- carousel items -->
+                    <div class="item ">
+                        <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/47200-4.jpg?itok=3RuSa_u_" alt="image1">
+                        <a href="https://norgenbiotek.com/product/urine-exosome-rna-isolation-kit?v=436" target=""><h3>Urine Exosome RNA Isolation Kit</h3></a>
+                        <p>Cat. 47200</p>
+                        <form action="" method="post" id="add-to-cart-variation-436" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-436" siq_id="autopick_7891">
+                      <input type="hidden" id="variation_id" name="variation_id" value="436">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-436" name="op" value="Add to cart">
+                    </form>
+                    </div>
+
+                    <div class="item ">
+                        <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/57400-4.jpg?itok=1RXzJB1d" alt="image1">
+                        <a href="https://norgenbiotek.com/product/plasmaserum-exosome-purification-kit?v=537" target="_blank"><h3>Plasma/Serum Exosome Purification Mini Kit</h3></a>
+                        <p>Cat. 57400</p>
+                        <form action="" method="post" id="add-to-cart-variation-537" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-537" siq_id="autopick_7891">
+                      <input type="hidden" id="variation_id" name="variation_id" value="537">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-537" name="op" value="Add to cart">
+                    </form>
+                    </div>
+
+                    <div class="item ">
+                        <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/57500-4.jpg?itok=gzL9FvT6" alt="image1">
+                        <a href="https://norgenbiotek.com/product/plasmaserum-exosome-purification-kit?v=538" target="_blank"><h3>Plasma/Serum Exosome Purification Midi Kit</h3></a>
+                        <p>Cat. 57500</p>
+                        <form action="" method="post" id="add-to-cart-variation-538" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-538" siq_id="autopick_7891">
+                      <input type="hidden" id="variation_id" name="variation_id" value="538">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-538" name="op" value="Add to cart">
+                    </form>
+                    </div>
+
+                    <div class="item ">
+                        <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/58000-3.jpg?itok=xKQIsnX4" alt="image1">
+                        <a href="https://norgenbiotek.com/product/exosomal-rna-isolation-kit?v=545" target="_blank"><h3>Exosomal RNA Purification Kit</h3></a>
+                        <p>Cat. 58000</p>
+                        <form action="" method="post" id="add-to-cart-variation-545" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-545" siq_id="autopick_7891">
+                      <input type="hidden" id="variation_id" name="variation_id" value="545">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-545" name="op" value="Add to cart">
+                    </form>
+                    </div>
+
+                    <div class="item ">
+                        <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/58300-3.jpg?itok=-pFFCCUN" alt="image1">
+                        <a href="https://norgenbiotek.com/product/plasmaserum-exosome-purification-and-rna-isolation-kits?v=550" target="_blank"><h3>Plasma/Serum Exosome Purification and RNA Isolation Kit</h3></a>
+                        <p>Cat. 58300</p>
+                        <form action="" method="post" id="add-to-cart-variation-550" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-550" siq_id="autopick_7891">
+                      <input type="hidden" id="variation_id" name="variation_id" value="550">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-550" name="op" value="Add to cart">
+                    </form>
+                    </div>
+
+                    <div class="item ">
+                        <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/58700-2.jpg?itok=8swbFhAY" alt="image1">
+                        <a href="https://norgenbiotek.com/product/urine-exosome-purification-and-rna-isolation-kits?v=548" target="_blank"><h3>Urine Exosome Purification and RNA Isolation Kit</h3></a>
+                        <p>Cat. 58700</p>
+                        <form action="" method="post" id="add-to-cart-variation-548" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-548" siq_id="autopick_7891">
+                      <input type="hidden" id="variation_id" name="variation_id" value="548">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-548" name="op" value="Add to cart">
+                    </form>
+                    </div>
+
+                    <div class="item ">
+                        <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/60400-3.jpg?itok=0kam7S8r"  alt="image1">
+                        <a href="https://norgenbiotek.com/product/cell-culture-media-exosome-purification-kits?v=590" target="_blank"><h3>Cell Culture Media Exosome Purification Mini Kit</h3></a>
+                        <p>Cat. 60400</p>
+                        <form action="" method="post" id="add-to-cart-variation-590" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-590" siq_id="autopick_7891">
+                      <input type="hidden" id="variation_id" name="variation_id" value="590">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-590" name="op" value="Add to cart">
+                    </form>
+                    </div>
+
+                    <div class="item ">
+                        <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/60600-3.jpg?itok=DOjYT29J" alt="image1">
+                        <a href="https://norgenbiotek.com/product/cell-culture-media-exosome-purification-kits?v=592" target="_blank"><h3>Cell Culture Media Exosome Purification Maxi Kit</h3></a>
+                        <p>Cat. 60600</p>
+                        <form action="" method="post" id="add-to-cart-variation-592" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-592" siq_id="autopick_7891">
+                      <input type="hidden" id="variation_id" name="variation_id" value="592">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-592" name="op" value="Add to cart">
+                    </form>
+                    </div>
+
+                     <div class="item ">
+                        <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/60700-3.jpg?itok=OR5imxDi" class="img-fluid   rounded-circle" alt="image1">
+                        <a href="https://norgenbiotek.com/product/cell-culture-media-exosome-purification-and-rna-isolation-kits?v=579" target="_blank"><h3>Cell Culture Media Exosome Purification and RNA Isolation Mini Kit</h3></a>
+                        <p>Cat. 60700</p>
+                        <form action="" method="post" id="add-to-cart-variation-579" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-579" siq_id="autopick_7891">
+                      <input type="hidden" id="variation_id" name="variation_id" value="579">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-579" name="op" value="Add to cart">
+                    </form>
+                    </div>
+
+                    <div class="item ">
+                        <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/61100-3.jpg?itok=J57g4uw9" class="img-fluid   rounded-circle" alt="image1">
+                        <a href="https://norgenbiotek.com/product/fbs-exosome-depletion-kits?v=582" target="_blank"><h3>FBS Exosome Depletion Kit I</h3></a>
+                        <p>Cat. 61100</p>
+                        <form action="" method="post" id="add-to-cart-variation-582" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-582" siq_id="autopick_7891">
+                      <input type="hidden" id="variation_id" name="variation_id" value="582">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-582" name="op" value="Add to cart">
+                    </form>
+                    </div>
+
+                    <div class="item ">
+                        <img src="/sites/default/files/images/exosome campaign/65300.jpg" class="img-fluid   rounded-circle" alt="image1">
+                        <a href="https://norgenbiotek.com/product/saliva-exosome-purification-kit?v=1089" target="_blank"><h3>Saliva Exosome Purification Kit</h3></a>
+                        <p>Cat. 65300</p>
+                        <form action="" method="post" id="add-to-cart-variation-1089" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1089" siq_id="autopick_7891">
+                      <input type="hidden" id="variation_id" name="variation_id" value="1089">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1089" name="op" value="Add to cart">
+                    </form>
+                    </div>
+
+                    <div class="item ">
+                        <img src="/sites/default/files/images/exosome campaign/65300.jpg" class="img-fluid   rounded-circle" alt="image1">
+                        <a href="https://norgenbiotek.com/product/urine-exosome-purification-kit?v=541" target="_blank"><h3>Urine Exosome Purification Midi Kit</h3></a>
+                        <p>Cat. 57800</p>
+                        <form action="" method="post" id="add-to-cart-variation-541" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-541" siq_id="autopick_7891">
+                      <input type="hidden" id="variation_id" name="variation_id" value="541">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-541" name="op" value="Add to cart">
+                    </form>
+                    </div>
+
+                    <div class="item ">
+                        <img src="/sites/default/files/images/exosome campaign/65300.jpg" class="img-fluid   rounded-circle" alt="image1">
+                        <a href="https://norgenbiotek.com//product/plasmaserum-exosome-purification-and-rna-isolation-kits?v=551" target="_blank"><h3>Plasma/Serum Exosome Purification and RNA Isolation Midi Kit</h3></a>
+                        <p>Cat. 58500</p>
+                        <form action="" method="post" id="add-to-cart-variation-551" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-551" siq_id="autopick_7891">
+                      <input type="hidden" id="variation_id" name="variation_id" value="551">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-551" name="op" value="Add to cart">
+                    </form>
+                    </div>
+
+
+                    <div class="item ">
+                        <img src="/sites/default/files/images/exosome campaign/65300.jpg" class="img-fluid   rounded-circle" alt="image1">
+                        <a href="https://norgenbiotek.com//product/plasmaserum-exosome-and-free-circulating-rna-isolation-kits?v=561" target="_blank"><h3>Plasma/Serum Exosome and Free-Circulating RNA Isolation Mini Kit</h3></a>
+                        <p>Cat. 59500</p>
+                        <form action="" method="post" id="add-to-cart-variation-561" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-561" siq_id="autopick_7891">
+                      <input type="hidden" id="variation_id" name="variation_id" value="561">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-561" name="op" value="Add to cart">
+                    </form>
+                    </div>
+
+                    <div class="item ">
+                        <img src="/sites/default/files/images/exosome campaign/65300.jpg" class="img-fluid   rounded-circle" alt="image1">
+                        <a href="https://norgenbiotek.com//product/fbs-exosome-depletion-kits?v=584" target="_blank"><h3>FBS Exosome Depletion Kit I (Column Format)</h3></a>
+                        <p>Cat. 61200</p>
+                        <form action="" method="post" id="add-to-cart-variation-584" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-584" siq_id="autopick_7891">
+                      <input type="hidden" id="variation_id" name="variation_id" value="584">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-584" name="op" value="Add to cart">
+                    </form>
+                    </div>
+
+                </div>
+            </div>
+        </div> <!-- end of .row class -->
+    </div>
+</section>
+
+
+
+<div class="container">
+<div class="key-features-div">
+    <div>
+        <p class="caption">Benefits</p>
+        <h2>Key Features of Our Exosome Isolation Kits</h2>
+        <div class="selling-points">
+            <div>
+                <img src="/sites/default/files/images/exosome campaign/icon1.png">
+                <div>
+
+                    <h3>Ready in 30 Minutes</h3>
+                    <p>Purified exosomes of use in functional studies prepared in under 30 minutes</p>
+                </div>
+            </div>
+            <div>
+                <img src="/sites/default/files/images/exosome campaign/icon2.png">
+                <div>
+                    <h3>Simplified Procedure</h3>
+                    <p>No precipitation reagents, overnight incubation, protease or coagulant treatments required</p>
+                </div>
+            </div>
+            <div>
+                <img src="/sites/default/files/images/exosome campaign/icon3.png">
+                <div>
+                    <h3>High Quality</h3>
+                    <p>Purified exosomes are between 40-200 nm size range, and free from contamination by other RNA-binding proteins.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+  <div class="exosome-svg-div">
+    <div class="exosomes-svg">
+    
+    <img src="/sites/default/files/images/exosome campaign/exosome-img.png" id="exosome-img">
+    <img src="/sites/default/files/images/exosome campaign/microscope.png" class="magnifying_glass_exosome">
+
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="stool-technical-guide-div">
+  <div class="container stool-technical-guide-div-grid">
+    <div class="img-div">
+      <img src="https://norgenbiotek.com/sites/default/files/images/exosome campaign/app_note.png">
+    </div>
+    <div>
+      <p class="caption">We are compared, we are trusted</p>
+      <h2 style="font-size:23px;font-weight:600;margin-top:0;">Human myeloma cell- and plasma-derived extracellular vesicles contribute to functional regulation of stromal cells</h2>
+      <p>Small EVs isolated using the Norgen kit reflected enrichment of small EV marker protein (TSG101), despite...</p>
+      <a class="btn btn-primary" href="https://analyticalsciencejournals.onlinelibrary.wiley.com/doi/abs/10.1002/pmic.202000119" target="_blank">Read More</a>
+    </div>
+  </div>
+  <img src="/sites/default/files/images/exosome campaign/exosome-img.png" id="exosome-img3">
+</div>
+
+<div class="applications">
+  <div class="container">
+    <div class="application-heading">
+      <p class="caption">Exosome Applications</p>
+      <h2>The Power of Exosomes</h2>
+      <p>Exosomal RNA sequencing holds tremendous potential across a wide range of applications, advancing both basic research and clinical diagnostics. Applications such as:</p>
+    </div>
+  
+    <div class="blog-card-grid">
+      <div class="blog-card">
+        <div class="blog-card-img" style="background-image:url('https://norgenbiotek.com/sites/default/files/BlogBanner_2-lrg.png')";></div>
+        <h3>Advancing Multiple Myeloma Research with Tumour-Specific Signatures Found in Exosomes</h3>
+        <p>Multiple myeloma (MM) is a cancer of the blood that develops in the plasma cells in bone marrow. Plasma cells assist the immune system by producing antibody proteins as a response to bacterial…</p>
+        <a href="https://norgenbiotek.com/blog/advancing-multiple-myeloma-research-tumour-specific-signatures-found-exosomes" target="_blank">Read More > </a>
+      </div>
+      <div class="blog-card">
+        <div class="blog-card-img" style="background-image:url('https://norgenbiotek.com/sites/default/files/BlogBanner_1-lrg.png')";></div>
+        <h3>Exosome Therapeutics: Diagnostics and Treatment with Exosomes</h3>
+        <p>Exosomes are a relatively recent discovery in medical history, having only been discovered independently in 1983. Six years before their discovery, extracellular vesicles (EVs), the overarching group…</p>
+        <a href="https://norgenbiotek.com/blog/exosome-therapeutics-diagnostics-and-treatment-exosomes" target="_blank">Read More > </a>
+      </div>
+      <div class="blog-card">
+        <div class="blog-card-img" style="background-image:url('https://norgenbiotek.com/sites/default/files/images/blog/banner_images/banner_lrg_7.jpg'"')";></div>
+        <h3>Exploring the Power of RNA-based Technologies</h3>
+        <p>In the world of molecular biology, RNA-based technologies have emerged as a powerful toolbox that enables scientists to decipher the intricacies of life at the molecular level. From gene expression…</p>
+        <a href="https://norgenbiotek.com/blog/exploring-power-rna-based-technologies" target="_blank">Read More > </a>
+      </div>
+    </div>
+  </div>
+</div>
+<section style="background:#F2F5FA;position:relative;padding:60px 0;">
+<img src="/sites/default/files/images/exosome campaign/exosome-img.png" id="exosome-img1">
+<div class="container">
+    <div class="procedure">
+        <div class="procedure-img" id="procedure-img1">
+        <div style="display:flex;background: white;padding: 10px;border-radius: 12px;justify-content: center;">
+        <button class="primary btn btn-primary" onClick="restart_animation()" style="padding: 2px 6px;    margin: 0 5px;"><img src="/sites/default/files/images/exosome campaign/restart.png" style="width:19px;"></button>
+        <div id="steps"></div>
+        
+        </div>
+        </div>
+        
+        <div>
+            <p class="caption">The process</p>
+            <h2>Norgen's Exosome Purification Procedure</h2>
+            <div class="c-content-title-1">
+              <div class="c-line-left c-bg-blue"></div>
+            </div>
+            <ul class="rnapoints keypoints" style="padding:0;">
+                <li style="display:flex;margin-bottom: 45px;"><span>Purification is based on Norgen's proprietary Silicon Carbide resin.</span></li>
+                <li style="display:flex;margin-bottom: 45px;"><span>Short procedure without time-consuming ultracentrifugation, filtration or special syringes.</span></li>
+                <li style="display:flex;margin-bottom: 45px;"><span>Simple protocol without need of special equipment or training.</span></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<img src="/sites/default/files/images/exosome campaign/exosome-img.png" id="exosome-img2">
+</section>
+
+
+
+<section class="campaign-testimonials " style="padding:60px 0;">
+  <div class="c-content-box c-size-md" style="padding-top:0;">
+    <div class="container wow animate fadeInUp" data-wow-delay="0.2s" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeInUp; opacity: 1;">
+      <div class="c-content-title-1 c-title home-heading-padding">
+        <h2 class="c-center c-font" style="font-size:35px;font-weight:700;">Trusted By Leading Institutions</h2>
+        <p>Delighted to collaborate with premier institutions across 155+ countries, including esteemed partners like Harvard University, Mount Sinai, Roswell Park, USDA, Mayo Clinic, and Vineland Research and Innovation Center. Our global partnerships underscore our commitment to excellence, as we work alongside renowned institutions to advance research and innovation.</p>
+      </div>
+      <div class="institution-logos-container">
+        <div class="institution-logos">
+          {#<img class="lazy" src="/sites/default/files/services/service-customer/harvard.png" srcset="/sites/default/files/services/service-customer/harvard.png 300w, /sites/default/files/services/service-customer/harvard-half.png 150w" alt="Harvard University">#}
+          <img class="lazy" src="/sites/default/files/services/service-customer/SVGs/roswell.svg" alt="Roswell Park Cancer Research">
+          <img class="lazy" src="/sites/default/files/services/service-customer/SVGs/sinai.svg" alt="Mount Sinai Beth Israel">
+          <img class="lazy" src="/sites/default/files/services/service-customer/SVGs/mayo.svg" alt="Mayo Clinic">
+          <img class="lazy" src="/sites/default/files/services/service-customer/SVGs/vineland.svg" alt="Vineland Research and Innovation Centre">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/brainstorm.png" alt="Brainstorm Cell Therapeutics">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/SVGs/bwh.svg" alt="Brigham and Women's Hospital">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/jefferson.png" srcset="/sites/default/files/services/service-customer/jefferson.png 300w, /sites/default/files/services/service-customer/jefferson-half.png 150w" alt="Thomas Jefferson University">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/SVGs/guelph.svg" alt="University of Guelph">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/planck.png" srcset="/sites/default/files/services/service-customer/planck.png 300w, /sites/default/files/services/service-customer/planck-half.png 150w" alt="Max Planck Institute for Medical Research">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/queens.png" srcset="/sites/default/files/services/service-customer/queens.png 300w, /sites/default/files/services/service-customer/queens-half.png 150w" alt="Queen's University">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/SVGs/usda.svg" alt="United States Department of Agriculture">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/warsaw.png" alt="customer">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/zenbio.png" alt="ZenBio">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/maryland.png" srcset="/sites/default/files/services/service-customer/maryland.png 300w, /sites/default/files/services/service-customer/maryland-half.png 150w" alt="University of Maryland School of Medicine">    
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/SVGs/biodesix.svg" alt="Biodesix">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/magee.png" alt="MaGee Women's Research Institute">
+        </div>
+        <div class="institution-logos">
+          {#<img class="lazy" src="/sites/default/files/services/service-customer/harvard.png" srcset="/sites/default/files/services/service-customer/harvard.png 300w, /sites/default/files/services/service-customer/harvard-half.png 150w" alt="Harvard University">#}
+          <img class="lazy" src="/sites/default/files/services/service-customer/SVGs/roswell.svg" alt="Roswell Park Cancer Research">
+          <img class="lazy" src="/sites/default/files/services/service-customer/SVGs/sinai.svg" alt="Mount Sinai Beth Israel">
+          <img class="lazy" src="/sites/default/files/services/service-customer/SVGs/mayo.svg" alt="Mayo Clinic">
+          <img class="lazy" src="/sites/default/files/services/service-customer/SVGs/vineland.svg" alt="Vineland Research and Innovation Centre">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/brainstorm.png" alt="Brainstorm Cell Therapeutics">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/SVGs/bwh.svg" alt="Brigham and Women's Hospital">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/jefferson.png" srcset="/sites/default/files/services/service-customer/jefferson.png 300w, /sites/default/files/services/service-customer/jefferson-half.png 150w" alt="Thomas Jefferson University">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/SVGs/guelph.svg" alt="University of Guelph">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/planck.png" srcset="/sites/default/files/services/service-customer/planck.png 300w, /sites/default/files/services/service-customer/planck-half.png 150w" alt="Max Planck Institute for Medical Research">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/queens.png" srcset="/sites/default/files/services/service-customer/queens.png 300w, /sites/default/files/services/service-customer/queens-half.png 150w" alt="Queen's University">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/SVGs/usda.svg" alt="United States Department of Agriculture">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/warsaw.png" alt="customer">
+          <img class="University of Warsaw" loading="lazy" src="/sites/default/files/services/service-customer/zenbio.png" alt="ZenBio">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/maryland.png" srcset="/sites/default/files/services/service-customer/maryland.png 300w, /sites/default/files/services/service-customer/maryland-half.png 150w" alt="University of Maryland School of Medicine">    
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/SVGs/biodesix.svg" alt="Biodesix">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/magee.png" alt="MaGee Women's Research Institute">
+        </div>
+      </div>
+    </div>
+  </div> 
+  
+
+  
+</section>
+
+<div class="consultation">
+  <div class="container">
+    <p class="caption">Free consultation</p>
+    <h2>Talk to Norgen's Exosome Experts</h2>
+    <p>Our team of dedicated scientisits will be happy to learn more about your specific project needs and provide you with the best tools for exosomes sample processing.</p>
+    <a class="btn btn-primary" href="https://norgenbiotek.com/bookmeeting" target="_blank">Book Consultation Now!</a>
+  </div>
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+
+<!-- adding bootstrap.bundle.min.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+<!-- adding owl.carousel.js CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.js" integrity="sha512-gY25nC63ddE0LcLPhxUJGFxa2GoIyA5FLym4UJqHDEMHjp8RET6Zn/SHo1sltt3WuVtqfyxECP38/daUc/WVEA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+<script>
+document.getElementById('count1').animate([
+  { '--num': 0 },
+  { '--num': 10 }
+], {
+  duration: 1000,
+    fill: 'forwards',
+    iterations: 1
+});
+document.getElementById('count2').animate([
+  { '--num': 0 },
+  { '--num': 15 }
+], {
+  duration: 1000,
+    fill: 'forwards',
+    iterations: 1
+});
+document.getElementById('count3').animate([
+  { '--num': 0 },
+  { '--num': 20 }
+], {
+  duration: 1000,
+    fill: 'forwards',
+    iterations: 1
+});
+
+
+$('.owl-carousel').owlCarousel({
+    loop:true,
+    margin:10,
+    nav:true,
+    /* here you can set the settings for responsive items */
+    responsive:{
+        0:{
+            items:2
+        },
+        768:{
+            items:4
+        }
+    }
+})
+
+
+
+
+
+
+const myElement = document.querySelector('#procedure-img1');
+const myElement2 = document.querySelector('#steps');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      myElement.classList.add('procedure-img-anim');
+      myElement2.classList.add('steps-anim');
+      observer.unobserve(myElement);
+    }
+  });
+});
+
+observer.observe(myElement);
+
+ 
+function restart_animation(){
+  const myElement = document.querySelector('#procedure-img1');
+  const myElement2 = document.querySelector('#steps');
+  myElement.classList.remove('procedure-img-anim');
+  myElement2.classList.remove('steps-anim');
+
+  setTimeout(function(){ 
+      myElement.classList.add('procedure-img-anim');
+      myElement2.classList.add('steps-anim');
+  }, 2000);
+  
+
+  
+}  
+
+function open_disclaimer(){
+  document.getElementsByClassName("disclaimer_popup")[0].style.display = "block";
+}
+
+function closedisclaimer(){
+  document.getElementsByClassName("disclaimer_popup")[0].style.display = "none";
+}
+</script>

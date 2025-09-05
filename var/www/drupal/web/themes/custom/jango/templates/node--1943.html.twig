@@ -1,0 +1,461 @@
+{#
+/**
+* @file
+* Default theme implementation to display a node.
+*
+* Available variables:
+* - node: The node entity with limited access to object properties and methods.
+* Only method names starting with "get", "has", or "is" and a few common
+* methods such as "id", "label", and "bundle" are available. For example:
+* - node.getCreatedTime() will return the node creation timestamp.
+* - node.hasField('field_example') returns TRUE if the node bundle includes
+* field_example. (This does not indicate the presence of a value in this
+* field.)
+* - node.isPublished() will return whether the node is published or not.
+* Calling other methods, such as node.delete(), will result in an exception.
+* See \Drupal\node\Entity\Node for a full list of public properties and
+* methods for the node object.
+* - label: (optional) The title of the node.
+* - content: All node items. Use {{ content }} to print them all,
+* or print a subset such as {{ content.field_example }}. Use
+* {{ content|without('field_example') }} to temporarily suppress the printing
+* of a given child element.
+* - author_picture: The node author user entity, rendered using the "compact"
+* view mode.
+* - metadata: Metadata for this node.
+* - date: (optional) Themed creation date field.
+* - author_name: (optional) Themed author name field.
+* - url: Direct URL of the current node.
+* - display_submitted: Whether submission information should be displayed.
+* - attributes: HTML attributes for the containing element.
+* The attributes.class element may contain one or more of the following
+* classes:
+* - node: The current template type (also known as a "theming hook").
+* - node--type-[type]: The current node type. For example, if the node is an
+* "Article" it would result in "node--type-article". Note that the machine
+* name will often be in a short form of the human readable label.
+* - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+* teaser would result in: "node--view-mode-teaser", and
+* full: "node--view-mode-full".
+* The following are controlled through the node publishing options.
+* - node--promoted: Appears on nodes promoted to the front page.
+* - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+* teaser listings.
+* - node--unpublished: Appears on unpublished nodes visible only to site
+* admins.
+* - title_attributes: Same as attributes, except applied to the main title
+* tag that appears in the template.
+* - content_attributes: Same as attributes, except applied to the main
+* content tag that appears in the template.
+* - author_attributes: Same as attributes, except applied to the author of
+* the node tag that appears in the template.
+* - title_prefix: Additional output populated by modules, intended to be
+* displayed in front of the main title tag that appears in the template.
+* - title_suffix: Additional output populated by modules, intended to be
+* displayed after the main title tag that appears in the template.
+* - view_mode: View mode; for example, "teaser" or "full".
+* - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+* - page: Flag for the full page state. Will be true if view_mode is 'full'.
+* - readmore: Flag for more state. Will be true if the teaser content of the
+* node cannot hold the main body content.
+* - logged_in: Flag for authenticated user status. Will be true when the
+* current user is a logged-in member.
+* - is_admin: Flag for admin user status. Will be true when the current user
+* is an administrator.
+*
+* @see template_preprocess_node()
+*
+* @ingroup themeable
+*/
+#}
+<article{{ attributes }}>
+
+  {{ title_prefix }}
+  {% if label and not page %}
+  <h2{{ title_attributes }}>
+    <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+    </h2>
+    {% endif %}
+    {{ title_suffix }}
+
+    {% if display_submitted %}
+    <footer>
+      {{ author_picture }}
+      <div{{ author_attributes }}>
+        {% trans %}Submitted by {{ author_name }} on {{ date }}{% endtrans %}
+        {{ metadata }}
+        </div>
+    </footer>
+    {% endif %}
+
+    <div{{ content_attributes }}>
+      {{ content }}
+      </div>
+      </article>
+
+      <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.15.3/css/all.css"
+        integrity="sha384-iKbFRxucmOHIcpWdX9NTZ5WETOPm0Goy0WmfyNcl52qSYtc2Buk0NCe6jU1sWWNB" crossorigin="anonymous">
+      <style>
+        /* Default Style Overrides */
+        .node-unpublished {
+          background: transparent;
+        }
+
+        #section-page-title {
+          display: none;
+        }
+
+        #section-main-content .container {
+          width: 100% !important;
+          padding: 0;
+        }
+
+        body {
+          font-size: 16px;
+          line-height: 200%;
+        }
+
+        /* Overrides End */
+
+        .covid-testing h1 {
+          text-align: center;
+          font-weight: 600;
+          margin: 40px 40px 0;
+        }
+
+        .covid-testing h2 {
+          font-size: 44px;
+          margin: 0;
+        }
+
+        .darkgradient {
+          background: linear-gradient(to bottom right, #4D6297, #001A37);
+          color: #d2d2d2;
+        }
+
+        .darkgradient h2,
+        .darkgradient p.headline {
+          color: #fff;
+        }
+
+        h2.bannerHeading {
+          margin: 40px 0 0;
+          background: linear-gradient(to bottom right, #1d8495, #064853);
+          max-width: 65%;
+          padding: 20px 5% 20px 10%;
+          border-radius: 0 20px 20px 0;
+          color: #fff;
+          font-weight: 600;
+          letter-spacing: 2px;
+          font-size: 3.3rem;
+          text-align: right;
+        }
+
+        .customer-links2 {
+          display: -ms-grid;
+          -ms-grid-columns: 1fr 40px 1fr;
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr;
+          grid-gap: 40px;
+          padding: 40px;
+        }
+
+        .customer-links2 a:nth-child(1) {
+          -ms-grid-column: 1;
+        }
+
+        .customer-links2 a:nth-child(2) {
+          -ms-grid-column: 3;
+        }
+
+        .customer-links2 a {
+          display: block;
+          position: relative;
+          width: 100%;
+          height: 400px;
+        }
+
+        .link-image {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          border-radius: 10px;
+          box-shadow: 1px 1px 3px #000;
+          background: #0f6b7a;
+        }
+
+        .link-image picture,
+        .link-image img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          filter: contrast(80%) grayscale(15%);
+          border-radius: 10px;
+          transition-duration: 0.2s;
+        }
+
+        .customer-links2 a:hover .link-image img {
+          filter: contrast(100%) grayscale(0);
+        }
+
+        .link-title {
+          position: absolute;
+          bottom: 40px;
+          left: 50%;
+          transform: translateX(-50%);
+          color: #111;
+          font-weight: 700;
+          font-size: 2.25rem;
+          font-family: 'montserrat', sans-serif;
+          padding: 15px 30px;
+          border-radius: 50px;
+          background: rgba(255, 255, 255, 0.85);
+          border: 5px solid rgba(140, 21, 32, 0.8);
+          transition-duration: 0.2s;
+          width: max-content;
+          max-width: calc(100% - 20px);
+          text-align: center;
+        }
+
+        .link-title:before {
+          content: '';
+          position: absolute;
+          top: -10px;
+          left: -10px;
+          width: calc(100% + 20px);
+          height: calc(100% + 20px);
+          border-radius: 55px;
+          border: 5px solid rgba(255, 255, 255, 0.55);
+        }
+
+        .customer-links2 a:hover .link-title {
+          background: #fff;
+          border-color: rgba(140, 21, 32, 0.9);
+        }
+
+        .customer-links2 a:hover .link-title:before {
+          border-color: rgba(255, 255, 255, 0.65);
+        }
+
+        .contactrow {
+          padding: 40px;
+        }
+
+        .contactrow h2 {
+          font-weight: 600;
+          letter-spacing: 2px;
+          font-size: 3.3rem;
+        }
+
+        .contactrow p {
+          margin: 0 auto;
+        }
+
+        .darkgradient h2.bannerHeading {
+          margin: 0;
+          background: linear-gradient(to bottom right, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.3));
+          color: #fff;
+        }
+
+        .contact-grid {
+          padding: 30px 0 0;
+          display: -ms-grid;
+          -ms-grid-columns: 1fr (40px 1fr)[2];
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          grid-gap: 40px;
+          align-items: center;
+        }
+
+        .contact-grid>* {
+          margin: 0 auto;
+          text-align: center;
+        }
+
+        .contact-left {
+          -ms-grid-column: 1;
+        }
+
+        .contact-mid {
+          -ms-grid-column: 3;
+        }
+
+        .contact-right {
+          -ms-grid-column: 5;
+          text-align: center;
+        }
+
+        .contact-grid a {
+          color: #fff;
+        }
+
+        .contact-left a i {
+          padding: 0 7px;
+          font-size: 16px;
+        }
+
+        .contact-mid img {
+          width: 75px;
+        }
+
+        .contact-left img {
+          width: 170px;
+        }
+
+        /*IE Compatability*/
+        @media all and (-ms-high-contrast: none),
+        (-ms-high-contrast: active) {
+          .image-links a .hover {
+            padding-top: 100px;
+          }
+        }
+
+        @media all and (-ms-high-contrast: none),
+        (-ms-high-contrast: active),
+        (max-width: 600px) {
+          .image-links a .hover {
+            padding-top: 50px;
+          }
+        }
+
+        @media only screen and (max-width: 1000px) {
+          .covid-testing h2 {
+            font-size: 36px;
+          }
+        }
+
+        @media only screen and (max-width: 700px) {
+          .customer-links2 {
+            display: block;
+          }
+
+          .customer-links2 a {
+            height: 200px;
+          }
+
+          .customer-links2 a:not(:last-child) {
+            margin-bottom: 10px;
+          }
+
+          .contact-grid {
+            -ms-grid-columns: 1fr 1fr;
+            grid-template-columns: 1fr 1fr;
+          }
+
+          .contact-mid {
+            -ms-grid-column: 1;
+            -ms-grid-column-span: 3;
+            -ms-grid-row: 1;
+            grid-column: 1 / 3;
+            grid-row: 1 / 2;
+          }
+
+          .contact-left {
+            -ms-grid-column: 1;
+            -ms-grid-row: 3;
+          }
+
+          .contact-right {
+            -ms-grid-column: 3;
+            -ms-grid-row: 3;
+          }
+        }
+
+        @media only screen and (max-width: 600px) {
+          .covid-testing h2 {
+            font-size: 24px;
+          }
+        }
+
+        @media only screen and (max-width: 550px) {
+          h2.bannerHeading {
+            margin-top: 30px;
+            max-width: 85%;
+          }
+
+          .contact-grid {
+            display: block;
+          }
+
+          .contact-grid> :not(:last-child) {
+            margin-bottom: 30px;
+          }
+
+          .contact-right {
+            text-align: center;
+          }
+        }
+      </style>
+      <main class="covid-testing">
+
+        <!-- Customer Type Links v2 Start -->
+        <h1>Which are you interested in?</h1>
+        <section class="customer-links2">
+          <a href="/staysafe/individuals">
+            <div class="link-image">
+              <picture>
+                <source media="(max-width: 600px)"
+                  srcset="https://norgenbiotek.com/sites/default/files/images/family2-sml.jpg" />
+                <img src="https://norgenbiotek.com/sites/default/files/images/family2-lrg.jpg" />
+              </picture>
+            </div>
+            <div class="link-title">Individuals and Families</div>
+          </a>
+          <a href="/staysafe#travelS">
+            <div class="link-image">
+              <picture>
+                <source media="(max-width: 600px)"
+                  srcset="/sites/default/files/images/COVID-19-Travel-Testing-Image.jpg" />
+                <img src="https://norgenbiotek.com/sites/default/files/images/COVID-19-Travel-Testing-Image.jpg" />
+              </picture>
+            </div>
+            <div class="link-title">Pre-Departure Travel Testing</div>
+          </a>
+          <a href="/staysafe/businesses">
+            <div class="link-image">
+              <picture>
+                <source media="(max-width: 600px)"
+                  srcset="https://norgenbiotek.com/sites/default/files/images/business3-sml.jpg" />
+                <img src="https://norgenbiotek.com/sites/default/files/images/business3-lrg.jpg" />
+              </picture>
+            </div>
+            <div class="link-title">Employee Testing</div>
+          </a>
+        </section>
+        <!-- Customer Type v2 End -->
+
+        <!-- Contact Section Starts -->
+        <section class="contactrow text-center darkgradient">
+          <h2>Want to speak with an expert?</h2>
+          <p>Norgen's product experts are always ready to help you with any concerns you may have. Simply reach out with
+            a phone call or an email, and we'll be sure to get in touch as soon as possible!</p>
+          <div class="contact-grid">
+            <div class="contact-left">
+              <a href="https://norgenbiotek.com"><img
+                  src="https://norgenbiotek.com/sites/default/files/norgen-logo-footer.svg" /></a><br>
+              <a href="http://facebook.com/norgenbiotek" target="_blank"><i class="fab fa-facebook"></i></a>
+              <a href="http://twitter.com/norgenbiotek" target="_blank"><i class="fab fa-twitter"></i></a>
+              <a href="http://instagram.com/norgen.biotek" target="_blank"><i class="fab fa-instagram"></i></a>
+              <a href="https://www.youtube.com/user/norgenbiotek" target="_blank"><i class="fab fa-youtube"></i></a>
+            </div>
+            <div class="contact-mid">
+              <img
+                src="https://norgenbiotek.com/sites/default/files/images/campaigns/saliva-rna/ontario-made.png" /><br>
+              <a href="tel:1-888-977-4839">1-888 9 SPIT DX</a><br>
+              <a href="mailto:orders@norgenbiotek.com?subject=COVID-19 Testing Inquiry">orders@norgenbiotek.com</a>
+              <!--<br>Looking to travel? <a href="mailto:orders@norgenbiotek.com?subject=COVID-19 Travel Testing Inquiry">Inquire about COVID-19 testing for travel</a>-->
+            </div>
+            <div class="contact-right">
+              3430 Schmon Parkway<br>
+              Thorold, ON<br>
+              Canada, L2V 4Y6
+            </div>
+          </div>
+        </section>
+        <!-- Contact Section Ends -->
+
+      </main>
+
+      <!-- Facebook Pixel Code -->

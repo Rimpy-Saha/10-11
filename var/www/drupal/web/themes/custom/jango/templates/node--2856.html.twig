@@ -1,0 +1,324 @@
+<style>
+#event-db-form{
+	display:none;
+}
+#event-db-delete-form{
+	display:none;
+}
+#update-form{
+	 width:800px;
+    border-radius: 7px;
+    background:white;
+    border:1px solid;
+    margin:30px auto 0;
+    padding:50px;
+    position:fixed;
+    left: 50%;
+  top: 25%;
+  margin-left: -400px;
+    margin-top: -40px; 
+    overflow: scroll;
+    height: 587px;
+    display:none;
+    z-index:2;
+}
+#delete-form{
+	 width:800px;
+    border-radius: 7px;
+    background:white;
+    border:1px solid;
+    margin:30px auto 0;
+    padding:50px;
+    position:fixed;
+    left: 50%;
+  top: 25%;
+  margin-left: -400px;
+    margin-top: -40px; 
+    display:none;
+    z-index:2;
+}
+#container2 {
+    width:100%;
+    display:block;
+}
+
+#overlay_update {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+    cursor: pointer;
+}
+
+#overlay_delete {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+    cursor: pointer;
+}
+.Updated{
+	    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.Updated h2{
+	color: #004897;
+    font-size: 32px;
+    font-weight: 800;
+    text-align:center;
+}
+.Updated p{
+	font-size:21px;
+}
+#eventsDropdown{
+	padding:10px;
+}
+.filters_div{
+	display:flex;
+	justify-content: space-between;
+	align-items: center;
+	margin: 20px auto;
+}
+.filters_div.container:before{
+	display:none;
+}
+.filters_div.container:after{
+	display:none;
+}
+.action-btn{
+	background:white;
+	border:white;
+}
+.glyphicon-trash{
+	color:#ba1e2d;
+	font-size:25px;
+}
+.glyphicon-pencil{
+	color:#004893;
+	font-size:25px;
+}
+div.scrollable {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+    max-height:100px;
+    overflow:flow
+}
+@media only screen and (max-width: 1195px) {
+  #event-db {
+    overflow:scroll;
+    display:block;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .filters_div {
+    flex-direction: column;
+    gap:30px;
+  }
+}
+.middle-line{
+	border:1px solid #00000024;
+	height:30px;
+}
+.table{
+  display:block;
+  overflow:auto;
+}
+.table
+{
+  display: block;
+  overflow:auto;
+  
+}
+
+
+</style>
+<div class="filters_div container">
+	<div>
+		<label for="" style="font-weight:700;">Filter By Event: </label>
+		<select id="eventsDropdown" name="eventsDropdown" oninput="filterTable()">
+  			<option>All</option>
+  			<!--<option>test1</option>
+  			<option>test2</option>
+  			<option>test3</option>-->
+		</select>
+	</div>
+	<div>
+		<button class="btn btn-primary btn-lg norgen-default-btn" onClick="exportTableToExcel('Conference Leads')"><span class="glyphicon glyphicon-download-alt"></span>  Download To Excel Sheet</button>
+	</div>
+</div>
+{#{{ dump(data2) }}#}
+{{ data2['#markup']|raw }}
+<div id="overlay_update" onclick="close_updateform();"></div>
+<div id="overlay_delete" onclick="close_deleteform();"></div>
+<div class="container2">
+
+<div id="update-form">
+<a class="close" href="#" onclick="close_updateform();return false;" style="font-size:70px;">×</a>
+{{ event_db }}
+
+</div>
+
+<div id="delete-form">
+<a class="close" href="#" onclick="close_deleteform();return false;" style="font-size:70px;">×</a>
+{{ event_db_delete }}
+</div>
+
+</div>
+
+
+
+<script>
+function show_form(id, fname, lname, email, company, job, event_name,notes,one){
+console.log(notes);
+	document.getElementById("update-form").style.display="block";
+
+	document.getElementById("event-db-form").style.display="block";
+	
+	
+	document.getElementById("overlay_update").style.display="block";
+	document.getElementById("edit-update-id").value = id;
+	document.getElementById("edit-update-fname").value = fname;
+	document.getElementById("edit-update-lname").value = lname;
+	document.getElementById("edit-update-email").value = email;
+	document.getElementById("edit-update-company").value = company;
+	document.getElementById("edit-update-job").value = job;
+	document.getElementById("edit-update-event-name").value = event_name;
+	document.getElementById("edit-update-conference-message").value = notes;
+}
+
+function delete_entry(elem){
+	document.getElementById("edit-delete-id").value = elem;
+	document.getElementById("delete-form").style.display="block";
+
+	document.getElementById("event-db-delete-form").style.display="block";
+	
+	document.getElementById("overlay_delete").style.display="block";
+}
+
+function close_updateform(){
+	document.getElementById("update-form").style.display="none";
+	document.getElementById("overlay_update").style.display="none";
+	if(document.getElementById("event-db-form") != null){
+		document.getElementById("event-db-form").style.display="none";
+	}
+	else{
+		location.reload();	
+	}
+	
+}
+function close_deleteform(){
+	document.getElementById("delete-form").style.display="none";
+	document.getElementById("overlay_delete").style.display="none";
+	if(document.getElementById("event-db-delete-form") != null){
+		document.getElementById("event-db-delete-form").style.display="none";
+		
+	}
+	else{
+		location.reload();	
+	}
+
+}
+console.log("test");
+function filterTable() {
+  // Variables
+  console.log("test2");
+  let dropdown, table, rows, cells, country, filter;
+  dropdown = document.getElementById("eventsDropdown");
+  table = document.getElementById("event-db");
+  rows = table.getElementsByTagName("tr");
+  console.log(rows);
+  filter = dropdown.value;
+
+  // Loops through rows and hides those with countries that don't match the filter
+  for (let row of rows) { // `for...of` loops through the NodeList
+    console.log("test" + row);
+    cells = row.getElementsByTagName("td");
+    event = cells[22] || null; // gets the 2nd `td` or nothing
+    
+    // if the filter is set to 'All', or this is the header row, or 2nd `td` text matches filter
+    if (filter === "All" || !event || (filter === event.textContent)) {
+      row.style.display = ""; // shows this row
+    }
+    else {
+      row.style.display = "none"; // hides this row
+    }
+  }
+}
+
+
+function exportTableToExcel(filename = ''){
+let downloadLink;
+let dataType = 'application/vnd.ms-excel';
+let tableSelect = document.getElementById("event-db");
+let tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+console.log(tableSelect);
+// Specify file name
+filename = 'Conference Leads.xls';
+
+// Create download link element
+downloadLink = document.createElement("a");
+
+document.body.appendChild(downloadLink);
+
+if(navigator.msSaveOrOpenBlob){
+    var blob = new Blob(['\ufeff', tableHTML], {
+        type: dataType
+    });
+    navigator.msSaveOrOpenBlob( blob, filename);
+}else{
+    // Create a link to the file
+    downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+
+    // Setting the file name
+    downloadLink.download = filename;
+    
+    //triggering the function
+    downloadLink.click();
+}
+}
+
+var table = document.getElementById("event-db");
+rows = table.getElementsByTagName("tr");
+var dropdown = document.getElementById("eventsDropdown");
+var options = dropdown.getElementsByTagName("option");
+
+  for (let row of rows) { // `for...of` loops through the NodeList
+  	var duplicate = 'false';
+    cells = row.getElementsByTagName("td");
+    event = cells[22] || null; // gets the 2nd `td` or nothing
+
+    if (event != null && event.textContent != "") {
+      for(var i = 0; i < options.length; i++){
+      	if(options[i].innerHTML == event.textContent){
+      		duplicate = 'true';
+      	}
+      }
+      if(duplicate == 'false'){
+      	var option = document.createElement("option");
+      	option.innerHTML = event.textContent;
+      	dropdown.appendChild(option);
+      }
+    }
+  }
+
+
+
+</script>

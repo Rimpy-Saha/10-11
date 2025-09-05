@@ -1,0 +1,386 @@
+{# /** * @file * Default theme implementation to display a block. * * Available
+  variables: * - plugin_id: The ID of the block implementation. * - label: The
+  configured label of the block if visible. * - configuration: A list of the
+  block's configuration values. * - label: The configured label for the block. * -
+  label_display: The display settings for the label. * - provider: The module or
+  other provider that provided this block plugin. * - Block plugin specific
+  settings will also be stored here. * - in_preview: Whether the plugin is being
+  rendered in preview mode. * - content: The content of this block. * -
+  attributes: array of HTML attributes populated by modules, intended to * be
+  added to the main container tag of this template. * - id: A valid HTML ID and
+  guaranteed unique. * - title_attributes: Same as attributes, except applied to
+  the main title * tag that appears in the template. * - title_prefix: Additional
+  output populated by modules, intended to be * displayed in front of the main
+  title tag that appears in the template. * - title_suffix: Additional output
+  populated by modules, intended to be * displayed after the main title tag that
+  appears in the template. * * @see template_preprocess_block() * * @ingroup
+  themeable */ #}
+  <footer {{ attributes }} id="footer">
+    {{ title_prefix }}
+    {% if label %}
+    <h2{{ title_attributes }}>{{ label }}</h2> {% endif %}
+      {{ title_suffix }}
+  
+      <style>
+        .social-list {
+          list-style-type: none;
+          padding: 0;
+          margin: 0;
+         /*  justify-content: center;
+          display: flex;
+          justify-content: center; */
+        }
+  
+        .content-social {
+          display: inline-block;
+        }
+  
+        .social-list li {
+          max-height: 18px;
+          margin-right: 10px;
+        }
+      </style>
+      <!-- Get menu items -->
+      {% set items = simplify_menu('main') %}
+  
+  
+  {# New Footer Styles #}
+      <style>
+        #footer{
+          background-color:var(--norgen-primary-blue-dark);
+          padding:80px 0px 10px 0px;
+          font-size:14px;
+        }
+        #footer .footer-contact{
+          color:#fff;
+        }
+        .social-list{
+          margin-bottom:10px;
+        }
+        #footer .social-links .content-social a i.fab{
+          color:#fff;
+          font-size: 18px;
+        }
+        #footer .social-links, #footer .company-contact{
+          margin-bottom:20px;
+        }
+        ul.company-contact{
+          list-style-type:none;
+          padding-left:0px;
+        }
+        ul.company-contact li{
+          margin-bottom:10px;
+        }
+        ul.company-contact li > i{
+          margin-right:10px;
+          width:10px;
+        }
+        .footer-sitemap{
+          display:grid;
+          grid-template-columns:1fr 1fr 1fr 1fr;
+          grid-gap:10px;
+        }
+        #footer .c-title a{
+          color:#fff;
+        }
+        #footer .copyright a{
+          color:#fff;
+        }
+        #footer .c-layout-footer.c-layout-footer-1 .c-prefooter{
+          background-color:var(--norgen-primary-blue-dark);
+        }
+         #footer .c-layout-footer.c-layout-footer-1 .c-prefooter.footer .footer-sitemap .c-links .c-nav > li > a{
+          text-transform:none;
+          font-weight:inherit;
+          color:#fff;
+        }
+        #footer .c-content-title-1 > h3{
+          margin-bottom:0px;
+          font-size: 18px;
+          font-weight: bold;
+        }
+        #footer .subs-div h3:before{
+          content: ' ';
+          display: inline-block;
+          background-image: url(/sites/default/files/images/home/subscribe.png);
+          position: relative;
+          background-size: contain;
+          width: 30px;
+          height: 30px;
+          top: 5px;
+          margin-right: 10px;
+        }
+        .footer-top{
+          display:grid;
+          grid-template-columns:1fr 1fr;
+        }
+        #footer .subs-div{
+          padding:20px;
+          border-radius:10px;
+          background-color:var(--norgen-primary-blue-light);
+        }
+        #footer form#zcampaignOptinForm{
+          display: grid;
+          grid-template-columns: 3fr 3fr 2fr;
+          width:100%;
+          gap:5px;
+          align-items:end;
+        }
+        #zcampaignOptinForm > #errorMsgDiv{
+          grid-column: 1 / 4;
+        }
+        @media only screen and (max-width:990px){
+          .footer-sitemap{
+            grid-template-columns:1fr 1fr;
+          }
+          .footer-top{
+            grid-template-columns:1fr;
+          }
+        }
+        @media only screen and (max-width:530px){
+          .footer-sitemap{
+            grid-template-columns:1fr;
+          }
+        }
+      </style>
+        
+      <div class="field field--name-body field--type-text-with-summary field--label-hidden field__item"></div>
+      <div class="c-layout-footer c-layout-footer-1 container" style="margin: auto;padding-left:15px;padding-right:15px;">
+        <div class="c-prefooter footer-top" style="padding:0 0 0 0">
+          <div class="footer-contact">
+            <div class="social-links">
+              <h3 style="font-weight:bold;color:#fff;">Follow</h3>
+              <ul class="social-list">
+                <li class="content-social">
+                  <a target="_blank" data-placement="auto" data-toggle="tooltip" title=""
+                    href="https://facebook.com/norgenbiotek" class="dtooltip social-icon fbclick"
+                    data-original-title="Facebook" aria-label="Facebook"><span><i class="fa-facebook fab"
+                        alt="Facebook"></i></span></a>
+                </li>
+                <li class="content-social">
+                  <a target="_blank" data-placement="auto" data-toggle="tooltip" title=""
+                    href="https://twitter.com/norgenbiotek" class="dtooltip social-icon twclick"
+                    data-original-title="Twitter" aria-label="Twitter"><span><svg
+                        style="max-width: 15px; max-height: 15px; position: relative; top: 1px;" width="1200" height="1227" viewBox="0 0 1200 1227"
+                        fill="#fff" xmlns="https://www.w3.org/2000/svg"
+                        aria-labelledby="twitter-footer-title">
+                        <title id="twitter-footer-title" lang="en">
+                          X formerly known as Twitter
+                        </title>
+                        <path
+                          d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z">
+                        </path>
+                      </svg></span></a>
+                </li>
+                <li class="content-social">
+                  <a target="_blank" data-placement="auto" data-toggle="tooltip" title=""
+                    href="https://instagram.com/norgen.biotek" class="dtooltip social-icon igclick"
+                    data-original-title="Instagram" aria-label="Instagram"><span><i class=" fa-instagram fab"
+                        alt="Instagram"></i></span></a>
+                </li>
+                <li class="content-social">
+                  <a target="_blank" data-placement="auto" data-toggle="tooltip" title=""
+                    href="https://www.youtube.com/@norgenbiotek?sub_confirmation=1" class="dtooltip social-icon ytclick"
+                    data-original-title="Youtube" aria-label="YouTube"><span><i class=" fa-youtube fab"
+                        alt="YouTube"></i></span></a>
+                </li>
+                <li class="content-social">
+                  <a target="_blank" data-placement="auto" data-toggle="tooltip" title=""
+                    href="https://www.linkedin.com/company/norgenbiotek/" class="dtooltip social-icon liclick"
+                    data-original-title="LinkedIn" aria-label="LinkedIn"><span><i class="fa-linkedin fab"
+                        alt="LinkedIn"></i></span></a>
+                </li>
+              </ul>
+            </div>
+            <div class="company-contact">
+              <h3 style="font-weight:bold;color:#fff;">Contact</h3>
+              <ul class="company-contact">
+                <li><i class="fa fa-map-marker-alt"></i><a href="https://maps.app.goo.gl/j86G82rQyH6Ro5UM8" target="_blank" style="color:#fff;">3430 Schmon Parkway, Thorold, ON, L2V 4Y6, Canada</a></li>
+                <li><i class="fa fa-phone"></i><a href="tel:9052278848" target="_blank" style="color:#fff;">905 227 8848</a></li>
+                <li><i class="fa fa-envelope"></i><a href="mailto:info@norgenbiotek.com" target="_blank" style="color:#fff;">info@norgenbiotek.com</a></li>
+              </ul>
+            </div>
+            <div class="feedback"> {# Only show to logged in users to avoid spam and real customers more important #}
+              <h3 style="font-weight:bold;color:#fff;">Feedback</h3>
+              <p><a href="https://survey.zohopublic.com/zs/X3COdj" style="color:#fff;text-decoration:underline;">Complete a quick website feedback survey</a> and receive a <b>5% off coupon</b></p>
+            </div>
+          </div>
+          <div style="margin-top:20px;">
+            <div class="subs-div" bis_skin_checked="1">
+              <h3 style="font-size:24px;font-weight:bold;margin-top:0px;">Stay Updated</h3>
+              <p>Receive a <b>10% off coupon</b> when you subscribe to our mailing list!</p>
+              <p>Be the first to know about new products, gain access to exclusive offers, and more!</p>
+              <!--Zoho Campaigns Web-Optin Form's Header Code Starts Here-->
+              <script type="text/javascript" src="https://ayzop-zgpvh.maillist-manage.net/js/optin.min.js" onload="setupSF('sf3zd890aa9417f22eda932c43a5d7be9fc799b7d5f45cdced63fb83d15e1ac87fb3','ZCFORMVIEW',false,'light',false,'0')"></script>
+              <script type="text/javascript">
+                function runOnFormSubmit_sf3zd890aa9417f22eda932c43a5d7be9fc799b7d5f45cdced63fb83d15e1ac87fb3(th){
+                  /*Before submit, if you want to trigger your event, "include your code here"*/
+                };
+              </script>
+              <style>.quick_form_7_css * { -webkit-box-sizing: border-box !important; -moz-box-sizing: border-box !important; box-sizing: border-box !important; overflow-wrap: break-word }@media only screen and (max-width: 600px) {.quick_form_7_css[name="SIGNUP_BODY"] { width: 100% !important; min-width: 100% !important; margin: 0px auto !important; padding: 0px !important } .SIGNUP_FLD { width: 90% !important; margin: 22px 0% !important; padding: 0px !important } .SIGNUP_FLD input { margin: 0 !important } }</style>
+              <!--Zoho Campaigns Web-Optin Form's Header Code Ends Here--><!--Zoho Campaigns Web-Optin Form Starts Here-->
+              <div id="sf3zd890aa9417f22eda932c43a5d7be9fc799b7d5f45cdced63fb83d15e1ac87fb3" data-type="signupform" style="opacity: 1;">
+                <div id="customForm">
+                  <div class="quick_form_7_css" style="background-color: rgb(229, 236, 244); z-index: 2; font-family: Arial; border: 1px none rgb(206, 206, 206); overflow: hidden;" name="SIGNUP_BODY">
+                    <div>
+                      <div style="font-size: 8px; font-family: Arial; font-weight: bold; color: rgb(85, 85, 85); text-align: left; padding: 5px 15px 5px; width: 100%; display: block; box-sizing: border-box; height: 0px" id="SIGNUP_HEADING"></div>
+                      <div style="position:relative;">
+                        <div id="Zc_SignupSuccess" style="display:none;position:absolute;margin-left:4%;width:90%;background-color: white; padding: 3px; border: 3px solid rgb(194, 225, 154);  margin-top: 10px;margin-bottom:10px;word-break:break-all">
+                          <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                            <tbody>
+                              <tr>
+                                <td width="10%">
+                                  <img class="successicon" src="https://ayzop-zgpvh.maillist-manage.net/images/challangeiconenable.jpg" align="absmiddle">
+                                </td>
+                                <td>
+                                  <span id="signupSuccessMsg" style="color: rgb(73, 140, 132); font-family: sans-serif; font-size: 14px;word-break:break-word">&nbsp;&nbsp;Thank you for Signing Up</span>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      <form method="POST" id="zcampaignOptinForm" style="margin: 0px; width: 100%; text-align: center" action="https://ayzop-zgpvh.maillist-manage.net/weboptin.zc" target="_zcSignup">
+                        <div style="background-color: rgb(255, 235, 232); padding: 10px; color: rgb(210, 0, 0); font-size: 11px; margin: 20px 10px 0px; border: 1px solid rgb(255, 217, 211); opacity: 1; display: none" id="errorMsgDiv">Please correct the marked field(s) below.</div>
+                        <div style="position: relative; display: inline-block; flex-grow:1;" class="SIGNUP_FLD">
+                          <div style="padding: 5px 0px; color: rgb(85, 85, 85); font-family: Arial; display: block; text-align: left; font-size: 17px">Email</div>
+                          <input type="text" style="font-size: 12px; border-width: 1px; border-color: rgb(214, 205, 205); border-style: solid; width: 100%; height: 100%; z-index: 4; outline: none; padding: 5px 10px; color: rgb(113, 106, 106); text-align: left; font-family: Arial; border-radius: 4px; background-color: rgb(255, 255, 255); box-sizing: border-box; padding:10px;" changeitem="SIGNUP_FORM_FIELD" name="CONTACT_EMAIL" id="EMBED_FORM_EMAIL_LABEL">
+                        </div>
+                        <div style="position: relative; display: inline-block; flex-grow:1;" class="SIGNUP_FLD">
+                          <div style="padding: 5px 0px; color: rgb(85, 85, 85); font-family: Arial; display: block; text-align: left; font-size: 17px">Name</div>
+                          <input type="text" style="font-size: 12px; border-width: 1px; border-color: rgb(214, 205, 205); border-style: solid; width: 100%; height: 100%; z-index: 4; outline: none; padding: 5px 10px; color: rgb(113, 106, 106); text-align: left; font-family: Arial; border-radius: 4px; background-color: rgb(255, 255, 255); box-sizing: border-box; padding:10px;" changeitem="SIGNUP_FORM_FIELD" name="LASTNAME" id="EMBED_FORM_NAME_LABEL">
+                        </div>
+                        <div style="position: relative; display: inline-block;" class="SIGNUP_FLD">
+                          <input type="button" style="text-align: center; width: 100%; height: 100%; z-index: 5; border: 1px none rgb(0, 0, 0); color: rgb(255, 255, 255); cursor: pointer; outline: none; font-size: 14px; background-color: rgb(0, 72, 147); border-radius: 4px; padding: 10px 20px; font-weight: 500;" name="SIGNUP_SUBMIT_BUTTON" id="zcWebOptin" value="Subscribe">
+                        </div>
+                        <input type="hidden" id="fieldBorder" value="">
+                        <input type="hidden" id="submitType" name="submitType" value="optinCustomView">
+                        <input type="hidden" id="emailReportId" name="emailReportId" value="">
+                        <input type="hidden" id="formType" name="formType" value="QuickForm">
+                        <input type="hidden" name="zx" id="cmpZuid" value="12f92098f">
+                        <input type="hidden" name="zcvers" value="3.0">
+                        <input type="hidden" name="oldListIds" id="allCheckedListIds" value="">
+                        <input type="hidden" id="mode" name="mode" value="OptinCreateView">
+                        <input type="hidden" id="zcld" name="zcld" value="1d306d931da37003">
+                        <input type="hidden" id="zctd" name="zctd" value="1d306d931da36411">
+                        <input type="hidden" id="document_domain" value="">
+                        <input type="hidden" id="zc_Url" value="ayzop-zgpvh.maillist-manage.net">
+                        <input type="hidden" id="new_optin_response_in" value="0">
+                        <input type="hidden" id="duplicate_optin_response_in" value="0">
+                        <input type="hidden" name="zc_trackCode" id="zc_trackCode" value="ZCFORMVIEW">
+                        <input type="hidden" id="zc_formIx" name="zc_formIx" value="3zd890aa9417f22eda932c43a5d7be9fc799b7d5f45cdced63fb83d15e1ac87fb3">
+                        <input type="hidden" id="viewFrom" value="URL_ACTION">
+                        <span style="display: none" id="dt_CONTACT_EMAIL">1,true,6,Contact Email,2</span>
+                        <span style="display: none" id="dt_FIRSTNAME">1,false,1,First Name,2</span>
+                        <span style="display: none" id="dt_LASTNAME">1,false,1,Last Name,2</span>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <img src="https://ayzop-zgpvh.maillist-manage.net/images/spacer.gif" id="refImage" onload="referenceSetter(this)" style="display:none;">
+              </div>
+              <input type="hidden" id="signupFormType" value="QuickForm_Horizontal">
+              <div id="zcOptinOverLay" oncontextmenu="return false" style="display:none;text-align: center; background-color: rgb(0, 0, 0); opacity: 0.5; z-index: 100; position: fixed; width: 100%; top: 0px; left: 0px; height: 988px;"></div>
+              <div id="zcOptinSuccessPopup" style="display:none;z-index: 9999;width: 800px; height: 40%;top: 84px;position: fixed; left: 26%;background-color: #FFFFFF;border-color: #E6E6E6; border-style: solid; border-width: 1px;  box-shadow: 0 1px 10px #424242;padding: 35px;">
+                <span style="position: absolute;top: -16px;right:-14px;z-index:99999;cursor: pointer;" id="closeSuccess">
+                  <img src="https://ayzop-zgpvh.maillist-manage.net/images/videoclose.png">
+                </span>
+                <div id="zcOptinSuccessPanel"></div>
+              </div>
+              <!--Zoho Campaigns Web-Optin Form Ends Here-->
+            </div>
+          </div>
+        </div>
+        <hr style="margin:40px 0px 40px 0px;">
+        <div class="c-prefooter footer sitemap" style="padding:0 0 0 0; margin-bottom:40px;">
+          <div class="footer-sitemap">
+              {# Products #}
+              <div class="sitemap-column">
+                <div class="c-links">
+                  <div class="c-content-title-1 c-title">
+                    <h3 class="c-left c-font"><a href="/products" style="color:#fff;">Products</a></h3>
+                  </div>
+                  <ul class="c-nav" role="list">
+                    <li><a href="/products/new">New Products</a></li>
+                    <li><a href="/smart-save">Smart Save</a></li>
+                    <li><a href="/category/sample-collection-and-preservation">Collection &amp; Preservation</a></li>
+                    <li><a href="/category/purification-and-isolation">Purification &amp; Isolation</a></li>
+                    <li><a href="/category/analysis">Analysis</a></li>
+                    <li><a href="/category/lab-components">Lab Components</a></li>
+                  </ul>
+                </div>
+              </div>
+              {# Services #}
+              <div class="sitemap-column">
+                <div class="c-links">
+                  <div class="c-content-title-1 c-title">
+                    <h3 class="c-left c-font"><a href="/services" style="color:#fff;">Services</a></h3>
+                  </div>
+                  <ul class="c-nav" role="list">
+                    <li><a href="/services/next-generation-sequencing">Next Generation Sequencing</a></li>
+                    <li><a href="/services/dnarnaexosome-isolation">DNA/RNA/Exosome Isolation</a></li>
+                    <li><a href="/services/contract-manufacturing-oem">Contract Manufacturing &amp; OEM</a></li>
+                  </ul>
+                </div>
+              </div>
+              {# Workflows #}
+              {# <div class="sitemap-column">
+                <div class="c-links">
+                  <div class="c-content-title-1 c-title">
+                    <h3 class="c-left c-font"><a href="/resources/complete-workflows">Workflows</a></h3>
+                  </div>
+                  <ul class="c-nav" role="list">
+                    <li><a href="/liquidbiopsy/plasmaserum">Plasma/Serum</a></li>
+                    <li><a href="/saliva">Saliva</a></li>
+                    <li><a href="/liquidbiopsy/urine">Urine</a></li>
+                    <li><a href="/Microbiome/stool">Stool</a></li>
+                    <li><a href="/covid-19/workflow">COVID-19</a></li>
+                  </ul>
+                </div>
+              </div> #}
+              {# Company #}
+              <div class="sitemap-column">
+                <div class="c-links">
+                  <div class="c-content-title-1 c-title">
+                    <h3 class="c-left c-font"><a href="/company" style="color:#fff;">Company</a></h3>
+                  </div>
+                  <ul class="c-nav" role="list">
+                    <li><a href="/about">About Norgen</a></li>
+                    <li><a href="/resources/press-releases">Press Releases</a></li>
+                    <li><a href="/events">Events</a></li>
+                    <li><a href="/careers">Careers</a></li>
+                    <li><a href="/resources/distributors">Distributors</a></li>
+                    <li><a href="/contact">Contact Us</a></li>
+                  </ul>
+                </div>
+              </div>
+              {# Resources #}
+              <div class="sitemap-column">
+                <div class="c-links">
+                  <div class="c-content-title-1 c-title">
+                    <h3 class="c-left c-font"><a href="/resources" style="color:#fff;">Resources</a></h3>
+                  </div>
+                  <ul class="c-nav" role="list">
+                    <li><a href="/norblog">Norblog</a></li>
+                    <li><a href="/resources/knowledge-hub/application-notes">Application Notes</a></li>
+                    <li><a href="/resources/knowledge-hub/video-hub">Videos</a></li>
+                    <li><a href="/resources/patents">Patents</a></li>
+                  </ul>
+                </div>
+              </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <div class="row">
+            <div class="col-sm-6">
+              <div style="font-size:12px;color:#fff;">
+                Copyright &copy; 2025 Norgen Biotek Corp. All Rights Reserved.
+              </div>
+            </div>
+            <div class="col-sm-6" style="text-align:right;font-size:12px;color:#fff;">
+              <a href="content/privacy-policy" style="text-decoration:underline;">Privacy Policy</a> | <a href="/content/purchase-and-order-policy" style="text-decoration:underline;">Purchase and Order Policy</a> | <a href="/content/terms-service" style="text-decoration:underline;">Terms of Service</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>

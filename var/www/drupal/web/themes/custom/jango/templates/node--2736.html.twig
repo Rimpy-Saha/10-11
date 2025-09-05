@@ -1,0 +1,1433 @@
+<style>
+.dark-norgenblue{
+	background:#043364;
+	color:white;
+}
+.dark-norgenblue h3{
+	color:white;
+	font-size: 25px;
+    line-height: 20px;
+}
+.shipping p{
+	margin-top:30px;
+	margin-bottom:0;
+}
+.norgenblue{
+	background:#004893;
+	color:white;
+}
+.norgenblue h3{
+	color:white;
+}
+.light-norgenblue{
+	background:#155FAC;
+	color:white;
+}
+.light-norgenblue h3{
+	color:white;
+}
+.height_shipping{
+	animation: height-shipping 1s forwards;
+}
+.shipping.dark-norgenblue{
+	height: 0;
+    overflow: hidden;
+	padding:20px;
+	animation-delay:1s;
+	opacity:0;
+	text-align:center;
+	align-content: center;
+}
+.height_original{
+	animation: height-original 1s forwards;
+}
+.original.norgenblue{
+	height: 0;
+    overflow: hidden;
+	padding:20px;
+	opacity:0;
+	align-content: center;
+}
+.original h3{
+	font-size: 25px;
+    line-height: 20px;
+    text-align:center;
+}
+.height_new{
+	animation: height-new 1s forwards;
+}
+.new{
+	height: 0;
+    overflow: hidden;
+	padding:20px;
+	animation-delay:2s;
+	opacity:0;
+	align-content: end;
+	text-align:center;
+
+}
+.new h3{
+	font-size: 25px;
+    line-height: 28px;
+}
+.height_discount{
+	animation: height-discount 1s forwards;
+}
+.discount{
+	height: 0;
+    overflow: hidden;
+	padding:10px 20px;
+	animation-delay:3s;
+	position: absolute;
+	opacity:0;
+	z-index:2;
+	text-align:center;
+	border-bottom: 4px dashed;
+	width: -webkit-fill-available;
+}
+.second-graph{
+	grid-area:two;
+	width:250px;
+	position:relative;
+}
+.first-graph{
+	grid-area:one;
+	width:250px;
+}
+.third-div{
+	grid-area:three;
+}
+.third-div h3{
+	font-size:38px;
+}
+.first-screen{
+	display:grid;
+	grid-template-areas: 'one three three'
+						 'one two four';
+	column-gap: 43px;
+    align-items: end;
+    justify-items: stretch;
+    justify-content: start;
+    margin:80px auto;
+    height:614px;
+}
+.white_animation{
+		animation: myAnim 2s ease 0s 1 normal forwards;
+}
+.white-bg{
+	grid-area:four;
+	background: #8f0e0e;
+    padding: 20px;
+    text-align: center;
+    color: white;
+    	opacity:0;
+	animation-delay:5s;
+}
+.white-bg h2{
+	font-size:30px;
+	color:white;
+}
+.white-bg h1{
+	font-size:60px;
+	color:white;
+	line-height:1;
+}
+.red-div{
+	background:#E9D9D9;
+	padding:10px 50px;
+	box-shadow: 12px 12px 2px 1px #CFB3B3;
+	margin:20px 0;
+
+}
+.red-div h3{
+	font-size:20px !important;
+}
+.arrow_animation{
+	 animation: opacity 2s ease 0s normal forwards ;
+}
+.svg-arrow{
+	width: 300px;
+    margin:30px 0;
+   opacity:0;
+    animation-delay:7s;
+    cursor: pointer;
+}
+
+@keyframes height-shipping{
+	from{
+		height:0;
+		opacity:0;
+	}
+	to{
+		height:360px;
+		opacity:1;
+	}
+}
+@keyframes height-original{
+	from{
+		height:0;
+		opacity:0;
+	}
+	to{
+		height:240px;
+		opacity:1;
+	}
+}
+
+
+@keyframes height-discount{
+	from{
+		height:0;
+		opacity:0;
+	}
+	to{
+		height:100px;
+		opacity:1;
+	}
+}
+
+@keyframes height-new{
+	from{
+		height:0;
+		opacity:0;
+	}
+	to{
+		height:240px;
+		opacity:1;
+	}
+}
+
+@keyframes myAnim {
+	0%{
+		transform: rotate(0deg);
+		transform-origin: 50% 50%;
+		opacity:0;
+	}
+
+	10% {
+		transform: rotate(8deg);
+	}
+
+	20%,
+	40%,
+	60% {
+		transform: rotate(-10deg);
+	}
+
+	30%,
+	50%,
+	70% {
+		transform: rotate(10deg);
+	}
+
+	80% {
+		transform: rotate(-8deg);
+	}
+
+	90% {
+		transform: rotate(8deg);
+	}
+	100%{
+		transform: rotate(0deg);
+		transform-origin: 50% 50%;
+		opacity:1;
+	}
+}
+@keyframes shake-arrow {
+	0% {
+		animation-timing-function: ease-in;
+		opacity: 1;
+		transform: translateX(-48px);
+	}
+
+	24% {
+		opacity: 1;
+	}
+
+	40% {
+		animation-timing-function: ease-in;
+		transform: translateX(-26px);
+	}
+
+	65% {
+		animation-timing-function: ease-in;
+		transform: translateX(-13px);
+	}
+
+	82% {
+		animation-timing-function: ease-in;
+		transform: translateX(-6.5px);
+	}
+
+	93% {
+		animation-timing-function: ease-in;
+		transform: translateX(-4px);
+	}
+
+	25%,
+	55%,
+	75%,
+	87%,
+	98% {
+		animation-timing-function: ease-out;
+		transform: translateX(0px);
+	}
+
+	100% {
+		animation-timing-function: ease-out;
+		opacity: 1;
+		transform: translateX(0px);
+	}
+}
+@keyframes height-shipping-collapsed{
+	0%{
+		height:100%;
+		opacity:1;
+	}
+	100%{
+	height:0;
+	opacity:0;
+	}
+}
+@keyframes height-original-collapsed{
+	0%{
+		height:100%;
+		opacity:1;
+	}
+	100%{
+	height:0;
+	opacity:0;
+	}
+}
+@keyframes height-new-collapsed{
+	0%{
+		height:100%;
+		opacity:1;
+	}
+	100%{
+	height:0;
+	opacity:0;
+	}
+}
+@keyframes height-discount-collapsed{
+	0%{
+		height:100%;
+		opacity:1;
+	}
+	100%{
+	height:0;
+	opacity:0;
+	}
+}
+.shipping-collapsed{
+	animation: height-shipping-collapsed 1s forwards;
+}
+.original-collapsed{
+	animation: height-original-collapsed 1s forwards;
+	animation-delay:1s;
+}
+.new-collapsed{
+	animation: height-new-collapsed 1s forwards;
+	animation-delay:2s;
+}
+.discount-collapsed{
+	animation: height-discount-collapsed 1s forwards;
+	animation-delay:3s;
+}
+.onepoint, .twopoint, .threepoint{
+	padding: 10px 20px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+}
+.second-animation{
+	animation:opacity 1s forwards;
+}
+
+.first-arrow{
+	animation-delay:1s;
+}
+.second-point{
+	animation-delay:2s;
+	width: -webkit-fill-available;
+}
+.second-arrow{
+	animation-delay:3s;
+}
+.third-point{
+	animation-delay:4s;
+	width: -webkit-fill-available;
+}
+.light-light-norgenblue{
+	background: #5586BB;
+    color: white;
+}
+.light-light-norgenblue h3{
+    color: white;
+}
+.fourth-div{
+	grid-area:fourth;
+}
+.second-screen{
+	display:grid;
+	gap:5px;
+	align-items: center;
+	margin:30px 0;
+	    justify-items: center;
+}
+#first-arrow{
+	width:100px;
+}
+#second-arrow{
+	width:100px;
+}
+
+
+.fourth-div h3{
+	font-size: 37px;
+	line-height:40px;
+}
+.container:before{
+	display:none;
+}
+.red-div ol{
+	display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap:20px;
+}
+.benefit-grid{
+	display:grid;
+	grid-template-columns:1fr 1fr 1fr;
+	gap:20px;
+	margin:75px 0;
+}
+.benefit-grid div{
+    color: white;
+    border-radius: 12px;
+    display:flex;
+    justify-content:center;
+    padding:10px;
+    gap:15px;
+    cursor: pointer;
+}
+.benefit-grid div h4{
+	color:white;
+	font-size:24px;
+}
+
+.promotion-div h4{
+	font-size: 38px;
+}
+.red-div h4{
+	font-size:20px;
+}
+.red-div p{
+	font-size:14px;
+}
+#products-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: end;
+    gap: 20px;
+    margin: 75px 0 0;
+}
+.product-div{
+	display:flex;
+}
+.product-div a{
+	display: flex;
+    flex-grow: 1;
+    justify-content: space-between;
+    flex-direction: column;
+}
+.header{
+	display:flex;
+	gap: 80px;
+    align-items: center;
+    margin:50px auto;
+}
+.header img{
+	width:150px;
+}
+.caption{
+	letter-spacing;
+	font-size: 16px;
+    letter-spacing: 3px;
+    margin-bottom:0;
+    color: #be1e2d;
+}
+.header h1{
+	font-size: 115px;
+	letter-spacing: 5px;
+    line-height: 75px;
+    font-weight: 800;
+    margin-top:0;
+}
+.header h2{
+	font-size: 55px;
+    margin-top: 0;
+}
+.header-container hr{
+	    border-width: 10px;
+    width: 10%;
+    margin: 0;
+    border-color: #be1e2d;
+}
+.red-div ol li img{
+	width:40px;
+	margin-right:10px;
+	filter: brightness(0.5);
+}
+.benefit-grid img{
+	width:60px;
+}
+.promotion-div h3{
+	font-size: 25px;
+    font-weight: 900;
+    letter-spacing: 4px;
+}
+.promotion-div{
+	text-align:center;
+}
+.promotion-div hr{
+	width:5%;
+	border:3px solid #8f0e0e;
+}
+.second-screen img{
+	width:75px;
+}
+.contact-container {
+    background-color: #0048970d;
+    padding: 50px 0;
+    margin: 100px 0 0;
+}
+.contact-container h2 {
+    font-size: 38px;
+    font-weight: 700;
+}
+
+@keyframes opacity{
+	0%{
+	 	opacity:0;
+	}
+	100%{
+		opacity:1;
+	}
+}
+
+@keyframes circle{
+	0%{
+	stroke-dasharray:135;
+	opacity:0;
+	}
+	5%{
+	opacity:1;
+	}
+	100%{
+	stroke-dasharray:1000;
+	opacity:1;
+	}
+}
+.red-line{
+	animation:circle 5s forwards;
+	animation-delay:4s;
+	opacity:0;
+}
+.red-line2{
+	animation:circle 5s forwards;
+	animation-delay:5s;
+	opacity:0;
+}
+.red-line3{
+	animation:circle 5s forwards;
+	animation-delay:6s;
+	opacity:0;
+}
+.red-line4{
+	animation:circle 5s forwards;
+	opacity:0;
+}
+.remove-div{
+	display:none;
+	gap:10px;
+	justify-content: flex-end;
+    align-items: center;
+    cursor:pointer;
+}
+.remove-div img{
+	width:40px;
+}
+.remove-div p{
+	margin-bottom:0px;
+}
+#cost-reduced-section{
+	padding:50px 0;
+}
+
+
+.mob-shipping-svg{
+	display:none;
+}
+@media (max-width: 992px) {
+	.first-screen {
+		grid-template-areas:'three three three'
+							'one two four';
+		height:auto;
+	}
+	.second-screen{
+		grid-template-columns:auto;	
+	}
+
+}
+@media (max-width: 992px) {
+
+	.header h1{
+		font-size:90px;
+	}
+	.header h2{
+	font-size:40px;
+	}
+	.header img{
+	display:none;
+	}
+	.benefit-grid{
+		grid-template-columns:auto;
+	}
+	#products-grid{
+	grid-template-columns:auto;
+	}
+
+}
+@media (max-width: 650px) {
+	.header h1{
+		font-size:50px;
+		overflow-wrap: anywhere;
+	}
+	.header h2{
+		font-size:30px;
+		overflow-wrap: anywhere;
+	}
+}
+@media (max-width: 600px) {
+.first-screen {
+		grid-template-areas:'three three three'
+							'one one one'
+							'two two two'
+							'four four four';
+		height:auto;
+		gap:10px;
+	}
+	.first-graph{
+		width:auto;
+	}
+	.second-graph{
+	width:auto;
+	}
+	.first-point, .twopoint, .threepoint {
+	width:auto;
+	}
+	.desktop-shipping-svg{
+		display:none;
+	}
+	.mob-shipping-svg{
+		display:block;
+	}
+}
+.bordered{
+	border:5px solid black;
+}
+.fourth-div h4{
+	font-size:23px;
+	letter-spacing:3px;
+	font-weight:300;
+	text-align:Center;
+}
+.video-text h3{
+	    font-size: 38px;
+}
+.video-grid{
+	display:flex;
+	align-items: center;
+    justify-content: center;
+    margin: 0px auto 100px;
+    flex-direction: row;
+    gap:5%;
+}
+.video{
+	width:30%;
+	/*border:5px solid #8f0e0e;*/
+}
+.video video{
+	width: -webkit-fill-available;
+}
+.video-text hr{
+	width: 13%;
+    border-top: 6px solid #8f0e0e;
+    margin: 0;
+}
+</style>
+
+<div class="container header-container">
+	<div class="header">
+	<div>
+		<p class="caption">NEW PRODUCT LAUNCH</p>
+		<h2>Taqman PCR Detection Kits,
+		<h1>Lyophilized!</h1>
+	</div>
+	<div>
+		<img src="/sites/default/files/images/lyophilization/new-circle.svg">
+	</div>
+	</div>
+	<hr>
+</div>
+<div class="container first-screen">
+	<div class="first-graph">
+		<div class="dark-norgenblue shipping">
+			<h3>Shipping Cost</h3>
+			
+			<p>Shipping with dry ice can increase your purchase cost by</p>
+			<div class="desktop-shipping-svg">
+				<?xml version="1.0" encoding="utf-8"?>
+				<!-- Generator: Adobe Illustrator 28.7.1, SVG Export Plug-In . SVG Version: 9.03 Build 54978)  -->
+				<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 				viewBox="0 0 91.3 80.1" style="enable-background:new 0 0 91.3 80.1;" xml:space="preserve">
+					<style type="text/css">
+						.st01{fill:#FFFFFF;}
+						.st23{font-size:18px;}
+						.st45{font-size:7.0451px;}
+						.st56{fill:none;stroke:#8f0e0e;stroke-miterlimit:10;stroke-width: 3px;}
+					</style>
+					<text transform="matrix(1 0 0 1 21.8948 36.5072)" class="st01 st12 st23">100%</text>
+					<text transform="matrix(0.9291 0 0 1 40.1074 44.9771)" class="st01 st34 st45">to</text>
+					<text transform="matrix(1 0 0 1 19.7156 62.2901)" class="st01 st12 st23">300%</text>
+					<path class="st56" d="M79.8,15.9c-13.1-2-26.4-2.7-39.7-2.3c-7.1,0.2-14.2,0.9-20.8,3.5S6.9,24.8,4.7,31.5C1.3,41.6,7,52.8,14.7,60.2
+						c3.3,3.2,7.1,6,11.4,7.9c4.3,1.9,9,2.8,13.6,3.6c10.3,1.8,21.8,2.9,30.5-2.8c2.8-1.9,5.2-4.3,7.4-6.9c6.5-7.5,11.9-16.4,12.8-26.2
+						c0.3-3.1,0-6.4-1.4-9.1c-0.9-1.7-2.2-3.2-3.6-4.6C75.8,12.4,61.9,7.5,48.4,8.9"/>
+				</svg>
+			</div>
+			<div class="mob-shipping-svg">
+				<h3>100% to 300%</h3>
+			</div>
+		</div>
+		<div class="norgenblue original">
+			<h3>Original Kit</h3>
+		</div>
+	</div>
+	<div class="second-graph">
+		<div class="light-norgenblue discount">
+			<!--<p>Another 10% Off Limited Time Offer*</p>-->
+			<div class="desktop-shipping-svg">
+				<?xml version="1.0" encoding="utf-8"?>
+				<!-- Generator: Adobe Illustrator 28.7.1, SVG Export Plug-In . SVG Version: 9.03 Build 54978)  -->
+				<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 				viewBox="0 0 84.5 33.9" style="enable-background:new 0 0 84.5 33.9;" xml:space="preserve">
+					<style type="text/css">
+						.st122{font-size:7px;fill:white;}
+						.st233{fill:none;stroke:#BE1E2D;stroke-miterlimit:10;stroke-width:2px;}
+					</style>
+					<text transform="matrix(0.8463 0 0 1 9.9821 15.6248)"><tspan x="0" y="0" class="st011 st122">Another 10% Off Limited </tspan><tspan x="21.5" y="7.7" class="st011 st122">Time Offer*</tspan></text>
+					<path class="st233" d="M7.2,13.9c-1,3.1,0.5,6.6,3,8.7s5.7,3.1,8.9,3.9c14.6,3.6,30.2,3.6,44.8-0.1c5.2-1.3,10.4-3.2,14.6-6.5
+						c2-1.7,3.9-4,3.8-6.6c-0.1-2.8-2.4-4.9-4.8-6.3c-4.7-2.7-10.2-3.6-15.6-4.2C44.3,1.2,26.4,3.4,9.9,9.4c-3.8,1.4-8.4,4.2-7.6,8.2
+						c0.5,2.5,2.8,4.1,5.1,5.3c14.4,7.7,31.5,10.3,47.6,7.1"/>
+				</svg>
+			</div>
+			<div class="mob-shipping-svg">
+				<h3>Another 10% Off* Limited Time Offer</h3>
+			</div>
+		</div>
+		<div class="norgenblue new">
+			<h3>Lyophilized PCR Kit</h3>
+		</div>
+	</div>
+	<div class="third-div">
+		<h3>Let's talk about price first</h3>
+		<div class="red-div"> 
+			<h3>Old Price: Kit Price + <span style="color:#8f0e0e;font-weight:800;">Dry Ice </span>Shipping Cost</h3>
+			<h3>
+			<h2>New Price: Kit Price + <span style="color:green;font-weight:800;">Ambient Temperature</span> Shipping Cost</h2>
+		</div>
+		<div id="testStatus" onClick="next()">
+			<?xml version="1.0" encoding="utf-8"?>
+			<!-- Generator: Adobe Illustrator 28.7.1, SVG Export Plug-In . SVG Version: 9.03 Build 54978)  -->
+				<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 				viewBox="0 0 150.9 43.7" style="enable-background:new 0 0 150.9 43.7;" xml:space="preserve" class="svg-arrow">
+					<style type="text/css">
+						.st0{stroke:#000000;stroke-miterlimit:10;}
+						.st1{fill:#FFFFFF;}
+						.st2{font-family:revert-layer;}
+						.st3{font-size:12px;}
+					</style>
+					<polygon class="st0" points="119.6,36.8 8.7,36.8 8.7,6.5 119.6,6.5 141.5,21.7 "/>
+					<text transform="matrix(1 0 0 1 18.2562 25.8342)" class="st1 st2 st3">Find Out How?</text>
+				</svg>
+		</div>
+	</div>
+	<div class="white-bg">
+		<h2>New Kit Saves you Up to</h2>
+		<div>
+		<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 28.7.1, SVG Export Plug-In . SVG Version: 9.03 Build 54978)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 101.1 32.1" style="enable-background:new 0 0 101.1 32.1;" xml:space="preserve">
+<style type="text/css">
+	.st0111{fill:#FFFFFF;}
+	.st2333{font-size:14px;}
+	.st3444{fill:none;stroke:white;stroke-miterlimit:10;stroke-width:2px;}
+</style>
+<text transform="matrix(1 0 0 1 22.3102 20.7309)" class="st0111 st1222 st2333">310% off*</text>
+<path class="st3444" d="M13.6,23.2c24.5,5.8,51.1,9.4,75,1.9c4.2-1.3,8.7-3.4,9.7-7.1c0.7-2.6-0.7-5.4-2.9-7.3s-5.2-3-8.2-3.9
+	c-7.9-2.2-16.3-2.8-24.6-3C47.7,3.4,32.7,4.1,18,5.8c-5.6,0.7-12.1,2-14.5,6.4C3,13,2.7,13.9,3,14.8c0.3,1.1,1.3,1.8,2.3,2.5
+	c13.5,9.5,32.4,10.1,49.9,10"/>
+</svg>
+
+		</div>
+		<!--<h1>310% Off*</h1>-->
+	</div>
+</div>
+
+<section id="cost-reduced-section">
+	<div class="container">
+		
+		<div class="video-grid">
+		<div class="container ">
+			<div class="fourth-div">
+			<h3>Cut the Cold Chain & Costs: Embrace Eco-Friendly Lyophilization</h3>
+			<!--<div class="red-div">
+				<h3>Lyophilized components provide higher stability across temperature ranges, eliminating the need for cold-chain shipping, leading to reduced shipping costs.</h3>
+			</div>-->
+		</div>
+			<div class="second-screen">
+			<div class="first-point">
+				<div class="norgenblue onepoint">
+					<img src="/sites/default/files/images/lyophilization/temperature.svg">
+					<h3>Lyophilized components provide higher stability across temperature ranges</h3>
+				</div>
+			</div>
+			<div class="first-arrow">
+				<img src="/sites/default/files/images/lyophilization/down-arrow.png" id="second-arrow">
+			</div>
+			<div class="second-point">
+				<div class="light-norgenblue twopoint">
+					<img src="/sites/default/files/images/lyophilization/cold-chain shipping_.svg">
+					<h3>No need for cold-chain shipping</h3>
+				</div>
+			</div>
+			<div class="second-arrow">
+				<img src="/sites/default/files/images/lyophilization/down-arrow.png" id="second-arrow">
+			</div>
+			<div class="third-point">
+				<div class="light-light-norgenblue threepoint">
+					<img src="/sites/default/files/images/lyophilization/Reduced cost.svg">
+					<h3>Reduced shipping cost</h3>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class="video">
+			<video controls="" id="vid" muted>
+        		<source src="/sites/default/files/images/lyophilization/lyophilization_video.mp4" type="video/mp4">
+        		<source src="/sites/default/files/images/lyophilization/lyophilization_video.mp4" type="video/ogg">
+    		</video>
+    	</div>
+
+    	</div>
+	</div>
+</section>
+
+<!--<div class="hidden2"></div>-->
+
+
+<section id="additional-section">
+	<div class="container">
+		<div class="fourth-div">
+			<h3>Advanced solutions targeting a wide variety of pathogens</h3>
+			<h4>Human, Food, and Plant Sources</h4>
+		</div>
+
+	</div>
+</section>
+
+<section id="products-title-section">
+	<div class="container promo-div">
+		
+		<div class="promotion-div">
+			<hr>
+			<h3>10% Off* All New Lyophilized Taqman PCR Detection kits</h3>
+					<div class="benefit-grid">
+			<div class="norgenblue benefit-div" id="virus" onClick="select_products(this.id)">
+				<img src="/sites/default/files/images/lyophilization/Virus.svg">
+				<h4>Virus</h4>
+			</div>
+			<div class="light-norgenblue benefit-div" id="yeast" onClick="select_products(this.id)">
+				<img src="/sites/default/files/images/lyophilization/Yeast.svg">
+				<h4>Yeast</h4>
+			</div>
+			<div class="light-light-norgenblue benefit-div" id="fungi" onClick="select_products(this.id)">
+				<img src="/sites/default/files/images/lyophilization/fungi_white.png">
+				<h4>Fungi</h4>
+			</div>
+			<div class="light-light-norgenblue benefit-div" id="bacteria" onClick="select_products(this.id)">
+				<img src="/sites/default/files/images/lyophilization/Bacteria.svg">
+				<h4>Bacteria</h4>
+			</div>
+			<div class="light-norgenblue benefit-div" id="protozoa" onClick="select_products(this.id)">
+				<img src="/sites/default/files/images/lyophilization/Protozoa.svg">
+				<h4>Protozoa</h4>
+			</div>
+			<div class="norgenblue benefit-div" id="parasite" onClick="select_products(this.id)">
+				<img src="/sites/default/files/images/lyophilization/Parasite.svg">
+				<h4>Parasite</h4>
+			</div>
+		</div>
+			<!--<div class="red-div">
+				<p>*Disclaimer: This promotion is available only to customers in Canada or the U.S. Discount is not available to Norgen Biotek distributors. Offer cannot be combined with other existing promotions. Offer valid until October 31st, 2024.</p>
+			</div>-->
+		</div>
+	</div>
+</section>
+
+
+<section>
+	<div class="container">
+		<div class="remove-div">
+			<img src="/sites/default/files/images/lyophilization/minus.png" onClick="remove_filter()">
+			<p onClick="remove_filter()">Remove All Filters</p>
+		</div>
+		<div>
+			<div id="products-grid">
+                <div class="product-div" category="bacteria" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/chlamydianeisseria-gonorrhoeae-taqman-pcr-lyophilized-kit?v=1553" target="_blank">
+                    <div>
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM42550L.jpg?itok=vuORdjCU">
+                    </div>
+                    <div>
+                    <h4>Chlamydia/Neisseria gonorrhoeae TaqMan PCR Lyophilized Kit</h4>
+                    <p>SKU TM42550L</p>
+                    </div>
+					{% if not restricted_country %}
+                    <div>
+                    <form action="" method="post" id="add-to-cart-variation-1553" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1553" siq_id="autopick_8971">
+                      <input type="hidden" id="variation_id" name="variation_id" value="1553">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1553" name="op" value="Add to cart">
+                    </form>
+                    </div>
+					{% endif %}
+                    </a>
+                </div>
+                <div class="product-div" category="bacteria" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/chlamydianeisseria-gonorrhoeae-taqman-pcr-lyophilized-kit?v=1554" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM42510L.jpg?itok=O98hYlq2">
+                    <h4>Chlamydia/Neisseria gonorrhoeae TaqMan PCR Lyophilized Kit(Probe/Primer and Control Set)</h4>
+                    <p>SKU TM42510L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1553" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1553" siq_id="autopick_8546">
+                      <input type="hidden" id="variation_id" name="variation_id" value="1554">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1554" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+                <div class="product-div" category="bacteria" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/legionella-sp-taqman-pcr-lyophilized-kits?v=1555" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM64450L.jpg?itok=nwzohTGJ">
+                    <h4>Legionella sp. TaqMan PCR Lyophilized Kit</h4>
+                    <p>SKU TM64450L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1555" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1555" siq_id="autopick_7749">
+                      <input type="hidden" id="variation_id" name="variation_id" value="1555">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1555" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+                <div class="product-div" category="bacteria" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/legionella-sp-taqman-pcr-lyophilized-kits?v=1556" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM64410L.jpg?itok=vgV07tRz">
+                    <h4>Legionella sp. TaqMan PCR Lyophilized Kit (Probe/Primer and Control Set)</h4>
+                    <p>SKU TM64410L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1556" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1556" siq_id="autopick_7749">
+                      <input type="hidden" id="variation_id" name="variation_id" value="1556">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1556" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+                <div class="product-div" category="virus" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/epstein-barr-virus-ebv-taqman-pcr-lyophilized-kits?v=1551" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM41050L.jpg?itok=FY38cKRz">
+                    <h4>Epstein-Barr Virus (EBV) TaqMan PCR Lyophilized Kit</h4>
+                    <p>SKU TM41050L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1551" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1551" siq_id="autopick_309">
+                      <input type="hidden" id="variation_id" name="variation_id" value="1551">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1551" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+
+                <div class="product-div" category="bacteria" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/vibrio-cholerae-taqman-pcr-lyophilized-kits?v=1549" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM38550L.jpg?itok=amRl0zTK">
+                    <h4>Vibrio cholerae TaqMan PCR Lyophilized Kit</h4>
+                    <p>SKU TM38550L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1549" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1549" siq_id="autopick_4215">
+                      <input type="hidden" id="variation_id" name="variation_id" value="1549">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1549" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+                <div class="product-div" category="bacteria" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/vibrio-cholerae-taqman-pcr-lyophilized-kits?v=1550" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM38510L.jpg?itok=MR9XiP-m">
+                    <h4>Vibrio cholerae TaqMan PCR Lyophilized Kit (Probe/Primer and Control Set)</h4>
+                    <p>SKU TM38510L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1550" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1550" siq_id="autopick_4215">
+                      <input type="hidden" id="variation_id" name="variation_id" value="1550">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1550" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+                <div class="product-div" category="bacteria" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/erwinia-amylovora-taqman-pcr-lyophilized-kits?v=1547" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM35150.jpg?itok=s99R_Boy">
+                    <h4>Erwinia amylovora TaqMan PCR Lyophilized Kit</h4>
+                    <p>SKU TM35150L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1547" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1547" siq_id="autopick_8136">
+                      <input type="hidden" id="variation_id" name="variation_id" value="1547">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1547" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+                <div class="product-div" category="bacteria" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/erwinia-amylovora-taqman-pcr-lyophilized-kits?v=1548" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM35110L.jpg?itok=cEDyo6Py">
+                    <h4>Erwinia amylovora TaqMan PCR Lyophilized Kit</h4>
+                    <p>SKU TM35110L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1548" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1548" siq_id="autopick_8136">
+                      <input type="hidden" id="variation_id" name="variation_id" value="1548">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1548" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+                <div class="product-div" category="fungi" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/candida-albicans-taqman-pcr-lyophilized-kits?v=1545" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM34050L.jpg?itok=KlXL-ZHQ">
+                    <h4>Candida albicans TaqMan PCR Lyophilized Kit</h4>
+                    <p>SKU TM34050L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1545" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1545" siq_id="autopick_5219">
+                      <input type="hidden" id="variation_id" name="variation_id" value="1545">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1545" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+                <div class="product-div" category="fungi" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/candida-albicans-taqman-pcr-lyophilized-kits?v=1546" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM34010L.jpg?itok=v1URnSzM">
+                    <h4>Candida albicans TaqMan PCR Lyophilized Kit (Probe/Primer and Control Set)</h4>
+                    <p>SKU TM34010L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1546" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1546" siq_id="autopick_5219">
+                      <input type="hidden" id="variation_id" name="variation_id" value="1546">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1546" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+                <div class="product-div" category="bacteria" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/mycoplasma-taqman-pcr-lyophilized-kits?v=1543" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM33150L.jpg?itok=ahQSuJSr">
+                    <h4>Mycoplasma TaqMan PCR Lyophilized Kit</h4>
+                    <p>SKU TM33150L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1543" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1543" siq_id="autopick_6849">
+                      <input type="hidden" id="variation_id" name="variation_id" value="1543">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1543" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+                <div class="product-div" category="bacteria" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/mycoplasma-taqman-pcr-lyophilized-kits?v=1544" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM33110L.jpg?itok=lr8aqF2j">
+                    <h4>Mycoplasma TaqMan PCR Lyophilized Kit (Probe/Primer and Control Set)</h4>
+                    <p>SKU TM33110L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1544" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1544" siq_id="autopick_6849">
+                      <input type="hidden" id="variation_id" name="variation_id" value="1544">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1544" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+                <div class="product-div" category="virus" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/human-papillomavirus-hpv-high-and-low-risk-taqman-pcr-lyophilized-kits?v=1541" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM31550L.jpg?itok=ScCTnSLp">
+                    <h4>Human Papillomavirus (HPV) (High and Low Risk) TaqMan PCR Lyophilized Kit</h4>
+                    <p>SKU TM31550L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1541" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1541" siq_id="autopick_8538">
+                      <input type="hidden" id="variation_id" name="variation_id" value="1541">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1541" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+                <div class="product-div" category="virus" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/human-papillomavirus-hpv-high-and-low-risk-taqman-pcr-lyophilized-kits?v=1542" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM31510L.jpg?itok=nD6xNkI4">
+                    <h4>Human Papillomavirus (HPV) (High and Low Risk) TaqMan PCR Lyophilized Kit (Probe/Primer and Control Set)</h4>
+                    <p>SKU TM31510L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1542" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1542" siq_id="autopick_8538">
+                      <input type="hidden" id="variation_id" name="variation_id" value="1542">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1542" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+                <div class="product-div" category="bacteria" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/streptococcus-agalactiae-taqman-pcr-lyophilized-kits?v=1539" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM30650L.jpg?itok=lHZ8w_fH">
+                    <h4>Streptococcus agalactiae TaqMan PCR Lyophilized Kit</h4>
+                    <p>SKU TM30650L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1539" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1539" siq_id="autopick_338">
+                      <input type="hidden" id="variation_id" name="variation_id" value="1539">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1539" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+                <div class="product-div" category="bacteria" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/streptococcus-agalactiae-taqman-pcr-lyophilized-kits?v=1540" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM30650L.jpg?itok=lHZ8w_fH">
+                    <h4>Streptococcus agalactiae TaqMan PCR Lyophilized Kit (Probe/Primer and Control Set)</h4>
+                    <p>SKU TM30610L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1540" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1540" siq_id="autopick_338">
+                      <input type="hidden" id="variation_id" name="variation_id" value="1540">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1540" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+                <div class="product-div" category="bacteria" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/xylella-fastidiosa-taqman-pcr-lyophilized-kits?v=1536" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM67050L.jpg?itok=Eg7TzTfB">
+                    <h4>Xylella fastidiosa TaqMan PCR Lyophilized Kit</h4>
+                    <p>SKU TM67050L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1536" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1536" siq_id="autopick_5195">
+                      <input type="hidden" id="variation_id" name="variation_id" value="1536">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1536" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+                <div class="product-div" category="bacteria" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/xylella-fastidiosa-taqman-pcr-lyophilized-kits?v=1537" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM67010L.jpg?itok=LZPoV90-">
+                    <h4>Xylella fastidiosa TaqMan PCR Lyophilized Kit (Probe/Primer and Control Set)</h4>
+                    <p>SKU TM67010L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1537" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1537" siq_id="autopick_5195">
+                      <input type="hidden" id="variation_id" name="variation_id" value="1537">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1537" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+                <div class="product-div" category="virus" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/hepatitis-b-virus-hbv-taqman-pcr-lyophilized-kits?v=1526" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM29250L.jpg?itok=XAdzVFSf">
+                    <h4>Hepatitis B Virus (HBV) TaqMan PCR Lyophilized Kit</h4>
+                    <p>SKU TM29250L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1526" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1526" siq_id="autopick_4567">
+                      <input type="hidden" id="variation_id" name="variation_id" value="1526">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1526" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+                <div class="product-div" category="virus" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/hepatitis-b-virus-hbv-taqman-pcr-lyophilized-kits?v=1527" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM29210L.jpg?itok=S6lve2W_">
+                    <h4>Hepatitis B Virus (HBV) TaqMan PCR Lyophilized Kit</h4>
+                    <p>SKU TM29210L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1527" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1527" siq_id="autopick_4567">
+                      <input type="hidden" id="variation_id" name="variation_id" value="1527">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1527" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+                <div class="product-div" category="bacteria" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/candidatus-liberibacter-solanacearum-taqman-pcr-lyophilized-kits?v=1534" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM66250L.jpg?itok=lc30KlKj">
+                    <h4>Candidatus Liberibacter solanacearum TaqMan PCR Lyophilized Kit</h4>
+                    <p>SKU TM66250L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1534" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1534" siq_id="autopick_2301">
+                      <input type="hidden" id="variation_id" name="variation_id" value="1534">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1534" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+                <div class="product-div" category="bacteria" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/candidatus-liberibacter-solanacearum-taqman-pcr-lyophilized-kits?v=1535" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM66210L.jpg?itok=g7qJlBm7">
+                    <h4>Candidatus Liberibacter solanacearum TaqMan PCR Lyophilized Kit (Probe/Primer and Control Set)</h4>
+                    <p>SKU TM66210L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1535" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1535" siq_id="autopick_2301">
+                      <input type="hidden" id="variation_id" name="variation_id" value="1535">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1535" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+                <div class="product-div" category="protozoa" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/toxoplasma-gondii-pcr-lyophilized-kits?v=1532" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM44750L.jpg?itok=KN86CVTz">
+                    <h4>Toxoplasma gondii PCR Lyophilized Kit</h4>
+                    <p>SKU TM44750L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1532" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1532" siq_id="autopick_9082">
+                      <input type="hidden" id="variation_id" name="variation_id" value="1532">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1532" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+                <div class="product-div" category="protozoa" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/toxoplasma-gondii-pcr-lyophilized-kits?v=1533" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM44710L.jpg?itok=7kqmTK1Z">
+                    <h4>Toxoplasma gondii PCR Lyophilized Kit (Probe/Primer and Control Set)</h4>
+                    <p>SKU TM44710L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1533" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1533" siq_id="autopick_9082">
+                      <input type="hidden" id="variation_id" name="variation_id" value="1533">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1533" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+                <div class="product-div" category="virus" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/cytomegalovirus-cmv-taqman-pcr-lyophilized-kits?v=1528" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM36350L.jpg?itok=7M5VXKkk">
+                    <h4>Cytomegalovirus (CMV) TaqMan PCR Lyophilized Kit</h4>
+                    <p>SKU TM36350L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1528" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1528" siq_id="autopick_1389">
+                      <input type="hidden" id="variation_id" name="variation_id" value="1528">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1528" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+                <div class="product-div" category="virus" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/cytomegalovirus-cmv-taqman-pcr-lyophilized-kits?v=1529" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM36310L.jpg?itok=1uGiwXJX">
+                    <h4>Cytomegalovirus (CMV) TaqMan PCR Lyophilized Kit (Probe/Primer and Control Set)</h4>
+                    <p>SKU TM36310L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1529" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1529" siq_id="autopick_1389">
+                      <input type="hidden" id="variation_id" name="variation_id" value="1529">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1529" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+                <div class="product-div" category="yeast" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/saccharomyces-cerevisiae-taqman-pcr-lyophilized-kits?v=1524" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM33350L.jpg?itok=eoKn-i1a">
+                    <h4>Saccharomyces cerevisiae TaqMan PCR Lyophilized Kit</h4>
+                    <p>SKU TM33350L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1524" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1524" siq_id="autopick_6506">
+                    <input type="hidden" id="variation_id" name="variation_id" value="1524">
+                    <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1524" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+                <div class="product-div" category="yeast" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/saccharomyces-cerevisiae-taqman-pcr-lyophilized-kits?v=1525" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM33310L.jpg?itok=HM7_Vc_D">
+                    <h4>Saccharomyces cerevisiae TaqMan PCR Lyophilized Kit (Probe/Primer and Control Set)</h4>
+                    <p>SKU TM33310L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1525" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1525" siq_id="autopick_6506">
+                    <input type="hidden" id="variation_id" name="variation_id" value="1525">
+                    <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1525" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+                <div class="product-div" category="parasite" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/trichinella-spiralis-taqman-pcr-lyophilized-kit?v=1559" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM72450L_0.jpg?itok=4RWfzlng">
+                    <h4>Trichinella spiralis TaqMan PCR Lyophilized Kit</h4>
+                    <p>SKU TM72450L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1559" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1559" siq_id="autopick_9504">
+                    <input type="hidden" id="variation_id" name="variation_id" value="1559">
+                    <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1559" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+                <div class="product-div" category="bacteria" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/clostridium-difficile-taqman-pcr-lyophilized-kits?v=1560" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM37150L_0.jpg?itok=2kIa5vOS">
+                    <h4>Clostridium difficile TaqMan PCR Lyophilized Kit</h4>
+                    <p>SKU TM37150L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1560" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1560" siq_id="autopick_4023">
+                    <input type="hidden" id="variation_id" name="variation_id" value="1560">
+                    <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1560" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+                <div class="product-div" category="bacteria" style="display: block;">
+                    <a href="https://norgenbiotek.com/product/clostridium-difficile-taqman-pcr-lyophilized-kits?v=1561" target="_blank">
+                    <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/TM37110L_0.jpg?itok=YjOjG480">
+                    <h4>Clostridium difficile TaqMan PCR Lyophilized Kit (Probe/Primer and Control Set)</h4>
+                    <p>SKU TM37110L</p>
+                    {% if not restricted_country %}
+                    <form action="" method="post" id="add-to-cart-variation-1561" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1561" siq_id="autopick_4023">
+                    <input type="hidden" id="variation_id" name="variation_id" value="1561">
+                    <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1561" name="op" value="Add to cart">
+                    </form>
+					{% endif %}
+                    </a>
+                </div>
+            </div>
+		</div>
+		<div style="margin-top:30px;">
+		<p style="font-size:14px;">*Disclaimer: This promotion is available only to customers in Canada or the U.S. Discount is not available to Norgen Biotek distributors. Offer cannot be combined with other existing promotions. Offer valid until October 31st, 2024.</p>
+		</div>
+	</div>
+</section>
+
+
+<section class="contact-container">
+	<div class="container">
+		<h2>Connect Scientist to Scientist</h2>
+		<p>Our scientists will answer all your questions.</p>
+		<a class="btn btn-primary" href="https://norgenbiotek.com/contact" target="_blank">Contact Now</a>
+	</div>
+</section>
+
+
+
+
+<script>
+function next(){
+	document.getElementById('cost-reduced-section').scrollIntoView();
+}
+function isInViewport(item) {
+
+    var bounding = item.getBoundingClientRect(),
+        myElementHeight = item.offsetHeight,
+        myElementWidth = item.offsetWidth;
+
+    if(bounding.top >= -myElementHeight
+        && bounding.left >= -myElementWidth
+        && bounding.right <= (window.innerWidth || document.documentElement.clientWidth) + myElementWidth
+        && bounding.bottom <= (window.innerHeight || document.documentElement.clientHeight) + myElementHeight) {
+        return true;
+    } else {
+        return false;
+    }
+
+}
+const monster = document.getElementsByClassName("third-point")[0];
+const monster1 = document.getElementsByClassName("first-screen")[0];
+
+/* Window Scrolling */
+window.addEventListener("scroll", function(){
+	console.log("scrolling")
+   if(isInViewport(monster1)) {
+      document.getElementsByClassName("original")[0].classList.add("height_original");
+  document.getElementsByClassName("shipping")[0].classList.add("height_shipping");
+  document.getElementsByClassName("new")[0].classList.add("height_new");
+  document.getElementsByClassName("discount")[0].classList.add("height_discount");
+  document.getElementsByClassName("white-bg")[0].classList.add("white_animation");
+  document.getElementsByClassName("svg-arrow")[0].classList.add("arrow_animation");
+  document.getElementsByClassName("st56")[0].classList.add("red-line");
+  document.getElementsByClassName("st233")[0].classList.add("red-line2");
+  document.getElementsByClassName("st3444")[0].classList.add("red-line3");
+   }
+
+   if(isInViewport(monster)) {
+     /* document.getElementsByClassName("first-point")[0].classList.add("second-animation");
+  document.getElementsByClassName("first-arrow")[0].classList.add("second-animation");
+  document.getElementsByClassName("second-point")[0].classList.add("second-animation");
+  document.getElementsByClassName("second-arrow")[0].classList.add("second-animation");
+  document.getElementsByClassName("third-point")[0].classList.add("second-animation");
+  document.getElementsByClassName("st23333")[0].classList.add("red-line4");*/
+  console.log("test");
+  document.getElementById("vid").play();
+   }
+
+
+});
+
+function select_products(elem){
+	console.log(elem);
+	var benefit_div = document.getElementsByClassName("benefit-div");
+	for(var i = 0; i < benefit_div.length; i++){
+			benefit_div[i].classList.remove("bordered");
+	}
+	document.getElementById(elem).classList.add("bordered");
+	var remove_div = document.getElementsByClassName("remove-div")[0];
+	remove_div.style.display = "flex";
+
+	var product_div = document.getElementsByClassName("product-div");
+
+	for(var i = 0; i < product_div.length; i++){
+
+		if(product_div[i].getAttribute("category") == elem){
+			product_div[i].style.display="flex";
+		}
+		else{
+			product_div[i].style.display="none";
+		}
+	}
+	document.getElementById('products-grid').scrollIntoView();
+}
+
+function remove_filter(){
+	var benefit_div = document.getElementsByClassName("benefit-div");
+	for(var i = 0; i < benefit_div.length; i++){
+			benefit_div[i].classList.remove("bordered");
+	}
+	var remove_div = document.getElementsByClassName("remove-div")[0];
+	remove_div.style.display = "none";
+	var product_div = document.getElementsByClassName("product-div");
+
+	for(var i = 0; i < product_div.length; i++){
+		product_div[i].style.display = "flex";
+	}
+}
+
+</script>

@@ -1,0 +1,450 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a node.
+ *
+ * Available variables:
+ * - node: The node entity with limited access to object properties and methods.
+ *   Only method names starting with "get", "has", or "is" and a few common
+ *   methods such as "id", "label", and "bundle" are available. For example:
+ *   - node.getCreatedTime() will return the node creation timestamp.
+ *   - node.hasField('field_example') returns TRUE if the node bundle includes
+ *     field_example. (This does not indicate the presence of a value in this
+ *     field.)
+ *   - node.isPublished() will return whether the node is published or not.
+ *   Calling other methods, such as node.delete(), will result in an exception.
+ *   See \Drupal\node\Entity\Node for a full list of public properties and
+ *   methods for the node object.
+ * - label: (optional) The title of the node.
+ * - content: All node items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - author_picture: The node author user entity, rendered using the "compact"
+ *   view mode.
+ * - metadata: Metadata for this node.
+ * - date: (optional) Themed creation date field.
+ * - author_name: (optional) Themed author name field.
+ * - url: Direct URL of the current node.
+ * - display_submitted: Whether submission information should be displayed.
+ * - attributes: HTML attributes for the containing element.
+ *   The attributes.class element may contain one or more of the following
+ *   classes:
+ *   - node: The current template type (also known as a "theming hook").
+ *   - node--type-[type]: The current node type. For example, if the node is an
+ *     "Article" it would result in "node--type-article". Note that the machine
+ *     name will often be in a short form of the human readable label.
+ *   - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+ *     teaser would result in: "node--view-mode-teaser", and
+ *     full: "node--view-mode-full".
+ *   The following are controlled through the node publishing options.
+ *   - node--promoted: Appears on nodes promoted to the front page.
+ *   - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+ *     teaser listings.
+ *   - node--unpublished: Appears on unpublished nodes visible only to site
+ *     admins.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main
+ *   content tag that appears in the template.
+ * - author_attributes: Same as attributes, except applied to the author of
+ *   the node tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ * - view_mode: View mode; for example, "teaser" or "full".
+ * - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+ * - page: Flag for the full page state. Will be true if view_mode is 'full'.
+ * - readmore: Flag for more state. Will be true if the teaser content of the
+ *   node cannot hold the main body content.
+ * - logged_in: Flag for authenticated user status. Will be true when the
+ *   current user is a logged-in member.
+ * - is_admin: Flag for admin user status. Will be true when the current user
+ *   is an administrator.
+ *
+ * @see template_preprocess_node()
+ *
+ * @ingroup themeable
+ */
+#}
+<article{{ attributes }}>
+
+  {{ title_prefix }}
+  {% if label and not page %}
+    <h2{{ title_attributes }}>
+      <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+    </h2>
+  {% endif %}
+  {{ title_suffix }}
+
+  {% if display_submitted %}
+    <footer>
+      {{ author_picture }}
+      <div{{ author_attributes }}>
+        {% trans %}Submitted by {{ author_name }} on {{ date }}{% endtrans %}
+        {{ metadata }}
+      </div>
+    </footer>
+  {% endif %}
+
+  <div{{ content_attributes }}>
+    {{ content.body }}
+  </div>
+
+</article>
+
+<style>
+    #section-main-content .container {
+        width:100%!important;
+    }
+    /* Page Specific For Category Pages */
+      .region-pagetitle,
+      .region-breadcrumb {
+          display: none;
+      }
+      .img-header {
+          margin: 0 -15px;
+          width: calc(100% + 30px);
+      }
+  
+  .img-header h1 {
+      width: max-content;
+      margin: 0 auto;
+      background: rgba(40, 157, 176, 0.8);
+      padding: 10px 30px 15px;
+      font-size: 4vw;
+      font-weight: 400;
+      letter-spacing: 2px;
+  }
+  
+  /* Press Releases Only */
+  #filterSearch {
+      color: #555;
+      font-size: 16px;
+      line-height: 16px;
+      padding: 12px 20px;
+      box-sizing: border-box;
+      width: 80%;
+      border-radius: 24px;
+      border-top-right-radius: 0px;
+      border-bottom-right-radius: 0px;
+      border: 1px solid #bfc1c3;
+      font-weight: normal;
+      height: 100%;
+      box-shadow: none;
+      display: inline-block;
+  }
+  #filterSearchButton{
+      width: 20%;
+      height: 100%;
+      position: relative;
+      top: -1px;
+      margin-left: -4px;
+      display: inline-block;
+      border: none;
+      background: #004897;
+      color: #fff;
+      border-top-right-radius: 24px;
+      border-bottom-right-radius:24px;
+  }
+  .toggleCat {
+      cursor: pointer;
+      width: max-content;
+  }
+  .toggleCat:before {
+      content: '\f105';
+      font-family: 'Font Awesome 5 Free';
+      font-weight: bold;
+      padding-right: 15px;
+  }
+  .toggleCat.active:before {
+      content: '\f107';
+  }
+  .toggleCat:not(:first-of-type) {
+      margin-top: 40px;
+  }
+  .press-list {
+      display: none;
+  }
+  .press-list.active {
+      display: block;
+  }
+  .press-box {
+      display: block;
+      box-shadow: 0 4px 40px 0 rgba(0,0,0,0.09),0 6px 20px 0 rgba(0,0,0,0.17);
+      margin-bottom: 20px;
+      border-radius: 24px;
+      padding: 20px;
+      font-size: 16px;
+      transition-duration: 0.5s;
+  }
+  .press-box:last-child {
+      margin-bottom: 0;
+  }
+  .press-box:hover {
+      transform: scale(1.04);
+  }
+  .press-box h3 {
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin: 0 0 10px 0;
+  }
+  .press-date {
+      font-size: 14px;
+      display: block;
+      margin: 5px 0 10px 0;
+  }
+  .press-box p {
+      color: #000;
+      font-weight: normal;
+      font-size: 16px;
+      letter-spacing: 0;
+      margin-bottom: 20px;
+  }
+  .press-box .btn {
+      padding: 5px 15px;
+  }
+  .press-box.press-image {
+      padding: 0;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 200px 1fr;
+  }
+  .press-box.press-image > img {
+      height: 100%;
+      object-fit: cover;
+  }
+  .press-box.press-image .press-content {
+      padding: 20px;
+  }
+
+
+  /* Publications */
+.page-parent-div{
+    width: fit-content;
+    margin: auto;
+    z-index:10;
+    display: flex;
+    margin-bottom: 50px;
+}
+.page-numbers{
+    height:100px;
+}
+#pages-list{
+    display: none;
+    list-style: none;
+    max-height:300px;
+    width:120px;
+    overflow-y: scroll;
+}
+#pages-list.active{
+    display: block;
+}
+.select-page-numbers{
+    height: 2em;
+    margin: auto;
+}
+
+#pages-list li button{
+    border: 1px solid #000;
+    border-bottom: none;
+    background: #fff;
+    color: #000;
+}
+#pages-list :nth-last-child(1){
+    border-bottom: 1px solid #000;
+}
+.publications-page{
+    display: none;
+}
+.publications-page.active{
+    display: block;
+}
+
+#left-btn, #right-btn{
+    height:40px;
+    height: 40px;
+    border: none;
+    background: transparent;
+    padding: 0px 20px;
+    margin: 0px 10px;
+}
+#left-btn i, #right-btn i{
+    color: #004897;
+    font-size: 18px;
+}
+
+div.zero-results{
+    font-size:2em;
+    width: fit-content;
+    margin: auto;
+    margin-bottom: 100px;
+}
+
+span.searchTerms{
+    margin: 10px;
+    background:#004897;
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 50px;
+    display: inline-block;
+    width: fit-content;
+    color: #fff;
+}
+.searchTerms button{
+    background: transparent;
+    border: none;
+    margin-left:10px;
+    color: #fff;
+}
+span#clearAllSearchTerms{
+    margin: 10px;
+    background:#BE1E2D;
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 50px;
+    display: inline-block;
+    width: fit-content;
+    color: #fff;
+}
+#clearAllSearchTerms button{
+    background: transparent;
+    border: none;
+    color: #fff;
+}
+
+#publications{
+    padding:0px 70px;
+}
+.publication-card{
+    border-radius: 25px;
+    padding:25px;
+    box-shadow: 0 5px 5px 0 rgb(0 0 0 / 9%), 0 2px 20px 0 rgb(0 0 0 / 7%);
+    display: block;
+    margin-bottom: 25px;
+    transition:0.5s;
+}
+.publication-card:hover{
+    transform: scale(1.05);
+    transition:0.5s;
+}
+.publication-text{
+    font-size:18px;
+}
+a.publication-link:not(.btn){
+    color:#004897;
+    overflow-wrap: anywhere;
+}
+.publication-product{
+    display: inline-block;
+    background: #004897;
+    border-radius:25px;
+    padding:10px 20px;
+    width: fit-content;
+    color: #fff;
+    font-weight: normal;
+    margin-top:20px;
+    font-size: 14px;
+    margin-right:10px;
+}
+.publication-sample{
+    display: inline-block;
+    background: #0f6b7a;
+    border-radius:25px;
+    padding:10px 20px;
+    width: fit-content;
+    color: #fff;
+    font-weight: normal;
+    margin-top:20px;
+    font-size: 14px;
+    margin-right: 10px;
+}
+p.date{
+    color: #777;
+    text-align: right;
+}
+div.tag{
+    font-size:18px;
+    display: block;
+}
+
+
+.resultsFlex{
+    display:flex;
+    padding-top:30px;
+}
+
+.showingResults{
+    display:inline-block; 
+    margin:auto 0px auto auto;
+}
+  
+  /*IE Override*/
+  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+       .video-box {
+        display: -ms-grid;
+        -ms-grid-columns: 200px 1fr;
+        margin-bottom: 20px;
+       }
+       .video-box:last-child {
+        margin-bottom: 0;
+       }
+    .feat-video-desc,
+       .video-desc {
+        -ms-grid-column: 2;
+       }
+  }
+  
+/*Media Queries*/
+@media only screen and (max-width: 600px) {
+    .press-box.press-image {
+        display: block;
+    }
+    .press-box.press-image img {
+        max-height: 200px;
+        width: 100%;
+    }
+    .resultsFlex{
+        flex-direction: column;
+    }
+    .showingResults{
+        margin:0px;
+    }
+}
+@media (min-width: 768px){
+    .vd-wrapper {
+        width: 750px;
+    }
+}
+@media (min-width: 992px){
+    .vd-wrapper {
+        width: 970px;
+    }
+}
+@media (min-width: 1200px){
+    .vd-wrapper {
+        width: 1170px;
+    }
+}
+
+/* new styles*/
+.anchorSection{
+  margin: auto;
+}
+
+.anchorSection h2 {
+  font-size: 30px;
+}
+</style>
+  
+<!-- Header -->
+<section class="img-header titleOnly">
+    <img src="https://norgenbiotek.com/sites/default/files/images/Publications_Graphic-small.png" style="position: absolute; left:50%; bottom:0; transform:translate(-50%, 0px);">
+    <h1 style="opacity:0;">Publications</h2>
+</section>
+
+<section class="anchorSection all-videos vd-wrapper">
+    <h2>Find a Publication</h2>
+    {{drupal_view('publications_or_citations','all_results')}}
+</section>

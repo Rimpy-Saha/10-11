@@ -1,0 +1,2878 @@
+{#
+/**
+* @file
+* Default theme implementation to display a node.
+*
+* Available variables:
+* - node: The node entity with limited access to object properties and methods.
+* Only method names starting with "get", "has", or "is" and a few common
+* methods such as "id", "label", and "bundle" are available. For example:
+* - node.getCreatedTime() will return the node creation timestamp.
+* - node.hasField('field_example') returns TRUE if the node bundle includes
+* field_example. (This does not indicate the presence of a value in this
+* field.)
+* - node.isPublished() will return whether the node is published or not.
+* Calling other methods, such as node.delete(), will result in an exception.
+* See \Drupal\node\Entity\Node for a full list of public properties and
+* methods for the node object.
+* - label: (optional) The title of the node.
+* - content: All node items. Use {{ content }} to print them all,
+* or print a subset such as {{ content.field_example }}. Use
+* {{ content|without('field_example') }} to temporarily suppress the printing
+* of a given child element.
+* - author_picture: The node author user entity, rendered using the "compact"
+* view mode.
+* - metadata: Metadata for this node.
+* - date: (optional) Themed creation date field.
+* - author_name: (optional) Themed author name field.
+* - url: Direct URL of the current node.
+* - display_submitted: Whether submission information should be displayed.
+* - attributes: HTML attributes for the containing element.
+* The attributes.class element may contain one or more of the following
+* classes:
+* - node: The current template type (also known as a "theming hook").
+* - node--type-[type]: The current node type. For example, if the node is an
+* "Article" it would result in "node--type-article". Note that the machine
+* name will often be in a short form of the human readable label.
+* - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+* teaser would result in: "node--view-mode-teaser", and
+* full: "node--view-mode-full".
+* The following are controlled through the node publishing options.
+* - node--promoted: Appears on nodes promoted to the front page.
+* - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+* teaser listings.
+* - node--unpublished: Appears on unpublished nodes visible only to site
+* admins.
+* - title_attributes: Same as attributes, except applied to the main title
+* tag that appears in the template.
+* - content_attributes: Same as attributes, except applied to the main
+* content tag that appears in the template.
+* - author_attributes: Same as attributes, except applied to the author of
+* the node tag that appears in the template.
+* - title_prefix: Additional output populated by modules, intended to be
+* displayed in front of the main title tag that appears in the template.
+* - title_suffix: Additional output populated by modules, intended to be
+* displayed after the main title tag that appears in the template.
+* - view_mode: View mode; for example, "teaser" or "full".
+* - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+* - page: Flag for the full page state. Will be true if view_mode is 'full'.
+* - readmore: Flag for more state. Will be true if the teaser content of the
+* node cannot hold the main body content.
+* - logged_in: Flag for authenticated user status. Will be true when the
+* current user is a logged-in member.
+* - is_admin: Flag for admin user status. Will be true when the current user
+* is an administrator.
+*
+* @see template_preprocess_node()
+*
+* @ingroup themeable
+*/
+#}
+<article{{ attributes }}>
+
+  {{ title_prefix }}
+  {% if label and not page %}
+  <h2{{ title_attributes }}>
+    <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+    </h2>
+    {% endif %}
+    {{ title_suffix }}
+
+    {% if display_submitted %}
+    <footer>
+      {{ author_picture }}
+      <div{{ author_attributes }}>
+        {% trans %}Submitted by {{ author_name }} on {{ date }}{% endtrans %}
+        {{ metadata }}
+        </div>
+    </footer>
+    {% endif %}
+
+    <div{{ content_attributes }}>
+      {{ content.body }}
+      </div>
+
+      </article>
+
+
+
+
+      <style>
+        .thankyou-screen {
+          margin-top: 0;
+          margin-left: 30%;
+          margin-right: 30%;
+          /* margin: 18%; */
+          background: white;
+          padding: 1%;
+          width: 100%;
+          max-width: 1000px;
+          margin: 20px auto 150px;
+          border: #12508b;
+          border-style: solid;
+          box-shadow: 0 4px 40px 0 rgb(0 0 0 / 9%), 0 6px 20px 0 rgb(0 0 0 / 17%);
+          border-radius: 20px;
+          border-bottom-color: #1d7280;
+          border-right-color: #126b7a;
+        }
+
+        .survey {
+          margin-top: 0;
+          margin-left: 30%;
+          margin-right: 30%;
+          /* margin: 18%; */
+          background: white;
+          padding: 1%;
+          width: 100%;
+          max-width: 800px;
+          margin: 20px auto 150px;
+        }
+
+        .survey-thankyou {
+          margin-top: 0;
+          margin-left: 30%;
+          margin-right: 30%;
+          /* margin: 18%; */
+          background: white;
+          padding: 2%;
+          width: 100%;
+          max-width: 800px;
+          margin: 5% auto;
+          text-align: center;
+          box-shadow: 0 4px 40px 0 rgb(0 0 0 / 4%), 0 6px 20px 0 rgb(0 0 0 / 5%);
+          display: none;
+        }
+
+        .survey-thankyou>hr {
+          border-top: 9px solid #12508b;
+          width: 50%;
+          margin: auto;
+        }
+
+        .section-page-title {
+          display: none;
+        }
+
+        .img-header p {
+          width: 100%;
+          max-width: 100% !important;
+          min-width: auto;
+          text-shadow: none;
+        }
+
+        .highlight-tm {
+          background: #fffae6;
+          padding: 24px;
+          border-radius: 24px 24px 0 0;
+          border-left: 1px solid #fbbf13;
+          border-top: 1px solid #fbbf13;
+          border-right: 1px solid #fbbf13;
+        }
+
+        .survey-overlay {
+          position: fixed;
+          z-index: 1000;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          transition: opacity 500ms ease-in-out 0s, visibility linear 500ms, transform 0s linear 500ms;
+          text-align: center;
+        }
+
+        .overlay:target,
+        .overlay:target .popup {
+          visibility: visible;
+          opacity: 1;
+        }
+
+        .rating {
+          margin-top: 5%;
+
+          /*display: flex;
+                  font-size:0;
+                  justify-content: center;
+                  align-items: center;
+                  flex-direction: row-reverse;*/
+          /*display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+          grid-auto-rows: auto;*/
+          width: 100%;
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-orient: horizontal;
+          -webkit-box-direction: normal;
+          -ms-flex-direction: row;
+          flex-direction: row;
+          margin-bottom: 12px;
+
+        }
+
+        @media only screen and (max-width: 60em) {
+          .rating {
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+          }
+        }
+
+        .rating input {
+          display: none
+        }
+
+        .rating label:hover {
+          background-color: #e6f2f3;
+        }
+
+        .rating input[type="radio"]:checked+label {
+          border-color: #007c89;
+          background: linear-gradient(0deg, rgba(0, 124, 137, .2), rgba(0, 124, 137, .2)), #fff;
+        }
+
+        .rating label {
+
+          font-size: 18px;
+
+          cursor: pointer;
+          flex-grow: 1;
+          min-width: 36px !important;
+          text-align: center;
+          padding: 4px;
+          border: 1px solid #dedddc;
+          border-radius: 3px;
+          margin-left: 6px;
+          margin-right: 6px;
+        }
+
+        .rating label {
+          border: 1px #999 solid;
+          transition: .3s;
+        }
+
+        #fname,
+        #lname,
+        #email,
+        #phone,
+        #company,
+        #job {
+          width: 100%;
+          height: 4%;
+          margin-bottom: 8%;
+          vertical-align: middle;
+          min-width: 50px;
+          max-width: 635px;
+          width: 100%;
+          min-height: 36px;
+          background-color: #fff;
+          border: #a9a9a969;
+          border-style: solid;
+          border-width: thin;
+          max-height: 60px;
+          padding: 2%;
+        }
+
+        #product-div {
+          display: grid;
+          grid-template-columns: 2fr 1fr;
+          grid-column-gap: 10px;
+        }
+
+        textarea {
+          border-radius: 40px;
+        }
+
+        .comment-sec {
+          margin-top: 10%;
+        }
+
+        .comment-text {
+          width: 100%;
+          height: 110px;
+        }
+
+        .feedback-btn {
+          /*margin-top: 10%;*/
+          /*padding-left: 2%;
+          padding-right: 2%;
+          padding-top: 1%;
+          padding-bottom: 1%;*/
+          padding: 10px 20px;
+          white-space: normal;
+          border: none;
+          font-size: 18px;
+          width: 162px;
+        }
+
+        /* .logo{
+          max-width:50%;
+       }*/
+        .image-logo {
+          text-align: center;
+          padding: 5%;
+          display: grid;
+          grid-template-columns: 1fr 0fr 1fr;
+          align-items: center;
+          grid-gap: 15px;
+          width: 75%;
+          margin: auto;
+        }
+
+        #logo2 {
+          width: 115%;
+          max-width: inherit;
+        }
+
+        .label-hide {
+          display: none;
+        }
+
+        @media only screen and (max-width:600px) {
+          #product-div {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        @media only screen and (max-width: 510px) {
+          .label-show {
+            display: none;
+          }
+
+          .label-hide {
+            display: block;
+          }
+
+        }
+
+        input::placeholder {
+          color: gray;
+          padding: 1%;
+        }
+
+        .thankyou-screen {
+          display: none;
+        }
+
+        .animation-ctn {
+          text-align: center;
+          margin-top: 5em;
+        }
+
+        @-webkit-keyframes checkmark {
+          0% {
+            stroke-dashoffset: 100px
+          }
+
+          100% {
+            stroke-dashoffset: 200px
+          }
+        }
+
+        @-ms-keyframes checkmark {
+          0% {
+            stroke-dashoffset: 100px
+          }
+
+          100% {
+            stroke-dashoffset: 200px
+          }
+        }
+
+        @keyframes checkmark {
+          0% {
+            stroke-dashoffset: 100px
+          }
+
+          100% {
+            stroke-dashoffset: 0px
+          }
+        }
+
+        @-webkit-keyframes checkmark-circle {
+          0% {
+            stroke-dashoffset: 480px
+          }
+
+          100% {
+            stroke-dashoffset: 960px;
+
+          }
+        }
+
+        @-ms-keyframes checkmark-circle {
+          0% {
+            stroke-dashoffset: 240px
+          }
+
+          100% {
+            stroke-dashoffset: 480px
+          }
+        }
+
+        @keyframes checkmark-circle {
+          0% {
+            stroke-dashoffset: 480px
+          }
+
+          100% {
+            stroke-dashoffset: 960px
+          }
+        }
+
+        @keyframes colored-circle {
+          0% {
+            opacity: 0
+          }
+
+          100% {
+            opacity: 100
+          }
+        }
+
+        /* other styles */
+        /* .svg svg {
+          display: none
+      }
+       */
+        .inlinesvg .svg svg {
+          display: inline
+        }
+
+        /* .svg img {
+          display: none
+      } */
+
+        .icon--order-success svg polyline {
+          -webkit-animation: checkmark 0.25s ease-in-out 0.7s backwards;
+          animation: checkmark 0.25s ease-in-out 0.7s backwards
+        }
+
+        .icon--order-success svg circle {
+          -webkit-animation: checkmark-circle 0.6s ease-in-out backwards;
+          animation: checkmark-circle 0.6s ease-in-out backwards;
+        }
+
+        .icon--order-success svg circle#colored {
+          -webkit-animation: colored-circle 0.6s ease-in-out 0.7s backwards;
+          animation: colored-circle 0.6s ease-in-out 0.7s backwards;
+        }
+
+        .save-icon {
+          width: 15px;
+          margin: 1%;
+        }
+
+        .page2 {
+          position: absolute;
+          left: 0;
+        }
+
+        .pages {
+          display: grid;
+          grid-template-columns: repeat(7, 100%);
+          overflow: hidden;
+        }
+
+        .form-table {
+          /* display: none; */
+          left: 0%;
+          transition: all 1s;
+          position: relative;
+          padding: 5%;
+        }
+
+        /* Style the tab */
+        .tab {
+          overflow: hidden;
+          border: 1px solid #ccc;
+          background-color: #f1f1f1;
+        }
+
+        /* Style the buttons inside the tab */
+        .tab button {
+          background-color: inherit;
+          float: left;
+          border: none;
+          outline: none;
+          cursor: pointer;
+          padding: 14px 16px;
+          transition: 0.3s;
+          font-size: 17px;
+        }
+
+        /* Change background color of buttons on hover */
+        .tab button:hover {
+          background-color: #ddd;
+        }
+
+        /* Create an active/current tablink class */
+        .tab button.active {
+          background-color: #ccc;
+        }
+
+        /* Style the tab content */
+        .tabcontent {
+          display: none;
+          padding: 6px 12px;
+          border: 1px solid #ccc;
+          border-top: none;
+        }
+
+        /*workflow*/
+        .workflow-menu {
+          background: #0149970f;
+
+          /*height: 600px;*/
+        }
+
+        .workflow-menu>ul {
+          list-style: none;
+          /* display: flex;
+          align-items: center;
+              justify-content: center;*/
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr;
+          justify-items: stretch;
+          align-items: center;
+        }
+
+        .workflow-menu>ul>a>li {
+          padding: 9%;
+          font-size: 16px;
+          box-shadow: inset 0 0 0 0 #01499730;
+          transition: all 1s ease;
+          text-align: center;
+        }
+
+        .workflow-menu ul li:hover {
+          background-color: #01499730;
+          /*background-color: #01499730;*/
+        }
+
+        #active-li {
+          box-shadow: inset 100vh 0 0 0 #01499730;
+        }
+
+        .btn-active {
+          background-color: #01499730;
+        }
+
+        .warning-banner {
+          background-color: #c75c5f;
+          position: absolute;
+          width: 31%;
+          top: 40%;
+          left: 33%;
+          right: 22%;
+          display: none;
+          text-align: center;
+          padding: 1%;
+
+        }
+
+        .missing-warning {
+          color: white;
+        }
+
+        .warning-banner>.close {
+          font-size: 21px;
+          font-weight: 700;
+          line-height: 1;
+          color: white;
+          text-shadow: 0 1px 0 #fff;
+          opacity: 1;
+        }
+
+        .next-btn {
+          font-size: 18px;
+          border: 2px solid #ddd;
+          border-radius: 12px;
+          padding: 10px 20px;
+          overflow-x: auto;
+          background: #f9f9f9;
+          color: black;
+
+        }
+
+        .sub-div {
+          position: absolute;
+          /*bottom: 0;*/
+          width: 90%;
+
+        }
+
+        .sub-div>button {
+          width: -webkit-fill-available;
+          padding: 15px 20px;
+        }
+
+        #save_text {
+          text-align: center;
+          background: gray;
+          color: white;
+          width: 30%;
+          margin: 3% auto;
+
+
+        }
+
+        .dropzone:hover {
+          cursor: pointer;
+        }
+
+        .dropzone i {
+          font-size: 2em;
+          color: #004897;
+        }
+
+        .dropzone .upload-btn {
+          color: #004897;
+          font-weight: bold;
+        }
+
+        #popupApplication form.no-drag-drop #resume-dropzone,
+        #popupApplication form.no-drag-drop #resume-dropzone {
+          background-color: #fff;
+          border: none;
+        }
+
+        #popupApplication form.no-drag-drop #resume-dropzone .drag-and-drop-text,
+        #popupApplication form.no-drag-drop #resume-dropzone .drag-and-drop-text {
+          display: none;
+        }
+
+        #resume-dropzone,
+        #cover-letter-dropzone {
+          border: 1px solid #c6c6c6;
+          ;
+          border-radius: 5px;
+          /*background-color: #e6e6e6e6;*/
+          text-align: center;
+          margin-bottom: 1em;
+          padding: calc(0px + 1vh);
+          justify-content: center;
+        }
+
+        #resume-dropzone.dragOver,
+        #cover-letter-dropzone.dragOver,
+        #resume-dropzone:focus-within,
+        #cover-letter-dropzone:focus-within {
+          border: 2px dashed #004897;
+          background-color: #e8f9fc;
+        }
+
+        #resume-dropzone input#resume,
+        #cover-letter-dropzone input#cover-letter {
+          opacity: 0;
+          width: 1px;
+          height: 1px;
+          position: absolute;
+          margin: auto;
+        }
+
+        /*#area_interest, #workflow_interest, #sample_work, #analytes, #downstream_app{
+                      height: 4%;
+          margin-bottom: 2%;
+          vertical-align: middle;
+          min-width: 50px;
+          max-width: 635px;
+          width: 100%;
+          min-height: 36px;
+          background-color: #fff;
+          border: #a9a9a969;
+          border-style: solid;
+          border-width: thin;
+          max-height: 60px;
+          padding: 2%;
+          }*/
+
+        #additional_comment_1,
+        #additional_comment_2,
+        #additional_comment_3,
+        #additional_comment_4,
+        #additional_comment_5 {
+          margin-bottom: 8%;
+          vertical-align: middle;
+          min-width: 50px;
+          max-width: 635px;
+          width: 100%;
+          min-height: 36px;
+          background-color: #fff;
+          border: #a9a9a969;
+          border-style: solid;
+          border-width: thin;
+          /*max-height: 60px;*/
+          padding: 2%;
+        }
+
+        textarea {
+          width: 100%;
+          height: 75px;
+          padding: 12px 20px;
+          box-sizing: border-box;
+          /* border: 2px solid #ccc;*/
+          border-radius: 4px;
+          background-color: white;
+          font-size: 16px;
+          /*resize: none;*/
+          overflow-y: scroll;
+          border: 1px solid #c6c6c6;
+        }
+
+        /*  #startdate, #enddate{
+               height: 4%;
+          margin-bottom: 8%;
+          
+          min-height: 36px;
+          background-color: #fff;
+          border: #a9a9a969;
+          border-style: solid;
+          border-width: thin;
+          max-height: 60px;
+          padding: 2%;
+          
+          }*/
+        label {
+          font-size: 16px;
+          font-weight: 300;
+        }
+
+        input[type=date] {
+          padding: 0 4%;
+          border: 1px solid #c6c6c6;
+        }
+
+        .page3>label {
+          margin-top: 8%;
+        }
+
+        .tooltip {
+          position: relative;
+          display: inline-block;
+          /*border-bottom: 1px dotted black;*/
+          opacity: 1;
+          font-size: 20px;
+          margin-left: 1%;
+          z-index: 0;
+        }
+
+        .tooltip .tooltiptext {
+          visibility: hidden;
+          width: 300px;
+          background-color: black;
+          color: #fff;
+          text-align: center;
+          border-radius: 6px;
+          padding: 10px 10px;
+
+          /* Position the tooltip */
+          position: absolute;
+          z-index: 1;
+          font-size: 14px;
+          left: 125%;
+
+        }
+
+        .tooltip:hover .tooltiptext {
+          visibility: visible;
+        }
+
+        .area_flex_parent {
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr 1fr;
+          grid-gap: 12px;
+          margin-bottom: 2%;
+          /*justify-content: space-between;
+          padding: 1%;*/
+        }
+
+        .area_flex_parent-three-cols {
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr;
+          grid-gap: 12px;
+          margin-bottom: 2%;
+          /*justify-content: space-between;
+          padding: 1%;*/
+        }
+
+        .animation-ctn {
+          text-align: center;
+          margin-top: 5em;
+        }
+
+
+
+
+
+        @-webkit-keyframes checkmark {
+          0% {
+            stroke-dashoffset: 100px
+          }
+
+          100% {
+            stroke-dashoffset: 200px
+          }
+        }
+
+        @-ms-keyframes checkmark {
+          0% {
+            stroke-dashoffset: 100px
+          }
+
+          100% {
+            stroke-dashoffset: 200px
+          }
+        }
+
+        @keyframes checkmark {
+          0% {
+            stroke-dashoffset: 100px
+          }
+
+          100% {
+            stroke-dashoffset: 0px
+          }
+        }
+
+        @-webkit-keyframes checkmark-circle {
+          0% {
+            stroke-dashoffset: 480px
+          }
+
+          100% {
+            stroke-dashoffset: 960px;
+
+          }
+        }
+
+        @-ms-keyframes checkmark-circle {
+          0% {
+            stroke-dashoffset: 240px
+          }
+
+          100% {
+            stroke-dashoffset: 480px
+          }
+        }
+
+        @keyframes checkmark-circle {
+          0% {
+            stroke-dashoffset: 480px
+          }
+
+          100% {
+            stroke-dashoffset: 960px
+          }
+        }
+
+        @keyframes colored-circle {
+          0% {
+            opacity: 0
+          }
+
+          100% {
+            opacity: 100
+          }
+        }
+
+        /* other styles */
+        /* .svg svg {
+          display: none
+      }
+       */
+        .inlinesvg .svg svg {
+          display: inline
+        }
+
+        /* .svg img {
+          display: none
+      } */
+
+        .icon--order-success svg polyline {
+          -webkit-animation: checkmark 0.25s ease-in-out 0.7s backwards;
+          animation: checkmark 0.25s ease-in-out 0.7s backwards
+        }
+
+        .icon--order-success svg circle {
+          -webkit-animation: checkmark-circle 0.6s ease-in-out backwards;
+          animation: checkmark-circle 0.6s ease-in-out backwards;
+        }
+
+        .icon--order-success svg circle#colored {
+          -webkit-animation: colored-circle 0.6s ease-in-out 0.7s backwards;
+          animation: colored-circle 0.6s ease-in-out 0.7s backwards;
+        }
+
+        @media only screen and (max-width: 430px) {
+          .area_flex_parent {
+            grid-template-columns: auto;
+            grid-gap: 0;
+          }
+
+          .area_flex_parent-three-cols {
+            grid-template-columns: auto;
+            grid-gap: 0;
+          }
+
+        }
+
+        .page2 label {
+          display: inline-block;
+
+        }
+
+        .area_flex label {
+          display: block;
+          padding-right: 10px;
+          padding-left: 22px;
+          padding-bottom: 5px;
+          text-indent: -26px;
+          line-height: initial;
+        }
+
+        .area_flex span {
+          padding-left: 8px;
+        }
+
+        #back-btn {
+
+          padding: 0.5em;
+          padding: 1%;
+          width: 200px;
+          margin: 1%;
+          font-size: 16px;
+          font-weight: 300;
+          /*border-bottom: 1px solid black;*/
+        }
+
+        #back-btn:hover {
+          cursor: pointer;
+        }
+
+        .page1 input {
+          border-radius: 40px;
+        }
+
+        #hear_opt {
+          border: 1px solid #c6c6c6;
+        }
+
+        #hear_opt {
+          width: 500px;
+          height: 34px;
+          margin-bottom: 1em;
+        }
+
+        /* new styles */
+        .feedback-btn {
+          background-color: #004897;
+          border-color: #004897;
+        }
+
+        hr {
+          border: 0;
+          border-top: 1px solid #eee;
+          width: 100%;
+        }
+
+        .workflow-menu ul {
+          padding: 0px
+        }
+      </style>
+
+
+
+      <div class="whole-page" style="background-color: #f2f2f2;position: relative;">
+        <div style="width: 52%; margin: auto;    padding: 2% 0 0 0;">
+          <a id="back-btn" href="https://norgenbiotek.com/sequencetodiscover"><i class="fa fa-arrow-left"></i> Go
+            Back</a>
+        </div>
+        <br>
+        <section class="survey-thankyou">
+          <div class="image-logo">
+            <img src="/sites/default/files/norgen-logo.png" class="logo">
+            <p>&</p>
+            <img src="https://norgenbiotek.com/sites/default/files/images/grant_research/512px-Illumina-logo.svg.png"
+              id="logo2">
+          </div>
+          <hr>
+
+          <h1>Thank You</h1>
+          <h2>Your application has been submitted.</h2>
+          <div class='animation-ctn'>
+            <div class='icon icon--order-success svg'>
+              <svg xmlns='http://www.w3.org/2000/svg' width='154px' height='154px'>
+                <g fill='none' stroke='#12508b' stroke-width='2'>
+                  <circle cx='77' cy='77' r='72' style='stroke-dasharray:480px, 480px; stroke-dashoffset: 960px;'>
+                  </circle>
+                  <circle id='colored' fill='#12508b' cx='77' cy='77' r='72'
+                    style='stroke-dasharray:480px, 480px; stroke-dashoffset: 960px;'></circle>
+                  <polyline class='st0' stroke='#fff' stroke-width='10' points='43.5,77.8 63.7,97.9 112.2,49.4'
+                    style='stroke-dasharray:100px, 100px; stroke-dashoffset: 200px;' />
+                </g>
+              </svg>
+            </div>
+          </div>
+
+        </section>
+        <section class="survey">
+          <div class="image-logo">
+            <img src="/sites/default/files/norgen-logo.png" class="logo">
+            <p>&</p>
+            <img src="https://norgenbiotek.com/sites/default/files/images/grant_research/512px-Illumina-logo.svg.png"
+              id="logo2">
+          </div>
+          <hr>
+          <div class="workflow-menu">
+            <ul>
+              <a href="javascript:void(0)" class="workflowSelector  active" data-section="0">
+                <li class="btn-active">Step 1</li>
+              </a>
+              <a href="javascript:void(0)" class="workflowSelector " data-section="1">
+                <li>Step 2</li>
+              </a>
+              <a href="javascript:void(0)" class="workflowSelector " data-section="2">
+                <li>Step 3</li>
+              </a>
+
+            </ul>
+          </div>
+
+          <p id="save_text"></p>
+          <form action="" method="post" enctype="multipart/form-data">
+            <div class="pages">
+              <div class="form-table page1" id="one">
+                <label for="fname">First Name<span class="required-asterisk">*</span></label>
+                <input type="text" onkeydown="auto_save(this.id)" id="fname" name="fname"
+                  placeholder="First Name (required)">
+
+                <label for="lname">Last Name<span class="required-asterisk">*</span></label>
+                <input type="text" onkeydown="auto_save(this.id)" id="lname" name="lname"
+                  placeholder="Last Name (required)">
+
+                <label for="email">Email Address<span class="required-asterisk">*</span></label>
+                <input type="email" onkeydown="auto_save(this.id)" id="email" name="email"
+                  placeholder="Email Address (required)">
+
+                <label for="phone">Phone<span class="required-asterisk">*</span></label>
+                <input type="tel" onkeydown="auto_save(this.id)" id="phone" name="phone"
+                  placeholder="Phone Number (required)">
+
+                <label for="job">Job Title<span class="required-asterisk">*</span></label>
+                <input type="text" onkeydown="auto_save(this.id)" id="job" name="job"
+                  placeholder="Job Title (required)">
+
+                <label for="company">Company/Institution<span class="required-asterisk">*</span></label>
+                <input type="text" onkeydown="auto_save(this.id)" id="company" name="company"
+                  placeholder="Company (required)">
+
+                <!--    <div style="padding: 0 3px;margin: 3% 0;">
+                                      <p id="residence_q"> I understand grant recipients must reside in Canada and hold a post within a Canadian research institution, university, organization or company<span class="required-asterisk">*</span></p>
+                                      <input type="radio" id="residence_yes" name="residence" value="yes" onchange ="resume_form();">
+                                      <label for="residence_yes" style="display: contents;">Yes</label><br>
+                                      <input type="radio" id="residence_no" name="residence" value="no" onchange="cancel_form();">
+                                      <label for="residence_no" style="display: contents;">No</label><br>  
+                                  </div> -->
+                <div style="display: flex;padding:0px 3px;align-items: baseline;">
+                  <input type="checkbox" id="residence" name="residence" value="true" style="margin-right:10px;">
+                  <label for="residence">I understand grant recipients must reside in Canada and hold a post within a
+                    Canadian research institution, university, organization or company</label>
+                </div>
+                <div style="display: flex;padding:0px 3px;align-items: baseline;">
+                  <input type="checkbox" id="confirm" name="confirm" value="true" style="margin-right:10px;">
+                  <label for="confirm">I confirm that I have read and agree to the <a
+                      href="https://norgenbiotek.com/sequencetodiscover/rules-and-regulations" target="_blank"> Terms
+                      and Conditions</a> for the Sequence to Discover Research Grant.</label>
+                </div>
+
+                <div style="display: grid;grid-template-rows: 1fr 0fr 1fr;justify-content: end;">
+                  <button class="btn-primary next-btn" type="button" onclick="next('next')" id="next-btn">Next <i
+                      class="fa fa fa-arrow-right"></i></button>
+                  <hr>
+                  <button class="btn-primary feedback-btn" type="submit" name="save" value="saved"
+                    style="float: right;">Save Progress</button>
+                </div>
+
+
+
+
+              </div>
+
+              <div class="form-table page2" id="two">
+
+                <div class="part1_page2">
+                  <label for="area_interest" id="area_interest">What are you areas of interest?<span
+                      class="required-asterisk">*</span></label>
+                  <div class="area_flex_parent">
+                    <div class="area_flex">
+                      <label for="area_interest_1"><input type="checkbox" class="area_interest" name="area_interest[]"
+                          value="CLIA/Diagnostic Labs" onchange="area_interest_check(this)" id="area_interest_1"><span>
+                          Diagnostic Labs</span></label>
+                      <label for="area_interest_2"><input type="checkbox" class="area_interest" name="area_interest[]"
+                          value="Academic" onchange="area_interest_check(this)" id="area_interest_2"><span> Academic
+                          Research</span></label>
+                      <label for="area_interest_3"><input type="checkbox" class="area_interest" name="area_interest[]"
+                          value="CRO" onchange="area_interest_check(this)" id="area_interest_3"><span> Contract Research
+                          Organization</span></label>
+
+                    </div>
+                    <div class="area_flex">
+                      <label for="area_interest_4"><input type="checkbox" class="area_interest" name="area_interest[]"
+                          value="Hospital" onchange="area_interest_check(this)" id="area_interest_4"><span>
+                          Hospital/Clinic</span></label>
+                      <label for="area_interest_5"><input type="checkbox" class="area_interest" name="area_interest[]"
+                          value="Government Testing" onchange="area_interest_check(this)" id="area_interest_5"><span>
+                          Government Testing </span></label>
+                      <label for="area_interest_6"><input type="checkbox" class="area_interest" name="area_interest[]"
+                          value="Private Testing" onchange="area_interest_check(this)" id="area_interest_6"><span>
+                          Private Testing</span></label>
+
+                    </div>
+                    <div class="area_flex">
+                      <label for="area_interest_7"><input type="checkbox" class="area_interest" name="area_interest[]"
+                          value="Reseller/Distributor" onchange="area_interest_check(this)" id="area_interest_7"><span>
+                          Reseller/Distributor</span></label>
+                      <label for="area_interest_8"><input type="checkbox" class="area_interest" name="area_interest[]"
+                          value="OEM" onchange="area_interest_check(this)" id="area_interest_8"><span> Original
+                          Equipment Manufacturer</span></label>
+                      <label for="area_interest_9"><input type="checkbox" class="area_interest" name="area_interest[]"
+                          value="Pharmacological" onchange="area_interest_check(this)" id="area_interest_9"><span>
+                          Pharmacology</span></label>
+
+                    </div>
+                    <div class="area_flex">
+                      <label for="area_interest_10"><input type="checkbox" class="area_interest" name="area_interest[]"
+                          value="Veterinary" onchange="area_interest_check(this)" id="area_interest_10"><span>
+                          Veterinary</span></label>
+                      <label for="area_interest_11"><input type="checkbox" class="area_interest" name="area_interest[]"
+                          value="Other" onchange="area_interest_check(this)" id="area_interest_11"><span>
+                          Other</span></label>
+
+                    </div>
+
+                  </div>
+
+
+
+                  <label for="additional_comment_1" style="font-size: 13px;">Any additional comments?</label>
+                  <textarea id="additional_comment_1" name="additional_comment_1" placeholder="Additional Comments"
+                    onkeydown="auto_save(this.id);"></textarea>
+                </div>
+                <div class="part2_page2">
+                  <label for="workflow_interest" id="workflow_interest">What Kind of workflows are you interested
+                    in?<span class="required-asterisk">*</span></label>
+                  <div class="area_flex_parent">
+                    <div class="area_flex">
+                      <label for="workflow_interest_1"><input type="checkbox" class="workflow_interest"
+                          name="workflow_interest[]" value="Oncology" onchange="workflow_interest_check(this)"
+                          id="workflow_interest_1"><span> Oncology</span></label>
+                      <label for="workflow_interest_2"><input type="checkbox" class="workflow_interest"
+                          name="workflow_interest[]" value="Infectious Disease Testing"
+                          onchange="workflow_interest_check(this)" id="workflow_interest_2"><span> Infectious Disease
+                          Testing</span> </label>
+                      <label for="workflow_interest_3"><input type="checkbox" class="workflow_interest"
+                          name="workflow_interest[]" value="Human Genetics" onchange="workflow_interest_check(this)"
+                          id="workflow_interest_3"><span> Human Genetics </span></label>
+                      <label for="workflow_interest_4"><input type="checkbox" class="workflow_interest"
+                          name="workflow_interest[]" value="Reproductive Health"
+                          onchange="workflow_interest_check(this)" id="workflow_interest_4"><span> Reproductive
+                          Health</span></label>
+
+                    </div>
+                    <div class="area_flex">
+
+                      <label for="workflow_interst_5"><input type="checkbox" class="workflow_interest"
+                          name="workflow_interest[]" value="Toxicology" onchange="workflow_interest_check(this)"
+                          id="workflow_interst_5"><span> Toxicology</span></label>
+                      <label for="workflow_interst_6"><input type="checkbox" class="workflow_interest"
+                          name="workflow_interest[]" value="Clinical Trials" onchange="workflow_interest_check(this)"
+                          id="workflow_interst_6"><span>Clinical Trials</span> </label>
+                      <label for="workflow_interest_7"><input type="checkbox" class="workflow_interest"
+                          name="workflow_interest[]" value="Environmental Testing"
+                          onchange="workflow_interest_check(this)" id="workflow_interest_7"><span> Environmental
+                          Testing</span></label>
+                      <label for="workflow_interest_8"><input type="checkbox" class="workflow_interest"
+                          name="workflow_interest[]" value="Agrigenomics/Crop Testing"
+                          onchange="workflow_interest_check(this)" id="workflow_interest_8"><span> Agrigenomics/Crop
+                          Testing </span></label>
+
+                    </div>
+                    <div class="area_flex">
+
+                      <label for="workflow_interest_9"><input type="checkbox" class="workflow_interest"
+                          name="workflow_interest[]" value="Direct-To-Consumer (DTC)"
+                          onchange="workflow_interest_check(this)" id="workflow_interest_9"><span> Direct-To-Consumer
+                          (DTC)</span> </label>
+                      <label for="workflow_interest_10"><input type="checkbox" class="workflow_interest"
+                          name="workflow_interest[]" value="Surveillance" onchange="workflow_interest_check(this)"
+                          id="workflow_interest_10"><span> Surveillance</span></label>
+                      <label for="workflow_interest_11"><input type="checkbox" class="workflow_interest"
+                          name="workflow_interest[]" value="Microbiome Analysis"
+                          onchange="workflow_interest_check(this)" id="workflow_interest_11"><span> Microbiome
+                          Analysis</span></label>
+                      <label for="workflow_interest_12"><input type="checkbox" class="workflow_interest"
+                          name="workflow_interest[]" value="Food Testing" onchange="workflow_interest_check(this)"
+                          id="workflow_interest_12"><span> Food Testing</span></label>
+
+                    </div>
+                    <div class="area_flex">
+
+                      <label for="workflow_interest_13"><input type="checkbox" class="workflow_interest"
+                          name="workflow_interest[]" value="Surveillance" onchange="workflow_interest_check(this)"
+                          id="workflow_interest_13"> <span> Surveillance</span></label>
+                      <label for="workflow_interest_14"><input type="checkbox" class="workflow_interest"
+                          name="workflow_interest[]" value="Forensics" onchange="workflow_interest_check(this)"
+                          id="workflow_interest_14"><span> Forensics</span></label>
+                      <label for="workflow_interest_15"><input type="checkbox" class="workflow_interest"
+                          name="workflow_interest[]" value="Other" onchange="workflow_interest_check(this)"
+                          id="workflow_interest_15"><span> Other</span></label>
+                    </div>
+
+                  </div>
+
+
+                  <label for="additional_comment_2" style="font-size: 13px;">Any additional comments?</label>
+                  <textarea id="additional_comment_2" name="additional_comment_2" placeholder="Additional Comments"
+                    onkeydown="auto_save(this.id);"></textarea>
+                </div>
+                <div class="part3_page2">
+                  <label for="sample_work" id="sample_work">What types of samples do you work with?<span
+                      class="required-asterisk">*</span></label>
+                  <div class="area_flex_parent">
+                    <div class="area_flex">
+                      <label for="sample_1"><input type="checkbox" class="sample_work" name="sample_work[]"
+                          value="Plasma/Serum" onchange="sample_work_check(this)" id="sample_1"><span>
+                          Plasma/Serum</span></label>
+                      <label for="sample_2"><input type="checkbox" class="sample_work" name="sample_work[]"
+                          value="Saliva/Sputum" onchange="sample_work_check(this)" id="sample_2"><span>
+                          Saliva/Sputum</span> </label>
+                      <label for="sample_3"><input type="checkbox" class="sample_work" name="sample_work[]"
+                          value="Urine" onchange="sample_work_check(this)" id="sample_3"><span> Urine</span></label>
+
+                    </div>
+                    <div class="area_flex">
+
+                      <label for="sample_4"><input type="checkbox" class="sample_work" name="sample_work[]"
+                          value="Stool" onchange="sample_work_check(this)" id="sample_4"><span> Stool</span></label>
+                      <label for="sample_5"><input type="checkbox" class="sample_work" name="sample_work[]"
+                          value="Cells and Animal Tissue" onchange="sample_work_check(this)" id="sample_5"><span> Cells
+                          and Animal Tissue</span></label>
+
+
+                    </div>
+                    <div class="area_flex">
+                      <label for="sample_6"><input type="checkbox" class="sample_work" name="sample_work[]" value="CSF"
+                          onchange="sample_work_check(this)" id="sample_6"><span> CSF </span></label>
+                      <label for="sample_7"><input type="checkbox" class="sample_work" name="sample_work[]"
+                          value="Blood" onchange="sample_work_check(this)" id="sample_7"><span> Blood</span></label>
+
+
+                    </div>
+                    <div class="area_flex">
+                      <label for="sample_8"><input type="checkbox" class="sample_work" name="sample_work[]" value="DBS"
+                          onchange="sample_work_check(this)" id="sample_8"><span> DBS </span></label>
+                      <labe for="sample_9"><input type="checkbox" class="sample_work" name="sample_work[]" value="other"
+                          onchange="sample_work_check(this)" id="sample_9"><span> Other </span></label>
+
+                    </div>
+
+                  </div>
+
+                  <label for="additional_comment_3" style="font-size: 13px;">Any additional comments?</label>
+                  <textarea id="additional_comment_3" name="additional_comment_3" placeholder="Additional Comments"
+                    onkeydown="auto_save(this.id);"></textarea>
+                </div>
+                <div>
+                  <label for="analytes" id="analytes">What analytes are you isolating?<span
+                      class="required-asterisk">*</span></label>
+                  <div class="area_flex_parent">
+                    <div class="area_flex">
+                      <label for="DNA"><input type="checkbox" class="analytes" name="analytes[]" value="DNA"
+                          onchange="analytes_check(this)" id="DNA"> <span>DNA</span></label>
+                      <label for="RNA"><input type="checkbox" class="analytes" name="analytes[]" value="RNA"
+                          onchange="analytes_check(this)" id="RNA"><span> RNA</span></label>
+
+
+                    </div>
+                    <div class="area_flex">
+                      <label for="cf-DNA"> <input type="checkbox" class="analytes" name="analytes[]" value="cf-DNA"
+                          onchange="analytes_check(this)" id="cf-DNA"> <span>cf-DNA</span></label>
+                      <label for="cf-RNA"> <input type="checkbox" class="analytes" name="analytes[]" value="cf-RNA"
+                          onchange="analytes_check(this)" id="cf-RNA"><span> cf-RNA </span></label>
+
+
+                    </div>
+                    <div class="area_flex">
+                      <label for="Protein"><input type="checkbox" class="analytes" name="analytes[]" value="Protein"
+                          onchange="analytes_check(this)" id="Protein"><span> Protein </span></label>
+                      <label for="Exosomes"><input type="checkbox" class="analytes" name="analytes[]" value="Exosomes"
+                          onchange="analytes_check(this)" id="Exosomes"><span> Exosomes </span></label>
+
+                    </div>
+                    <div class="area_flex">
+                      <label for="CTCs"><input type="checkbox" class="analytes" name="analytes[]" value="CTCs"
+                          onchange="analytes_check(this)" id="CTCs"><span> CTCs</span></label>
+                      <label for="other"><input type="checkbox" class="analytes" name="analytes[]" value="Other "
+                          onchange="analytes_check(this)" id="other"> <span> Other</span></label>
+                    </div>
+
+                  </div>
+
+                  <label for="additional_comment_4" style="font-size: 13px;">Any additional comments?</label>
+                  <textarea id="additional_comment_4" name="additional_comment_4" placeholder="Additional Comments"
+                    onkeydown="auto_save(this.id);"></textarea>
+                </div>
+                <div>
+                  <label for="downstream_app" id="downstream_app">What downstream applications do you work with?<span
+                      class="required-asterisk">*</span></label>
+                  <div class="area_flex_parent-three-cols">
+                    <div class="area_flex">
+                      <label for="app1"><input type="checkbox" class="downstream_app" name="downstream_app[]"
+                          value="End-point PCR" onchange="downstream_app_check(this)" id="app1"><span> End-point
+                          PCR</span></label>
+                      <label for="app2"><input type="checkbox" class="downstream_app" name="downstream_app[]"
+                          value="qPCR" onchange="downstream_app_check(this)" id="app2"><span> qPCR </span></label>
+                      <label for="app3"><input type="checkbox" class="downstream_app" name="downstream_app[]"
+                          value="ddPCR" onchange="downstream_app_check(this)" id="app3"><span> ddPCR</span></label>
+
+                    </div>
+                    <div class="area_flex">
+                      <label for="app4"><input type="checkbox" class="downstream_app" name="downstream_app[]"
+                          value="Micro Array" onchange="downstream_app_check(this)" id="app4"><span> Micro
+                          Array</span></label>
+                      <label for="app5"><input type="checkbox" class="downstream_app" name="downstream_app[]"
+                          value="Next Generation Sequencing (NGS)" onchange="downstream_app_check(this)"
+                          id="app5"><span> Next Generation Sequencing (NGS)</span></label>
+                      <label for="app6"><input type="checkbox" class="downstream_app" name="downstream_app[]"
+                          value="Sanger Sequencing" onchange="downstream_app_check(this)" id="app6"><span> Sanger
+                          Sequencing</span></label>
+
+                    </div>
+                    <div class="area_flex">
+
+                      <label for="app7"><input type="checkbox" class="downstream_app" name="downstream_app[]"
+                          value="Biobanking" onchange="downstream_app_check(this)" id="app7"><span>
+                          Biobanking</span></label>
+                      <label for="app8"><input type="checkbox" class="downstream_app" name="downstream_app[]"
+                          value="Proteomics" onchange="downstream_app_check(this)" id="app8"><span> Proteomics
+                        </span></label>
+                      <label for="app9"><input type="checkbox" class="downstream_app" name="downstream_app[]"
+                          value="Automation Solutions" onchange="downstream_app_check(this)" id="app9"><span> Automation
+                          Solutions </span></label>
+                    </div>
+
+                    <!--  <div class="area_flex">
+                                  
+                              </div> -->
+
+                  </div>
+
+                  <label for="additional_comment_5" style="font-size: 13px;">Any additional comments?</label>
+                  <textarea id="additional_comment_5" name="additional_comment_5" placeholder="Additional Comments"
+                    onkeydown="auto_save(this.id);"></textarea>
+                </div>
+
+                <div style="display: grid;grid-template-rows: 1fr 0fr 1fr;justify-content: end;margin-bottom: 5%;">
+                  <div>
+
+                    <button class="btn-primary next-btn" type="button" onclick="next('back')"><i
+                        class="fa fa fa-arrow-left"></i> Back </button>
+                    <button class="btn-primary next-btn" type="button" onclick="next('next')">Next <i
+                        class="fa fa fa-arrow-right"></i></button>
+                  </div>
+                  <hr>
+                  <button class="btn-primary feedback-btn" type="submit" name="save" value="saved"
+                    style="float: right;">Save Progress</button>
+                </div>
+
+
+
+
+              </div>
+
+              <div class="form-table page3" id="three">
+                <p style="color: red;">Disclaimer: files uploaded wont be saved in your form progress unless you submit
+                  the form.</p>
+
+                <label for="aim">Project Aim and Significance<span class="required-asterisk">*</span><br><span
+                    style="font-size: 12px;color: gray;">Disclaimer: Project Aim can be no more than 800
+                    words.</span></label>
+                <textarea id="aim" name="aim" placeholder="Project Aim and Significance"
+                  onkeydown="auto_save(this.id);"></textarea>
+                <label for="start_date">Project Timeline<span class="required-asterisk">*</span></label>
+                <input type="date" id="start_date" name="start_date" onchange="validatedate();"> to <input type="date"
+                  id="end_date" name="end_date" onchange="validatedate();">
+
+
+                <label for="summary"> Project Summary<span class="required-asterisk">*</span>
+                  <div class="tooltip"> <i class="fa fa-info-circle"></i>
+                    <span class="tooltiptext">Include an introduction and how the grant will be used to support a new
+                      project.</span>
+                  </div><br><span style="font-size: 12px;color: gray;">Disclaimer: Summary can be no more than 300
+                    words.
+                </label>
+
+
+                <textarea id="summary" name="summary" placeholder="Project Summary"
+                  onkeydown="auto_save(this.id);"></textarea>
+
+                <label for="resume">Resume or CV<span class="required-asterisk">*</span>
+                  <div class="tooltip"> <i class="fa fa-info-circle"></i>
+                    <span class="tooltiptext">Maximum file size: 1 MB. Acceptable file format: .pdf, .doc, .docx</span>
+                  </div>
+                </label>
+                <div id="resume-dropzone" class="resume-upload dropzone" ondrop="dropHandler(event, this)"
+                  ondragover="dragOverHandler(event, this)" ondragleave="dragLeaveHandler(event, this)">
+                  <p><i class="fa fa-file-arrow-up"></i></p>
+                  <p class="upload-p"><span class="upload-btn">Upload Resume</span><span class="drag-and-drop-text"> or
+                      drag and drop file here (required)</span></p>
+                  <input type="file" id="resume" name="resume" class="file_input" accept=".pdf, .doc, .docx">
+                </div>
+
+                <label for="cover-letter">Letter of Support<span class="required-asterisk">*</span>
+                  <div class="tooltip"> <i class="fa fa-info-circle"></i>
+                    <span class="tooltiptext">Maximum file size: 1 MB. Acceptable file format: .pdf, .doc, .docx</span>
+                  </div>
+                </label>
+
+
+                <div id="cover-letter-dropzone" class="cover-letter-upload dropzone" ondrop="dropHandler(event, this)"
+                  ondragover="dragOverHandler(event, this)" ondragleave="dragLeaveHandler(event, this)">
+                  <p><i class="fa fa-file-arrow-up"></i></p>
+                  <p class="upload-p"><span class="upload-btn">Upload Letter of Support</span><span
+                      class="drag-and-drop-text"> or drag and drop file here (optional)</span></p>
+                  <input type="file" id="cover-letter" name="cover-letter" class="file_input"
+                    accept=".pdf, .doc, .docx">
+                </div>
+
+                <label for="hear_opt">How did you hear about us?<span class="required-asterisk">*</span></label>
+                <select id="hear_opt" name="hear_opt">
+                  <option value="" disabled="" selected="">-Please Select (required)-</option>
+                  <option value="Social Media">Social Media</option>
+                  <option value="Search Engine">Search Engine</option>
+                  <option value="Email">Email</option>
+                  <option value="Distributor Referral">Distributor Referral</option>
+                  <option value="Existing Customer">Existing Customer</option>
+                  <option value="Other">Other</option>
+                </select>
+
+                <div style="display: flex;padding:0px 3px;align-items: baseline;margin: 3% 0;">
+                  <input type="checkbox" id="opt_in" name="opt_in" value="true" style="margin-right:10px;">
+                  <label for="opt_in">I would like to receive emails from Norgen Biotek regarding webinars, services,
+                    and other marketing material. For more information please view our <a
+                      href="https://norgenbiotek.com/about/privacy">Privacy Policy</a>.</label>
+                </div>
+
+                <div
+                  style="display: grid;grid-template-rows: 1fr 0fr 1fr;justify-content: end;margin-bottom: 10%;margin-top: 4%;">
+
+
+                  <button class="btn-primary next-btn" type="button" onclick="next('back')"><i
+                      class="fa fa fa-arrow-left"></i> Back </button>
+
+
+                  <hr>
+
+                  <button class="btn-primary feedback-btn" type="submit" name="save" value="saved">Save
+                    Progress</button>
+
+
+                </div>
+                <div class="sub-div">
+                  <button class="btn-primary feedback-btn" type="button" onclick="makerequired()">Submit</button>
+                  <button class="btn-primary feedback-btn" type="submit" id="submit" name="update" value="updated"
+                    style="display: none;">Submit</button>
+                </div>
+              </div>
+            </div>
+            <div class="center-div" style="padding-bottom: 15px;text-align: center;">
+              <!-- <button class="btn-primary feedback-btn" type="submit" name="save" value="saved" >Saves and Exit</button> -->
+
+
+            </div>
+
+          </form>
+
+
+        </section>
+
+
+        <br>
+        <br>
+        <br>
+
+        <div class="warning-banner">
+          <a class="close" href="#" onclick="closebox();return false;">&times;</a>
+          <h3 class="missing-warning"></h3>
+        </div>
+
+      </div>
+
+
+      <script>
+
+
+        function fill_input(elem) {
+          var x = elem;
+          var input = document.getElementById("area_interest_2");
+
+
+
+
+          var string = document.createElement("p");  // create a new paragraph
+          string.setAttribute("id", "option_selected");  // assign it an ID (optional — for locating later)
+
+
+
+          if (document.getElementById(x).checked) {
+            if (string == "") {
+              string.innerHTML = x;
+              input.value = string;
+            }
+            else {
+              string.innerHTML += ", " + x;
+              input.value = string;
+            }
+
+          }
+          else {
+
+            input.value = "";
+          }
+        }
+        $('textarea[name=summary]').keyup(function () {
+          // Get value of textarea
+          var str = $('textarea[name=summary]').val();
+          // Check if value has more than 20 words
+          var limit = 300;
+          if (str.split(" ").length > 300) {
+            var finish = str.substr(0, limit);
+            $('textarea[name=summary]').val(finish);
+            document.getElementById("summary").disabled = true;
+            // // Create string with first 20 words
+            // var str_new = str.split(" ").splice(0, 300).join(" ");
+            // // Overwrite the content with the first 20 words
+            // $('textarea[name=summary]').val(str_new);
+          }
+        });
+        $('textarea[name=aim]').keyup(function () {
+          // Get value of textarea
+          var str = $('textarea[name=aim]').val();
+          // Check if value has more than 20 words
+          var limit = 800;
+          if (str.split(" ").length > 800) {
+
+            var finish = str.substr(0, limit);
+            $('textarea[name=aim]').val(finish);
+            document.getElementById("aim").disabled = true;
+            // // Create string with first 20 words
+            // var str_new = str.split(" ").splice(0, 300).join(" ");
+            // // Overwrite the content with the first 20 words
+            // $('textarea[name=summary]').val(str_new);
+          }
+        });
+        var count = 1;
+        $('.workflowSelector').on('click', function () {
+
+
+          var y = $(".workflowSelector li:first-child");
+          for (var k = 0; k < y.length; k++) {
+            if (k != $(this).attr('data-section')) {
+              y[k].classList.remove('btn-active')
+            }
+          }
+
+          y[$(this).attr('data-section')].classList.add('btn-active');
+          var leftVal = -100 * $(this).attr('data-section');
+          count = $(this).attr('data-section');
+          count = parseInt(count) + 1;
+
+          $('.workflowSelector').removeClass('active');
+          $(this).addClass('active');
+          $('.form-table').css({ 'left': leftVal + '%' });
+          var x = $(".form-table");
+
+          var elem1 = x[$(this).attr('data-section')].id;
+
+
+
+        });
+
+      </script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script type="text/javascript">
+
+        function validatedate() {
+          var startdate = document.getElementById("start_date").value;
+          var enddate = document.getElementById("end_date").value;
+
+          if (startdate != "" && enddate != "") {
+
+            if (startdate > enddate) {
+              document.getElementById("end_date").value = "";
+              var warning = document.querySelector(".warning-banner");
+              warning.style.display = "block";
+              warning.querySelector(".missing-warning").innerHTML = "Start date <strong>cannot</strong> be later than the end date";
+            }
+            else {
+              auto_save("start_date");
+            }
+          }
+        }
+        // remove_local();
+        var area_interest_arr = [];
+        var workflow_interest_arr = [];
+        var sample_work_arr = [];
+        var analytes_arr = [];
+        var downstream_app_arr = [];
+
+        var wordLen = 300; // Maximum word length
+        function checkWordLen(obj) {
+          var len = obj.value.split(/[\s]+/);
+          if (len.length > wordLen) {
+            // alert("You cannot put more than "+wordLen+" words in this text area.");
+            obj.oldValue = obj.value != obj.oldValue ? obj.value : obj.oldValue;
+            obj.value = obj.oldValue ? obj.oldValue : "";
+            return false;
+          }
+          return true;
+        }
+
+        var isAdvancedUpload = function () {
+          var div = document.createElement('div');
+          return (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div)) && 'FormData' in window && 'FileReader' in window;
+        }();
+        if (!isAdvancedUpload) {
+          document.querySelector('#popupApplication form').classList.add('no-drag-drop');
+        }
+
+        var counter = 0;
+        // Handle drag-and-drop file upload //
+        function dragOverHandler(e, dropzone) {
+          // Prevent default behavior (Prevent file from being opened)
+          e.preventDefault();
+          //add hover class
+          dropzone.classList.add('dragOver');
+        }
+        function dragLeaveHandler(e, dropzone) {
+          e.preventDefault();
+          //remove hover class
+          if (dropzone.classList.contains('dragOver')) {
+            dropzone.classList.remove('dragOver');
+          }
+        }
+        function dropHandler(e, dropzone) {
+          // Prevent default behavior (Prevent file from being opened)
+          e.preventDefault();
+
+          // Use DataTransfer interface to access the file
+          uploadFiles(e.dataTransfer.files, dropzone);
+        }
+        function uploadFiles(files, dropzone) {
+          let input = dropzone.querySelector('input[type="file"]');
+          let p = dropzone.querySelector('.upload-p');
+          if (files.length > 0) {
+            p.innerHTML = files[0].name + " (" + Math.round(files[0].size / 1024) + " KB)"; //only 1 file allowed
+            input.files = files;
+            //remove hover class
+            if (dropzone.classList.contains('dragOver')) {
+              dropzone.classList.remove('dragOver');
+            }
+          }
+          var validated = true;
+          // Validate file size
+          //handle if file size is too large (don't even let them submit because with very large files this causes severely slow page loads because form must upload the file to our tmp folder)
+          if (files[0].size / 1024 > 1000) {
+            document.querySelector('button#submit').disabled = true;
+            document.querySelector('button#submit').classList.add("disabled");
+            p.innerHTML += "<span class='required'> File too large!</span>";
+            validated = false;
+          }
+          // If the file is the right size:
+          // Validate file extension
+          // and handle the case where file is wrong file type (don't let them submit)
+          var fileExt = files[0].name.slice((files[0].name.lastIndexOf(".") - 1 >>> 0) + 2);
+
+          if (fileExt != "pdf" && fileExt != "doc" && fileExt != "docx") {
+            document.querySelector('button#submit').disabled = true;
+            document.querySelector('button#submit').classList.add("disabled");
+            p.innerHTML += "<span class='required'> File must be .pdf, .doc or .docx file type!</span>";
+            validated = false;
+          }
+          if (validated) {
+            //otherwise, if both file size and type are correct, check the warnings on the other file input before enabling the submit
+            if (document.querySelector('button#submit').classList.contains("disabled")) {
+              checkWarnings(dropzone);
+            }
+          }
+
+        }
+
+        // Handle traditional click file upload
+        var inputs = document.querySelectorAll('.dropzone input[type="file"]');
+        Array.prototype.forEach.call(inputs, function (input) {
+          var dropzone = input.parentElement;
+          var label = dropzone.querySelector('.upload-p'),
+            labelVal = label.innerHTML;
+
+          input.addEventListener('change', function (e) {
+            if (e.target.value.length == 0) {
+              return; // if file upload was cancelled then don't continue 
+            }
+            var fileName = '';
+            fileName = e.target.value.split("\\").pop();
+
+            if (fileName) {
+              label.innerHTML = fileName + " (" + Math.round(input.files[0].size / 1024) + " KB)";
+            }
+            else {
+              label.innerHTML = labelVal;
+            }
+            if (input.files[0]) {
+              var size = input.files[0].size;
+              var validated = true;
+              // Validate file size
+              if (size / 1024 > 1000) {
+                document.querySelector('button#submit').disabled = true;
+                document.querySelector('button#submit').classList.add("disabled");
+                label.innerHTML += "<span class='required'> File too large!</span>";
+                validated = false;
+              }
+              // Validate file extension
+              // handle if file is wrong file type (don't let them submit)
+              // files[0].name.slice((files[0].name.lastIndexOf(".") - 1 >>> 0) + 2);
+              var fileExt = input.files[0].name.slice((input.files[0].name.lastIndexOf(".") - 1 >>> 0) + 2);
+              if (fileExt != "pdf" && fileExt != "doc" && fileExt != "docx") {
+                document.querySelector('button#submit').disabled = true;
+                document.querySelector('button#submit').classList.add("disabled");
+                label.innerHTML += "<span class='required'> File must be .pdf, .doc or .docx file type!</span>";
+                validated = false;
+              }
+              if (validated) {
+                //otherwise, if both file size and type are correct, check the warnings on the other file input before enabling the submit
+                if (document.querySelector('button#submit').classList.contains("disabled")) {
+                  checkWarnings(dropzone);
+                }
+              }
+            }
+          });
+        });
+
+        function checkWarnings(dropzone) {
+          if (dropzone.id == "cover-letter-dropzone") {
+            var resume_p = document.querySelector("#resume-dropzone .upload-p");
+            if (!resume_p.querySelector("span.required")) { // if there is not a warning in the other file upload box, remove the disabled
+              document.querySelector('button#submit').disabled = false;
+              document.querySelector('button#submit').classList.remove("disabled");
+            }
+          }
+          else { //dropzone.id=="resume-dropzone"
+            var cover_p = document.querySelector("#cover-letter-dropzone .upload-p");
+            if (!cover_p.querySelector("span.required")) { // if there is not a warning in the other file upload box, remove the disabled
+              document.querySelector('button#submit').disabled = false;
+              document.querySelector('button#submit').classList.remove("disabled");
+            }
+          }
+        }
+
+
+
+        document.querySelector('#resume-dropzone').addEventListener("click", function () {
+          document.querySelector('#resume-dropzone input#resume').click();
+        });
+        document.querySelector('#cover-letter-dropzone').addEventListener("click", function () {
+          document.querySelector('#cover-letter-dropzone input#cover-letter').click();
+        });
+
+
+
+        function closebox() {
+          var warning = document.querySelector(".warning-banner");
+          warning.style.display = "none";
+        }
+        function makerequired() {
+
+          var lname = document.querySelector("#lname");
+          var fname = document.querySelector("#fname");
+          var email = document.querySelector("#email");
+          var phone = document.querySelector("#phone");
+          var job = document.querySelector("#job");
+          var company = document.querySelector("#company");
+          var area_interest = document.getElementsByName("area_interest[]");
+          var workflow_interest = document.getElementsByName("workflow_interest[]");
+          var sample_work = document.getElementsByName("sample_work[]");
+          var analytes = document.getElementsByName("analytes[]");
+          var downstream_app = document.getElementsByName("downstream_app[]");
+          var opt_in = document.getElementById("opt_in");
+          var residence = document.getElementById("residence");
+          // var residence_yes = document.getElementById("residence_yes");
+          // var residence_no = document.getElementById("residence_no");
+
+          // console.log(residence_yes.checked);
+          // console.log(residence_no.checked);
+          var residence_q = document.getElementById("residence_q");
+          // console.log(residence.value);
+          // console.log(residence.checked);
+          var confirm = document.getElementById("confirm");
+          var hear_opt = document.getElementById("hear_opt");
+
+
+          var area_check = false;
+          for (var i = 0; i < area_interest.length; i++) {
+            if (area_interest[i].checked) {
+              area_check = true;
+            }
+          }
+
+          var workflow_check = false;
+          for (var i = 0; i < workflow_interest.length; i++) {
+            if (workflow_interest[i].checked) {
+              workflow_check = true;
+            }
+          }
+
+          var sample_check = false;
+          for (var i = 0; i < sample_work.length; i++) {
+            if (sample_work[i].checked) {
+              sample_check = true;
+            }
+          }
+
+
+
+          var analytes_check = false;
+          for (var i = 0; i < analytes.length; i++) {
+            if (analytes[i].checked) {
+              analytes_check = true;
+            }
+          }
+
+          var downstream_app_check = false;
+          for (var i = 0; i < downstream_app.length; i++) {
+            if (downstream_app[i].checked) {
+              downstream_app_check = true;
+            }
+          }
+
+          var aim = document.querySelector("#aim");
+          var start_date = document.querySelector("#start_date");
+          var end_date = document.querySelector("#end_date");
+          var summary = document.querySelector("#summary");
+          var resume = document.querySelector("#resume");
+          var coverletter = document.querySelector("#cover-letter");
+
+
+          if (lname.value == "" || fname.value == "" || email.value == "" || phone.value == "" || job.value == "" || company.value == "" || residence.checked == false) {
+
+            var all = document.querySelectorAll(".workflowSelector");
+            for (var i = 0; i < all.length; i++) {
+              all[i].querySelector("li").style.color = "black";
+            }
+            var x = all[0];
+
+            x.querySelector("li").style.color = "red";
+            var warning = document.querySelector(".warning-banner");
+            warning.style.display = "block";
+            warning.querySelector(".missing-warning").innerHTML = "You are missing information on the<b> Step 1</b> section";
+
+            if (lname.value == "") {
+              lname.style.borderColor = "red";
+            }
+            if (fname.value == "") {
+              fname.style.borderColor = "red";
+            }
+            if (email.value == "") {
+              email.style.borderColor = "red";
+            }
+            if (phone.value == "") {
+              phone.style.borderColor = "red";
+            }
+            if (job.value == "") {
+              job.style.borderColor = "red";
+            }
+            if (company.value == "") {
+              company.style.borderColor = "red";
+            }
+            if (residence.checked == false) {
+              residence.parentElement.style.border = "solid 1px red";
+              warning.querySelector(".missing-warning").innerHTML = "In order to be eligible for the Sequence to Discover Research Grant you must reside in Canada and hold a post within a Canadian research institution, university, organization or company. Thank you for understanding. Please confirm on <b>Step 1</b>.";
+            }
+
+          }
+          else if (confirm.checked == false) {
+            var all = document.querySelectorAll(".workflowSelector");
+            for (var i = 0; i < all.length; i++) {
+              all[i].querySelector("li").style.color = "black";
+            }
+            var x = all[0];
+
+            x.querySelector("li").style.color = "red";
+
+            var warning = document.querySelector(".warning-banner");
+            warning.style.display = "block";
+            warning.querySelector(".missing-warning").innerHTML = "Please accept terms and conditions on <b>Step 1</b> in order to submit your application.";
+
+            confirm.parentElement.style.border = "solid 1px red";
+          }
+          else if (area_check == false || workflow_check == false || sample_check == false || analytes_check == false || downstream_app_check == false) {
+
+            var all = document.querySelectorAll(".workflowSelector");
+            for (var i = 0; i < all.length; i++) {
+              all[i].querySelector("li").style.color = "black";
+            }
+            var x = all[1];
+
+            x.querySelector("li").style.color = "red";
+            var warning = document.querySelector(".warning-banner");
+            warning.style.display = "block";
+            warning.querySelector(".missing-warning").innerHTML = "You are missing information on the<b> Step 2</b> section";
+            if (area_check == false) {
+              document.getElementById("area_interest").style.color = "red";
+            }
+            if (workflow_check == false) {
+              document.getElementById("workflow_interest").style.color = "red";
+            }
+            if (sample_check == false) {
+              document.getElementById("sample_work").style.color = "red";
+            }
+            if (analytes_check == false) {
+              document.getElementById("analytes").style.color = "red";
+            }
+            if (downstream_app_check == false) {
+              document.getElementById("downstream_app").style.color = "red";
+            }
+
+
+          }
+
+
+          else if (aim.value == "" || start_date.value == "" || end_date.value == "" || summary.value == "" || resume.files.length == 0 || coverletter.files.length == 0 || hear_opt.value == "") {
+
+            var all = document.querySelectorAll(".workflowSelector");
+            for (var i = 0; i < all.length; i++) {
+              all[i].querySelector("li").style.color = "black";
+            }
+            var x = all[2];
+
+            x.querySelector("li").style.color = "red";
+            var warning = document.querySelector(".warning-banner");
+            warning.style.display = "block";
+            warning.querySelector(".missing-warning").innerHTML = "You are missing information on the<b> Step 3</b> section";
+
+            if (aim.value == "") {
+              aim.style.borderColor = "red";
+            }
+            if (start_date.value == "") {
+              start_date.style.borderColor = "red";
+            }
+            if (end_date.value == "") {
+              end_date.style.borderColor = "red";
+            }
+            if (summary.value == "") {
+              summary.style.borderColor = "red";
+            }
+            if (hear_opt.value == "") {
+              hear_opt.style.borderColor = "red";
+            }
+            if (resume.files.length == 0) {
+
+              document.querySelector("#resume-dropzone").style.borderColor = "red";
+              // resume.style.borderColor = "red";
+            }
+            if (coverletter.files.length == 0) {
+
+              document.querySelector("#cover-letter-dropzone").style.borderColor = "red";
+              // resume.style.borderColor = "red";
+            }
+
+          }
+          // else if(residence_no.checked == false && residence_yes.checked == false){
+          //      var all = document.querySelectorAll(".workflowSelector");
+          //     for(var i = 0; i < all.length; i++){
+          //         all[i].querySelector("li").style.color = "black";
+          //     }
+          //     var x = all[0];
+
+          //     x.querySelector("li").style.color = "red";
+          //     var warning = document.querySelector(".warning-banner");
+          //     warning.style.display = "block";
+          //     warning.querySelector(".missing-warning").innerHTML = "You are missing information on the<b> Step 1</b> section";
+          //      document.querySelector("#residence_q").style.color = "red";
+          // }
+          // else if(residence_no.checked == true){
+          //     var all = document.querySelectorAll(".workflowSelector");
+          //     for(var i = 0; i < all.length; i++){
+          //         all[i].querySelector("li").style.color = "black";
+          //     }
+          //     var x = all[2];
+
+          //     x.querySelector("li").style.color = "red";
+          //     var warning = document.querySelector(".warning-banner");
+          //     warning.style.display = "block";
+          //     warning.querySelector(".missing-warning").innerHTML = "In order to be eligible for the Sequence to Discover Research Grant you must reside in Canada and hold a post within a Canadian research institution, university, organization or company. Thank you for understanding.";
+
+          //     document.querySelector("#residence_q").style.color = "red";
+
+          // }
+
+          else if (opt_in.checked == false) {
+            var warning = document.querySelector(".warning-banner");
+            warning.style.display = "block";
+            warning.querySelector(".missing-warning").innerHTML = "Please Opt-in in order to submit your application";
+
+            opt_in.parentElement.style.border = "solid 1px red";
+          }
+          else {
+
+            document.getElementById("submit").click();
+            // document.querySelector("#submit").click();
+          }
+
+        }
+
+
+
+
+        var searchTimeout;
+        function auto_save(elem) {
+
+
+          var z = document.getElementById("save_text");
+          z.innerHTML = '<img class="save-icon" src="https://norgenbiotek.com/sites/default/files/images/rotation-icon-0.jpg">' + "Saving...";
+          if (searchTimeout != undefined) clearTimeout(searchTimeout);
+          searchTimeout = setTimeout(save_local, 750);
+        }
+
+
+
+        var emailcheck = false;
+        var number;
+
+        function savedData() {
+
+
+
+          if (logged == true) {
+
+            for (var i = 0; i < entries.length; i++) {
+
+              if (entries[i][15] == user_email && entries[i][16] == "false") {
+                emailcheck = true;
+                number = i;
+              }
+
+            }
+
+            if (emailcheck == true) {
+              // console.log("email found");
+              var i = number;
+
+              if (localStorage.getItem("lastname") != null && localStorage.getItem("lastname") != "") {
+                document.getElementById("lname").value = localStorage.getItem("lastname");
+              }
+              else if (entries[i][1] != null && entries[i][1] != "") {
+                document.getElementById("lname").value = entries[i][1];
+              }
+
+              if (localStorage.getItem("firstname") != null && localStorage.getItem("firstname") != "") {
+                document.getElementById("fname").value = localStorage.getItem("firstname");
+              }
+              else if (entries[i][0] != null && entries[i][0] != "") {
+                document.getElementById("fname").value = entries[i][0];
+              }
+              if (localStorage.getItem("email") != null && localStorage.getItem("email") != "") {
+                document.getElementById("email").value = localStorage.getItem("email");
+              }
+              else if (entries[i][2] != null && entries[i][2] != "") {
+                document.getElementById("email").value = entries[i][2];
+              }
+              if (localStorage.getItem("phone") != null && localStorage.getItem("phone") != "") {
+                document.getElementById("phone").value = localStorage.getItem("phone");
+              }
+              else if (entries[i][3] != null && entries[i][3] != "") {
+                document.getElementById("phone").value = entries[i][3];
+              }
+              if (localStorage.getItem("job") != null && localStorage.getItem("job") != "") {
+                document.getElementById("job").value = localStorage.getItem("job");
+              }
+              else if (entries[i][4] != null && entries[i][4] != "") {
+                document.getElementById("job").value = entries[i][4];
+              }
+              if (localStorage.getItem("company") != null && localStorage.getItem("company") != "") {
+                document.getElementById("company").value = localStorage.getItem("company");
+              }
+              else if (entries[i][5] != null && entries[i][5] != "") {
+                document.getElementById("company").value = entries[i][5];
+              }
+
+              check_logged_area(entries[i][6]);
+              check_logged_workflow(entries[i][7]);
+
+              check_logged_sample(entries[i][8]);
+              check_logged_analytes(entries[i][9]);
+              check_logged_downstream(entries[i][10]);
+
+              if (localStorage.getItem("aim") != null && localStorage.getItem("aim") != "") {
+                document.getElementById("aim").value = localStorage.getItem("aim");
+              }
+              else if (entries[i][11] != null && entries[i][11] != "") {
+                document.getElementById("aim").value = entries[i][11];
+              }
+
+              if (localStorage.getItem("start_date") != null && localStorage.getItem("start_date") != "") {
+                document.getElementById("start_date").value = localStorage.getItem("start_date");
+              }
+              else if (entries[i][13] != null && entries[i][13] != "") {
+                document.getElementById("start_date").value = entries[i][13];
+              }
+
+              if (localStorage.getItem("end_date") != null && localStorage.getItem("end_date") != "") {
+                document.getElementById("end_date").value = localStorage.getItem("end_date");
+              }
+              else if (entries[i][14] != null && entries[i][14] != "") {
+                document.getElementById("end_date").value = entries[i][14];
+              }
+              if (localStorage.getItem("summary") != null && localStorage.getItem("summary") != "") {
+                document.getElementById("summary").value = localStorage.getItem("summary");
+              }
+              else if (entries[i][12] != null && entries[i][12] != "") {
+                document.getElementById("summary").value = entries[i][12];
+              }
+              if (localStorage.getItem("additional_comment_2") != null && localStorage.getItem("additional_comment_2") != "") {
+                document.getElementById("additional_comment_2").value = localStorage.getItem("additional_comment_2");
+              }
+              else if (entries[i][17] != null && entries[i][17] != "") {
+                document.getElementById("additional_comment_2").value = entries[i][17];
+              }
+
+              if (localStorage.getItem("additional_comment_3") != null && localStorage.getItem("additional_comment_3") != "") {
+                document.getElementById("additional_comment_3").value = localStorage.getItem("additional_comment_3");
+              }
+              else if (entries[i][18] != null && entries[i][18] != "") {
+                document.getElementById("additional_comment_3").value = entries[i][18];
+              }
+
+              if (localStorage.getItem("additional_comment_4") != null && localStorage.getItem("additional_comment_4") != "") {
+                document.getElementById("additional_comment_4").value = localStorage.getItem("additional_comment_4");
+              }
+              else if (entries[i][19] != null && entries[i][19] != "") {
+                document.getElementById("additional_comment_4").value = entries[i][19];
+              }
+
+              if (localStorage.getItem("additional_comment_5") != null && localStorage.getItem("additional_comment_5") != "") {
+                document.getElementById("additional_comment_5").value = localStorage.getItem("additional_comment_5");
+              }
+              else if (entries[i][20] != null && entries[i][20] != "") {
+                document.getElementById("additional_comment_5").value = entries[i][20];
+              }
+
+            }
+            else if (emailcheck == false) {
+              // console.log("eail not in db");
+              document.getElementById("lname").value = localStorage.getItem("lastname");
+              document.getElementById("fname").value = localStorage.getItem("firstname");
+              document.getElementById("email").value = localStorage.getItem("email");
+              document.getElementById("phone").value = localStorage.getItem("phone");
+              document.getElementById("job").value = localStorage.getItem("job");
+              document.getElementById("company").value = localStorage.getItem("company");
+
+              var area_interest = document.querySelectorAll(".area_interest");
+              if (localStorage.getItem("area_interest") != "" && localStorage.getItem("area_interest") != null) {
+
+                var area_interest_length = JSON.parse(localStorage.getItem("area_interest")).length;
+                for (var i = 0; i < area_interest.length; i++) {
+                  for (var j = 0; j < area_interest_length; j++) {
+
+                    if (area_interest[i].value == JSON.parse(localStorage.getItem("area_interest"))[j]) {
+                      // console.log(area_interest[i]);
+                      area_interest[i].checked = true;
+                    }
+                  }
+                }
+
+              }
+              var workflow_interest = document.querySelectorAll(".workflow_interest");
+              if (localStorage.getItem("workflow_interest") != "" && localStorage.getItem("workflow_interest") != null) {
+
+                var workflow_interest_length = JSON.parse(localStorage.getItem("workflow_interest")).length;
+
+                for (var i = 0; i < workflow_interest.length; i++) {
+                  for (var j = 0; j < workflow_interest_length; j++) {
+
+                    if (workflow_interest[i].value == JSON.parse(localStorage.getItem("workflow_interest"))[j]) {
+                      // console.log(workflow_interest[i]);
+                      workflow_interest[i].checked = true;
+                    }
+                  }
+                }
+
+              }
+              var sample_work = document.querySelectorAll(".sample_work");
+              if (localStorage.getItem("sample_work") != "" && localStorage.getItem("sample_work") != null) {
+                var sample_work_length = JSON.parse(localStorage.getItem("sample_work")).length;
+
+                for (var i = 0; i < sample_work.length; i++) {
+                  for (var j = 0; j < sample_work_length; j++) {
+
+                    if (sample_work[i].value == JSON.parse(localStorage.getItem("sample_work"))[j]) {
+                      // console.log(sample_work[i]);
+                      sample_work[i].checked = true;
+                    }
+                  }
+                }
+
+              }
+              var analytes = document.querySelectorAll(".analytes");
+              if (localStorage.getItem("analytes") != "" && localStorage.getItem("analytes") != null) {
+
+                var analytes_length = JSON.parse(localStorage.getItem("analytes")).length;
+
+                for (var i = 0; i < analytes.length; i++) {
+                  for (var j = 0; j < analytes_length; j++) {
+
+                    if (analytes[i].value == JSON.parse(localStorage.getItem("analytes"))[j]) {
+                      // console.log(analytes[i]);
+                      analytes[i].checked = true;
+                    }
+                  }
+                }
+                // document.getElementById("analytes").value = localStorage.getItem("analytes");
+              }
+              var downstream_app = document.querySelectorAll(".downstream_app");
+              if (localStorage.getItem("downstream_app") != "" && localStorage.getItem("downstream_app") != null) {
+                var downstream_app_length = JSON.parse(localStorage.getItem("downstream_app")).length;
+
+                for (var i = 0; i < downstream_app.length; i++) {
+                  for (var j = 0; j < downstream_app_length; j++) {
+
+                    if (downstream_app[i].value == JSON.parse(localStorage.getItem("downstream_app"))[j]) {
+                      // console.log(downstream_app[i]);
+                      downstream_app[i].checked = true;
+                    }
+                  }
+                }
+                // document.getElementById("downstream_app").value = localStorage.getItem("downstream_app");
+              }
+
+              document.getElementById("aim").value = localStorage.getItem("aim", aim);
+              document.getElementById("start_date").value = localStorage.getItem("start_date");
+              document.getElementById("end_date").value = localStorage.getItem("end_date");
+              document.getElementById("summary").value = localStorage.getItem("summary");
+              document.getElementById("additional_comment_1").value = localStorage.getItem("additional_comment_1");
+              document.getElementById("additional_comment_2").value = localStorage.getItem("additional_comment_2");
+              document.getElementById("additional_comment_3").value = localStorage.getItem("additional_comment_3");
+              document.getElementById("additional_comment_4").value = localStorage.getItem("additional_comment_4");
+              document.getElementById("additional_comment_5").value = localStorage.getItem("additional_comment_5");
+
+            }
+          }
+          else {
+
+            if (localStorage.getItem("area_interest") != null) {
+              // console.log("bro");
+              var area_interest_length = JSON.parse(localStorage.getItem("area_interest")).length;
+
+              var area_interest = document.querySelectorAll(".area_interest");
+
+              for (var i = 0; i < area_interest.length; i++) {
+                for (var j = 0; j < area_interest_length; j++) {
+                  // console.log(area_interest[i].value);
+                  // console.log(JSON.parse(localStorage.getItem("area_interest"))[j]);
+                  if (area_interest[i].value == JSON.parse(localStorage.getItem("area_interest"))[j]) {
+                    // console.log(area_interest[i]);
+                    area_interest[i].checked = true;
+                  }
+                }
+              }
+
+
+            }
+            if (localStorage.getItem("workflow_interest") != null) {
+              // console.log("bro");
+              var workflow_interest_length = JSON.parse(localStorage.getItem("workflow_interest")).length;
+
+              var workflow_interest = document.querySelectorAll(".workflow_interest");
+
+              for (var i = 0; i < workflow_interest.length; i++) {
+                for (var j = 0; j < workflow_interest_length; j++) {
+
+                  if (workflow_interest[i].value == JSON.parse(localStorage.getItem("workflow_interest"))[j]) {
+                    // console.log(workflow_interest[i]);
+                    workflow_interest[i].checked = true;
+                  }
+                }
+              }
+
+
+
+
+            }
+            if (localStorage.getItem("sample_work") != null) {
+              // console.log("bro");
+              var sample_work_length = JSON.parse(localStorage.getItem("sample_work")).length;
+
+              var sample_work = document.querySelectorAll(".sample_work");
+
+              for (var i = 0; i < sample_work.length; i++) {
+                for (var j = 0; j < sample_work_length; j++) {
+
+                  if (sample_work[i].value == JSON.parse(localStorage.getItem("sample_work"))[j]) {
+                    // console.log(sample_work[i]);
+                    sample_work[i].checked = true;
+                  }
+                }
+              }
+
+
+
+            }
+            if (localStorage.getItem("analytes") != null) {
+              // console.log("bro");
+              var analytes_length = JSON.parse(localStorage.getItem("analytes")).length;
+
+              var analytes = document.querySelectorAll(".analytes");
+
+
+
+              for (var i = 0; i < analytes.length; i++) {
+                for (var j = 0; j < analytes_length; j++) {
+
+                  if (analytes[i].value == JSON.parse(localStorage.getItem("analytes"))[j]) {
+                    // console.log(analytes[i]);
+                    analytes[i].checked = true;
+                  }
+                }
+              }
+
+            }
+            if (localStorage.getItem("downstream_app") != null) {
+              // console.log("bro");
+              var downstream_app_length = JSON.parse(localStorage.getItem("downstream_app")).length;
+
+              var downstream_app = document.querySelectorAll(".downstream_app");
+
+              for (var i = 0; i < downstream_app.length; i++) {
+                for (var j = 0; j < downstream_app_length; j++) {
+
+                  if (downstream_app[i].value == JSON.parse(localStorage.getItem("downstream_app"))[j]) {
+                    // console.log(downstream_app[i]);
+                    downstream_app[i].checked = true;
+                  }
+                }
+              }
+
+            }
+
+            document.getElementById("lname").value = localStorage.getItem("lastname");
+            document.getElementById("fname").value = localStorage.getItem("firstname");
+            document.getElementById("email").value = localStorage.getItem("email");
+            document.getElementById("phone").value = localStorage.getItem("phone");
+            document.getElementById("job").value = localStorage.getItem("job");
+            document.getElementById("company").value = localStorage.getItem("company");
+            // console.log("show" , localStorage.getItem("area_interest"))
+
+            document.getElementById("aim").value = localStorage.getItem("aim");
+            document.getElementById("start_date").value = localStorage.getItem("start_date");
+            document.getElementById("end_date").value = localStorage.getItem("end_date");
+            document.getElementById("summary").value = localStorage.getItem("summary");
+            document.getElementById("additional_comment_1").value = localStorage.getItem("additional_comment_1");
+            document.getElementById("additional_comment_2").value = localStorage.getItem("additional_comment_2");
+            document.getElementById("additional_comment_3").value = localStorage.getItem("additional_comment_3");
+            document.getElementById("additional_comment_4").value = localStorage.getItem("additional_comment_4");
+            document.getElementById("additional_comment_5").value = localStorage.getItem("additional_comment_5");
+          }
+        }
+
+
+        function check_logged_area(elem) {
+          var area_interest = document.querySelectorAll(".area_interest");
+
+          if (localStorage.getItem("area_interest") != null && localStorage.getItem("area_interest") != "") {
+            var area_interest_length = JSON.parse(localStorage.getItem("area_interest")).length;
+
+
+
+            for (var i = 0; i < area_interest.length; i++) {
+              for (var j = 0; j < area_interest_length; j++) {
+
+                if (area_interest[i].value == JSON.parse(localStorage.getItem("area_interest"))[j]) {
+                  // console.log(area_interest[i]);
+                  area_interest[i].checked = true;
+                }
+              }
+            }
+          }
+          else if (elem != null && elem != "") {
+            var x = elem.split(",");
+            for (var i = 0; i < area_interest.length; i++) {
+              for (var j = 0; j < x.length; j++) {
+                if (area_interest[i].value == x[j]) {
+                  // console.log(area_interest[i]);
+                  area_interest[i].checked = true;
+                }
+              }
+            }
+
+          }
+
+        }
+
+        function check_logged_workflow(elem) {
+          var workflow_interest = document.querySelectorAll(".workflow_interest");
+
+          if (localStorage.getItem("workflow_interest") != null && localStorage.getItem("workflow_interest") != "") {
+            var workflow_interest_length = JSON.parse(localStorage.getItem("workflow_interest")).length;
+
+
+
+            for (var i = 0; i < workflow_interest.length; i++) {
+              for (var j = 0; j < workflow_interest_length; j++) {
+
+                if (workflow_interest[i].value == JSON.parse(localStorage.getItem("workflow_interest"))[j]) {
+                  // console.log(workflow_interest[i]);
+                  workflow_interest[i].checked = true;
+                }
+              }
+            }
+          }
+          else if (elem != null && elem != "") {
+            var x = elem.split(",");
+            for (var i = 0; i < workflow_interest.length; i++) {
+              for (var j = 0; j < x.length; j++) {
+                if (workflow_interest[i].value == x[j]) {
+                  // console.log(workflow_interest[i]);
+                  workflow_interest[i].checked = true;
+                }
+              }
+            }
+
+          }
+
+        }
+
+        function check_logged_sample(elem) {
+          var sample_work = document.querySelectorAll(".sample_work");
+          if (localStorage.getItem("sample_work") != null && localStorage.getItem("sample_work") != "") {
+            var sample_work_length = JSON.parse(localStorage.getItem("sample_work")).length;
+
+
+
+            for (var i = 0; i < sample_work.length; i++) {
+              for (var j = 0; j < sample_work_length; j++) {
+
+                if (sample_work[i].value == JSON.parse(localStorage.getItem("sample_work"))[j]) {
+                  // console.log(sample_work[i]);
+                  sample_work[i].checked = true;
+                }
+              }
+            }
+          }
+          else if (elem != null && elem != "") {
+            var x = elem.split(",");
+            for (var i = 0; i < sample_work.length; i++) {
+              for (var j = 0; j < x.length; j++) {
+                if (sample_work[i].value == x[j]) {
+                  // console.log(sample_work[i]);
+                  sample_work[i].checked = true;
+                }
+              }
+            }
+
+          }
+
+        }
+
+        function check_logged_analytes(elem) {
+          var analytes = document.querySelectorAll(".analytes");
+          if (localStorage.getItem("analytes") != null && localStorage.getItem("analytes") != "") {
+            var analytes_length = JSON.parse(localStorage.getItem("analytes")).length;
+
+
+
+            for (var i = 0; i < analytes.length; i++) {
+              for (var j = 0; j < analytes_length; j++) {
+
+                if (analytes[i].value == JSON.parse(localStorage.getItem("analytes"))[j]) {
+                  // console.log(analytes[i]);
+                  analytes[i].checked = true;
+                }
+              }
+            }
+          }
+          else if (elem != null && elem != "") {
+            var x = elem.split(",");
+            for (var i = 0; i < analytes.length; i++) {
+              for (var j = 0; j < x.length; j++) {
+                if (analytes[i].value == x[j]) {
+                  // console.log(analytes[i]);
+                  analytes[i].checked = true;
+                }
+              }
+            }
+
+          }
+
+        }
+
+        function check_logged_downstream(elem) {
+          var downstream_app = document.querySelectorAll(".downstream_app");
+          if (localStorage.getItem("downstream_app") != null && localStorage.getItem("downstream_app") != "") {
+            var downstream_app_length = JSON.parse(localStorage.getItem("downstream_app")).length;
+
+
+
+            for (var i = 0; i < downstream_app.length; i++) {
+              for (var j = 0; j < downstream_app_length; j++) {
+
+                if (downstream_app[i].value == JSON.parse(localStorage.getItem("downstream_app"))[j]) {
+                  // console.log(downstream_app[i]);
+                  downstream_app[i].checked = true;
+                }
+              }
+            }
+          }
+          else if (elem != null && elem != "") {
+            var x = elem.split(",");
+            for (var i = 0; i < downstream_app.length; i++) {
+              for (var j = 0; j < x.length; j++) {
+                if (downstream_app[i].value == x[j]) {
+                  // console.log(downstream_app[i]);
+                  downstream_app[i].checked = true;
+                }
+              }
+            }
+
+          }
+
+        }
+
+        window.onload = savedData;
+        function area_interest_check(elem) {
+
+          if (localStorage.getItem("area_interest") != null) {
+            area_interest_arr = JSON.parse(localStorage.getItem("area_interest"));
+          }
+
+          // console.log("this is the imp" , area_interest_arr);
+          if (elem.checked == true) {
+            // console.log("it is trye");
+            area_interest_arr.push(elem.value);
+          }
+          else {
+            var index = area_interest_arr.indexOf(elem.value);
+            if (index !== -1) {
+              area_interest_arr.splice(index, 1);
+            }
+          }
+          // console.log("hello area interest" , area_interest_arr);
+          auto_save(elem);
+
+          localStorage.setItem("area_interest", JSON.stringify(area_interest_arr));
+        }
+
+        function workflow_interest_check(elem) {
+
+          if (localStorage.getItem("workflow_interest") != null) {
+            workflow_interest_arr = JSON.parse(localStorage.getItem("workflow_interest"));
+          }
+
+          if (elem.checked == true) {
+            // console.log("it is trye");
+            workflow_interest_arr.push(elem.value);
+          }
+          else {
+            var index = workflow_interest_arr.indexOf(elem.value);
+            if (index !== -1) {
+              workflow_interest_arr.splice(index, 1);
+            }
+          }
+          // console.log("hello area interest" , workflow_interest_arr);
+          auto_save(elem);
+
+          localStorage.setItem("workflow_interest", JSON.stringify(workflow_interest_arr));
+
+        }
+
+        function sample_work_check(elem) {
+          // console.log(elem);
+          if (localStorage.getItem("sample_work") != null) {
+            sample_work_arr = JSON.parse(localStorage.getItem("sample_work"));
+          }
+          // console.log("this is the imp" , sample_work_arr);
+          if (elem.checked == true) {
+            // console.log("it is trye");
+            sample_work_arr.push(elem.value);
+          }
+          else {
+            var index = sample_work_arr.indexOf(elem.value);
+            if (index !== -1) {
+              sample_work_arr.splice(index, 1);
+            }
+          }
+          // console.log("hello area interest" , sample_work_arr);
+          auto_save(elem);
+
+          localStorage.setItem("sample_work", JSON.stringify(sample_work_arr));
+
+        }
+
+        function analytes_check(elem) {
+          // console.log(elem);
+          if (localStorage.getItem("analytes") != null) {
+            analytes_arr = JSON.parse(localStorage.getItem("analytes"));
+          }
+          // console.log("this is the imp" , analytes_arr);
+          if (elem.checked == true) {
+            // console.log("it is trye");
+            analytes_arr.push(elem.value);
+          }
+          else {
+            var index = analytes_arr.indexOf(elem.value);
+            if (index !== -1) {
+              analytes_arr.splice(index, 1);
+            }
+          }
+          // console.log("hello area interest" , analytes_arr);
+          auto_save(elem);
+
+          localStorage.setItem("analytes", JSON.stringify(analytes_arr));
+
+        }
+
+        function downstream_app_check(elem) {
+          // console.log(elem);
+          if (localStorage.getItem("downstream_app") != null) {
+            downstream_app_arr = JSON.parse(localStorage.getItem("downstream_app"));
+          }
+          // console.log("this is the imp" , downstream_app_arr);
+          if (elem.checked == true) {
+            // console.log("it is trye");
+            downstream_app_arr.push(elem.value);
+          }
+          else {
+            var index = downstream_app_arr.indexOf(elem.value);
+            if (index !== -1) {
+              downstream_app_arr.splice(index, 1);
+            }
+          }
+          // console.log("hello area interest" , downstream_app_arr);
+          auto_save(elem);
+
+          localStorage.setItem("downstream_app", JSON.stringify(downstream_app_arr));
+        }
+        function save_local() {
+
+
+          var lname = document.getElementById('lname').value;
+          var fname = document.getElementById('fname').value;
+          var email = document.getElementById('email').value;
+          var phone = document.getElementById("phone").value;
+          var job = document.getElementById("job").value;
+          var company = document.getElementById("company").value;
+
+          var aim = document.getElementById("aim").value;
+          var start_date = document.getElementById("start_date").value;
+          var end_date = document.getElementById("end_date").value;
+          var summary = document.getElementById("summary").value;
+          var additional_comment_1 = document.getElementById("additional_comment_1").value;
+          var additional_comment_2 = document.getElementById("additional_comment_2").value;
+          var additional_comment_3 = document.getElementById("additional_comment_3").value;
+          var additional_comment_4 = document.getElementById("additional_comment_4").value;
+          var additional_comment_5 = document.getElementById("additional_comment_5").value;
+
+          localStorage.setItem("lastname", lname);
+          localStorage.setItem("firstname", fname);
+          localStorage.setItem("email", email);
+          localStorage.setItem("phone", phone);
+          localStorage.setItem("job", job);
+          localStorage.setItem("company", company);
+          localStorage.setItem("aim", aim);
+          localStorage.setItem("start_date", start_date);
+          localStorage.setItem("end_date", end_date);
+          localStorage.setItem("summary", summary);
+          localStorage.setItem("additional_comment_1", additional_comment_1);
+          localStorage.setItem("additional_comment_2", additional_comment_2);
+          localStorage.setItem("additional_comment_3", additional_comment_3);
+          localStorage.setItem("additional_comment_4", additional_comment_4);
+          localStorage.setItem("additional_comment_5", additional_comment_5);
+
+
+          var z = document.getElementById("save_text");
+          z.innerHTML = "Changed are saved!";
+
+        }
+        function remove_local() {
+          submit = true;
+          // console.log("removig");
+          localStorage.removeItem("lastname", lname);
+          localStorage.removeItem("firstname", fname);
+          localStorage.removeItem("email", email);
+          localStorage.removeItem("phone", phone);
+          localStorage.removeItem("job", job);
+          localStorage.removeItem("company", company);
+          localStorage.removeItem("area_interest", area_interest);
+          localStorage.removeItem("workflow_interest", workflow_interest);
+          localStorage.removeItem("sample_work", sample_work);
+          localStorage.removeItem("analytes", analytes);
+          localStorage.removeItem("downstream_app", downstream_app);
+          localStorage.removeItem("aim", aim);
+          localStorage.removeItem("start_date", start_date);
+          localStorage.removeItem("end_date", end_date);
+          localStorage.removeItem("summary", summary);
+          localStorage.removeItem("additional_comment_1", additional_comment_1);
+          localStorage.removeItem("additional_comment_2", additional_comment_2);
+          localStorage.removeItem("additional_comment_3", additional_comment_3);
+          localStorage.removeItem("additional_comment_4", additional_comment_4);
+          localStorage.removeItem("additional_comment_5", additional_comment_5);
+
+
+
+        }
+
+
+        function complete_form() {
+          var thankyou = document.querySelector(".survey-thankyou");
+          var s_form = document.querySelector(".survey");
+
+          thankyou.style.display = "block";
+          s_form.style.display = "none";
+
+          remove_local();
+
+
+
+        }
+
+
+        function next(elem) {
+
+
+          var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+          var address = document.getElementById('email');
+          var email = document.getElementById('email').value;
+
+          if (email != null && email != "") {
+            if (email.match(validRegex)) {
+
+
+              var slide = document.querySelectorAll(".form-table");
+              // console.log(slide);
+              if (elem == "next") {
+
+                // slide[0].style.left = "-"+leftval+"%";
+                var leftval = 100 * count;
+                for (var j = 0; j < slide.length; j++) {
+
+                  slide[j].style.left = "-" + leftval + "%";
+
+
+
+                }
+                count++;
+              }
+              if (elem == "back") {
+
+                // slide[0].style.left = "-"+leftval+"%";
+                var leftval = 100 * (count - 2);
+                for (var j = 0; j < slide.length; j++) {
+
+                  slide[j].style.left = "-" + leftval + "%";
+
+
+
+                }
+                count--;
+
+              }
+              // console.log(count);
+              for (var i = 0; i < slide.length; i++) {
+                slide[i].classList.remove("active");
+              }
+              slide[count - 1].classList.add("active");
+
+              var x = document.querySelectorAll(".workflowSelector");
+              // console.log(x);
+              for (var j = 0; j < x.length; j++) {
+                x[j].classList.remove("active");
+                x[j].querySelector("li").classList.remove("btn-active");
+              }
+              x[count - 1].classList.add("active");
+              x[count - 1].querySelector("li").classList.add("btn-active");
+
+            }
+            else {
+              var warning = document.querySelector(".warning-banner");
+              warning.style.display = "block";
+              warning.querySelector(".missing-warning").innerHTML = "You provided invalid email address";
+              address.style.borderColor = "red";
+            }
+          }
+
+          else {
+
+
+            var slide = document.querySelectorAll(".form-table");
+            // console.log(slide);
+            if (elem == "next") {
+
+              // slide[0].style.left = "-"+leftval+"%";
+              var leftval = 100 * count;
+              for (var j = 0; j < slide.length; j++) {
+
+                slide[j].style.left = "-" + leftval + "%";
+
+
+
+              }
+              count++;
+            }
+            if (elem == "back") {
+
+              // slide[0].style.left = "-"+leftval+"%";
+              var leftval = 100 * (count - 2);
+              for (var j = 0; j < slide.length; j++) {
+
+                slide[j].style.left = "-" + leftval + "%";
+
+
+
+              }
+              count--;
+
+            }
+            // console.log(count);
+            for (var i = 0; i < slide.length; i++) {
+              slide[i].classList.remove("active");
+            }
+            slide[count - 1].classList.add("active");
+
+            var x = document.querySelectorAll(".workflowSelector");
+            // console.log(x);
+            for (var j = 0; j < x.length; j++) {
+              x[j].classList.remove("active");
+              x[j].querySelector("li").classList.remove("btn-active");
+            }
+            x[count - 1].classList.add("active");
+            x[count - 1].querySelector("li").classList.add("btn-active");
+          }
+
+
+
+
+        }
+        function back() {
+
+          var slide = document.querySelectorAll(".form-table");
+
+          var leftval = 100 * count;
+          for (var j = 0; j < slide.length; j++) {
+
+            slide[j].style.left = "-" + leftval + "%";
+          }
+          count++;
+        }
+        // remove_local();
+      </script>

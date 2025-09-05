@@ -1,0 +1,656 @@
+{#
+/**
+ * @file
+ * Default theme implementation for the basic structure of a single Drupal page.
+ *
+ * Variables:
+ * - logged_in: A flag indicating if user is logged in.
+ * - root_path: The root path of the current page (e.g., node, admin, user).
+ * - node_type: The content type for the current node, if the page is a node.
+ * - head_title: List of text elements that make up the head_title variable.
+ *   May contain one or more of the following:
+ *   - title: The title of the page.
+ *   - name: The name of the site.
+ *   - slogan: The slogan of the site.
+ * - page_top: Initial rendered markup. This should be printed before 'page'.
+ * - page: The rendered page markup.
+ * - page_bottom: Closing rendered markup. This variable should be printed after
+ *   'page'.
+ * - db_offline: A flag indicating if the database is offline.
+ * - placeholder_token: The token for generating head, css, js and js-bottom
+ *   placeholders.
+ *
+ * @see template_preprocess_html()
+ *
+ * @ingroup themeable
+ */
+#}
+<!DOCTYPE html>
+<html{{ html_attributes }}>
+  <head>
+    <link rel="alternate" type="application/rss+xml" title="Norblog" href="https://norgenbiotek.com/norblog.xml" />
+    <link rel="alternate" type="application/rss+xml" title="Customer Success Stories" href="https://norgenbiotek.com/stories.xml" />
+    <link rel="alternate" type="application/rss+xml" title="Publication Summaries" href="https://norgenbiotek.com/summary.xml" />
+    <head-placeholder token="{{ placeholder_token }}">
+    <title>{{ head_title|safe_join(' | ') }}</title>
+    <css-placeholder token="{{ placeholder_token }}">
+    <js-placeholder token="{{ placeholder_token }}">
+    {% if gmap_key %}      
+      <script src="//maps.googleapis.com/maps/api/js?key={{ gmap_key }}" type="text/javascript"></script>
+    {% endif %}
+        
+    <!--lite-youtube module for embedding youtube videos-->
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@justinribeiro/lite-youtube@1.4.0/lite-youtube.js"></script>
+    <!-- jquery 3.3.1 -->
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    {% if is_front %}
+    <meta property="og:title" content="Norgen Biotek" />
+    <meta property="og:description" content="Equip Your Lab with Complete Solutions for Any Workflow" />
+    <meta property="og:image" content="https://norgenbiotek.com/sites/default/files/norgen-logo.png" />
+    {% endif %}
+    {% if is_front %}<meta name="google-site-verification" content="DTDTFnIyoLNnOO19t0nibEzOA6i3vNERJyBeq0EJdM0" />{% endif %}
+
+    {# MOTAWORD translation service #}
+    {# <link rel="preconnect" href="https://serve.motaword.com"><link rel="preload" href="https://serve.motaword.com/js/206-24737.js" as="script" importance="high" crossorigin referrerpolicy="unsafe-url"><link rel="preconnect" href="https://api.motaword.com"><script src="https://serve.motaword.com/js/206-24737.js" data-token="a9f7168e9f49d64bbc6fbf9412fb25e233c05219" crossorigin async referrerpolicy="unsafe-url"></script>
+     #}
+  </head>
+  <body{{ attributes }}>
+    {#
+    Keyboard navigation/accessibility link to main content section in
+    page.html.twig.
+    #}
+    <a href="#block-jango-content" class="visually-hidden focusable">
+      {{ 'Skip to main content'|t }}
+    </a>
+    {% if ('/fr/' in url) or (url ends with '/fr') %}
+    {% include '@jango/templates/fr/includes/fr-header.html.twig' %}
+    {% elseif ('/es/' in url) or (url ends with '/es') %}
+    {% include '@jango/templates/es/includes/es-header.html.twig' %}
+    {% elseif ('/cn/' in url) or (url ends with '/cn') %}
+    {% include '@jango/templates/cn/includes/cn-header.html.twig' %}
+    {% elseif ('/de/' in url) or (url ends with '/de') %}
+    {% include '@jango/templates/de/includes/de-header.html.twig' %}
+    {# {% elseif ('/ja/' in url) or (url ends with '/ja') %}
+    {% include '@jango/templates/ja/includes/ja-header.html.twig' %} #}
+    {% else %}
+    {% include '@jango/templates/includes/header.html.twig' %}
+    {#{% if logged_in != true %}
+    {% include '@jango/templates/includes/mail_optin.html.twig' %}
+    {% elseif logged_in == true and mail_opt_in == 0 %}
+    {% include '@jango/templates/includes/mail_optin.html.twig' %}
+    {% endif %}#}
+    {% endif %}
+    {{ page_top }}
+    {{ page }}
+    {{ page_bottom }}
+    {% if ('/fr/' in url) or (url ends with '/fr') %}
+    {% include '@jango/templates/fr/includes/fr-footer.html.twig' %}
+    {% elseif ('/es/' in url) or (url ends with '/es') %}
+    {% include '@jango/templates/es/includes/es-footer.html.twig' %}
+    {% elseif ('/cn/' in url) or (url ends with '/cn') %}
+    {% include '@jango/templates/cn/includes/cn-footer.html.twig' %}
+    {% elseif ('/de/' in url) or (url ends with '/de') %}
+    {% include '@jango/templates/de/includes/de-footer.html.twig' %}
+    {# {% elseif ('/ja/' in url) or (url ends with '/ja') %}
+    {% include '@jango/templates/ja/includes/ja-footer.html.twig' %} #}
+    {% else %}
+    {% include '@jango/templates/includes/footer.html.twig' %}
+    {% endif %}
+    <js-bottom-placeholder token="{{ placeholder_token }}">
+    <div class="c-layout-go2top" style="display: block;">
+      <i class="icon-arrow-up"></i>
+    </div>
+
+    {% if dev %}
+      <nav class="c-layout-quick-sidebar">
+        <div class="c-header">
+          <button type="button" class="c-link c-close">
+            <i class="icon-login"></i>
+          </button>
+        </div>
+        <div class="c-content">
+          <div class="c-section">
+            <h3>{{ 'Theme Colors'|t }}</h3>
+            <div class="c-settings">
+              <span class="c-color c-default c-active" data-color="default"></span>
+              <span class="c-color c-green1" data-color="green1"></span>
+              <span class="c-color c-green2" data-color="green2"></span>
+              <span class="c-color c-green3" data-color="green3"></span>
+              <span class="c-color c-yellow1" data-color="yellow1"></span>
+              <span class="c-color c-yellow2" data-color="yellow2"></span>
+              <span class="c-color c-yellow3" data-color="yellow3"></span>
+              <span class="c-color c-red1" data-color="red1"></span>
+              <span class="c-color c-red2" data-color="red2"></span>
+              <span class="c-color c-red3" data-color="red3"></span>
+              <span class="c-color c-purple1" data-color="purple1"></span>
+              <span class="c-color c-purple2" data-color="purple2"></span>
+              <span class="c-color c-purple3" data-color="purple3"></span>
+              <span class="c-color c-blue1" data-color="blue1"></span>
+              <span class="c-color c-blue2" data-color="blue2"></span>
+              <span class="c-color c-blue3" data-color="blue3"></span>
+              <span class="c-color c-brown1" data-color="brown1"></span>
+              <span class="c-color c-brown2" data-color="brown2"></span>
+              <span class="c-color c-brown3" data-color="brown3"></span>
+              <span class="c-color c-dark1" data-color="dark1"></span>
+              <span class="c-color c-dark2" data-color="dark2"></span>
+              <span class="c-color c-dark3" data-color="dark3"></span>
+            </div>
+          </div>
+          <div class="c-section">
+            <h3>{{ 'Header Type'|t }}</h3>
+            <div class="c-settings">
+              <input type="button" class="c-setting_header-type btn btn-sm c-btn-border-1x c-btn-white c-btn-sbold c-btn-uppercase active" data-value="boxed" value="boxed">
+              <input type="button" class="c-setting_header-type btn btn-sm c-btn-border-1x c-btn-white c-btn-sbold c-btn-uppercase" data-value="fluid" value="fluid">
+            </div>
+          </div>
+          <div class="c-section">
+            <h3>{{ 'Header Mode'|t }}</h3>
+            <div class="c-settings">
+              <input type="button" class="c-setting_header-mode btn btn-sm c-btn-border-1x c-btn-white c-btn-sbold c-btn-uppercase active" data-value="fixed" value="fixed">
+              <input type="button" class="c-setting_header-mode btn btn-sm c-btn-border-1x c-btn-white c-btn-sbold c-btn-uppercase" data-value="static" value="static">
+            </div>
+          </div>
+          <div class="c-section">
+            <h3>{{ 'Mega Menu Style'|t }}</h3>
+            <div class="c-settings">
+              <input type="button" class="c-setting_megamenu-style btn btn-sm c-btn-border-1x c-btn-white c-btn-sbold c-btn-uppercase active" data-value="dark" value="dark">
+              <input type="button" class="c-setting_megamenu-style btn btn-sm c-btn-border-1x c-btn-white c-btn-sbold c-btn-uppercase" data-value="light" value="light">
+            </div>
+          </div>
+          <div class="c-section">
+            <h3>{{ 'Font Style'|t }}</h3>
+            <div class="c-settings">
+              <input type="button" class="c-setting_font-style btn btn-sm c-btn-border-1x c-btn-white c-btn-sbold c-btn-uppercase active" data-value="default" value="default">
+              <input type="button" class="c-setting_font-style btn btn-sm c-btn-border-1x c-btn-white c-btn-sbold c-btn-uppercase" data-value="light" value="light">
+            </div>
+          </div>
+        </div>
+      </nav>
+    {% endif %}
+
+    {{ attach_library('jango/zoho-salesiq') }}
+
+    {% if ('/fr/' in url) or (url ends with '/fr') %}
+      {{ attach_library('jango/google-tag-manager-french') }}
+      {{ attach_library('jango/google-analytics-french') }}
+    {% elseif ('/es/' in url) or (url ends with '/es') %}
+      {{ attach_library('jango/google-analytics-spanish') }}
+    {% elseif ('/cn/' in url) or (url ends with '/cn') %}
+      {{ attach_library('jango/google-analytics-chinese') }}
+    {% else %}
+      {{ attach_library('jango/google-tag-manager-new') }}
+      {{ attach_library('jango/google-analytics') }}
+      {{ attach_library('jango/msclarity')}}
+    {% endif %}
+
+    <!--[if lt IE 9]>
+    <script src="../assets/global/plugins/excanvas.min.js"></script>
+    <![endif]-->
+  
+
+
+
+
+<!--     <style>
+      #feedback-bubble {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  
+    #feedback-bubble > div {
+      background-color: yellow;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      width: 80%;
+      max-width: 400px;
+    }
+  
+    #feedback-bubble a {
+      color: blue;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  
+    #feedback-bubble button {
+      background: none;
+      border: 1px solid #333;
+      border-radius: 5px;
+      padding: 10px;
+      cursor: pointer;
+    }
+  
+    #feedback-bubble a:hover {
+      color: darkblue;
+    }
+    </style>
+    
+    <div id="feedback-bubble" class="feedback-bubble" style="display: none;">
+      <div style="background-color: #ffff; padding: 20px; border-radius: 10px; text-align: center; width: 80%; max-width: 400px;">
+        <span id="feedback-link" style="display: block; margin: 10px 0; font-size: 17px; color: #004897;font-weight: 600;">ATTENTION</span>
+        <span id="feedback-link" style="display: block; margin: 10px 0; font-size: 16px; color: #004897;font-weight: 600;text-align: left;">Ordering will be temporarily unavailable December 4, 2024 during the hours of 10:00 - 12:00 EST for scheduled maintenance. We apologize for any inconvenience.</span>
+        <button id="close-bubble" style="padding: 10px 20px; font-size: 16px; cursor: pointer;background-color:#004897;border:#004897 ;"><p style="color:white;margin:0px;">Okay</p></button>
+      </div>
+    </div>
+  
+    <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    function setDismissedTime() {
+      const dismissTime = new Date().getTime();
+      localStorage.setItem("feedbackDismissedTimev2", dismissTime);
+    }
+  
+    function getDismissedTime() {
+      return localStorage.getItem("feedbackDismissedTimev2");
+    }
+  
+    function shouldShowBubble() {
+      const dismissTime = getDismissedTime();
+      if (!dismissTime) return true; 
+      const currentTime = new Date().getTime();
+      const elapsedDays = (currentTime - dismissTime) / (1000 * 60 * 60 * 24);
+      return elapsedDays > 15; 
+    }
+  
+    if (shouldShowBubble()) {
+      setTimeout(function () {
+        const feedbackBubble = document.getElementById("feedback-bubble");
+        feedbackBubble.style.display = "flex"; 
+  
+        document.getElementById("close-bubble").addEventListener("click", function () {
+          feedbackBubble.style.display = "none"; 
+          setDismissedTime(); 
+        });
+  
+        document.getElementById("feedback-link").addEventListener("click", function () {
+          setDismissedTime(); 
+        });
+      }, 2000);
+    }
+  });
+    </script> -->
+
+
+
+
+  {% set show_right = is_authenticated and mailing_optin == 0 %}
+  {% set show_full = not is_authenticated %}
+  {% set hide_popup = is_authenticated and mailing_optin == 1 %}
+
+
+  {% if not hide_popup %}
+  
+<style>
+
+          #welcome-bubble {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.8);
+          z-index: 99999;
+          justify-content: center;
+          align-items: center;
+          transition: opacity 0.3s ease-in-out;
+          overflow-y: auto;
+        }
+        #welcome-bubble .newsletter-code {
+            background-color: #abcdf1;
+            cursor: pointer;
+            padding: 0px 8px;
+            transition: background-color 0.3sease;
+            display: inline-block;
+        }
+        {# #welcome-bubble .form-item-newsletter-country{
+          padding-left: 30px;
+        } #}
+        #welcome-bubble .form-item-newsletter-country select{
+          width:73%;
+        }
+      /* Popup Container */
+      #welcome-bubble .popup-box {
+          background: white;
+          width: 700px;
+          max-width: 90%;
+          border-radius: 10px;
+          box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+          overflow: hidden;
+          position: relative;
+          padding: 20px 30px;
+          text-align: center;
+          max-height: 90vh; /* Ensures it doesn't go beyond screen height */
+          overflow-y: auto;
+      }
+
+      /* Close Button (X) */
+      #welcome-bubble #close-bubble {
+          position: absolute;
+          top: 10px;
+          right: 15px;
+          font-size: 18px;
+          cursor: pointer;
+          color: #999;
+          background: none;
+          border: none;
+      }
+
+      #welcome-bubble #close-bubble:hover {
+          color: black;
+      }
+
+      /* Header (Centered Above Layout) */
+      #welcome-bubble .popup-header {
+          font-size: 35px;
+          font-weight: bold;
+          color: #004897;
+          text-align: center;
+          margin-bottom: 10px;
+          line-height:1.2;
+      }
+      #welcome-bubble .popup-divider {
+        width:100%;
+        max-width: 435px; /* Keep or adjust as needed */
+        margin: 0 auto 10px auto; /* Center the popup-divider */
+        text-align: center;
+      }
+      /* Scrollbar Styling for Better UX */
+      #welcome-bubble .popup-box::-webkit-scrollbar {
+          width: 6px;
+      }
+
+      #welcome-bubble .popup-box::-webkit-scrollbar-track {
+          background: #f1f1f1;
+      }
+
+      #welcome-bubble .popup-box::-webkit-scrollbar-thumb {
+          background: #004897;
+          border-radius: 10px;
+      }
+      #welcome-bubble .underbar {
+          border-top: 7px solid #be1e2d;
+          margin: 0 auto 5px auto;
+          width: 64%;
+          border-radius: 13px;
+      }
+
+      #welcome-bubble .verticle-divider {
+      position: absolute;
+          width: 435px;
+          text-align: center;
+          transform: rotate(90deg);
+          left: 132px;
+          /* top: 50%;*/
+      }
+
+      #welcome-bubble .verticlebar {
+          border-top: 4px solid #6E8AB8;
+          width: 91%;
+          border-radius: 13px;
+      }
+
+      #welcome-bubble .popup-header span {
+          display: block;
+          font-size: 14px;
+          font-weight: 600;
+          color: #004897;
+          margin-top: -5px;
+      }
+
+      /* Two-column layout for content */
+      #welcome-bubble .popup-body {
+          display: grid;
+          grid-template-columns: 1fr 1fr; /* Two equal columns */
+          align-items: center;
+          padding-top: 10px;
+      }
+
+      /* Left Column - Image & Sign-up */
+      #welcome-bubble .popup-left {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          padding-right: 20px;
+          height:100%;
+          justify-content:space-between;
+      }
+
+      #welcome-bubble .popup-left img {
+          width: 116%;
+          max-width: 340px;
+          margin-bottom: 10px;
+          padding-right: 25px;
+      }
+
+      /* Right Column - Newsletter Subscription */
+      #welcome-bubble .popup-right {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          padding-left: 20px;
+          height:100%;
+          justify-content:space-between;
+      }
+
+      /* Subtext (Offer text) */
+      #welcome-bubble .popup-subtext {
+          font-size: 20px;
+          font-weight: 500;
+          color: #004897;
+          width: 250px;
+          line-height: 1.2;
+          align-self: center; 
+          /*flex-grow:1;*/
+      }
+      /* Subtext (Offer text) */
+      #welcome-bubble .popup-subtext2 {
+          font-size: 20px;
+          font-weight: 500;
+          color: #004897;
+          width: 250px;
+          line-height: 1.2;
+          align-self: center; 
+          margin-bottom: 24px;
+          flex-grow:1;
+      }
+
+      /* Form Inputs */
+      #welcome-bubble .popup-right input {
+          width: 100%;
+          padding: 10px;
+          margin-bottom: 10px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          font-size: 14px;
+          width: 90%;
+      }
+
+      /* Buttons */
+      #welcome-bubble .popup-button {
+          padding: 10px;
+          margin-bottom: 10px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          font-size: 14px;
+          width: 90%;
+          background-color: #004897;
+          border-color: #004897;
+          opacity: 1;
+          color: #fff;
+          font-weight: bold;
+      }
+
+      /* Sign-up Button */
+      #welcome-bubble .signup-button {
+          background-color: #004897;
+          color: white;
+      }
+
+      #welcome-bubble .signup-button:hover {
+          background-color: #003470;
+      }
+
+
+      #welcome-bubble .popup-right .submit{
+          margin-top: 24px;
+      }
+
+      #welcome-bubble .popup-right .lottie-email-sent-text h2{
+        font-size:18px;
+      }
+
+      #welcome-bubble .popup-right .disclaimer{
+        font-size:12px;
+      }
+
+      #welcome-bubble .popup-right dotlottie-player{
+          height: 160px;
+
+          margin: auto;
+      }
+      #welcome-bubble .popup-right .main{
+        height:59%;
+      }
+
+      #welcome-bubble .popup-right svg{
+        height:180%;
+      }
+
+      #welcome-bubble .popup-right .form-group{
+        margin-bottom: 0px;
+        display: flex;
+        justify-content: center;
+      }
+      #welcome-bubble .popup-right .form-group .has-feedback{
+        /*padding-left:30px;*/
+        display: flex;
+        justify-content: center;
+        width: 80%;
+      }
+
+
+
+  @media (max-width: 768px) {
+      #welcome-bubble .popup-body {
+        grid-template-columns: 1fr !important; /* Stack on top of each other */ 
+        gap: 20px; /* Add spacing */
+      }
+
+      #welcome-bubble .popup-left,
+      #welcome-bubble .popup-right {
+        padding: 0; /* Remove extra padding */
+        text-align: center; /* Ensure text stays centered */
+      }
+
+      #welcome-bubble .verticle-divider {
+        display: none; /* Hide vertical divider on smaller screens */
+      }
+      #welcome-bubble .popup-box {
+        width: 95%;
+        max-height: 85vh; /* Limits height to 85% of viewport */
+        overflow-y: auto; /* Allows scrolling */
+      }
+      #welcome-bubble .popup-subtext2{
+        margin-bottom: 0px;
+      }
+      #welcome-bubble .popup-right .submit {
+        margin-top: 15px;
+      }
+  }
+
+
+  @media (max-width: 768px) {
+      #welcome-bubble #edit-google-recaptcha {
+        display: flex;
+        justify-content: center;
+      }
+  }
+
+  @media (max-width: 500px) {
+      #welcome-bubble .popup-left img{
+        display:none;
+      }
+  }
+
+</style>
+
+
+
+    <!-- Welcome Popup -->
+    <div id="welcome-bubble">
+        <div class="popup-box">
+            <!-- Close Button -->
+            <button id ="close-bubble">✖</button>
+            <!-- Header (Centered Above Content) -->
+            <h2 class="popup-header">
+                Welcome to <br>Norgen Biotek!
+            </h2>
+            <div class="popup-divider">
+              <hr class = "underbar">
+            </div>
+            <!-- Two-column Layout -->
+            <div class="popup-body">
+              {% if show_full %}
+                <!-- Left Side (Image & Sign Up) -->
+                <div class="popup-left">
+                    <p class="popup-subtext">Register on our <br>website and enjoy <br> <span style="color:#be1e2d;"><strong>15% off!</strong></span></p>
+                    <img src="/sites/default/files/images/scientists (1).png" alt="Scientists">
+                    <a href="https://norgenbiotek.com/user/login" class="popup-button signup-button">SIGN UP</a>
+                </div>
+                <div class="verticle-divider">
+                <hr class = "verticlebar">
+                </div>
+              {% endif %}
+              <style>
+              
+              {% if show_right %}
+              #welcome-bubble .popup-body {
+                display: grid;
+                grid-template-columns: 1fr 0fr;
+                align-items: center;
+                padding-top: 10px;
+                }
+              #welcome-bubble .popup-right .form-group .has-feedback .form-item-newsletter-country{
+                padding-left: 55px !important;
+              }
+              #welcome-bubble #edit-google-recaptcha{
+                display:flex;
+                justify-content:center;
+              }
+              {% endif %}
+              
+              </style>
+
+                <!-- Right Side (Newsletter Form) -->
+                <div class="popup-right">
+                    <p class="popup-subtext2">Subscribe to our <br> newsletter and enjoy <br> <span style="color:#be1e2d;"><strong>10% off!</strong></span></p>
+                    {# <input style = "margin-top: 57px;" type="text" placeholder="First Name (Required)">
+                    <input type="email" placeholder="Email Address (Required)">
+                    <input style = "margin-bottom: 57px;" type="text" placeholder="Job Title (Required)"> #}
+                    {{social_media_popup}}
+                    {# {{newsletter_subscription}} #}
+                    {# {{service_consultation}} #}
+                    {# <button class="popup-button subscribe-button">Subscribe</button> #}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+  {% endif %}
+
+</body>
+</html>

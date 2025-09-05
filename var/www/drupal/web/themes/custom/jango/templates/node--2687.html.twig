@@ -1,0 +1,1175 @@
+
+<style>
+	/*html {
+  scroll-behavior: smooth;
+}*/
+	.each-prod{
+		    display: flex;
+    gap: 20px;
+    margin: 2% 0%;
+    align-items: center;
+	}
+	.right-side{
+
+    gap: 60px;
+    flex-direction: row-reverse;
+	}
+	.right-side  .number{
+		color:#004897;
+	}
+	.left-side  .number{
+		color:#EC1D25;
+	}
+	.more-info-btn{
+		    background: #ec1d25;
+    border: #ec1d25;
+    font-weight: 600;
+    font-size: 17px;
+	}
+	.more-info-btn:hover{
+		opacity: 0.4;
+		 background: #ec1d25;
+    border: #ec1d25;
+
+	}
+	.more-info-btn-blue{
+		 background: #004897;
+    border: #004897;
+    font-weight: 600;
+    font-size: 17px;
+	}
+	.main-banner{
+		height: 500px;
+		background-image: linear-gradient(to right, #f8fcfff2,#022954a6), url(/sites/default/files/images/aboutus-fr/top_products.jpg);
+		/*background-image: url(/sites/default/files/images/aboutus-fr/top_products.jpg);*/
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-position: center;
+	}
+	.prod-banner-text{
+    	/*margin: -1% 10%;
+    margin-top: max(350px, 1em);
+    margin-bottom: 20px;
+        display: inline-flex;
+    flex-direction: column;*/
+    top:50%;
+    position:relative;
+    translate:transformY(-50%);
+	}
+	.prod-banner-text h1{
+		font-weight: 700;
+    	color: #004897;
+    	font-size: 55px;
+    	line-height: 1.4;
+	}
+	.banner-btn{
+		background-color: #0f6b7a;
+    	color: white;
+    	font-weight: 700;
+    	font-size: 22px;
+    	width: 50%;
+	}
+
+	
+	hr.header-separator {
+    border-top: 0px;
+    margin-left: -15px;
+    margin-right: -15px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    height: 24px;
+    background: linear-gradient(90deg, #ec1d25,#004897,#0f6b7a);
+}
+
+
+.number{
+	font-size: 70px;
+    font-weight: 600;
+    display: flex;
+    gap:10px;
+}
+.number span{
+	font-size: 63px;
+	font-weight: 500;
+}
+.step-text{
+	display: flex;
+	align-items: center;
+}
+
+.step-title{
+	font-size: 22px;
+	line-height: 1.3;
+	margin-left: 1%;
+	font-weight: 500;
+	text-align: left;
+}
+
+.blue-text{
+	color: #004897;
+}
+.red-text{
+	color: #EC1D25;
+}
+
+ 
+
+.btn-primary:hover{
+	opacity: 0.7;
+	color: white;
+}
+.region-breadcrumb{
+	display: none;
+}
+.text-side > p{
+	font-size: 17px;
+    line-height: 1.4;
+    margin-top: -19px;
+    margin-bottom: 20px;
+}
+.step-icon {
+    border: 7px solid transparent;
+    width: 150px;
+    height: 150px;
+    border-radius: 200px;
+}
+.step-icon-nav{
+	background: linear-gradient(to right, white, white), linear-gradient(to right, #ffffff , #ffffff);
+	width:75px;
+	height:75px;
+	border: 7px solid transparent;
+    border-radius: 200px;
+}
+.step-icon-nav img{
+	padding:10%;
+	max-width:none;
+}
+.sub-nav{
+	position:sticky;
+	top:0px;
+}
+.sub-nav .flex-child h3{
+	margin-top:0px;
+	margin-bottom:0px;
+}
+.sub-nav .flex-child{
+	padding:1em 0;
+}
+.icon-seperator{
+	/*border: 7px solid transparent;*/
+    width: 50px;
+    height: 50px;
+    /*border-radius: 200px;
+    background: linear-gradient(to right, white, white), linear-gradient(to right, #EC1D25 , #662d91);
+    background-clip: padding-box, border-box;
+    background-origin: padding-box, border-box;*/
+}
+#first-icon {
+    background: linear-gradient(to right, white, white), linear-gradient(to right, #EC1D25 , #662d91);
+    background-clip: padding-box, border-box;
+    background-origin: padding-box, border-box;
+}
+#first-icon-nav, #second-icon-nav, #third-icon-nav {
+	background: linear-gradient(to right, white, white), linear-gradient(to right, #ffffff , #ffffff);
+	width:75px;
+	height:75px;
+    background-clip: padding-box, border-box;
+    background-origin: padding-box, border-box;
+}
+.step-icon-nav{
+	display:flex;
+}
+.step-icon img {
+    padding: 13%;
+}
+.section-title{
+	display: flex;
+	align-items: center;
+    gap: 30px;
+       flex-wrap: wrap;
+}
+.section-title h1{
+	font-weight: 700;
+}
+.prod-section-name{
+	background: linear-gradient(90deg, #ec1d252e,#00489738,#0f6b7a52);
+    padding: 2%;
+
+}
+.text-side{
+	width: 70%;
+}
+.img-side{
+	width: 40%;
+}
+.img-side > img{
+	min-width: 500px;
+}
+#second-icon {
+    background: linear-gradient(to right, white, white), linear-gradient(to right, #EC1D25 , #662d91, #004897, #3974b6);
+    background-clip: padding-box, border-box;
+    background-origin: padding-box, border-box;
+}
+#third-icon {
+    background: linear-gradient(to right, white, white), linear-gradient(to right, #004897, #3974b6);
+    background-clip: padding-box, border-box;
+    background-origin: padding-box, border-box;
+}
+
+
+.section-seperator > a {
+  display: flex;
+  align-items: center;
+  gap:30px;
+}
+.section-seperator > a:before,
+.section-seperator > a:after {
+  flex: 1;
+  content: '';
+  height: 3px;
+  background: black;
+}
+.section-seperator{
+	padding: 3%;
+	text-align: center;
+	    width: 80%;
+    margin: 15% auto;
+}
+.section-seperator h1{
+	font-weight: 700;
+	margin-bottom: 2%;
+}
+.section-seperator h2{
+	font-weight: 600;
+	margin-bottom: 2%;
+}
+.flex-parent{
+	display: flex;
+	justify-content: center;
+}
+.flex-child{
+	display: flex;
+	align-items: center;
+	gap:10px;
+	
+	justify-content: center;
+	
+}
+.flex-parent > a{
+	padding: 0.5% 3%;
+	width: 100%;
+}
+.flex-child h3{
+	color: white;
+        font-size: 20px;
+    font-weight: 600;
+}
+.flex-child > img{
+	width: 75px;
+}
+.sub-nav.fixed2 {
+    position: fixed;
+    width: 100%;
+    top: 75px;
+    z-index: 501;
+}
+html {
+  scroll-padding-top: 30rem;
+}
+
+@media (max-width: 1100px){
+	.each-prod{
+		flex-wrap: wrap;
+	}
+	.step-icon-nav{
+		display: none;
+	}
+	}
+	@media (max-width: 1100px){
+	.right-side{
+		flex-direction: inherit;
+	}
+	.text-side{
+		width: auto;
+	}
+	.img-side{
+		width: auto;
+	}
+	.img-side > img{
+		min-width: auto;
+	}
+}
+@media (max-width: 530px){
+	.flex-child > img{
+		display: none;
+	}
+	.prod-banner-text {
+		margin-top: max(230px, 1em);
+	}
+	.text-side > p{
+		margin-top:0px;
+	}
+}
+@media (max-width: 450px){
+	.flex-parent {
+		flex-direction: column;
+	}
+	.sub-nav{
+		position:relative;
+		top:0px;
+	}
+	.flex-child h3{
+		font-size:13px;
+		text-align:center;
+	}
+	.prod-banner-text h1 {
+		font-size: 40px;
+		line-height: 1.4;
+	}
+	.text-side > p {
+		margin-top: 5px;
+	}
+}
+@media only screen and (max-width: 700px) and (max-height: 719px){
+	.flex-parent{
+		flex-direction:column;
+	}
+	.sub-nav{
+		position:relative;
+		top:0px;
+	}
+	.flex-child h3{
+		text-align:center;
+	}
+}
+@media (max-width: 1200px) and (max-height: 721px){
+	.prod-banner-text {
+		margin-top: max(230px, 1em);
+	}
+}
+@media (max-width: 740px) and (max-height: 721px){
+	.each-prod {
+		flex-wrap: wrap;
+	}
+	.right-side {
+		flex-direction: inherit;
+	}
+}
+.container:before{
+	display:none;
+}
+/*#samplecollection::before { content: ''; display: block; height: 150px; margin: -50px 0 0 0; }
+#purificationisolation::before { content: ''; display: block; height: 150px; margin: -50px 0 0 0; }
+#diagnostic::before { content: ''; display: block; height: 150px; margin: -50px 0 0 0; }*/
+</style>
+
+<section class="main-banner">
+	<div class="prod-banner-text container">
+		<h1> 顶级产品</h1>
+	</div>
+</section>
+<hr class="header-separator">
+<div id="sticky"></div>
+<section class="sub-nav">
+	<div class="flex-parent">
+
+		<a href="#samplecollection" style="background: linear-gradient(to right, #ed707a , #ad7cb2);border-right: 1px solid white;"><div class="flex-child" >
+				<div class="step-icon-nav" id="first-icon-nav" >
+					<img src="/sites/default/files/images/homepage-fr/sample-collection-icon_Gradient-01.svg">
+				</div>
+				<h3> 样本采集和保存</h3>
+				</div>
+		</a>
+		<a href="#purificationisolation" style="background: linear-gradient(to right, #ad7cb2, #698fc4);border-right: 1px solid white;">
+			<div class="flex-child"  >
+				<div class="step-icon-nav" id="second-icon-nav" >
+					<img src="/sites/default/files/images/homepage-fr/isolation-purification_Gradient-01.svg">
+				</div>
+				<h3> 分离和纯化</h3>
+			</div>
+		</a>
+		<a href="#diagnostic" style="background:linear-gradient(to right, #698fc4, #5182b8);">
+			<div class="flex-child" >
+				<div class="step-icon-nav" id="third-icon-nav" >
+					<img src="/sites/default/files/images/homepage-fr/molecular-diagnostics.svg">
+				</div>
+				<h3> 分子诊断</h3>
+			</div>
+		</a>
+
+	</div>
+</section>
+
+<div id="samplecollection"></div>
+<section class="prod-section-name">
+	<div class="section-title container">
+	<div class="step-icon" id="first-icon">
+		<img src="/sites/default/files/images/homepage-fr/sample-collection-icon_Gradient-01.svg">
+	</div>
+	<h1> 样本采集和保存</h1>
+	
+</div>
+</section>
+
+<!-- <section class="prod-section-name"> -->
+	<!-- <div class="section-title"> -->
+	<!-- <div class="step-icon" id="first-icon">
+		<img src="/sites/default/files/images/homepage-fr/sample-collection-icon_Gradient-01.svg">
+	</div> -->
+<!-- 	<section class="section-seperator">
+	<h1>Sample Collection and Preservation</h1>
+	<a href="">
+  		<div class="step-icon" id="first-icon">
+			<img src="/sites/default/files/images/homepage-fr/sample-collection-icon_Gradient-01.svg">
+		</div>
+	</a>
+</section> -->
+	
+<!-- </div> -->
+<!-- </section> -->
+<section class="prod-list container">
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >1  <span> |</span></p><p class="step-title"><strong>cf-DNA/cf-RNA 保存剂试管</strong><br>(cat. 63950)</p>
+			
+		</div>
+			<p>Norgen 的 cf-DNA/cf-RNA 储存管是密封的真空包装塑料管，用于在储存和运输过程中收集和储存人类全血样本中的 cf-DNA、循环肿瘤 DNA、CF-DNA 和循环肿瘤细胞。</p>
+			<a class="btn-primary btn more-info-btn" href="/cn/产品/cf-dnacf-rna-baocunjishiguan" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/cftube2web.jpg?itok=6tQJGmjX">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >2  <span> |</span></p><p class="step-title"><strong>cfDNA/cfRNA Dx 储存管</strong><br>(cat. Dx63950)</p><div style="text-align: right;width: 35%;"><img src="https://norgenbiotek.com/sites/default/files/norproduct/European_Conformity_logo.svg" style="width: 70px;"></div>
+			
+		</div>
+			<p>Norgen 的 cf-DNA/cf-RNA 储存管是密封的真空包装塑料管，用于在储存和运输过程中收集和储存人类全血样本中的 cf-DNA、循环肿瘤 DNA、CF-DNA 和循环肿瘤细胞。  </p>
+			<a class="btn-primary btn more-info-btn-blue" href="/cn/产品/cf-dnacf-rna-baocunguan-dx" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/cftube2web.jpg?itok=6tQJGmjX">
+		</div>
+	</div>
+
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >3  <span> |</span></p><p class="step-title"><strong>尿液采集和保存设备</strong><br>(cat. 18118, 18122, 18113, 18126, 18129)</p>
+			
+		</div>
+			<p>Norgen 尿液​​防腐剂专为快速保存新鲜尿液样本中的 DNA、RNA、microRNA 和蛋白质而设计。</p>
+			<a class="btn-primary btn more-info-btn" href="/cn/产品/niaoyecaijihebaocunshebei" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/urine-tubes_700.jpg?itok=yN3JFgE-">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >4  <span> |</span></p><p class="step-title"><strong>粪便核酸采集及保存管	</strong><br>(cat. 45660)</p>
+			
+		</div>
+			<p>Norgen 粪便核酸采集和保存管专为快速保存新鲜粪便样本中的核酸而设计。</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/cn/产品/fenbianhesuancaijihebaocunjishiguan" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/45660-new-web.jpg?itok=SoL2XKr7%22">
+		</div>
+	</div>
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >5  <span> |</span></p><p class="step-title"><strong>粪便核酸采集保存系统	</strong><br>(cat. 63700)</p>
+			
+		</div>
+			<p>Norgen 粪便核酸采集和保存系统是专为粪便样本中核酸的采集、室温储存和运输而设计的完整系统。</p>
+			<a class="btn-primary btn more-info-btn" href="/cn/产品/fenbianhesuancaijihebaocunxitong" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/63700_2.jpg?itok=3KDICEnj">
+		</div>
+	</div>
+
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >6  <span> |</span></p><p class="step-title"><strong>Dx 唾液 DNA 采集和保存装置</strong><br>(cat. 49000)</p><div style="text-align: right;width: 35%;"><img src="https://norgenbiotek.com/sites/default/files/norproduct/European_Conformity_logo.svg" style="width: 70px;"></div>
+			
+		</div>
+			<p>Norgen Saliva DNA 防腐剂是一种水性储存缓冲液，设计用于快速细胞裂解以及随后保存新鲜样品中的 DNA。</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/cn/产品/tuoye-dna-caijihebaocunshebei-dx" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/49000-Saliva-DNA-Collection-kit-WEB.jpg?itok=XYmmez_V%22">
+		</div>
+	</div>
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >7  <span> |</span></p><p class="step-title"><strong>用于收集和保存唾液 DNA 的装置</strong><br>(cat. RU49000)</p>
+			
+		</div>
+			<p>Norgen Saliva DNA 防腐剂是一种水性储存缓冲液，设计用于快速细胞裂解以及随后保存新鲜样品中的 DNA。 </p>
+			<a class="btn-primary btn more-info-btn" href="/cn/产品/tuoye-dna-caijihebaocunshebei" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/RU49000-web.jpg?itok=rdzOMBi7%22">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >8  <span> |</span></p><p class="step-title"><strong>Dx 唾液 RNA 采集和保存装置</strong><br>(cat. 53800)</p><div style="text-align: right;width: 35%;"><img src="https://norgenbiotek.com/sites/default/files/norproduct/European_Conformity_logo.svg" style="width: 70px;"></div>
+			
+		</div>
+			<p>Norgen Salivary RNA Preservative 是一种水性储存缓冲液，设计用于快速细胞裂解以及随后保存新鲜唾液样本中的 RNA。</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/cn/产品/tuoye-rna-caijihebaocunshebei-dx" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/RU53800-blue-web-min.jpg?itok=B2MI5l16%22">
+		</div>
+	</div>
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >9  <span> |</span></p><p class="step-title"><strong>用于从唾液中收集和保存 RNA 的装置</strong><br>(cat. RU53800)</p>
+			
+		</div>
+			<p>Norgen Salivary RNA Preservative 是一种水性储存缓冲液，设计用于快速细胞裂解以及随后保存新鲜样本中的 RNA。</p>
+			<a class="btn-primary btn more-info-btn" href="/cn/产品/tuoye-rna-caijihebaocunshebei" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/RU53800-blue-web-min.jpg?itok=B2MI5l16%22">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >10  <span> |</span></p><p class="step-title"><strong>总核酸储存管 </strong><br>(cat. 69200)</p>
+			
+		</div>
+			<p>使用 Norgen 总核酸保存管收集和保存的样品与大多数市售 DNA 和 RNA 分离方法兼容。</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/cn/产品/zonghesuanbaocunjishiguan" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/69200-Total-Nucleic-Acid-Preservation-Tubes_2_WEB.jpg?itok=1mSVfdsx">
+		</div>
+	</div>
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >11  <span> |</span></p><p class="step-title"><strong>Dx 总核酸储存管 </strong><br>(cat. Dx69200)</p><div style="text-align: right;width: 35%;"><img src="https://norgenbiotek.com/sites/default/files/norproduct/European_Conformity_logo.svg" style="width: 70px;"></div>
+			
+		</div>
+			<p>Norgen Dx 总核酸保存管适用于专业用户，例如在分子生物学技术方面经验丰富并接受过培训的技术人员、医生和生物学家。</p>
+			<a class="btn-primary btn more-info-btn" href="/cn/产品/zonghesuanbaocunjishiguan-dx" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/69200-Total-Nucleic-Acid-Preservation-Tubes_2_WEB.jpg?itok=1mSVfdsx">
+		</div>
+	</div>
+
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >12  <span> |</span></p><p class="step-title"><strong>DNA样本采集保存系统</strong><br>(cat. 45690-B)</p>
+			
+		</div>
+			<p>使用 Norgen 拭子采集和 DNA 保存系统收集和储存的拭子样本与大多数 DNA 分离方法兼容。</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/cn/产品/shizicaijihe-dna-baocunxitong" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/45690-%20Swab%20collection%20and%20Total%20Nucleic%20Acid-web.jpg?itok=-UnlWthU%22">
+		</div>
+	</div>
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >13  <span> |</span></p><p class="step-title"><strong>粪便拭子采集和保存系统</strong><br>(cat. 45670-B)</p>
+			
+		</div>
+			<p>Norgen 的粪便拭子收集和保存系统专为收集、室温储存和运输粪便样本中的核酸而设计。</p>
+			<a class="btn-primary btn more-info-btn" href="/cn/产品/fenbianshizicaijihebaocunxitong" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/45670-B-Fecal-Swab-Collection-and-Preservation--WEB.jpg?itok=PvXByNcl%22">
+		</div>
+	</div>
+</section>
+<!--purification-->
+<div id="purificationisolation"></div>
+<section class="prod-section-name">
+	<div class="section-title container">
+		<div class="step-icon" id="second-icon">
+			<img src="/sites/default/files/images/homepage-fr/isolation-purification_Gradient-01.svg">
+		</div>
+	<h1>Isolement et purification</h1>
+</div>
+</section>
+
+<section class="prod-list container">
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >1  <span> |</span></p><p class="step-title"><strong>总RNA纯化试剂盒（Collone de Spin）</strong><br>(cat. 17200, 17250, 17270, 37500, 24350, 24380, 24300, 24370)</p>
+			
+		</div>
+			<p>这些试剂盒适用于从各种样品中分离总 RNA，包括细胞、细菌、酵母、病毒和体液（例如血浆/血清、血液、唾液、LCR 等）。</p>
+			<a class="btn-primary btn more-info-btn" href="/cn/产品/zong-rna-chunhuashijihe-xuanzhuanzhu" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/17200-Total-RNA-Purification_WEB_2.jpg?itok=u67KZDoT%22">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >2  <span> |</span></p><p class="step-title"><strong>Dx 总 RNA 纯化试剂盒</strong><br>(cat. Dx17200, Dx24300, Dx24350, Dx24380)</p><div style="text-align: right;width: 35%;"><img src="https://norgenbiotek.com/sites/default/files/norproduct/European_Conformity_logo.svg" style="width: 70px;"></div>
+			
+		</div>
+			<p>Norgen Dx 总 RNA 纯化试剂盒提供了从组织、血液、血浆、血清、唾液、细菌样本、酵母、真菌和病毒中分离和纯化总 RNA 的快速方法，以便进一步用于体外诊断。</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/cn/产品/rna-chunhuashijihe-xuanzhuanzhu-dx" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/17200-Total-RNA-Purification-Kit_WEB_1_0.jpg?itok=mXtFXZuQ">
+		</div>
+	</div>
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >3  <span> |</span></p><p class="step-title"><strong>Total Plus RNA 纯化试剂盒</strong><br>(cat. 48300, 48400)</p>
+			
+		</div>
+			<p>该试剂盒可从生物样品中纯化总 RNA（包括 miRNA），并使用额外的色谱柱有效去除污染的 gDNA，从而取代酶促 DNase 步骤。 </p>
+			<a class="btn-primary btn more-info-btn" href="/cn/产品/zong-rna-chunhuashijihe-xuanzhuanzhu-fujiashijihe" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/48300-Total-RNA-Purification-Plus-Kit_WEB.jpg?itok=RtuQjoW9">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >4  <span> |</span></p><p class="step-title"><strong>micro plus 总 RNA 纯化试剂盒 </strong><br>(cat. 48500)</p>
+			
+		</div>
+			<p>纯化基于旋转柱色谱，使用 Norgen 的专有树脂作为分离基质。 </p>
+			<a class="btn-primary btn more-info-btn-blue" href="/cn/产品/zong-rna-chunhuashijihe-xuanzhuanzhu-plus-weixingshijihe" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/48500-Total-RNA-Purification-Plus-Micro-Kit-WEB.jpg?itok=OYajbXH3">
+		</div>
+	</div>
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >5  <span> |</span></p><p class="step-title"><strong>微量总RNA纯化试剂盒</strong><br>(cat. 35300, 35350)</p>
+			
+		</div>
+			<p>该试剂盒从低细胞计数样品中提取总 RNA，并在方便的 20 µL 洗脱液中进行洗脱，适合多种下游应用。 </p>
+			<a class="btn-primary btn more-info-btn" href="/cn/产品/zong-rna-chunhuashijihe-xuanzhuanzhu-weixingshijihe" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/35300-Total-RNA-Purification-Micro-Kit-WEB.jpg?itok=nzzClMkm">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >6  <span> |</span></p><p class="step-title"><strong>Max总RNA纯化试剂盒</strong><br>(cat. 26800)</p>
+			
+		</div>
+			<p>纯化基于旋转柱色谱，使用 Norgen 的专有树脂作为分离基质。 </p>
+			<a class="btn-primary btn more-info-btn-blue" href="/cn/产品/zong-rna-chunhuashijihe-xuanzhuanzhu-maxi-shijihe" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/26800-Total-RNA-Purification-Maxi-Kit-WEB.jpg?itok=ty8TWpeq">
+		</div>
+	</div>
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >7  <span> |</span></p><p class="step-title"><strong>用于收集和保存粪便 DNA 的微型管</strong><br>(cat. 27650)</p>
+			
+		</div>
+			<p>Norgen 的迷你粪便 DNA 采集和保存管专为快速保存新鲜粪便样本中的 DNA 而设计。 </p>
+			<a class="btn-primary btn more-info-btn" href="/cn/产品/fenbian-dna-caijiyubaocunminishiguan" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/27650-web_1.jpg?itok=4RnRAg52%22">
+		</div>
+	</div>
+
+
+
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >8  <span> |</span></p><p class="step-title"><strong>血浆/血清 RNA 纯化试剂盒</strong><br>(cat. 55000, 56100, 56200)</p>
+			
+		</div>
+			<p>这些试剂盒提供了一种快速、可靠和方便的方法，使用方便的旋转柱方法纯化和浓缩高质量、高纯度、无抑制剂的循环和外泌体 RNA。 </p>
+			<a class="btn-primary btn more-info-btn-blue" href="/cn/产品/xuejiangxueqing-rna-chunhuashijihe" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/55000-Plasma_Serum-RNA-Purification-Mini-Kit-2-WEB_0.jpg?itok=q8ccmkpW%22">
+		</div>
+	</div>
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >9  <span> |</span></p><p class="step-title"><strong>血浆/血清外泌体纯化和 RNA 分离试剂盒</strong><br>(cat. 58300, 58500, 58600)</p>
+			
+		</div>
+			<p>Norgen 的血浆/血清外泌体和游离循环 RNA 分离试剂盒是一种一体化系统，用于从不同体积的血浆/血清样品中纯化外泌体以及顺序分离外泌体 RNA 和游离循环 RNA。</p>
+			<a class="btn-primary btn more-info-btn" href="/cn/产品/xuejiangxueqingwaimitichunhuahe-rna-fenlishijihe" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/58300-Plasma-Serum-Exosome-Reflection-Web.jpg?itok=XFQYtMj5%22">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >10  <span> |</span></p><p class="step-title"><strong>外泌体RNA分离试剂盒</strong><br>(cat. 58000)</p>
+			
+		</div>
+			<p>该试剂盒提供了一种快速、可靠且方便的方法，用于从先前使用 Norgen 的外泌体纯化试剂盒纯化的外泌体中分离和浓缩外泌体 RNA。</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/cn/产品/waimiti-rna-fenlishijihe">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/58000-web.jpg?itok=3TvG1ELI%22">
+		</div>
+	</div>
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >11  <span> |</span></p><p class="step-title"><strong>细胞质和核 RNA 的纯化</strong><br>(cat. 21000, 37400)</p>
+			
+		</div>
+			<p>该试剂盒提供了一种从培养的动物细胞和小组织样品中分离和纯化细胞质和核 RNA 的快速方法。</p>
+			<a class="btn-primary btn more-info-btn" href="/cn/产品/xibaozhihe-rna-chunhua" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/21000%20Cytoplasmic%20and%20Nuclear%20RNA-WEB_0.jpg?itok=IYLnTJU5%22">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >12  <span> |</span></p><p class="step-title"><strong>单细胞 RNA 纯化试剂盒</strong><br>(cat. 51800)</p>
+			
+		</div>
+			<p>高灵敏度试剂盒设计用于处理单细胞和多达 100,000 个细胞。微量旋转柱的特殊设计实现了仅 8 µL 的小洗脱体积。</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/cn/产品/danxibao-rna-chunhuashijihe" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/51800-Single-Cell-RNA-purification-Kit-WEB_0.jpg?itok=bcxCCtCQ%22">
+		</div>
+	</div>
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >13  <span> |</span></p><p class="step-title"><strong>RNA 纯化和浓缩套件</strong><br>(cat. 23600, 43200, 25100, 61000)</p>
+			
+		</div>
+			<p>这些试剂盒旨在从 TRIzol® 和 TRI Reagent®、酶促反应、体外转录、标记反应等中清洁和浓缩 RNA（包括 miRNA）。</p>
+			<a class="btn-primary btn more-info-btn" href="/cn/产品/rna-qinglihenongsuoshijihe" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/23600-RNA-Clean-Up-and-Concentration-Kit-WEB_0.jpg?itok=322TKX0T">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >14  <span> |</span></p><p class="step-title"><strong>血浆/血清循环游离 DNA 纯化试剂盒</strong><br>(cat. 55500,55100, 55600, 55800)</p>
+			
+		</div>
+			<p>这些试剂盒提供了一种快速、可靠且方便的方法，用于从血浆/血清样本量中分离高质量、高纯度、无抑制剂的循环游离 DNA (cfc-DNA)。</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/cn/产品/buhanxuejiangxueqingxibaodexunhuan-dna-chunhuashijihe" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/55100-web_0.jpg?itok=16SgQB1n">
+		</div>
+	</div>
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >15  <span> |</span></p><p class="step-title"><strong>粪便 DNA 分离试剂盒</strong><br>(cat. 27600, 65600, 55700, 63100)</p>
+			
+		</div>
+			<p>这些试剂盒提供了一种方便、快速的方法，用于从新鲜、冷冻和储存的粪便样本中分离总 DNA，包括使用 Norgen 粪便核酸收集和储存管（货号 45660）储存的样本。</p>
+			<a class="btn-primary btn more-info-btn" href="/cn/产品/fenbian-dna-fenlishijihe" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/27600-Stool-DNA-Isolation-Kit_WEB.jpg?itok=47HFkc13%22">
+		</div>
+	</div>
+
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >16  <span> |</span></p><p class="step-title"><strong>Dx 粪便 DNA 分离试剂盒</strong><br>(cat. Dx27600)</p><div style="text-align: right;width: 35%;"><img src="https://norgenbiotek.com/sites/default/files/norproduct/European_Conformity_logo.svg" style="width: 70px;"></div>
+			
+		</div>
+			<p>该试剂盒提供了一种方便、快速的方法，用于从新鲜、冷冻和储存的粪便样本中分离总 DNA，包括使用 Norgen Dx 鞍座（目录号 Dx45660）储存的粪便样本。</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/cn/产品/fenbian-dna-fenlishijihe-dx" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/27600.jpg?itok=GdluIv_u%22">
+		</div>
+	</div>
+
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >17  <span> |</span></p><p class="step-title"><strong>噬菌体 DNA 分离试剂盒</strong><br>(cat. 46800, 46850)</p>
+			
+		</div>
+			<p>该试剂盒提供了一种快速柱方法，用于从液体培养基中生长的细菌中繁殖的广谱噬菌体中纯化总 DNA。</p>
+			<a class="btn-primary btn more-info-btn" href="/cn/产品/shijunti-dna-fenlishijihe" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/46800-Reflection-web_0.jpg?itok=iReo6_i9%22">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >18  <span> |</span></p><p class="step-title"><strong>粪便核酸采集和保存装置 Dx</strong><br>(cat. Dx45660)</p><div style="text-align: right;width: 35%;"><img src="https://norgenbiotek.com/sites/default/files/norproduct/European_Conformity_logo.svg" style="width: 70px;"></div>
+			
+		</div>
+			<p>Norgen Dx 粪便核酸采集和保存装置设计用于从新鲜粪便样本中采集和保存核酸。</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/cn/产品/fenbianhesuancaijihebaocunshebei-dx" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/45630_0.png?itok=A5GCCCny%22">
+		</div>
+	</div>
+
+
+	<!-- <div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >19  <span> |</span></p><p class="step-title"><strong>NGS Normalization 96-Well Kit</strong><br>(Cat. 61900)</p>
+			
+		</div>
+			<p>Norgen Biotek's NGS Normalization 96-Well Kit are suitable for high-throughput NGS Library PCR amplicon clean-up and normalization of NGS library PCR product concentration</p>
+			<button class="btn-primary btn more-info-btn">Plus d'information</button>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/61900-Reflection-web.jpg?itok=x7nN-Bdy%22">
+		</div>
+	</div> -->
+</section>
+
+<!--Diagnostics-->
+<div id="diagnostic"></div>
+<section class="prod-section-name">
+	<div class="section-title container">
+		<div class="step-icon" id="third-icon">
+				<img src="/sites/default/files/images/homepage-fr/molecular-diagnostics.svg">
+			</div>
+	<h1>分子诊断</h1>
+</div>
+</section>
+
+<section class="prod-list container">
+
+	<section class="section-seperator">
+	<h2>人类病原体检测</h2>
+	<a href="">
+  		<div class="icon-seperator">
+			<img src="https://norgenbiotek.com/sites/default/files/banner-ribbon.webp">
+		</div>
+	</a>
+</section>
+<!-- <div class="seperator">
+	<hr>
+	<h2>Human Pathogen Detection</h2>
+	<hr>
+</div> -->
+	<!-- <div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >1  <span> |</span></p><p class="step-title"><strong>TaqMan PCR 人乳头瘤病毒 (HPV) 检测试剂盒（高风险和低风险）</strong><br>(cat. TM31550, TM31510)</p>
+			
+		</div>
+			<p>HPV检测试剂盒（高风险和低风险）</p>
+			<a class="btn-primary btn more-info-btn" href="https://norgenbiotek.com/cn/产品/renleirutubingdu-hpvgaoweihediweitaqman-juhemeilianshifanyingjianceshijihe" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/TM31550-Human-Papillomavirus-%28HPV%29-%28High-and-Low-Risk%29-WEB.jpg?itok=d-5_YdW_%22">
+		</div>
+	</div> -->
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >1  <span> |</span></p><p class="step-title"><strong>衣原体/淋病奈瑟菌 TaqMan PCR 检测试剂盒</strong><br>(cat. TM42550, TM42510)</p>
+			
+		</div>
+			<p>衣原体/淋病奈瑟菌检测试剂盒</p>
+			<a class="btn-primary btn more-info-btn" href="/cn/产品/yiyuantilinbingnaisejun-taqman-juhemeilianshifanyingjianceshijihe" target="_blank">更多信息<</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/TM31450-Chlamydia-Detection-Kit%20WEB.jpg?itok=2IUXrhXy%22">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >2  <span> |</span></p><p class="step-title"><strong>TaqMan 单纯疱疹病毒 1 和 2 (HSV-1&2) PCR 检测试剂盒</strong><br>(cat. TM31750, TM31710)</p>
+			
+		</div>
+			<p>HSV-1&2 检测试剂盒</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/cn/产品/danchunpaozhenbingdu-1-he-2-hsv-1-he-2-taqman-juhemeilianshifanyingjianceshijihe" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/TM32650%20Herpes%20Simplex%20Virus%201%20%28HSV-1%29%20TaqMan-WEB.jpg?itok=2i4hN-u4%22">
+		</div>
+	</div>
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >3  <span> |</span></p><p class="step-title"><strong>单纯疱疹病毒 1 (HSV-1) TaqMan PCR 检测试剂盒</strong><br>(cat. TM32650, TM32610)</p>
+			
+		</div>
+			<p>HSV-1 检测试剂盒</p>
+			<a class="btn-primary btn more-info-btn" href="/cn/产品/danchunpaozhenbingdu-1-hsv-1-taqman-juhemeilianshifanyingjianceshijihe" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/TM32650%20Herpes%20Simplex%20Virus%201%20%28HSV-1%29%20TaqMan-WEB.jpg?itok=2i4hN-u4%22">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >4  <span> |</span></p><p class="step-title"><strong>TaqMan 单纯疱疹病毒 1 (HSV-1) Dx PCR 检测试剂盒</strong><br>(cat. DxTM32600)</p><div style="text-align: right;width: 35%;"><img src="https://norgenbiotek.com/sites/default/files/norproduct/European_Conformity_logo.svg" style="width: 70px;"></div>
+			
+		</div>
+			<p>HSV-1检测试剂盒</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/cn/产品/danchunpaozhenbingdu-1-hsv-1-taqman-juhemeilianshifanyingjianceshijihe-dx" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/TM32650%20Herpes%20Simplex%20Virus%201%20%28HSV-1%29%20TaqMan-WEB.jpg?itok=2i4hN-u4%22">
+		</div>
+	</div>
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >5  <span> |</span></p><p class="step-title"><strong>单纯疱疹病毒 2 (HSV-2) TaqMan PCR 检测试剂盒</strong><br>(cat. TM32450, TM32410)</p>
+			
+		</div>
+			<p>HSV-2检测试剂盒</p>
+			<a class="btn-primary btn more-info-btn" href="/cn/产品/danchunpaozhenbingdu-2-hsv-2-taqman-juhemeilianshifanyingjianceshijihe" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/TM32650%20Herpes%20Simplex%20Virus%201%20%28HSV-1%29%20TaqMan-WEB.jpg?itok=2i4hN-u4%22">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >6  <span> |</span></p><p class="step-title"><strong>单纯疱疹病毒 2 (HSV-2) TaqMan PCR Dx 检测试剂盒</strong><br>(cat. DxTM32400)</p><div style="text-align: right;width: 35%;"><img src="https://norgenbiotek.com/sites/default/files/norproduct/European_Conformity_logo.svg" style="width:70px;"></div>
+			
+		</div>
+			<p>HSV-2检测试剂盒</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/cn/产品/danchunpaozhenbingdu-2-hsv-2-taqman-juhemeilianshifanyingjianceshijihe-dx" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/TM32650%20Herpes%20Simplex%20Virus%201%20%28HSV-1%29%20TaqMan-WEB.jpg?itok=2i4hN-u4%22">
+		</div>
+	</div>
+
+
+	<section class="section-seperator">
+	<h2>植物病原体检测</h2>
+	<a href="">
+  		<div class="icon-seperator">
+			<img src="https://norgenbiotek.com/sites/default/files/banner-ribbon.webp">
+		</div>
+	</a>
+		</section>
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >7  <span> |</span></p><p class="step-title"><strong>TaqMan RT-PCR 啤酒花潜伏病毒 (HLVd) 检测试剂盒</strong><br>(cat. TM38750, TM38710)</p>
+			
+		</div>
+			<p>基于 RT-PCR 的啤酒花潜伏类病毒 (HLVd) 检测试剂盒</p>
+			<a class="btn-primary btn more-info-btn" href="/cn/产品/huopuqianfubingdu-hlvd-taqman-rt-pcr-jianceshijihe" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/TM38750-Hop-latent-viroid-WEB.jpg?itok=sirT4AKT%22">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >8  <span> |</span></p><p class="step-title"><strong>酿酒酵母 TaqMan PCR 检测试剂盒</strong><br>(cat. TM33350, TM33310)</p>
+			
+		</div>
+			<p>酿酒酵母检测试剂盒</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/cn/产品/niangjiujiaomu-taqman-juhemeilianshifanyingjianceshijihe" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/TM33300-Taqman-24rxn-WEB_0.jpg?itok=o7ln0U8q%22">
+		</div>
+	</div>
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >9  <span> |</span></p><p class="step-title"><strong>TaqMan RT-PCR 牛油果太阳黑子病毒 (ASBVd) 检测试剂盒</strong><br>(cat. TM38850, TM38810)</p>
+			
+		</div>
+			<p>ASBVd 检测试剂盒</p>
+			<a class="btn-primary btn more-info-btn" href="/cn/产品/elibandianbingbingdu-asbvd-taqman-rt-pcr-jianceshijihe" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/TM38850-Avocado-Sunblotch-Viroid-WEB.jpg?itok=h-Y4kVl3%22">
+		</div>
+	</div>
+		<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >10  <span> |</span></p><p class="step-title"><strong>军团菌属TaqMan PCR 检测试剂盒</strong><br>(Cat. TM64450, TM64410)</p>
+			
+		</div>
+			<p>军团菌检测试剂盒</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/cn/产品/juntuanjuntaqman-juhemeilianshifanyingjianceshijihe" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/DxTM64400-Taqman-24rxn-WEB.jpg?itok=2XGU_B_G%22">
+		</div>
+	</div>
+	<section class="section-seperator">
+	<h2>食品和牛奶中病原体的检测</h2>
+	<a href="">
+  		<div class="icon-seperator">
+			<img src="https://norgenbiotek.com/sites/default/files/banner-ribbon.webp">
+		</div>
+	</a>
+</section>
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >11  <span> |</span></p><p class="step-title"><strong>无乳链球菌 TaqMan PCR 检测试剂盒</strong><br>(cat. TM30650, TM30610)</p>
+			
+		</div>
+			<p>无乳链球菌检测试剂盒</p>
+			<a class="btn-primary btn more-info-btn" href="/cn/产品/wurulianqiujun-taqman-juhemeilianshifanyingjianceshijihe" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/TM30600-Taqman-24rxn-WEB.jpg?itok=ULDSFZe6%22">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >12  <span> |</span></p><p class="step-title"><strong>单增李斯特菌 TaqMan PCR 检测试剂盒</strong><br>(cat. TM30450, TM30410)</p>
+			
+		</div>
+			<p>单增李斯特氏菌检测试剂盒</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/cn/产品/lisitejun-taqman-juhemeilianshifanyingjianceshijihe">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/TM30400-Taqman-24rxn-WEB_1.jpg?itok=PEfjkeBy%22">
+		</div>
+	</div>
+	<section class="section-seperator">
+	<h2>水传播病原体的检测</h2>
+	<a href="">
+  		<div class="icon-seperator">
+			<img src="https://norgenbiotek.com/sites/default/files/banner-ribbon.webp">
+		</div>
+	</a>
+</section>
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >13 <span> |</span></p><p class="step-title"><strong>隐孢子虫 TaqMan RT-PCR 检测试剂盒</strong><br>(cat. TM39150, TM39110)</p>
+			
+		</div>
+			<p>隐孢子虫检测试剂盒</p>
+			<a class="btn-primary btn more-info-btn" href="/cn/产品/yinbaozichong-taqman-rt-pcr-jianceshijihe" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/TM39100-Taqman-24rxn-WEB.jpg?itok=GBvJqOCc%22">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >14  <span> |</span></p><p class="step-title"><strong>肠贾第虫 TaqMan RT-PCR 检测试剂盒</strong><br>(cat. TM43850, TM43810)</p>
+			
+		</div>
+			<p>肠贾第虫检测试剂盒</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/cn/产品/changjiadichong-taqman-rt-pcr-jianceshijihe" target="_blank">更多信息</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/TM43800-Taqman-24rxn-WEB.jpg?itok=EE7DfdZ1%22">
+		</div>
+	</div>
+
+
+</section>
+
+<script>
+
+	document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+    	console.log("anchoring");
+        e.preventDefault();
+
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+});
+
+</script>

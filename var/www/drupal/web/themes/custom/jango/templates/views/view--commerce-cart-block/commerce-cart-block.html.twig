@@ -1,0 +1,11 @@
+{% if content %}
+
+  {{ content }}
+
+  <div class="c-cart-menu-footer">
+    <a href="{{ url('commerce_cart.page') }}" class="btn btn-md c-btn c-btn-grey-3 c-font-white c-font-bold c-center c-font-uppercase">
+      {{ 'View Cart'|t }}
+    </a>
+    {{ checkout_link }}
+  </div>
+{% endif %}

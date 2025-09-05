@@ -1,0 +1,5485 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a node.
+ *
+ * Available variables:
+ * - node: The node entity with limited access to object properties and methods.
+ *   Only method names starting with "get", "has", or "is" and a few common
+ *   methods such as "id", "label", and "bundle" are available. For example:
+ *   - node.getCreatedTime() will return the node creation timestamp.
+ *   - node.hasField('field_example') returns TRUE if the node bundle includes
+ *     field_example. (This does not indicate the presence of a value in this
+ *     field.)
+ *   - node.isPublished() will return whether the node is published or not.
+ *   Calling other methods, such as node.delete(), will result in an exception.
+ *   See \Drupal\node\Entity\Node for a full list of public properties and
+ *   methods for the node object.
+ * - label: (optional) The title of the node.
+ * - content: All node items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - author_picture: The node author user entity, rendered using the "compact"
+ *   view mode.
+ * - metadata: Metadata for this node.
+ * - date: (optional) Themed creation date field.
+ * - author_name: (optional) Themed author name field.
+ * - url: Direct URL of the current node.
+ * - display_submitted: Whether submission information should be displayed.
+ * - attributes: HTML attributes for the containing element.
+ *   The attributes.class element may contain one or more of the following
+ *   classes:
+ *   - node: The current template type (also known as a "theming hook").
+ *   - node--type-[type]: The current node type. For example, if the node is an
+ *     "Article" it would result in "node--type-article". Note that the machine
+ *     name will often be in a short form of the human readable label.
+ *   - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+ *     teaser would result in: "node--view-mode-teaser", and
+ *     full: "node--view-mode-full".
+ *   The following are controlled through the node publishing options.
+ *   - node--promoted: Appears on nodes promoted to the front page.
+ *   - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+ *     teaser listings.
+ *   - node--unpublished: Appears on unpublished nodes visible only to site
+ *     admins.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main
+ *   content tag that appears in the template.
+ * - author_attributes: Same as attributes, except applied to the author of
+ *   the node tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ * - view_mode: View mode; for example, "teaser" or "full".
+ * - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+ * - page: Flag for the full page state. Will be true if view_mode is 'full'.
+ * - readmore: Flag for more state. Will be true if the teaser content of the
+ *   node cannot hold the main body content.
+ * - logged_in: Flag for authenticated user status. Will be true when the
+ *   current user is a logged-in member.
+ * - is_admin: Flag for admin user status. Will be true when the current user
+ *   is an administrator.
+ *
+ * @see template_preprocess_node()
+ *
+ * @ingroup themeable
+ */
+#}
+<article{{ attributes }}>
+
+  {{ title_prefix }}
+  {% if label and not page %}
+    <h2{{ title_attributes }}>
+      <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+    </h2>
+  {% endif %}
+  {{ title_suffix }}
+
+  {% if display_submitted %}
+    <footer>
+      {{ author_picture }}
+      <div{{ author_attributes }}>
+        {% trans %}Submitted by {{ author_name }} on {{ date }}{% endtrans %}
+        {{ metadata }}
+      </div>
+    </footer>
+  {% endif %}
+
+  <div{{ content_attributes }}>
+    {{ content }}
+  </div>
+
+</article>
+
+
+
+
+<style>
+  
+
+.form-submit {
+    border-radius: 12px !important;
+    width: max-content;
+    padding: 10px 30px;
+}
+.step_info{
+  display: none;
+}
+.step{
+  display: none;
+  width: 65%;
+  margin:auto;
+}
+
+.step_heading h2{
+  color: white;
+  margin:0;
+}
+
+.product_item{
+      display: flex;
+    align-items: flex-start;
+    margin:3% 0;
+    align-items: center;
+    gap:5%;
+    /*display: none;*/
+    justify-content: center;
+    flex-direction: column-reverse;
+}
+.email-product_item{
+      display: flex;
+    align-items: flex-start;
+    margin:3% 0;
+    align-items: center;
+    gap:5%;
+    /*display: none;*/
+    justify-content: center;
+    flex-direction: column-reverse;
+}
+.product_item > img{
+      width: 50px;
+    position: relative;
+    left: 25%;
+    margin: 3%;
+}
+.product_info > img{
+  width: 250px;
+}
+.seperator{
+  width: 70%;
+  margin: auto;
+}
+.cart_info{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-direction: column-reverse;
+    justify-content: flex-start;
+}
+
+.more_less_btn{
+  text-align: center;
+  margin: 1% 0;
+}
+
+.more > img{
+  width: 30px;
+  margin: 0 4%;
+}
+.less{
+   border-color: gray;
+    background: transparent;
+    color: #004897;
+    font-size: 17px;
+    font-weight: 800;
+    border-width: medium;
+    width: 200px;
+}
+.less > img{
+  width: 30px;
+  margin: 0 4%;
+}
+.morethanone{
+  display: none;
+}
+.product_text > p{
+  color: #004897;
+  font-weight: 600;
+}
+
+
+.category_question, .organism_question, .pathogen_question, .sample_question, .analyte_question{
+  width: 70%;
+    margin: auto;
+    text-align: center;
+    left: 0%;
+    transition: all 1s;
+    position: relative;
+}
+
+
+button > img{
+  width: 80px;
+}
+
+
+.submitbtn{
+  background: #f1cb59 !important;
+    border-radius: 40px;
+    padding: 0% 3%;
+    color: white;
+    font-weight: 600;
+    font-size: 20px;
+}
+.submitbtn:disabled,
+.submitbtn[disabled]{
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.submitbtn > img{
+  width: 50px;
+}
+.deletebtn{
+  position: absolute;
+    top: -17px;
+    right: -16px;
+    display: none;
+    pointer-events: auto;
+}
+
+svg {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    filter: drop-shadow(0px 1px 3px black);
+}
+.test{
+  filter: none !important;
+  position: absolute;
+  bottom:75px;
+  z-index: -10;
+  display:none;
+}
+.test2{
+  filter: none !important;
+  position: absolute;
+  bottom:75px;
+  z-index: -10;
+  display:none;
+  left:10%;
+  width:100%;
+}
+.active-circle{
+  animation: scaleAnimation 1s linear forwards;
+  animation-play-state: paused;
+}
+.active {
+    animation: firstAnimation 5s linear forwards;
+}
+.active1{
+  animation: comingin 2s ease-in-out,
+             comingout 1s ease-in-out 2s;
+}
+.active1-color{
+  stroke:url(#SVGID_00000040558217345501320120000017947595967312959631_);
+}
+.active1-color1{
+  stroke:url(#SVGID_00000040558217345501320120000017947595967312959631_1);
+}
+.active1_generating{
+  animation: generate 5s ease-in-out;
+
+} 
+@keyframes generate{
+  0%{
+    stroke-dashoffset: 1000;
+    stroke:url(#SVGID_00000055669036931614567330000007236034388313106576_);
+  }
+  100%{
+    stroke-dashoffset: 0;
+    stroke:url(#SVGID_00000055669036931614567330000007236034388313106576_);
+  }
+}
+
+@keyframes generate_text{
+  0%{
+    opacity: 1;
+  }
+  20%{
+    fill: #004897;
+  }
+  40%{
+    fill: #662D91;
+  }
+  60%{
+    fill: #EC1D25;
+  }
+  80%{
+    fill: #0f6B7A;
+  }
+  100%{
+    fill: #004897;
+   opacity: 1;
+  }
+}
+.active3{
+  stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+}
+.active4{
+  animation: comingin 2s linear forwards 2s;
+}
+.active5{
+  animation: comingin 2s linear forwards 2s;
+}
+.active6{
+  animation: comingin 2s linear forwards 2s;
+}
+.active7{
+  animation: comingin 2s linear forwards 2s;
+}
+.active8{
+  animation: comingin 2s linear forwards 2s;
+}
+.active9{
+  animation: comingin 2s linear forwards 2s;
+}
+.active10{
+  animation: comingin 2s linear forwards 2s;
+}
+.active11{
+  animation: comingin_fill 2s linear forwards 2s;
+}
+.active12{
+  animation: comingin 2s linear forwards 2s;
+}
+.active13{
+  animation: comingin 2s linear forwards 2s;
+}
+.active14{
+  animation: comingin 2s linear forwards 2s;
+}
+.active15{
+  animation: comingin 2s linear forwards 2s;
+}
+.active16{
+  animation: comingin 2s linear forwards 2s;
+}
+.activated{
+  animation: filled 2s linear forwards;
+}
+.text-initialize{
+  animation:disappear 0.2s linear forwards;
+  animation-delay: 2s;
+}
+.text-generating{
+  animation:generate_text 5s linear;
+
+}
+@keyframes disappear{
+  100%{
+    display: none;
+    visibility: hidden;
+  }
+}
+@keyframes buttons{
+  0%{
+    transform: scale(1);
+    opacity: 1;
+  }
+  100%{
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+@keyframes filled{
+  100%{
+        stroke-dashoffset: 0;
+        fill:#00BF30;
+  }
+}
+@keyframes comingin_fill{
+  100%{
+        stroke-dashoffset: 0;
+        fill:#808080;
+  }
+}
+@keyframes comingin{
+  100%{
+        stroke-dashoffset: 0;
+        fill:white;
+  }
+}
+@keyframes colorme{
+  0%{
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+  }
+  100%{
+    stroke-dasharray: 0;
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes colorme_fill{
+  0%{
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+  }
+  100%{
+    stroke-dasharray: 0;
+    stroke-dashoffset: 0;
+    fill:url(#Step_4:_Sample_Type_00000045579000185955044170000000304850895410102404_);
+  }
+}
+@keyframes comingout{
+  0%{
+     stroke-dasharray: 0;
+    stroke-dashoffset: 0;
+  }
+  100%{
+         stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    stroke:white;
+  }
+}
+
+
+@keyframes firstAnimation{
+
+  100%{
+        stroke-dashoffset: 0;
+        fill:white;
+  }
+ 
+}
+@keyframes scaleAnimation{
+  100%{
+    transform:scale(1.2);
+  }
+}
+
+
+.workflow-div{
+  box-shadow: 0 4px 40px 0 rgb(0 0 0 / 9%), 0 6px 20px 0 rgb(0 0 0 / 17%);
+    width: 70%;
+    margin: 0% auto 5% auto;
+    border-radius: 30px;
+    position: relative;
+    height: 715px;
+}
+
+.workflow-img{
+  width: 20%;
+    margin: auto;
+    padding: 3%;
+}
+.workflow-question-0 .cursor{
+      font-size: 30px;
+    font-weight: 900;
+    margin-bottom: 25px;
+}
+.wf-analyte-btn{
+    background: white;
+    border: 5px solid #004893;
+    border-radius: 8px;
+    padding: 10px 20px;
+    color: #004893;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+.workflow-question-0{
+  overflow: hidden;
+  text-align:center;
+  margin-top:70px;
+}
+.workflow-question{
+    overflow: hidden;
+    text-align: center;
+    scroll-behavior: ;
+    background-color: white;
+    display: grid;
+    grid-template-columns: repeat(7, 100%);
+    display:none;
+}
+.workflow-question-no-pathogen{
+      overflow: hidden;
+    text-align: center;
+    scroll-behavior: ;
+    background-color: white;
+    display: grid;
+    grid-template-columns: repeat(7, 100%);
+    display:none;
+}
+.category-question, .organism-question, .pathogen-question, .sample-question, .analyte-question{
+    width: 80%;
+    margin: 1% auto;
+    left: 0;
+    right: 0;
+    text-align: center;
+    position: relative;
+    transition: all 2s;
+    transition-delay: 1s;
+    height: 350px;
+}
+.question-img{
+  width: 100px;
+}
+.workflow-start > img{
+  width: 10%;
+  margin: auto;
+}
+.workflow-start{
+  text-align: center;
+  //animation: slideup 0.5s linear;
+  animation-delay: 3s;
+  padding: 3% 0 0 0;
+}
+.workflow-start > h2{
+  color: #004897;
+  font-weight: 800;
+
+}
+.workflow-slide{display: none;animation: slidedown 0.5s linear forwards;padding-top:50px;}
+
+
+@keyframes slideup{
+  100%{
+    opacity: 0;
+  }
+}
+@keyframes slidedown{
+  0%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
+}
+/* The typing effect */
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+/* The typewriter cursor effect */
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: orange; }
+}
+.options{
+  margin: 4% 0;
+      margin: 4% 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1%;
+    align-items: center;
+    justify-content: center;
+}
+polygon{
+  fill:none;
+}
+.powered{
+  text-align: center;
+    position: absolute;
+    bottom: 35px;
+    left: 0;
+    right: 0;
+    font-size: 12px;
+}
+.powered_result{
+  text-align: center;
+  padding: 2% 0;
+  font-size: 12px;
+}
+.powered_form{
+  text-align: center;
+  padding: 2% 0;
+  font-size: 12px;
+  margin: 7% 0 0;
+}
+.text-svg{
+  stroke: black;
+    stroke-dashoffset: 249;
+    stroke-dasharray: 634;
+    font-size: 50px;
+    font-family: 'Montserrat','Ubuntu',sans-serif;
+    margin-left: -24px;
+    transform: translateX(900px);
+    transform: translateY(226px) translateX(905px);
+    animation: text 500ms linear forwards;
+    animation-delay: 2s;
+
+}
+@keyframes text{
+  100%{
+    opacity: 0;
+  }
+}
+#category. #organism, #pathogen, #sample, #analyte{
+  display: flex;
+    gap: 2%;
+}
+#category input[type="radio"], #organism input[type="radio"], 
+#pathogen input[type="radio"], #sample input[type="radio"],
+#analyte input[type="radio"] {
+  opacity: 0;
+  position: fixed;
+  width: 0;
+
+}
+#nopathogen_organism input[type="radio"], 
+#nopathogen_pathogen input[type="radio"], #nopathogen_sample input[type="radio"],
+#nopathogen_analyte input[type="radio"] {
+  opacity: 0;
+  position: fixed;
+  width: 0;
+}
+.nopathogen_pathogen_radios input[type="radio"]{
+  opacity: 0;
+  position: fixed;
+  width: 0;
+}
+
+#nopathogen_organism label, #nopathogen_sample label,
+#nopathogen_analyte label {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 25px;
+    color: white;
+}
+.nopathogen_pathogen_radios label{
+  display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 25px;
+    color: white;
+}
+#category label, #organism label,
+#pathogen label, #sample label,
+#analyte label {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 25px;
+    color: white;
+}
+#category label{
+  background: #BE1E2D;
+  border-color: #BE1E2D;
+}
+#organism label{
+  background: #662d91;
+  border-color: #662d91;
+}
+#nopathogen_organism label{
+  background: #662d91;
+  border-color: #662d91;
+}
+#pathogen label{
+  background: #004897;
+  border-color: #004897;
+  margin:0 2px;
+}
+.nopathogen_pathogen_radios label{
+  background: #004897;
+  border-color: #004897;
+  margin:0 2px;
+}
+
+#sample label{
+  background: #0f6b7a;
+  border-color: #0f6b7a;
+}
+#nopathogen_sample label{
+  background: #0f6b7a;
+  border-color: #0f6b7a;
+}
+#analyte label{
+  background: #0f6b7a;
+  border-color: #0f6b7a;
+}
+#nopathogen_analyte label{
+  background: #0f6b7a;
+  border-color: #0f6b7a;
+}
+#category label:hover, #organism label:hover,
+#pathogen label:hover, #sample label:hover,
+#analyte label:hover{
+  opacity: 0.7;
+  cursor: pointer;
+}
+#nopathogen_organism label:hover, #nopathogen_sample label:hover,
+#nopathogen_analyte label:hover{
+  opacity: 0.7;
+  cursor: pointer;
+}
+.nopathogen_pathogen_radios label:hover{
+  opacity: 0.7;
+  cursor: pointer;
+}
+#category input[type="radio"]:focus + label, #organism input[type="radio"]:focus + label,
+#pathogen input[type="radio"]:focus + label, #sample input[type="radio"]:focus + label,
+#analyte input[type="radio"]:focus + label {
+    opacity: 0.7;
+    border: 2px dashed white;
+}
+#nopathogen_organism input[type="radio"]:focus + label, #nopathogen_sample input[type="radio"]:focus + label,
+#nopathogen_analyte input[type="radio"]:focus + label {
+    opacity: 0.7;
+    border: 2px dashed white;
+}
+.nopathogen_pathogen_radios input[type="radio"]:focus + label{
+    opacity: 0.7;
+    border: 2px dashed white;
+}
+#category input[type="radio"]:checked + label, #organism input[type="radio"]:checked + label,
+#pathogen input[type="radio"]:checked + label, #sample input[type="radio"]:checked + label,
+#analyte input[type="radio"]:checked + label {
+    opacity: 0.7;
+    border-color: white;
+}
+#nopathogen_organism input[type="radio"]:checked + label, #nopathogen_sample input[type="radio"]:checked + label,
+#nopathogen_analyte input[type="radio"]:checked + label {
+    opacity: 0.7;
+    border-color: white;
+}
+.nopathogen_pathogen_radios input[type="radio"]:checked + label{
+    opacity: 0.7;
+    border-color: white;
+}
+.box-text{
+  opacity: 0;
+  font-size: 30px;
+  font-weight: 700;
+  /*animation: 2s anim-popoutin ease;*/
+}
+
+@keyframes textanim {
+  0% {
+    color: black;
+    opacity: 0;
+    text-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  }
+  
+  100% {
+    opacity: 1;
+    text-shadow: 1px 0 0 rgba(0, 0, 0, 0);
+  }
+}
+.generate-svg{
+    position: absolute;
+    width: 14%;
+    top: 36%;
+    bottom: 36%;
+    left: 42%;
+    right: 45%;
+    filter: none !important;
+    z-index: -1;
+}
+.generating-text{
+  opacity: 0;
+}
+.opac_disappear{
+    animation: div_disappear 2s linear forwards;
+    animation-delay: 4s;
+}
+.opac_appear{
+    animation: div_appear 2s linear forwards;
+    /*animation-delay: 4s;*/
+}
+@keyframes div_disappear{
+  95%{
+    opacity: 0;
+  }
+  100%{
+    display: none;
+    visibility: hidden;
+  }
+}
+@keyframes div_appear{
+  0%{
+    opacity: 0;
+  }
+
+  100%{
+    opacity: 1;
+  }
+}
+
+
+.workflow-end > img{
+  width: 100px;
+  margin: auto;
+}
+.workflow-end{
+  text-align: center;
+  padding: 3% 0 0 0;
+  display: none;
+}
+.results-div{
+  box-shadow: 0 4px 40px 0 rgb(0 0 0 / 9%), 0 6px 20px 0 rgb(0 0 0 / 17%);
+    width: 70%;
+    margin: 0% auto 5% auto;
+    border-radius: 30px;
+    position: relative;
+    height: 940px;
+    padding: 1%;
+    display: none;
+    z-index: 3;
+}
+
+.email-results-div{
+  box-shadow: 0 4px 40px 0 rgb(0 0 0 / 9%), 0 6px 20px 0 rgb(0 0 0 / 17%);
+    width: 70%;
+    margin: 0% auto 5% auto;
+    border-radius: 30px;
+    position: relative;
+    height: 940px;
+    padding: 1%;
+    z-index: 3;
+    display:none;
+}
+
+.results-div > h2{
+    color:#004897;
+    font-weight: 700;
+    text-align: center;
+    margin-top: 3.5%;
+}
+.all_steps{
+  display: grid;
+  grid-gap: 10px;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  margin: 2.5% 0;
+}
+.email-all_steps{
+  display: grid;
+  grid-gap: 10px;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  margin: 2.5% 0;
+}
+.each_step{
+  border-radius: 20px;
+  border:1px solid #c5c2c2;
+  height: auto;
+  /*overflow: hidden;*/
+  text-align: center;
+  padding: 5% 5% 0% 5%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.email-each_step{
+  border-radius: 20px;
+  border:1px solid #c5c2c2;
+  height: auto;
+  /*overflow: hidden;*/
+  text-align: center;
+  padding: 5% 5% 0% 5%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.each_step h4{
+  margin: 0;
+}
+.step_count{
+  font-weight: 700;
+}
+.view_btn{
+    width: 100%;
+    background: white;
+    border: none;
+    border-top: 1px solid  #c5c2c2;
+    padding: 4% 0;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    z-index: 3;
+}
+.view_btn > img{
+  width: 15px;
+}
+.drawer{
+  display: none;
+  position: absolute;
+  top: 500px;
+  left: -1px;
+  background: white;
+  width: 100.5%;
+  border:1px solid #c5c2c2;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  box-shadow: inset 0 -8px 4px 4px rgb(255,255,255), inset 0 2px 4px 0px #d9d6d6;
+  z-index: 4;
+      overflow-y: scroll;
+    height: 200px;
+}
+.drawer > .product_item:hover{
+  cursor: pointer;
+}
+.drawer > .product_item > .product_info{
+  display: block;
+}
+.drawer > .product_item > .product_info > img{
+  width: 250px;
+}
+.drawer > .product_item > .product_info  > form{
+  display: none;
+}
+.drawer > .product_item > .product_info > .cart_info{
+  display: none;
+}
+.drawer > .product_item > .product_info > .product_text > h4 > a{
+  font-size: 14px;
+  font-weight: 400;
+  color: black;
+  pointer-events: none;
+}
+.drawer > .product_item > .product_info > .product_text > p{
+  display: none;
+}
+.drawer > .product_item > .product_info > .product_text > .inside_type{
+  display: block;
+}
+.drawer > .view_btn{
+  //border: 1px solid #c5c2c2;
+  box-shadow: 0px -2px 4px #d9d6d6;
+      bottom: -2px;
+    position: sticky;
+}
+.form-table > form >  input {
+    padding: 8px;
+    border: 1px solid #c6c6c6;
+    border-radius: 20px;
+}
+.form-table > form > input{
+    width: 100%;
+    /*height: 34px;*/
+    margin-bottom: 1em;
+    padding: 10px 30px;
+}
+.form-table > form > label{
+  width: 100%;
+    height: 34px;
+    margin-bottom: 0em;
+}
+.form-table{
+  text-align: center;
+  display: none;
+}
+.form-table > h4{
+  margin-bottom: 20px;
+}
+.no_pathogen_form{
+  position: absolute;
+  top: 17%;
+  left: 5%;
+  right: 5%;
+}
+#test-iframe{
+  display: none;
+}
+#test-iframe2{
+  display: none;
+}
+#test-iframe3{
+  display: none;
+}
+.mail-sent{
+  display: none;
+}
+
+.mail-sent > h4{
+  font-weight: 500;
+  margin:8% 0;
+}
+.save_workflow_div{
+  /*display: none;*/
+      background: white;
+    position: fixed;
+    top: 20%;
+    width: 35%;
+    left: 32%;
+    right: 35%;
+    padding: 1%;
+    text-align: center;
+        /*color: white;*/
+   /* font-size: 24px;*/
+    box-shadow: 0 4px 40px 0 rgb(0 0 0 / 9%), 0 6px 20px 0 rgb(0 0 0 / 17%);
+    display: none;
+    z-index: 3;
+}
+.cart_confirmation{
+      background: white;
+    position: fixed;
+    top: 20%;
+    width: 35%;
+    left: 32%;
+    right: 35%;
+    padding: 1%;
+    text-align: center;
+    box-shadow: 0 4px 40px 0 rgb(0 0 0 / 9%), 0 6px 20px 0 rgb(0 0 0 / 17%);
+    display: none;
+    z-index: 4;
+}
+.cart_confirmation > div{
+  padding: 1%;
+}
+#cart{
+  margin: auto;
+}
+.popup_for_individual{
+      background: white;
+    position: fixed;
+    top: 20%;
+    width: 35%;
+    left: 32%;
+    right: 35%;
+    padding: 1%;
+    text-align: center;
+    box-shadow: 0 4px 40px 0 rgb(0 0 0 / 9%), 0 6px 20px 0 rgb(0 0 0 / 17%);
+    display: none;
+    z-index: 4;
+}
+.popup_for_individual > div{
+  padding: 1%;
+}
+#cart2{
+  margin: auto;
+}
+.save_workflow_bookmark{
+  /*display: none;*/
+      background: white;
+    position: absolute;
+    top: 35%;
+    width: 35%;
+    left: 32%;
+    right: 35%;
+    padding: 1%;
+    text-align: center;
+    box-shadow: 0 4px 40px 0 rgb(0 0 0 / 9%), 0 6px 20px 0 rgb(0 0 0 / 17%);
+    display: none;
+    z-index: 4;
+}
+.save_workflow_bookmark > div{
+  padding: 1%;
+}
+.workflow-sent{
+  display: none;
+}
+
+.step_info_link{
+  display: none;
+}
+#save_workflow > #submits{
+    border-radius: 32px;
+    padding: 10px 25px;
+    border:none;
+    font-size: 16px;
+    font-weight: 600;
+}
+#save_workflow > input{
+  border-radius: 20px;
+    border: gray 1px solid;
+        width: -webkit-fill-available;
+    padding: 6px 15px;
+    margin: 1%;
+}
+#save_workflow > h3{
+  color: #004897;
+}
+.workflowcart{
+  display: none;
+    text-align: center;
+    margin: 1.5%;
+    align-items: center;
+    /*gap: 5%;*/
+    justify-content: space-between;
+    align-items: flex-start;
+    gap:10px;
+}
+.reset-btn{
+    border: none;
+    background: none;
+    color: #004897;
+    font-weight: 500;
+    font-size: 16px;
+    /*padding: 0px 20px;*/
+    padding:0;
+    width:max-content;
+}
+.reset-btn > img{
+  width: 30px;
+    filter: brightness(0.5);
+}
+.reset-btn-div{
+      width: 70%;
+    margin: 5% auto 1% auto;
+    text-align: right;
+        display: flex
+;
+    justify-content: flex-end;
+}
+.generate-btn-div{
+   width: 70%;
+    margin: 5% auto 1% auto;
+    text-align: right;
+    display: none;
+}
+
+.saving-workflow img{
+  width: 60px;
+}
+.email-save{
+      border: 1px solid #c5c2c2;
+        padding: 5px 20px;
+    display: flex;
+    align-items: center;
+    gap:10px;
+    width: 380px;
+    text-align: left;
+
+}
+.email-save:hover{
+  cursor: pointer;
+}
+.page-save:hover{
+  cursor: pointer;
+}
+.saving-workflow h4{
+  margin-bottom: 0;
+      font-weight: 600;
+      font-size:16px;
+}
+.saving-workflow p{
+ 
+      font-size:12px;
+      line-height: 1.4;
+}
+.page-save{
+      border: 1px solid #c5c2c2;
+        padding: 5px 20px;
+    display: flex;
+    align-items: center;
+    width: 380px;
+    text-align: left;
+    
+}
+.just-text-btn{
+  background: none;
+  border:none;
+  color: #004897;
+  font-weight: 600;
+  font-size: 18px;
+}
+.close {
+    float: right;
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 0.75;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    opacity: .2;
+    filter: alpha(opacity=20);
+}
+.form_end{
+  padding: 10%;
+}
+#overlay, #overlay-email,#overlay-save, #overlay-cart, #overlay-help, #overlay-popup_for_individual {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /*background-color: rgba(0,0,0,0.5);*/
+    z-index: 2;
+    cursor: pointer;
+    max-height:max-content;
+}
+#overlay-email,#overlay-save, #overlay-cart, #overlay-help {
+  background-color: rgb(0 0 0 / 26%);
+}
+#overlay-help{
+  z-index:5;
+}
+/* Slider */
+
+.slider-wrapper {
+  overflow: hidden;
+}
+
+
+.more_options{
+ position: relative;
+  display: flex;
+  transition: 0.5s;
+  flex-wrap: nowrap;
+  gap: 0;
+  align-items: center;
+  justify-content: flex-start;
+  margin:2% 0;  
+  left:0;
+}
+.item {
+  flex: 1 0 33%;
+}
+.next{
+  background: none;
+    border: none;
+    color: #004897;
+    display: none;
+}
+.back{
+  background: none;
+    border: none;
+    color: #004897;
+    display: none;
+}
+.red-btn{
+  background-color: #BE1E2D;
+  border-color:#BE1E2D;
+  width: 350px;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 20px 40px;
+}
+.save_workflow_name{
+  display: none;
+    background: white;
+    position: fixed;
+    top: 20%;
+    width: 35%;
+    left: 32%;
+    right: 35%;
+    padding: 1%;
+    text-align: center;
+    box-shadow: 0 4px 40px 0 rgb(0 0 0 / 9%), 0 6px 20px 0 rgb(0 0 0 / 17%);
+    display: none;
+    z-index: 4;
+}
+.save_workflow_name > div{
+  padding: 10%;
+}
+.save_workflow_name >div> input {
+    border-radius: 20px;
+    border: gray 1px solid;
+    width: -webkit-fill-available;
+    padding: 6px 15px;
+    margin: 1%;
+}
+.product_info{
+    display: grid;
+    justify-items: center;
+    grid-template-rows: 100px 175px 100px;
+    align-items: stretch;
+}
+.product_text{
+  display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+.product_info > form{
+  align-items: end;
+    display: flex;
+    justify-content:center;
+}
+.inside_type.blue-btn{
+  background: #004897;
+    color: white;
+    padding: 3px 30px;
+    border-radius: 20px; 
+}
+.inside_type.red-btn2{
+  background: #BE1E2D;
+    color: white;
+    padding: 3px 30px;
+    border-radius: 20px; 
+}
+.inside_type.purple-btn{
+  background: #662D91;
+    color: white;
+    padding: 3px 30px;
+    border-radius: 20px; 
+}
+select{
+  width: 100%;
+  border: 1px solid #c6c6c6;
+  height: 34px;
+}
+select:hover{
+  cursor: pointer;
+}
+.nor-menu-mob{
+  display:none;
+       width: 80%;
+    margin: 5% auto 1% auto;
+    text-align: right;
+}
+.nor-menu{
+     width: 70%;
+    margin: 5% auto 1% auto;
+    text-align: right;
+    display: flex;
+    justify-content: space-between;
+        align-items: flex-end;
+}
+.nor-menu img{
+  width:30px;
+}
+@media only screen and (max-width: 1325px) {
+    .results-div{
+        width:95%;
+    }
+    .workflow-div{
+    width:95%;
+    }
+    .nor-menu{
+      width:95%;
+    }
+    .product_info{
+    gap:20px;
+    }
+
+}
+@media only screen and (max-width: 950px) {
+.help_div{
+  width:60%;
+  left:20%;
+}
+.product_info > img {
+    grid-area: img;
+    width: auto;
+}
+.product_info > .product_text{
+  grid-area: ptext;
+}
+.product_info > .cart_info{
+  grid-area: info;
+      justify-content: flex-end;
+}
+.product_info > form{
+  grid-area: info;
+      align-items: initial;
+}
+.product_info {
+      grid-template-areas:
+        'ptext img'
+        'info img';
+    align-items: center;
+    /*grid-template-columns: 1fr 1fr;*/
+    
+    justify-items: center;
+    align-items: center;
+        grid-template-rows: auto;
+}
+.all_steps {
+    grid-auto-flow: row;
+    }
+.results-div{
+  height: auto;
+}
+.drawer{
+  top:425px;
+}
+.email-save{
+  grid-area: email-btn;
+}
+.page-save{
+  grid-area: save-btn;
+}
+.red-btn{
+  grid-area: redbtn;
+}
+.powered_result{
+  grid-area: powered;
+}
+.workflowcart{
+  /*display: grid;*/
+  grid-template-areas:
+        'email-btn email-btn'
+        'save-btn save-btn'
+        'redbtn rebtn'
+        'powered powered';
+    justify-content: center;
+  grid-gap: 30px;
+}
+.no_pathogen_form {
+    position: relative;
+}
+.form-table > form > input {
+    width: 60%;
+}
+.save_workflow_div{
+  width: 60%;
+    left: 20%;
+    right: 33%;
+    top: 20%;
+    position:fixed;
+}
+.save_workflow_name {
+  width: 60%;
+    left: 20%;
+    right: 33%;
+     top: 20%;
+    position:fixed;
+  }
+  .cart_confirmation{
+  width: 60%;
+    left: 20%;
+    right: 33%;
+     top: 20%;
+    position:fixed;
+  }
+}
+@media only screen and (max-width: 800px) {
+  .workflow-div {
+    box-shadow: 0 4px 40px 0 rgb(0 0 0 / 9%), 0 6px 20px 0 rgb(0 0 0 / 17%);
+    width: 90%;
+}
+.workflow_div{
+  padding: 2%;
+}
+  }
+  @media only screen and (max-width: 700px) {
+
+  .item {
+    flex: 1 0 49%;
+}
+  }
+    @media only screen and (max-width: 400px) {
+
+  .item {
+    flex: 1 0 99%;
+}
+  }
+      @media only screen and (max-width: 300px) {
+
+.question-img {
+
+    display: none;
+}
+  }
+@media only screen and (max-width: 600px) {
+.nor-menu{
+display:none;
+}
+.nor-menu-mob{
+display:block;
+}
+  .product_info {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.product_info > img {
+    width: 250px;
+    }
+    .drawer {
+    top: 444px;
+}
+.save_workflow_div{
+      width: 80%;
+    left: 11%;
+  }
+  .save_workflow_name {
+   width: 80%;
+    left: 11%;
+  }
+}
+@media only screen and (max-width: 400px) {
+  .results-div {
+      width: 95%;
+  }
+  .saving-workflow img {
+    display: none;
+}
+.email-save{
+  width: 80%;
+}
+.page-save{
+  width: 80%;
+}
+.red-btn{
+  width: 80%;
+}
+}
+@media only screen and (max-width: 1372px) and (max-height: 721px) {
+  .email-save{
+  grid-area: email-btn;
+}
+.page-save{
+  grid-area: save-btn;
+}
+.red-btn{
+  grid-area: redbtn;
+}
+.workflowcart{
+  /*display: grid;*/
+  grid-template-areas:
+        'redbtn rebtn'
+        'email-btn email-btn'
+        'save-btn save-btn';
+    justify-content: center;
+  grid-gap: 30px;
+}
+  }
+  @media only screen and (max-width: 950px) and (max-height: 721px) {
+    .drawer{
+      top:725px;
+    }
+  }
+  .autorows{
+    grid-template-rows: auto;
+  }
+  .btnmargin{
+    margin: 0 2px;
+  }
+
+  .checkmark__circle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  stroke-width: 2;
+  stroke-miterlimit: 10;
+  stroke: #7ac142;
+  fill: none;
+  animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+  animation-play-state: paused;
+}
+
+.checkmark {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: block;
+  stroke-width: 2;
+  stroke: #fff;
+  stroke-miterlimit: 10;
+  margin: 10% auto;
+  /*box-shadow: inset 0px 0px 0px #7ac142;*/
+  animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+  animation-play-state: paused;
+  filter: none;
+}
+
+.checkmark__check {
+  transform-origin: 50% 50%;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+  animation-play-state: paused;
+}
+
+@keyframes stroke {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes scale {
+  0%, 100% {
+    transform: none;
+  }
+  50% {
+    transform: scale3d(1.1, 1.1, 1);
+  }
+}
+@keyframes fill {
+  100% {
+    box-shadow: inset 0px 0px 0px 30px #7ac142;
+  }
+}
+@media only screen and (max-width: 414px) and (max-height: 896px) {
+.powered{
+  position: relative;
+  bottom: 0;
+}
+.test, .test2{
+  position: relative;
+  bottom: 0;
+}
+.workflow-div{
+  height: auto;
+  padding: 4% 0;
+}
+.workflow-slide{
+  padding-top:5px;
+}
+.results-div{
+  width: 90%;
+  padding: 5%;
+}
+.generate-svg{
+  top: 50%;
+  bottom: 42%;
+  left: 43%;
+  right: 45%;
+  position: inherit;
+  height: 0;
+}
+}
+.next_back_btns{
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  gap: 5%;
+}
+@keyframes up{
+  0%{
+    opacity: 0;
+  }
+  100%{
+    
+    opacity: 1;
+  }
+}
+#first-e{
+  opacity: 0;
+  animation:up 0.75s linear forwards;
+}
+#second-e{
+  opacity: 0;
+  animation:up 0.75s linear forwards;
+  animation-delay: 0.75s;
+}
+#third-e{
+  opacity: 0;
+  animation: up 0.75s linear forwards;
+  animation-delay: 1.5s;
+}
+#ce-img{
+  width: 30px;
+    margin: 7px;
+    background: #cde0f1;
+    padding: 3px;
+}
+/*@keyframes slideout{
+  0%{
+    height: 0px;
+  }
+  100%{
+    height: 500px;
+  }
+}*/
+.slidingout{
+  animation: slideout 2s linear forwards;
+  overflow: scroll;
+}
+.red-btn:hover{
+  opacity: 0.7;
+  background: #BE1E2D;
+  border: #BE1E2D;
+}
+@media only screen and (min-width: 2390px){
+  .workflow-div{
+    height: auto;
+  }
+  #category label, #organism label, #pathogen label, #sample label, #analyte label {
+    padding: 10px 30px;
+    font-size: 20px;
+    border-radius: 39px;
+  }
+  .workflow-div h3{
+    font-size:42px;
+  }
+  .question-img {
+    width: 150px;
+  }
+  .results-div {
+    
+    height: 990px;
+  }
+  .category-question, .organism-question, .pathogen-question, .sample-question, .analyte-question {
+   
+    height: 35vh;
+}
+.test, .test2{
+  position: relative;
+  bottom: 0;
+}
+.generate-svg{
+  position: inherit;
+  height: 0;
+}
+}
+@media only screen and (min-width: 2600px){
+  .workflow-div{
+    height: auto;
+  }
+  #category label, #organism label, #pathogen label, #sample label, #analyte label {
+    padding: 10px 30px;
+    font-size: 20px;
+    border-radius: 39px;
+  }
+  .workflow-div h3{
+    font-size:45px;
+  }
+  .question-img {
+    width: 170px;
+  }
+  .category-question, .organism-question, .pathogen-question, .sample-question, .analyte-question {
+    height: 30vh;
+  }
+  .results-div {
+    
+    height: 1025px;
+  }
+}
+@media only screen and (min-width: 3200px){
+  .workflow-div{
+    height: auto;
+  }
+
+}
+@media only screen and (min-width: 4100px){
+  .workflow-div{
+    height: auto;
+  }
+  .category-question, .organism-question, .pathogen-question, .sample-question, .analyte-question {
+    height: 25vh;
+  }
+  .question-img {
+    width: 200px;
+}
+.workflow-div h3 {
+    font-size: 72px;
+}
+#category label, #organism label, #pathogen label, #sample label, #analyte label {
+    font-size: 50px;
+    border-radius: 48px;
+}
+.results-div{
+  height: 44vh;
+}
+}
+@media only screen and (min-width: 6000px){
+  .workflow-div{
+    height: auto;
+  }
+  .category-question, .organism-question, .pathogen-question, .sample-question, .analyte-question {
+    height: 25vh;
+  }
+  .question-img {
+    width: 300px;
+}
+.workflow-div h3 {
+    font-size: 100px;
+}
+#category label, #organism label, #pathogen label, #sample label, #analyte label {
+        padding: 15px 75px;
+    font-size: 85px;
+    border-radius: 95px;
+}
+.next{
+  font-size: 70px;
+}
+.back{
+  font-size:70px;
+}
+}
+.fullscreen {
+    position: fixed;
+    z-index: 999999999;
+    width: 100%;
+    overflow: scroll;
+    background: #fff;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+
+}
+::-webkit-scrollbar-track-piece:end {
+    background: transparent;
+    //margin-bottom: 500px; 
+}
+
+::-webkit-scrollbar-track-piece:start {
+    background: transparent;
+    margin-top: 0px;
+}
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+  margin-bottom: 80px; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+.form-item-step4-1{
+  display:none;
+}
+.form-item-category, .form-item-organism,  .form-item-pathogen, .form-item-analyte, .form-item-sample{
+  display:none;
+}
+
+
+/*drop down buttons*/
+.dropbtn {
+  background-color: white;
+  color: black;
+  /*padding: 16px;*/
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropbtn img{
+  width:30px;
+}
+.dropdown {
+  position: relative;
+  display: inline-block;
+  
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 5;
+  text-align: left;
+}
+
+.dropdown-content div {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  width:-webkit-fill-available;
+}
+
+.dropdown-content div:hover {background-color: #f1f1f1;cursor:pointer;}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+
+
+
+.dropdown-content img{
+  width:20px;
+}
+#save-wf-key{
+  font-size:16px;
+}
+#save-wf-key img{
+  width:20px;
+}
+.disable-retrieve button{
+  color:#b3b3b3;
+}
+.disable-retrieve:hover{
+  cursor:default !important;
+  background:#f9f9f9 !important;
+}
+.disable-retrieve button:hover{
+  cursor:default !important;
+}
+.setting_help{
+  display:flex;
+  gap:10px;
+}
+.help_div{
+  width: 40%;
+    position: absolute;
+    background: white;
+    z-index: 10;
+    left: 30%;
+    right: 0;
+    border: 5px solid;
+    padding: 20px 40px;
+    /* box-shadow: 0 4px 40px 0 rgb(0 0 0 / 9%), 0 6px 20px 0 rgb(0 0 0 / 17%); */
+    overflow-y: scroll;
+        max-height: 500px;
+    margin-top: 50px;
+    display:none;
+}
+
+.if_no_collection{
+  display:none;
+}
+.choices_made {
+    display: flex;
+    justify-content: center;
+    gap: 1%;
+}
+.choices_made_for_pathogen, .choices_made_for_nopathogen, .choices_made_for_protein{
+  display:none;
+  justify-content: center;
+    gap: 1%;
+    text-transform: capitalize;
+}
+
+.choices_made > p {
+    background: aliceblue;
+    padding: 1%;
+}
+.workflowcart2{
+      justify-content: start;
+      gap:40px;
+}
+</style>
+
+
+
+
+<div class="fullscreen">
+<div id="overlay-help" onclick="close_help_div();"></div>
+<div class="nor-menu">
+    <div style="display:flex;align-content:center;align-items:center;gap:10px;"><a style="display: flex;align-items: center;gap: 5px;" href="https://norgenbiotek.com"><img src="/sites/default/files/images/norgenius/home (2).png"> Back to Site</a><a href="https://norgenbiotek.com/cart" style="display:flex;align-content:center;align-items:center;gap:5px;"><i class="icon-handbag c-cart-icon"></i>Checkout Now</a></div>
+    <div class="setting_help">
+      <div class="dropdown">
+          <button class="dropbtn"><img src="/sites/default/files/images/norgenius/setting.png"> Settings</button>
+          <div class="dropdown-content">
+              <div><button class="reset-btn" onclick="resets()"><img src="/sites/default/files/images/norgenius/circular.png"> Reset</button></div>
+              <div id="retrieve_storage" class="disable-retrieve"><button class="reset-btn" onclick="retrieve_local_storage()" ><img src="/sites/default/files/images/norgenius/back-arrow.png" style="width:16px;"> Load Previous Workflow</button></div>
+              {% if logged_in == 1 %}
+              <div id="save-wf-key"><a href="https://norgenbiotek.com/content/savedworkflows"><img src="/sites/default/files/images/norgenius/floppy-disk.png" style="width:16px;"> See Saved Workflows</a></div>
+              {% endif %}
+          </div>
+      </div>
+      <div><button onClick="show_help_div()" style="background:white;border:none;"><img src="/sites/default/files/images/norgenius/question.png" > Help?</button></div>
+    </div>
+</div>
+
+<div class="nor-menu-mob">
+    
+    <div class="setting_help">
+      <div class="dropdown">
+          <button class="dropbtn"><img src="/sites/default/files/images/norgenius/menu.png"> Menu</button>
+          <div class="dropdown-content">
+              <div><a style="display: flex;align-items: center;gap: 5px;" href="https://norgenbiotek.com"><img src="/sites/default/files/images/norgenius/home (2).png"> Back to Site</a></div>
+              <div><button class="reset-btn" onclick="resets()"><img src="/sites/default/files/images/norgenius/circular.png"> Reset</button></div>
+              <div id="retrieve_storage" class="disable-retrieve"><button class="reset-btn" onclick="retrieve_local_storage()" ><img src="/sites/default/files/images/norgenius/back-arrow.png" style="width:16px;"> Load Previous Workflow</button></div>
+              <div id="save-wf-key"><a href="https://norgenbiotek.com/content/savedworkflows"><img src="/sites/default/files/images/norgenius/floppy-disk.png" style="width:16px;"> See Saved Workflows</a></div>
+              <div><button onClick="show_help_div()" style="background:white;border:none;"><img src="/sites/default/files/images/norgenius/question.png" > Help?</button></div>
+          </div>
+      </div>
+      
+    </div>
+</div>
+
+
+
+
+<div class="help_div">
+<a class="close" href="#" onclick="close_help_div();return false;" style="font-size:36px;">x</a>
+    <h1><img src="/sites/default/files/images/norgenius/question.png" style="width:50px;"> Need Help?</h1>
+    <hr>
+    <h3>Q. How to reset or create a new workflow?</h3>
+    <p>Hover over settings and then select reset from the dropdown</p>
+    <hr>
+    <h3>Q. How to save this workflow (Only available for pathogen workflow at the moment)?</h3>
+    <p>For logged-in users</p>
+    <ul>
+    <li>Send it to yourself using "Send workflow through email" options</li>
+    <li>Click on the save your workflow option</li>
+    </ul>
+    <p>For logged-out users</p>
+    <ul>
+    <li>Send it to yourself using "Send workflow through email" options</li>
+    </ul>
+    <hr>
+    <h3>Q. Why is load your previous workflow button disabled?</h3>
+    <p>You haven't created a workflow yet for it to have any previous workflow load for you or your session has expired</p>
+    <hr>
+    <h3>Q. How do I get back to the website></h3>
+    <p>Just click on the back to site on the left side of the tool</p>
+    <hr>
+    <h3>Need more help?</h3>
+    <p>Contact us on this email "Sabah.butt@norgenbiotek.com"</p>
+</div>
+
+
+<div class="cart_confirmation">
+  <a class="close" href="#" onclick="close_cart_confirmation();return false;" style="font-size:70px;">×</a>
+  <div>
+  <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
+
+    <dotlottie-player src="https://lottie.host/cdbd9dfc-640b-4659-a8ff-32e1e2292c41/ycIbcVDjXd.json" background="transparent" speed="1" style="width: 250px; height: 250px;" id="cart"></dotlottie-player>
+
+  <h3>Your workflow has been added to the cart.</h3>
+  <p>Thank you for using NorGenius.</p>
+  <!-- <button class="just-text-btn" onclick="close_cart_confirmation();">Close</button> -->
+  <div class="powered_form">
+    <p><strong>Powered by  <img src="/sites/default/files/images/norgenius/norgenius_icon.svg" style="width: 50px;">  NorGenius</strong></p>
+  </div>
+ </div>
+</div>
+
+<div class="popup_for_individual">
+<a class="close" href="#" onclick="close_popup_for_individual();return false;" style="font-size:70px;">×</a>
+<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+<dotlottie-player src="https://lottie.host/cdbd9dfc-640b-4659-a8ff-32e1e2292c41/ycIbcVDjXd.json" background="transparent" speed="1" style="width: 250px; height: 250px;" id="cart2"></dotlottie-player>
+<p>The product is added to the cart</p>
+<p id="pname"></p>
+<div class="powered_form">
+    <p><strong>Powered by  <img src="/sites/default/files/images/norgenius/norgenius_icon.svg" style="width: 50px;">  NorGenius</strong></p>
+  </div>
+</div>
+
+<div class="save_workflow_name">
+  <a class="close" href="#" onclick="close_save_workflow();return false;" style="font-size:70px;">×</a>
+  <div>
+
+  {{norgenius_saveworkflow}}
+
+ </div>
+</div>
+
+<div class="results-div">
+  <h2>Your Custom Workflow</h2>
+  <div class="choices_made choices_made_for_pathogen">
+    <p><strong>Category: </strong><span id="choice_category"></span></p>
+    <p><strong>Organism: </strong><span id="choice_organism"></span></p>
+    <p><strong>Pathogen: </strong><span id="choice_pathogen"></span></p>
+    <p><strong>Sample: </strong><span id="choice_sample"></span></p>
+    <p><strong>Analyte: </strong><span id="choice_analyte"></span></p>
+  </div>
+
+   <div class="choices_made choices_made_for_nopathogen">
+    <p><strong>Analyte: </strong><span id="choice_analyte1"></span></p>
+    <p><strong>Sample: </strong><span id="choice_sample1"></span></p>
+    <p><strong>Organism: </strong><span id="choice_organism1"></span></p>
+  </div>
+
+    <div class="choices_made choices_made_for_protein">
+    <p><strong>Analyte: </strong><span id="choice_analyte2"></span></p>
+    <p><strong>Sample: </strong><span id="choice_sample2"> Urine</span></p>
+    
+  </div>
+
+
+<div id="overlay-email" onclick="close_email_workflow()"></div>
+<div id="overlay-save" onclick="close_save_workflow()"></div>
+<div id="overlay-cart" onclick="close_cart_confirmation()"></div>
+<div id="overlay-popup_for_individual" onclick="close_popup_for_individual()"></div>
+
+<div class="all_steps">
+  <div class="each_step">
+    <div class="step_div">
+      <h4 class="step_count">Step 1</h4>
+      <h4 class="step_heading">Collection &amp; Preservation</h4>
+      <hr>
+      <div class="if_no_collection">
+        <p>No collection device needed for this workflow</p>
+      </div>
+
+    </div>
+  </div>
+  <div class="each_step">
+    <div class="step_div">
+      <h4 class="step_count">Step 2</h4>
+      <h4 class="step_heading">Isolation &amp; Purification</h4>
+      <hr>
+    </div>
+  </div>
+  <div class="each_step">
+    <div class="step_div">
+      <h4 class="step_count">Step 3</h4>
+      <h4 class="step_heading">qPCR &amp; RT-qPCR</h4>
+      <hr>
+    </div>
+  </div>
+</div>
+</div>
+<div class="workflowcart">
+  <div class="saving-workflow email-save" onclick="email_workflow();">
+  <img src="/sites/default/files/images/norgenius/email.png">
+  <div>
+    <h4>Email Workflow to Colleague </h4>
+    <p>Share your custom workflow with others</p>
+  </div>
+
+  </div>
+  <div>
+  <button class="btn btn-primary red-btn" onclick="add_workflow()">Add Workflow to Cart</button>
+  <div class="powered_result">
+    <p><strong>Powered by  <img src="/sites/default/files/images/norgenius/norgenius_icon.svg" style="width: 50px;">  NorGenius</strong></p>
+  </div>
+</div>
+
+{% if logged_in == 1 %}
+  <div class="page-save2">
+    <div class=" saving-workflow page-save" onclick="save_workflow();">
+      <img src="https://norgenbiotek.com/sites/default/files/images/norgenius/bookmark.png">
+      <div>
+        <h4>Save this Workflow</h4> 
+        <p>Save your customer workflow to view anytime</p>
+      </div>
+      </div>
+     </div>
+  {% else %}
+  <div class="page-save2" onclick="save_workflow();">
+  </div>
+    <div style="width: 30%;">
+      </div>
+
+{% endif %}
+</div>
+
+
+
+
+<div class="save_workflow_bookmark">
+  <a class="close" href="#" onclick="close_save_workflow();return false;" style="font-size:70px;">×</a>
+  <div>
+  <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
+
+    <dotlottie-player src="https://lottie.host/b3c75ff7-e4d5-4481-87c2-1ff01f1a537e/zKspRCUB9N.jsonhttps://lottie.host/b3c75ff7-e4d5-4481-87c2-1ff01f1a537e/zKspRCUB9N.json" background="transparent" speed="1" style="width: 300px; height: 300px;margin:auto;" id="bookmark"></dotlottie-player>
+
+
+    <h3>Your Custom Workflow is saved</h3>
+    <h4>You can access your saved workflows on this page - <a href="https://norgenbiotek.com/content/savedworkflows" target="_blank">Saved Workflows</a></h4>
+    <!-- <button class="just-text-btn" onclick="close_save_workflow();">Close</button> -->
+    <div class="powered_form">
+    <p><strong>Powered by  <img src="/sites/default/files/images/norgenius/norgenius_icon.svg" style="width: 50px;">  NorGenius</strong></p>
+  </div>
+  </div>
+</div>
+<iframe name="content2" style="" id="test-iframe2">
+</iframe>
+<div class="save_workflow_div">
+  <a class="close" href="#" onclick="close_email_workflow();return false;" style="font-size:70px;">×</a>
+<div class="form_end" id="save_workflow">
+    
+    {{norgenius_email}}
+</div>
+
+<div class="workflow-sent">
+ 
+ <div>
+
+  <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
+
+    <dotlottie-player src="https://lottie.host/4a732250-8157-4da2-8f69-b45597738c3b/dtkpAoPjYT.json" background="transparent" speed="1" style="width: 300px; height: 300px;margin:auto" id="mail2"></dotlottie-player>
+  </div>
+    <h3>Email Sent!</h3>
+    <h4>Thank you for using our Norgenius tool</h4>
+    <div class="powered_form">
+    <p><strong>Powered by  <img src="/sites/default/files/images/norgenius/norgenius_icon.svg" style="width: 50px;">  NorGenius</strong></p>
+  </div>
+</div>
+</div>
+
+
+
+<div class="workflow-div">
+
+  <div class="workflow-end">
+     <img src="/sites/default/files/images/norgenius/norgenius_icon.svg">
+    <h2>NorGenius is generating your custom workflow</h2>
+  </div>
+  <div class="workflow-start">
+    <h1>NorGenius</h1>
+    <h2>PRODUCT SELECTION WORKFLOW ASSISTANT</h2>
+        <div class="workflow-question-0">
+      <div class="">
+        <img src="/sites/default/files/images/biotech_1.png" class="question-img">
+        <h3 class="cursor">Do you work with molecular diagnostics or purification?</h3>
+         <div class="">
+          <div id="initial" class="">
+            <button class="wf-analyte-btn" id="wf_path" onClick="show_workflow_question('pathogens');">Pathogens</button>
+            <button class="wf-analyte-btn" id="wf_micro" onClick="show_workflow_question('microassays');">microassays</button>
+          </div>
+         </div>
+       </div>
+    </div>
+  </div>
+  <div class="workflow-slide">
+   
+    
+
+
+    <div class="workflow-question">
+      <div class="category-question sliding">
+        <img src="/sites/default/files/images/norgenius/category.svg" class="question-img">
+        <h3 class="cursor">What is the nature of pathogen you are working with?</h3>
+         <div class="slider-wrapper">
+        <div id="category" class="select_option options" ontouchstart="detectswipe('category',myfunction)">
+        </div>
+    </div>
+    <div class="next_back_btns">
+    <button class="next" type="button" onclick="slidingoptions('right',this)">More Category Options <img src="/sites/default/files/images/norgenius/next.png" style="width: 15px;"></button>
+    <button class="back" type="button" onclick="slidingoptions('left',this)"><img src="/sites/default/files/images/norgenius/back_btn.png" style="width: 15px;">Less Pathogen Options </button>
+  </div>
+      </div>
+      <div class="organism-question sliding">
+        <img src="/sites/default/files/images/norgenius/organism.svg" class="question-img">
+        <h3>What type of organism are you working with?</h3>
+        
+        <div id="organism" class="select_option options">
+        </div>
+    
+    
+      </div>
+      <div class="pathogen-question sliding" data-items="2">
+        <img src="/sites/default/files/images/norgenius/pathogen.svg" class="question-img">
+        <h3>What is your target pathogen</h3>
+        <div class="slider-wrapper">
+        <div id="pathogen" class="select_option options" ontouchstart="detectswipe('pathogen',myfunction);">
+          <input nickname="Pathogen Not Listed" type="radio" id="unavailable" name="pathogen" value="unavailable" onclick="selectoption(this,3,'active-3',false)">
+          <label class="btn2 item" for="unavailable">Pathogen Not Listed</label>
+        </div>
+      </div>
+        <!-- <button class="prev" type="button" onclick="slidingoptions('left')">More Options&larr;</button> -->
+        <div class="next_back_btns">
+            <button class="next" type="button" onclick="slidingoptions('right',this)">More Pathogen Options <img src="/sites/default/files/images/norgenius/next.png" style="width: 15px;"></button>
+            <button class="back" type="button" onclick="slidingoptions('left',this)"><img src="/sites/default/files/images/norgenius/back_btn.png" style="width: 15px;"> Less Pathogen Options </button>
+        </div>
+      </div>
+       <div class="analyte-question sliding" style="display: none;">
+        <img src="/sites/default/files/images/norgenius/pathogen.svg" class="question-img">
+        <h3>What is the analyte you are working with?</h3>
+        <div id="analyte" class="select_option options">
+        </div>
+      </div>
+      <div class="sample-question sliding">
+        <img src="/sites/default/files/images/norgenius/sample.svg" class="question-img">
+        <h3>What sample type are you starting with?</h3>
+        <div id="sample" class="select_option options">
+        </div>
+      </div>
+    </div>
+    
+    <!--second version-->
+    <div class="workflow-question-no-pathogen">
+      <div class="analyte-question np_sliding">
+        <img src="/sites/default/files/images/norgenius/pathogen.svg" class="question-img">
+        <h3>What is the analyte you are working with?</h3>
+        <div id="nopathogen_analyte" class="np_select_option options">
+        </div>
+      </div>
+      <div class="sample-question np_sliding">
+        <img src="/sites/default/files/images/norgenius/sample.svg" class="question-img">
+        <h3>What sample type are you starting with?</h3>
+        <div id="nopathogen_sample" class="np_select_option options">
+        </div>
+      </div>
+      <div class="organism-question np_sliding">
+        <img src="/sites/default/files/images/norgenius/organism.svg" class="question-img">
+        <h3>What type of organism are you working with?</h3>
+        
+        <div id="nopathogen_organism" class="np_select_option options">
+        </div>
+    
+    
+      </div>
+
+       
+    </div>
+    
+  </div>
+
+
+
+<!-- Generator: Adobe Illustrator 27.9.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+   viewBox="0 0 2532.3 655.7" style="enable-background:new 0 0 2532.3 655.7;" xml:space="preserve" class="test">
+
+<style type="text/css">
+  .st0{fill:none;stroke:#808080;stroke-width:10;stroke-miterlimit:10;}
+  .st1{fill:none;stroke:#808080;stroke-width:6;stroke-miterlimit:10;}
+  .st2{fill:none;stroke:#808080;stroke-width:4.5649;stroke-miterlimit:10;}
+  .st3{fill:none;stroke:#808080;stroke-miterlimit:10;}
+  .st4{fill:url(#Step_4:_Sample_Type_00000155105451663315422600000002970010775392592004_);}
+  
+    .st5{fill:none;stroke:url(#Step_3:_Target_Pathogen_00000062874422241671961210000001653142273706464953_);stroke-width:6;stroke-miterlimit:10;}
+  
+    .st6{fill:none;stroke:url(#Step_2:_Type_of_Organism_00000127741679587756635170000013153874950729460651_);stroke-width:6;stroke-miterlimit:10;}
+  
+    .st7{fill:none;stroke:url(#Step_1:_Nature_of_Pathogen_00000159467844818398200880000003366448754200257469_);stroke-width:4.5649;stroke-miterlimit:10;}
+  .st8{fill:none;stroke:url(#SVGID_1_);stroke-width:10;stroke-miterlimit:10;}
+  .st9{fill:none;stroke:url(#SVGID_00000122680739255906868320000004284886126766080149_);stroke-width:10;stroke-miterlimit:10;}
+  .st10{fill:none;stroke:url(#SVGID_00000170269979093932786250000007458759961812609178_);stroke-width:10;stroke-miterlimit:10;}
+  .st11{fill:none;stroke:url(#SVGID_00000068675384123602505730000005878034061989474457_);stroke-width:10;stroke-miterlimit:10;}
+  .st12{fill:none;stroke:url(#SVGID_00000134947864389463192530000010214760226772676233_);stroke-width:10;stroke-miterlimit:10;}
+  .st13{fill:none;stroke:url(#SVGID_00000176732423233944558040000010755124966558323853_);stroke-width:0.5;stroke-miterlimit:10;}
+  .st14{fill:none;stroke:url(#SVGID_00000005945622662558444530000008494689707352815543_);stroke-width:10;stroke-miterlimit:10;}
+  .st15{fill:none;stroke:url(#SVGID_00000004546498169794346850000008061131751790675338_);stroke-width:10;stroke-miterlimit:10;}
+  .st16{font-family:'Montserrat','Ubuntu',sans-serif;}
+  .st17{font-size:38px;}
+  .st22{fill:none;stroke:#808080;stroke-width:10;stroke-miterlimit:10;stroke-linecap:round;}
+</style>
+<path class="st0" d="M1250.2,524.8"/>
+<path class="st0" d="M1254.1,524.8"/>
+<line class="st22 active4" x1="1380" y1="525" x2="1125.8" y2="525"/>
+<line class="st22 active5" x1="1933.8" y1="524.8" x2="1679.5" y2="524.8"/>
+<line class="st22 active6" x1="838.5" y1="524.8" x2="584.2" y2="524.8"/>
+<path id="Step_2:_Type_of_Organism_00000173128460650220327880000005129037951917846406_" class="st1 active7" d="M1087.1,512.5
+  c0,7.1-5.6,12.9-12.7,13.2l-11.2,0.4c-1.2,0-2.4-0.1-3.6-0.4c-1.8,8.7-5.2,16.7-10,23.8c1.4,0.7,2.7,1.7,3.8,2.9l7.5,8.4
+  c4.8,5.5,4.3,13.8-1.1,18.6c-2.5,2.2-5.6,3.3-8.8,3.3c-3.6,0-7.3-1.5-9.9-4.4l-7.5-8.4c-0.7-0.8-1.3-1.7-1.8-2.6
+  c-7.2,4.9-15.5,8.4-24.3,10.2c0.4,1.3,0.6,2.6,0.6,3.9c0,0.3,0,0.5,0,0.8l-0.7,11.2c-0.4,7.3-6.7,12.8-14,12.4
+  c-7-0.4-12.4-6.2-12.4-13.2c0-0.3,0-0.5,0-0.8l0.7-11.2c0.1-1.1,0.2-2.1,0.5-3.1c-9.3-1.7-18-5.4-25.5-10.7c-0.5,0.8-1,1.5-1.6,2.2
+  l-7.6,8.3c-4.9,5.4-13.3,5.7-18.7,0.8c-2.8-2.6-4.3-6.1-4.3-9.7c0-3.2,1.2-6.4,3.5-8.9l7.6-8.3c1-1.1,2.1-1.9,3.3-2.6
+  c-4.7-7.1-8-15.2-9.6-23.8c-1.1,0.3-2.2,0.5-3.4,0.6l-11.2,0.4c-7.3,0.3-13.4-5.4-13.7-12.7c0-0.2,0-0.3,0-0.5
+  c0-7.1,5.6-12.9,12.7-13.2l11.2-0.4c1.6-0.1,3.1,0.2,4.5,0.6c1.7-8.8,5.2-17,10-24.2c-1.9-0.7-3.6-1.9-5.1-3.5l-7.5-8.4
+  c-4.8-5.4-4.3-13.8,1.1-18.6c2.5-2.2,5.6-3.3,8.8-3.3c3.6,0,7.3,1.5,9.9,4.4l7.5,8.4c1,1.1,1.8,2.4,2.3,3.7
+  c7.4-5.2,15.9-8.9,25.1-10.7c-0.4-1.3-0.6-2.6-0.6-4c0-0.3,0-0.5,0-0.8l0.7-11.2c0.4-7.3,6.7-12.8,14-12.4c7,0.4,12.4,6.2,12.4,13.2
+  c0,0.3,0,0.5,0,0.8l-0.7,11.2c-0.1,1.1-0.3,2.1-0.6,3.1c9.2,1.7,17.7,5.3,25.1,10.4c0.5-0.9,1.1-1.7,1.8-2.5l7.6-8.3
+  c4.9-5.4,13.3-5.7,18.7-0.8c2.8,2.6,4.3,6.1,4.3,9.7c0,3.2-1.2,6.4-3.5,8.9l-7.6,8.3c-1,1.1-2.1,2-3.4,2.6
+  c4.8,7.2,8.3,15.4,9.9,24.3c0.8-0.2,1.6-0.3,2.4-0.3l11.2-0.4c7.3-0.3,13.4,5.4,13.7,12.7C1087.1,512.1,1087.1,512.3,1087.1,512.5z
+   M993.9,475.6c-3.8,0-6.8,3.1-6.8,6.8s3.1,6.8,6.8,6.8c3.8,0,6.8-3.1,6.8-6.8S997.7,475.6,993.9,475.6z M1016.3,505.9
+  c-10.2,0-18.5,8.3-18.5,18.5s8.3,18.5,18.5,18.5s18.5-8.3,18.5-18.5S1026.5,505.9,1016.3,505.9z M1016.3,505.9
+  c-10.2,0-18.5,8.3-18.5,18.5s8.3,18.5,18.5,18.5s18.5-8.3,18.5-18.5S1026.5,505.9,1016.3,505.9z M962.7,512.3c-6.6,0-12,5.4-12,12
+  c0,6.6,5.4,12,12,12c6.6,0,12-5.4,12-12C974.7,517.7,969.3,512.3,962.7,512.3z"/>
+<path id="Step_1:_Nature_of_Pathogen_00000049219333657781798960000014214619552973686446_" class="st2 active8" d="M465.5,573.7
+  c14.8-26.2,37.1-16.9,37.1-16.9 M430.9,560.5c0,0,19.7,8.3,36.4,13.8c17.1,5.6,37.4,6.1,40.8-6.2 M521.4,536.8l-24.6-21
+   M518.3,472.8l-17.2,7.3 M467.6,438.1l-0.3,18.8 M398.9,532.5l36-19.7 M413.7,454.5l24.2,18.3 M397.9,431.8
+  c-5.9,0-10.6,4.7-10.6,10.6c0,5.9,4.7,10.6,10.6,10.6c5.9,0,10.6-4.7,10.6-10.6C408.5,436.5,403.7,431.8,397.9,431.8z M397.9,421.1
+  c-11.8,0-21.3,9.5-21.3,21.3s9.5,21.3,21.3,21.3s21.3-9.5,21.3-21.3S409.6,421.1,397.9,421.1z M539.6,527.7
+  c-11.8,0-21.3,9.5-21.3,21.3s9.5,21.3,21.3,21.3s21.3-9.5,21.3-21.3S551.4,527.7,539.6,527.7z M538.3,442.4
+  c-11.8,0-21.3,9.5-21.3,21.3s9.5,21.3,21.3,21.3s21.3-9.5,21.3-21.3S550.1,442.4,538.3,442.4z M538.3,454.5c-5.1,0-9.2,4.1-9.2,9.2
+  s4.1,9.2,9.2,9.2c5.1,0,9.2-4.1,9.2-9.2S543.4,454.5,538.3,454.5z M538.3,539.9c-5.1,0-9.2,4.1-9.2,9.2c0,5.1,4.1,9.2,9.2,9.2
+  c5.1,0,9.2-4.1,9.2-9.2C547.5,544,543.4,539.9,538.3,539.9z M390.8,527.7c-5.1,0-9.2,4.1-9.2,9.2c0,5.1,4.1,9.2,9.2,9.2
+  c5.1,0,9.2-4.1,9.2-9.2C400,531.8,395.9,527.7,390.8,527.7z M491.1,496.1v-1.3c0-2.6-2.1-4.8-4.8-4.8h-36c-2.6,0-4.8,2.1-4.8,4.8
+  v1.3c0,2.6,2.1,4.8,4.8,4.8h36C488.9,500.9,491.1,498.8,491.1,496.1z M510.3,572.4l-23.2-46.7l-0.7-1.4v-23.6h-37l0.3,24.6l-0.7,1.2
+  l-25.3,47.6c-10.4,27.6,17.5,31,17.5,31l63.3-1.7C524.4,597.6,510.3,572.4,510.3,572.4z M467.6,438.1c5.1,0,9.2-4.1,9.2-9.2
+  c0-5.1-4.1-9.2-9.2-9.2c-5.1,0-9.2,4.1-9.2,9.2C458.5,434,462.6,438.1,467.6,438.1z M467.6,536c3.1,0,5.5-2.5,5.5-5.5
+  c0-3.1-2.5-5.5-5.5-5.5c-3.1,0-5.5,2.5-5.5,5.5C462.1,533.6,464.6,536,467.6,536z M467.4,456.9c-20.5,0-37.2,16.7-37.2,37.2
+  c0,13.9,7.6,26,18.9,32.4l0.7-1.2l-0.3-24.6h37v23.6l0.7,1.4c10.5-6.6,17.5-18.2,17.5-31.5C504.6,473.6,487.9,456.9,467.4,456.9z
+   M444.4,592.8c3.6,0,6.5-2.9,6.5-6.5c0-3.6-2.9-6.5-6.5-6.5c-3.6,0-6.5,2.9-6.5,6.5C437.9,589.9,440.8,592.8,444.4,592.8z"/>
+<path id="Step_3:_Target_Pathogen_00000091719549688237544510000004914641491985351322_" class="st1 active9" d="M1509.5,565.9
+  c0,0.8-0.6,1.4-1.4,1.4s-1.4-0.6-1.4-1.4c0-0.8,0.6-1.4,1.4-1.4S1509.5,565.1,1509.5,565.9z M1521.8,553.6c-0.7,0-1.3,0.6-1.3,1.3
+  s0.6,1.3,1.3,1.3c0.7,0,1.3-0.6,1.3-1.3S1522.5,553.6,1521.8,553.6z M1523.9,572c-0.8,0-1.5,0.7-1.5,1.5c0,0.8,0.7,1.5,1.5,1.5
+  c0.8,0,1.5-0.7,1.5-1.5C1525.4,572.7,1524.7,572,1523.9,572z M1552.8,435.7c-5.7-5.7-17.8-2.8-27.1,6.4c-9.3,9.3-12.1,21.4-6.4,27.1
+  c5.7,5.7,17.8,2.8,27.1-6.4C1555.7,453.5,1558.6,441.4,1552.8,435.7z M1537.6,452.1c0,0.8-0.6,1.4-1.4,1.4c-0.8,0-1.4-0.6-1.4-1.4
+  s0.6-1.4,1.4-1.4C1537,450.8,1537.6,451.4,1537.6,452.1z M1477.1,549.4c5.7-2.8,11.6-5.2,17.7-7.2c3.2-1,6.6-2,9-4.4
+  c0.4-0.4,0.7-0.8,0.8-1.3c0.1-0.6-0.1-1.1-0.4-1.6c-1.2-2.2-3.5-3.6-5.9-4.4c-2.4-0.8-4.9-1.1-7.3-1.6c-3.9-0.8-7.6-2.1-11.2-3.8
+  c-1.4-0.7-2.9-1.7-3.3-3.2c-0.3-1.2,0.3-2.5,1.3-3.3c0.9-0.8,2.1-1.4,3.2-1.8c7.9-3.1,16.6-4.4,23.8-8.9c0.8-0.5,1.6-1.1,1.8-2
+  c0.1-0.6,0-1.2-0.3-1.8c-1-2-3.2-3.1-5.3-3.9c-6.9-2.5-14.7-2.8-21-6.6c-0.8-0.5-1.6-1.1-2-2c-0.5-1.3,0.1-2.8,1.2-3.7
+  c1.1-0.9,2.4-1.3,3.8-1.7c4-1.2,8-2.3,12.1-3.5c1.7-0.5,3.5-1,5.3-0.7 M1445.6,504.8c0-50.6,40.4-91.6,90.3-91.6
+  c49.9,0,90.3,41,90.3,91.6s-40.4,91.6-90.3,91.6C1486,596.4,1445.6,555.4,1445.6,504.8z M1535.9,606.8c55.5,0,100.6-45.7,100.6-102
+  s-45-102-100.6-102c-55.5,0-100.6,45.7-100.6,102S1480.4,606.8,1535.9,606.8z M1563.5,506.3c-0.8,0-1.4,0.6-1.4,1.4s0.6,1.4,1.4,1.4
+  c0.8,0,1.4-0.6,1.4-1.4S1564.3,506.3,1563.5,506.3z M1566.9,525.3c0,0.7-0.6,1.3-1.3,1.3s-1.3-0.6-1.3-1.3s0.6-1.3,1.3-1.3
+  S1566.9,524.5,1566.9,525.3z M1581.7,515.3c0,0.7-0.6,1.3-1.3,1.3s-1.3-0.6-1.3-1.3c0-0.7,0.6-1.3,1.3-1.3
+  S1581.7,514.6,1581.7,515.3z M1587,532.3c-9.1,9.1-23.8,9.1-32.8,0c-9.1-9.1-9.1-23.8,0-32.8s23.8-9.1,32.8,0
+  C1596,508.5,1596,523.2,1587,532.3z M1570.2,481.9l0.1,10.7 M1562.9,480.7h13.8 M1587,499.4l8-7.9 M1590.2,486.5l9.6,9.9
+   M1593.8,515.8h11.6 M1605.4,509.2v13.5 M1587,532.3l8,8.4 M1599.8,535.8l-9.6,9.8 M1570.3,539.6v11.4 M1562.9,551.1h13.8
+   M1554.1,532.3l-8.7,7.8 M1541,535l9.5,10.6 M1535.3,515.9l12-0.1 M1535.1,509.1v13.5 M1545.7,491.5l8.4,7.9 M1540.6,495.5l9.8-9.7"
+  />
+<path id="Step_4:_Sample_Type_00000149382742173255578820000006794283131895063203_" class="st3 active11" d="M2033.2,507.4l-6.9-6.9l1.2-1.2
+  l6.9,6.9L2033.2,507.4z M2048.6,507.3l-14.4-14.4l-1.2,1.2l14.4,14.4L2048.6,507.3z M2063.4,480.4l-8-8l-1.2,1.2l8,8L2063.4,480.4z
+   M2077.4,478.6l-14-14l-1.2,1.2l14,14L2077.4,478.6z M2007.8,516.9c-9.6,9.5-19.2,19-28.8,28.5c-2.2,2.4-3.3,4.1-5.5,9.6
+  c-1.2,2.9-1.1,6.9-1.2,9.3c-0.2,7.6,3.8,13.3,8.8,17.6c6.7,5.7,16.3,7.5,22.1,5.4c10.7-3.8,15.6-8.3,16.5-9.6
+  c7.3-7.4,13.3-13,20.6-20.3c13.5-13.5,25.9-27.2,39.4-40.7C2055.6,516.8,2031.7,516.9,2007.8,516.9z M2155.5,472.4l-69.1-69.1
+  l-4.4,4.4l69.1,69.1L2155.5,472.4z M2134.1,459.7c0,0-109,111.6-116.6,117.7c-5.5,4.5-10,8.5-18.5,9.2c-5.7,0.5-13.4-1.1-18.1-6.1
+  c-5.5-5.9-6.8-14.3-7-18.2c-0.3-7.2,2.9-12.1,6.9-16.9S2102,427.3,2102,427.3l-4.4-4.4c0,0-119.5,117.2-121.5,119.5
+  c-1.9,2.2-5.9,6.9-7.7,14.4c-1.3,5.5-0.2,12.8,0.9,15.4c1.2,3.1,0.7,3.3,4.7,8.7c3.9,5.5,12.4,10.8,21,11.3c9.4,0.5,15.2-2.9,17.2-4
+  c4.4-2.3,9.4-6.8,10-7.4c1.7-1.4,115.8-117.2,115.8-117.2L2134.1,459.7z"/>
+<linearGradient id="Step_4:_Sample_Type_00000045579000185955044170000000304850895410102404_" gradientUnits="userSpaceOnUse" x1="2061.4788" y1="403.2708" x2="2061.4788" y2="592.1746">
+  <stop  offset="0" style="stop-color:#BD202E"/>
+  <stop  offset="0.5" style="stop-color:#154A95"/>
+  <stop  offset="1" style="stop-color:#126C7B"/>
+</linearGradient>
+<path class="active-4" id="Step_4:_Sample_Type" style="fill:none;stroke:url(#Step_4:_Sample_Type_00000045579000185955044170000000304850895410102404_);stroke-width:6;" d="
+  M2033,507.4l-6.9-6.9l1.2-1.2l6.9,6.9L2033,507.4z M2048.4,507.3l-14.4-14.4l-1.2,1.2l14.4,14.4L2048.4,507.3z M2063.2,480.4l-8-8
+  l-1.2,1.2l8,8L2063.2,480.4z M2077.2,478.6l-14-14l-1.2,1.2l14,14L2077.2,478.6z M2007.6,516.9c-9.6,9.5-19.2,19-28.8,28.5
+  c-2.2,2.4-3.3,4.1-5.5,9.6c-1.2,2.9-1.1,6.9-1.2,9.3c-0.2,7.6,3.8,13.3,8.8,17.6c6.7,5.7,16.3,7.5,22.1,5.4
+  c10.7-3.8,15.6-8.3,16.5-9.6c7.3-7.4,13.3-13,20.6-20.3c13.5-13.5,25.9-27.2,39.4-40.7C2055.4,516.8,2031.5,516.9,2007.6,516.9z
+   M2155.3,472.4l-69.1-69.1l-4.4,4.4l69.1,69.1L2155.3,472.4z M2133.9,459.7c0,0-109,111.6-116.6,117.7c-5.5,4.5-10,8.5-18.5,9.2
+  c-5.7,0.5-13.4-1.1-18.1-6.1c-5.5-5.9-6.8-14.3-7-18.2c-0.3-7.2,2.9-12.1,6.9-16.9s121.2-118.1,121.2-118.1l-4.4-4.4
+  c0,0-119.5,117.2-121.5,119.5c-1.9,2.2-5.9,6.9-7.7,14.4c-1.3,5.5-0.2,12.8,0.9,15.4c1.2,3.1,0.7,3.3,4.7,8.7
+  c3.9,5.5,12.4,10.8,21,11.3c9.4,0.5,15.2-2.9,17.2-4c4.4-2.3,9.4-6.8,10-7.4c1.7-1.4,115.8-117.2,115.8-117.2L2133.9,459.7z"/>
+<linearGradient id="Step_3:_Target_Pathogen_00000087401222413244689700000002420668232535561873_" gradientUnits="userSpaceOnUse" x1="1535.7246" y1="398.8118" x2="1535.7246" y2="610.8118">
+  <stop  offset="0" style="stop-color:#BD202E"/>
+  <stop  offset="0.5" style="stop-color:#154A95"/>
+  <stop  offset="1" style="stop-color:#126C7B"/>
+</linearGradient>
+<path class="active-3" id="Step_3:_Target_Pathogen" style="fill:none;stroke:url(#Step_3:_Target_Pathogen_00000087401222413244689700000002420668232535561873_);stroke-width:6;stroke-miterlimit:10;" d="
+  M1509.3,565.9c0,0.8-0.6,1.4-1.4,1.4s-1.4-0.6-1.4-1.4c0-0.8,0.6-1.4,1.4-1.4S1509.3,565.1,1509.3,565.9z M1521.6,553.6
+  c-0.7,0-1.3,0.6-1.3,1.3s0.6,1.3,1.3,1.3c0.7,0,1.3-0.6,1.3-1.3S1522.3,553.6,1521.6,553.6z M1523.7,572c-0.8,0-1.5,0.7-1.5,1.5
+  c0,0.8,0.7,1.5,1.5,1.5s1.5-0.7,1.5-1.5C1525.2,572.7,1524.5,572,1523.7,572z M1552.7,435.7c-5.7-5.7-17.8-2.8-27.1,6.4
+  c-9.3,9.3-12.1,21.4-6.4,27.1c5.7,5.7,17.8,2.8,27.1-6.4C1555.5,453.5,1558.4,441.4,1552.7,435.7z M1537.4,452.1
+  c0,0.8-0.6,1.4-1.4,1.4c-0.8,0-1.4-0.6-1.4-1.4s0.6-1.4,1.4-1.4C1536.8,450.8,1537.4,451.4,1537.4,452.1z M1476.9,549.4
+  c5.7-2.8,11.6-5.2,17.7-7.2c3.2-1,6.6-2,9-4.4c0.4-0.4,0.7-0.8,0.8-1.3c0.1-0.6-0.1-1.1-0.4-1.6c-1.2-2.2-3.5-3.6-5.9-4.4
+  c-2.4-0.8-4.9-1.1-7.3-1.6c-3.9-0.8-7.6-2.1-11.2-3.8c-1.4-0.7-2.9-1.7-3.3-3.2c-0.3-1.2,0.3-2.5,1.3-3.3c0.9-0.8,2.1-1.4,3.2-1.8
+  c7.9-3.1,16.6-4.4,23.8-8.9c0.8-0.5,1.6-1.1,1.8-2c0.1-0.6,0-1.2-0.3-1.8c-1-2-3.2-3.1-5.3-3.9c-6.9-2.5-14.7-2.8-21-6.6
+  c-0.8-0.5-1.6-1.1-2-2c-0.5-1.3,0.1-2.8,1.2-3.7c1.1-0.9,2.4-1.3,3.8-1.7c4-1.2,8-2.3,12.1-3.5c1.7-0.5,3.5-1,5.3-0.7 M1445.4,504.8
+  c0-50.6,40.4-91.6,90.3-91.6c49.9,0,90.3,41,90.3,91.6s-40.4,91.6-90.3,91.6C1485.9,596.4,1445.4,555.4,1445.4,504.8z M1535.7,607.8
+  c56.1,0,101.5-46.1,101.5-103s-45.5-103-101.5-103c-56.1,0-101.5,46.1-101.5,103S1479.6,607.8,1535.7,607.8z M1563.3,506.3
+  c-0.8,0-1.4,0.6-1.4,1.4s0.6,1.4,1.4,1.4c0.8,0,1.4-0.6,1.4-1.4S1564.1,506.3,1563.3,506.3z M1566.7,525.3c0,0.7-0.6,1.3-1.3,1.3
+  c-0.7,0-1.3-0.6-1.3-1.3s0.6-1.3,1.3-1.3C1566.1,523.9,1566.7,524.5,1566.7,525.3z M1581.5,515.3c0,0.7-0.6,1.3-1.3,1.3
+  c-0.7,0-1.3-0.6-1.3-1.3c0-0.7,0.6-1.3,1.3-1.3C1580.9,514,1581.5,514.6,1581.5,515.3z M1586.8,532.3c-9.1,9.1-23.8,9.1-32.8,0
+  c-9.1-9.1-9.1-23.8,0-32.8s23.8-9.1,32.8,0C1595.8,508.5,1595.8,523.2,1586.8,532.3z M1570,481.9l0.1,10.7 M1562.7,480.7h13.8
+   M1586.8,499.4l8-7.9 M1590,486.5l9.6,9.9 M1593.6,515.8h11.6 M1605.2,509.2v13.5 M1586.8,532.3l8,8.4 M1599.6,535.8l-9.6,9.8
+   M1570.1,539.6v11.4 M1562.7,551.1h13.8 M1553.9,532.3l-8.7,7.8 M1540.8,535l9.5,10.6 M1535.1,515.9l12-0.1 M1534.9,509.1v13.5
+   M1545.5,491.5l8.4,7.9 M1540.4,495.5l9.8-9.7"/>
+<linearGradient id="Step_2:_Type_of_Organism_00000181045711374831077330000017839490630204365447_" gradientUnits="userSpaceOnUse" x1="994.0647" y1="415.9105" x2="994.0647" y2="608.9339">
+  <stop  offset="0" style="stop-color:#BD202E"/>
+  <stop  offset="0.5" style="stop-color:#154A95"/>
+  <stop  offset="1" style="stop-color:#126C7B"/>
+</linearGradient>
+<path class="active-2" id="Step_2:_Type_of_Organism" style="fill:none;stroke:url(#Step_2:_Type_of_Organism_00000181045711374831077330000017839490630204365447_);stroke-width:6;stroke-miterlimit:10;" d="
+  M1087.1,512.5c0,7.1-5.6,12.9-12.7,13.2l-11.2,0.4c-1.2,0-2.4-0.1-3.6-0.4c-1.8,8.7-5.2,16.7-10,23.8c1.4,0.7,2.7,1.7,3.8,2.9
+  l7.5,8.4c4.8,5.5,4.3,13.8-1.1,18.6c-2.5,2.2-5.6,3.3-8.8,3.3c-3.6,0-7.3-1.5-9.9-4.4l-7.5-8.4c-0.7-0.8-1.3-1.7-1.8-2.6
+  c-7.2,4.9-15.5,8.4-24.3,10.2c0.4,1.3,0.6,2.6,0.6,3.9c0,0.3,0,0.5,0,0.8l-0.7,11.2c-0.4,7.3-6.7,12.8-14,12.4
+  c-7-0.4-12.4-6.2-12.4-13.2c0-0.3,0-0.5,0-0.8l0.7-11.2c0.1-1.1,0.2-2.1,0.5-3.1c-9.3-1.7-18-5.4-25.5-10.7c-0.5,0.8-1,1.5-1.6,2.2
+  l-7.6,8.3c-4.9,5.4-13.3,5.7-18.7,0.8c-2.8-2.6-4.3-6.1-4.3-9.7c0-3.2,1.2-6.4,3.5-8.9l7.6-8.3c1-1.1,2.1-1.9,3.3-2.6
+  c-4.7-7.1-8-15.2-9.6-23.8c-1.1,0.3-2.2,0.5-3.4,0.6l-11.2,0.4c-7.3,0.3-13.4-5.4-13.7-12.7c0-0.2,0-0.3,0-0.5
+  c0-7.1,5.6-12.9,12.7-13.2l11.2-0.4c1.6-0.1,3.1,0.2,4.5,0.6c1.7-8.8,5.2-17,10-24.2c-1.9-0.7-3.6-1.9-5.1-3.5l-7.5-8.4
+  c-4.8-5.4-4.3-13.8,1.1-18.6c2.5-2.2,5.6-3.3,8.8-3.3c3.6,0,7.3,1.5,9.9,4.4l7.5,8.4c1,1.1,1.8,2.4,2.3,3.7
+  c7.4-5.2,15.9-8.9,25.1-10.7c-0.4-1.3-0.6-2.6-0.6-4c0-0.3,0-0.5,0-0.8l0.7-11.2c0.4-7.3,6.7-12.8,14-12.4c7,0.4,12.4,6.2,12.4,13.2
+  c0,0.3,0,0.5,0,0.8l-0.7,11.2c-0.1,1.1-0.3,2.1-0.6,3.1c9.2,1.7,17.7,5.3,25.1,10.4c0.5-0.9,1.1-1.7,1.8-2.5l7.6-8.3
+  c4.9-5.4,13.3-5.7,18.7-0.8c2.8,2.6,4.3,6.1,4.3,9.7c0,3.2-1.2,6.4-3.5,8.9l-7.6,8.3c-1,1.1-2.1,2-3.4,2.6
+  c4.8,7.2,8.3,15.4,9.9,24.3c0.8-0.2,1.6-0.3,2.4-0.3l11.2-0.4c7.3-0.3,13.4,5.4,13.7,12.7C1087.1,512.1,1087.1,512.3,1087.1,512.5z
+   M993.9,475.6c-3.8,0-6.8,3.1-6.8,6.8s3.1,6.8,6.8,6.8c3.8,0,6.8-3.1,6.8-6.8S997.7,475.6,993.9,475.6z M1016.3,505.9
+  c-10.2,0-18.5,8.3-18.5,18.5s8.3,18.5,18.5,18.5s18.5-8.3,18.5-18.5S1026.5,505.9,1016.3,505.9z M1016.3,505.9
+  c-10.2,0-18.5,8.3-18.5,18.5s8.3,18.5,18.5,18.5s18.5-8.3,18.5-18.5S1026.5,505.9,1016.3,505.9z M962.7,512.3c-6.6,0-12,5.4-12,12
+  c0,6.6,5.4,12,12,12c6.6,0,12-5.4,12-12C974.7,517.7,969.3,512.3,962.7,512.3z"/>
+<linearGradient id="Step_1:_Nature_of_Pathogen_00000102513341552808153730000004253305598505680306_" gradientUnits="userSpaceOnUse" x1="468.7558" y1="417.5464" x2="468.7558" y2="607.3018">
+  <stop  offset="0" style="stop-color:#EA2128"/>
+  <stop  offset="0.5" style="stop-color:#154A93"/>
+  <stop  offset="1" style="stop-color:#126C7A"/>
+</linearGradient>
+<path class="active-1" id="Step_1:_Nature_of_Pathogen" style="fill:none;stroke:url(#Step_1:_Nature_of_Pathogen_00000102513341552808153730000004253305598505680306_);stroke-width:4.5649;stroke-miterlimit:10;" d="
+  M465.5,573.7c14.8-26.2,37.1-16.9,37.1-16.9 M430.9,560.5c0,0,19.7,8.3,36.4,13.8c17.1,5.6,37.4,6.1,40.8-6.2 M521.4,536.8l-24.6-21
+   M518.3,472.8l-17.2,7.3 M467.6,438.1l-0.3,18.8 M398.9,532.5l36-19.7 M413.7,454.5l24.2,18.3 M397.9,431.8
+  c-5.9,0-10.6,4.7-10.6,10.6c0,5.9,4.7,10.6,10.6,10.6c5.9,0,10.6-4.7,10.6-10.6C408.5,436.5,403.7,431.8,397.9,431.8z M397.9,421.1
+  c-11.8,0-21.3,9.5-21.3,21.3s9.5,21.3,21.3,21.3s21.3-9.5,21.3-21.3S409.6,421.1,397.9,421.1z M539.6,527.7
+  c-11.8,0-21.3,9.5-21.3,21.3s9.5,21.3,21.3,21.3s21.3-9.5,21.3-21.3S551.4,527.7,539.6,527.7z M538.3,442.4
+  c-11.8,0-21.3,9.5-21.3,21.3s9.5,21.3,21.3,21.3s21.3-9.5,21.3-21.3S550.1,442.4,538.3,442.4z M538.3,454.5c-5.1,0-9.2,4.1-9.2,9.2
+  s4.1,9.2,9.2,9.2c5.1,0,9.2-4.1,9.2-9.2S543.4,454.5,538.3,454.5z M538.3,539.9c-5.1,0-9.2,4.1-9.2,9.2c0,5.1,4.1,9.2,9.2,9.2
+  c5.1,0,9.2-4.1,9.2-9.2C547.5,544,543.4,539.9,538.3,539.9z M390.8,527.7c-5.1,0-9.2,4.1-9.2,9.2c0,5.1,4.1,9.2,9.2,9.2
+  c5.1,0,9.2-4.1,9.2-9.2C400,531.8,395.9,527.7,390.8,527.7z M491.1,496.1v-1.3c0-2.6-2.1-4.8-4.8-4.8h-36c-2.6,0-4.8,2.1-4.8,4.8
+  v1.3c0,2.6,2.1,4.8,4.8,4.8h36C488.9,500.9,491.1,498.8,491.1,496.1z M510.3,572.4l-23.2-46.7l-0.7-1.4v-23.6h-37l0.3,24.6l-0.7,1.2
+  l-25.3,47.6c-10.4,27.6,17.5,31,17.5,31l63.3-1.7C524.4,597.6,510.3,572.4,510.3,572.4z M467.6,438.1c5.1,0,9.2-4.1,9.2-9.2
+  c0-5.1-4.1-9.2-9.2-9.2c-5.1,0-9.2,4.1-9.2,9.2C458.5,434,462.6,438.1,467.6,438.1z M467.6,536c3.1,0,5.5-2.5,5.5-5.5
+  c0-3.1-2.5-5.5-5.5-5.5c-3.1,0-5.5,2.5-5.5,5.5C462.1,533.6,464.6,536,467.6,536z M467.4,456.9c-20.5,0-37.2,16.7-37.2,37.2
+  c0,13.9,7.6,26,18.9,32.4l0.7-1.2l-0.3-24.6h37v23.6l0.7,1.4c10.5-6.6,17.5-18.2,17.5-31.5C504.6,473.6,487.9,456.9,467.4,456.9z
+   M444.4,592.8c3.6,0,6.5-2.9,6.5-6.5c0-3.6-2.9-6.5-6.5-6.5c-3.6,0-6.5,2.9-6.5,6.5C437.9,589.9,440.8,592.8,444.4,592.8z"/>
+<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="1252.1111" y1="524.7689" x2="1252.1111" y2="524.7689">
+  <stop  offset="4.469274e-02" style="stop-color:#126C7A"/>
+  <stop  offset="0.1112" style="stop-color:#3F5B68"/>
+  <stop  offset="0.2076" style="stop-color:#7C4650"/>
+  <stop  offset="0.296" style="stop-color:#AC343F"/>
+  <stop  offset="0.3733" style="stop-color:#CE2630"/>
+  <stop  offset="0.4365" style="stop-color:#E22229"/>
+  <stop  offset="0.4777" style="stop-color:#EA2128"/>
+  <stop  offset="0.5377" style="stop-color:#D7212E"/>
+  <stop  offset="0.6604" style="stop-color:#A52948"/>
+  <stop  offset="0.833" style="stop-color:#54396E"/>
+  <stop  offset="1" style="stop-color:#154A93"/>
+</linearGradient>
+<path class="st8" d="M1252.1,524.8"/>
+<linearGradient id="SVGID_00000052106624750351042550000003310261344632357511_" gradientUnits="userSpaceOnUse" x1="1157.1277" y1="581.2612" x2="1352.1636" y2="468.6571">
+  <stop  offset="4.469274e-02" style="stop-color:#126C7A"/>
+  <stop  offset="0.1112" style="stop-color:#3F5B68"/>
+  <stop  offset="0.2076" style="stop-color:#7C4650"/>
+  <stop  offset="0.296" style="stop-color:#AC343F"/>
+  <stop  offset="0.3733" style="stop-color:#CE2630"/>
+  <stop  offset="0.4365" style="stop-color:#E22229"/>
+  <stop  offset="0.4777" style="stop-color:#EA2128"/>
+  <stop  offset="0.5377" style="stop-color:#D7212E"/>
+  <stop  offset="0.6604" style="stop-color:#A52948"/>
+  <stop  offset="0.833" style="stop-color:#54396E"/>
+  <stop  offset="1" style="stop-color:#154A93"/>
+</linearGradient>
+<line style="fill:none;stroke:url(#SVGID_00000052106624750351042550000003310261344632357511_);stroke-width:10;stroke-linecap:round;stroke-miterlimit:10;" x1="1381.8" y1="525" x2="1127.5" y2="525" class="active-2"/>
+<linearGradient id="SVGID_00000011018494372127892890000014914048954137983880_" gradientUnits="userSpaceOnUse" x1="1710.7395" y1="581.2612" x2="1905.7754" y2="468.6571">
+  <stop  offset="4.469274e-02" style="stop-color:#126C7A"/>
+  <stop  offset="0.1112" style="stop-color:#3F5B68"/>
+  <stop  offset="0.2076" style="stop-color:#7C4650"/>
+  <stop  offset="0.296" style="stop-color:#AC343F"/>
+  <stop  offset="0.3733" style="stop-color:#CE2630"/>
+  <stop  offset="0.4365" style="stop-color:#E22229"/>
+  <stop  offset="0.4777" style="stop-color:#EA2128"/>
+  <stop  offset="0.5377" style="stop-color:#D7212E"/>
+  <stop  offset="0.6604" style="stop-color:#A52948"/>
+  <stop  offset="0.833" style="stop-color:#54396E"/>
+  <stop  offset="1" style="stop-color:#154A93"/>
+</linearGradient>
+<line style="fill:none;stroke:url(#SVGID_00000011018494372127892890000014914048954137983880_);stroke-width:10;stroke-linecap:round;stroke-miterlimit:10;" x1="1935.4" y1="525" x2="1681.1" y2="525" class="active-3"/>
+<linearGradient id="SVGID_00000072971973310149350420000010788601328287262095_" gradientUnits="userSpaceOnUse" x1="613.7966" y1="581.0709" x2="808.8326" y2="468.4669">
+  <stop  offset="4.469274e-02" style="stop-color:#126C7A"/>
+  <stop  offset="0.1112" style="stop-color:#3F5B68"/>
+  <stop  offset="0.2076" style="stop-color:#7C4650"/>
+  <stop  offset="0.296" style="stop-color:#AC343F"/>
+  <stop  offset="0.3733" style="stop-color:#CE2630"/>
+  <stop  offset="0.4365" style="stop-color:#E22229"/>
+  <stop  offset="0.4777" style="stop-color:#EA2128"/>
+  <stop  offset="0.5377" style="stop-color:#D7212E"/>
+  <stop  offset="0.6604" style="stop-color:#A52948"/>
+  <stop  offset="0.833" style="stop-color:#54396E"/>
+  <stop  offset="1" style="stop-color:#154A93"/>
+</linearGradient>
+<line style="fill:none;stroke:url(#SVGID_00000072971973310149350420000010788601328287262095_);stroke-width:10;stroke-linecap:round;stroke-miterlimit:10;" x1="838.5" y1="524.8" x2="584.2" y2="524.8" class="active-1"/>
+<linearGradient id="SVGID_00000147196873133499769710000003377046395753022397_" gradientUnits="userSpaceOnUse" x1="1248.9633" y1="524.7689" x2="1248.9633" y2="524.7689">
+  <stop  offset="4.469274e-02" style="stop-color:#126C7A"/>
+  <stop  offset="0.1112" style="stop-color:#3F5B68"/>
+  <stop  offset="0.2076" style="stop-color:#7C4650"/>
+  <stop  offset="0.296" style="stop-color:#AC343F"/>
+  <stop  offset="0.3733" style="stop-color:#CE2630"/>
+  <stop  offset="0.4365" style="stop-color:#E22229"/>
+  <stop  offset="0.4777" style="stop-color:#EA2128"/>
+  <stop  offset="0.5377" style="stop-color:#D7212E"/>
+  <stop  offset="0.6604" style="stop-color:#A52948"/>
+  <stop  offset="0.833" style="stop-color:#54396E"/>
+  <stop  offset="1" style="stop-color:#154A93"/>
+</linearGradient>
+<path style="fill:none;stroke:url(#SVGID_00000147196873133499769710000003377046395753022397_);stroke-width:10;stroke-miterlimit:10;" d="
+  M1249,524.8"/>
+<linearGradient id="SVGID_00000104680827677968597670000017912765013007048889_" gradientUnits="userSpaceOnUse" x1="-687.8607" y1="279.0022" x2="-367.3548" y2="279.0022" gradientTransform="matrix(1 0 0 1 1778.0526 -98.3149)">
+  <stop  offset="4.469274e-02" style="stop-color:#126C7A"/>
+  <stop  offset="0.1112" style="stop-color:#3F5B68"/>
+  <stop  offset="0.2076" style="stop-color:#7C4650"/>
+  <stop  offset="0.296" style="stop-color:#AC343F"/>
+  <stop  offset="0.3733" style="stop-color:#CE2630"/>
+  <stop  offset="0.4365" style="stop-color:#E22229"/>
+  <stop  offset="0.4777" style="stop-color:#EA2128"/>
+  <stop  offset="0.5377" style="stop-color:#D7212E"/>
+  <stop  offset="0.6604" style="stop-color:#A52948"/>
+  <stop  offset="0.833" style="stop-color:#54396E"/>
+  <stop  offset="1" style="stop-color:#154A93"/>
+</linearGradient>
+<path style="fill:none;stroke:url(#SVGID_00000104680827677968597670000017912765013007048889_);stroke-width:0.5;stroke-miterlimit:10;" d="
+  M1410.4,180.7c0,88.4-71.6,160-160,160s-160-71.6-160-160c0-88.4,71.6-160,160-160"/>
+<linearGradient id="SVGID_00000083073745934119273190000017447622816105182593_" gradientUnits="userSpaceOnUse" x1="1364.6682" y1="206.3384" x2="1138.7368" y2="336.7799">
+  <stop  offset="4.469274e-02" style="stop-color:#126C7A"/>
+  <stop  offset="0.1112" style="stop-color:#3F5B68"/>
+  <stop  offset="0.2076" style="stop-color:#7C4650"/>
+  <stop  offset="0.296" style="stop-color:#AC343F"/>
+  <stop  offset="0.3733" style="stop-color:#CE2630"/>
+  <stop  offset="0.4365" style="stop-color:#E22229"/>
+  <stop  offset="0.4777" style="stop-color:#EA2128"/>
+  <stop  offset="0.5377" style="stop-color:#D7212E"/>
+  <stop  offset="0.6604" style="stop-color:#A52948"/>
+  <stop  offset="0.833" style="stop-color:#54396E"/>
+  <stop  offset="1" style="stop-color:#154A93"/>
+</linearGradient>
+<line style="fill:none;stroke:url(#SVGID_00000083073745934119273190000017447622816105182593_);stroke-width:10;stroke-miterlimit:10;" x1="1251.7" y1="19.3" x2="1251.7" y2="523.8" class="active3"/>
+<linearGradient id="SVGID_00000040558217345501320120000017947595967312959631_" gradientUnits="userSpaceOnUse" x1="1086.7576" y1="179.0466" x2="1416.6475" y2="179.0466">
+  <stop  offset="4.469274e-02" style="stop-color:#126C7A"/>
+  <stop  offset="0.1112" style="stop-color:#3F5B68"/>
+  <stop  offset="0.2076" style="stop-color:#7C4650"/>
+  <stop  offset="0.296" style="stop-color:#AC343F"/>
+  <stop  offset="0.3733" style="stop-color:#CE2630"/>
+  <stop  offset="0.4365" style="stop-color:#E22229"/>
+  <stop  offset="0.4777" style="stop-color:#EA2128"/>
+  <stop  offset="0.5377" style="stop-color:#D7212E"/>
+  <stop  offset="0.6604" style="stop-color:#A52948"/>
+  <stop  offset="0.833" style="stop-color:#54396E"/>
+  <stop  offset="1" style="stop-color:#154A93"/>
+</linearGradient>
+<ellipse style="fill:none;stroke-width:10;stroke-miterlimit:10;" cx="1251.7" cy="179" rx="159.9" ry="159.7" class="active1" transform="rotate(-90 1251.7 179)"/>
+<text transform="matrix(1 0 0 1 1144.6433 197.5856)" class="st16 st17 text-initialize">Initializing<tspan id="first-e">.</tspan><tspan id="second-e">.</tspan><tspan id="third-e">.</tspan></text>
+
+<rect style="fill:none;" x="200.8" y="326.3" class="st18" width="532.4" height="61.1"/>
+
+<text x="460.8" y="360.3" class="st16 st17 box-text" id="category-text" dominant-baseline="middle" text-anchor="middle">Text</text>
+<rect style="fill:none;" x="731.6" y="326.3" class="st18" width="532.4" height="61.1"/>
+
+<text x="980.6" y="360.3" class="st16 st17 box-text" id="organism-text" dominant-baseline="middle" text-anchor="middle">Text</text>
+<rect style="fill:none;" x="1259.1" y="326.3" class="st18" width="532.4" height="61.1"/>
+
+<text x="1510.1" y="360.3" class="st16 st17 box-text" id="pathogen-text" dominant-baseline="middle" text-anchor="middle">Text</text>
+<rect style="fill:none;" x="1792.6" y="326.3" class="st18" width="532.4" height="61.1"/>
+
+<text x="2090.6" y="360.3" class="st16 st17 box-text" id="sample-text" dominant-baseline="middle" text-anchor="middle">Text</text>
+
+
+</svg>
+
+
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+   viewBox="0 0 335.5 334.5" style="enable-background:new 0 0 335.5 334.5;" xml:space="preserve" class="generate-svg">
+<style type="text/css">
+  .st01{fill:none;stroke:url(#SVGID_1_);stroke-width:0.5;stroke-miterlimit:10;}
+  .st21{font-family:'Montserrat','Ubuntu',sans-serif;}
+  .st31{font-size:38px;}
+</style>
+<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="-1772.4526" y1="248.2851" x2="-1451.9526" y2="248.2851" gradientTransform="matrix(1 0 0 -1 1778.0526 415.6851)">
+  <stop  offset="4.469274e-02" style="stop-color:#126C7A"/>
+  <stop  offset="0.1112" style="stop-color:#3F5B68"/>
+  <stop  offset="0.2076" style="stop-color:#7C4650"/>
+  <stop  offset="0.296" style="stop-color:#AC343F"/>
+  <stop  offset="0.3733" style="stop-color:#CE2630"/>
+  <stop  offset="0.4365" style="stop-color:#E22229"/>
+  <stop  offset="0.4777" style="stop-color:#EA2128"/>
+  <stop  offset="0.5377" style="stop-color:#D7212E"/>
+  <stop  offset="0.6604" style="stop-color:#A52948"/>
+  <stop  offset="0.833" style="stop-color:#54396E"/>
+  <stop  offset="1" style="stop-color:#154A93"/>
+</linearGradient>
+<path class="st01" d="M325.9,167.4c0,88.4-71.6,160-160,160s-160-71.6-160-160s71.6-160,160-160"/>
+<linearGradient id="SVGID_00000055669036931614567330000007236034388313106576_" gradientUnits="userSpaceOnUse" x1="2.2499" y1="348.3" x2="332.05" y2="348.3" gradientTransform="matrix(1 0 0 -1 0 514)">
+  <stop  offset="4.469274e-02" style="stop-color:#126C7A"/>
+  <stop  offset="0.1112" style="stop-color:#3F5B68"/>
+  <stop  offset="0.2076" style="stop-color:#7C4650"/>
+  <stop  offset="0.296" style="stop-color:#AC343F"/>
+  <stop  offset="0.3733" style="stop-color:#CE2630"/>
+  <stop  offset="0.4365" style="stop-color:#E22229"/>
+  <stop  offset="0.4777" style="stop-color:#EA2128"/>
+  <stop  offset="0.5377" style="stop-color:#D7212E"/>
+  <stop  offset="0.6604" style="stop-color:#A52948"/>
+  <stop  offset="0.833" style="stop-color:#54396E"/>
+  <stop  offset="1" style="stop-color:#154A93"/>
+</linearGradient>
+<ellipse style="fill:none;stroke-width:10;stroke-miterlimit:10;" cx="167.1" cy="165.7" rx="159.9" ry="159.7" class="generating-circle" transform="rotate(-90 167.1 165.7)"/>
+<text transform="matrix(1 0 0 1 60.0933 184.2856)" class="st21 st31 generating-text">Generating...</text>
+<rect x="-353" y="313" class="st4" width="532.4" height="61.1"/>
+<rect x="174.5" y="313" class="st4" width="532.4" height="61.1"/>
+</svg>
+
+
+<!--second version-->
+<!-- Generator: Adobe Illustrator 27.9.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+   viewBox="0 0 2532.3 655.7" style="enable-background:new 0 0 2532.3 655.7;" xml:space="preserve" class="test2">
+
+<style type="text/css">
+  .st0{fill:none;stroke:#808080;stroke-width:10;stroke-miterlimit:10;}
+  .st1{fill:none;stroke:#808080;stroke-width:6;stroke-miterlimit:10;}
+  .st2{fill:none;stroke:#808080;stroke-width:4.5649;stroke-miterlimit:10;}
+  .st3{fill:none;stroke:#808080;stroke-miterlimit:10;}
+  .st4{fill:url(#Step_4:_Sample_Type_00000155105451663315422600000002970010775392592004_1);}
+  
+    .st5{fill:none;stroke:url(#Step_3:_Target_Pathogen_00000062874422241671961210000001653142273706464953_1);stroke-width:6;stroke-miterlimit:10;}
+  
+    .st6{fill:none;stroke:url(#Step_2:_Type_of_Organism_00000127741679587756635170000013153874950729460651_1);stroke-width:6;stroke-miterlimit:10;}
+  
+    .st7{fill:none;stroke:url(#Step_1:_Nature_of_Pathogen_00000159467844818398200880000003366448754200257469_1);stroke-width:4.5649;stroke-miterlimit:10;}
+  .st8{fill:none;stroke:url(#SVGID_1_);stroke-width:10;stroke-miterlimit:10;}
+  .st9{fill:none;stroke:url(#SVGID_00000122680739255906868320000004284886126766080149_);stroke-width:10;stroke-miterlimit:10;}
+  .st10{fill:none;stroke:url(#SVGID_00000170269979093932786250000007458759961812609178_);stroke-width:10;stroke-miterlimit:10;}
+  .st11{fill:none;stroke:url(#SVGID_00000068675384123602505730000005878034061989474457_);stroke-width:10;stroke-miterlimit:10;}
+  .st12{fill:none;stroke:url(#SVGID_00000134947864389463192530000010214760226772676233_);stroke-width:10;stroke-miterlimit:10;}
+  .st13{fill:none;stroke:url(#SVGID_00000176732423233944558040000010755124966558323853_);stroke-width:0.5;stroke-miterlimit:10;}
+  .st14{fill:none;stroke:url(#SVGID_00000005945622662558444530000008494689707352815543_);stroke-width:10;stroke-miterlimit:10;}
+  .st15{fill:none;stroke:url(#SVGID_00000004546498169794346850000008061131751790675338_);stroke-width:10;stroke-miterlimit:10;}
+  .st16{font-family:'Montserrat','Ubuntu',sans-serif;}
+  .st17{font-size:38px;}
+  .st22{fill:none;stroke:#808080;stroke-width:10;stroke-miterlimit:10;stroke-linecap:round;}
+</style>
+<path class="st0" d="M1250.2,524.8"/>
+<path class="st0" d="M1254.1,524.8"/>
+<line class="st22 active4" x1="1380" y1="525" x2="1125.8" y2="525"/>
+
+<line class="st22 active6" x1="838.5" y1="524.8" x2="584.2" y2="524.8"/>
+<linearGradient id="Step_1:_Nature_of_Pathogen_00000102513341552808153730000004253305598505680306_1" gradientUnits="userSpaceOnUse" x1="468.7558" y1="417.5464" x2="468.7558" y2="607.3018">
+  <stop  offset="0" style="stop-color:#EA2128"/>
+  <stop  offset="0.5" style="stop-color:#154A93"/>
+  <stop  offset="1" style="stop-color:#126C7A"/>
+</linearGradient>
+<path id="Step_1:_Nature_of_Pathogen_00000049219333657781798960000014214619552973686446_1" class="st2 active8" d="M465.5,573.7
+  c14.8-26.2,37.1-16.9,37.1-16.9 M430.9,560.5c0,0,19.7,8.3,36.4,13.8c17.1,5.6,37.4,6.1,40.8-6.2 M521.4,536.8l-24.6-21
+   M518.3,472.8l-17.2,7.3 M467.6,438.1l-0.3,18.8 M398.9,532.5l36-19.7 M413.7,454.5l24.2,18.3 M397.9,431.8
+  c-5.9,0-10.6,4.7-10.6,10.6c0,5.9,4.7,10.6,10.6,10.6c5.9,0,10.6-4.7,10.6-10.6C408.5,436.5,403.7,431.8,397.9,431.8z M397.9,421.1
+  c-11.8,0-21.3,9.5-21.3,21.3s9.5,21.3,21.3,21.3s21.3-9.5,21.3-21.3S409.6,421.1,397.9,421.1z M539.6,527.7
+  c-11.8,0-21.3,9.5-21.3,21.3s9.5,21.3,21.3,21.3s21.3-9.5,21.3-21.3S551.4,527.7,539.6,527.7z M538.3,442.4
+  c-11.8,0-21.3,9.5-21.3,21.3s9.5,21.3,21.3,21.3s21.3-9.5,21.3-21.3S550.1,442.4,538.3,442.4z M538.3,454.5c-5.1,0-9.2,4.1-9.2,9.2
+  s4.1,9.2,9.2,9.2c5.1,0,9.2-4.1,9.2-9.2S543.4,454.5,538.3,454.5z M538.3,539.9c-5.1,0-9.2,4.1-9.2,9.2c0,5.1,4.1,9.2,9.2,9.2
+  c5.1,0,9.2-4.1,9.2-9.2C547.5,544,543.4,539.9,538.3,539.9z M390.8,527.7c-5.1,0-9.2,4.1-9.2,9.2c0,5.1,4.1,9.2,9.2,9.2
+  c5.1,0,9.2-4.1,9.2-9.2C400,531.8,395.9,527.7,390.8,527.7z M491.1,496.1v-1.3c0-2.6-2.1-4.8-4.8-4.8h-36c-2.6,0-4.8,2.1-4.8,4.8
+  v1.3c0,2.6,2.1,4.8,4.8,4.8h36C488.9,500.9,491.1,498.8,491.1,496.1z M510.3,572.4l-23.2-46.7l-0.7-1.4v-23.6h-37l0.3,24.6l-0.7,1.2
+  l-25.3,47.6c-10.4,27.6,17.5,31,17.5,31l63.3-1.7C524.4,597.6,510.3,572.4,510.3,572.4z M467.6,438.1c5.1,0,9.2-4.1,9.2-9.2
+  c0-5.1-4.1-9.2-9.2-9.2c-5.1,0-9.2,4.1-9.2,9.2C458.5,434,462.6,438.1,467.6,438.1z M467.6,536c3.1,0,5.5-2.5,5.5-5.5
+  c0-3.1-2.5-5.5-5.5-5.5c-3.1,0-5.5,2.5-5.5,5.5C462.1,533.6,464.6,536,467.6,536z M467.4,456.9c-20.5,0-37.2,16.7-37.2,37.2
+  c0,13.9,7.6,26,18.9,32.4l0.7-1.2l-0.3-24.6h37v23.6l0.7,1.4c10.5-6.6,17.5-18.2,17.5-31.5C504.6,473.6,487.9,456.9,467.4,456.9z
+   M444.4,592.8c3.6,0,6.5-2.9,6.5-6.5c0-3.6-2.9-6.5-6.5-6.5c-3.6,0-6.5,2.9-6.5,6.5C437.9,589.9,440.8,592.8,444.4,592.8z"/>
+
+<path transform="translate(-1050,2.5)" id="Step_4:_Sample_Type_00000149382742173255578820000006794283131895063203_1" class="st3 active11" x1="1933.8" y1="524.8" x2="1679.5" y2="524.8" d="M2033.2,507.4l-6.9-6.9l1.2-1.2
+  l6.9,6.9L2033.2,507.4z M2048.6,507.3l-14.4-14.4l-1.2,1.2l14.4,14.4L2048.6,507.3z M2063.4,480.4l-8-8l-1.2,1.2l8,8L2063.4,480.4z
+   M2077.4,478.6l-14-14l-1.2,1.2l14,14L2077.4,478.6z M2007.8,516.9c-9.6,9.5-19.2,19-28.8,28.5c-2.2,2.4-3.3,4.1-5.5,9.6
+  c-1.2,2.9-1.1,6.9-1.2,9.3c-0.2,7.6,3.8,13.3,8.8,17.6c6.7,5.7,16.3,7.5,22.1,5.4c10.7-3.8,15.6-8.3,16.5-9.6
+  c7.3-7.4,13.3-13,20.6-20.3c13.5-13.5,25.9-27.2,39.4-40.7C2055.6,516.8,2031.7,516.9,2007.8,516.9z M2155.5,472.4l-69.1-69.1
+  l-4.4,4.4l69.1,69.1L2155.5,472.4z M2134.1,459.7c0,0-109,111.6-116.6,117.7c-5.5,4.5-10,8.5-18.5,9.2c-5.7,0.5-13.4-1.1-18.1-6.1
+  c-5.5-5.9-6.8-14.3-7-18.2c-0.3-7.2,2.9-12.1,6.9-16.9S2102,427.3,2102,427.3l-4.4-4.4c0,0-119.5,117.2-121.5,119.5
+  c-1.9,2.2-5.9,6.9-7.7,14.4c-1.3,5.5-0.2,12.8,0.9,15.4c1.2,3.1,0.7,3.3,4.7,8.7c3.9,5.5,12.4,10.8,21,11.3c9.4,0.5,15.2-2.9,17.2-4
+  c4.4-2.3,9.4-6.8,10-7.4c1.7-1.4,115.8-117.2,115.8-117.2L2134.1,459.7z"/>
+
+  <path transform="translate(550,2.5)" id="Step_2:_Type_of_Organism_00000173128460650220327880000005129037951917846406_1" class="st1 active7" d="M1087.1,512.5
+  c0,7.1-5.6,12.9-12.7,13.2l-11.2,0.4c-1.2,0-2.4-0.1-3.6-0.4c-1.8,8.7-5.2,16.7-10,23.8c1.4,0.7,2.7,1.7,3.8,2.9l7.5,8.4
+  c4.8,5.5,4.3,13.8-1.1,18.6c-2.5,2.2-5.6,3.3-8.8,3.3c-3.6,0-7.3-1.5-9.9-4.4l-7.5-8.4c-0.7-0.8-1.3-1.7-1.8-2.6
+  c-7.2,4.9-15.5,8.4-24.3,10.2c0.4,1.3,0.6,2.6,0.6,3.9c0,0.3,0,0.5,0,0.8l-0.7,11.2c-0.4,7.3-6.7,12.8-14,12.4
+  c-7-0.4-12.4-6.2-12.4-13.2c0-0.3,0-0.5,0-0.8l0.7-11.2c0.1-1.1,0.2-2.1,0.5-3.1c-9.3-1.7-18-5.4-25.5-10.7c-0.5,0.8-1,1.5-1.6,2.2
+  l-7.6,8.3c-4.9,5.4-13.3,5.7-18.7,0.8c-2.8-2.6-4.3-6.1-4.3-9.7c0-3.2,1.2-6.4,3.5-8.9l7.6-8.3c1-1.1,2.1-1.9,3.3-2.6
+  c-4.7-7.1-8-15.2-9.6-23.8c-1.1,0.3-2.2,0.5-3.4,0.6l-11.2,0.4c-7.3,0.3-13.4-5.4-13.7-12.7c0-0.2,0-0.3,0-0.5
+  c0-7.1,5.6-12.9,12.7-13.2l11.2-0.4c1.6-0.1,3.1,0.2,4.5,0.6c1.7-8.8,5.2-17,10-24.2c-1.9-0.7-3.6-1.9-5.1-3.5l-7.5-8.4
+  c-4.8-5.4-4.3-13.8,1.1-18.6c2.5-2.2,5.6-3.3,8.8-3.3c3.6,0,7.3,1.5,9.9,4.4l7.5,8.4c1,1.1,1.8,2.4,2.3,3.7
+  c7.4-5.2,15.9-8.9,25.1-10.7c-0.4-1.3-0.6-2.6-0.6-4c0-0.3,0-0.5,0-0.8l0.7-11.2c0.4-7.3,6.7-12.8,14-12.4c7,0.4,12.4,6.2,12.4,13.2
+  c0,0.3,0,0.5,0,0.8l-0.7,11.2c-0.1,1.1-0.3,2.1-0.6,3.1c9.2,1.7,17.7,5.3,25.1,10.4c0.5-0.9,1.1-1.7,1.8-2.5l7.6-8.3
+  c4.9-5.4,13.3-5.7,18.7-0.8c2.8,2.6,4.3,6.1,4.3,9.7c0,3.2-1.2,6.4-3.5,8.9l-7.6,8.3c-1,1.1-2.1,2-3.4,2.6
+  c4.8,7.2,8.3,15.4,9.9,24.3c0.8-0.2,1.6-0.3,2.4-0.3l11.2-0.4c7.3-0.3,13.4,5.4,13.7,12.7C1087.1,512.1,1087.1,512.3,1087.1,512.5z
+   M993.9,475.6c-3.8,0-6.8,3.1-6.8,6.8s3.1,6.8,6.8,6.8c3.8,0,6.8-3.1,6.8-6.8S997.7,475.6,993.9,475.6z M1016.3,505.9
+  c-10.2,0-18.5,8.3-18.5,18.5s8.3,18.5,18.5,18.5s18.5-8.3,18.5-18.5S1026.5,505.9,1016.3,505.9z M1016.3,505.9
+  c-10.2,0-18.5,8.3-18.5,18.5s8.3,18.5,18.5,18.5s18.5-8.3,18.5-18.5S1026.5,505.9,1016.3,505.9z M962.7,512.3c-6.6,0-12,5.4-12,12
+  c0,6.6,5.4,12,12,12c6.6,0,12-5.4,12-12C974.7,517.7,969.3,512.3,962.7,512.3z"/>
+<linearGradient id="Step_4:_Sample_Type_00000045579000185955044170000000304850895410102404_1" gradientUnits="userSpaceOnUse" x1="2061.4788" y1="403.2708" x2="2061.4788" y2="592.1746">
+  <stop  offset="0" style="stop-color:#BD202E"/>
+  <stop  offset="0.5" style="stop-color:#154A95"/>
+  <stop  offset="1" style="stop-color:#126C7B"/>
+</linearGradient>
+<path transform="translate(550,2.5)" class="active-3" id="Step_2:_Type_of_Organism1" style="fill:none;stroke:url(#Step_2:_Type_of_Organism_00000181045711374831077330000017839490630204365447_1);stroke-width:6;stroke-miterlimit:10;" d="
+  M1087.1,512.5c0,7.1-5.6,12.9-12.7,13.2l-11.2,0.4c-1.2,0-2.4-0.1-3.6-0.4c-1.8,8.7-5.2,16.7-10,23.8c1.4,0.7,2.7,1.7,3.8,2.9
+  l7.5,8.4c4.8,5.5,4.3,13.8-1.1,18.6c-2.5,2.2-5.6,3.3-8.8,3.3c-3.6,0-7.3-1.5-9.9-4.4l-7.5-8.4c-0.7-0.8-1.3-1.7-1.8-2.6
+  c-7.2,4.9-15.5,8.4-24.3,10.2c0.4,1.3,0.6,2.6,0.6,3.9c0,0.3,0,0.5,0,0.8l-0.7,11.2c-0.4,7.3-6.7,12.8-14,12.4
+  c-7-0.4-12.4-6.2-12.4-13.2c0-0.3,0-0.5,0-0.8l0.7-11.2c0.1-1.1,0.2-2.1,0.5-3.1c-9.3-1.7-18-5.4-25.5-10.7c-0.5,0.8-1,1.5-1.6,2.2
+  l-7.6,8.3c-4.9,5.4-13.3,5.7-18.7,0.8c-2.8-2.6-4.3-6.1-4.3-9.7c0-3.2,1.2-6.4,3.5-8.9l7.6-8.3c1-1.1,2.1-1.9,3.3-2.6
+  c-4.7-7.1-8-15.2-9.6-23.8c-1.1,0.3-2.2,0.5-3.4,0.6l-11.2,0.4c-7.3,0.3-13.4-5.4-13.7-12.7c0-0.2,0-0.3,0-0.5
+  c0-7.1,5.6-12.9,12.7-13.2l11.2-0.4c1.6-0.1,3.1,0.2,4.5,0.6c1.7-8.8,5.2-17,10-24.2c-1.9-0.7-3.6-1.9-5.1-3.5l-7.5-8.4
+  c-4.8-5.4-4.3-13.8,1.1-18.6c2.5-2.2,5.6-3.3,8.8-3.3c3.6,0,7.3,1.5,9.9,4.4l7.5,8.4c1,1.1,1.8,2.4,2.3,3.7
+  c7.4-5.2,15.9-8.9,25.1-10.7c-0.4-1.3-0.6-2.6-0.6-4c0-0.3,0-0.5,0-0.8l0.7-11.2c0.4-7.3,6.7-12.8,14-12.4c7,0.4,12.4,6.2,12.4,13.2
+  c0,0.3,0,0.5,0,0.8l-0.7,11.2c-0.1,1.1-0.3,2.1-0.6,3.1c9.2,1.7,17.7,5.3,25.1,10.4c0.5-0.9,1.1-1.7,1.8-2.5l7.6-8.3
+  c4.9-5.4,13.3-5.7,18.7-0.8c2.8,2.6,4.3,6.1,4.3,9.7c0,3.2-1.2,6.4-3.5,8.9l-7.6,8.3c-1,1.1-2.1,2-3.4,2.6
+  c4.8,7.2,8.3,15.4,9.9,24.3c0.8-0.2,1.6-0.3,2.4-0.3l11.2-0.4c7.3-0.3,13.4,5.4,13.7,12.7C1087.1,512.1,1087.1,512.3,1087.1,512.5z
+   M993.9,475.6c-3.8,0-6.8,3.1-6.8,6.8s3.1,6.8,6.8,6.8c3.8,0,6.8-3.1,6.8-6.8S997.7,475.6,993.9,475.6z M1016.3,505.9
+  c-10.2,0-18.5,8.3-18.5,18.5s8.3,18.5,18.5,18.5s18.5-8.3,18.5-18.5S1026.5,505.9,1016.3,505.9z M1016.3,505.9
+  c-10.2,0-18.5,8.3-18.5,18.5s8.3,18.5,18.5,18.5s18.5-8.3,18.5-18.5S1026.5,505.9,1016.3,505.9z M962.7,512.3c-6.6,0-12,5.4-12,12
+  c0,6.6,5.4,12,12,12c6.6,0,12-5.4,12-12C974.7,517.7,969.3,512.3,962.7,512.3z"/>
+
+
+<linearGradient id="Step_3:_Target_Pathogen_00000087401222413244689700000002420668232535561873_1" gradientUnits="userSpaceOnUse" x1="1535.7246" y1="398.8118" x2="1535.7246" y2="610.8118">
+  <stop  offset="0" style="stop-color:#BD202E"/>
+  <stop  offset="0.5" style="stop-color:#154A95"/>
+  <stop  offset="1" style="stop-color:#126C7B"/>
+</linearGradient>
+<path transform="translate(-1050,2.5)" class="active-2" id="Step_4:_Sample_Type1" style="fill:none;stroke:url(#Step_4:_Sample_Type_00000045579000185955044170000000304850895410102404_1);stroke-width:6;" d="
+  M2033,507.4l-6.9-6.9l1.2-1.2l6.9,6.9L2033,507.4z M2048.4,507.3l-14.4-14.4l-1.2,1.2l14.4,14.4L2048.4,507.3z M2063.2,480.4l-8-8
+  l-1.2,1.2l8,8L2063.2,480.4z M2077.2,478.6l-14-14l-1.2,1.2l14,14L2077.2,478.6z M2007.6,516.9c-9.6,9.5-19.2,19-28.8,28.5
+  c-2.2,2.4-3.3,4.1-5.5,9.6c-1.2,2.9-1.1,6.9-1.2,9.3c-0.2,7.6,3.8,13.3,8.8,17.6c6.7,5.7,16.3,7.5,22.1,5.4
+  c10.7-3.8,15.6-8.3,16.5-9.6c7.3-7.4,13.3-13,20.6-20.3c13.5-13.5,25.9-27.2,39.4-40.7C2055.4,516.8,2031.5,516.9,2007.6,516.9z
+   M2155.3,472.4l-69.1-69.1l-4.4,4.4l69.1,69.1L2155.3,472.4z M2133.9,459.7c0,0-109,111.6-116.6,117.7c-5.5,4.5-10,8.5-18.5,9.2
+  c-5.7,0.5-13.4-1.1-18.1-6.1c-5.5-5.9-6.8-14.3-7-18.2c-0.3-7.2,2.9-12.1,6.9-16.9s121.2-118.1,121.2-118.1l-4.4-4.4
+  c0,0-119.5,117.2-121.5,119.5c-1.9,2.2-5.9,6.9-7.7,14.4c-1.3,5.5-0.2,12.8,0.9,15.4c1.2,3.1,0.7,3.3,4.7,8.7
+  c3.9,5.5,12.4,10.8,21,11.3c9.4,0.5,15.2-2.9,17.2-4c4.4-2.3,9.4-6.8,10-7.4c1.7-1.4,115.8-117.2,115.8-117.2L2133.9,459.7z"/>
+
+<linearGradient id="Step_2:_Type_of_Organism_00000181045711374831077330000017839490630204365447_1" gradientUnits="userSpaceOnUse" x1="994.0647" y1="415.9105" x2="994.0647" y2="608.9339">
+  <stop  offset="0" style="stop-color:#BD202E"/>
+  <stop  offset="0.5" style="stop-color:#154A95"/>
+  <stop  offset="1" style="stop-color:#126C7B"/>
+</linearGradient>
+
+
+
+
+
+<linearGradient id="Step_1:_Nature_of_Pathogen_00000102513341552808153730000004253305598505680306_1" gradientUnits="userSpaceOnUse" x1="468.7558" y1="417.5464" x2="468.7558" y2="607.3018">
+  <stop  offset="0" style="stop-color:#EA2128"/>
+  <stop  offset="0.5" style="stop-color:#154A93"/>
+  <stop  offset="1" style="stop-color:#126C7A"/>
+</linearGradient>
+<path class="active-1" id="Step_1:_Nature_of_Pathogen1" style="fill:none;stroke:url(#Step_1:_Nature_of_Pathogen_00000102513341552808153730000004253305598505680306_1);stroke-width:4.5649;stroke-miterlimit:10;" d="
+  M465.5,573.7c14.8-26.2,37.1-16.9,37.1-16.9 M430.9,560.5c0,0,19.7,8.3,36.4,13.8c17.1,5.6,37.4,6.1,40.8-6.2 M521.4,536.8l-24.6-21
+   M518.3,472.8l-17.2,7.3 M467.6,438.1l-0.3,18.8 M398.9,532.5l36-19.7 M413.7,454.5l24.2,18.3 M397.9,431.8
+  c-5.9,0-10.6,4.7-10.6,10.6c0,5.9,4.7,10.6,10.6,10.6c5.9,0,10.6-4.7,10.6-10.6C408.5,436.5,403.7,431.8,397.9,431.8z M397.9,421.1
+  c-11.8,0-21.3,9.5-21.3,21.3s9.5,21.3,21.3,21.3s21.3-9.5,21.3-21.3S409.6,421.1,397.9,421.1z M539.6,527.7
+  c-11.8,0-21.3,9.5-21.3,21.3s9.5,21.3,21.3,21.3s21.3-9.5,21.3-21.3S551.4,527.7,539.6,527.7z M538.3,442.4
+  c-11.8,0-21.3,9.5-21.3,21.3s9.5,21.3,21.3,21.3s21.3-9.5,21.3-21.3S550.1,442.4,538.3,442.4z M538.3,454.5c-5.1,0-9.2,4.1-9.2,9.2
+  s4.1,9.2,9.2,9.2c5.1,0,9.2-4.1,9.2-9.2S543.4,454.5,538.3,454.5z M538.3,539.9c-5.1,0-9.2,4.1-9.2,9.2c0,5.1,4.1,9.2,9.2,9.2
+  c5.1,0,9.2-4.1,9.2-9.2C547.5,544,543.4,539.9,538.3,539.9z M390.8,527.7c-5.1,0-9.2,4.1-9.2,9.2c0,5.1,4.1,9.2,9.2,9.2
+  c5.1,0,9.2-4.1,9.2-9.2C400,531.8,395.9,527.7,390.8,527.7z M491.1,496.1v-1.3c0-2.6-2.1-4.8-4.8-4.8h-36c-2.6,0-4.8,2.1-4.8,4.8
+  v1.3c0,2.6,2.1,4.8,4.8,4.8h36C488.9,500.9,491.1,498.8,491.1,496.1z M510.3,572.4l-23.2-46.7l-0.7-1.4v-23.6h-37l0.3,24.6l-0.7,1.2
+  l-25.3,47.6c-10.4,27.6,17.5,31,17.5,31l63.3-1.7C524.4,597.6,510.3,572.4,510.3,572.4z M467.6,438.1c5.1,0,9.2-4.1,9.2-9.2
+  c0-5.1-4.1-9.2-9.2-9.2c-5.1,0-9.2,4.1-9.2,9.2C458.5,434,462.6,438.1,467.6,438.1z M467.6,536c3.1,0,5.5-2.5,5.5-5.5
+  c0-3.1-2.5-5.5-5.5-5.5c-3.1,0-5.5,2.5-5.5,5.5C462.1,533.6,464.6,536,467.6,536z M467.4,456.9c-20.5,0-37.2,16.7-37.2,37.2
+  c0,13.9,7.6,26,18.9,32.4l0.7-1.2l-0.3-24.6h37v23.6l0.7,1.4c10.5-6.6,17.5-18.2,17.5-31.5C504.6,473.6,487.9,456.9,467.4,456.9z
+   M444.4,592.8c3.6,0,6.5-2.9,6.5-6.5c0-3.6-2.9-6.5-6.5-6.5c-3.6,0-6.5,2.9-6.5,6.5C437.9,589.9,440.8,592.8,444.4,592.8z"/>
+<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="1252.1111" y1="524.7689" x2="1252.1111" y2="524.7689">
+  <stop  offset="4.469274e-02" style="stop-color:#126C7A"/>
+  <stop  offset="0.1112" style="stop-color:#3F5B68"/>
+  <stop  offset="0.2076" style="stop-color:#7C4650"/>
+  <stop  offset="0.296" style="stop-color:#AC343F"/>
+  <stop  offset="0.3733" style="stop-color:#CE2630"/>
+  <stop  offset="0.4365" style="stop-color:#E22229"/>
+  <stop  offset="0.4777" style="stop-color:#EA2128"/>
+  <stop  offset="0.5377" style="stop-color:#D7212E"/>
+  <stop  offset="0.6604" style="stop-color:#A52948"/>
+  <stop  offset="0.833" style="stop-color:#54396E"/>
+  <stop  offset="1" style="stop-color:#154A93"/>
+</linearGradient>
+<path class="st8" d="M1252.1,524.8"/>
+<linearGradient id="SVGID_00000052106624750351042550000003310261344632357511_1" gradientUnits="userSpaceOnUse" x1="1157.1277" y1="581.2612" x2="1352.1636" y2="468.6571">
+  <stop  offset="4.469274e-02" style="stop-color:#126C7A"/>
+  <stop  offset="0.1112" style="stop-color:#3F5B68"/>
+  <stop  offset="0.2076" style="stop-color:#7C4650"/>
+  <stop  offset="0.296" style="stop-color:#AC343F"/>
+  <stop  offset="0.3733" style="stop-color:#CE2630"/>
+  <stop  offset="0.4365" style="stop-color:#E22229"/>
+  <stop  offset="0.4777" style="stop-color:#EA2128"/>
+  <stop  offset="0.5377" style="stop-color:#D7212E"/>
+  <stop  offset="0.6604" style="stop-color:#A52948"/>
+  <stop  offset="0.833" style="stop-color:#54396E"/>
+  <stop  offset="1" style="stop-color:#154A93"/>
+</linearGradient>
+<line style="fill:none;stroke:url(#SVGID_00000052106624750351042550000003310261344632357511_1);stroke-width:10;stroke-linecap:round;stroke-miterlimit:10;" x1="1381.8" y1="525" x2="1127.5" y2="525" class="active-2"/>
+<linearGradient id="SVGID_00000011018494372127892890000014914048954137983880_1" gradientUnits="userSpaceOnUse" x1="1710.7395" y1="581.2612" x2="1905.7754" y2="468.6571">
+  <stop  offset="4.469274e-02" style="stop-color:#126C7A"/>
+  <stop  offset="0.1112" style="stop-color:#3F5B68"/>
+  <stop  offset="0.2076" style="stop-color:#7C4650"/>
+  <stop  offset="0.296" style="stop-color:#AC343F"/>
+  <stop  offset="0.3733" style="stop-color:#CE2630"/>
+  <stop  offset="0.4365" style="stop-color:#E22229"/>
+  <stop  offset="0.4777" style="stop-color:#EA2128"/>
+  <stop  offset="0.5377" style="stop-color:#D7212E"/>
+  <stop  offset="0.6604" style="stop-color:#A52948"/>
+  <stop  offset="0.833" style="stop-color:#54396E"/>
+  <stop  offset="1" style="stop-color:#154A93"/>
+</linearGradient>
+
+<linearGradient id="SVGID_00000072971973310149350420000010788601328287262095_1" gradientUnits="userSpaceOnUse" x1="613.7966" y1="581.0709" x2="808.8326" y2="468.4669">
+  <stop  offset="4.469274e-02" style="stop-color:#126C7A"/>
+  <stop  offset="0.1112" style="stop-color:#3F5B68"/>
+  <stop  offset="0.2076" style="stop-color:#7C4650"/>
+  <stop  offset="0.296" style="stop-color:#AC343F"/>
+  <stop  offset="0.3733" style="stop-color:#CE2630"/>
+  <stop  offset="0.4365" style="stop-color:#E22229"/>
+  <stop  offset="0.4777" style="stop-color:#EA2128"/>
+  <stop  offset="0.5377" style="stop-color:#D7212E"/>
+  <stop  offset="0.6604" style="stop-color:#A52948"/>
+  <stop  offset="0.833" style="stop-color:#54396E"/>
+  <stop  offset="1" style="stop-color:#154A93"/>
+</linearGradient>
+<line style="fill:none;stroke:url(#SVGID_00000072971973310149350420000010788601328287262095_1);stroke-width:10;stroke-linecap:round;stroke-miterlimit:10;" x1="838.5" y1="524.8" x2="584.2" y2="524.8" class="active-1"/>
+<linearGradient id="SVGID_00000147196873133499769710000003377046395753022397_1" gradientUnits="userSpaceOnUse" x1="1248.9633" y1="524.7689" x2="1248.9633" y2="524.7689">
+  <stop  offset="4.469274e-02" style="stop-color:#126C7A"/>
+  <stop  offset="0.1112" style="stop-color:#3F5B68"/>
+  <stop  offset="0.2076" style="stop-color:#7C4650"/>
+  <stop  offset="0.296" style="stop-color:#AC343F"/>
+  <stop  offset="0.3733" style="stop-color:#CE2630"/>
+  <stop  offset="0.4365" style="stop-color:#E22229"/>
+  <stop  offset="0.4777" style="stop-color:#EA2128"/>
+  <stop  offset="0.5377" style="stop-color:#D7212E"/>
+  <stop  offset="0.6604" style="stop-color:#A52948"/>
+  <stop  offset="0.833" style="stop-color:#54396E"/>
+  <stop  offset="1" style="stop-color:#154A93"/>
+</linearGradient>
+<path style="fill:none;stroke:url(#SVGID_00000147196873133499769710000003377046395753022397_1);stroke-width:10;stroke-miterlimit:10;" d="
+  M1249,524.8"/>
+<linearGradient id="SVGID_00000104680827677968597670000017912765013007048889_1" gradientUnits="userSpaceOnUse" x1="-687.8607" y1="279.0022" x2="-367.3548" y2="279.0022" gradientTransform="matrix(1 0 0 1 1778.0526 -98.3149)">
+  <stop  offset="4.469274e-02" style="stop-color:#126C7A"/>
+  <stop  offset="0.1112" style="stop-color:#3F5B68"/>
+  <stop  offset="0.2076" style="stop-color:#7C4650"/>
+  <stop  offset="0.296" style="stop-color:#AC343F"/>
+  <stop  offset="0.3733" style="stop-color:#CE2630"/>
+  <stop  offset="0.4365" style="stop-color:#E22229"/>
+  <stop  offset="0.4777" style="stop-color:#EA2128"/>
+  <stop  offset="0.5377" style="stop-color:#D7212E"/>
+  <stop  offset="0.6604" style="stop-color:#A52948"/>
+  <stop  offset="0.833" style="stop-color:#54396E"/>
+  <stop  offset="1" style="stop-color:#154A93"/>
+</linearGradient>
+<path style="fill:none;stroke:url(#SVGID_00000104680827677968597670000017912765013007048889_1);stroke-width:0.5;stroke-miterlimit:10;" d="
+  M1410.4,180.7c0,88.4-71.6,160-160,160s-160-71.6-160-160c0-88.4,71.6-160,160-160"/>
+<linearGradient id="SVGID_00000083073745934119273190000017447622816105182593_1" gradientUnits="userSpaceOnUse" x1="1364.6682" y1="206.3384" x2="1138.7368" y2="336.7799">
+  <stop  offset="4.469274e-02" style="stop-color:#126C7A"/>
+  <stop  offset="0.1112" style="stop-color:#3F5B68"/>
+  <stop  offset="0.2076" style="stop-color:#7C4650"/>
+  <stop  offset="0.296" style="stop-color:#AC343F"/>
+  <stop  offset="0.3733" style="stop-color:#CE2630"/>
+  <stop  offset="0.4365" style="stop-color:#E22229"/>
+  <stop  offset="0.4777" style="stop-color:#EA2128"/>
+  <stop  offset="0.5377" style="stop-color:#D7212E"/>
+  <stop  offset="0.6604" style="stop-color:#A52948"/>
+  <stop  offset="0.833" style="stop-color:#54396E"/>
+  <stop  offset="1" style="stop-color:#154A93"/>
+</linearGradient>
+<line style="fill:none;stroke:url(#SVGID_00000083073745934119273190000017447622816105182593_1);stroke-width:10;stroke-miterlimit:10;" x1="1251.7" y1="19.3" x2="1251.7" y2="523.8" class="active3"/>
+<linearGradient id="SVGID_00000040558217345501320120000017947595967312959631_1" gradientUnits="userSpaceOnUse" x1="1086.7576" y1="179.0466" x2="1416.6475" y2="179.0466">
+  <stop  offset="4.469274e-02" style="stop-color:#126C7A"/>
+  <stop  offset="0.1112" style="stop-color:#3F5B68"/>
+  <stop  offset="0.2076" style="stop-color:#7C4650"/>
+  <stop  offset="0.296" style="stop-color:#AC343F"/>
+  <stop  offset="0.3733" style="stop-color:#CE2630"/>
+  <stop  offset="0.4365" style="stop-color:#E22229"/>
+  <stop  offset="0.4777" style="stop-color:#EA2128"/>
+  <stop  offset="0.5377" style="stop-color:#D7212E"/>
+  <stop  offset="0.6604" style="stop-color:#A52948"/>
+  <stop  offset="0.833" style="stop-color:#54396E"/>
+  <stop  offset="1" style="stop-color:#154A93"/>
+</linearGradient>
+<ellipse style="fill:none;stroke-width:10;stroke-miterlimit:10;" cx="1251.7" cy="-80" rx="159.9" ry="159.7" class="active1" transform="rotate(-90 1251.7 179)"/>
+<text style="transform: translateX(875px) translateY(200px);" class="st16 st17 text-initialize">Initializing<tspan id="first-e">.</tspan><tspan id="second-e">.</tspan><tspan id="third-e">.</tspan></text>
+<!-- <defs>
+        <filter x="0" y="0" width="1" height="1" id="bg-text">
+          <feFlood flood-color="black"/>
+          <feComposite in="SourceGraphic" operator="xor" />
+        </filter>
+      </defs> -->
+<rect style="fill:none;" x="200.8" y="326.3" class="st18" width="532.4" height="61.1"/>
+
+<text x="460.8" y="360.3" class="st16 st17 box-text" id="nopathogen_analyte-text1" dominant-baseline="middle" text-anchor="middle">Text</text>
+<rect style="fill:none;" x="731.6" y="326.3" class="st18" width="532.4" height="61.1"/>
+
+<text x="980.6" y="360.3" class="st16 st17 box-text" id="nopathogen_sample-text1" dominant-baseline="middle" text-anchor="middle">Text</text>
+<rect style="fill:none;" x="1259.1" y="326.3" class="st18" width="532.4" height="61.1"/>
+
+<text x="1510.1" y="360.3" class="st16 st17 box-text" id="nopathogen_organism-text1" dominant-baseline="middle" text-anchor="middle">Text</text>
+<rect style="fill:none;" x="1792.6" y="326.3" class="st18" width="532.4" height="61.1"/>
+
+<text x="2090.6" y="360.3" class="st16 st17 box-text" id="nopathogen_sample-text1" dominant-baseline="middle" text-anchor="middle">Text</text>
+
+
+</svg>
+
+
+<div class="powered">
+  <p><strong>Powered by  <img src="/sites/default/files/images/norgenius/norgenius_icon.svg" style="width: 50px;">  NorGenius</strong></p>
+</div>
+</div>
+
+</div>
+<!--closing tag for fullscreen-->
+
+
+
+
+
+
+
+
+
+
+
+<section id="result">
+  <div class="step">
+    <div class="available_option">
+      <h3>Available Options:</h3>
+      <span class="available_number"></span>
+    </div>
+    <div class="step_heading">
+      <h2>Step 1. Collection and Preservation</h2>
+    </div>
+   
+  </div>
+  <div class="step">
+    <div class="available_option">
+      <h3>Available Options:</h3>
+      <span class="available_number"></span>
+    </div>
+    <div class="step_heading">
+      <h2>Step 2. Isolation and Purification</h2>
+    </div>
+    
+  </div>
+  <div class="step">
+    <div class="available_option">
+      <h3>Available Options:</h3>
+      <span class="available_number"></span>
+    </div>
+     <div class="step_heading">
+      <h2>Step 3. qPCR and RT-qPCR</h2>
+    </div>
+    
+  </div>
+  <div class="step">
+    <div class="available_option">
+      <h3>Available Options</h3>
+      <span class="available_number"></span>
+    </div>
+     <div class="step_heading">
+      <h2>Step 3. qPCR and RT-qPCR</h2>
+    </div>
+    
+  </div>
+</section>
+
+<div class="form-table">
+<img src="/sites/default/files/images/norgenius/pathogen.svg" class="question-img">
+
+
+<iframe name="content" style="" id="test-iframe">
+</iframe>
+
+
+
+{{norgenius_pathogen}}
+</div>
+
+<iframe name="content3" style="" id="test-iframe3">
+</iframe>
+
+<div class="email_screenshot">
+  <div class="email-results-div">
+    <div class="email-all_steps" style="display: grid;grid-gap: 10px;grid-template-columns: 1fr 1fr 1fr;grid-auto-flow: column;margin: 2.5% 0;">
+      <div class="email-each_step" style="height: auto;text-align: center;position: relative;">
+        <div style="style:flex;flex-direction: column;padding:2%;">
+          <h4 class="step_count" style="font-weight:100;margin:0;">Step 1</h4>
+          <h4 class="step_heading" style="font-size:22px;font-weight:900;margin:0;">Collection &amp; Preservation</h4>
+          </div>
+          <hr>
+        <div class="email-step_div" style="display:flex;">
+          
+        </div>
+      </div>
+      <div class="email-each_step" style="height: auto;text-align: center;position: relative;">
+         <div style="style:flex;flex-direction: column;padding:2%;">
+          <h4 class="step_count" style="font-weight:100;margin:0;">Step 2</h4>
+          <h4 class="step_heading" style="font-size:22px;font-weight:900;margin:0;">Isolation &amp; Purification</h4>
+          </div>
+          <hr>
+        <div class="email-step_div" style="display:flex;">
+         
+        </div>
+      </div>
+      <div class="email-each_step" style="height: auto;text-align: center;position: relative;">
+        <div style="style:flex;flex-direction: column;padding:2%;">
+          <h4 class="step_count" style="font-weight:100;margin:0;">Step 3</h4>
+          <h4 class="step_heading" style="font-size:22px;font-weight:900;margin:0;">qPCR &amp; RT-qPCR</h4>
+        </div>
+          <hr>
+        <div class="email-step_div" style="display:flex;">
+        
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-alpha1/html2canvas.js">
+</script>
+<script>
+
+
+
+ function newScreenshot(){
+  
+  var codeblock = document.getElementsByClassName("email_screenshot")[0].innerHTML;
+  document.getElementById("edit-step4-1").value = codeblock;
+ 
+}
+
+  
+ function detectswipe(el,func) {
+  
+  swipe_det = new Object();
+  swipe_det.sX = 0; swipe_det.sY = 0; swipe_det.eX = 0; swipe_det.eY = 0;
+  var min_x = 30;  //min x swipe for horizontal swipe
+  var max_x = 30;  //max x difference for vertical swipe
+  var min_y = 50;  //min y swipe for vertical swipe
+  var max_y = 60;  //max y difference for horizontal swipe
+  var direc = "";
+  
+  ele = document.getElementById(el);
+  ele.addEventListener('touchstart',function(e){
+    
+    var t = e.touches[0];
+    swipe_det.sX = t.screenX; 
+    swipe_det.sY = t.screenY;
+  },false);
+  ele.addEventListener('touchmove',function(e){
+    
+    e.preventDefault();
+    var t = e.touches[0];
+    swipe_det.eX = t.screenX; 
+    swipe_det.eY = t.screenY;    
+  },false);
+  ele.addEventListener('touchend',function(e){
+    
+    //horizontal detection
+    if ((((swipe_det.eX - min_x > swipe_det.sX) || (swipe_det.eX + min_x < swipe_det.sX)) && ((swipe_det.eY < swipe_det.sY + max_y) && (swipe_det.sY > swipe_det.eY - max_y) && (swipe_det.eX > 0)))) {
+      if(swipe_det.eX > swipe_det.sX) direc = "r";
+      else direc = "l";
+    }
+    //vertical detection
+    else if ((((swipe_det.eY - min_y > swipe_det.sY) || (swipe_det.eY + min_y < swipe_det.sY)) && ((swipe_det.eX < swipe_det.sX + max_x) && (swipe_det.sX > swipe_det.eX - max_x) && (swipe_det.eY > 0)))) {
+      if(swipe_det.eY > swipe_det.sY) direc = "d";
+      else direc = "u";
+    }
+
+    if (direc != "") {
+      if(typeof func == 'function') func(el,direc);
+    }
+    direc = "";
+    swipe_det.sX = 0; swipe_det.sY = 0; swipe_det.eX = 0; swipe_det.eY = 0;
+  },false);  
+}
+
+function myfunction(el,d) {
+  // alert("you swiped on element with id '"+el+"' to "+d+" direction");
+  
+  if(d == "l"){
+    
+    var x = ele.parentElement.parentElement;
+    
+    var y = x.getElementsByClassName("next_back_btns");
+    var z = y[0].getElementsByClassName("next");
+    
+    slidingoptions('right',z[0]);
+  }
+  else if (d == "r"){
+    
+    var x = ele.parentElement.parentElement;
+    
+    var y = x.getElementsByClassName("next_back_btns");
+    var z = y[0].getElementsByClassName("back");
+    
+    slidingoptions('left',z[0]);
+  }
+}
+detectswipe('pathogen',myfunction);
+detectswipe('category',myfunction);
+
+
+
+ var moveleft = 1;
+ var moveright = 1;
+ function slidingoptions(elem, elem1){
+
+  var mainelem = elem1.parentElement.parentElement;
+  if(elem == "right"){
+    
+    var slider_wrapper = mainelem.getElementsByClassName("slider-wrapper");
+    
+    var options = slider_wrapper[0].getElementsByClassName("options");
+    var items = options[0].getElementsByClassName("btn2");
+  
+  if(window.innerWidth > 700){
+    
+    var bool_check = Math.ceil(items.length/3);
+  }
+    else if(window.innerWidth <= 700 && window.innerWidth > 400){
+      
+      var bool_check = Math.ceil(items.length/2);
+    }
+    else if(window.innerWidth <=400){
+      
+      var bool_check = Math.ceil(items.length/1);
+    }
+
+    move = moveleft * 100;
+    if(bool_check*100 > move){
+     
+      options[0].style.left = "-"+move+"%";
+      moveright--;
+      moveleft++;
+      var parent = elem1.parentElement;
+      parent.getElementsByClassName("back")[0].style.display = "block";
+      if(bool_check <= moveleft){
+        elem1.style.display = "none";
+      }
+      
+    }
+    else{
+      moveleft=0;
+      move = moveleft * 100;
+      options[0].style.left = move+"%";
+      moveleft++;
+    }
+    
+  }
+  else{
+     var slider_wrapper = mainelem.getElementsByClassName("slider-wrapper");
+    
+    var options = slider_wrapper[0].getElementsByClassName("options");
+    var items = options[0].getElementsByClassName("btn2");
+  
+  if(window.innerWidth > 700){
+    
+    var bool_check = Math.ceil(items.length/3);
+  }
+    else if(window.innerWidth <= 700 && window.innerWidth > 400){
+      
+      var bool_check = Math.ceil(items.length/2);
+    }
+    else if(window.innerWidth <=400){
+      
+      var bool_check = Math.ceil(items.length/1);
+    }
+
+
+    if(moveleft >= 2){
+   
+      move = 2 - moveleft;
+      options[0].style.left = (move*100)+"%";
+      moveright++;
+     
+      var parent = elem1.parentElement;
+      parent.getElementsByClassName("next")[0].style.display = "block";
+      if(moveright ==1){
+        elem1.style.display = "none";
+      }
+      moveleft--;
+      // moveleft++;
+    }
+  }
+    
+ }
+
+  function close_email_workflow(){
+
+    document.getElementById("mail2").stop();
+    document.getElementById("overlay-email").style.display = "none";
+    document.getElementsByClassName("save_workflow_div")[0].style.display = "none";
+    var view_button = document.getElementsByClassName("view_btn");
+    for(var i = 0; i < view_button.length; i++){
+      view_button[i].style.zIndex = "3"; 
+    }
+  }
+  function close_cart_confirmation(){
+     document.getElementById("cart").stop();
+    document.getElementsByClassName("cart_confirmation")[0].style.display = "none";
+  document.getElementById("overlay-cart").style.display = "none";
+  var view_button = document.getElementsByClassName("view_btn");
+    for(var i = 0; i < view_button.length; i++){
+      view_button[i].style.zIndex = "3"; 
+    }
+  }
+
+  const variationMap = {}; // Keeps count of variations per product_id
+const products_array = [];     // Final array
+
+function addProduct(product_id, variation_id) {
+  if (!variationMap[product_id]) {
+    variationMap[product_id] = [variation_id];
+  } else {
+    variationMap[product_id].push(variation_id);
+  }
+
+  const variations = variationMap[product_id];
+
+  // Remove any existing entry for this product
+  const index = products.findIndex(item => 
+    (typeof item === 'number' && item === product_id) || 
+    (item.product_id === product_id)
+  );
+  if (index !== -1) {
+    products_array.splice(index, 1); // Remove the old entry
+  }
+
+  // Push based on variation count
+  if (variations.length === 1) {
+    products_array.push(product_id); // Just push ID
+  } else {
+    variations.forEach(variation_id => {
+      products_array.push({ product_id, variation_id }); // Push full objects
+    });
+  }
+}
+
+var btn_value1, btn_value2, btn_value3;
+async function add_workflow(){
+
+  localStorage.setItem('page_refreshed', 'yes');
+  document.getElementsByClassName("cart_confirmation")[0].style.display = "block";
+  document.getElementById("overlay-cart").style.display = "block";
+  document.getElementById("cart").play();
+  var view_button = document.getElementsByClassName("view_btn");
+    for(var i = 0; i < view_button.length; i++){
+      view_button[i].style.zIndex = "1"; 
+    }
+  var results_div = document.getElementsByClassName("results-div");
+  var all_steps = results_div[0].getElementsByClassName("all_steps");
+  var each_step = all_steps[0].getElementsByClassName("each_step");
+  var step_div = each_step[0].getElementsByClassName("step_div");
+  // for(var i = 0; i < each_step.length;i++){
+
+    
+    if(step_div[0].getElementsByClassName("product_item").length > 0){
+      
+    var product_item = each_step[0].getElementsByClassName("product_item");
+    
+      if(product_item[0].getElementsByClassName("cart_info").length > 0){
+       var cart_info = product_item[0].getElementsByClassName("cart_info");
+
+       var form = cart_info[0].getElementsByClassName("thiskit");
+       //var span = form[0].getElementsByTagName("span");
+       var input = form[0].getElementsByTagName("input");
+
+       //input[1].click();
+       btn_value1 = input[0].value;
+    
+        const product_id_url = products.find(row => row[1] === btn_value1)?.[2];
+        
+
+
+       
+         addProduct(btn_value1, 1);
+        
+        try {
+        const res = await fetch('/add-to-cart/'+product_id_url+'/'+ btn_value1, {
+          method: 'GET',
+          credentials: 'same-origin',
+        });
+
+        if (!res.ok) {
+          console.error('Failed to add product');
+        } else {
+          
+        }
+      } catch (err) {
+        console.error('Error adding variation, err');
+      }
+        //const response = await fetch('/add-to-cart/'+btn_value1+'/1');
+        //const data = await response.json();
+        
+
+     }
+     else{
+      if(product_item[0].getElementsByTagName("form").length > 0){
+        var form = product_item[0].getElementsByClassName("thiskit");
+
+       // var form = cart_info[0].getElementsByTagName("form");
+       //var span = form[0].getElementsByTagName("span");
+       var input = form[0].getElementsByTagName("input");
+
+       //input[1].click();
+       btn_value1 = input[0].value;
+        const product_id_url = products.find(row => row[1] === btn_value1)?.[2];
+        
+
+
+       
+         addProduct(btn_value1, 1);
+        
+        try {
+        const res = await fetch('/add-to-cart/'+product_id_url+'/'+ btn_value1, {
+          method: 'GET',
+          credentials: 'same-origin',
+        });
+
+        if (!res.ok) {
+          console.error('Failed to add product');
+        } else {
+        }
+      } catch (err) {
+        console.error('Error adding variation, err');
+      }
+
+      }
+     }
+   
+    }
+
+    var step_div2 = each_step[1].getElementsByClassName("step_div");
+    
+      if(step_div2[0].getElementsByClassName("product_item").length > 0){
+     
+      var product_item = step_div2[0].getElementsByClassName("product_item");
+      if(product_item[0].getElementsByClassName("cart_info").length > 0){
+         var cart_info = product_item[0].getElementsByClassName("cart_info");
+      
+        var form = cart_info[0].getElementsByClassName("thiskit");
+        //var span = form[0].getElementsByTagName("span");
+        var input = form[0].getElementsByTagName("input");
+
+        //input[1].click();
+        btn_value2 = input[0].value;
+                const product_id_url = products.find(row => row[1] === btn_value2)?.[2];
+        
+
+
+       
+         addProduct(btn_value2, 1);
+        
+        try {
+        const res = await fetch('/add-to-cart/'+product_id_url+'/'+ btn_value2, {
+          method: 'GET',
+          credentials: 'same-origin',
+        });
+
+        if (!res.ok) {
+          console.error('Failed to add product');
+        } else {
+          console.log('Added variation');
+        }
+      } catch (err) {
+        console.error('Error adding variation, err');
+      }
+      }
+      else{
+      if(product_item[0].getElementsByTagName("form").length > 0){
+        var form = product_item[0].getElementsByClassName("thiskit");
+
+       // var form = cart_info[0].getElementsByTagName("form");
+       //var span = form[0].getElementsByTagName("span");
+       var input = form[0].getElementsByTagName("input");
+
+       //input[1].click();
+       btn_value2 = input[0].value;
+                       const product_id_url = products.find(row => row[1] === btn_value2)?.[2];
+        
+
+
+       
+         addProduct(btn_value2, 1);
+       
+        try {
+        const res = await fetch('/add-to-cart/'+product_id_url+'/'+ btn_value2, {
+          method: 'GET',
+          credentials: 'same-origin',
+        });
+
+        if (!res.ok) {
+          console.error('Failed to add product');
+        } else {
+          console.log('Added variation');
+        }
+      } catch (err) {
+        console.error('Error adding variation, err');
+      }
+      }
+     }
+     
+      }
+    
+    var step_div3 = each_step[2].getElementsByClassName("step_div");
+    
+      if(step_div3[0].getElementsByClassName("product_item").length > 0){
+        
+      var product_item = step_div3[0].getElementsByClassName("product_item");
+      if(product_item[0].getElementsByClassName("cart_info").length > 0){
+        var cart_info = product_item[0].getElementsByClassName("cart_info");
+      
+        var form = cart_info[0].getElementsByClassName("thiskit");
+        //var span = form[0].getElementsByTagName("span");
+        var input = form[0].getElementsByTagName("input");
+
+        //input[1].click();
+        btn_value3 = input[0].value;
+                const product_id_url = products.find(row => row[1] === btn_value3)?.[2];
+        
+
+
+       
+         addProduct(btn_value3, 1);
+        
+        try {
+        const res = await fetch('/add-to-cart/'+product_id_url+'/'+ btn_value3, {
+          method: 'GET',
+          credentials: 'same-origin',
+        });
+
+        if (!res.ok) {
+          console.error('Failed to add product');
+        } else {
+          console.log('Added variation');
+        }
+      } catch (err) {
+        console.error('Error adding variation, err');
+      }
+      }
+      else{
+      if(product_item[0].getElementsByTagName("form").length > 0){
+        var form = product_item[0].getElementsByClassName("thiskit");
+
+       // var form = cart_info[0].getElementsByTagName("form");
+       //var span = form[0].getElementsByTagName("span");
+       var input = form[0].getElementsByTagName("input");
+
+       //input[1].click();
+       btn_value3 = input[0].value;
+                       const product_id_url = products.find(row => row[1] === btn_value3)?.[2];
+        
+
+
+       
+         addProduct(btn_value3, 1);
+        
+        try {
+        const res = await fetch('/add-to-cart/'+product_id_url+'/'+ btn_value3, {
+          method: 'GET',
+          credentials: 'same-origin',
+        });
+
+        if (!res.ok) {
+          console.error('Failed to add product');
+        } else {
+          console.log('Added variation');
+        }
+      } catch (err) {
+        console.error('Error adding variation, err');
+      }
+      }
+     }
+      
+      }
+     
+
+
+
+
+
+
+  
+}
+function email_workflow(){
+  
+  document.getElementById("overlay-email").style.display = "block";
+  document.getElementsByClassName("save_workflow_div")[0].style.display = "block";
+  document.getElementsByClassName("form_end")[0].style.display = "block";
+  document.getElementsByClassName("workflow-sent")[0].style.display = "none";
+  var view_button = document.getElementsByClassName("view_btn");
+    for(var i = 0; i < view_button.length; i++){
+      view_button[i].style.zIndex = "1"; 
+    }
+  $('#thisdiv').load(document.URL +  ' #thisdiv');
+  newScreenshot();
+}
+function save_workflow(){
+  
+ 
+    document.getElementsByClassName("save_workflow_name")[0].style.display = "block";
+  document.getElementById("overlay-save").style.display = "block";
+  var view_button = document.getElementsByClassName("view_btn");
+    for(var i = 0; i < view_button.length; i++){
+      view_button[i].style.zIndex = "1"; 
+    }
+  
+ 
+  // document.getElementById("enter").click();
+  if(is_nopathogen == "false"){
+  
+      document.getElementById("edit-category").value = document.querySelector('input[name="category"]:checked').value;
+  document.getElementById("edit-organism").value = document.querySelector('input[name="organism"]:checked').value;
+  document.getElementById("edit-pathogen").value = document.querySelector('input[name="pathogen"]:checked').value;
+  document.getElementById("edit-analyte").value = document.querySelector('input[name="analyte"]:checked').value;
+  document.getElementById("edit-sample").value = document.querySelector('input[name="sample"]:checked').value;
+  localStorage.setItem('question', 1);
+  }
+  else{
+  
+      //document.getElementById("edit-category").value = document.querySelector('input[name="nopathogen_category"]:checked').value;
+  document.getElementById("edit-organism").value = document.querySelector('input[name="nopathogen_organism"]:checked').value;
+  //document.getElementById("edit-pathogen").value = document.querySelector('input[name="nopathogen_pathogen"]:checked').value;
+  document.getElementById("edit-analyte").value = document.querySelector('input[name="nopathogen_analyte"]:checked').value;
+  document.getElementById("edit-sample").value = document.querySelector('input[name="nopathogen_sample"]:checked').value;
+  localStorage.setItem('question', 2);
+  }
+  var emailaddress = {{email|json_encode()|raw}};
+  
+  document.getElementById("edit-norgenius-email--2").value = emailaddress;
+  
+}
+function close_save_workflow(){
+  document.getElementById("bookmark").stop();
+  document.getElementsByClassName("save_workflow_name")[0].style.display = "none";
+  document.getElementById("overlay-save").style.display = "none";
+  document.getElementsByClassName("save_workflow_bookmark")[0].style.display = "none";
+}
+function saving_animation(){
+   var inputname = document.getElementById("wf_name");
+  if(inputname.value != ""){
+  document.getElementsByClassName("save_workflow_name")[0].style.display = "none";
+  document.getElementsByClassName("save_workflow_bookmark")[0].style.display = "block";
+  document.getElementById("bookmark").play();
+ 
+}
+ else{
+    inputname.style.borderColor = "red";
+  }
+}
+ 
+function mail_sent_animation(){
+
+  
+  document.getElementsByClassName("mail-sent")[0].style.display = "block";
+  document.getElementsByClassName("checkmark__circle")[0].style.animationPlayState = "running";
+  document.getElementsByClassName("checkmark")[0].style.animationPlayState = "running";
+  document.getElementsByClassName("checkmark__check")[0].style.animationPlayState = "running";
+  
+  document.getElementById("no_pathogen_form_1").style.display = "none";
+  document.getElementById("pathogen_q").style.display = "none";
+
+}
+function resets(){
+  location.reload();
+}
+ //setTimeout(function(){document.getElementsByClassName("active1")[0].classList.remove("active1-color"); }, 2000);
+  setTimeout(function(){ document.getElementsByClassName("workflow-slide")[0].style.display = "block"; }, 3000);
+  function testing(num, elem){
+   
+    if(elem == "active-4"){
+      var first = document.getElementsByClassName(elem);
+    
+    for(var j = 0; j < first.length; j++){
+      var time = j * 500;
+      first[j].style.animation = "1.5s linear forwards colorme_fill";
+      first[j].style.animationDelay = time + "ms"; 
+         }
+    }
+    else{
+      var first = document.getElementsByClassName(elem);
+    
+    for(var j = 0; j < first.length; j++){
+      var time = j * 500;
+      first[j].style.animation = "1.5s linear forwards colorme";
+      first[j].style.animationDelay = time + "ms"; 
+         }
+    }
+    
+    var sliding = document.getElementsByClassName("sliding");
+    var options = sliding[num-1].getElementsByClassName("options");
+   
+    var buttons = options[0].getElementsByClassName("btn2");
+    var button_l = buttons.length;
+    for(var i = 0; i < buttons.length; i++){
+     
+      var time = button_l*100;
+      button_l--;
+      
+      buttons[i].style.animation = "250ms linear forwards buttons";
+      buttons[i].style.animationDelay = time+"ms";
+      
+    }
+    slide(num);
+
+  }
+
+    function slide(num){
+      moveleft = 1;
+      moveright = 1;
+      var slide = document.querySelectorAll(".sliding");
+      var leftval = 100*num;
+      for(var j = 0; j < slide.length; j++){
+        slide[j].style.left = "-"+leftval+"%";
+      }
+      
+
+    }
+
+    var products = {{prods|json_encode()|raw}};
+  //var products=<?php echo json_encode($prods); ?>;
+  
+
+  var all_info = {{all_info|json_encode()|raw}};
+
+    var category = {{categories|json_encode()|raw}};
+    for(var i =0; i < category.length; i++){
+    var outer_div = document.createElement('div');
+    outer_div.setAttribute("class",'outer_div');
+
+      var block = '<input type="radio" id="'+category[i][3]+'" name="category" value="'+category[i][3]+'" onclick="selectoption(this,1,\'active-1\',false)"><label class="btn2" for="'+category[i][3]+'">'+category[i][2]+'</label>';
+        // var block = '<option value="'+category[i][3]+'" order="'+category[i][1]+'">'+category[i][2]+'</option>';
+        var d1= document.getElementById("category");
+        d1.insertAdjacentHTML('beforeend',block);
+   }
+
+   var organism = {{organisms|json_encode()|raw}};
+   for(var i =0; i < organism.length; i++){
+      var block = '<input type="radio" id="'+organism[i][3]+'" name="organism" value="'+organism[i][3]+'" onclick="selectoption(this,2,\'active-2\',false)"><label for="'+organism[i][3]+'">'+organism[i][2]+'</label>';
+        // var block = '<option value="'+organism[i][3]+'" order="'+organism[i][1]+'">'+organism[i][2]+'</option>';
+        var d1= document.getElementById("organism");
+        d1.insertAdjacentHTML('beforeend',block);
+  }
+
+  var pathogen = {{pathogens|json_encode()|raw}};
+  for(var i =0; i < pathogen.length; i++){
+      var block = '<input nickname="'+pathogen[i][4]+'" type="radio" id="'+pathogen[i][3]+'" name="pathogen" value="'+pathogen[i][3]+'" onclick="selectoption(this,3,\'active-3\',false)"><label class="item" for="'+pathogen[i][3]+'">'+pathogen[i][2]+'</label>';
+        // var block = '<option value="'+pathogen[i][3]+'" order="'+pathogen[i][1]+'">'+pathogen[i][2]+'</option>';
+        var d1= document.getElementById("pathogen");
+        d1.insertAdjacentHTML('afterbegin',block);
+  }
+
+
+  var analyte = {{analytes|json_encode()|raw}};
+  for(var i =0; i < analyte.length; i++){
+      var block = '<input type="radio" id="'+analyte[i][3]+'" name="analyte" value="'+analyte[i][3]+'" onclick="selectoption(this,4,\'active-5\',\'none\')"><label for="'+analyte[i][3]+'">'+analyte[i][2]+'</label>';
+        // var block = '<option value="'+analyte[i][3]+'" order="'+analyte[i][1]+'">'+analyte[i][2]+'</option>';
+        var d1= document.getElementById("analyte");
+        d1.insertAdjacentHTML('beforeend',block);
+  }
+
+  var sample = {{samples|json_encode()|raw}};
+  for(var i =0; i < sample.length; i++){
+      var block = '<input type="radio" id="'+sample[i][3]+'" name="sample" value="'+sample[i][3]+'" onclick="selectoption(this,4,\'active-4\',true)"><label for="'+sample[i][3]+'">'+sample[i][2]+'</label>';
+        // var block = '<option value="'+sample[i][3]+'" order="'+sample[i][1]+'">'+sample[i][2]+'</option>';
+        var d1= document.getElementById("sample");
+        d1.insertAdjacentHTML('beforeend',block);
+  }
+
+
+  //this is for version 2
+  var nopathogen_analyte = {{nopathogen_analytes|json_encode()|raw}};
+  for(var i =0; i < nopathogen_analyte.length; i++){
+      var block = '<input type="radio" id="nopathogen_'+nopathogen_analyte[i][3]+'" name="nopathogen_analyte" value="'+nopathogen_analyte[i][3]+'" onclick="np_selectoption(this,1,\'active-1\',\'false\')"><label class="btn2" for="nopathogen_'+nopathogen_analyte[i][3]+'">'+nopathogen_analyte[i][2]+'</label><br>';
+        // var block = '<option value="'+analyte[i][3]+'" order="'+analyte[i][1]+'">'+analyte[i][2]+'</option>';
+        var d1= document.getElementById("nopathogen_analyte");
+        d1.insertAdjacentHTML('beforeend',block);
+  }
+  var nopathogen_sample = {{nopathogen_samples|json_encode()|raw}};
+  for(var i =0; i < nopathogen_sample.length; i++){
+      var block = '<input type="radio" id="nopathogen_'+nopathogen_sample[i][3]+'" name="nopathogen_sample" value="'+nopathogen_sample[i][3]+'" onclick="np_selectoption(this,2,\'active-2\',false)"><label for="nopathogen_'+nopathogen_sample[i][3]+'">'+nopathogen_sample[i][2]+'</label><br>';
+        // var block = '<option value="'+sample[i][3]+'" order="'+sample[i][1]+'">'+sample[i][2]+'</option>';
+        var d1= document.getElementById("nopathogen_sample");
+        d1.insertAdjacentHTML('beforeend',block);
+  }
+  var nopathogen_organism = {{nopathogen_organisms|json_encode()|raw}};
+   for(var i =0; i < nopathogen_organism.length; i++){
+      var block = '<input type="radio" id="nopathogen_'+nopathogen_organism[i][3]+'" name="nopathogen_organism" value="'+nopathogen_organism[i][3]+'" onclick="np_selectoption(this,3,\'active-3\',true)"><label for="nopathogen_'+nopathogen_organism[i][3]+'">'+nopathogen_organism[i][2]+'</label><br>';
+        // var block = '<option value="'+organism[i][3]+'" order="'+organism[i][1]+'">'+organism[i][2]+'</option>';
+        var d1= document.getElementById("nopathogen_organism");
+        d1.insertAdjacentHTML('beforeend',block);
+  }
+
+  //end of all options for select fields
+
+  //function when an option is selected
+  let choices = [];
+
+  var select_option_way = 'false';
+  function selectoption(elem,num,activenum,bool){
+  
+    if(elem.name == 'pathogen'){
+        select_option_way = 'true';
+    }
+    if(bool != "none"){
+      var string = elem.name + "-text";
+      if(elem.name == "pathogen"){
+        document.getElementById(string).textContent = elem.getAttribute("nickname");
+          document.getElementById(string).style.animation = "textanim 2s";
+          document.getElementById(string).style.opacity = "1";
+      }
+      else{
+        document.getElementById(string).textContent = elem.nextElementSibling.innerHTML;
+        document.getElementById(string).style.animation = "textanim 2s";
+        document.getElementById(string).style.opacity = "1";
+      }
+      
+      
+      
+    }
+    testing(num,activenum);
+    if(elem.value != "unavailable"){
+      document.getElementById(elem.name).classList.add("selected");
+    }
+    
+    var allselect = document.getElementsByClassName("select_option");
+    var not_available;
+    for(var i = 0; i< allselect.length; i++){
+      if(allselect[i].id != elem.name){
+        not_available = allselect[i].querySelectorAll("input");
+        for(var j = 0; j < not_available.length; j++){
+          if(not_available[j].value == "unavailable"){
+        
+            document.getElementById(elem.name).classList.remove("selected");
+            
+            not_available[j].nextElementSibling.style.display = "block";
+            //not_available[j].nextElementSibling.style.display = "block";
+          }
+          else{
+        
+
+            not_available[j].nextElementSibling.style.display = "none";
+            not_available[j].nextElementSibling.classList.remove("btn2");
+          }
+          
+        }
+      }
+    }
+
+    var elem_id = elem.name;
+    
+    
+    if(elem_id == "category"){
+ 
+      choices[0] = elem.value;
+    }
+    else if(elem_id == "organism"){
+   
+      choices[1] = elem.value;
+    }
+    else if(elem_id == "pathogen"){
+    
+      choices[2] = elem.value;
+    }
+    else if(elem_id == "analyte"){
+  
+      choices[3] = elem.value;
+    }
+    else if(elem_id == "sample"){
+     
+      choices[4] = elem.value;
+    }
+    
+
+    finding_in_db(elem.value);
+    
+
+    if(bool == true){
+      generating_anim();
+    }
+  }
+
+  function generating_anim(){
+    document.getElementsByClassName("test")[0].style.display = "none";
+    var eclipse = document.getElementsByClassName("generating-circle");
+    eclipse[0].classList.add("active1_generating");
+    document.getElementsByClassName("generate-svg")[0].style.height = "auto";
+    var text = document.getElementsByClassName("generating-text");
+    text[0].classList.add("text-generating");
+    var div = document.getElementsByClassName("workflow-div");
+    div[0].classList.add("opac_disappear");
+    setTimeout(function(){ div[0].style.display = "none"; }, 6000);
+    var slide = document.getElementsByClassName("workflow-slide");
+    slide[0].style.display="none";
+
+    var div_end = document.getElementsByClassName("workflow-end");
+    div_end[0].style.display = "block";
+
+    // document.getElementById("enter").click();
+    var results_div = document.getElementsByClassName("results-div");
+    results_div[0].classList.add("opac_appear");
+    setTimeout(function(){ results_div[0].style.display = "block"; }, 5800);
+
+    already_loaded = "true";
+    display_results();
+       
+    
+
+  }
+  
+  function finding_in_db(selected){
+    let entries = []; //main array tha will contain small arrays of all the db entries that go with the option selected
+    var data = {{data|json_encode()|raw}};
+    
+    var choiceslength = 0;
+    for(var p = 0; p < choices.length; p++){
+      if(choices[p] != null){
+        choiceslength++;
+      }
+    }
+    for(var j =0; j < data.length; j++){
+      var counter2 = 0;
+      for(var  i =0; i < choices.length;i++){
+     
+        // console.log(data[j][i]);
+        let entry = [];
+        if(choices[i] == data[j][i] || choices[i] == "unavailable"){
+          var x = j;
+          counter2++;
+          if(counter2 == choiceslength){
+            for(var b = 0; b < data[x].length;b++){
+              entry.push(data[x][b]);
+            }
+            entries.push(entry);
+          }
+          
+        }
+      }
+    }
+
+    let choices_final = [];
+    for(var r = 0; r < choices.length;r++){
+      if(choices[r] != null && choices[r] != "" && choices[r] != "unavailable"){
+        choices_final.push(choices[r]);
+      }
+    }
+
+
+
+    let final = [];
+    for(var a = 0; a < entries.length;a++){
+      var counter = 0;
+      for(var c=0;c<entries[a].length;c++){
+        for(var p = 0; p < choices_final.length;p++){
+          
+          if(entries[a][c] == choices_final[p]){
+            
+            counter++;
+            
+            if(counter == choices_final.length){
+              final.push(entries[a]);
+            }
+          }
+        }
+      }
+    }
+
+    
+      entries_loop(final);
+    
+    
+  }
+
+  function entries_loop(elem){
+
+    var allselect = document.getElementsByClassName("select_option");
+
+    for(var i = 0; i < allselect.length; i++){
+      var x = allselect[i].querySelectorAll("input");
+      for(var j = 0; j < elem.length; j++){
+        for(var o = 0; o < x.length;o++){
+            if(x[o].value == elem[j][i]){
+
+              // x[o].disabled = false;
+              x[o].nextElementSibling.style.display = "block";
+              x[o].nextElementSibling.classList.add("btn2");
+            }
+        }
+      }
+    }
+    check_analyte();
+    if(window.innerWidth < 900){
+      var slider_wrapper = document.getElementsByClassName("slider-wrapper");
+    for(var all = 0; all < slider_wrapper.length; all++){
+      var options = slider_wrapper[all].getElementsByClassName("options");
+      options[0].classList.add("more_options");
+      var items = options[0].getElementsByClassName("btn2");
+      
+      
+      if(items.length > 3){
+        if(select_option_way != 'true'){
+            document.getElementsByClassName("next")[all].style.display = "inline";
+        } 
+      }
+      else{
+        
+        document.getElementsByClassName("next")[all].style.display = "none";
+      }
+    }
+    }
+    else{
+      var slider_wrapper = document.getElementsByClassName("slider-wrapper");
+      var options = slider_wrapper[1].getElementsByClassName("options");
+      options[0].classList.add("more_options");
+      var items = options[0].getElementsByClassName("btn2");
+      
+      
+      if(items.length > 3){
+        if(select_option_way != 'true'){
+        document.getElementsByClassName("next")[1].style.display = "inline";
+        }
+      }
+      else{
+       
+        document.getElementsByClassName("next")[1].style.display = "none";
+      }
+   }
+    
+      
+  }
+
+  document.addEventListener("DOMContentLoaded", function() {
+    
+    var page_refreshed = localStorage.getItem('page_refreshed');
+    
+    if(page_refreshed == 'yes'){
+
+        document.getElementById("retrieve_storage").classList.remove("disable-retrieve");
+    }
+    document.getElementsByClassName("active1")[0].classList.add("active1-color");
+    document.getElementsByClassName("active1")[1].classList.add("active1-color1");
+    if(window.innerWidth < 900){
+      var slider_wrapper = document.getElementsByClassName("slider-wrapper");
+    for(var all = 0; all < slider_wrapper.length; all++){
+      var options = slider_wrapper[all].getElementsByClassName("options");
+      options[0].classList.add("more_options");
+      var items = options[0].getElementsByClassName("btn2");
+      for(var alli = 0; alli < items.length; alli++){
+        items[alli].classList.add("item");
+        items[alli].classList.add("btnmargin");
+      }
+      
+      
+      if(items.length > 3){
+        
+        document.getElementsByClassName("next")[all].style.display = "inline";
+      }
+      else{
+       
+        document.getElementsByClassName("next")[all].style.display = "none";
+      }
+    }
+    }
+  });
+  function check_analyte(){
+
+
+    var x = document.getElementById("analyte");
+    var option;
+    var counter = 0;
+    var y = x.querySelectorAll("input");
+    
+    for(var i = 0; i < y.length; i++){
+      
+
+      if (y[i].nextElementSibling.style.display == "block") {
+        
+        counter++;
+        option = y[i].value;
+       
+      }
+      
+    }
+
+    if(counter == 1){
+      y.value = option;
+      choices[3] = option;
+      document.getElementById(option).checked = true;
+      document.getElementsByClassName("analyte-question")[0].style.display = "none";
+    }
+    else if(counter == 2){
+      
+      document.getElementsByClassName("analyte-question")[0].style.display = "block";
+    }
+    
+    
+  }
+
+    var results = {{res|json_encode()|raw}};
+
+  //takes the code from the db table and find it the big all products db table
+  function display_results(){
+    
+    let results_array = [];
+    var data = {{data|json_encode()|raw}};
+
+    for(var i = 0; i < data.length; i++){
+      var count = 0;
+      //finding the results in data table
+      for(var j = 0; j < choices.length; j++){
+        if(data[i][j] == choices[j] || choices[j] == "unavailable"){
+          count++;
+        }
+      }
+
+      //if all choices are matched in data table
+      if(count == 5){
+        var code = data[i][5];
+        for(var p = 0; p < results.length; p++){
+          let results_entry = [];
+          var resulted_code = results[p][1];
+          // console.log("2." + resulted_code);
+          var code_array = resulted_code.split(" ");
+          // console.log("3" + code_array);
+          for(var q = 0; q < code_array.length; q++){
+            // console.log("4. " + code_array[q]);
+            // console.log("5. " + code);
+            
+            if(code_array[q] == code){
+              
+              results_entry.push(results[p][0]);
+              results_entry.push(results[p][2]);
+              results_entry.push(results[p][3]);
+              var val = results_entry[2];
+              // results_array[val].push(results_entry);
+              results_array.push(results_entry);
+            }
+            
+            
+          }
+        }
+      }
+    }
+    
+    helper1(results_array);
+  
+  }
+  let res = [];
+
+  
+
+  //get all the results that we need
+  function helper1(elem){
+   
+  let step1 = [];
+  let step2 = [];
+  let step3 = [];
+  let step4 = [];
+  let s_entry = [];
+  let res = [];
+  var counter1 = 0;
+  var counter2 = 0;
+  var counter3 = 0;
+  var counter4 = 0;
+    for(var i =0; i < elem.length;i++){
+      var val = elem[i][2];
+      if(val == 1){
+        
+        counter1++;
+        step1[0] = counter1;
+     
+        if(step1.includes(elem[i][0]) == false){
+          step1.push(elem[i][0]);
+        }
+        
+      }
+      else if(val == 2){
+        counter2++;
+        step2[0] = counter2;
+        if(step2.includes(elem[i][0]) == false){
+          step2.push(elem[i][0]);
+        }
+      }
+
+      //for pcr
+      else if(val == 4){
+          if(choices[2] == "unavailable"){
+          step4[0] = "unavailable";
+        }
+        else{
+          counter4++;
+          step4[0] = counter4;
+          if(step4.includes(elem[i][0]) == false){
+            step4.push(elem[i][0]);
+          }
+        }
+         
+        
+      }
+      
+    }
+
+    res.push(step1);
+    res.push(step2);
+    res.push(step4);
+   
+    
+    makeboxes(res);
+    getproductinfo(res);
+    
+    
+  }
+
+  function makeboxes(elem){
+
+  
+    var main_div = document.getElementsByClassName("results-div");
+    var each_step = document.getElementsByClassName("each_step");
+    var step_div = document.getElementsByClassName("step_div");
+
+    var main_div_email = document.getElementsByClassName("email-results-div");
+    var each_step_email = document.getElementsByClassName("email-each_step");
+    var step_div_email = document.getElementsByClassName("email-step_div");
+    
+    for(var i = 0; i < elem.length; i++){
+      
+       if(elem[i] != ""){
+          
+          if(elem[i][0] == "unavailable"){
+            var no_pathogen_form = document.createElement("div");
+            no_pathogen_form.setAttribute("class",'no_pathogen_form');
+
+            var form_div = document.getElementsByClassName("form-table");
+            
+            form_div[0].style.display = "block";
+            no_pathogen_form.appendChild(form_div[0]);
+            
+            each_step[i].appendChild(no_pathogen_form);
+           
+          }
+      
+
+       
+
+          var extra_div = document.createElement('div');
+          extra_div.setAttribute("class",'drawer');
+
+          
+
+          for(var j = 0; j < elem[i].length-1; j++){
+            var item_div = document.createElement('div');
+            item_div.setAttribute("class", 'product_item');
+
+            var item_div_email = document.createElement('div');
+            item_div_email.setAttribute("class", 'email-product_item');
+            item_div_email.style.width = "100%";
+            
+
+
+            step_div_email[i].appendChild(item_div_email);
+            if(j == 0){
+              
+              step_div[i].appendChild(item_div);
+              
+            }
+            else{
+              // if(i != 3 && choices.includes("unavailable")==false){
+                item_div.setAttribute("onclick",'showthis(this)');
+              extra_div.appendChild(item_div);
+              // }
+              
+              
+            }
+            
+            
+          }
+          var view_btn = document.createElement('button');
+              view_btn.setAttribute("class",'view_btn');
+              view_btn.setAttribute('onclick','less(this)');
+              view_btn.innerHTML = "Hide Options<br><img src='/sites/default/files/images/norgenius/arrow-up.png'>";
+          extra_div.appendChild(view_btn);
+          each_step[i].appendChild(extra_div);
+
+
+          var product_length = each_step[i].getElementsByClassName("product_item");
+          
+          
+
+          if(product_length.length > 1){
+            var view_btn = document.createElement('button');
+            view_btn.setAttribute("class",'view_btn');
+            view_btn.setAttribute('onclick','more(this)');
+            for(var q = 1; q < elem[i].length; q++){
+              
+              var check = elem[i][q];
+              if(check.includes("Dx") && check != "Dx53800"){
+                view_btn.innerHTML = "View More Options (Diagnostic Kit Available)<br> <img src='/sites/default/files/images/norgenius/arrow-down.png'>";
+                
+                
+              }
+              else{
+                view_btn.innerHTML = "View More Options <br><img src='/sites/default/files/images/norgenius/arrow-down.png'>";
+              }
+            }
+            
+            each_step[i].appendChild(view_btn);
+          }
+
+
+
+
+
+       }
+
+    }
+    var workflowbtn = document.getElementsByClassName("workflowcart")[0];
+     
+     if(window.innerWidth > 950){
+      workflowbtn.style.display = "flex";
+     }
+     
+     else if(window.innerWidth < 950){
+      workflowbtn.style.display = "grid";
+     }
+     main_div[0].appendChild(workflowbtn);
+     
+    if(is_nopathogen == "true" && is_protein == "false"){
+            
+            var block_div = '<div id="pathogen_question"><img src="/sites/default/files/images/norgenius/category.svg" class="question-img"><h3>Are you interested in the following pathogens?</h3>';
+            each_step[2].insertAdjacentHTML('beforeend',block_div);
+            for(var i = 0; i < pathogens.length; i++){
+            var block = '<div class="nopathogen_pathogen_radios"><input type="radio" id="nopathogen_'+pathogens[i]+'" name="nopathogen_pathogen" value="'+pathogens[i]+'" onclick="select_pathogen(this)"><label class="btn2" for="nopathogen_'+pathogens[i]+'">'+pathogens[i]+'</label><br></div>';
+        
+          var d1= document.getElementById("nopathogen_analyte");
+          each_step[2].insertAdjacentHTML('beforeend',block);
+         
+            }
+            block_div2 = '<div></div><div></div><div></div>';
+            each_step[2].insertAdjacentHTML('beforeend',block_div2);
+          }
+          else if(is_nopathogen == "true" && is_protein == "true"){
+            var block_div = '<div id="pathogen_question"><img src="/sites/default/files/images/norgenius/category.svg" class="question-img"><h3>No pathogen available for the selected choices</h3>';
+            each_step[2].insertAdjacentHTML('beforeend',block_div);
+         
+            block_div2 = '<div></div><div></div><div></div>';
+            each_step[2].insertAdjacentHTML('beforeend',block_div2);
+          }
+  }
+
+
+  //informgation for the products that we need
+  function getproductinfo(elem){
+
+  if(elem[0][1] == "No Collection Device Needed"){
+  document.getElementsByClassName("if_no_collection")[0].style.display = "block";
+  }
+    let wf_results = [];
+    for(var i = 0; i < elem.length; i++){
+      for(var j = 1; j < elem[i].length;j++){
+      var x = elem[i][j];
+      
+      var prod_array = x.split(" ");
+      
+      for(var l = 0; l < prod_array.length; l++){
+        let result_temp = [];
+        for(var k = 0; k < products.length; k++){
+          if(prod_array[l] == products[k][3]){
+            //result_temp.push(products[k][0]);
+            result_temp.push(products[k][1]);
+            //result_temp.push(products[k][2]);
+            result_temp.push(products[k][3]);
+            //result_temp.push(products[k][4]);
+            result_temp.push(products[k][5]);
+            //result_temp.push(products[k][6]);
+            result_temp.push(products[k][7]);
+            result_temp.push(products[k][8]);
+            result_temp.push(products[k][9]);
+            result_temp.push(products[k][10]);
+            // result_temp.push()
+            if(wf_results.includes(result_temp) == false){
+              wf_results.push(result_temp);
+            }
+            
+          }
+        }
+      }
+      }
+    }
+    
+    display_result_helper(wf_results, elem);
+    
+  }
+
+  
+//results array contains the kits that needs to show in the result
+function display_result_helper(elem1, elem2){
+
+  if(is_nopathogen == "true"){
+    document.getElementsByClassName("email-step_div")[2].innerHTML = "<p style='text-align:center;width:100%;'>Please use the product select tool to see the options available for pathogen selection</p>";
+  }
+
+  var testingdiv = document.getElementsByClassName("product_item");
+
+  var testingdiv_email = document.getElementsByClassName("email-product_item");
+
+ 
+  
+  var step = document.getElementsByClassName("step");
+
+  // var inside_type = document.getElementsByClassName("inside_type");
+  
+  var num_counter = 0;
+  for(var i = 0; i < elem2.length; i++){
+    for(var j = 1; j < elem2[i].length; j++){
+      var parent = testingdiv[num_counter];
+      var parent_email = testingdiv_email[num_counter];
+     
+      var num_opt = elem2[i].length;
+      var x = elem2[i][j];
+      var entry_a = x.split(" ");
+      if(entry_a.length > 1){
+
+
+        var product_info = document.createElement('div');
+        product_info.setAttribute("class",'product_info');
+        var product_text = document.createElement('div');
+        product_text.setAttribute("class",'product_text');
+        var title = document.createElement('h4');
+
+        var product_info_email = document.createElement('div');
+        product_info_email.setAttribute("class",'email-product_info');
+        var product_text_email = document.createElement('div');
+        product_text_email.setAttribute("class",'email-product_text');
+        var title_email = document.createElement('h4');
+
+
+        var img = document.createElement('img');
+        var img_email = document.createElement('img');
+        img_email.style.width = "30%";
+
+        for(var ctitle = 0; ctitle < elem1.length; ctitle++){
+          if(entry_a[0] == elem1[ctitle][1]){
+             
+                    url = "https://norgenbiotek.com/" + elem1[ctitle][6];
+                
+            
+
+            
+
+            var check = elem1[ctitle][4];
+
+            if(check.includes("Dx") && check != "Dx53800"){
+                title.innerHTML = "<a href='" + url + "'>"+elem1[ctitle][4]+"<img src='https://norgenbiotek.com/sites/default/files/norproduct/European_Conformity_logo.svg'></a>";
+            }
+            else{
+              title.innerHTML = "<a href='" + url + "'>"+elem1[ctitle][4]+"</a>";
+            }
+            title_email.innerHTML = "<a href='" + url + "'>"+elem1[ctitle][4]+"</a>";
+
+            var src = elem1[ctitle][5].replace("public://","/sites/default/files/");
+            img.setAttribute('src',src);
+            img_email.setAttribute('src',"https://norgenbiotek.com/" + src);
+
+          if(i == 1 && elem1[ctitle][4].includes("DNA")){
+            var inside_type = document.createElement('p');
+              inside_type.setAttribute("class",'inside_type');
+            inside_type.innerHTML = "DNA";
+            inside_type.classList.add("blue-btn");
+            product_text.appendChild(inside_type);
+          }
+          else if(i == 1 && elem1[ctitle][4].includes("RNA")){
+            var inside_type = document.createElement('p');
+              inside_type.setAttribute("class",'inside_type');
+            inside_type.innerHTML = "RNA";
+            inside_type.classList.add("red-btn2");
+            product_text.appendChild(inside_type);
+          }
+          else if(i == 1 && elem1[ctitle][4].includes("Nucleic Acid")){
+            var inside_type = document.createElement('p');
+              inside_type.setAttribute("class",'inside_type');
+            inside_type.innerHTML = "Multi-Analyte";
+            inside_type.classList.add("purple-btn");
+            product_text.appendChild(inside_type);
+          }
+             
+          }
+        }
+        var sku = document.createElement('p');
+        var sku_email = document.createElement('p');
+        //create a selector
+        var select = document.createElement('select');
+        select.setAttribute("onchange" , 'change_select(this)');
+        var selected_opt = false;
+
+        var cart_info = document.createElement("div");
+        cart_info.setAttribute("class",'cart_info');
+        // parent.appendChild(select);
+
+        // Use createElement to add an option:
+        for(var p = 0; p < entry_a.length;p++){
+          if(p > 0){
+            sku.innerHTML = sku.innerHTML + ", " + entry_a[p]; 
+            sku_email.innerHTML = sku_email.innerHTML + ", " + entry_a[p];
+          }
+          else{
+            sku.innerHTML = "Cat. " + entry_a[p];
+            sku_email.innerHTML = "Cat. " + entry_a[p];
+          }
+          for(var q = 0; q < elem1.length;q++){
+            if(entry_a[p] == elem1[q][1]){
+               option = document.createElement('option');
+
+              option.value = elem1[q][3] + "-" + elem1[q][2];
+              option.text = elem1[q][3] + " - " + elem1[q][2];
+              option.setAttribute("cart",elem1[q][0]);
+              if(selected_opt == false){
+                option.setAttribute("selected",'');
+                selected_opt = true;
+              }
+              
+              select.appendChild(option);
+              
+
+              var block = '<form onclick="add_to_cart_2(this)" action="" method="post" id="add-to-cart-variation-'+elem1[q][0]+'" class="full-width-btn col-sm-12 home-bestsellers-btn-div morethanone" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-'+elem1[q][0]+'" siq_id="autopick_738" btnvalue="'+elem1[q][0]+'"><input type="hidden" id="variation_id" name="variation_id" value="'+elem1[q][0]+'"><input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-'+elem1[q][0]+'" name="op" value="Add to cart"></form>';
+              cart_info.insertAdjacentHTML('beforeend',block);
+            }
+          }
+        }
+       
+        product_text.appendChild(title);
+        product_text.appendChild(sku);
+        
+        
+        
+    
+        if(select.length > 0){
+        cart_info.appendChild(select);
+        }
+        
+        
+      
+        product_info.appendChild(product_text);
+        product_info.appendChild(img);
+    
+        
+       
+    if(select.length > 0){
+      product_info.appendChild(cart_info);
+        }
+        if(select.length > 0){
+        parent.appendChild(product_info);
+        }
+       
+        product_text_email.appendChild(title_email);
+        product_text_email.appendChild(sku_email);
+        product_info_email.appendChild(product_text_email);
+        product_info_email.appendChild(img_email);
+        
+        parent_email.appendChild(product_info_email);
+        num_counter++;
+        // }
+        
+        
+      }
+      else{
+         
+         var product_info = document.createElement('div');
+         product_info.setAttribute("class",'product_info');
+          var product_text = document.createElement('div');
+        product_text.setAttribute("class",'product_text');
+         var title = document.createElement('h4');
+
+         var product_info_email = document.createElement('div');
+        product_info_email.setAttribute("class",'email-product_info');
+        var product_text_email = document.createElement('div');
+        product_text_email.setAttribute("class",'email-product_text');
+        var title_email = document.createElement('h4');
+
+
+         var img = document.createElement('img');
+         var img_email = document.createElement('img');
+         img_email.style.width = "75%";
+         // var url = document.createElement('a');
+         var url;
+        for(var ctitle = 0; ctitle < elem1.length; ctitle++){
+          if(entry_a[0] == elem1[ctitle][1]){
+           
+                    url = "https://norgenbiotek.com/" + elem1[ctitle][6];
+               
+          
+            
+            // title.innerHTML = "<a href='" + url + "'>"+elem1[ctitle][4]+"</a>";
+            var check = elem1[ctitle][4];
+            if(check.includes("Dx") && check != "Dx53800"){
+                title.innerHTML = "<a href='" + url + "' target='_blank' target='_blank'>"+elem1[ctitle][4]+"<img id='ce-img' src='https://norgenbiotek.com/sites/default/files/norproduct/European_Conformity_logo.svg'></a>";
+            }
+            else{
+              title.innerHTML = "<a href='" + url + "' target='_blank' target='_blank'>"+elem1[ctitle][4]+"</a>";
+            }
+            title_email.innerHTML = "<a href='" + url + "' target='_blank' target='_blank'>"+elem1[ctitle][4]+"</a>";
+            var src = elem1[ctitle][5].replace("public://","/sites/default/files/");
+            img.setAttribute('src',src);
+            img_email.setAttribute('src',"https://norgenbiotek.com/" + src);
+            
+
+
+                var block = '<form onclick="add_to_cart_2(this)" action="" method="post" id="add-to-cart-variation-'+elem1[ctitle][0]+'" class="full-width-btn col-sm-12 home-bestsellers-btn-div thiskit" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-'+elem1[ctitle][0]+'" siq_id="autopick_738" btnvalue="'+elem1[ctitle][0]+'"><input type="hidden" id="variation_id" name="variation_id" value="'+elem1[ctitle][0]+'"><input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-'+elem1[ctitle][0]+'" name="op" value="Add to cart"></form>';
+              if(i == 1 && elem1[ctitle][4].includes("DNA")){
+              var inside_type = document.createElement('p');
+              inside_type.setAttribute("class",'inside_type');
+            inside_type.innerHTML = "DNA";
+            inside_type.classList.add("blue-btn");
+            product_text.appendChild(inside_type);
+          }
+          else if(i == 1 && elem1[ctitle][4].includes("RNA")){
+            var inside_type = document.createElement('p');
+              inside_type.setAttribute("class",'inside_type');
+            inside_type.innerHTML = "RNA";
+            inside_type.classList.add("red-btn2");
+            product_text.appendChild(inside_type);
+          }
+          else if(i == 1 && elem1[ctitle][4].includes("Nucleic Acid")){
+            var inside_type = document.createElement('p');
+              inside_type.setAttribute("class",'inside_type');
+            inside_type.innerHTML = "Multi-Analyte";
+            inside_type.classList.add("purple-btn");
+            product_text.appendChild(inside_type);
+          }
+          }
+        }
+
+        var sku = document.createElement('p');
+        var sku_email = document.createElement('p');
+        sku.innerHTML = "Cat. " + elem2[i][j];
+        sku_email.innerHTML = "Cat. " + elem2[i][j];
+        if(title.innerHTML == ""){
+          product_info.classList.add("autorows");
+              if(sku.innerHTML == "Cat. RU46110"){
+                title.innerHTML = "Clamshell Individual Sputum DNA Collection and Preservation Device - Tube Format";
+              }
+              else if(sku.innerHTML == "Cat. notavailable"){
+                title.innerHTML = "EDTA Tubes - Biobasic";
+              }
+              var helptext = document.createElement('p');
+              helptext.innerHTML = "Sorry for the inconviniece. This product is not currently sold at Norgen Biotek<br><br>";
+              product_text.appendChild(helptext);
+              img.setAttribute('src',"/sites/default/files/images/norgenius/unavailable.png");
+              img.style.width = "100px";
+              block = "";
+            }
+  
+        product_text.appendChild(title);
+        product_text.appendChild(sku);
+
+        product_info.appendChild(product_text);
+        product_info.appendChild(img);
+        
+        product_info.insertAdjacentHTML('beforeend',block);
+        
+        product_text_email.appendChild(title_email);
+        product_text_email.appendChild(sku_email);
+        product_info_email.appendChild(product_text_email);
+        product_info_email.appendChild(img_email);
+
+         parent.appendChild(product_info);
+
+         parent_email.appendChild(product_info_email);
+         num_counter++;
+        
+      
+
+        
+         
+        
+          
+      }
+    }
+  }
+  
+ 
+  cart_info_btn();
+  
+  
+  local_storage();
+
+  localStorage.setItem('question_ans', question_ans1);
+  check_step();
+  var div1 = document.getElementsByClassName("choices_made_for_pathogen")[0];
+  var div2 = document.getElementsByClassName("choices_made_for_nopathogen")[0];
+  var div3 = document.getElementsByClassName("choices_made_for_protein")[0];
+
+  if(div1.style.display != "flex" && div2.style.display != "flex" && div3.style.display != "flex"){
+  insert_choices();
+  }
+  
+  localStorage.setItem('page_refreshed', 'yes');
+}
+//document.addEventListener('click', hide_all_drawers);
+function hide_all_drawers(){
+  var drawers = document.getElementsByClassName("drawer");
+  for (var i = 0; i < drawers.length; i++){
+    if(drawers[i].style.display == "block"){
+      drawers[i].style.display = "none";
+      var grand = drawers[i].parentElement;
+      var more = grand.getElementsByClassName("more");
+      more[0].style.display = "block";
+      //document.getElementById("overlay").style.display = "none";
+      // drawers[i].style.zIndex = "1";
+    }
+  
+  }
+  var viewbtn = document.getElementsByClassName("view_btn");
+  for (var j = 0; j < viewbtn.length; j++){
+    if(viewbtn[j].style.opacity == 0){
+      viewbtn[j].style.opacity = 1;
+    }
+  }
+}
+function more(elem){
+    elem.classList.add("more");
+    elem.style.opacity = 0;
+    var parent = elem.parentElement;
+    var drawer = parent.getElementsByClassName("drawer");
+    drawer[0].style.display = "block";
+    
+}
+function less(elem){
+  var parent = elem.parentElement;
+  parent.style.display = "none";
+  var grand = parent.parentElement;
+  var more = grand.getElementsByClassName("more");
+  more[0].style.opacity = 1;
+ 
+}
+function showthis(elem){
+  var parent = elem.parentElement; //drawer
+  var grand = parent.parentElement; //each_step
+
+  var product_item = grand.getElementsByClassName("product_item");
+  var temp = elem.innerHTML;
+  elem.innerHTML = product_item[0].innerHTML;
+  product_item[0].innerHTML = temp;
+  
+
+}
+
+function cart_info_btn(){
+  var cart_info = document.getElementsByClassName("cart_info");
+  for(var i = 0; i < cart_info.length;i++){
+    var select_field = cart_info[i].getElementsByTagName("select");
+    
+    var selected_opt = select_field[0].options[select_field[0].selectedIndex].getAttribute("cart");
+
+    var btn = cart_info[i].getElementsByClassName("morethanone");
+    for(var j = 0; j < btn.length; j++){   
+      var helper = btn[j].getElementsByTagName("input");
+      var selected_btn = helper[0].value;
+  
+      if(selected_btn == selected_opt){
+        btn[j].style.display = "block";
+        btn[j].classList.add("thiskit");
+      }
+    }
+  }
+}
+function change_select(elem){
+ 
+  var parent = elem.parentElement;
+  
+
+  var cart = elem.options[elem.selectedIndex].getAttribute("cart");
+  
+  var btn = parent.getElementsByClassName("morethanone");
+  for(var i = 0; i < btn.length; i++){
+    btn[i].style.display = "none";
+    btn[i].classList.remove("thiskit");
+    var btnvalue = btn[i].getAttribute("btnvalue");
+    if(btnvalue == cart){
+      btn[i].style.display = "block";
+      btn[i].classList.add("thiskit");
+    }
+  }
+}
+
+
+
+function hide_email_form(){
+  
+    document.getElementById("save_workflow").style.display = "none";
+  document.getElementsByClassName("workflow-sent")[0].style.display = "block";
+  
+  document.getElementById("mail2").play();
+  // setTimeout(function(){ document.getElementById("mail2").pause(); }, 3500);
+  document.getElementById("submits").click();
+  
+  
+}
+
+
+ var storage_saved = 'no';
+function local_storage(){
+
+  storage_saved = 'yes';
+
+  if(local_nopathogen == "false"){
+       localStorage.setItem('category', document.querySelector('input[name="category"]:checked').value);
+      localStorage.setItem('organism', document.querySelector('input[name="organism"]:checked').value);
+      localStorage.setItem('pathogen', document.querySelector('input[name="pathogen"]:checked').value);
+      localStorage.setItem('analyte', document.querySelector('input[name="analyte"]:checked').value);
+      localStorage.setItem('sample', document.querySelector('input[name="sample"]:checked').value);
+  }
+  else if (local_nopathogen == "nopathogen" && is_protein == "false"){
+      localStorage.setItem('analyte', document.querySelector('input[name="nopathogen_analyte"]:checked').value);
+      localStorage.setItem('sample', document.querySelector('input[name="nopathogen_sample"]:checked').value);
+      localStorage.setItem('organism', document.querySelector('input[name="nopathogen_organism"]:checked').value);
+      //localStorage.setItem('pathogen', document.querySelector('input[name="nopathogen_pathogen"]:checked').value);
+      
+      
+  }
+  else if (local_nopathogen == "nopathogen" && is_protein == "true"){
+      //localStorage.setItem('organism', document.querySelector('input[name="nopathogen_organism"]:checked').value);
+      localStorage.setItem('analyte', document.querySelector('input[name="nopathogen_analyte"]:checked').value);
+      localStorage.setItem('sample', document.querySelector('input[name="nopathogen_sample"]:checked').value);
+  }
+  else if (local_nopathogen == "true" && is_protein == "false"){
+      localStorage.setItem('organism', document.querySelector('input[name="nopathogen_organism"]:checked').value);
+      localStorage.setItem('pathogen', document.querySelector('input[name="nopathogen_pathogen"]:checked').value);
+      localStorage.setItem('analyte', document.querySelector('input[name="nopathogen_analyte"]:checked').value);
+      localStorage.setItem('sample', document.querySelector('input[name="nopathogen_sample"]:checked').value);
+  }
+  //console.log(document.querySelector('input[name="nopathogen_pathogen"]:checked').value);
+
+
+  //location.reload();
+}
+var already_loaded = "false";
+function retrieve_local_storage(){
+  document.getElementsByClassName("workflow-start")[0].style.display = "none";
+  var question_ans = localStorage.getItem('question_ans');
+  var l_is_protein = localStorage.getItem('l_is_protein');
+  var l_local_nopathogen = localStorage.getItem('l_local_nopathogen');
+  document.getElementsByClassName("test")[0].style.display = "none";
+  document.getElementsByClassName("test2")[0].style.display = "none";
+
+      if(already_loaded == "false"){
+        if(question_ans == "pathogen"){
+          var store_category = localStorage.getItem('category');
+          var store_organism = localStorage.getItem('organism');
+          var store_pathogen = localStorage.getItem('pathogen');
+          var store_analyte = localStorage.getItem('analyte');
+          var store_sample = localStorage.getItem('sample');
+          document.getElementById("wf_path").click();
+          document.getElementById(store_category).click();
+          document.getElementById(store_organism).click();
+          document.getElementById(store_pathogen).click();
+          document.getElementById(store_analyte).click();
+          document.getElementById(store_sample).click();
+          already_loaded = "true";
+        }
+        else if (question_ans=="micro" && l_is_protein == "false" && l_local_nopathogen != "true"){
+          var store_organism = "nopathogen_" + localStorage.getItem('organism');
+          var store_analyte = "nopathogen_" + localStorage.getItem('analyte');
+          var store_sample = "nopathogen_" + localStorage.getItem('sample');
+          document.getElementById("wf_micro").click();
+          document.getElementById(store_analyte).click();
+          document.getElementById(store_sample).click();
+          document.getElementById(store_organism).click();
+          
+          
+          already_loaded = "true";
+        }
+        else if (question_ans=="micro" && l_is_protein == "true"){
+          //var store_organism = "nopathogen_" + localStorage.getItem('organism');
+          var store_analyte = "nopathogen_" + localStorage.getItem('analyte');
+          var store_sample = "nopathogen_" + localStorage.getItem('sample');
+          //document.getElementById(store_organism).click();
+          document.getElementById("wf_micro").click();
+          document.getElementById(store_analyte).click();
+
+          document.getElementById(store_sample).click();
+          already_loaded = "true";
+
+        }
+
+        else if(question_ans=="micro" && l_local_nopathogen == "true"){
+          var store_organism = "nopathogen_" + localStorage.getItem('organism');
+          var store_pathogen = "nopathogen_" + localStorage.getItem('pathogen');
+          var store_analyte = "nopathogen_" + localStorage.getItem('analyte');
+          var store_sample = "nopathogen_" + localStorage.getItem('sample');
+          document.getElementById("wf_micro").click();
+          
+          
+          document.getElementById(store_analyte).click();
+          document.getElementById(store_sample).click();
+          document.getElementById(store_organism).click();
+   
+          var x = document.getElementById(store_pathogen);
+          
+          document.getElementById(store_pathogen).checked = true;
+          select_pathogen(document.getElementById(store_pathogen));
+          //document.getElementById(store_pathogen).click();
+          already_loaded = "true";
+        }
+       
+      }
+      
+
+}
+
+function show_help_div(){
+ document.getElementsByClassName("help_div")[0].style.display = "block";
+ document.getElementById("overlay-help").style.display="block";
+}
+function close_help_div(){
+  document.getElementsByClassName("help_div")[0].style.display = "none";
+   document.getElementById("overlay-help").style.display="none";
+}
+
+
+//to check if any of the steps are empty
+function check_step(){
+
+  var each_step = document.getElementsByClassName("each_step");
+  for(var i = 0; i < each_step.length; i++){
+    var product_item = each_step[i].getElementsByClassName("product_item")[0];
+    var no_pathogen_form = each_step[i].getElementsByClassName("no_pathogen_form")[0];
+    var step_div = each_step[i].getElementsByClassName("step_div")[0];
+    if(product_item == null && no_pathogen_form == null && local_nopathogen == "false"){
+      var sorry = document.createElement("p");
+      sorry.innerHTML = "Sorry we have no product available for step 1 at the moment";
+
+      step_div.appendChild(sorry);
+    }
+  }
+
+
+  
+}
+
+function myFunction() {
+  var x = document.getElementById("myLinks");
+  if (x.style.display === "block") {
+    x.style.display = "none";
+  } else {
+    x.style.display = "block";
+  }
+}
+
+var question_ans1 = "null";
+function show_workflow_question(elem){
+document.getElementsByClassName("workflow-start")[0].style.display = "none";
+  document.getElementsByClassName("workflow-question-0")[0].style.display = "none";
+  
+  if(elem == "pathogens"){
+  question_ans1 = "pathogen";
+  //localStorage.setItem('question_ans', 'pathogen');
+  document.getElementsByClassName("test")[0].style.display = "block";
+    setTimeout(() => {
+        document.getElementsByClassName("workflow-question")[0].style.display = "grid";
+    }, "3000");
+    
+  }
+  else if(elem =="microassays"){
+  question_ans1 = "micro";
+  //localStorage.setItem('question_ans', 'micro');
+  document.getElementsByClassName("test2")[0].style.display = "block";
+  setTimeout(() => {
+    document.getElementsByClassName("workflow-question-no-pathogen")[0].style.display = "grid";
+    }, "3000");
+  }
+}
+
+
+//function when an option is selected
+  let np_choices = [];
+  var is_protein = "false";
+  var is_nopathogen = "false";
+  function np_selectoption(elem,num,activenum,bool){
+  localStorage.setItem('l_local_nopathogen','false');
+  localStorage.setItem('l_is_protein','false');
+  var saving_workflow = document.getElementsByClassName("page-save2");
+  saving_workflow[0].style.display = "none";
+  document.getElementsByClassName("workflowcart")[0].classList.add("workflowcart2");
+  local_nopathogen = "nopathogen";
+  is_nopathogen = "true";
+
+
+    //this is for svg text
+      if(bool != "none"){
+      var string = elem.name + "-text1";
+      if(elem.name == "pathogen"){
+        document.getElementById(string).textContent = elem.getAttribute("nickname");
+          document.getElementById(string).style.animation = "textanim 2s";
+          document.getElementById(string).style.opacity = "1";
+      }
+      else{
+        document.getElementById(string).textContent = elem.nextElementSibling.innerHTML;
+        document.getElementById(string).style.animation = "textanim 2s";
+        document.getElementById(string).style.opacity = "1";
+      }
+      
+      
+      
+    }
+    //np_testing(num,activenum);
+    if(elem.value != "unavailable"){
+      document.getElementById(elem.name).classList.add("selected");
+    }
+    
+    var allselect = document.getElementsByClassName("np_select_option");
+    var not_available;
+    for(var i = 0; i< allselect.length; i++){
+      if(allselect[i].id != elem.name){
+        not_available = allselect[i].querySelectorAll("input");
+        for(var j = 0; j < not_available.length; j++){
+          if(not_available[j].value == "unavailable"){
+        
+            document.getElementById(elem.name).classList.remove("selected");
+            
+            not_available[j].nextElementSibling.style.display = "block";
+            
+          }
+          else{
+        
+
+            not_available[j].nextElementSibling.style.display = "none";
+            not_available[j].nextElementSibling.classList.remove("btn2");
+          }
+          
+        }
+      }
+    }
+
+    var elem_id = elem.name;
+    
+    
+    
+    
+    
+    if(elem_id == "nopathogen_analyte"){
+  
+      np_choices[0] = elem.value;
+    }
+    else if(elem_id == "nopathogen_sample"){
+     
+      np_choices[1] = elem.value;
+    }
+    else if(elem_id == "nopathogen_organism"){
+   
+      np_choices[2] = elem.value;
+    }
+    if ((1 in np_choices)) {         
+
+}
+
+    if (np_choices[0] == "Protein" && 1 in np_choices){
+     
+      localStorage.setItem('l_is_protein','true');
+      bool = true;
+      np_choices[2] = "na";
+      is_protein = "true";
+      
+      //np_testing(num,activenum);
+    }
+    else{
+      np_testing(num,activenum);
+    }
+    nopathogen_finding_in_db(elem.value);
+    
+
+    
+    if(bool == true){
+      np_generating_anim();
+    }
+  }
+    var pathogen_code = null;
+    function nopathogen_finding_in_db(selected){
+    
+    let entries = []; //main array tha will contain small arrays of all the db entries that go with the option selected
+    var np_data = {{np_data|json_encode()|raw}};
+    
+    var choiceslength = 0;
+    for(var p = 0; p < np_choices.length; p++){
+      if(np_choices[p] != null){
+        choiceslength++;
+      }
+    }
+    for(var j =0; j < np_data.length; j++){
+      var counter2 = 0;
+      for(var  i =0; i < np_choices.length;i++){
+     
+        // console.log(data[j][i]);
+        let entry = [];
+        if(np_choices[i] == np_data[j][i] || np_choices[i] == "unavailable"){
+          var x = j;
+          counter2++;
+          if(counter2 == choiceslength){
+            for(var b = 0; b < np_data[x].length;b++){
+              entry.push(np_data[x][b]);
+            }
+            entries.push(entry);
+          }
+          
+        }
+      }
+    }
+    
+    let choices_final = [];
+    for(var r = 0; r < np_choices.length;r++){
+      if(np_choices[r] != null && np_choices[r] != "" && np_choices[r] != "unavailable"){
+        choices_final.push(np_choices[r]);
+      }
+    }
+
+
+
+    let final = [];
+    for(var a = 0; a < entries.length;a++){
+      var counter = 0;
+      for(var c=0;c<entries[a].length;c++){
+        for(var p = 0; p < choices_final.length;p++){
+          
+          if(entries[a][c] == choices_final[p]){
+            
+            counter++;
+            
+            if(counter == choices_final.length){
+              final.push(entries[a]);
+            }
+          }
+        }
+      }
+    }
+
+    
+   
+   pathogen_code = final[0][3];
+      np_entries_loop(final);
+      
+    
+  }
+
+  let pathogens = [];
+  function finding_pathogens(elem){
+    
+    var workflow_ap = {{workflow_ap|json_encode()|raw}};
+    var count = 0; 
+    for(var i = 0; i < workflow_ap.length; i++){
+      
+      if(workflow_ap[i][2] == elem){
+        pathogens[count] = workflow_ap[i][1];
+        count++;
+      }
+    }
+    
+  }
+
+
+  function np_testing(num, elem){
+   
+    if(elem == "active-4"){
+      var first = document.getElementsByClassName(elem);
+    
+    for(var j = 0; j < first.length; j++){
+      var time = j * 500;
+      first[j].style.animation = "1.5s linear forwards colorme_fill";
+      first[j].style.animationDelay = time + "ms"; 
+         }
+    }
+    else{
+      var first = document.getElementsByClassName(elem);
+    
+    for(var j = 0; j < first.length; j++){
+      var time = j * 500;
+      first[j].style.animation = "1.5s linear forwards colorme";
+      first[j].style.animationDelay = time + "ms"; 
+         }
+    }
+    
+    var sliding = document.getElementsByClassName("np_sliding");
+    
+    var options = sliding[num-1].getElementsByClassName("options");
+    
+    var buttons = options[0].getElementsByClassName("btn2");
+    var button_l = buttons.length;
+    
+    for(var i = 0; i < buttons.length; i++){
+     
+      var time = button_l*100;
+      button_l--;
+      
+      buttons[i].style.animation = "250ms linear forwards buttons";
+      buttons[i].style.animationDelay = time+"ms";
+      
+    }
+    np_slide(num);
+
+  }
+
+    function np_slide(num){
+      moveleft = 1;
+      moveright = 1;
+      var slide = document.querySelectorAll(".np_sliding");
+      var leftval = 100*num;
+      for(var j = 0; j < slide.length; j++){
+        slide[j].style.left = "-"+leftval+"%";
+      }
+      
+     
+    }
+
+
+     function np_entries_loop(elem){
+
+
+    
+
+    var allselect = document.getElementsByClassName("np_select_option");
+   
+    for(var i = 0; i < allselect.length; i++){
+      var x = allselect[i].querySelectorAll("input");
+     
+      for(var j = 0; j < elem.length; j++){
+        for(var o = 0; o < x.length;o++){
+    
+            if(x[o].value == elem[j][i]){
+              
+              // x[o].disabled = false;
+              x[o].nextElementSibling.style.display = "block";
+              x[o].nextElementSibling.classList.add("btn2");
+            }
+        }
+      }
+    }
+    check_analyte();
+    if(window.innerWidth < 900){
+      var slider_wrapper = document.getElementsByClassName("slider-wrapper");
+    for(var all = 0; all < slider_wrapper.length; all++){
+      var options = slider_wrapper[all].getElementsByClassName("options");
+      options[0].classList.add("more_options");
+      var items = options[0].getElementsByClassName("btn2");
+      
+      
+      if(items.length > 3){
+        if(select_option_way != 'true'){
+            document.getElementsByClassName("next")[all].style.display = "inline";
+        } 
+      }
+      else{
+        
+        document.getElementsByClassName("next")[all].style.display = "none";
+      }
+    }
+    }
+    else{
+      var slider_wrapper = document.getElementsByClassName("slider-wrapper");
+      var options = slider_wrapper[1].getElementsByClassName("options");
+      options[0].classList.add("more_options");
+      var items = options[0].getElementsByClassName("btn2");
+      
+      
+      if(items.length > 3){
+        if(select_option_way != 'true'){
+        document.getElementsByClassName("next")[1].style.display = "inline";
+        }
+      }
+      else{
+       
+        document.getElementsByClassName("next")[1].style.display = "none";
+      }
+   }
+    
+      
+  }
+
+
+  var np_results = {{np_res|json_encode()|raw}};
+
+  //takes the code from the db table and find it the big all products db table
+  function np_display_results(){
+    
+    let results_array = [];
+    var np_data = {{np_data|json_encode()|raw}};
+
+    for(var i = 0; i < np_data.length; i++){
+      var count = 0;
+      //finding the results in data table
+      for(var j = 0; j < np_choices.length; j++){
+        if(np_data[i][j] == np_choices[j] || np_choices[j] == "unavailable"){
+          count++;
+        }
+      }
+
+      //if all choices are matched in data table
+      if(count == 3){
+        var code = np_data[i][3];
+        for(var p = 0; p < np_results.length; p++){
+          let results_entry = [];
+          var resulted_code = np_results[p][1];
+         
+          var code_array = resulted_code.split(" ");
+          
+          for(var q = 0; q < code_array.length; q++){
+           
+            
+            if(code_array[q] == code){
+              
+              results_entry.push(np_results[p][0]);
+              results_entry.push(np_results[p][2]);
+              results_entry.push(np_results[p][3]);
+              var val = results_entry[2];
+              // results_array[val].push(results_entry);
+              results_array.push(results_entry);
+            }
+            
+            
+          }
+        }
+      }
+    }
+    
+    np_helper1(results_array);
+  
+  }
+  let np_res = [];
+
+  
+
+  //get all the results that we need
+  function np_helper1(elem){
+
+  let step1 = [];
+  let step2 = [];
+  let step3 = [];
+  let step4 = [];
+  let s_entry = [];
+  //let np_res = [];
+  var counter1 = 0;
+  var counter2 = 0;
+  var counter3 = 0;
+  var counter4 = 0;
+    for(var i =0; i < elem.length;i++){
+      var val = elem[i][2];
+      if(val == 1){
+        
+        counter1++;
+        step1[0] = counter1;
+     
+        if(step1.includes(elem[i][0]) == false){
+          step1.push(elem[i][0]);
+        }
+        
+      }
+      else if(val == 2){
+        counter2++;
+        step2[0] = counter2;
+        if(step2.includes(elem[i][0]) == false){
+          step2.push(elem[i][0]);
+        }
+      }
+
+      
+    }
+
+    np_res.push(step1);
+    np_res.push(step2);
+    
+
+    makeboxes(np_res);
+    getproductinfo(np_res);
+    
+    
+  }
+
+    function np_generating_anim(){
+    document.getElementsByClassName("test2")[0].style.display = "none";
+    // var svg = document.getElementsByClassName("test");
+    // svg[0].style.zIndex = "0";
+    var eclipse = document.getElementsByClassName("generating-circle");
+    eclipse[0].classList.add("active1_generating");
+    // eclipse[0].classList.remove("active1");
+    
+    document.getElementsByClassName("generate-svg")[0].style.height = "auto";
+    var text = document.getElementsByClassName("generating-text");
+    text[0].classList.add("text-generating");
+    
+    // text[0].classList.remove("text-initialize");
+     
+    // text[0].style.animationPlayState === 'running';
+    var div = document.getElementsByClassName("workflow-div");
+    div[0].classList.add("opac_disappear");
+    setTimeout(function(){ div[0].style.display = "none"; }, 6000);
+    // settimeout({});div[0].style.display = "none";
+    var slide = document.getElementsByClassName("workflow-slide");
+    slide[0].style.display="none";
+
+    var div_end = document.getElementsByClassName("workflow-end");
+    div_end[0].style.display = "block";
+
+    // document.getElementById("enter").click();
+    var results_div = document.getElementsByClassName("results-div");
+    results_div[0].classList.add("opac_appear");
+    setTimeout(function(){ results_div[0].style.display = "block"; }, 5800);
+
+   
+
+
+    insert_choices();
+    already_loaded = "true";
+    finding_pathogens(pathogen_code);
+    np_display_results();
+    
+  }
+var nopathogen_results = "false";
+var local_nopathogen = "false";
+  function select_pathogen(elem){
+  is_nopathogen = "false";
+  local_nopathogen = "true";
+  localStorage.setItem('l_local_nopathogen','true');
+      let step4 = [];
+    let counter4 = 0;
+
+    var wf_np_results = {{workflow_np_results|json_encode()|raw}};
+
+    
+
+    
+      for(var i = 0; i < wf_np_results.length; i++){
+
+        if(wf_np_results[i][1] == elem.value){
+          counter4++;
+              step4[0] = 6;
+          step4.push(wf_np_results[i][0]);
+        }
+      }
+    
+
+    np_res.push(step4);
+
+    //np_generating_anim();
+    remove_elements();
+    makeboxes(np_res);
+    getproductinfo(np_res);
+  }
+  function remove_elements(){
+    
+      var product_items = document.querySelectorAll(".product_item");
+      for(var i = 0; i < product_items.length; i++){
+        product_items[i].remove();
+      }
+
+      var drawers = document.querySelectorAll(".drawer");
+      for(var i = 0; i < drawers.length; i++){
+        drawers[i].remove();
+      }
+
+      var view_btn = document.querySelectorAll(".view_btn");
+      for(var i = 0; i < view_btn.length; i++){
+        view_btn[i].remove();
+      }
+
+      var radios = document.querySelectorAll(".nopathogen_pathogen_radios");
+      for(var i = 0; i < radios.length; i++){
+        //radios[i].remove();
+        radios[i].style.display = "none";
+      }
+      document.getElementById("pathogen_question").style.display = "none";
+
+  }
+
+  function insert_choices(){
+
+if(is_nopathogen == "false"){
+
+    var category = localStorage.getItem('category');
+  var organism = localStorage.getItem('organism');
+  var sample = localStorage.getItem('sample');
+  var analyte = localStorage.getItem('analyte');
+  var pathogen = localStorage.getItem('pathogen');
+
+  document.getElementById("choice_category").innerHTML = category;
+  document.getElementById("choice_organism").innerHTML = organism;
+  document.getElementById("choice_sample").innerHTML = sample;
+  document.getElementById("choice_analyte").innerHTML = analyte;
+  document.getElementById("choice_pathogen").innerHTML = pathogen;
+  document.getElementsByClassName("choices_made_for_pathogen")[0].style.display = "flex";
+}
+else if(is_nopathogen == "true" && is_protein == "false"){
+  
+  var sample = localStorage.getItem('sample');
+  var analyte = localStorage.getItem('analyte');
+  var organism = localStorage.getItem('organism');
+
+  document.getElementById("choice_sample1").innerHTML = sample;
+  document.getElementById("choice_analyte1").innerHTML = analyte;
+  document.getElementById("choice_organism1").innerHTML = organism;
+  document.getElementsByClassName("choices_made_for_nopathogen")[0].style.display = "flex";
+}
+else if(is_nopathogen == "true" && is_protein == "true"){
+
+  var sample = localStorage.getItem('sample');
+  var analyte = localStorage.getItem('analyte');
+  document.getElementById("choice_sample2").innerHTML = sample;
+  document.getElementById("choice_analyte2").innerHTML = analyte;
+  document.getElementsByClassName("choices_made_for_protein")[0].style.display = "flex";
+}
+
+
+}
+
+function add_to_cart_2(elem) {
+    event.preventDefault(); // Stops form from submitting
+
+    // Run your custom function here
+ 
+    var x = elem.getAttribute("btnvalue");
+    myCustomFunction(x);
+  }
+
+  async function myCustomFunction(elem) {
+  popup_for_individual_kit();
+
+      const product_id_url = products.find(row => row[1] === elem)?.[2];
+         addProduct(elem, 1);
+        
+        try {
+        const res = await fetch('/add-to-cart/'+product_id_url+'/'+ elem, {
+          method: 'GET',
+          credentials: 'same-origin',
+        });
+
+        if (!res.ok) {
+          console.error('Failed to add product');
+        } else {
+          console.log('Added variation');
+        }
+      } catch (err) {
+        console.error('Error adding variation, err');
+      }
+        //const response = await fetch('/add-to-cart/'+btn_value1+'/1');
+        //const data = await response.json();
+        
+  }
+
+  function popup_for_individual_kit(){
+document.getElementsByClassName("popup_for_individual")[0].style.display = "block";
+  document.getElementById("overlay-popup_for_individual").style.display = "block";
+  document.getElementById("cart2").play();
+  var view_button = document.getElementsByClassName("view_btn");
+    for(var i = 0; i < view_button.length; i++){
+      view_button[i].style.zIndex = "1"; 
+    }
+  }
+  function close_popup_for_individual(){
+     document.getElementById("cart2").stop();
+    document.getElementsByClassName("popup_for_individual")[0].style.display = "none";
+  document.getElementById("overlay-popup_for_individual").style.display = "none";
+  var view_button = document.getElementsByClassName("view_btn");
+    for(var i = 0; i < view_button.length; i++){
+      view_button[i].style.zIndex = "3"; 
+    }
+  }
+</script>
+

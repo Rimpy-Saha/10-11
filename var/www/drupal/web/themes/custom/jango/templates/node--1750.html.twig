@@ -1,0 +1,549 @@
+<style>
+  .category {
+      line-height: 1.5;
+      font-size: 18px;
+      color: #004897;
+      display: inline-grid;
+      margin-bottom: 20px;
+      text-align: start;
+  }
+  .main_category {
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 10px;
+      color: #004897;
+  }
+  .subcategory {
+      font-size: 18px;
+      color:#5c6873;
+      display: inline-grid;
+      margin-bottom: 10px;
+  }
+  .subcategory a {
+      color: #5c6873;
+      text-decoration: none;
+      display: block; 
+      padding-bottom:6px;
+  }
+  .subcategory a:hover {
+      color: #004897;
+  }
+  .row {
+      display: flex;
+      flex-wrap: wrap;
+  }
+  .title_wrapper {
+      margin: auto 0;
+      text-align: left;
+      font-weight: bold;
+      font-size: 18px;
+  }
+  .pre-title {
+     
+      background-size: cover;
+      background-position: center;
+      color: white;
+      height: 60px; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 5px;
+      overflow: hidden;
+      position: relative;
+background-color: rgba(0, 0, 0, 0.5); 
+background-blend-mode: multiply;
+  }
+  .pre-title h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: bold;
+      color: white;
+      z-index: 2;
+      text-align: center;
+  }
+  .pre-title::after {
+      content: "";
+      position: absolute;
+      bottom: 10px;
+      width: 95%;
+      height: 3px;
+      background-color: white;
+      opacity: 0.8;
+      z-index: 1;
+  }
+  .center_text {
+      max-width: 1200px;
+      margin: 20px auto;
+      text-align: center;
+  }
+  .after_text {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-left: 55px;
+      padding-right: 55px;
+  }
+  .image {
+      background-image: url('/sites/default/files/images/icons/icons_product/dna.jpg');
+      background-size: cover;
+      background-position: center;
+      width: 50px;
+      height: 50px;
+  }
+  .feedback-bubble {
+      display: none;
+  }
+
+      .pre-title-img1{       background-image: url('/sites/default/files/images/icons/icons_product/test_icon/test.jpg');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      height: 60px; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 5px;
+      overflow: hidden;
+      position: relative;
+      background-color: rgba(0, 0, 0, 0.5); 
+      background-blend-mode: multiply;}
+
+      .pre-title-img2 {       background-image: url('/sites/default/files/images/icons/icons_product/test_icon/test2.jpg');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      height: 60px; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 5px;
+      overflow: hidden;
+      position: relative;
+      background-color: rgba(0, 0, 0, 0.5); 
+      background-blend-mode: multiply;}
+
+      .pre-title-img3{       background-image: url('/sites/default/files/images/icons/icons_product/test_icon/test3.jpg');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      height: 60px; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 5px;
+      overflow: hidden;
+      position: relative;
+      background-color: rgba(0, 0, 0, 0.5); 
+      background-blend-mode: multiply;}
+
+      .pre-title-img4 {       background-image: url('/sites/default/files/images/icons/icons_product/test_icon/test4.jpg');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      height: 60px; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 5px;
+      overflow: hidden;
+      position: relative;
+      background-color: rgba(0, 0, 0, 0.5); 
+      background-blend-mode: multiply;}
+
+
+
+      .pre-title-img1:hover, .pre-title-img2:hover, .pre-title-img3:hover, .pre-title-img4:hover {
+        background-color: rgba(0, 0, 0, 0.2);
+      }
+      
+.all-prod {
+margin-top:-10px;
+
+}
+
+
+.c-shop-cart-page-1 {
+grid-column: 2 / 3; 
+grid-row: 2; 
+}
+
+
+{#
+.form-actions .btn-medium {margin-top:0px;margin-right:0px;}
+.form-group.has-feedback {height:auto;}
+.views-view-responsive-grid.views-view-responsive-grid--horizontal{background: #F7F9FD;}
+#}
+
+.container0{
+background: #F7F9FD;
+padding-top:20px;
+}
+
+
+
+
+
+@media (max-width: 1200px) {
+.row {
+  flex-wrap: nowrap;
+}
+}
+
+@media (max-width: 765px) {
+.row {
+  display: block;
+}
+}
+
+.E-style {
+background-image: url('/themes/custom/jango/images/ex.png');
+background-repeat: no-repeat;
+background-position: top right 110px; 
+background-size: 32px 32px;
+display: block;
+}
+
+
+
+.L-style {
+
+display: block;
+background-image: url('/themes/custom/jango/images/eco.png');
+background-repeat: no-repeat;
+background-position: bottom right 10px; 
+background-size: 32px 32px;
+}
+
+
+@media (max-width: 1200px) {
+   
+
+.E-style {
+   
+    background-size: 0px 0px;
+   
+}
+
+
+
+.L-style {
+    
+    
+    background-size: 0px 0px;
+}
+
+
+
+}
+
+
+
+.italic-text{
+
+font-style: italic;
+
+
+}
+
+/* .E-style:hover {
+
+transform: scale(1.05); 
+transition: all 0.3s ease; 
+} */
+
+/* .L-style:hover {
+background: #3B7DBB; 
+transform: scale(1.05); 
+transition: all 0.3s ease; 
+} */
+
+
+
+.pre-services {
+background-image: url('/sites/default/files/images/icons/icons_product/test_icon/service.jpg'); 
+background-size: cover;
+background-position: center;
+color: white;
+height: 60px;
+display: flex;
+align-items: center;
+justify-content: center;
+border-radius: 5px;
+overflow: hidden;
+position: relative;
+background-color: rgba(0, 0, 0, 0.5);
+background-blend-mode: multiply;
+
+}
+
+.pre-services:hover {
+background-color: rgba(0, 0, 0, 0.2);
+
+}
+
+.pre-services h2 {
+margin: 0;
+font-size: 18px;
+font-weight: bold;
+color: white;
+z-index: 2;
+text-align: center;
+}
+
+
+.pre-services::after {
+content: "";
+position: absolute;
+bottom: 10px;
+width: 95%;
+height: 3px;
+background-color: white;
+opacity: 0.8;
+z-index: 1; }
+
+
+.best-seller-div{height: 30px;
+gap: 5px;
+display: flex;
+margin-bottom:10px;
+}
+.best-seller-div img {
+
+width:30px;
+
+
+
+.container.back {background-color: white !important;}
+
+}
+
+
+.best-seller-div p {
+color: green;
+margin-bottom: 0;
+}
+
+
+.col-12-md.all-prod {
+background-color: white !important;
+min-height: 200px; 
+}
+
+.promo-div {
+background: #ba1e2d;
+padding: 5px 20px;
+color: white;
+margin: 10px 0;
+display: flex;
+font-size: 15px;
+gap: 10px;
+align-items: center;
+}
+.promo-div p {margin:0px;}
+
+
+
+</style>
+
+<div class="center_text">
+    <h2 style="font-size:40px;font-weight:700;color: #5c6873;">All Products</h2>
+    <div class="after_title">
+        <p>
+            Get quick access to all Norgen's cutting edge research solutions - including 
+            <a href="#all-products-section" style="color: #004897; text-decoration: none;" class="scroll-trigger">
+            <span class="highlight"><span class="text-underline">Bestsellers</span></span>
+            </a>,
+            <a href="products/new" style="color: #004897; text-decoration: none;">New Launches</a> and <a href="/resources/complete-workflows" style="color: #004897; text-decoration: none;">Complete Workflows</a>.
+        </p>
+    </div>
+</div>
+<div class="container0">
+    <div class="container">
+        <div class="row">
+            <!-- Column 1 -->
+            <div class="col-lg-3"> 
+                <div class="category">
+                    <a href="/category/sample-collection-and-preservation" style="display: block; text-decoration: none; color: inherit;">
+                        <div class="pre-title pre-title-img1">
+                            <div class="title_wrapper">
+                                <h2>Collection & Preservation</h2>
+                            </div>
+                        </div>
+                    </a>                
+                    <div class="main_category"><a href="https:/category/cf-dna-cf-rna-blood">cf-DNA & cf-RNA from Blood</a></div>  
+                    <div class="main_category"><a href="/category/urine">Urine</a></div>
+                    <div class="main_category"><a href="/category/saliva">Saliva</a></div>
+                    <div class="main_category"><a href="/category/stool">Stool</a></div>
+                    <div class="main_category"><a href="/category/swab-based">Swab Collection and Preservation</a></div>
+                    <div class="main_category"><a href="/product/shipping-accessories-50-mailers">Shipping Accessories</a></div>
+                </div>
+            </div>
+
+            <!-- Column 2 -->
+            <div class="col-lg-3"> 
+                <div class="category">
+                    <a href="/category/purification-and-isolation" style="display: block; text-decoration: none; color: inherit;">
+                        <div class="pre-title pre-title-img2">
+                            <div class="title_wrapper">
+                                <h2>Purification and Isolation</h2>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="main_category">
+                        <a href="/category/rna-purification-kits">RNA</a>
+                    </div>
+                    <div class="subcategory">
+                        <a href="/category/cell-free-rna-purification-kits">Cell-Free RNA Purification Kits</a>
+                        <a href="/category/total-rna-purification-kits">Total RNA Purification Kits</a>
+                        <a href="/category/rna-clean-and-concentration">RNA Clean-Up and Concentration</a>
+                        <a href="/category/rna-purification-kits?extraclean=1"><span class="E-style"><span class="italic-text">EXTRA</span>Clean <br>(for small RNA NGS)</span></a>
+                    </div>
+                    <div class="main_category">
+                        <a href="/category/dna-isolation-kits">DNA</a>
+                    </div>
+                    <div class="subcategory">
+                        <a href="/category/cell-free-dna-isolation">Cell-Free DNA Isolation</a>
+                        <a href="/category/total-genomic-dna-isolation">Total Genomic DNA Isolation</a>
+                        <a href="/category/plasmid-dna-preparation">Plasmid DNA Preparation</a>
+                        <a href="/category/endotoxin-removal">Endotoxin Removal</a>
+                        <a href="/category/dna-clean-and-concentration">DNA Clean-Up and Concentration</a>
+                    </div>
+                    
+                    <div class="main_category">
+                        <a href="/category/exosome-purification-and-rna-isolation-kits">Exosomes</a>
+                    </div>
+                    <div class="subcategory">
+                        <a href="/category/intact-exosome-purification">Intact Exosome Purification</a>
+                        <a href="/category/rna-isolation-purified-exosomes">RNA Isolation from Purified Exosomes</a>
+                        <a href="/category/intact-exosome-purification-and-exosomal-rna-isolation">Exosomal Purification &amp; Exosomal RNA Isolation</a>
+                        <a href="/category/exosome-depletion">Exosome Depletion</a>
+                        <a href="/product/exosome-labeling-and-cleaning-kit">Exosome Labeling</a>
+                    </div>
+                    
+                    <div class="main_category">
+                        <a href="/category/protein-purification-kits">Protein</a>
+                    </div>
+                    <div class="subcategory">
+                        <a href="/category/inclusion-body-protein-purification">Inclusion Body Protein Purification</a>
+                        <a href="/category/protein-clean-concentration-and-endotoxin-removal">Protein Clean Concentration</a>
+                        <a href="/category/urine-protein-concentration">Urine Protein Concentration</a>
+                        <a href="/product/abundant-serum-protein-depletion-kit">Serum Protein Depletion</a>
+                        <a href="/product/proteospin-column-proteolytic-digestion-kit">Proteospin On-Column Digestion</a>
+                    </div>
+                    <div class="main_category">
+                        <a href="/category/multiple-analyte-kits">Multiple-Analyte Kits</a>
+                    </div>
+                    <div class="main_category">
+                        <a href="/category/virus-purification">Virus Purification</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column 3 -->
+            <div class="col-lg-3"> 
+                <div class="category">
+                    <a href="/category/lab-components" style="display: block; text-decoration: none; color: inherit;">
+                        <div class="pre-title pre-title-img4">
+                            <div class="title_wrapper">
+                                <h2>Lab Components</h2>
+                            </div>
+                        </div>
+                    </a>
+                        <div class="main_category">
+                        <a href="/category/dna-and-rna-ladders">DNA and RNA Ladders</a>
+                    </div>
+                    <div class="subcategory">
+                        <a href="/category/dna-ladders">DNA Ladders</a>
+                        <a href="/category/rna-ladders">RNA Ladders</a>
+                        <a href="/product/internal-lane-standard-60bp-600bp-rox-abi-genetic-analyzer">Internal Lane Standard</a>
+                    </div>
+                    
+                    <div class="main_category">
+                        <a href="/category/enzymes">Enzymes</a>
+                    </div>
+                    
+                    <div class="main_category">
+                        <a href="/category/pcr-reagents">PCR Reagents</a>
+                    </div>
+                    
+                    <div class="main_category">
+                        <a href="/product/ultrapure-nuclease-free-water">Ultrapure Nuclease-Free Water</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column 4 -->
+            <div class="col-lg-3">
+                <div class="category">
+                        <a href="/category/analysis" style="display: block; text-decoration: none; color: inherit;">
+                            <div class="pre-title pre-title-img3">
+                                <div class="title_wrapper">
+                                    <h2>Analysis & Services</h2>
+                                </div>
+                            </div>
+                        </a>
+                    
+                    <div class="main_category">
+                        <a href="/category/clean-concentration">Clean-Up and Concentration</a>
+                    </div>
+                    <div class="subcategory">
+                        <a href="/category/rna-clean-and-concentration">RNA Clean-Up and Concentration</a>
+                        <a href="/category/dna-clean-and-concentration">DNA Clean-Up and-Concentration</a>
+                        <a href="/category/protein-clean-concentration-and-endotoxin-removal">Protein Clean-Up &amp; Concentration</a>
+                    </div>
+                    
+                    <div class="main_category">
+                        <a href="/category/normalization-quantification">Normalization &amp; Quantification</a>
+                    </div>
+                    
+                    <div class="main_category">
+                        <a href="/category/ngs-library-preparation-kits">NGS Library Preparation Kits</a>
+                    </div>
+                    <div class="subcategory">
+                        <a href="/category/small-rna-library-prep-kits">Small RNA Library Prep Kits</a>
+                        <a href="/category/16s-rrna-library-prep-kits">16S RNA Library Prep Kits</a>
+                        <a href="/category/its-library-preparation-kits">ITS Library Preparation Kits</a> 
+                    </div>
+                    <div class="main_category">
+                        <a href="/category/pcr-based-detection">PCR-Based Detection</a>
+                    </div>
+                    <div class="subcategory">
+                        <a href="/category/pcr-based-detection?field_environmental_value=1&field_intended_use_value=All&field_storage_temperature_value=All&sort_bef_combine=field_sale_promotion_value_DESC">
+                        <span class="L-style">Lyophilized Kits <br>(No Dry-Ice Shipment)</span>
+                    </a>
+                    
+                        <a href="/category/human-pathogen-detection">Human</a>
+                        <a href="/category/plant-pathogen-detection">Plant</a>
+                        <a href="/category/food-and-milk-pathogen-detection">Food and Milk</a>
+                        <a href="/category/waterborne-pathogen-detection">Waterborne</a>
+                        <a href="/category/mycoplasma-detection">Mycoplasma</a>
+                        <a href="/category/quantified-dna-standards-pathogens">Quantified DNA Standards for Pathogens</a>
+                    </div>
+                    <div class="main_category"><a href="/services/dnarnaexosome-isolation">Isolation Services</a></div>
+                    <div class="main_category"><a href="/services/next-generation-sequencing">NGS Services</a></div>
+                    <div class="main_category"><a href="/services/contract-manufacturing-oem">Contract Manufacturing &amp; OEM</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-12-md all-prod">
+    <span id="all-products-section" style="position:relative;top:-100px;"></span>
+    <h3 style="    background: #ba1e2d;
+    margin-bottom: 10px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 22px;
+    padding-top: 10px;
+    color: white;
+    padding-bottom: 10px;">Best Sellers</h3>
+    {# {{ dump(drupal_view('ajax_filterable_products', 'block_6')) }}  #}
+    <div class="container back">
+    {{ drupal_view('ajax_filterable_products', 'block_8') }}
+    </div>
+
+
+    {#   <div{{ content_attributes }}>
+    {{ content }}
+    </div> #}
+</div>

@@ -1,0 +1,137 @@
+<div class="c-shop-login-register-1" style="padding:5% 0;">
+  <div class="row">
+    <div class="col-md-6" style="text-align:center;">
+      <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+      <dotlottie-player src="https://lottie.host/31b7ea34-dec1-4a45-ac46-8fcc7c56245d/24fV3coqIw.json" background="transparent" speed="1" style="width: 300px; height: 300px;margin:auto;" loop="" autoplay="" class="svg-element"></dotlottie-player>
+      {% if ('/fr/' in url)  %}
+      <h2>Vous n'êtes pas encore inscrit ?</h2>
+      <p style="font-size:14px;text-align:center;">Inscrivez-vous aujourd'hui pour recevoir <b>une réduction exclusive de 15 %</b> sur votre première commande. Rejoignez notre réseau et restez à la pointe de l'innovation biotechnologique.</p>
+      {% elseif ('/es/' in url)  %}
+      <h2>¿Aún no te has registrado?</h2>
+      <p style="font-size:14px;text-align:center;">Regístrese hoy para recibir un descuento <b>exclusivo del 15 %</b> en su primer pedido. Únase a nuestra red y manténgase a la vanguardia de la innovación biotecnológica.</p>
+      {% elseif ('/cn/' in url)  %}
+      <h2>你还没有注册吗？</h2>
+      <p style="font-size:14px;text-align:center;">立即註冊即可享有首筆訂單 15% 的獨家折扣。加入我們的網路並保持在生物技術創新的最前沿。</p>
+      {% elseif ('/de/' in url)  %}
+      <h2>Noch nicht angemeldet?</h2>
+      <p style="font-size:14px;text-align:center;">Registrieren Sie sich noch heute, um einen <b>exklusiven Rabatt von 15 %</b> auf Ihre erste Bestellung zu erhalten. Treten Sie unserem Netzwerk bei und bleiben Sie an der Spitze der Biotech-Innovation.</p>
+
+      {% elseif ('/ja/' in url)  %}
+      <h2>まだ登録していませんか？</h2>
+      <p style="font-size:14px;text-align:center;">今すぐ登録して、初回注文で 15% の特別割引を受けましょう。当社のネットワークに参加して、バイオテクノロジーのイノベーションの最前線に立ち続けましょう。</p>
+
+      {% else %}
+      <h2>Haven't signed up yet?</h2>
+      <p style="font-size:14px;text-align:center;">Register today to receive an <b>exclusive 15% discount</b> on your first order. Join our network and stay at the forefront of biotech innovation.</p>
+      {% endif %}
+      <div class="c-form-register">
+        {% if ('/fr/' in url)  %}
+        <a href="{{ url('user.register') }}" class="c-theme-link btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button js-form-submit form-submit">{{ 'Créez votre compte'|t }}</a>.
+        {% elseif ('/es/' in url)  %}
+        <a href="{{ url('user.register') }}" class="c-theme-link btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button js-form-submit form-submit">{{ 'Crea tu cuenta'|t }}</a>.
+        {% elseif ('/cn/' in url)  %}
+        <a href="{{ url('user.register') }}" class="c-theme-link btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button js-form-submit form-submit">{{ '创建您的帐户'|t }}</a>.
+        {% elseif ('/de/' in url)  %}
+        <a href="{{ url('user.register') }}" class="c-theme-link btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button js-form-submit form-submit">{{ 'Erstellen Sie Ihr Konto'|t }}</a>.
+
+        {% elseif ('/ja/' in url)  %}
+        <a href="{{ url('user.register') }}" class="c-theme-link btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button js-form-submit form-submit">{{ 'アカウントを作成する'|t }}</a>.
+
+
+        {% else %}
+        <a href="{{ url('user.register') }}" class="c-theme-link btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button js-form-submit form-submit">{{ 'Create Your Account'|t }}</a>.
+        {% endif %}
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="panel panel-default c-panel">
+        <div class="panel-body c-panel-body">
+          {% if ('/fr/' in url)  %}
+          <h1 style="text-align:center;font-size:30px;font-weight:600;">Vous avez oublié votre mot de passe ?</h1>
+          <div style="margin:5% 0;">
+          {{ rendered }}
+          </div>
+          <a href="https://norgenbiotek.com/fr/user/login">Retour à la connexion</a>
+          {% elseif ('/es/' in url)  %}
+          <h1 style="text-align:center;font-size:30px;font-weight:600;">¿Olvidaste tu contraseña?</h1>
+          <div style="margin:5% 0;">
+          {{ rendered }}
+          </div>
+          <a href="https://norgenbiotek.com/es/user/login">Volver a iniciar sesión</a>
+          {% elseif ('/cn/' in url)  %}
+          <h1 style="text-align:center;font-size:30px;font-weight:600;">忘记密码了吗？</h1>
+          <div style="margin:5% 0;">
+          {{ rendered }}
+          </div>
+          <a href="https://norgenbiotek.com/cn/user/login">重新登录</a>
+          {% elseif ('/de/' in url)  %}
+          <h1 style="text-align:center;font-size:30px;font-weight:600;">Passwort vergessen?</h1>
+          <div style="margin:5% 0;">
+          {{ rendered }}
+          </div>
+          <a href="https://norgenbiotek.com/de/user/login">Zurück zur Anmeldung</a>
+
+          {% elseif ('/ja/' in url)  %}
+          <h1 style="text-align:center;font-size:30px;font-weight:600;">パスワードをお忘れですか？</h1>
+          <div style="margin:5% 0;">
+          {{ rendered }}
+          </div>
+          <a href="https://norgenbiotek.com/ja/user/login">ログインに戻る</a>
+
+
+          {% else %}
+          <h1 style="text-align:center;font-size:30px;font-weight:600;">Forgot Your Password?</h1>
+          <div style="margin:5% 0;">
+          {{ rendered }}
+          </div>
+          <a href="https://norgenbiotek.com/user/login">Back To Login</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% if toggle_checkbox %}
+      <div class="col-md-6">
+        <div class="panel panel-default c-panel">
+          <div class="panel-body c-panel-body">
+            <div class="c-content-title-1">
+              <h3 class="c-left">
+                <i class="icon-user"></i>{{ 'Don\'t have an account yet?'|t }}</h3>
+              <div class="c-line-left c-theme-bg"></div>
+              <p>{{ 'Join us and enjoy shopping online today.'|t }}</p>
+            </div>
+            <div class="c-margin-fix">
+              {{ toggle_checkbox }}
+            </div>
+            <div class="c-form-register">
+              <a href="{{ url('user.register') }}" class="c-theme-link">{{ 'User Register Form'|t }}</a>.
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+#block-jango-primary-local-tasks{
+  display:none;
+}
+@media only screen and (max-width: 992px) {
+  .c-shop-login-register-1 > .row > div{
+    margin:5px 0 0;
+  }
+}
+@media only screen and (max-width: 315px) {
+  .svg-element{
+    width:100px !important;
+    height:100px !important;
+  }
+  .js-form-submit.form-submit{
+        width: auto;
+    text-wrap: balance;
+  }
+}
+.c-shop-login-register-1 .form-control.input-lg{
+  border-radius:4px !important;
+}
+</style>

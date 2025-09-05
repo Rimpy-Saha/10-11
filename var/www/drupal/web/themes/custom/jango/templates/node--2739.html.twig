@@ -1,0 +1,624 @@
+
+
+<style>
+  .main-banner{
+    height: 600px;
+    background-image: url(/sites/default/files/images/homepage-fr/niagara-falls-norgen-banner.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url('https://norgenbiotek.com/sites/default/files/images/home/Virology Lab_microscope-38-Edited.png');
+  }
+  .banner-text{
+          top: 50%;
+    transform: translateY(-50%);
+    position:relative;
+
+  }
+  .banner-text h1{
+    font-weight: 700;
+      color: #3f444a;
+      font-size: 55px;
+      line-height: 1.4;
+  }
+  .banner-btn{
+    background-color:#004897;
+      color: white;
+      font-weight: 700;
+      font-size: 22px;
+      /*width: 50%;*/
+          white-space: normal;
+  }
+
+  .cta-div{
+    display: flex;
+    gap:20px;
+    align-items: center;
+    margin-top: 7%;
+  }
+  .cta-div > a{
+    font-size: 22px;
+  }
+  hr.header-separator {
+    border-top: 0px;
+    margin-left: -15px;
+    margin-right: -15px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    height: 24px;
+    background: linear-gradient(90deg, #ec1d25,#004897,#0f6b7a);
+}
+
+.parent{
+  display: grid;
+  grid-template-columns:1fr 1fr;
+  gap:50px;
+  align-items: center;
+}
+.end-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5%;
+}
+.iso-div {
+    width: fit-content;
+    margin: auto;
+    float: none;
+}
+.iso-div >ul {
+    margin: 0 auto;
+    height: auto;
+    list-style: none;
+    display: flex;
+}
+.iso-div ul li img {
+    width: 100px;
+    float: right;
+}
+/*.img-child{
+  background-image: url(/sites/default/files/images/homepage-fr/Norgen-Building.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 140%;
+    background-position: center;
+}*/
+.text-child{
+  padding: 2% 10% 2% 0;
+  text-align:center;
+}
+.text-child p{
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.step-icon{
+  
+    border: 4px solid transparent;
+    width: 300px;
+    height: 300px;
+    border-radius: 200px;
+}
+#first-icon{
+  background: linear-gradient(to right, white, white), linear-gradient(to right, #EC1D25 , #662d91);
+    background-clip: padding-box, border-box;
+    background-origin: padding-box, border-box;
+}
+#second-icon{
+  background: linear-gradient(to right, white, white), linear-gradient(to right, #EC1D25 , #662d91, #004897, #3974b6);
+    background-clip: padding-box, border-box;
+    background-origin: padding-box, border-box;
+}
+#third-icon{
+  background: linear-gradient(to right, white, white), linear-gradient(to right, #004897, #3974b6);
+    background-clip: padding-box, border-box;
+    background-origin: padding-box, border-box;
+}
+.step-icon img{
+  padding: 13%;
+}
+.number{
+  font-size: 70px;
+    font-weight: 600;
+    display: flex;
+    gap:10px;
+}
+.number span{
+  font-size: 63px;
+  font-weight: 500;
+}
+.step-text{
+  display: flex;
+  align-items: center;
+  justify-content:center;
+}
+.workflow-parent{
+  display: flex;
+  align-items: center;
+  gap:10px;
+  justify-content: center;
+  margin:4% auto;
+}
+.step{
+  width: 300px;
+}
+.step-pause h3{
+  font-size: 70px;
+}
+.step-title{
+  font-size: 22px;
+  line-height: 1.3;
+  font-weight: 500;
+  text-align: center;
+  margin-top:20px;
+}
+.provide h2{
+      text-align: center;
+    font-weight: 700;
+}
+.blue-text{
+  color: #004897;
+}
+.red-text{
+  color: #EC1D25;
+}
+.provide{
+  text-align: center;
+  margin: 5% auto;
+  padding:0px 15px;
+}
+.img-child-research{
+  background-image: url(/sites/default/files/images/homepage-fr/next-gernation-sequencing-technician.webp);
+  /*background-image: url(/sites/default/files/images/homepage-fr/next-gernation-sequencing-technician.png);*/
+  background-repeat: no-repeat;
+    background-size: cover;
+    width: 45%;
+}
+.text-child-research{
+    padding: 2% 2%;
+}
+.text-child-research h3{
+  font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 8%;
+}
+
+.key-text ul li {
+    line-height: 2;
+    text-indent: 0.22em;
+    margin-left: -0.22em;
+    margin-bottom: -3px;
+    font-size: 22px;
+}
+
+.dnapoints li:before {
+    color: #004897;
+    font-size: 34px;
+    float: none;
+    margin-right: 21px;
+}
+.parent-research{
+  display: flex;
+  gap:50px;
+
+}
+.blue-bg{
+  background: #0048971f;
+}
+.contact-distributor{
+  width: 80%;
+  margin: auto;
+}
+.parent-contact{
+  display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+    align-items: center;
+        align-items: baseline;
+}
+.distributor{
+  display: flex;
+    flex-direction: column;
+    /* text-align: center; */
+    align-content: center;
+    margin: 5% auto;
+
+}
+.form h3{
+  font-size: 28px;
+    font-weight: 700;
+    color: #0f6B7A;
+}
+.distributor{
+  text-align: center;
+}
+.distributor h3{
+  font-size: 26px;
+    font-weight: 700;
+    color: #004897;
+}
+.distributor img{
+  margin: 5% auto;
+}
+.distributor button{
+      width: 50%;
+    margin: 5% auto;
+}
+.form button{
+  background-color: #0f6B7A;
+}
+.trusted h3{
+  font-size: 30px;
+    font-weight: 700;
+    color: #004897;
+    text-align: center;
+}
+.text-center{
+  margin: 3% auto;
+}
+.grey-bg{
+  background-color: #8080800a;
+}
+.trusted{
+  padding: 1.5% 0 0.01% 0;
+}
+.tag-btn{
+      width: auto;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 1.5% 4%;
+}
+.long-tag-btn{
+  width: auto;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 0.75% 3%;
+     white-space: normal;
+}
+.short-tag-btn{
+  width: auto;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 2.5% 7%;
+    margin-bottom: 30px;
+}
+.banner-btn:hover{
+  opacity: 0.7;
+  color: white;
+}
+.btn-primary:hover{
+  opacity: 0.7;
+  color: white;
+}
+/* Contact Form */
+#contact-form{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  justify-content: center;
+  gap: 1em 36px;
+  column-gap: 8px;
+  max-width:900px;
+  margin:auto;
+  margin-top:30px;
+  margin-bottom:30px;
+}
+#contact-form h3{
+  grid-column: 1 / 3;
+  /* font-weight: 700;
+  color: #0f6B7A; */
+  text-align:center;
+}
+#contact-form input{
+  border-radius: 24px;
+  padding: 0.5em 1em;
+  height:36px;
+}
+#contact-form textarea{
+  border-radius: 24px;
+  border: 1px solid #ccc;
+  padding: 0.5em 1em;
+  width:100%;
+  max-width:100%;
+}
+#contact-form .contact-msg-div{
+  grid-column: 1 / 3;
+}
+#contact-form input[type=submit]{
+  grid-column: 1 / 3;
+  margin:auto;
+  background-color: #0f6b7a;
+  font-weight:bold;
+  width:fit-content;
+  min-height:50px;
+}
+  .cat-grid{
+        display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 50px;
+    }
+    .cat-grid-card{
+      border: 1px solid #dfdfdf;
+      border-radius: 12px;
+      padding: 20px;
+      text-align:Center;
+    }
+    .cat-grid-card img{
+    width:200px;
+    }
+    .container:before{
+      display:none;
+    }
+@media only screen and (max-width: 1000px){
+    .parent-contact{
+      grid-template-columns: auto;
+      margin-top: 5%;
+    }
+    .distributor button{
+      width: auto;
+    }
+    }
+    @media only screen and (max-width: 880px){
+    .workflow-parent{
+      flex-direction: column;
+      gap:105px;
+    }
+    .step-pause{
+      transform: rotate(90deg);
+    }
+    }
+ @media only screen and (max-width: 800px){
+  .cat-grid{
+    grid-template-columns:auto;
+  }
+    .parent{
+    gap:0;
+      grid-template-columns:auto;
+    }
+    
+    .text-child{
+      padding: 5%;
+    }
+    .parent-research{
+      flex-direction: column;
+      gap:0;
+    }
+    .img-child-research{
+    /* background-position: right; */
+    height: 600px;
+    width: 100%;
+    }
+    .text-child-research {
+      padding: 5%;
+    }
+    }
+ @media only screen and (max-width: 690px){
+    .banner-text {
+      float: none;
+      padding: 5%;
+      background: #ffffffa6;
+       margin: auto; 
+      width: 100%;
+  }
+    }
+
+  @media only screen and (max-width: 400px){
+    .banner-text h1{
+      font-size: 42px;
+      overflow-wrap: break-word;
+    }
+    #contact-form input{
+      width: 90%;
+    }
+    }
+    @media only screen and (max-width: 300px){
+    .step-icon{
+      width: 150px;
+      height: 150px;
+      margin: auto;
+    }
+    .step-text{
+      flex-direction: column;
+    }
+    #contact-form{
+      display: block;
+    }
+    }
+    .step-pause img{
+      width: 100%;
+    }
+    @media only screen and (max-width: 535px) and (max-height: 721px){
+      .main-banner {
+        height: auto;
+      }
+      .cta-div {
+
+        flex-direction: column;
+    }
+    .banner-text h1 {
+        font-size: 28px;
+    }
+    .banner-btn {
+        width: 100%;
+        font-size: 14px !important;
+      }
+      .cta-div > a {
+        font-size: 14px;
+    }
+    }
+  
+</style>
+
+<section class="main-banner">
+  <div class="container banner-text">
+    <h1>Der Weltmarktführer in <br> der Probenvorbereitung</h1>
+    <div class="cta-div">
+      <a class="primary btn banner-btn" href="/de/Top-Produkte">Unsere Top-Produkte</a>
+      <!--<a href="/fr/trouver-un-distributeur">Trouver un distributeur</a>-->
+    </div>
+  </div>
+</section>
+<section style="padding:100px 0;">
+  <div class="container">
+    <div class="bounceInUp c-content-title-1 c-title wow" style="visibility: visible; animation-name: bounceInUp;">
+           <h2 class="c-center c-font">Top-Produkte</h2>
+            <div class="c-line-center c-bg-blue"></div>
+            <p class="c-center">Wir haben es uns zur Aufgabe gemacht, maßgeschneiderte Forschungserfahrungen für unsere Kunden zu schaffen, indem wir innovative Lösungen anbieten, die zu neuen Entdeckungen inspirieren.</p>
+        </div>
+    
+    <div class="cat-grid" style="margin:50px 0;">
+      <a class="cat-grid-card" href="/de/Top-Produkte#samplecollection" target="_blank">
+      <div >
+        <img src="/sites/default/files/images/homepage-fr/sample-collection-icon_Gradient-01.svg">
+        <hr>
+        <div class="step-text">
+          <p class="step-title">Probenentnahme und -konservierung</p>
+        </div>
+      </div>
+      </a>
+      <a class="cat-grid-card" href="/de/Top-Produkte#purificationisolation" target="_blank">
+      <div >
+        <img src="/sites/default/files/images/homepage-fr/isolation-purification_Gradient-01.svg">
+        <hr>
+        <div class="step-text">
+          <p class="step-title">Isolierung und Aufreinigung</p>
+        </div>
+      </div>
+      </a>
+      <a  class="cat-grid-card" href="/de/Top-Produkte#diagnostic" target="_blank">
+      <div >
+        <img src="/sites/default/files/images/homepage-fr/molecular-diagnostics.svg">
+        <hr>
+        <div class="step-text">
+          <p class="step-title">Molekulare Diagnostik</p>
+        </div>
+      </div>
+      </a>
+    </div>
+    <div style="text-align:center;margin:20px;">  
+      <a href="/de/Top-Produkte" class="center btn btn-primary long-tag-btn" role="button" style="width:auto;font-size:20px;">Unsere Top-Produkte anzeigen</a>
+    </div>
+  </div>
+</section>
+
+
+<section class="research" style="padding:100px 0;">
+  <div class="parent-research container">
+    <div class="img-child-research">
+      <!-- <img src="https://norgenbiotek.com/sites/default/files/images/Chemical-Clean-Room_Oct%2005_21_10.jpg"> -->
+    </div>
+    <div class="text-child-research">
+      <div class="bounceInUp c-content-title-1 c-title wow" style="visibility: visible; animation-name: bounceInUp;">
+            <h2 class="c-left c-font">Beschleunigen Sie Ihre Forschung mit unseren umfassenden Labordienstleistungen</h2>
+            <div class="c-line-left c-bg-blue"></div>
+          </div>
+      <!--<h3><span class="blue-text">Accélérez votre recherche grâce<br> à nos</span><span class="red-text"> services de laboratoire complets</span></h3>-->
+      <div class="dnapoints key-text">
+      <ul>
+        <li>Sequenzierung der nächsten Generation</li>
+        <li>Fortgeschrittene Bioinformatik</li>
+        <li>RNA-/DNA-/Exosomen-Isolierung</li>
+        <li>Auftragsfertigung</li>
+      </ul>
+    </div>
+      <a href="/de/Dienstleistungen" class="center btn btn-primary short-tag-btn" role="button" style="width:auto;font-size:20px;">Mehr erfahren</a>
+    </div>
+  </div>
+</section>
+
+<section class="trusted grey-bg">
+  <div class="bounceInUp c-content-title-1 c-title wow" style="visibility: visible; animation-name: bounceInUp;">
+        <h2 class="c-center c-font">Unsere treuen Kunden auf der ganzen Welt</h2>
+        <div class="c-line-center c-bg-blue"></div>
+    </div>
+  <div id="block-block-17" class="block block-block title text-center" data-background-width="16000" data-background-height="900" data-background-ratio="0.5">
+      <div class="inner"></div>
+      <div id="Carouselclients" class="carousel slide carousel-fade1" data-ride="carousel" data-interval="4500" data-pause="hover">
+        <!--<ol class="carousel-indicators car-new">
+          <li data-target="#Carouselclients" data-slide-to="0" class="active" style=" border: solid #1A3C93 8px;" ></li>
+          <li data-target="#Carouselclients" data-slide-to="1" style=" border: solid #1A3C93 8px;"></li>
+        </ol>-->
+        <div class="carousel-inner carousel-inner-feat" style="width: 100%!important">
+          <div class="item">
+            <div class="row">
+              {# <div class="col-xs-4 col-md-2 our-customers"><img class="lazy" src="/sites/default/files/services/service-customer/harvard.png" data-src="/sites/default/files/services/service-customer/harvard.png" srcset="/sites/default/files/services/service-customer/harvard.png 300w, /sites/default/files/services/service-customer/harvard-half.png 150w" alt="Harvard University"></div> #}
+<!--               <div class="col-xs-4 col-md-2 our-customers "><img class="lazy" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="/sites/default/files/services/service-customer/SVGs/nimh.svg"  alt="NIH Health and Sciences"></div>
+ -->              <div class="col-xs-6 col-md-3 our-customers"><img class="lazy" src="/sites/default/files/services/service-customer/SVGs/roswell.svg" data-src="/sites/default/files/services/service-customer/SVGs/roswell.svg" alt="Roswell Park Cancer Research"></div>
+              <div class="col-xs-6 col-md-3 our-customers"><img class="lazy" src="/sites/default/files/services/service-customer/SVGs/sinai.svg" data-src="/sites/default/files/services/service-customer/SVGs/sinai.svg" alt="Mount Sinai Beth Israel"></div>
+              <div class="col-xs-6 col-md-3 our-customers"><img class="lazy" src="/sites/default/files/services/service-customer/SVGs/mayo.svg" data-src="/sites/default/files/services/service-customer/SVGs/mayo.svg" alt="Mayo Clinic"></div>
+              <div class="col-xs-6 col-md-3 our-customers "><img class="lazy" src="/sites/default/files/services/service-customer/SVGs/vineland.svg" data-src="/sites/default/files/services/service-customer/SVGs/vineland.svg" alt="Vineland Research and Innovation Centre"></div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="row">
+              <div class="col-xs-4 col-md-2 our-customers "><img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/brainstorm.png" data-src="/sites/default/files/services/service-customer/brainstorm.png" alt="Brainstorm Cell Therapeutics"></div>
+              <div class="col-xs-4 col-md-2 our-customers "><img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/SVGs/bwh.svg" data-src="/sites/default/files/services/service-customer/SVGs/bwh.svg" alt="Brigham and Women's Hospital"></div>
+              <div class="col-xs-4 col-md-2 our-customers "><img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/jefferson.png" data-src="/sites/default/files/services/service-customer/jefferson.png" srcset="/sites/default/files/services/service-customer/jefferson.png 300w, /sites/default/files/services/service-customer/jefferson-half.png 150w" alt="Thomas Jefferson University"></div>    
+              <div class="col-xs-4 col-md-2 our-customers "><img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/SVGs/guelph.svg" data-src="/sites/default/files/services/service-customer/SVGs/guelph.svg" alt="University of Guelph"></div>   
+              <div class="col-xs-4 col-md-2 our-customers "><img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/planck.png" srcset="/sites/default/files/services/service-customer/planck.png 300w, /sites/default/files/services/service-customer/planck-half.png 150w" alt="Max Planck Institute for Medical Research"></div>   
+              <div class="col-xs-4 col-md-2 our-customers "><img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/queens.png" data-src="/sites/default/files/services/service-customer/queens.png" srcset="/sites/default/files/services/service-customer/queens.png 300w, /sites/default/files/services/service-customer/queens-half.png 150w" alt="Queen's University"></div>
+            </div>
+          </div>
+          <div class="item active">
+            <div class="row">
+              <div class="col-xs-4 col-md-2 our-customers "><img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/SVGs/usda.svg" data-src="/sites/default/files/services/service-customer/SVGs/usda.svg" alt="United States Department of Agriculture"></div>
+              <div class="col-xs-4 col-md-2 our-customers "><img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/warsaw.png" data-src="/sites/default/files/services/service-customer/warsaw.png" alt="customer"></div>
+              <div class="col-xs-4 col-md-2 our-customers "><img class="University of Warsaw" loading="lazy" src="/sites/default/files/services/service-customer/zenbio.png" data-src="/sites/default/files/services/service-customer/zenbio.png" alt="ZenBio"></div>  
+              <div class="col-xs-4 col-md-2 our-customers "><img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/maryland.png" data-src="/sites/default/files/services/service-customer/maryland.png" srcset="/sites/default/files/services/service-customer/maryland.png 300w, /sites/default/files/services/service-customer/maryland-half.png 150w" alt="University of Maryland School of Medicine"></div>    
+              <div class="col-xs-4 col-md-2 our-customers "><img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/SVGs/biodesix.svg" data-src="/sites/default/files/services/service-customer/SVGs/biodesix.svg" alt="Biodesix"></div>
+              <div class="col-xs-4 col-md-2 our-customers "><img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/magee.png" data-src="/sites/default/files/services/service-customer/magee.png" alt="MaGee Women's Research Institute"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+
+
+
+<section class="aboutus" style="padding:100px 0;">
+
+  <div class="parent container">
+    <div class="img-child">
+      <img src="https://norgenbiotek.com/sites/default/files/images/CEO-Dr-Haj-Ahmad-Norgen-Biotek (1).webp">
+    </div>
+    <div class="text-child">
+      <div class="bounceInUp c-content-title-1 c-title wow" style="visibility: visible; animation-name: bounceInUp;">
+            <h2 class="c-center c-font">Über</h2>
+            <div class="c-line-center c-bg-blue"></div>
+        </div>
+      <p><strong>Norgen Biotek Corp.</strong> ist ein nach ISO 9001, ISO 13485 und ISO 15189 Plus TM zertifiziertes, voll integriertes kanadisches Biotechnologieunternehmen, das sich auf die Entwicklung von Produkten für die Probenentnahme, -aufbereitung und -erkennung sowie auf die Bereitstellung umfassender Forschungsdienstleistungen für die wissenschaftliche Gemeinschaft konzentriert.</p>
+      <p>Wir haben es uns zur Aufgabe gemacht, maßgeschneiderte Forschungserfahrungen für unsere Kunden zu schaffen, indem wir innovative Lösungen anbieten, die zu neuen Entdeckungen inspirieren.</p>
+      <div class="iso-div">
+              <ul>
+                <li><a href="https://norgenbiotek.com/sites/default/files/about/FM_547994.pdf"><img class="lazy" src="/sites/default/files/about/ISO-13485.svg" data-src="/sites/default/files/about/ISO-13485.svg" alt="ISO 13485 Seal"></a></li>
+                <li><a href="https://norgenbiotek.com/sites/default/files/about/FM_547995.pdf"><img class="lazy" src="/sites/default/files/about/ISO-9001.svg" data-src="/sites/default/files/about/ISO-9001.svg" alt="ISO 13485 Seal"></a></li>
+                <li><a href="https://norgenbiotek.com/sites/default/files/about/15189.pdf"><img class="lazy" src="/sites/default/files/about/ISO-15189.svg" data-src="/sites/default/files/about/ISO-15189.svg" alt="ISO 15189 Seal"></a></li>
+              </ul>
+          </div>
+      <div class="end-div">
+            <a href="/de/Über" class="center btn btn-primary tag-btn" role="button" style="width:auto;font-size:20px;">Mehr erfahren</a>
+            
+        </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<!--<section class="contact-distributor">
+  <div class="parent-contact">
+  <div class="form">
+    <h3>Contacter Norgen Biotek Corp. aujourd'hui</h3>
+     <div class="form-container" id="contacter-norgen-container">
+            {{ contacter_norgen }}
+          </div>
+  </div>
+  <div class="distributor">
+    <h3>Trouver un distributeur dans votre région</h3>
+    <img src="/sites/default/files/images/homepage-fr/norgen-distributor-map.png">
+    <a class="primary btn-primary btn contact-btn" href="fr/trouver-un-distributeur">Trouver un distributeur</a>
+  </div>
+</div>
+</section>-->
+

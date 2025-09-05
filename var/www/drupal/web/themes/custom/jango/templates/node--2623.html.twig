@@ -1,0 +1,612 @@
+
+
+{#
+/**
+* @file
+* Default theme implementation to display a node.
+*
+* Available variables:
+* - node: The node entity with limited access to object properties and methods.
+* Only method names starting with "get", "has", or "is" and a few common
+* methods such as "id", "label", and "bundle" are available. For example:
+* - node.getCreatedTime() will return the node creation timestamp.
+* - node.hasField('field_example') returns TRUE if the node bundle includes
+* field_example. (This does not indicate the presence of a value in this
+* field.)
+* - node.isPublished() will return whether the node is published or not.
+* Calling other methods, such as node.delete(), will result in an exception.
+* See \Drupal\node\Entity\Node for a full list of public properties and
+* methods for the node object.
+* - label: (optional) The title of the node.
+* - content: All node items. Use {{ content }} to print them all,
+* or print a subset such as {{ content.field_example }}. Use
+* {{ content|without('field_example') }} to temporarily suppress the printing
+* of a given child element.
+* - author_picture: The node author user entity, rendered using the "compact"
+* view mode.
+* - metadata: Metadata for this node.
+* - date: (optional) Themed creation date field.
+* - author_name: (optional) Themed author name field.
+* - url: Direct URL of the current node.
+* - display_submitted: Whether submission information should be displayed.
+* - attributes: HTML attributes for the containing element.
+* The attributes.class element may contain one or more of the following
+* classes:
+* - node: The current template type (also known as a "theming hook").
+* - node--type-[type]: The current node type. For example, if the node is an
+* "Article" it would result in "node--type-article". Note that the machine
+* name will often be in a short form of the human readable label.
+* - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+* teaser would result in: "node--view-mode-teaser", and
+* full: "node--view-mode-full".
+* The following are controlled through the node publishing options.
+* - node--promoted: Appears on nodes promoted to the front page.
+* - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+* teaser listings.
+* - node--unpublished: Appears on unpublished nodes visible only to site
+* admins.
+* - title_attributes: Same as attributes, except applied to the main title
+* tag that appears in the template.
+* - content_attributes: Same as attributes, except applied to the main
+* content tag that appears in the template.
+* - author_attributes: Same as attributes, except applied to the author of
+* the node tag that appears in the template.
+* - title_prefix: Additional output populated by modules, intended to be
+* displayed in front of the main title tag that appears in the template.
+* - title_suffix: Additional output populated by modules, intended to be
+* displayed after the main title tag that appears in the template.
+* - view_mode: View mode; for example, "teaser" or "full".
+* - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+* - page: Flag for the full page state. Will be true if view_mode is 'full'.
+* - readmore: Flag for more state. Will be true if the teaser content of the
+* node cannot hold the main body content.
+* - logged_in: Flag for authenticated user status. Will be true when the
+* current user is a logged-in member.
+* - is_admin: Flag for admin user status. Will be true when the current user
+* is an administrator.
+*
+* @see template_preprocess_node()
+*
+* @ingroup themeable
+*/
+#}
+
+<article{{attributes}}>
+
+  {{ title_prefix }}
+  {% if label and not page %}
+    <h2{{title_attributes}}>
+      <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+    </h2>
+  {% endif %}
+  {{ title_suffix }}
+
+  <div{{content_attributes}}>
+    {{ content.body }}
+  </div>
+
+</article>
+
+
+      <style>
+        table.box-content {
+          margin: auto auto;
+          border-collapse: separate;
+          border-spacing: 1em 0px;
+          border: none
+        }
+
+        table.box-content td:first-child {
+          text-align: left;
+        }
+
+        table.box-content td:last-child {
+          text-align: right;
+        }
+
+        .row.phone-email {
+          border-bottom: 1px solid #eaf0f6;
+        }
+
+        table.box-content td:first-child,
+        table.box-content td:last-child {
+          border: none;
+          padding: 0;
+        }
+
+        @media only screen and (max-width:380px) {
+
+          table.box-content td,
+          table.box-content td:first-child,
+          table.box-content td:last-child {
+            display: block;
+            text-align: center;
+          }
+        }
+
+        .parent-contact {
+          display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+    align-items: center;
+    align-items: baseline;
+        }
+
+        .distributor {
+          display: flex;
+          flex-direction: column;
+          /* text-align: center; */
+          align-content: center;
+          margin: 5% auto;
+
+        }
+
+        .form h3 {
+          font-size: 28px;
+          font-weight: 700;
+          color: #0f6B7A;
+        }
+
+        .distributor {
+          text-align: center;
+        }
+
+        .distributor h3 {
+          font-size: 26px;
+          font-weight: 700;
+          color: #004897;
+        }
+
+        .distributor img {
+          margin: 5% auto;
+        }
+
+        .distributor button {
+          width: 50%;
+          margin: 5% auto;
+        }
+
+        .form button {
+          background-color: #0f6B7A;
+        }
+
+        /* Contact Form */
+        #contact-form {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          justify-content: center;
+          gap: 1em 36px;
+          column-gap: 8px;
+          max-width: 900px;
+          margin: auto;
+          margin-top: 30px;
+          margin-bottom: 30px;
+        }
+
+        #contact-form h3 {
+          grid-column: 1 / 3;
+          /* font-weight: 700;
+    color: #0f6B7A; */
+          text-align: center;
+        }
+
+        #contact-form input {
+          border-radius: 24px;
+          padding: 0.5em 1em;
+          height: 42px;
+        }
+
+        #contact-form textarea {
+          border-radius: 24px;
+          border: 1px solid #ccc;
+          padding: 0.5em 1em;
+          width: 100%;
+          max-width: 390px;
+          max-height: 300px;
+        }
+
+        #contact-form .contact-msg-div {
+          grid-column: 1 / 3;
+        }
+
+        #contact-form input[type=submit] {
+          grid-column: 1 / 3;
+          margin: auto;
+          background-color: #0f6b7a;
+          font-weight: bold;
+          width: fit-content;
+          min-height: 50px;
+        }
+
+        @media only screen and (max-width: 1000px) {
+          .parent-contact {
+            grid-template-columns: auto;
+            margin-top: 5%;
+          }
+
+          .distributor button {
+            width: auto;
+          }
+        }
+
+        @media only screen and (max-width: 400px) {
+
+          #contact-form input {
+            width: 90%;
+          }
+        }
+
+        /* new styles */
+
+        .btn-primary {
+          border-radius: 36px;
+          background-color: #004897;
+          border-color: #004897;
+          padding: 12px 20px;
+        }
+
+        table.box-content tr:hover{
+          background: white;
+        }
+
+        .fa-4x{
+          transform: scaleX(-1);
+          color:black;
+        }
+
+        label {
+          width: 100%;
+        }
+
+        @media only screen and (max-width: 768px){
+          .dexp-menu-mega, #left-side-resource, #searchInput, .cont-container, .work-flow-img img, .cat-image, .video-js {
+              width: 100%;
+          }
+        }
+/*breadcrumb-style*/
+.page-title{
+    font-size:36px;
+  }
+    h1{
+        font-weight: bold;
+    }
+    .key-text{
+        margin-top:0px;
+        margin-bottom:0px;
+    }
+    #section-main-content .container {
+        width: 100% !important;
+    }
+    .region-breadcrumb{
+      display:none;
+    }
+    #section-main-content .header.container{
+      background-image:url('https://norgenbiotek.com/sites/default/files/cat-banner.jpg');
+      background-size:cover;
+      background-position-x: left;
+      background-position: top;
+      margin-left:-15px;
+      margin-right:-15px;
+      width:auto !important;
+    }
+    #section-main-content section{
+      padding:3em 0;
+    }
+    section#key-points-and-lead-gen, section#text-section{
+      background-color: #f9f9f9;
+    }
+    hr.header-separator{
+      border-top:0px;
+      margin-left:-15px;
+      margin-right:-15px;
+      margin-top:0px;
+      margin-bottom:0px;
+      height:24px;
+      background:linear-gradient(90deg, #ec1d25,#004897,#0f6b7a)
+    }
+    .flex{
+      display:flex;
+    }
+    .flex-col{
+      display:flex;
+      flex-direction:column;
+      justify-content:end;
+      flex:1;
+      margin-left:-15px;
+      margin-right:-15px;
+      margin-top:max(10vh, 1em);
+      margin-bottom:20px;
+    }
+    .rnapoints .key-text{
+      background-color:#e5ecf4;
+      padding:2em;
+      margin:10px 0px;
+    }
+    .shop-container{
+      max-width:1920px;
+      margin:auto;
+    }
+
+        
+    /* Header App Note Download */
+    .data-container{
+        /* position: absolute; */
+        width: calc(100% - 2rem);
+        bottom: -17rem;
+        background-color: #000000cc;
+        /*max-width: 1280px;*/
+        /* max-width:700px; */
+        margin: auto;
+        padding: 1em;
+        text-align:left;
+        box-shadow: 0 0 5px 0;
+    }
+    
+    .inner_content_content_type{
+        color:white;
+        font-weight:600 !important;
+        font-size:18px !important;
+        padding-bottom:0.2% !important;
+    }
+    
+    .inner_content_release_date_and_last_updated_date{
+        color:white;
+        display: inline-block;
+    }
+    
+    .inner_content_title{
+        color:white;
+        font-size: max(1vw, 28px) !important;
+        font-weight:600 !important;
+        display:inline-block;
+    }
+    
+    .fa-download{
+        padding-right:10px;
+    }
+  
+
+    #key-points-and-lead-gen .vd-wrapper{
+      display: flex;
+        align-items: center;
+    }
+
+    /* Page Specific For Category Pages */
+    .region-pagetitle {
+        display: none;
+    }
+    .img-header,
+    .sticky-submenu,
+    .sticky-submenu.isSticky {
+        margin: 0 -15px;
+        width: calc(100% + 30px);
+    }
+    .img-header {
+        background-image: url(/sites/default/files/images/rna-bkg.jpg);
+    }
+    .vd-wrapper.row{
+        margin:1em auto;
+    }
+    .header.container {
+      background-image: url(https://norgenbiotek.com/sites/default/files/cat-banner.jpg);
+      background-size: cover;
+      background-position-x: left;
+      background-position: top;
+      margin-left: -15px;
+      margin-right: -15px;
+      width: auto !important;
+  }
+  
+    @media (min-width: 768px){
+        .vd-wrapper {
+            width: 750px;
+        }
+    }
+    @media (min-width: 992px){
+        .vd-wrapper {
+            width: 970px;
+        }
+    }
+    @media (min-width: 1200px){
+        .vd-wrapper {
+            width: 1170px;
+        }
+    }
+
+    @media (max-width: 992px){
+      .flex{
+        flex-direction: column;
+      }
+      #key-points-and-lead-gen .vd-wrapper{
+          flex-direction: column;
+        }
+    }
+
+    @media only screen and (max-width: 600px) {
+    
+        .data-container{
+            bottom: -2rem;
+        }
+    }
+    
+    @media only screen and (max-width: 392px) {
+    
+        .data-container{
+            bottom: -2rem;
+        }
+        .inner_content_title{
+            font-size:22px !important;
+        }
+        .inner_content_content_type{
+            font-size:15px;
+        }
+        .data-container .btn-exo{
+            font-size: 10px !important;
+        }
+    }
+    
+    @media only screen and (max-width: 302px) {
+        
+        .data-container{
+            bottom: -2rem;
+        }
+        .inner_content_title{
+        font-size:18px !important;
+        }
+        .inner_content_content_type{
+            font-size:12px;
+        }
+        
+        .data-container .btn-exo{
+            font-size: 7px !important;
+        }
+    }
+    
+    @media only screen and (max-width: 279px) {
+    
+        .data-container{
+            bottom: -2rem;
+        }
+        .inner_content_title{
+            font-size:15px !important;
+        }
+        
+        .inner_content_content_type{
+            font-size:10px;
+        }
+        
+        .data-container .btn-exo{
+            font-size: 5px !important;
+        }
+    }
+    
+    @media only screen and (min-width: 5000px) {
+        .inner_content_title{
+            font-size: max(0vw, 30px) !important;
+        }
+    }
+    /*breadcrumb-style*/
+      </style>
+<div class="header container" style="position:relative;overflow:hidden;">
+    <picture style="position:absolute;height:200%;transform: rotate(73deg) scale(-1,1);bottom: -50%;right: max(-5vw, -3em);">
+        <source srcset="https://norgenbiotek.com/sites/default/files/banner-ribbon.webp" type="image/webp">
+        <source srcset="https://norgenbiotek.com/sites/default/files/banner-ribbon.png" type="image/jpeg">
+        <img src="https://norgenbiotek.com/sites/default/files/banner-ribbon.png" alt="" style="height:100%;">
+    </picture>
+    <div class="row">
+        <div class="flex vd-wrapper">
+            <div class="col-lg-6 col-md-6 col-sm-12 flex-col">                
+                    {% if label %}
+                {% if page %}
+                    <h1 class="page-title">{{ label }}</h1>
+                {% else %}
+                    <h1 class="node-title"><a href="{{ url }}" class="node__title-link" rel="bookmark">{{ label }}</a></h>
+                {% endif %}
+              {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<hr class="header-separator">
+      <div class="vd-wrapper">
+        <div class="row phone-email">
+          <div class="col-sm-12 col-md-12 col-lg-6 cont-container">
+            <div class="contact-content">
+              <div class="dexp-animate animated flipInY" data-animate="flipInY">
+                <div class="dexp-shortcodes-box box-background box-center">
+                  <div class="box-icon"><i class="fa fa-phone fa-4x"></i></div>
+                  <h3 class="box-title">Número de teléfono</h3>
+                  <table class="box-content">
+                    <tbody>
+                      <tr>
+                        <td><strong>Teléfono:</strong></td>
+                        <td><a href="tel:+1&nbsp;905&nbsp;227&nbsp;8848">+1&nbsp;905&nbsp;227&nbsp;8848</a></td>
+                      </tr>
+                      <tr>
+                        <td><strong>Número gratuito en América del Norte:</strong></td>
+                        <td><a href="tel:18666674362">1-866-NORGENB</a></td>
+                      </tr>
+                      <tr>
+                        <td><strong>Fax:</strong></td>
+                        <td><a href="tel:+1&nbsp;905&nbsp;227&nbsp;1061">+1&nbsp;905&nbsp;227&nbsp;1061</a></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-12 col-lg-6 cont-container">
+            <div class="contact-content">
+              <div class="dexp-animate animated flipInY" data-animate="flipInY">
+                <div class="dexp-shortcodes-box box-background box-center">
+                  <div class="box-icon"><i class="fas fa-envelope fa-4x"></i></div>
+                  <h3 class="box-title">E-mail</h3>
+                  <table class="box-content">
+                    <tr>
+                      <td><strong>Información:</strong></td>
+                      <td><a href="mailto:info@norgenbiotek.com">info@norgenbiotek.com</a></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Órdenes:</strong></td>
+                      <td><a href="mailto:orders@norgenbiotek.com">orders@norgenbiotek.com</a></td>
+                    </tr>
+                    <tr>
+                      <td><strong>apoyo:</strong></td>
+                      <td><a href="mailto:support@norgenbiotek.com">support@norgenbiotek.com</a></td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <section class="contact-distributor container">
+        <div class="parent-contact">
+          <div class="form">
+            <h3>Contacte a Norgen Biotek Corp. Hoy</h3>
+            <div class="form-container" id="contacter-norgen-container">
+            {{ contact_spanish }}
+          </div>
+            
+          </div>
+          <div class="distributor">
+            <h3>Encuentra un distribuidor en tu zona</h3>
+            <img src="/sites/default/files/images/homepage-fr/norgen-distributor-map.png">
+            <a class="primary btn-primary btn contact-btn" href="/es/distribuidor">encontrar un distribuidor</a>
+          </div>
+        </div>
+      </section>
+      <!--  <form method="post" action="" id="contact-form">
+        <h3>Contact Norgen Biotek</h3>
+        <div>
+            <label for="fname">First Name <span class="form-required" title="This field is required.">*</span></label>
+            <input type="text" id="fname" name="fname" placeholder="First Name (requis)" class="form-control form-text" required>
+        </div>
+        <div>
+            <label for="lname">Last Name <span class="form-required" title="This field is required.">*</span></label>
+            <input type="text" id="lname" name="lname" placeholder="Last Name (requis)" class="form-control form-text" required>
+        </div>
+        <div>
+            <label for="company">Company/Institution <span class="form-required" title="This field is required.">*</span></label>
+            <input type="text" id="company" name="company" placeholder="Company/Institution (requis)" class="form-control form-text">
+        </div>
+        <div>
+            <label for="job">Job Title <span class="form-required" title="This field is required.">*</span></label>
+            <input type="text" id="job" name="job" placeholder="Job Title (requis)" class="form-control form-text" required>
+        </div>
+        <div>
+            <label for="email">Email <span class="form-required" title="This field is required.">*</span></label>
+            <input type="email" id="email" name="email" placeholder="Email (requis)" class="form-control form-text" required>
+        </div>
+        <div>
+            <label for="phone">Phone <span class="form-required" title="This field is required.">*</span></label>
+            <input type="tel" id="phone" name="phone" placeholder="Phone (requis)" class="form-control form-text" required>
+        </div>
+        <div class="contact-msg-div">
+            <label for="message">Message <span class="form-required" title="This field is required.">*</span></label>
+            <textarea id="message" name="message" placeholder="Message (requis)" rows="10"></textarea>
+        </div>
+        <input type="submit" value="Send Email" id="contact-submit" name="contact-submit" class="btn btn-primary" required>
+    </form> -->

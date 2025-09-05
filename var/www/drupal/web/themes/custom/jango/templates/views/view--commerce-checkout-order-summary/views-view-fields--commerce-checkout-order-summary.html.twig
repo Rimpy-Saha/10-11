@@ -1,0 +1,76 @@
+{#
+/**
+ * @file
+ * Default view template to display all the fields in a row.
+ *
+ * Available variables:
+ * - view: The view in use.
+ * - fields: A list of fields, each one contains:
+ *   - content: The output of the field.
+ *   - raw: The raw data for the field, if it exists. This is NOT output safe.
+ *   - class: The safe class ID to use.
+ *   - handler: The Views field handler controlling this field.
+ *   - inline: Whether or not the field should be inline.
+ *   - wrapper_element: An HTML element for a wrapper.
+ *   - wrapper_attributes: List of attributes for wrapper element.
+ *   - separator: An optional separator that may appear before a field.
+ *   - label: The field's label text.
+ *   - label_element: An HTML element for a label wrapper.
+ *   - label_attributes: List of attributes for label wrapper.
+ *   - label_suffix: Colon after the label.
+ *   - element_type: An HTML element for the field content.
+ *   - element_attributes: List of attributes for HTML element for field content.
+ *   - has_label_colon: A boolean indicating whether to display a colon after
+ *     the label.
+ *   - element_type: An HTML element for the field content.
+ *   - element_attributes: List of attributes for HTML element for field content.
+ * - row: The raw result from the query, with all data it fetched.
+ *
+ * @see template_preprocess_views_view_fields()
+ *
+ * @ingroup themeable
+ */
+#}
+
+<div class="product-container">
+  <div class="image-box-img">
+    <img src="{{file_url(row._relationship_entities.order_items.purchased_entity.0.entity.field_product_image.0.entity.uri.value)}}" alt="Product Image">
+  </div>
+  <div class="c-item-title">{{fields.title.content}}</div>
+  <div class="c-cart-details">
+  
+    
+    <div class="c-item-sku">{{fields.sku.content}}</div>
+    <div class="size_format">
+      {# {% if fields.attribute_format.content is not empty %}
+      <div class="c-item-quantity"><p class="format-value">{{ fields.attribute_format.content }}</p></div>
+      {% endif %} #}
+      <div class="c-item-quantity"><p class="size-value">{{fields.attribute_size.content }} </p></div>
+    </div>
+    {# {{ row._relationship_entities.order_items.unit_price.0.currency_code }}{{ row._relationship_entities.order_items.unit_price.0.number }} #}
+    {# <div class="c-item-price">{{ fields.total_price__number.content }}</div> #}
+  </div>
+  <div class="unit_line"><span class="price">{{ fields.unit_price__number.content }}</span> <span class="quantity"><span class="times">&times;</span> {{ fields.quantity.content|striptags|replace({'&nbsp;': '', 'x': ''})|trim }}</span></div>
+</div>
+
+
+
+ {# <div class="col-md-1 col-sm-3 col-xs-6 c-cart-qty">
+  {{ fields.quantity.content }}
+</div>
+<div class="col-md-2 col-sm-3 col-xs-5 c-cart-image">
+  {{ fields.field_images.content }}
+</div>
+<div class="col-md-4 col-sm-9 col-xs-7 c-cart-desc">
+  <h3>
+    <a href="{{ fields.jango_cms_entity_path.content|striptags|trim }}" class="c-font-bold c-theme-link c-font-22 c-font-dark">
+      {{ fields.title.content }}
+    </a>
+  </h3>
+</div>
+<div class="col-md-2 col-sm-3 col-xs-6 c-cart-ref">
+  <p>{{ fields.sku.content }}</p>
+</div>
+<div class="col-md-2 col-sm-3 col-xs-6 c-cart-total">
+  <p class="c-cart-price c-font-bold">{{ fields.total_price__number.content }}</p>
+</div>  #}

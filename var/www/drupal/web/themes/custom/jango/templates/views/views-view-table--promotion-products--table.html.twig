@@ -1,0 +1,219 @@
+{#
+/**
+ * @file
+ * Default theme implementation for displaying a view as a table.
+ *
+ * Available variables:
+ * - attributes: Remaining HTML attributes for the element.
+ *   - class: HTML classes that can be used to style contextually through CSS.
+ * - title : The title of this group of rows.
+ * - header: The table header columns.
+ *   - attributes: Remaining HTML attributes for the element.
+ *   - content: HTML classes to apply to each header cell, indexed by
+ *   the header's key.
+ *   - default_classes: A flag indicating whether default classes should be
+ *     used.
+ * - caption_needed: Is the caption tag needed.
+ * - caption: The caption for this table.
+ * - accessibility_description: Extended description for the table details.
+ * - accessibility_summary: Summary for the table details.
+ * - rows: Table row items. Rows are keyed by row number.
+ *   - attributes: HTML classes to apply to each row.
+ *   - columns: Row column items. Columns are keyed by column number.
+ *     - attributes: HTML classes to apply to each column.
+ *     - content: The column content.
+ *   - default_classes: A flag indicating whether default classes should be
+ *     used.
+ * - responsive: A flag indicating whether table is responsive.
+ * - sticky: A flag indicating whether table header is sticky.
+ *
+ * @see template_preprocess_views_view_table()
+ *
+ * @ingroup themeable
+ */
+#}
+
+<style>
+
+.views-element-container .promo-products-table table{
+  margin-top:0px;
+}
+.views-element-container .promo-products-table table th, .views-element-container .promo-products-table table td{
+  padding-left:1em !important;
+  padding-right:1em !important;
+}
+.views-element-container .promo-products-table table th{
+  font-weight:bold;
+}
+.views-element-container .promo-products-table table td{
+  font-weight:normal;
+}
+.promo-products-table form[data-drupal-selector^="views-exposed-form-promotion-products-table"]{
+  margin-bottom:0px;
+  display:flex;
+  justify-content:end;
+}
+.promo-products-table form[data-drupal-selector^="views-exposed-form-promotion-products-table"] .form-item.form-item-sort-bef-combine{
+  position:relative;
+}
+.promo-products-table form[data-drupal-selector^="views-exposed-form-promotion-products-table"] .form-item.form-item-sort-bef-combine > label{
+    position: absolute;
+    top: 5px;
+    left: 20px;
+    font-size: 12px;
+    color:inherit;
+}
+.promo-products-table form[data-drupal-selector^="views-exposed-form-promotion-products-table"] .form-item.form-item-sort-bef-combine > select{
+    padding-top:22px;
+    height:auto;
+}
+
+</style>
+
+
+{# 
+<table class="product-table">
+  <thead>
+    <tr>
+      <th>Product Name</th>
+      <th>Description</th>
+      <th>Price</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in rows %}
+      {% set content = row.content %}
+      {% for product in content['#row'].field_products %}
+        <tr>
+          <td>{{ product.entity.label }}</td>
+          <td>{{ product.entity.field_description.value }}</td>
+          <td>{{ product.entity.field_price.value }}</td>
+        </tr>
+      {% endfor %}
+    {% endfor %}
+  </tbody>
+</table> #}
+
+
+
+{#
+  This template is for the View: promotion_products, display: table
+  It renders ONLY <tr> rows, not the full <table>
+#}
+{# 
+{% for row in rows.0['#rows'] %}
+
+  <tr class="product-row">
+    <td class="views-field views-field-category">
+
+      {{ row.content['field_category'] }}
+
+    </td>
+    <td class="views-field views-field-sku">
+      {{ row.content['field_sku'] }}
+
+    </td>
+    <td class="views-field views-field-name">
+      {{ row.content['field_name'] }}
+    </td>
+    <td class="views-field views-field-cart">
+      {{ row.content['field_cart'] }}
+    </td>
+  </tr>
+{% endfor %}
+ #}
+
+
+{%
+  set classes = [
+    'cols-' ~ header|length,
+    responsive ? 'responsive-enabled',
+    sticky ? 'sticky-enabled',
+    'table table-hover mb-40',
+  ]
+%}
+<table{{ attributes.addClass(classes) }}>
+  {% if caption_needed %}
+    <caption>
+    {% if caption %}
+      {{ caption }}
+    {% else %}
+      {{ title }}
+    {% endif %}
+    {% if (summary is not empty) or (description is not empty) %}
+      <details>
+        {% if summary is not empty %}
+          <summary>{{ summary }}</summary>
+        {% endif %}
+        {% if description is not empty %}
+          {{ description }}
+        {% endif %}
+      </details>
+    {% endif %}
+    </caption>
+  {% endif %}
+  {% if header %}
+    <thead>
+      <tr>
+        {% for key, column in header %}
+          {% if column.default_classes %}
+            {%
+              set column_classes = [
+                'views-field',
+                'views-field-' ~ fields[key],
+              ]
+            %}
+          {% endif %}
+          <th{{ column.attributes.addClass(column_classes).setAttribute('scope', 'col') }}>
+            {%- if column.wrapper_element -%}
+              <{{ column.wrapper_element }}>
+                {%- if column.url -%}
+                  <a href="{{ column.url }}" title="{{ column.title }}">{{ column.content }}{{ column.sort_indicator }}</a>
+                {%- else -%}
+                  {{ column.content }}{{ column.sort_indicator }}
+                {%- endif -%}
+              </{{ column.wrapper_element }}>
+            {%- else -%}
+              {%- if column.url -%}
+                <a href="{{ column.url }}" title="{{ column.title }}">{{ column.content }}{{ column.sort_indicator }}</a>
+              {%- else -%}
+                {{- column.content }}{{ column.sort_indicator }}
+              {%- endif -%}
+            {%- endif -%}
+          </th>
+        {% endfor %}
+      </tr>
+    </thead>
+  {% endif %}
+  <tbody>
+    {% for row in rows %}
+      <tr{{ row.attributes }}>
+        {% for key, column in row.columns %}
+          {% if column.default_classes %}
+            {%
+              set column_classes = [
+                'views-field'
+              ]
+            %}
+            {% for field in column.fields %}
+              {% set column_classes = column_classes|merge(['views-field-' ~ field]) %}
+            {% endfor %}
+          {% endif %}
+          <td{{ column.attributes.addClass(column_classes) }}>
+            {%- if column.wrapper_element -%}
+              <{{ column.wrapper_element }}>
+              {% for content in column.content %}
+                {{ content.separator }}{{ content.field_output }}
+              {% endfor %}
+              </{{ column.wrapper_element }}>
+            {%- else -%}
+              {% for content in column.content %}
+                {{- content.separator }}{{ content.field_output -}}
+              {% endfor %}
+            {%- endif %}
+          </td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

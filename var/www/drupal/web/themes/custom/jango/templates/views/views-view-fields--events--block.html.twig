@@ -1,0 +1,99 @@
+{#
+/**
+ * @file
+ * Theme override to display all the fields in a row.
+ *
+ * Available variables:
+ * - view: The view in use.
+ * - fields: A list of fields, each one contains:
+ *   - content: The output of the field.
+ *   - raw: The raw data for the field, if it exists. This is NOT output safe.
+ *   - class: The safe class ID to use.
+ *   - handler: The Views field handler controlling this field.
+ *   - inline: Whether or not the field should be inline.
+ *   - wrapper_element: An HTML element for a wrapper.
+ *   - wrapper_attributes: List of attributes for wrapper element.
+ *   - separator: An optional separator that may appear before a field.
+ *   - label: The field's label text.
+ *   - label_element: An HTML element for a label wrapper.
+ *   - label_attributes: List of attributes for label wrapper.
+ *   - label_suffix: Colon after the label.
+ *   - element_type: An HTML element for the field content.
+ *   - element_attributes: List of attributes for HTML element for field content.
+ *   - has_label_colon: A boolean indicating whether to display a colon after
+ *     the label.
+ *   - element_type: An HTML element for the field content.
+ *   - element_attributes: List of attributes for HTML element for field content.
+ * - row: The raw result from the query, with all data it fetched.
+ *
+ * @see template_preprocess_views_view_fields()
+ */
+#}
+
+
+{# {{dump()}} #}
+{# {% for field in fields -%}
+  {{ field.separator }}
+  {%- if field.wrapper_element -%}
+    <{{ field.wrapper_element }}{{ field.wrapper_attributes }}>
+  {%- endif %}
+  {%- if field.label -%}
+    {%- if field.label_element -%}
+      <{{ field.label_element }}{{ field.label_attributes }}>{{ field.label }}{{ field.label_suffix }}</{{ field.label_element }}>
+    {%- else -%}
+      {{ field.label }}{{ field.label_suffix }}
+    {%- endif %}
+  {%- endif %}
+  {%- if field.element_type -%}
+    <{{ field.element_type }}{{ field.element_attributes }}>{{ field.content }}</{{ field.element_type }}>
+  {%- else -%}
+    {{ field.content }}
+  {%- endif %}
+  {%- if field.wrapper_element -%}
+    </{{ field.wrapper_element }}>
+  {%- endif %}
+{%- endfor %}   #}
+
+
+
+<div class="view-content">
+{# {{dump(fields.field_event_picture)}} #}
+  {# {{dump()}}  #}
+  {# {{dump(row._entity.nid.0.value)}} #}
+  <div class="views-row">
+    <a href="{{path('entity.node.canonical', {'node': row._entity.nid.0.value})}}" class="link">
+      <div class="event_cart">
+        {# {{dump(fields.field_event_picture)}} #}
+        <div class="img_event" style="background-image:url('{{ file_url(row._entity.field_event_picture.0.entity.uri.value) }}'); background-size: cover; height: 300px;  background-position: center;">   
+          <div class="logo">
+            {{ fields.field_event_logo.content }}
+          </div>
+        </div>
+        <div class="fields">
+          <div class="date">
+            {{fields.field_event_date.content}}<i class="fas fa-calendar-alt"></i>
+          </div>
+          <div class="location">
+            {{fields.field_event_location.content}} 
+            <i class="fas fa-map-marker-alt"></i>
+          </div>
+          {# <div class="location">{{ item['#row']._entity.field_event_location }} #}
+          <div class="title_event">  
+            {{fields.title.content}}
+          </div> 
+          <div class="desc"> {{fields.field_description.content}} </div>
+        </div>
+      </div>
+    </a>
+  </div>
+</div> 
+
+{{ pager }}
+<style>
+@media (max-width: 1200px) {
+  .fields{
+    border-radius: 12px 12px;
+  }
+
+  }
+</style>

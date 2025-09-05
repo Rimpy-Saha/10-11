@@ -1,0 +1,266 @@
+
+<style>
+.section-footer{
+    padding:1em;
+    color:white;
+}
+#desktop-footer{
+    display:grid;
+    /* grid-template-columns: max(150px, 10%) 1fr; */
+    grid-column-gap:2em;
+}
+
+.logo-and-iso-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    column-gap: 1em;
+    row-gap:0.5em;
+    width: max(150px, 10%);
+    height:fit-content;
+}
+.footer-logo{
+    grid-column: 1 / 4;
+    width:100%;
+}
+.footer-iso{
+    display:flex;
+    justify-content:center;
+    margin:auto;
+    height: 85px;
+    height: fit-content;
+    color:#fff;
+    gap:15px;
+}
+.footer-iso a span{
+    color:#fff;
+}
+.footer-iso-seal{
+    height:max(50px, 5vh);
+}
+
+.norgen-footer{
+    width: 100%;
+    /*max-width: 800px;*/
+    align-self: start;
+    margin-left: auto;
+    margin-right: auto;
+}
+.footer-header{
+    position: absolute;
+    clip: rect(1px, 1px, 1px, 1px);
+    -webkit-clip-path: inset(0px 0px 99.9% 99.9%);
+    clip-path: inset(0px 0px 99.9% 99.9%);
+    overflow: hidden;
+    height: 1px;
+    width: 1px;
+    padding: 0;
+    border: 0;
+}
+.footer-nav{
+    display:flex;
+    gap:2em;
+    width:80%;
+    margin:2% auto;
+        justify-content: center;
+     
+}
+/*.footer-nav-col{
+    flex-basis:50%;
+}*/
+/*.footer-nav-col h3:first-child{
+    margin-top:0px;
+}*/
+.footer-nav h3, .footer-nav a:not(.btn){
+    font-size:14px;
+    color:white;
+}
+.footer-nav li > a:not(.btn){
+    font-weight:normal;
+}
+.footer-nav a:hover, .section-footer a:hover{
+    text-decoration: underline;
+    color:#fff;
+}
+.ul-unstyled{
+    list-style: none;
+    margin-left:0px;
+    padding:0;
+    /*text-wrap:nowrap;*/
+}
+.ul-unstyled li{
+    margin:4% auto;
+}
+.footer-socials{
+    min-height:34px;
+}
+.footer-socials {
+    position: relative;
+    list-style: none;
+    text-align: center;
+    border: none;
+    min-height: 44px;
+    min-width: 44px;
+    margin-right: 0.5em;
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+.vert-flex{
+    display:flex;
+    flex-direction: column;
+    height:100%;
+    align-items:center;
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 1.5),
+only screen and (-o-min-device-pixel-ratio: 3/2),
+only screen and (min--moz-device-pixel-ratio: 1.5),
+only screen and (min-device-pixel-ratio: 1.5){
+    html,
+    body{
+        width:100%;
+        overflow-x:clip !important;
+    }
+}
+/* Safari 10.1+ */
+
+@media not all and (min-resolution:.001dpcm) { 
+    @media {
+        html,body{
+            overflow-x:hidden;
+            height:100vh;
+        } 
+    }
+}
+
+@-moz-document url-prefix() {
+    .info-content > img{
+        position: relative !important; 
+    }
+    .ic-div{
+        padding-left: 0 !important;
+    }
+}
+
+@media only screen and (max-width:600px) and (min-height:720px){
+    #desktop-footer .ul-unstyled{
+        text-wrap:wrap;
+    }
+    #desktop-footer .footer-nav{
+        display:block;
+    }
+}
+@media only screen and (max-width:900px) and (max-height:719px){
+    #desktop-footer .ul-unstyled{
+        text-wrap:wrap;
+    }
+    #desktop-footer .footer-nav{
+        display:block;
+    }
+}
+
+@media only screen and (max-width: 768px){
+    .footer-logo {
+        margin-left: 0;
+        margin-top:0px;
+    }
+}
+.footer-grid{
+    display:grid;
+    gap:50px;
+    grid-template-columns:1fr 1fr 1fr 1fr 1fr;
+}
+@media only screen and (max-width: 700px){
+.footer-grid{
+    display:grid;
+    gap:50px;
+    grid-template-columns:1fr 1fr;
+}
+}
+@media only screen and (max-width: 300px){
+.footer-grid{
+    display:grid;
+    gap:50px;
+    grid-template-columns:1fr;
+}
+}
+</style>
+
+<footer id="desktop-footer" class="section-footer" style="background: linear-gradient(#022954, #1e6ab0);">
+    <div class="norgen-footer">
+        <h2 class="footer-header">Norgen Biotek Footer</h2>
+        <nav class="footer-nav">
+            <div class="footer-nav-col">
+                <div class="footer-grid">
+                    <div style="width:90%;">
+                        <h3><a href="/es/productos-principales" style="font-size:24px;">主要产品</a></h3>
+                        <ul class="ul-unstyled">
+                            <li><a href="/es/productos-principales#samplecollection" style="font-size:15px;font-weight:400;">样品的采集和保存</a></li>
+                            <li><a href="/es/productos-principales#purificationisolation" style="font-size:15px;font-weight:400;">分离纯化</a></li>
+                            <li><a href="/es/productos-principales#diagnostic" style="font-size:15px;font-weight:400;">分子诊断</a></li>
+                        </ul>
+                    </div>
+                    <div style="width:90%;">
+                        <h3><a href="/es/servicios" style="font-size:24px;">验室服务</a></h3>
+                        <ul class="ul-unstyled">
+                            <li><a href="/es/servicios#Séquence" style="font-size:15px;font-weight:400;">下一代序列</a></li>
+                            <li><a href="/es/servicios#Fabrication" style="font-size:15px;font-weight:400;">设备制造商制造（OEM）</a></li>
+                            
+                        </ul>
+                    </div>
+                    <div style="width:90%;">
+                        <h3><a href="/es/acerca-de" style="font-size:24px;">关于</a></h3>
+                        <ul class="ul-unstyled">
+                            <li><a href="/es/acerca-de#aboutmission" style="font-size:15px;font-weight:400;">我们的使命</a></li>
+                            <!--<li><a href="/es/acerca-de#coreprods" style="font-size:15px;font-weight:400;">Productos y servicios básicos</a></li>-->
+                            <li><a href="/es/acerca-de#aboutcert" style="font-size:15px;font-weight:400;">ISO认证</a></li>
+                        </ul>
+                    </div>
+                    <div style="width:90%;">
+                        <h3><a href="/es/distribuidor" style="font-size:24px;">寻找经销商</a></h3>
+                        <img src="https://norgenbiotek.com/sites/default/files/images/homepage-fr/norgen-distributor-map.png">
+                    </div>
+                    <div style="width:90%;">
+                    <!--<h3><a href="/es/distribuidor" style="font-size:18px;">Find a Distributor</a></h3>
+                        <img src="https://development.norgenbiotek.com/sites/default/files/images/homepage-fr/norgen-distributor-map.png">-->
+                        <h3><a href="/es/Contacte" style="font-size:24px;">Contactar con Norgen</a></h3>
+                        <ul class="ul-unstyled">
+                            <li>3430 Schmon Parkway, Thorold, ON, Canada, L2V 4Y6</li>
+                            <li>info@norgenbiotek.com</li>
+                            <li>+1 (905) 227-8848</li>
+                            <li>北美免费电话号码: 1-866-NORGENB</li>
+                            <li>
+                                <div class="footer-socials"> 
+                                    <div><a target="_blank" data-placement="auto" data-toggle="tooltip" title="" href="http://facebook.com/norgenbiotek" class="dtooltip social-icon fbclick" data-original-title="Facebook" aria-label="Facebook"><span><i class="fab fa-facebook" alt="Facebook"></i></span></a></div>
+                                    <div><a target="_blank" data-placement="auto" data-toggle="tooltip" title="" href="http://twitter.com/norgenbiotek" class="dtooltip social-icon twclick" data-original-title="Twitter" aria-label="Twitter"><span><i class="fab fa-twitter" alt="Twitter"></i></span></a></div>
+                                    <div><a target="_blank" data-placement="auto" data-toggle="tooltip" title="" href="http://instagram.com/norgen.biotek" class="dtooltip social-icon igclick" data-original-title="Twitter" aria-label="Instagram"><span><i class="fab fa-instagram" alt="Instagram"></i></span></a></div>
+                                    <div><a target="_blank" data-placement="auto" data-toggle="tooltip" title="" href="https://www.youtube.com/@norgenbiotek?sub_confirmation=1" class="dtooltip social-icon ytclick" data-original-title="Youtube" aria-label="YouTube"><span><i class="fab fa-youtube" alt="YouTube"></i></span></a></div>
+                                    <div><a target="_blank" data-placement="auto" data-toggle="tooltip" title="" href="https://www.linkedin.com/company/norgenbiotek/" class="dtooltip social-icon liclick" data-original-title="LinkedIn" aria-label="LinkedIn"><span><i class="fab fa-linkedin" alt="LinkedIn"></i></span></a></div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+               
+                
+            </div>
+            
+        </nav>
+        <hr>
+        <div class="footer-iso flex">
+            <a class="vert-flex" target="_blank" href="/content/iso-certifications">
+                <img class="footer-iso-seal lazy" loading="lazy" src="/sites/default/files/about/ISO-13485-cropped-white.svg" data-src="/sites/default/files/about/ISO-13485-cropped-white.svg"  alt="ISO 13485 Seal">
+                <span>ISO 13485:2016</span>
+            </a>
+            <a class="vert-flex" target="_blank" href="/content/iso-certifications">
+                <img class="footer-iso-seal lazy" loading="lazy" src="/sites/default/files/about/ISO-9001-cropped-white.svg" data-src="/sites/default/files/about/ISO-9001-cropped-white.svg" alt="ISO 13485 Seal">
+                <span>ISO 9001:2015</span>
+            </a>
+            <a class="vert-flex" target="_blank" href="/content/iso-certifications">
+                <img class="footer-iso-seal lazy" loading="lazy" src="/sites/default/files/images/homepage-fr/ISO 15189-cropped-white.svg" data-src="/sites/default/files/images/homepage-fr/ISO 15189-cropped-white.svg" alt="ISO 15189 Seal">
+                <span>ISO 15189:2022</span>
+            </a>
+        </div>
+    </div>
+</footer>

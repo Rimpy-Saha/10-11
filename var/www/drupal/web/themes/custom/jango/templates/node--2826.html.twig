@@ -1,0 +1,745 @@
+<style>
+.black-circle{
+    width: 200px;
+    height: 175px;
+    /* line-height: 173px; */
+    padding-top: 60px;
+    border-radius: 50%;
+    font-size: 20px;
+    color: #fff;
+    text-align: center;
+    background: #000;
+    font-weight: 700;
+}
+.left-side{
+	    display: flex;
+    list-style: none;
+    gap: 15px;
+    padding:0;
+        align-items: flex-end;
+}
+.left-side li{
+	border-bottom: 1px solid;
+}
+.right-side{
+	    display: flex;
+    list-style: none;
+    gap: 20px;
+    padding:0;
+        align-items: flex-end;
+}
+.right-side li{
+	border-bottom: 1px solid;
+}
+.grid{
+	display:flex;
+	align-items: center;
+    gap: 25px;
+}
+.name{
+	line-height: 1.2;
+      color: #004897;
+    font-style: italic;
+        font-size: 19px;;
+}
+.name:hover{
+	cursor:pointer;
+}
+.name-selected{
+	background: #00489369;
+    padding: 7px;
+    line-height: 1.2;
+    color: white;
+    margin-bottom: 5px;
+}
+.gel, .pcr, .sequencing, .dna, .transfection, .mass, .vitro{
+	/*display:none;*/
+}
+.prod-card{
+	
+}
+.alltables{
+	display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+	  align-items: stretch;
+    gap: 20px;
+    margin: 75px auto 0;
+}
+.table-selected{
+	display:block;
+}
+
+* {box-sizing:border-box}
+
+/* Slideshow container */
+.slideshow-container {
+  max-width: 1000px;
+  position: relative;
+  margin: auto;
+  display:flex;
+  align-items: center;
+}
+
+/* Hide the images by default */
+.mySlides {
+  display: none;
+  justify-items:center;
+  gap:50px;
+}
+.mySlides h3{
+  font-size: 30px;
+    letter-spacing: 2px;
+    text-align: center;
+    font-weight: 300;
+}
+.mySlides a{
+	    width: 100%;
+    text-align: center;
+}
+.mySlides img{
+      width: 40%;
+}
+
+/* Next & previous buttons */
+.prev, .next {
+    cursor: pointer;
+    /* position: absolute; */
+    top: 50%;
+    width: auto;
+    /* margin-top: -22px; */
+    padding: 13px 20px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    background: #004893;
+    width: 50px;
+    height: 50px;
+    display: block;
+    border-radius: 100%;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  /*border-radius: 3px 0 0 3px;*/
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover, .next:hover {
+  background-color: rgba(0,0,0,0.8);
+}
+
+/* Caption text */
+.text {
+  font-size: 12px;
+  padding: 8px 12px;
+  bottom: 8px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+/* The dots/bullets/indicators */
+.dot {
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.support .dot:hover{
+  background-color: #717171;
+}
+.support .active {
+  background-color: #717171;
+}
+
+
+/* Fading animation */
+.fade2 {
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+
+@keyframes fade {
+  from {opacity: .4}
+  to {opacity: 1}
+}
+
+.imp-text h2{
+	font-size: 30px;
+    text-align: center;
+}
+.imp-text hr{
+	width:15%;
+}
+.imp-text h3{
+	font-size: 22px;
+    text-align: center;
+}
+.imp-text p{
+	width: 60%;
+    margin: auto;
+}
+.main_section{
+	margin:100px auto;
+}
+.limited-time{
+	background: #ba1e2d;
+    border-radius: 40px;
+    color: white;
+    width: fit-content;
+    font-size: 21px;
+    box-shadow: 8px 5px #004897;
+    padding: 5px 55px;
+    margin: 40px 0;
+
+}
+.limited-time p{
+	font-size:24px;
+	margin-bottom:0;
+}
+.stock_office{
+	display: grid;
+    justify-content: center;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+}
+.heading2{
+	margin: 10px 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 1;
+    font-size: 80px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: #b32214;
+}
+.stock_office ul{
+	list-style:none;
+	text-align:right;
+}
+.stock_office ul li{
+	border-bottom: 1px solid;
+    padding: 10px 0;
+}
+.stock_office h1{
+	    font-size: 25px;
+    line-height: 1.2;
+}
+.stock_office hr{
+	width: 28%;
+    margin: 30px 0;
+    border-color: #9f9f9f;
+}
+.container:before{
+	display:none;
+}
+.off-tag-parent{
+	 rotate: 352deg;  
+    position: absolute;
+    bottom: -40px;
+    right: 30px;
+    left: 165px;
+}
+.off-tag{
+background: #ba1e2d;
+    color: white;
+    padding: 1px 50px;
+    width: max-content;
+    border-left: 9px solid white;
+    box-shadow: -5px 2px 15px #2a4577;
+    margin: 0;
+    margin: 0;
+}
+.off-tag h2{
+	color:white;
+	font-size: 30px;
+	    margin: 0;
+}
+.off-tag h2 span{
+	font-size: 45px;
+    font-weight: 700;
+    text-decoration: underline;
+}
+.free-tag{
+	display:flex;
+	gap: 10px;
+    background: #ba1e2d;
+    color: white;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    align-items: center;
+}
+.free-tag h3{
+	color:white;
+	font-size:20px;
+	letter-spacing:5px;
+}
+.free-tag img{
+	width:40px;
+}
+.disclaimer{
+	background:#d4e0ed;
+	margin-top: 50px;
+    padding: 10px 40px;
+}
+.disclaimer p{
+	font-size: 14px;
+	margin-bottom:0;
+}
+
+
+@property --num3 {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
+}
+
+.perc {
+  counter-reset:  num3 var(--num3);
+  font-size: 40px;
+  font-weight: bold;
+  animation: animate 2s forwards ease;
+}
+
+.perc:before {
+  content: counter(num3);
+}
+
+@keyframes animate {
+  to {
+    --num3: 15;
+  }
+}
+.prods-sale hr{
+  border-top: 6px solid #004893;
+  width: 35%;
+}
+.support hr{
+   border-top: 6px solid #004893;
+  width: 35%; 
+    margin: 20px auto 0;
+}
+.prods-sale h3{
+	    font-size: 30px;
+    letter-spacing: 2px;
+    text-align: center;
+    font-weight: 300;
+}
+.prod-card{
+      border: 1px solid #e3dbdb;
+    border-radius: 12px;
+    padding: 15px;
+    display:flex;
+}
+.prod-card div{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+}
+.prod-card div img{
+	width:50%;
+}
+@media only screen and (max-width: 1100px) {
+	.stock_office {
+    	grid-template-columns: 1fr;
+    }
+    .left-side{
+        flex-wrap: wrap;
+    }
+}
+@media only screen and (max-width: 700px) {
+	.alltables {
+    	grid-template-columns: 1fr;
+    }
+    .off-tag {
+    	width: -webkit-fill-available;
+    	text-align: center;
+    }
+    .off-tag-parent{
+    	rotate: 0deg;
+    	position: relative;
+    	bottom: auto;
+    	right: auto;   
+    	left:auto;
+    	width: -webkit-fill-available;
+    }
+}
+@media only screen and (max-width: 500px) {
+	.prev, .next {
+    	display: none;
+    }
+}
+
+</style>
+<section class="container stock_office" style="margin-top:70px;">
+	<div>
+		<h1>End of Year</h1>
+		<hr>
+		<div class="limited-time">
+		<p>Limited Time Offer</p>
+		</div>
+		<h2 class="heading2">Stock-Up,</h2>
+		<h2 class="heading2">Clean-Up,</h2>
+		<h2 class="heading2">Level-Up</h2>
+		<br>
+		<h2 style="font-size: 60px;font-style:italic;font-weight:700;color: black;">For 2025</h2>
+	</div>
+	<div style="position:relative;">
+		<img src="/sites/default/files/images/end_of_year/bulks.png">
+		<div class="off-tag-parent">
+		<div class="off-tag">
+			<h2>Up to <span class="perc">%</span> off*</h2>
+		</div>
+		<div style="display:flex;gap:10px;    align-items: center;    margin-top: 10px;    justify-content: center;">
+		<img src="/sites/default/files/images/end_of_year/free.png" style="width:40px;        filter: brightness(0.5);">
+		<p style="margin-bottom:0px;line-height: 1.2;width: 250px;">Plus Free Bottle of Ultrapure Nuclease-free Water</p>
+		</div>
+		</div>
+	</div>
+</section>
+
+<section class="container" style="margin:50px auto;">
+
+	<hr style="width:50%;margin:100px auto 0;">
+</section>
+
+<div class="container prods-sale">
+	<h3>Choose the products based on your applications</h3>
+</div>
+
+<section style="margin:100px auto;">
+	<div class="container grid">
+		<div>
+			<ul class="left-side">
+				<li onClick="click_name('all', this)"><p class="name name-selected">All products</p></li>
+				<li onClick="click_name('gel', this)"><p class="name">Gel Electrophoresis</p></li>
+				<li onClick="click_name('pcr', this)"><p class="name">PCR/qPCR</p></li>
+				<li onClick="click_name('vitro', this)"><p class="name">In-Vitro Synthesis</p></li>
+				<li onClick="click_name('dna', this)"><p class="name">DNA Modification</p></li>
+				<li onClick="click_name('transfection', this)"><p class="name">Transfection</p></li>
+				<li onClick="click_name('mass', this)"><p class="name">Mass Spectrometry</p></li>
+				<li onClick="click_name('sequencing', this)"><p class="name">Sequencing</p></li>
+			</ul>
+		</div>
+	</div>
+</section>
+
+<section style="margin:25px auto;">
+	<div class="container alltables">
+		<a class="prod-card gel" href="https://norgenbiotek.com/product/dna-gel-extraction-kit?v=8" target="_blank"><div>
+      <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/13100-Reflection-web.jpg?itok=LU9NM_Dm">
+      <h3>DNA Gel Extraction Kit</h3>
+      <p>13100</p>
+                <form action="" method="post" id="add-to-cart-variation-8" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-8" siq_id="autopick_836">
+                <input type="hidden" id="variation_id" name="variation_id" value="8">
+                <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-8" name="op" value="Add to cart">
+                </form>
+    </div></a>
+    <a class="prod-card gel mass" href="https://norgenbiotek.com/product/abundant-serum-protein-depletion-kit?v=49" target="_blank"><div>
+      <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/17300-ProteoSpin-Abundant-Serum-Protein-Depletion_WEB_0.jpg?itok=3WYjlVjz">
+      <h3>ProteoSpin Abundant Serum Protein Depletion Kit</h3>
+      <p>17300</p>
+        <form action="" method="post" id="add-to-cart-variation-49" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-49" siq_id="autopick_8839">
+                    <input type="hidden" id="variation_id" name="variation_id" value="49">
+                    <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-49" name="op" value="Add to cart">
+                </form>
+    </div></a>
+    <a class="prod-card gel Transfection mass" href="https://norgenbiotek.com/product/proteospin-total-protein-concentration-detergent-clean-and-endotoxin-removal-kits?v=58" target="_blank"><div>
+      <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/22800-Reflection-web.jpg?itok=oMoJE-VV">
+      <h3>ProteoSpin Total Protein Concentration Detergent Clean-Up and Endotoxin Removal Mini Kit</h3>
+      <p>22800</p>
+        <form action="" method="post" id="add-to-cart-variation-58" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-58" siq_id="autopick_7279">
+                      <input type="hidden" id="variation_id" name="variation_id" value="58">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-58" name="op" value="Add to cart">
+                    </form>
+    </div></a>
+    <a class="prod-card pcr dna" href="https://norgenbiotek.com/product/pcr-purification-kit?v=6" target="_blank"><div>
+      <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/14400-PCR-Purification-Kit-WEB.jpg?itok=11NRG3A_">
+      <h3>PCR Purification Kit</h3>
+      <p>14400</p>
+        <form action="" method="post" id="add-to-cart-variation-6" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-6" siq_id="autopick_236">
+                            <input type="hidden" id="variation_id" name="variation_id" value="6">
+                            <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-6" name="op" value="Add to cart">
+                        </form>
+    </div></a>
+    <a class="prod-card pcr dna" href="https://norgenbiotek.com/product/pcr-purification-kit?v=423" target="_blank"><div>
+      <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/14400-PCR-Purification-Kit-WEB.jpg?itok=11NRG3A_">
+      <h3>PCR Purification Kit</h3>
+      <p>45700</p>
+        <form action="" method="post" id="add-to-cart-variation-423" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-423" siq_id="autopick_5840">
+                            <input type="hidden" id="variation_id" name="variation_id" value="423">
+                            <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-423" name="op" value="Add to cart">
+                        </form>
+    </div></a>
+
+    <a class="prod-card pcr sequencing dna" href="https://norgenbiotek.com/product/dna-clean-and-concentration-micro-elute-kit?v=1101" target="_blank"><div>
+      <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/67200%20DNA%20Clean-up%20and%20Concentration-WEB.jpg?itok=b0es3moj">
+      <h3>DNA Clean-Up and Concentration Micro-Elute Kit</h3>
+      <p>67200</p>
+        <form action="" method="post" id="add-to-cart-variation-1101" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-1101" siq_id="autopick_7696">
+                      <input type="hidden" id="variation_id" name="variation_id" value="1101">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-1101" name="op" value="Add to cart">
+                    </form>
+    </div></a>
+    <a class="prod-card pcr vitro dna" href="https://norgenbiotek.com/product/oligo-clean-and-concentration-kit?v=352" target="_blank"><div>
+      <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/34100-Oligo-Clean-up-and-concentration-Kit-WEB.jpg?itok=I__4V43G">
+      <h3>Oligo Clean-Up and Concentration Kit</h3>
+      <p>34100</p>
+        <form action="" method="post" id="add-to-cart-variation-352" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-352" siq_id="autopick_863">
+                      <input type="hidden" id="variation_id" name="variation_id" value="352">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-352" name="op" value="Add to cart">
+                    </form>
+    </div></a>
+
+ 
+
+    <a class="prod-card sequencing vitro" href="https://norgenbiotek.com/product/rna-clean-and-concentration-kits?v=35" target="_blank"><div>
+      <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/23600-RNA-Clean-Up-and-Concentration-Kit-WEB_0.jpg?itok=322TKX0T">
+      <h3>RNA Clean-Up and Concentration Kit</h3>
+      <p>23600</p>
+        <form action="" method="post" id="add-to-cart-variation-35" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-35" siq_id="autopick_1660">
+                      <input type="hidden" id="variation_id" name="variation_id" value="35">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-35" name="op" value="Add to cart">
+                    </form>
+    </div></a>
+
+    <a class="prod-card sequencing vitro" href="https://norgenbiotek.com/product/rna-clean-and-concentration-kits?v=231" target="_blank"><div>
+      <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/23600-RNA-Clean-Up-and-Concentration-Kit-WEB_0.jpg?itok=322TKX0T">
+      <h3>RNA Clean-Up and Concentration 96-Well Kit</h3>
+      <p>25100</p>
+        <form action="" method="post" id="add-to-cart-variation-231" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-231" siq_id="autopick_1764">
+                      <input type="hidden" id="variation_id" name="variation_id" value="231">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-231" name="op" value="Add to cart">
+                    </form>
+    </div></a>
+
+    <a class="prod-card sequencing vitro" href="https://norgenbiotek.com/product/rna-clean-and-concentration-kits?v=341" target="_blank"><div>
+      <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/23600-RNA-Clean-Up-and-Concentration-Kit-WEB_0.jpg?itok=322TKX0T">
+      <h3>RNA Clean-Up and Concentration Kit</h3>
+      <p>43200</p>
+         <form action="" method="post" id="add-to-cart-variation-341" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-341" siq_id="autopick_3205">
+                      <input type="hidden" id="variation_id" name="variation_id" value="341">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-341" name="op" value="Add to cart">
+                    </form>
+    </div></a>
+
+    <a class="prod-card sequencing vitro" href="https://norgenbiotek.com/product/rna-clean-and-concentration-kits?v=576" target="_blank"><div>
+      <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/61000%20RNA%20Clean-Up%20and%20Concentration%20Micro-Elute%20Kit%20WEB_0.jpg?itok=X0pt_p4R">
+      <h3>RNA Clean-Up and Concentration Micro-Elute Kit</h3>
+      <p>61000</p>
+          <form action="" method="post" id="add-to-cart-variation-576" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-576" siq_id="autopick_9901">
+                      <input type="hidden" id="variation_id" name="variation_id" value="576">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-576" name="op" value="Add to cart">
+                    </form>
+    </div></a>
+
+    <a class="prod-card sequencing vitro dna transfection" href="https://norgenbiotek.com/product/cleanall-rnadna-clean-and-concentration-kit?v=39" target="_blank"><div>
+      <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/23800%20CleanAll%20DNA-RNA%20Clean-Up-and%20Concentratio%20%20Micro%20Kit%20WEB_0.jpg?itok=wPD7JD3y">
+      <h3>Clean All DNA/RNA Clean-Up and Concentration Micro Kit</h3>
+      <p>23800</p>
+          <form action="" method="post" id="add-to-cart-variation-39" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-39" siq_id="autopick_2701">
+                      <input type="hidden" id="variation_id" name="variation_id" value="39">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-39" name="op" value="Add to cart">
+                    </form>
+    </div></a>
+
+
+
+
+    
+    
+
+    
+
+    
+
+    
+    <a class="prod-card transfection" href="https://norgenbiotek.com/product/endotoxin-removal-kits-dna?v=18" target="_blank"><div>
+      <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/21900-Reflection-web.jpg?itok=O7AF8jKB">
+      <h3>Endotoxin Removal Kit (Maxi) - For DNA</h3>
+      <p>21900</p>
+             <form action="" method="post" id="add-to-cart-variation-18" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-18" siq_id="autopick_9060">
+                      <input type="hidden" id="variation_id" name="variation_id" value="18">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-18" name="op" value="Add to cart">
+                    </form>
+    </div></a>
+
+   
+
+    <a class="prod-card transfection" href="https://norgenbiotek.com/product/endotoxin-removal-kits-dna?v=17" target="_blank"><div>
+      <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/21900-Reflection-web.jpg?itok=O7AF8jKB">
+      <h3>Endotoxin Removal Kit (Mini) - For DNA</h3>
+      <p>22700</p>
+             <form action="" method="post" id="add-to-cart-variation-17" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-17" siq_id="autopick_9060">
+                      <input type="hidden" id="variation_id" name="variation_id" value="17">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-17" name="op" value="Add to cart">
+                    </form>
+    </div></a>
+
+    <a class="prod-card transfection" href="https://norgenbiotek.com/product/endotoxin-removal-kits-dna?v=480" target="_blank"><div>
+      <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/52200-Reflection-web.jpg?itok=Xs_rZWMs">
+      <h3>Endotoxin Removal Kit (Midi) - For DNA</h3>
+      <p> 52200</p>
+             <form action="" method="post" id="add-to-cart-variation-480" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-480" siq_id="autopick_9060">
+                      <input type="hidden" id="variation_id" name="variation_id" value="480">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-480" name="op" value="Add to cart">
+                    </form>
+    </div></a>
+    </div>
+</section>
+
+<section style="margin:100px auto;">
+	<div class="container support">
+		<h2 style="font-size:40px;text-align:center;FONT-WEIGHT: 600;">Supporting Data</h2>
+		<hr>
+		<div class="slideshow-container">
+  			<!-- Full-width images with number and caption text -->
+  			<div>
+  				<a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+  			</div>
+  			<div>
+  				<div class="mySlides fade2">
+    				
+    					<h3>Gel Electrophoresis </h3>
+    					<a href="https://norgenbiotek.com/product/dna-gel-extraction-kit?v=8" target="_blank"><img src="https://norgenbiotek.com/sites/default/files/images/13100-fig2.jpg"></a>
+    					<div class="text"><strong>Efficient Recovery of Large DNA Fragments. </strong>The efficient recovery of Norgen's DNA Gel Extraction Kit is illustrated by purification of 1.5 µg of a 3,700 bp fragment from a 0.9% agarose gel using Norgen's DNA Gel Extraction Kit (Lanes 5-7) and a competitor's kit (Lanes 2-4). Eluted DNA was resolved on a 1X TAE, 0.9% agarose gel. Lane 1 indicates 300 ng (20%) of the input amount, while lanes 2-7 contain 10 µL (20%) of the 50 µL eluted amount. Norgen's kit shows a higher recovery than the competitors kit.</div>
+  				</div>
+
+  				<div class="mySlides fade2">
+    				
+    					<h3>PCR/qPCR</h3>
+    					<a href="https://norgenbiotek.com/product/pcr-purification-kit?v=6" target="_blank"><img src="https://norgenbiotek.com/sites/default/files/images/14400-fig1.jpg"></a>
+   						<div class="text"><strong>High Yield Purification. </strong>The high yield of Norgen's PCR Purification Kit is illustrated by purifying 3.5 µg of a 500 bp PCR-amplified product from a reaction mixture and comparing the recovery with a competitor. The purifications were performed in triplicate. DNA recovery was quantified by running 350 ng (1/10th) of the input and 5 µL (1/10th) of 50 µL DNA elution on a 1X TAE, 1% agarose gel followed by densitometry. The average yield for each kit is shown in Figure 1. Norgen's kit shows a significantly higher recovery than the competitor's kit.</div>
+  				</div>
+
+  				<div class="mySlides fade2">
+    				
+    					<h3>Sequencing</h3>
+    					<a href="https://norgenbiotek.com/product/rna-clean-and-concentration-kits?v=231" target="_blank"><img src="https://norgenbiotek.com/sites/default/files/images/product_figures/rna-micro-elute-fig5.jpg"></a>
+    					<div class="text"><strong> Concentration of RNA prior to Next Generation Sequencing (NGS) applications. </strong>Total RNA was purified from 200 µL of plasma collected on EDTA blood tubes using Norgen's Total RNA Purification Kit (Cat. 17200) and eluted in 50 µL of elution solution. The same RNA was also concentrated two-fold using the Micro-Elute RNA Column by eluting in 25 µL of elution solution. Five microliters of both the RNA without additional concentration and the 2X concentrated RNA were used as inputs to generate RNA libraries (using the NEBNext® Small RNA Library Prep Set for Illumina® and following manufacturer’s instructions) for small RNA NGS on the MiSeq (Illumina) platform. A) The prepared small RNA libraries were visualized on a 6% TBE polyacrylamide gel, where the library prepared with 2X concentrated RNA contained more ligated/indexed miRNA cDNA (147-160 bp) products than the library prepared using the RNA without concentration. B) The cDNA was extracted from excised gel bands and interrogated using the Agilent 2100 Bioanalyzer (High Sensitivity DNA Assay). As would be expected based on input, the small RNA library prepared with the 2X concentrated RNA sample was approximately two times more concentrated than the library prepared with RNA without prior concentration (39.8 vs 21.2 nM, respectively).</div>
+  				</div>
+  				<div class="mySlides fade3">
+    				
+    					<h3>Transfection</h3>
+    					<a href="https://norgenbiotek.com/product/cleanall-rnadna-clean-and-concentration-kit?v=39" target="_blank"><img src="https://norgenbiotek.com/sites/default/files/images/23800-fig1.jpg"></a>
+    					<div class="text"><strong>High Recoveries and Efficient Endotoxin Removal. </strong> High recoveries of DNA can be seen when using the CleanAll kit, and these high recoveries are not compromised even during endotoxin removal. In Panel A, 1 µg of a PCR product was cleaned using the CleanAll DNA/RNA Clean-Up and Concentration Micro Kit as well as Norgen's PCR Purification Kit. More than 0.9 µg of the DNA was recovered from both kits with a comparable percent recovery of over 90%. In Panel B, 10 µg of plasmid DNA preparation was cleaned from endotoxin by using the CleanAll DNA/RNA Kit. Endotoxin levels of the plasmid DNA sample were reduced from 0.75 EU/µg plasmid DNA to less 0.05 EU/µg plasmid DNA. Approximately 95% of the endotoxin units in the DNA sample were removed using the kit, therefore the kit allows for high recoveries coupled with exceptional cleanup.</div>
+  				</div>
+  				<div class="mySlides fade4">
+    				
+    					<h3>Mass Spectrometry</h3>
+    					<a href="https://norgenbiotek.com/product/proteospin-total-protein-concentration-detergent-clean-and-endotoxin-removal-kits?v=58" target="_blank"><img src="https://norgenbiotek.com/sites/default/files/images/22800-fig6.jpg"></a>
+    					<div class="text"><strong>epresentative Recovery and Salt Reduction using the ProteoSpin™ Total Protein Concentration, Detergent Clean-Up and Endotoxin Removal Mini Kit.</strong>To investigate salt removal using the ProteoSpin™ Total Protein Concentration, Detergent Clean-Up and Endotoxin Removal Mini Kit, 50 µg samples of BSA were prepared in 1 mL samples of sodium acetate and were spiked with 300 ppm of MgCl2, NaCl, KCl, CaCl2 or LiCl. The salt was removed using the provided protocol, and the proteins were eluted into 2 separate 50 µL elutions of 250 mM ammonium hydroxide. Ammonium hydroxide is not the provided elution buffer, but was required to allow for the analysis of the amount of salt in the elutions. The 2 elutions were combined for analysis. The amount of BSA recovery was determined using the BioRad Protein Assay, and the amounts can be seen in the table above. The BSA recoveries were lower than expected due to the fact that an alternate Elution Solution was used for analysis that was not optimized for recovery. The amount of salt present in the elutions was determined by ICP/MS designed for elemental analysis. As it can be seen, salt removal was up to 99.7% using this kit.</div>
+  				</div>
+  			</div>
+  			<!-- Next and previous buttons -->
+  			<div>
+  				<a class="next" onclick="plusSlides(1)">&#10095;</a>
+  			</div>
+		</div>
+		<br>
+		<div style="text-align:center">
+  			<span class="dot" onclick="currentSlide(1)"></span>
+  			<span class="dot" onclick="currentSlide(2)"></span>
+  			<span class="dot" onclick="currentSlide(3)"></span>
+  			<span class="dot" onclick="currentSlide(4)"></span>
+  			<span class="dot" onclick="currentSlide(5)"></span>
+		</div>
+	</div>
+</section>
+
+
+<section class="container" style="margin-bottom:50px;">
+	<div class="disclaimer">
+		<p>*Disclaimer: This promotion is available only to customers in Canada or the U.S. The discount is applied to selected clean-up and concentration products. The discount is not available to Norgen Biotek distributors and cannot be combined with other existing promotions. Offer valid until December 31st, 2024, at 12 PM (GMT-4).</p>
+	</div>
+</div>
+
+
+<script>
+	function click_name(elem, elem2){
+		var class_name = elem;
+
+		if(class_name == "all"){
+			var all_prod = document.getElementsByClassName("prod-card");
+			for(var i = 0; i < all_prod.length; i++){
+				all_prod[i].style.display = "flex";
+			}
+		}
+		else{
+		var tables = document.getElementsByClassName("alltables");
+		var each_prod = tables[0].getElementsByClassName("prod-card");
+		console.log(each_prod);
+		for(var i = 0; i < each_prod.length; i++){
+			console.log(each_prod[i]);
+				each_prod[i].style.display = "none";
+		
+		}
+		var elem_prod = tables[0].getElementsByClassName(elem);
+		console.log(elem_prod);
+		for(var j = 0; j < elem_prod.length; j++){
+			elem_prod[j].style.display = "flex";
+		}
+		}
+		
+
+		var li_element = elem2;
+		var li_elements = document.getElementsByClassName("name");
+
+		for(var i = 0; i < li_elements.length; i++){
+			li_elements[i].classList.remove("name-selected");
+		}
+
+		console.log(elem2);
+		var p_element = elem2.getElementsByClassName("name");
+		p_element[0].classList.add("name-selected");
+
+
+	}
+
+	let slideIndex = 1;
+showSlides(slideIndex);
+
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  let i;
+  let slides = document.getElementsByClassName("mySlides");
+  let dots = document.getElementsByClassName("dot");
+  if (n > slides.length) {slideIndex = 1}    
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";  
+  }
+  for (i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "inline-grid";  
+  dots[slideIndex-1].className += " active";
+}
+</script>

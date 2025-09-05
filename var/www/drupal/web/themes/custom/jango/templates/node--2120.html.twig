@@ -1,0 +1,464 @@
+{#
+/**
+* @file
+* Default theme implementation to display a node.
+*
+* Available variables:
+* - node: The node entity with limited access to object properties and methods.
+* Only method names starting with "get", "has", or "is" and a few common
+* methods such as "id", "label", and "bundle" are available. For example:
+* - node.getCreatedTime() will return the node creation timestamp.
+* - node.hasField('field_example') returns TRUE if the node bundle includes
+* field_example. (This does not indicate the presence of a value in this
+* field.)
+* - node.isPublished() will return whether the node is published or not.
+* Calling other methods, such as node.delete(), will result in an exception.
+* See \Drupal\node\Entity\Node for a full list of public properties and
+* methods for the node object.
+* - label: (optional) The title of the node.
+* - content: All node items. Use {{ content }} to print them all,
+* or print a subset such as {{ content.field_example }}. Use
+* {{ content|without('field_example') }} to temporarily suppress the printing
+* of a given child element.
+* - author_picture: The node author user entity, rendered using the "compact"
+* view mode.
+* - metadata: Metadata for this node.
+* - date: (optional) Themed creation date field.
+* - author_name: (optional) Themed author name field.
+* - url: Direct URL of the current node.
+* - display_submitted: Whether submission information should be displayed.
+* - attributes: HTML attributes for the containing element.
+* The attributes.class element may contain one or more of the following
+* classes:
+* - node: The current template type (also known as a "theming hook").
+* - node--type-[type]: The current node type. For example, if the node is an
+* "Article" it would result in "node--type-article". Note that the machine
+* name will often be in a short form of the human readable label.
+* - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+* teaser would result in: "node--view-mode-teaser", and
+* full: "node--view-mode-full".
+* The following are controlled through the node publishing options.
+* - node--promoted: Appears on nodes promoted to the front page.
+* - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+* teaser listings.
+* - node--unpublished: Appears on unpublished nodes visible only to site
+* admins.
+* - title_attributes: Same as attributes, except applied to the main title
+* tag that appears in the template.
+* - content_attributes: Same as attributes, except applied to the main
+* content tag that appears in the template.
+* - author_attributes: Same as attributes, except applied to the author of
+* the node tag that appears in the template.
+* - title_prefix: Additional output populated by modules, intended to be
+* displayed in front of the main title tag that appears in the template.
+* - title_suffix: Additional output populated by modules, intended to be
+* displayed after the main title tag that appears in the template.
+* - view_mode: View mode; for example, "teaser" or "full".
+* - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+* - page: Flag for the full page state. Will be true if view_mode is 'full'.
+* - readmore: Flag for more state. Will be true if the teaser content of the
+* node cannot hold the main body content.
+* - logged_in: Flag for authenticated user status. Will be true when the
+* current user is a logged-in member.
+* - is_admin: Flag for admin user status. Will be true when the current user
+* is an administrator.
+*
+* @see template_preprocess_node()
+*
+* @ingroup themeable
+*/
+#}
+<article{{ attributes }}>
+
+  {{ title_prefix }}
+  {% if label and not page %}
+  <h2{{ title_attributes }}>
+    <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+    </h2>
+    {% endif %}
+    {{ title_suffix }}
+
+    {% if display_submitted %}
+    <footer>
+      {{ author_picture }}
+      <div{{ author_attributes }}>
+        {% trans %}Submitted by {{ author_name }} on {{ date }}{% endtrans %}
+        {{ metadata }}
+        </div>
+    </footer>
+    {% endif %}
+
+    <div{{ content_attributes }}>
+      {{ content.body }}
+      </div>
+
+      </article>
+
+
+      <style>
+        #form-container.fullscreen {
+          position: fixed;
+          z-index: 999999999;
+          width: 100%;
+          overflow: scroll;
+          background: #fff;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+        }
+
+        #form-wrapper {
+          position: relative;
+          padding:20px;
+          max-width:700px;
+          margin:auto;
+          min-height: 100%;
+          display: flex;
+          flex-direction: column;
+        }
+
+        #success {
+          background: #004897f0;
+          color: #fff;
+          width: 50vw;
+          height: 50vw;
+          margin: auto;
+          left: 0;
+          right: 0;
+          top: 0;
+          bottom: 0;
+          border-radius: 100%;
+          display: none;
+          position: fixed;
+          opacity: 1;
+          visibility: visible;
+        }
+
+        #success.animate {
+          animation: fadeout 1s linear 1.5s 1 forwards;
+        }
+
+        .success-wrapper {
+          margin: auto;
+          display: flex;
+          flex-direction: column;
+          font-size: 5vw;
+        }
+
+        .success-wrapper svg polyline {
+          animation: checkmark 0.5s linear 1s 1 forwards;
+          stroke-dasharray: 45;
+          stroke-dashoffset: 45;
+        }
+
+        #fullscreen-btn {
+          position: absolute;
+          bottom: 5px;
+          right: 5px;
+          background-color: #fff;
+          border: none;
+          color: #004897;
+        }
+
+        #conferenceleadform-container {
+          margin: auto;
+        }
+
+        #conference-lead-form {
+          display: inline-block;
+          margin: 3em auto;
+          max-width: 900px;
+        }
+
+        #conference-lead-form .item {
+          width: 75%;
+          display: block;
+          margin: auto;
+        }
+
+        #conference-lead-form .item:not(label) {
+          margin-bottom: 2em;
+        }
+
+        .cool-labels {
+          position: relative;
+        }
+
+        #conference-lead-form .cool-labels label.item {
+          position: absolute;
+          left: calc(12.5% + 0.75em + 10px);
+          top: -0.75em;
+          background: #fff;
+          display: inline-block;
+          width: auto;
+          padding: 0px 5px;
+        }
+
+        #conference-lead-form .cool-labels input.item {
+          padding-left: calc(0.75em + 15px);
+        }
+
+        #conference-lead-form .cool-labels label .required-asterisk {
+          color: #ec1d25;
+        }
+
+        #conference-lead-form input#opt_in {
+          transform: scale(4) translateX(4px) translateY(3px);
+          margin-right: 4em;
+        }
+
+        #conference-lead-form #notes {
+          padding: 1em;
+          padding-left: calc(0.75em + 10px);
+          border-radius: 34px;
+          resize: vertical;
+        }
+
+        .logo {
+          max-width: 200px;
+          margin: 3em auto;
+        }
+
+        .loader {
+          position: fixed;
+          left: 0;
+          right: 0;
+          top: 0;
+          bottom: 0;
+          margin: auto;
+          border: 20px solid #EAF0F6;
+          border-radius: 50%;
+          border-top: 20px solid #004897;
+          width: 200px;
+          height: 200px;
+          animation: spinner 4s linear infinite;
+        }
+
+        .mailing-list-disclaimer {
+          font-size: 0.75em;
+        }
+
+        @keyframes spinner {
+          0% {
+            transform: rotate(0deg);
+          }
+
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+
+        @keyframes fadeout {
+          to {
+            opacity: 0%;
+            visibility: hidden;
+          }
+        }
+
+        @keyframes checkmark {
+          to {
+            stroke-dashoffset: 0;
+          }
+        }
+
+        .btn-primary {
+          background-color: #004897;
+          border-color: #004897;
+          border-radius: 40px;
+        }
+
+        .btn-primary:hover {
+          background-color: #3276b1;
+          border-color: #285e8e;
+        }
+
+
+        /* New Styles 2024 */
+        fieldset.lead-profile-fieldset fieldset > legend{
+          font-weight: 300;
+          font-size: 18px;
+          color:black;
+          border-bottom:none;
+          margin-bottom:0px;
+        }
+        fieldset.lead-profile-fieldset fieldset.fieldgroup .fieldset-wrapper{
+          padding:20px;
+          border:1px solid #e5e5e5;;
+        }
+        fieldset.lead-profile-fieldset fieldset .form-checkboxes{
+          display:grid;
+          grid-template-columns: 1fr 1fr 1fr;
+          gap:10px;
+        }
+        .form-item-newsletter-subscribe .description{
+          font-size:12px;
+          padding-left:30px;
+        }
+        .form-item-newsletter-subscribe{
+          margin:40px auto;
+        }
+        .zsiq_floatmain{
+          display:none!important;
+        }
+        dotlottie-player{
+          margin:auto;
+        }
+      </style>
+
+      <div id="form-container" class="fullscreen">
+        <div id="form-wrapper">
+          <img class="logo" src="/themes/custom/jango/logo.svg" alt="Norgen Biotek Logo"
+            title="Norgen Biotek Logo">
+          {{conference_lead}}
+
+          {# <form id="form" action="" method="post">
+            <div class="item">
+              <h2>Personal Information</h3>
+            </div>
+            <div class="cool-labels">
+              <label class="item" for="fname">First Name<span class="required-asterisk">*</span></label>
+              <input class="item" type="text" id="fname" name="fname" placeholder="First Name" required>
+            </div>
+            <div class="cool-labels">
+              <label class="item" for="lname">Last Name<span class="required-asterisk">*</span></label>
+              <input class="item" type="text" id="lname" name="lname" placeholder="Last Name" required>
+            </div>
+            <div class="cool-labels">
+              <label class="item" for="email">Email<span class="required-asterisk">*</span></label>
+              <input class="item" type="email" id="email" name="email" placeholder="email@domain.com" required>
+            </div>
+            <div class="item">
+              <h2>Professional Information</h3>
+            </div>
+            <div class="cool-labels">
+              <label class="item" for="company">Company/Institution<span class="required-asterisk">*</span></label>
+              <input class="item" type="text" id="company" name="company" placeholder="Company or Institution Name"
+                required>
+            </div>
+            <div class="cool-labels">
+              <label class="item" for="job_title">Job Title</label>
+              <input class="item" type="text" id="job_title" name="job_title" placeholder="Job Title">
+            </div>
+            <div class="cool-labels">
+              <label class="item" for="interest">Area of Interest</label>
+              <input class="item" type="text" id="interest" name="interest"
+                placeholder="eg: liquid biopsy, DNA purification, etc.">
+            </div>
+
+            <input type="hidden" id="event" name="event" value="BZI event">
+
+            <div class="item" style="margin-top:80px;margin-bottom:80px;">
+              <div style="display: flex;padding:0px 3px;">
+                <input type="checkbox" id="opt_in" name="opt_in" value="true">
+                <label for="opt_in">I would like to receive emails from Norgen Biotek regarding webinars, services,
+                  and other marketing material.*</label>
+              </div>
+              <div class="mailing-list-disclaimer item">*You can unsubscribe at any time by clicking the link in the
+                footer of our emails. For information about our privacy practices, please visit our website.</div>
+            </div>
+
+            <div class="cool-labels">
+              <label class="item" for="notes">Special Notes</label>
+              <textarea class="item" type="text" id="notes" name="notes" rows="5"
+                placeholder="Type notes here"></textarea>
+            </div>
+
+            <div class="loader" style="display:none;"></div>
+            <div class="item" style="padding-top: 2em;text-align:center;">
+              <button class="btn btn-primary" style="padding:1.5em 3em;" type="submit" id="submit" name="submit"
+                onclick="loader_anim();">SUBMIT</button>
+            </div>
+          </form> #}
+          <button id="fullscreen-btn">Toggle Full Screen<i class="fa fa-expand"
+              style="font-size:1.5em;margin-left:0.25em;"></i>
+          </button>
+          <div id="success">
+            <div class="success-wrapper">
+              <span>Thank You</span>
+              <svg id="a" style="width:15vw;min-width:2em;max-width:5em;margin:auto;" xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 30.24 21.16">
+                <defs>
+                  <style>
+                    .b {
+                      fill: none;
+                      stroke: #fff;
+                      stroke-linecap: round;
+                      stroke-linejoin: round;
+                      stroke-width: 3px;
+                    }
+                  </style>
+                </defs>
+                <polyline class="b" points="1.5 10.58 10.58 19.66 28.74 1.5" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        function loader_anim() {
+          var a = document.getElementById("fname").value;
+          var b = document.getElementById("lname").value;
+          var c = document.getElementById("email").value;
+          var d = document.getElementById("company").value;
+
+          if (a != "" && b != "" && c != "" && d != "") {
+            document.getElementById('form-wrapper').style.opacity = '0.5';
+            document.getElementsByClassName("loader")[0].style.display = 'block';
+          }
+        }
+
+        function toggleFullScreen() {
+          const form_container = document.getElementById("form-container");
+          if (form_container.classList.contains("fullscreen")) {
+            form_container.classList.remove("fullscreen");
+            document.querySelector("html").style.overflow = "auto";
+          }
+          else {
+            form_container.classList.add("fullscreen");
+            document.querySelector("html").style.overflow = "hidden";
+          }
+        }
+
+        function formSuccess() {
+          const success_div = document.getElementById("success");
+          success_div.style.display = "flex";
+          success_div.classList.add("animate");
+        }
+
+        const fullscreen_button = document.getElementById("fullscreen-btn");
+        fullscreen_button.addEventListener('click', event => {
+          toggleFullScreen();
+        });
+        fullscreen_button.addEventListener('keydown', event => {
+          if (event.keyCode === 13 || event.keyCode === 32) { //13=enter, 32=spacebar
+            toggleFullScreen();
+          }
+        });
+
+      </script>
+      <script>
+        const submit = document.getElementById('edit-submit')
+        submit.addEventListener('click', save_local)
+
+        function save_local() {
+          const customerData = {
+            fname: document.getElementById('edit-conference-fname').value,
+            lname: document.getElementById('edit-conference-lname').value,
+            email: document.getElementById('edit-conference-email').value,
+            job: document.getElementById("edit-conference-job").value,
+            company: document.getElementById("edit-conference-company").value,
+            event_name: document.getElementById("edit-event-name").value,
+            first_engagement: document.getElementById("edit-first-engagement").value,
+            notes: document.getElementById("edit-conference-message").value
+          };
+
+          let customerArray = JSON.parse(localStorage.getItem("customers")) || [];
+
+          customerArray.push(customerData);
+
+          localStorage.setItem("customers", JSON.stringify(customerArray));
+
+        }
+      </script>

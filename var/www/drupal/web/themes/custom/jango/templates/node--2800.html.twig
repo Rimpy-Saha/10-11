@@ -1,0 +1,2477 @@
+<style>
+  /*  html {
+  scroll-behavior: smooth;
+}*/
+
+    #section-main-content .container {
+        width:100%!important;
+        padding-left:0px;
+        padding-right:0px;
+    }
+    .img-header{
+        background-image: url('/sites/default/files/images/norgen-building-2022-dark.jpg');
+        margin: 0 -15px;
+        width: calc(100% + 30px);
+        background-position-y: center;
+    }
+    .region.region-pagetitle, .region.region-breadcrumb{
+        display: none;
+    }
+
+    .timeline-parent{
+        /*display: flex;*/
+       /* overflow-x: hidden;*/
+        background-color:#004897;
+        opacity:1;
+        transition: opacity 1.5s;
+    }
+    .timeline-parent.hide{
+        transition: opacity 1.5s;
+        opacity: 0;
+        position:relative;
+    }
+    .date-shadow-left, .date-shadow-right{
+        -webkit-box-flex: 1;
+        -webkit-flex: 1; 
+        -ms-flex: 1;
+        flex: 1;
+        height:100%;
+        z-index:1;
+        pointer-events: none;
+    }
+    .date-shadow-left{
+        background-image: -webkit-linear-gradient(90deg, #004897, rgba(0, 72, 151, 0.5));
+        background-image: linear-gradient(90deg, #004897, rgba(0, 72, 151, 0.5));
+    }
+    .date-shadow-right{
+        background-image: -webkit-linear-gradient(90deg, rgba(0, 72, 151, 0.5), #004897);
+        background-image: linear-gradient(90deg, rgba(0, 72, 151, 0.5), #004897);
+    }
+
+    .date-wrap{
+        width:130px;
+        display: flex;
+    }
+    .date-wrap ul{
+        width: 2400px;
+        height: 20px;
+        flex: 0 0 auto;
+        transition: all ease-in-out 0.25s 0.25s;
+    }
+    .sticky-submenu .date-wrap ul li{
+        padding:0px;
+        justify-items: center;
+        font-size:18px;
+        color:#fff;
+    }
+
+    .sticky-submenu.isSticky .date-wrap a{
+        font-size: 18px;
+    }
+
+    .timeline-parent li{
+        list-style: none;
+        width:163px;
+        height:24px;
+        float: left;
+
+    }
+
+    .timeline-card{
+        margin:25vh auto;
+        /*height:50vh;*/
+        border-radius:36px;
+        box-shadow: 0 4px 10px -5px rgb(0 0 0 / 9%), 0 6px 20px -6px rgb(0 0 0 / 17%);
+        opacity:0;
+        transform: translate(5000px);
+        transition: opacity 0.5s 0.25s, transform 0.5s;
+    }
+    .timeline-card.visible{
+        opacity:1;
+        transform: translate(0px);
+    }
+    .timeline-card div{
+        padding:20px;
+    }
+    .card-title-section{
+        position: relative;
+        background-size:cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        border-top-right-radius: 36px;
+        border-top-left-radius: 36px;
+        min-height:250px;
+    }
+    #c-1998 .card-title-section{
+        background-image: url('https://norgenbiotek.com/sites/default/files/20th-banner-min.jpg');
+    }
+    #c-2000 .card-title-section{
+        background-image: url('https://norgenbiotek.com/sites/default/files/SIV.jpg');
+    }
+    #c-2005 .card-title-section{
+        background-image: url('https://norgenbiotek.com/sites/default/files/SIV.jpg');
+    }
+    #c-2009 .card-title-section{
+        background-image: url('https://norgenbiotek.com/sites/default/files/SIV.jpg');
+    }
+    #c-2012 .card-title-section{
+        background-image: url('https://norgenbiotek.com/sites/default/files/SIV.jpg');
+    }
+    #c-2015 .card-title-section{
+        background-image: url('https://norgenbiotek.com/sites/default/files/SIV.jpg');
+    }
+    #c-2019 .card-title-section{
+        background-image: url('https://norgenbiotek.com/sites/default/files/images/cdc-covid19.jpg');
+    }
+    #c-2020 .card-title-section{
+        background-image: url('https://norgenbiotek.com/sites/default/files/images/cdc-covid19.jpg');
+    }
+    #c-2021 .card-title-section{
+        background-image: url('https://norgenbiotek.com/sites/default/files/images/cdc-covid19.jpg');
+    }
+    #c-2022 .card-title-section{
+        background-image: url('https://norgenbiotek.com/sites/default/files/images/squidward-future.gif');
+    }
+    .timeline-card div h1, .timeline-card div h2{
+        margin-top:0px;
+        background:#004897;
+        border-radius:12px;
+        padding:10px;
+        width:fit-content;
+        color:#fff;
+    }
+    .timeline-card div h2{
+        /*position: absolute;*/
+        bottom:0;
+    }
+    .carousel-inner-feat{
+        max-height:none;
+    }
+    .featured-product-bkg{
+        background: none;
+    }
+   /* .feature-gradient{
+        height:auto;
+        display:flex; 
+        flex-direction:column;
+    }*/
+    .front-featured h3{
+        margin-top:0px;
+        flex-grow:1;
+
+    }
+    .feat-cont{
+        height: fit-content;
+    }
+    .front-featured{
+       /* height:auto;*/
+        margin:0px;
+        height: 650px !important;
+    }
+
+
+    @media only screen and (min-width:720px){
+        .about-us-content{
+            margin:auto;
+        }
+        .timeline-card{
+            width:72vw;
+        }
+    }
+    @media only screen and (min-width:1080px){
+        .about-us-content{
+          
+            margin:auto;
+        }
+        .timeline-card{
+            width:47vw;
+        }
+    }
+   /* @media only screen and (max-width: 1050px){
+        .featured-car-one{
+            display: block;
+        }
+    }*/
+    @media only screen and (max-width:600px){
+        .timeline-card{
+            width:97vw
+        }
+        .about-us-content{
+           
+            margin:auto;
+        }
+    }
+/*     .skew-parent{
+        transform: skew(340deg, 0deg);
+    } */
+
+/*     .skew-parent div{
+        transform: skew(-340deg, 0deg);
+    } */
+
+    div.node-unpublished{
+        background-color: #fff;
+    }
+
+    /* Testimonials Only */
+.testimonial-list {
+    display: block; /*Fallback for IE*/
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 60px;
+    padding:40px 0px;
+}
+.flexy-testimonials{
+    display: flex;
+    flex-direction: column;
+    padding:0px 25px;
+}
+.quote-box {
+    margin-bottom:60px;
+    position: relative;
+    width: 100%;
+    border-radius: 24px;
+    padding: 15px 20px 20px;
+    font-family: montserrat;
+    font-size: 18px;
+    box-shadow: 0 4px 40px 0 rgba(0,0,0,0.09),0 6px 20px 0 rgba(0,0,0,0.17);
+    height: max-content;
+    transition-duration: 0.5s;
+}
+.quote-box:hover {
+    transform: scale(1.04);
+}
+.quote-box .quote-image {
+    content: '\f10e';
+    position: absolute;
+    right: -20px;
+    top: -20px;
+    font-family: 'Font Awesome 5 Pro' !important;
+    font-weight: 700;
+    font-size: 20px;
+    background: #004897;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    text-align: center;
+    color: #fff;
+    padding: 5px;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+.quote-image i {
+    line-height: 50px;
+}
+.quote-box .quote-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+.quote-box p {
+    padding-right: 20px;
+}
+.quote-box ul {
+    font-size: 12px;
+    list-style-type: none;
+    margin: 0;
+    padding: 0 0 0 20px;
+}
+.quote-box li {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    font-style: italic;
+}
+.quote-box li:before {
+    content: '—';
+    padding-right: 10px;
+    grid-row: span 2;
+}
+.quote-box li b,
+.quote-box li strong {
+    font-size: 14px;
+    font-style: normal;
+}
+.date-wrap a{
+    display: block;
+    font-size: 18px;
+    padding: 5px 15px
+}
+
+.quote-box1 {
+    margin-bottom:60px;
+    position: relative;
+    width: 100%;
+    border-radius: 24px;
+    padding: 15px 20px 20px;
+    font-family: montserrat;
+    font-size: 18px;
+    box-shadow: 0 4px 40px 0 rgba(0,0,0,0.09),0 6px 20px 0 rgba(0,0,0,0.17);
+    height: max-content;
+    transition-duration: 0.5s;
+    margin-left: 1%;
+    margin-bottom: 1%;
+    margin-top: 1%;
+    width: 425px;
+    min-height: 250px;
+    max-height: 250px;
+    background: white;
+}
+.quote-box1:hover {
+    transform: scale(1.04);
+}
+.quote-box1 .quote-image {
+    content: '\f10e';
+    position: absolute;
+    right: -20px;
+    top: -20px;
+    font-family: 'Font Awesome 5 Pro' !important;
+    font-weight: 700;
+    font-size: 20px;
+    background: #004897;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    text-align: center;
+    color: #fff;
+    padding: 5px;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+.quote-image i {
+    line-height: 50px;
+}
+.quote-box1 .quote-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+.quote-box1 p {
+    padding-right: 20px;
+    height: 170px;
+    overflow: auto;
+    font-size: 14px;
+    padding: 4%;
+}
+.quote-box1 ul {
+    font-size: 12px;
+    list-style-type: none;
+    margin: 0;
+    padding: 0 0 0 20px;
+}
+.quote-box1 li {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    font-style: italic;
+}
+.quote-box1 li:before {
+    content: '—';
+    padding-right: 10px;
+    grid-row: span 2;
+}
+.quote-box1 li b,
+.quote-box1 li strong {
+    font-size: 14px;
+    font-style: normal;
+}
+
+/*Media Queries*/
+@media only screen and (max-width: 900px) {
+.testimonial-list {
+display: block;
+}
+.quote-box:not(:last-child) {
+margin-bottom: 40px;
+}
+}
+
+.tech-content{
+    margin-top:5%;
+}
+.about-us-content{
+    margin-top:5%;
+    margin-bottom: 5%;
+}
+.picture-name{
+    display: grid;
+    text-align: center;
+
+}
+/* -------------------------------- 
+
+Primary style
+
+-------------------------------- */
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro);
+*, *::after, *::before {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-size: 1.6rem;
+  font-family: 'Montserrat','Ubuntu',sans-serif;
+  color: #383838;
+  background-color: #f8f8f8;
+}
+
+a {
+  
+  text-decoration: none;
+}
+
+/* -------------------------------- 
+
+Main Components 
+
+-------------------------------- */
+.cd-horizontal-timeline {
+  opacity: 0;
+  margin: 2em auto;
+  -webkit-transition: opacity 0.2s;
+  -moz-transition: opacity 0.2s;
+  transition: opacity 0.2s;
+}
+.cd-horizontal-timeline::before {
+  /* never visible - this is used in jQuery to check the current MQ */
+  content: 'mobile';
+  display: none;
+}
+.cd-horizontal-timeline.loaded {
+  /* show the timeline after events position has been set (using JavaScript) */
+  opacity: 1;
+}
+.cd-horizontal-timeline .timeline {
+  position: relative;
+  height: 55px;
+  width: 100%;
+  /*max-width: 800px;*/
+  margin: 0 auto;
+}
+.cd-horizontal-timeline .events-wrapper {
+  position: relative;
+  height: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  width: 60%
+}
+.cd-horizontal-timeline .events-wrapper::after, .cd-horizontal-timeline .events-wrapper::before {
+  /* these are used to create a shadow effect at the sides of the timeline */
+  content: '';
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  height: 100%;
+  width: 20px;
+}
+.cd-horizontal-timeline .events-wrapper::before {
+  left: 0;
+ /* background-image: -webkit-linear-gradient( left , #f8f8f8, rgba(248, 248, 248, 0));
+  background-image: linear-gradient(to right, #f8f8f8, rgba(248, 248, 248, 0));*/
+}
+.cd-horizontal-timeline .events-wrapper::after {
+  right: 0;
+  /*background-image: -webkit-linear-gradient( right , #f8f8f8, rgba(248, 248, 248, 0));
+  background-image: linear-gradient(to left, #f8f8f8, rgba(248, 248, 248, 0));*/
+}
+.cd-horizontal-timeline .events {
+  /* this is the grey line/timeline */
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  top: 58px;
+  height: 0px;
+  /* width will be set using JavaScript */
+  background: #dfdfdf;
+  -webkit-transition: -webkit-transform 0.4s;
+  -moz-transition: -moz-transform 0.4s;
+  transition: transform 0.4s;
+}
+.cd-horizontal-timeline .filling-line {
+  /* this is used to create the green line filling the timeline */
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #7b9d6f;
+  -webkit-transform: scaleX(0);
+  -moz-transform: scaleX(0);
+  -ms-transform: scaleX(0);
+  -o-transform: scaleX(0);
+  transform: scaleX(0);
+  -webkit-transform-origin: left center;
+  -moz-transform-origin: left center;
+  -ms-transform-origin: left center;
+  -o-transform-origin: left center;
+  transform-origin: left center;
+  -webkit-transition: -webkit-transform 0.3s;
+  -moz-transition: -moz-transform 0.3s;
+  transition: transform 0.3s;
+}
+.cd-horizontal-timeline .events a {
+  position: absolute;
+  bottom: 0;
+  z-index: 2;
+  text-align: center;
+  font-size: 1.3rem;
+  padding-bottom: 15px;
+  color: #383838;
+  /* fix bug on Safari - text flickering while timeline translates */
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+  color:white;
+  font-size: 18px;
+}
+.cd-horizontal-timeline .events a::after {
+  /* this is used to create the event spot */
+  /*content: '';
+  position: absolute;
+  left: 50%;
+  right: auto;
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  -o-transform: translateX(-50%);
+  transform: translateX(-50%);
+  bottom: -5px;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  border: 2px solid #dfdfdf;
+  background-color: #f8f8f8;
+  -webkit-transition: background-color 0.3s, border-color 0.3s;
+  -moz-transition: background-color 0.3s, border-color 0.3s;
+  transition: background-color 0.3s, border-color 0.3s;*/
+}
+.no-touch .cd-horizontal-timeline .events a:hover::after {
+  background-color: #7b9d6f;
+  border-color: #7b9d6f;
+}
+.cd-horizontal-timeline .events a.selected {
+  pointer-events: none;
+  font-size: 25px;
+}
+.cd-horizontal-timeline .events a.selected::after {
+  background-color: #7b9d6f;
+  border-color: #7b9d6f;
+}
+.cd-horizontal-timeline .events a.older-event::after {
+  border-color: #7b9d6f;
+}
+@media only screen and (min-width: 1100px) {
+  .cd-horizontal-timeline {
+    margin: 2em auto;
+  }
+  .cd-horizontal-timeline::before {
+    /* never visible - this is used in jQuery to check the current MQ */
+    content: 'desktop';
+  }
+}
+
+.cd-timeline-navigation a {
+  /* these are the left/right arrows to navigate the timeline */
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  bottom: auto;
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  transform: translateY(-50%);
+  /*height: 34px;
+  width: 34px;
+  border-radius: 50%;
+  border: 2px solid #dfdfdf;*/
+  /* replace text with an icon */
+  /*overflow: hidden;*/
+  color: transparent;
+  text-indent: 100%;
+  white-space: nowrap;
+  -webkit-transition: border-color 0.3s;
+  -moz-transition: border-color 0.3s;
+  transition: border-color 0.3s;
+}
+.cd-timeline-navigation a::after {
+  /* arrow icon */
+  content: '';
+  position: absolute;
+  height: 16px;
+  width: 16px;
+  left: 50%;
+  top: 50%;
+  bottom: auto;
+  right: auto;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -ms-transform: translateX(-50%) translateY(-50%);
+  -o-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+  background: url(../img/cd-arrow.svg) no-repeat 0 0;
+}
+.cd-timeline-navigation a.prev {
+  left: -40;
+  -webkit-transform: translateY(-50%) rotate(360deg);
+  -moz-transform: translateY(-50%) rotate(360deg);
+  -ms-transform: translateY(-50%) rotate(360deg);
+  -o-transform: translateY(-50%) rotate(360deg);
+  transform: translateY(-50%) rotate(360deg);
+}
+.cd-timeline-navigation a.next {
+  right: 30;
+}
+.no-touch .cd-timeline-navigation a:hover {
+  border-color: #7b9d6f;
+}
+.cd-timeline-navigation a.inactive {
+  cursor: not-allowed;
+}
+.cd-timeline-navigation a.inactive::after {
+  background-position: 0 -16px;
+}
+.no-touch .cd-timeline-navigation a.inactive:hover {
+  border-color: #dfdfdf;
+}
+
+.cd-horizontal-timeline .events-content {
+  position: relative;
+  width: 100%;
+  margin: 6em 0;
+  overflow: hidden;
+  -webkit-transition: height 0.4s;
+  -moz-transition: height 0.4s;
+  transition: height 0.4s;
+}
+.cd-horizontal-timeline .events-content li {
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  left: 0;
+  top: 0;
+  -webkit-transform: translateX(-100%);
+  -moz-transform: translateX(-100%);
+  -ms-transform: translateX(-100%);
+  -o-transform: translateX(-100%);
+  transform: translateX(-100%);
+  padding: 0 5%;
+  opacity: 0;
+  -webkit-animation-duration: 0.4s;
+  -moz-animation-duration: 0.4s;
+  animation-duration: 0.4s;
+  -webkit-animation-timing-function: ease-in-out;
+  -moz-animation-timing-function: ease-in-out;
+  animation-timing-function: ease-in-out;
+  min-height: 250px;
+}
+.cd-horizontal-timeline .events-content li.selected {
+  /* visible event content */
+  position: relative;
+  z-index: 2;
+  opacity: 1;
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+}
+.cd-horizontal-timeline .events-content li.enter-right, .cd-horizontal-timeline .events-content li.leave-right {
+  -webkit-animation-name: cd-enter-right;
+  -moz-animation-name: cd-enter-right;
+  animation-name: cd-enter-right;
+}
+.cd-horizontal-timeline .events-content li.enter-left, .cd-horizontal-timeline .events-content li.leave-left {
+  -webkit-animation-name: cd-enter-left;
+  -moz-animation-name: cd-enter-left;
+  animation-name: cd-enter-left;
+}
+.cd-horizontal-timeline .events-content li.leave-right, .cd-horizontal-timeline .events-content li.leave-left {
+  -webkit-animation-direction: reverse;
+  -moz-animation-direction: reverse;
+  animation-direction: reverse;
+}
+.cd-horizontal-timeline .events-content li > * {
+  max-width: 800px;
+  margin: 0 auto;
+}
+.cd-horizontal-timeline .events-content h2 {
+  font-weight: bold;
+  font-size: 2.6rem;
+  /*font-family: "Playfair Display", serif;*/
+  font-weight: 700;
+  line-height: 1.2;
+}
+.cd-horizontal-timeline .events-content em {
+  display: block;
+  font-style: italic;
+  margin: 10px auto;
+}
+.cd-horizontal-timeline .events-content em::before {
+  content: '- ';
+}
+.cd-horizontal-timeline .events-content p {
+  font-size: 1.4rem;
+  color: #959595;
+}
+.cd-horizontal-timeline .events-content em, .cd-horizontal-timeline .events-content p {
+  line-height: 1.6;
+}
+@media only screen and (min-width: 768px) {
+  .cd-horizontal-timeline .events-content h2 {
+    font-size: 3rem;
+  }
+  .cd-horizontal-timeline .events-content em {
+    font-size: 2rem;
+  }
+  .cd-horizontal-timeline .events-content p {
+    font-size: 1.8rem;
+  }
+}
+
+@-webkit-keyframes cd-enter-right {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateX(100%);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateX(0%);
+  }
+}
+@-moz-keyframes cd-enter-right {
+  0% {
+    opacity: 0;
+    -moz-transform: translateX(100%);
+  }
+  100% {
+    opacity: 1;
+    -moz-transform: translateX(0%);
+  }
+}
+@keyframes cd-enter-right {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateX(100%);
+    -moz-transform: translateX(100%);
+    -ms-transform: translateX(100%);
+    -o-transform: translateX(100%);
+    transform: translateX(100%);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateX(0%);
+    -moz-transform: translateX(0%);
+    -ms-transform: translateX(0%);
+    -o-transform: translateX(0%);
+    transform: translateX(0%);
+  }
+}
+@-webkit-keyframes cd-enter-left {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateX(-100%);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateX(0%);
+  }
+}
+@-moz-keyframes cd-enter-left {
+  0% {
+    opacity: 0;
+    -moz-transform: translateX(-100%);
+  }
+  100% {
+    opacity: 1;
+    -moz-transform: translateX(0%);
+  }
+}
+@keyframes cd-enter-left {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateX(-100%);
+    -moz-transform: translateX(-100%);
+    -ms-transform: translateX(-100%);
+    -o-transform: translateX(-100%);
+    transform: translateX(-100%);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateX(0%);
+    -moz-transform: translateX(0%);
+    -ms-transform: translateX(0%);
+    -o-transform: translateX(0%);
+    transform: translateX(0%);
+  }
+}
+.testimonials1 {
+  height:350px; 
+  position:relative; 
+  overflow:hidden;
+      top: -180px;
+      margin-bottom: -100px;
+}
+
+.testimonials_banner {
+  position:absolute; 
+  top:0px; 
+  left:0px; 
+  overflow:hidden; 
+  animation: 35000ms linear 0s infinite normal none running bannermove;
+  display: inline-flex;
+}
+
+.testimonials_banner img {    
+  margin: 0 -0.5em 
+}
+
+@keyframes bannermove {
+  0% {
+      transform: translate(0, 0);
+  }
+  100% {
+      transform: translate(-50%, 0);
+  }
+}
+
+
+.testimonials_banner:hover{
+        animation-play-state: paused;
+}
+.testimonials-bg{
+        height: 550px;
+    background: aliceblue;
+    padding-top: 1px;
+}
+@media screen and (max-width: 720px) {
+.about-us-content{
+    margin-left: 50px;
+    }
+}
+@keyframes myOrbit {
+    from { transform: rotate(0deg) translateX(150px) rotate(0deg); }
+    to   { transform: rotate(360deg) translateX(150px) rotate(-360deg); }
+}
+.circle-planet{
+  animation: myOrbit 4s linear infinite; 
+}
+.top-header{
+/*  background-image: url(https://norgenbiotek.com/sites/default/files/images/norgen-building-2022-dark.jpg);
+*/  background-size: cover;
+ /* margin-bottom: 10%;
+  height: 45%;*/
+  position: relative;
+      background-image: linear-gradient(to right, #022954,transparent), url(https://norgenbiotek.com/sites/default/files/images/about_us_icons/banner4.jpg);
+      /*background: linear-gradient(#022954, #1e6ab0);*/
+}
+.header-above{
+      backdrop-filter: blur(4px);
+}
+.feature-t-2, .feature-t-3, .feature-t-4, .feature-t-5, .feature-t-6, .feature-t-7{
+display:none;
+}
+  .feature-gradient-2{
+grid-template-rows: 0fr 2fr 0fr !important;
+    margin-bottom: 7% !important;
+        box-shadow: 0px 5px 10px -5px #888;
+background:white;
+padding: 24px;
+    margin: 0 auto;
+    height: 100%;
+    width: 100%;
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-rows: max-content 200px max-content auto max-content;
+    -ms-grid-columns: 100%;
+    grid-template-rows: max-content 200px max-content auto max-content;
+    border-radius: 24px;
+transition-duration:2s;
+border-style: solid;
+    border-width: 8px;
+    border-color: #31509e;
+grid-template-rows: 1fr 0fr 0fr !important;
+padding:0;
+}
+.feature-gradient-2:hover{
+    background-image: url(/sites/default/files/images/cf-tube2-dark.jpg);
+       color: white;
+background-size:cover;
+border-color:white;
+background-position: right;
+
+}
+.feature-gradient-2:hover hr{
+margin:20px auto;
+width:60%;
+}
+.feature-gradient-2:hover .overlay{
+border-radius:12px;
+background: #00000057; 
+   box-shadow: inset 0 0 200px #000000;
+}
+.feature-gradient-2:hover h2{
+
+      display:none;
+}
+.feature-gradient-2:hover .feature-t-2{
+display:block;
+color: white;
+        font-size:16px;
+    padding: 10%;
+    padding-top: 35%;
+    text-align: justify;
+}
+.feature-gradient-2 h2{
+    padding: 5%;
+    padding-top: 45%;
+    padding-bottom: 45%;
+}
+.feature-gradient-2:hover .feature-text{
+display:none;
+}
+ .feature-gradient-3{
+grid-template-rows: 0fr 2fr 0fr !important;
+    margin-bottom: 7% !important;
+        box-shadow: 0px 5px 10px -5px #888;
+background:white;
+padding: 24px;
+    margin: 0 auto;
+    height: 100%;
+    width: 100%;
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-rows: max-content 200px max-content auto max-content;
+    -ms-grid-columns: 100%;
+    grid-template-rows: max-content 200px max-content auto max-content;
+    border-radius: 24px;
+border-style: solid;
+    border-width: 8px;
+    border-color: #31509e;
+transition-duration:2s;
+grid-template-rows: 1fr 0fr 0fr !important;
+padding:0;
+}
+.feature-gradient-3:hover{
+   background-image: url(/sites/default/files/images/isolation-lab.jpg);
+       color: white;
+background-size:cover;
+background-position: right;
+border-color:white;
+
+}
+.feature-gradient-3:hover hr{
+margin:20px auto;
+width:60%;
+}
+.feature-gradient-3:hover .overlay{
+border-radius:12px;
+background: #00000057;
+    box-shadow: inset 0 0 200px #000000;
+}
+.feature-gradient-3:hover h2{
+
+      display:none;
+
+}
+.feature-gradient-3:hover .feature-t-3{
+display:block;
+color: white;
+        font-size:16px;
+    padding: 10%;
+    padding-top: 35%;
+    text-align: justify;
+}
+.feature-gradient-3 h2{
+    padding: 5%;
+    padding-top: 45%;
+    padding-bottom: 45%;
+}
+.feature-gradient-3:hover .feature-text{
+display:none;
+}
+ .feature-gradient-4{
+grid-template-rows: 0fr 2fr 0fr !important;
+    margin-bottom: 7% !important;
+        box-shadow: 0px 5px 10px -5px #888;
+background:white;
+padding: 24px;
+    margin: 0 auto;
+    height: 100%;
+    width: 100%;
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-rows: max-content 200px max-content auto max-content;
+    -ms-grid-columns: 100%;
+    grid-template-rows: max-content 200px max-content auto max-content;
+    border-radius: 24px;
+border-style: solid;
+    border-width: 8px;
+    border-color: #31509e;
+transition-duration:2s;
+grid-template-rows: 1fr 0fr 0fr !important;
+padding:0;
+}
+.feature-gradient-4:hover{
+      background-image: url(/sites/default/files/images/rna-bkg.jpg);
+       color: white;
+background-size:cover;
+background-position: right;
+border-color:white;
+
+}
+.feature-gradient-4:hover hr{
+margin:20px auto;
+width:60%;
+}
+.feature-gradient-4:hover .overlay{
+border-radius:12px;
+background: #00000057;
+    box-shadow: inset 0 0 200px #000000;
+}
+.feature-gradient-4:hover h2{
+
+       display:none;
+
+}
+.feature-gradient-4:hover .feature-t-4{
+display:block;
+color: white;
+        font-size:16px;
+    padding: 10%;
+    padding-top: 35%;
+    text-align: justify;
+}
+
+.feature-gradient-4 h2{
+    padding: 5%;
+    padding-top: 45%;
+    padding-bottom: 45%;
+}
+.feature-gradient-4:hover .feature-text{
+display:none;
+}
+
+.feature-gradient-5{
+grid-template-rows: 0fr 2fr 0fr !important;
+    margin-bottom: 7% !important;
+        box-shadow: 0px 5px 10px -5px #888;
+background:white;
+padding: 24px;
+    margin: 0 auto;
+    height: 100%;
+    width: 100%;
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-rows: max-content 200px max-content auto max-content;
+    -ms-grid-columns: 100%;
+    grid-template-rows: max-content 200px max-content auto max-content;
+    border-radius: 24px;
+transition-duration:2s;
+border-style: solid;
+    border-width: 8px;
+    border-color: #31509e;
+grid-template-rows: 1fr 0fr 0fr !important;
+padding:0;
+}
+.feature-gradient-5:hover{
+    background-image: url(https://norgenbiotek.com/sites/default/files/images/ngs-tech.png);
+       color: white;
+background-size:cover;
+border-color:white;
+background-position: right;
+
+}
+.feature-gradient-5:hover hr{
+margin:20px auto;
+width:60%;
+}
+.feature-gradient-5:hover .overlay{
+border-radius:12px;
+background: #00000057;
+    box-shadow: inset 0 0 200px #000000;
+}
+.feature-gradient-5:hover h2{
+
+      display:none;
+}
+.feature-gradient-5:hover .feature-t-5{
+display:block;
+color: white;
+        font-size:16px;
+    padding: 10%;
+    padding-top: 35%;
+    text-align: justify;
+}
+.feature-gradient-5 h2{
+    padding: 5%;
+    padding-top: 45%;
+    padding-bottom: 45%;
+}
+.feature-gradient-5:hover .feature-text{
+display:none;
+}
+.feature-gradient-6{
+grid-template-rows: 0fr 2fr 0fr !important;
+    margin-bottom: 7% !important;
+        box-shadow: 0px 5px 10px -5px #888;
+background:white;
+padding: 24px;
+    margin: 0 auto;
+    height: 100%;
+    width: 100%;
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-rows: max-content 200px max-content auto max-content;
+    -ms-grid-columns: 100%;
+    grid-template-rows: max-content 200px max-content auto max-content;
+    border-radius: 24px;
+transition-duration:2s;
+border-style: solid;
+    border-width: 8px;
+    border-color: #31509e;
+grid-template-rows: 1fr 0fr 0fr !important;
+padding:0;
+}
+.feature-gradient-6:hover{
+       background-image: url(/sites/default/files/images/image/ngs-bkg.jpg);
+       color: white;
+background-size:cover;
+border-color:white;
+background-position: right;
+
+}
+.feature-gradient-6:hover hr{
+margin:20px auto;
+width:60%;
+}
+.feature-gradient-6:hover .overlay{
+border-radius:12px;
+background: #00000057;
+    box-shadow: inset 0 0 200px #000000;
+}
+.feature-gradient-6:hover h2{
+
+      display:none;
+}
+.feature-gradient-6:hover .feature-t-6{
+display:block;
+color: white;
+        font-size:16px;
+    padding: 10%;
+    padding-top: 35%;
+    text-align: justify;
+}
+.feature-gradient-6 h2{
+    padding: 5%;
+    padding-top: 45%;
+    padding-bottom: 45%;
+}
+.feature-gradient-6:hover .feature-text{
+display:none;
+}
+.carousel-control.services.left{
+background: none;
+    border: none;
+background-image:none !important;
+left:100px;
+
+}
+.feature-gradient-7{
+grid-template-rows: 0fr 2fr 0fr !important;
+    margin-bottom: 7% !important;
+        box-shadow: 0px 5px 10px -5px #888;
+background:white;
+padding: 24px;
+    margin: 0 auto;
+    height: 100%;
+    width: 100%;
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-rows: max-content 200px max-content auto max-content;
+    -ms-grid-columns: 100%;
+    grid-template-rows: max-content 200px max-content auto max-content;
+    border-radius: 24px;
+transition-duration:2s;
+border-style: solid;
+    border-width: 8px;
+    border-color: #31509e;
+grid-template-rows: 1fr 0fr 0fr !important;
+padding:0;
+}
+.feature-gradient-7:hover{
+       background-image: url(/sites/default/files/front/lab-bkg-new.jpg);
+       color: white;
+background-size:cover;
+border-color:white;
+background-position: right;
+
+}
+.feature-gradient-7:hover hr{
+margin:20px auto;
+width:60%;
+}
+.feature-gradient-7:hover .overlay{
+border-radius:12px;
+background: #00000057;
+    box-shadow: inset 0 0 200px #000000;
+}
+.feature-gradient-7:hover h2{
+
+      display:none;
+}
+.feature-gradient-7:hover .feature-t-7{
+display:block;
+color: white;
+        font-size:16px;
+    padding: 10%;
+    padding-top: 35%;
+    text-align: justify;
+}
+.feature-gradient-7 h2{
+    padding: 5%;
+    padding-top: 45%;
+    padding-bottom: 45%;
+}
+.feature-gradient-7:hover .feature-text{
+display:none;
+}
+.carousel-control.services.right{
+right:100px;
+background: none;
+    border: none;
+background-image:none !important;
+}
+.featured-car-three{
+display:none;
+}
+.green-bg{
+background: #e8f9fc;
+}
+.each-row {
+    padding-top: 1% !important;
+    padding-bottom: 1% !important;
+    /*padding-left: 15% !important;
+    padding-right: 15% !important;*/
+}
+.feature-gradient {
+    grid-template-rows: 0fr 2fr 0fr !important;
+    margin-bottom: 7% !important;
+    box-shadow: 0px 5px 10px -5px #888;
+    background: white;
+    overflow-y: scroll;
+    /*background-image: linear-gradient(#E5ECF4,#fff);*/
+    padding: 24px;
+    margin: 0 auto;
+    height: 100%;
+    width: 100%;
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-rows: max-content 200px max-content auto max-content;
+    -ms-grid-columns: 100%;
+    grid-template-rows: max-content 200px max-content auto max-content;
+    border-radius: 24px;
+}
+#section-main-content .container {
+    width: 100%!important;
+}
+.carousel-inner-feat{
+max-height:fit-content !important;
+}
+.overlay{
+    grid-template-rows: 400px 45px 50px;
+    display: grid;
+}
+.feature-t-2, .feature-t-3, .feature-t-4, .feature-t-5, .feature-t-6, .feature-t-7{
+display:none;
+}
+  .feature-gradient-2{
+grid-template-rows: 0fr 2fr 0fr !important;
+    margin-bottom: 7% !important;
+        box-shadow: 0px 5px 10px -5px #888;
+background:white;
+padding: 24px;
+    margin: 0 auto;
+    height: 100%;
+    width: 100%;
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-rows: max-content 200px max-content auto max-content;
+    -ms-grid-columns: 100%;
+    grid-template-rows: max-content 200px max-content auto max-content;
+    border-radius: 24px;
+transition-duration:2s;
+border-style: solid;
+    border-width: 8px;
+    border-color: #31509e;
+grid-template-rows: 1fr 0fr 0fr !important;
+padding:0;
+}
+.feature-gradient-2:hover{
+    background-image: url(/sites/default/files/images/cf-tube2-dark.jpg);
+       color: white;
+background-size:cover;
+border-color:white;
+background-position: right;
+
+}
+.feature-gradient-2:hover hr{
+margin:20px auto;
+width:60%;
+}
+.feature-gradient-2:hover .overlay{
+border-radius:12px;
+background: #00000057; 
+   box-shadow: inset 0 0 200px #000000;
+}
+.feature-gradient-2:hover h2{
+
+      display:none;
+}
+.feature-gradient-2:hover .feature-t-2{
+display:block;
+color: white;
+        font-size:16px;
+    padding: 10%;
+    padding-top: 35%;
+    text-align: justify;
+}
+.feature-gradient-2 h2{
+    padding: 5%;
+    padding-top: 45%;
+    padding-bottom: 45%;
+}
+.feature-gradient-2:hover .feature-text{
+display:none;
+}
+ .feature-gradient-3{
+grid-template-rows: 0fr 2fr 0fr !important;
+    margin-bottom: 7% !important;
+        box-shadow: 0px 5px 10px -5px #888;
+background:white;
+padding: 24px;
+    margin: 0 auto;
+    height: 100%;
+    width: 100%;
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-rows: max-content 200px max-content auto max-content;
+    -ms-grid-columns: 100%;
+    grid-template-rows: max-content 200px max-content auto max-content;
+    border-radius: 24px;
+border-style: solid;
+    border-width: 8px;
+    border-color: #31509e;
+transition-duration:2s;
+grid-template-rows: 1fr 0fr 0fr !important;
+padding:0;
+}
+.feature-gradient-3:hover{
+   background-image: url(/sites/default/files/images/isolation-lab.jpg);
+       color: white;
+background-size:cover;
+background-position: right;
+border-color:white;
+
+}
+.feature-gradient-3:hover hr{
+margin:20px auto;
+width:60%;
+}
+.feature-gradient-3:hover .overlay{
+border-radius:12px;
+background: #00000057;
+    box-shadow: inset 0 0 200px #000000;
+}
+.feature-gradient-3:hover h2{
+
+      display:none;
+
+}
+.feature-gradient-3:hover .feature-t-3{
+display:block;
+color: white;
+        font-size:16px;
+    padding: 10%;
+    padding-top: 35%;
+    text-align: justify;
+}
+.feature-gradient-3 h2{
+    padding: 5%;
+    padding-top: 45%;
+    padding-bottom: 45%;
+}
+.feature-gradient-3:hover .feature-text{
+display:none;
+}
+ .feature-gradient-4{
+grid-template-rows: 0fr 2fr 0fr !important;
+    margin-bottom: 7% !important;
+        box-shadow: 0px 5px 10px -5px #888;
+background:white;
+padding: 24px;
+    margin: 0 auto;
+    height: 100%;
+    width: 100%;
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-rows: max-content 200px max-content auto max-content;
+    -ms-grid-columns: 100%;
+    grid-template-rows: max-content 200px max-content auto max-content;
+    border-radius: 24px;
+border-style: solid;
+    border-width: 8px;
+    border-color: #31509e;
+transition-duration:2s;
+grid-template-rows: 1fr 0fr 0fr !important;
+padding:0;
+}
+.feature-gradient-4:hover{
+      background-image: url(/sites/default/files/images/rna-bkg.jpg);
+       color: white;
+background-size:cover;
+background-position: right;
+border-color:white;
+
+}
+.feature-gradient-4:hover hr{
+margin:20px auto;
+width:60%;
+}
+.feature-gradient-4:hover .overlay{
+border-radius:12px;
+background: #00000057;
+    box-shadow: inset 0 0 200px #000000;
+}
+.feature-gradient-4:hover h2{
+
+       display:none;
+
+}
+.feature-gradient-4:hover .feature-t-4{
+display:block;
+color: white;
+        font-size:16px;
+    padding: 10%;
+    padding-top: 35%;
+    text-align: justify;
+}
+
+.feature-gradient-4 h2{
+    padding: 5%;
+    padding-top: 45%;
+    padding-bottom: 45%;
+}
+.feature-gradient-4:hover .feature-text{
+display:none;
+}
+
+.feature-gradient-5{
+grid-template-rows: 0fr 2fr 0fr !important;
+    margin-bottom: 7% !important;
+        box-shadow: 0px 5px 10px -5px #888;
+background:white;
+padding: 24px;
+    margin: 0 auto;
+    height: 100%;
+    width: 100%;
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-rows: max-content 200px max-content auto max-content;
+    -ms-grid-columns: 100%;
+    grid-template-rows: max-content 200px max-content auto max-content;
+    border-radius: 24px;
+transition-duration:2s;
+border-style: solid;
+    border-width: 8px;
+    border-color: #31509e;
+grid-template-rows: 1fr 0fr 0fr !important;
+padding:0;
+}
+.feature-gradient-5:hover{
+    background-image: url(https://norgenbiotek.com/sites/default/files/images/ngs-tech.png);
+       color: white;
+background-size:cover;
+border-color:white;
+background-position: right;
+
+}
+.feature-gradient-5:hover hr{
+margin:20px auto;
+width:60%;
+}
+.feature-gradient-5:hover .overlay{
+border-radius:12px;
+background: #00000057;
+    box-shadow: inset 0 0 200px #000000;
+}
+.feature-gradient-5:hover h2{
+
+      display:none;
+}
+.feature-gradient-5:hover .feature-t-5{
+display:block;
+color: white;
+        font-size:16px;
+    padding: 10%;
+    padding-top: 35%;
+    text-align: justify;
+}
+.feature-gradient-5 h2{
+    padding: 5%;
+    padding-top: 45%;
+    padding-bottom: 45%;
+}
+.feature-gradient-5:hover .feature-text{
+display:none;
+}
+.feature-gradient-6{
+grid-template-rows: 0fr 2fr 0fr !important;
+    margin-bottom: 7% !important;
+        box-shadow: 0px 5px 10px -5px #888;
+background:white;
+padding: 24px;
+    margin: 0 auto;
+    height: 100%;
+    width: 100%;
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-rows: max-content 200px max-content auto max-content;
+    -ms-grid-columns: 100%;
+    grid-template-rows: max-content 200px max-content auto max-content;
+    border-radius: 24px;
+transition-duration:2s;
+border-style: solid;
+    border-width: 8px;
+    border-color: #31509e;
+grid-template-rows: 1fr 0fr 0fr !important;
+padding:0;
+}
+.feature-gradient-6:hover{
+       background-image: url(/sites/default/files/images/image/ngs-bkg.jpg);
+       color: white;
+background-size:cover;
+border-color:white;
+background-position: right;
+
+}
+.feature-gradient-6:hover hr{
+margin:20px auto;
+width:60%;
+}
+.feature-gradient-6:hover .overlay{
+border-radius:12px;
+background: #00000057;
+    box-shadow: inset 0 0 200px #000000;
+}
+.feature-gradient-6:hover h2{
+
+      display:none;
+}
+.feature-gradient-6:hover .feature-t-6{
+display:block;
+color: white;
+        font-size:16px;
+    padding: 10%;
+    padding-top: 35%;
+    text-align: justify;
+}
+.feature-gradient-6 h2{
+    padding: 5%;
+    padding-top: 45%;
+    padding-bottom: 45%;
+}
+.feature-gradient-6:hover .feature-text{
+display:none;
+}
+.carousel-control.services.left{
+background: none;
+    border: none;
+background-image:none !important;
+left:100px;
+
+}
+.feature-gradient-7{
+grid-template-rows: 0fr 2fr 0fr !important;
+    margin-bottom: 7% !important;
+        box-shadow: 0px 5px 10px -5px #888;
+background:white;
+padding: 24px;
+    margin: 0 auto;
+    height: 100%;
+    width: 100%;
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-rows: max-content 200px max-content auto max-content;
+    -ms-grid-columns: 100%;
+    grid-template-rows: max-content 200px max-content auto max-content;
+    border-radius: 24px;
+transition-duration:2s;
+border-style: solid;
+    border-width: 8px;
+    border-color: #31509e;
+grid-template-rows: 1fr 0fr 0fr !important;
+padding:0;
+}
+.feature-gradient-7:hover{
+       background-image: url(/sites/default/files/front/lab-bkg-new.jpg);
+       color: white;
+background-size:cover;
+border-color:white;
+background-position: right;
+
+}
+.feature-gradient-7:hover hr{
+margin:20px auto;
+width:60%;
+}
+.feature-gradient-7:hover .overlay{
+border-radius:12px;
+background: #00000057;
+    box-shadow: inset 0 0 200px #000000;
+}
+.feature-gradient-7:hover h2{
+
+      display:none;
+}
+.feature-gradient-7:hover .feature-t-7{
+display:block;
+color: white;
+        font-size:16px;
+    padding: 10%;
+    padding-top: 35%;
+    text-align: justify;
+}
+.feature-gradient-7 h2{
+    padding: 5%;
+    padding-top: 45%;
+    padding-bottom: 45%;
+}
+.feature-gradient-7:hover .feature-text{
+display:none;
+}
+.carousel-control.services.right{
+right:100px;
+background: none;
+    border: none;
+background-image:none !important;
+}
+.featured-car-three{
+display:none;
+}
+.green-bg{
+background: #e8f9fc;
+}
+.featured-car-two{
+  display: none;
+}
+@media only screen and (max-width: 1050px){
+  .featured-car-one{
+    display: none;
+  }
+}
+  @media only screen and (max-width:1411px){
+      .front-featured{
+       /* height:auto;*/
+        margin:0px;
+        height: 650px !important;
+      }
+      .featured-car-one{
+        display: none;
+      }
+      .featured-car-two{
+        display: block;
+      }
+
+    }
+@media only screen and (max-width: 767px){
+.front-featured {
+
+    margin-bottom: 10% !important;
+}
+.featured-car-two{
+
+display:none;
+}
+.featured-car-three{
+display:block;
+}
+
+
+}
+
+
+@media only screen and (max-width: 900px){
+ .feature-gradient{
+
+    overflow: scroll !important;
+}
+
+}
+  .feature-gradient{
+grid-template-rows: 0fr 2fr 0fr !important;
+    margin-bottom: 7% !important;
+        box-shadow: 0px 5px 10px -5px #888;
+background:white;
+}
+    #section-main-content .container {
+    
+        width:100%!important;
+    
+    }
+    .img-header{
+        background-image: url('/sites/default/files/images/norgen-building-2022-dark.jpg');
+        margin: 0 -15px;
+        width: calc(100% + 30px);
+        background-position-y: center;
+    }
+    .region.region-pagetitle, .region.region-breadcrumb{
+        display: none;
+    }
+.norgen_core{
+
+margin-top:4%;
+margin-bottom:4%;
+margin-left:10%;
+margin-right:10%;
+}
+
+.contract{
+margin-top:4%;
+margin-bottom:4%;
+margin-left:10%;
+margin-right:10%;
+}
+.carousel-control.services {
+    position: absolute;
+    top: 40%; /* pushes the icon in the middle of the height */
+     z-index: 5;
+    display: inline-block;
+}
+
+.tech-content{
+    margin-top:5%;
+}
+.about-us-content{
+    margin-top:5%;
+}
+.about-text{
+   
+    position: relative;
+   
+    z-index: 9;
+}
+.about-img-right{
+      width: 70%;
+   
+    background: aliceblue;
+    padding: 8%;
+    position: relative;
+ 
+        margin: initial;
+    margin-top: -8%;
+        box-shadow: 0 0 4px 22px #f0f8ff;
+}
+.about-img-right img{
+  width:90%;
+}
+.about-img img {
+    width: 90%;
+}
+.about-img {
+    width: 70%;
+    margin: auto;
+    background: #20748214;
+    text-align: end;
+    padding: 8%;
+    position: relative;
+    margin-top: -8%;
+    box-shadow: 0 0 4px 22px #20748214;
+}
+@media only screen and (min-width: 720px){
+  .about-us-content {
+   
+    margin: 3% auto;
+}
+}
+@media only screen and (min-width: 1080px){
+.about-us-content {
+   
+    margin: 3% auto;
+}
+}
+.about-text {
+
+    position: relative;
+    
+    z-index: 9;
+}
+@media (min-width: 2000px){
+  .col-xl-8 {
+    width: 66.66666667%;
+    position: relative;
+    min-height: 1px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.col-xl-4{
+      width: 33.33333333%;
+      position: relative;
+    min-height: 1px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+}
+/*.top-header > img{
+      position: absolute;
+    bottom: 10px;
+    right: 10px;
+    filter: brightness(15.5);
+}*/
+@media (max-width: 768px){
+.top-header {
+
+    height: auto;
+}
+}
+@media (max-width: 1038px){
+.img-mtdna {
+
+    display: none;
+}
+}
+.gradient-rectangle {
+    /*position: absolute;
+    transform: translateY(calc(100px - 1.5em));*/
+    width: 100%;
+    height: 1.5em;
+    background-image: linear-gradient(90deg, #03989e, #004aad, #ff1616);
+}
+
+.side-nav-reading{
+    position: fixed;
+    left: 0px;
+    top: calc(50% + 45px);
+    z-index: 1;
+    transform: translateY(-50%);
+    width: calc(14% + 30px);
+    max-width: 215px;
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+    opacity: 0;
+    visibility: hidden;
+    }
+    .side-nav-reading li {
+    position: relative;
+    transform: translate3d(-100%, 0px, 0px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease-in-out 0s;
+    }   
+    .side-nav-reading a {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.6;
+    color: #746d6d;
+    border-bottom: none;
+    padding-left: 36px;
+    margin-bottom: 30px;
+    transition-timing-function: ease-in-out;
+}
+.side-nav-reading li::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 10px;
+    left: -20px;
+    width: 50px;
+    height: 1px;
+    background: #746d6d;
+}
+.side-nav-reading li.active{
+    color: #004897;
+    transform: translateX(20px) !important;
+
+}
+.side-nav-reading li.active a{
+    color: #004897;
+}
+.side-nav-reading li.active::before {
+    background: #004897;
+}
+.side-nav-reading.is-visible {
+  opacity: 1;
+  visibility: visible;
+  z-index: 9999;
+}
+.side-nav-reading.is-visible li {
+    opacity: 1;
+    visibility: visible;
+    transform: translate3d(0px, 0px, 0px);
+    margin-bottom: 8%;
+}
+
+.flex-content{
+  display: flex;
+  gap:20px;
+  align-items: center;
+}
+.flex-content li{
+      margin: 2% 4%;
+}
+.flex-content-mission{
+  display: flex;
+  gap:50px;
+  align-items: center;
+}
+.mission-content{
+  margin: auto;
+  background: linear-gradient(#004897, #4285c1);
+  color: white;
+}
+.main-banner {
+    height: 500px;
+    background-image: linear-gradient(to right, #f8fcfff2,#022954a6), url(https://norgenbiotek.com/sites/default/files/images/aboutUs/Norgen-Building.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.prod-banner-text {
+    /*margin: -1% 10%;
+    margin-top: max(350px, 1em);
+    margin-bottom: 20px;
+    display: inline-flex;
+    flex-direction: column;*/
+    position:relative;
+    top:50%;
+    translate:transformY(-50%);
+}
+.prod-banner-text h1 {
+    font-weight: 700;
+    color: #004897;
+    font-size: 55px;
+    line-height: 1.4;
+}
+html {
+  scroll-padding-top: 20rem;
+}
+ @media only screen and (max-width:1629px){
+      .front-featured{
+       /* height:auto;*/
+        margin:0px;
+        height: 725px !important;
+      }
+      .feature-gradient{
+        overflow: scroll;
+      }
+
+    }
+  
+     @media only screen and (max-width:1290px){
+      .front-featured{
+       /* height:auto;*/
+        margin:0px;
+        height: 700px !important;
+      }
+
+    }
+   /*    @media only screen and (max-width:1050px){
+      .front-featured{
+        height:auto;
+        margin:0px;
+        height: 475px !important;
+      }
+
+    }*/
+       @media only screen and (max-width:767px){
+      .front-featured{
+       /* height:auto;*/
+        margin:0px;
+        height: 500px !important;
+      }
+
+    }
+      @media only screen and (max-width:651px){
+      .front-featured{
+       /* height:auto;*/
+        margin:0px;
+        height: 600px !important;
+      }
+      .flex-content-mission{
+        flex-direction: column;
+      }
+      .flex-content{
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .about-us-content{
+        
+        padding: 0 !important;
+      }
+      .about-us-content > div{
+      
+        margin-left: 0 !important;
+        width:80% !important;
+      }
+.prod-banner-text {
+    
+    margin-top: max(257px, 0em);
+    
+}
+.about-text{
+  width: 80%;
+}
+.carousel-text{
+  width: 100%;
+}
+    }
+  
+    @media only screen and (max-width:501px){
+.carousel-control.services {
+        top:100%;
+      }
+      .front-featured{
+       /* height:auto;*/
+        margin:0px;
+        height: 650px !important;
+      }
+    }
+    @media only screen and (max-width:337px){
+      .front-featured{
+       /* height:auto;*/
+        margin:0px;
+        height: 875px !important;
+      }
+      .each-row{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .carousel-control.services.left {
+        left: 28px;
+      }
+       .carousel-control.services.right {
+        right: 34px !important;
+      }
+      .carousel-control.services {
+        top:100%;
+      }
+    }
+    @media only screen and (max-width:500px){
+    .testimonials-bg h2{
+      display: none;
+    }
+  }
+
+ /* .container {
+    width: 100%!important;
+}*/
+.red-small-heading{
+  border-left: 8px solid #ec1d25;
+    padding-left: 2%;
+    color: #ec1d25;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.blue-small-heading{
+  border-left: 8px solid #004897;
+    padding-left: 3%;
+    color: #004897;
+    font-weight: 700;
+    font-size: 20px;
+}
+.blue-small-heading-right{
+  border-right: 8px solid #004897;
+    padding-right: 2%;
+    color: #004897;
+    font-weight: 700;
+    font-size: 20px;
+}
+.carousel-indicators {
+  bottom:-30px !important;
+}
+@media screen and (min-width: 768px) {
+    .carousel-indicators {
+        bottom: -60px !important;
+    }
+}
+</style>
+ 
+<!-- <ul class="side-nav-reading">
+  <li class="item" onclick="linkS(this)"><a href="#heading1">Who are we?</a></li>
+  <li class="item" onclick="linkS(this)"><a href="#heading2">Norgen's Technology</a></li>
+  <li class="item" onclick="linkS(this)"><a href="#heading3">Manufacturing Capability, Contract Manufacturing and OEM</a></li>
+  <li class="item" onclick="linkS(this)"><a href="#heading4">cGMP</a></li>
+  <li class="item" onclick="linkS(this)"><a href="#heading5">ISO Certifications and Illumina Propel Certification</a></li>
+  <li class="item" onclick="linkS(this)"><a href="#heading6">Norgen's Core Products and Services</a></li>
+  <li class="item" onclick="linkS(this)"><a href="#heading8">Still Having Doubts?</a></li>
+</ul> -->
+    <section class="main-banner">
+    <div class="prod-banner-text container">
+       <h1>会社概要</h1>
+    </div>
+    </section>
+    
+    <div class="gradient-rectangle"></div>
+    <!-- Who are We -->
+    <div id="aboutcompany"></div>
+    <section class="tech-content about-us-content">
+    
+        <div class="about-text container">
+            <h3 class="red-small-heading">会社概要</h3>
+            <h2 id="heading1" class="section-heading" style="font-weight: 700;font-size: 40px;">会社</h2>
+            <p>
+                Norgen Biotekは1998 年にユセフ・ハジ・アマド 博士によって設立されました。同社は、カナダのオンタリオ州ソロルドにある、ブロック大学から数ブロックの 24,000 平方フィートの最先端施設に所在しています。Norgen社は、ISO9001、ISO13485、ISO15189認証を取得したカナダの完全統合型バイオテクノロジー企業であり、サンプル採取、サンプル前処理、サンプル検出のための製品開発に注力するとともに、科学コミュニティに包括的な研究サービスを提供しています。NorgenのISO認証は、高品質の製品を製造・販売することへのコミットメントと、会社、製品、品質管理システムを継続的に改善することへのコミットメントを示しています。
+
+
+            </p>
+        </div>
+        
+    </section>
+   
+  
+
+
+    <!-- Norgen's Technology -->
+    <div id="abouttech"></div>
+    <section class="tech-content about-us-content" style="padding: 2%;">
+    <div class="row container" style="margin: 2% auto; ">
+        
+        <div class="col-md-4 col-lg-4 col-xl-8">
+            <h3 class="blue-small-heading">テクノロジー</h3>
+            <h2 id ="heading2" class="section-heading" style="font-weight: 700;font-size: 40px;">Norgenのテクノロジー</h2>
+            <p>
+                Norgenは35以上の特許を取得しています。Norgenは、さまざまな検体タイプからの DNA、RNA、マイクロ RNA、タンパク質、エクソソームの精製、濃縮、クリーンアップなど、多くの用途を持つ独自の樹脂/マトリックスに基づくユニークなプラットフォーム技術を開発しました。これらの高分子の効率的な精製は、多くの場合、診断や、ゲノミクスやプロテオミクスの発見を促進する何百もの分子生物学アプリケーションにおける最初のステップとなります。この技術の斬新さが認められ、Norgenは全米研究評議会から名誉ある「2003年イノベーションリーダー賞」を受賞しました。
+            </p>
+        </div>
+        <div class="col-md-8 col-lg-8 col-xl-4">
+          <img src="https://norgenbiotek.com/sites/default/files/images/hamilton-vantage-cGMP-lrg.jpg" style="width: 150%;">
+        </div>
+    </div>
+    </section>
+
+    <!-- Norgen's MANUFACTURING -->
+    <div id="aboutmanufacturing"></div>
+    <section class="tech-content about-us-content">
+    <!-- <div class="row">
+     <div class="col-md-5">
+        <img src="https://norgenbiotek.com/sites/default/files/images/manufacturing-lrg.jpg" style="margin-top:30%;">
+        </div>
+        <div class="col-md-7"> -->
+          <div class="about-text container">
+            <h3 class="red-small-heading">製造能力</h3>
+            <h2 id="heading3" class="section-heading" style="font-weight: 700;font-size: 40px;">製造能力、受託製造、OEM</h2>
+            <p>
+               Norgenは、分離精製キット、サンプル採取・保存装置、分子診断キット、NGSキットなど、すべての製品を開発・製造しています。当社では、これらのキットのすべての試薬と溶液を製造しているだけでなく、これらのキットに関連するスピン・カラムも製造しています。Norgenには、大容量液体充填に使用されるISOクラス5認証のクリーンルームを含む、設備の整った製造施設があります。Norgenはまた、分子生物学および診断学市場向けのキットや試薬のOEMおよび受託製造においても、非常に優れた専門知識を有しています。これには、完全精製／分離キット、サンプル採取・保存装置、および緩衝液やRNA／DNA標準物質を含む分子生物学試薬のカスタマイズ製造が含まれます。Norgenの受託製造サービスは、お一人おひとりのニーズにお応えし、高品質な製品とサービスの提供に努めています。当社は最高品質の製品、迅速な納期、そして親しみやすく、有能で比類のないサービスを提供します。
+
+            </p>
+          </div>
+       <!--  </div>
+        
+        </div> -->
+    </section>
+    <section>
+      <div class="row">
+        <div class="col-md-6" style="padding: 0;">
+      <img src="https://norgenbiotek.com/sites/default/files/images/clean-room-lrg.jpg" style="width:-webkit-fill-available;">
+      </div>
+      <div class="col-md-6" style="padding: 0;">
+      <img src="https://norgenbiotek.com/sites/default/files/images/manufacturing-lrg.jpg" style="width:-webkit-fill-available;">
+      </div>
+      </div>    
+    </section>
+    <!-- Norgen's PRODUCTS -->
+    <div id="aboutproduct"></div>
+    <section class="tech-content about-us-content" style="text-align: right;">
+  
+    
+        <div class="about-text container" style="border-left: none;">
+            <h3 class="blue-small-heading-right">製品</h3>
+            <h2 id="heading4" class="section-heading" style="font-weight: 700;font-size: 40px;">cGMP</h2>
+            <p>
+                Norgenの製品はすべて、cGMP準拠を満たすかそれを上回るISO 13485:2016規格に従って製造されています。完全に検証された設備や製造施設から、高度な訓練を受けた従業員まで、当社はGMPの要件をすべて満たしています。当社の製造工程はすべてSOPによって厳密に管理されており、当社の施設で製造されるすべての製品についてバッチ間の一貫性と完全なトレーサビリティが保証されています。自社製品や医療機器の製造に加え、ライフサイエンスや医療機器業界向けの受託製造も行っています。
+
+            </p>
+        
+        </div>
+
+   
+    </section>
+    <div id="aboutmission"></div>
+    <section class="mission-content">
+      <div class="container">
+      <h3 class="red-small-heading">DÉCLARATION</h3>
+      <h2 id="heading4" class="section-heading" style="font-weight: 700;font-size: 40px;color: white;">ミッション・ステートメント</h3>
+      <div class="flex-content-mission">
+      <div>
+        <h2 style="font-weight: 600;font-size: 35px;color: white;">私たちの使命</h1>
+            <p>
+                Norgen Biotek Corp.は、新たな発見を促す革新的なソリューションを提供することで、お客様のためにカスタマイズされた研究体験を創造することをお約束します。サンプルの採取、保存から抽出、検出まで、最高品質の製品とサービスを保証することで、当社の専門家チームとグローバル・パートナーは、あらゆる段階でお客様をサポートします。
+
+            </p>
+      </div>
+      <div>
+        <h2 style="font-weight: 600;font-size: 35px;color: white;">フォーカス</h1>
+            <p>
+                当社チームは常に、RNA、DNA、エクソソーム、タンパク質抽出に関する製品とサービスポートフォリオの拡大に取り組んでいます。当社の主な焦点は、極めて少量の入力で難しいサンプルタイプを扱うことですが、RNA に熱心であり、最高品質の RNA を抽出するために当社の技術を使用しています。また、当社の技術は、研究用途や診断に使用されるクリーンアップキットや濃縮キットの強化にも使用されています。サンプルの収集、保存、抽出、検出以外にも、リキッドバイオプシーやエクソソームなどの超低濃度サンプルの取り扱いに精通し、高品質の次世代シーケンシングサービスを提供することに専念しています。
+
+            </p>
+      </div>
+    </div>
+    </div>
+    </section>
+   
+<div id="aboutpromise"></div>
+    <section class="tech-content about-us-content flex-content container">
+      <div>
+        <h3 class="blue-small-heading">約束</h3>
+        <h2 id="heading4" class="section-heading" style="font-weight: 700;font-size: 40px;">約束</h2>
+        <ol>
+          <li>最高品質で費用対効果の高い製品とサービスをお客様に提供すること。</li>
+          <li>事業慣行、製造業務、品質管理（QC）手順の改善に一貫して取り組むこと。</li>
+          <li>当社の品質を継続的に改善し、期待を上回るサービスを提供するために、当社の製品、サービス、および全体的な顧客体験に関する顧客からのフィードバックを収集し、実施すること。</li>
+          <li>QC手順を実施・維持するためにチームを教育・訓練することにより、QCにおける問題の特定、解決、修正、予防を促進すること。</li>
+          <li>ISO 13485:2016およびISO 9001:2015に準拠した品質管理手順を維持し、改正されたカナダ医療機器規制（SOR/98-282）を遵守すること。</li>
+        </ol>
+      </div>
+      <div>
+        <img src="https://norgenbiotek.com/sites/default/files/images/CEO-Dr-Haj-portrait.jpg">
+      </div>
+    </section>
+
+    
+
+<div id="aboutcert"></div>
+    <section class="tech-content about-us-content">
+  
+    
+        <div class="about-text container">
+            <h4 class="blue-small-heading">証明書</h4>
+            <h1 id="heading5" class="section-heading" style="font-weight: 700;font-size: 40px;">ISO認証</h1>
+            <p>
+                Norgenは、研究および診断用途のサンプル採取、保存、精製に重点を置いた、ISO 9001:2015、ISO 13485:2016、ISO 15189:2022認証を取得した、完全に統合されたカナダのバイオテクノロジー企業です。NorgenのISO 9001、ISO 13485、ISO 15189認証は、高品質な製品の設計、開発、製造、販売へのコミットメントと、会社、製品、品質管理システムを継続的に改善するコミットメントを示しています。
+
+            </p>
+        
+        </div>
+        <div class="row abtWrap fw-pad" style=" height: auto;margin-bottom: 20px;">
+    
+    
+    <div class="vd-wrapper">
+    
+    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+    <div class="img-cont-iso">
+     <div class="image-box" style="width:50%;margin:auto;">
+       <a href="/sites/default/files/about/FM_547995.pdf"><img src="/sites/default/files/about/certificate_of_registration_2015.jpg" alt="Norgen ISO company"></a>
+    </div>
+    </div>
+    
+    </div>  
+    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+    <div class="img-cont-iso">
+     <div class="image-box" style="width:50%;margin:auto;">
+      <a href="/sites/default/files/about/FM_547994.pdf"><img src="/sites/default/files/about/certificate_of_registration_2016.jpg" alt="Norgen ISO Company"></a>
+    </div>
+    </div>
+    
+    </div>  
+    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+    <div class="img-cont-iso">
+     <div class="image-box" style="width:50%;margin:auto;">
+      <a href="https://norgenbiotek.com/sites/default/files/about/15189.pdf"><img src="https://norgenbiotek.com/sites/default/files/about/ISO15189-certificate-2022.jpg" alt="Norgen ISO Company"></a>
+    </div>
+    </div>
+    
+    </div> 
+    </div>
+    </div>
+   
+    </section>
+    
+ 
+
+   
+
+    <!-- Norgen's LEADERS -->
+    <section class="tech-content about-us-content" style="display: NONE;">
+        <div style="width: 80%;">
+            <h4 style="opacity: 0.4;">LEADERS</h4>
+            <h1 class="section-heading" style="font-weight: 700;font-size: 40px;">Meet Norgen's Team</h1>
+            <p>
+                As a team, this is our promise to provide the highest quality, cost effective products ad services to our clients. We work consistenly to improve our business practices, manufacturing operations and Quality Control (QC) procedures.
+            </p>
+        </div>
+        <div class="row" style="margin-top: 5%;">
+            <div class="col-md-12">
+                <div class="picture-name" style="margin: auto;width: 30%;">
+                    <img src="https://norgenbiotek.com/sites/default/files/images/CEO-Dr-Haj-portrait.jpg">
+                    <p style="font-weight: 700;font-size: 18px;">Dr. Y. Haj-Ahmad, MSC, PhD</p>
+                    <p style="font-size: 16px;">CEO & President</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="picture-name">
+                    <img src="https://norgenbiotek.com/sites/default/files/images/new-careers/real-people/indira-lrg.jpg">
+                    <p style="font-weight: 700;font-size: 18px;">Indira Castillo</p>
+                    <p style="font-size: 16px;">Lab Technician</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="picture-name">
+                    <img src="https://norgenbiotek.com/sites/default/files/images/new-careers/real-people/claudia-lrg.jpg">
+                    <p style="font-weight: 700;font-size: 18px;">Claudia Melanson</p>
+                    <p style="font-size: 16px;">Manufacturing Supervisor & Head of Inventory/Receiving</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="picture-name">
+                    <img src="https://norgenbiotek.com/sites/default/files/images/new-careers/real-people/michelle-lrg.jpg">
+                    <p style="font-weight: 700;font-size: 18px;">Michelle Stopher</p>
+                    <p style="font-size: 16px;">Services Sales Manager</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="picture-name">
+                    <img src="https://norgenbiotek.com/sites/default/files/images/new-careers/real-people/ben-lrg.jpg">
+                    <p style="font-weight: 700;font-size: 18px;">Ben Miles</p>
+                    <p style="font-size: 16px;">Marketing Manager</p>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="picture-name">
+                    <img src="https://norgenbiotek.com/sites/default/files/images/new-careers/real-people/ben-lrg.jpg">
+                    <p style="font-weight: 700;font-size: 18px;">Ben Miles</p>
+                    <p style="font-size: 16px;">Marketing Manager</p>
+                </div>
+            </div>
+      
+        </div>
+        
+    </section>
+  </section>
+  
+
+    <!--------------------------------------------------------------------------****---------------------------------------------------------------------------------->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        console.log("anchoring");
+          e.preventDefault();
+          document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+          });
+      });
+    });
+
+  //        let processScroll = () => {
+  // let docElem = document.documentElement, 
+  //     docBody = document.body,
+  //     scrollTop = docElem['scrollTop'] || docBody['scrollTop'],
+  //     scrollBottom = (docElem['scrollHeight'] || docBody['scrollHeight']) - window.innerHeight/* docElem.scrollHeight */ - 800,  subtract 800 for the approximate height of the footer and copyright sections 
+  //     scrollPercent = scrollTop / scrollBottom * 100 + '%';
+  
+  // var y = window.scrollY;
+  // var side_nav_classlist = document.querySelector(".side-nav-reading").classList;
+  
+  // if (y >= 200) {
+  //   console.log("da",side_nav_classlist);
+  //   side_nav_classlist.add('is-visible');
+  // }
+  // else if (y < 500){
+  //   side_nav_classlist.remove('is-visible');
+   
+  // }
+  
+ 
+  var body_offset;
+  if(window.innerWidth <= 1280 && window.innerHeight >= 500){
+    body_offset = 0.7 * document.body.offsetHeight;
+  }
+  else body_offset = document.body.offsetHeight;
+  if ((window.innerHeight + window.scrollY) >= body_offset - 600) { /* subtract 800 for the approximate height of the footer and copyright sections */
+    side_nav_classlist.remove('is-visible');
+   
+  }
+  // always hide the side nav bar if it will overlap with the blog's content (when window width is less than 1380px).
+  x = window.innerWidth;
+  if(x<1380){
+    side_nav_classlist.remove('is-visible');
+  }
+
+const buttons = document.querySelectorAll('.side-nav-reading li');
+ window.addEventListener("scroll", function(){
+          
+          for (var i =1; i<9; i++){
+            var two = document.getElementById("heading"+i);
+            const offset = two.getBoundingClientRect().top - window.screen.height + 500;
+            console.log(offset);
+            if (offset <= 0){
+              for(var j = 0; j < 8; j++){
+                buttons[j].classList.remove('active');
+        
+              }
+              buttons[i-1].classList.add('active');
+        
+ }         else{
+            buttons[i-1].classList.remove('active');
+            }
+          }
+
+      })
+ var check = false;
+function linkS(clicked_id){
+ 
+  console.log("hereee",clicked_id);
+  check = true;
+  const innerDiv2 = document.querySelector('.side-nav-reading');
+  var h2 = innerDiv2.getElementsByTagName("li");
+  for (var j = 0; j < h2.length; j++){
+    h2[j].classList.remove('active');
+
+  }
+ 
+  clicked_id.classList.add('active');
+}
+window.addEventListener('scroll', processScroll);
+    $(document).ready(function(){
+      // Add smooth scrolling to all links
+      $(".timeline-parent div a").on('click', function(event) {
+    
+        // Make sure this.hash has a value before overriding default behavior
+        if (this.hash !== "") {
+          // Prevent default anchor click behavior
+          event.preventDefault();
+    
+          // Store hash
+          var hash = this.hash;
+    
+          // Using jQuery's animate() method to add smooth page scroll
+          // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+          $('html, body').animate({
+            scrollTop: $(hash).offset().top
+          }, 800, function(){
+    
+            // Add hash (#) to URL when done scrolling (default click behavior)
+            window.location.hash = hash;
+          });
+        } // End if 
+      });
+    });
+
+   
+    </script>

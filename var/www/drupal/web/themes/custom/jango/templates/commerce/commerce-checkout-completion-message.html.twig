@@ -1,0 +1,100 @@
+{#
+/**
+ * @file
+ * Default theme implementation for the completion message.
+ *
+ * Available variables:
+ * - order_entity: The order entity.
+ * - message: The completion message.
+ * - payment_instructions: The payment instructions, if provided.
+ *
+ * @ingroup themeable
+ */
+#}
+<div class="checkout-complete">
+  {{- message -}}
+
+  {% if payment_instructions %}
+    <div class="checkout-complete__payment-instructions">
+      <h2>{{ 'Payment instructions'|t }}</h2>
+      {{ payment_instructions }}
+    </div>
+  {% endif %}
+</div>
+
+{% if order_entity %}
+  {# Add up all shipping costs, and any order-level promotions #}
+  {% set shipping_value = 0 %}
+  {% set order_promotion_value = 0 %}
+  {% set order_promotion_names = [] %}
+  {% for adjustment in order_entity.adjustments %}
+    {% if adjustment.value.type == "shipping" %} 
+      {% set shipping_value = shipping_value + adjustment.value.amount.number %}
+    {% elseif adjustment.value.type == "promotion" or adjustment.value.type == 'shipping_promotion' %} 
+      {% set order_promotion_value = order_promotion_value + adjustment.value.amount.number %}
+      {% set order_promotion_names = order_promotion_names|merge([adjustment.value.label]) %}
+    {% endif %}
+  {% endfor %}
+
+  {# Add up all tax costs #}
+  {% set tax_value = 0 %}
+  {% for order_item in order_entity.order_items %} {# taxes are stored in each order_item (annoying) #}
+    {% for adjustment in order_item.entity.adjustments %} {# check all order_item adjustements and add the tax values #}
+      {% if adjustment.value.type == "tax" %} 
+        {% set tax_value = tax_value + adjustment.value.amount.number %}
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+
+  <script>
+    dataLayer.push({ ecommerce: null });
+    dataLayer.push({
+      event: "purchase",
+      ecommerce: {
+        transaction_id: "{{order_entity.order_id.value}}",
+        value: {{order_entity.total_price.number|round(2)}},
+        currency: "{{order_entity.total_price.currency_code}}",
+        shipping: {{shipping_value|round(2)}},
+        tax: {{tax_value|round(2)}},
+        {% if order_promotion_value != 0 %}
+        discount: {{ order_promotion_value }},
+        {% endif %}
+        {% if order_promotion_names != [] %}
+        promotion_name: "{{ order_promotion_names|join('|') }}",
+        {% endif %}
+        {% set coupon_names = [] %}
+        {% for coupon in order_entity.coupons %}
+          {% set coupon_names = coupon_names|merge([coupon.entity.code.value]) %}
+        {% endfor %}
+        {% if coupon_names != [] %}
+        coupon: {{ coupon_names|join('|') }},
+        {% endif %}
+        items: [
+        {% for order_item in order_entity.order_items %}
+          {
+            item_id: "{{order_item.entity.purchased_entity.entity.sku.value}}",
+            item_name: "{{order_item.entity.purchased_entity.entity.title.value}}",
+            price: {{order_item.entity.unit_price.number|round(2)}},
+            quantity: {{order_item.entity.quantity.value|round(0)}},
+            {% set order_item_discount_value = 0 %}
+            {% set order_item_discount_names = [] %}
+            {% for item_adjustment in order_item.entity.adjustments %}
+              {% if item_adjustment.value.type == "promotion" or item_adjustment.value.type == "shipping_promotion" %}
+                {% set order_item_discount_value = order_item_discount_value + item_adjustment.value.amount.number %}
+                {% set order_item_discount_names = order_item_discount_names|merge([item_adjustment.value.label]) %}
+              {% endif %}
+            {% endfor%}
+            {% if order_item_discount_value != 0 %}
+              discount: {{ order_item_discount_value/(order_item.entity.quantity.value|round(0)) }},
+            {% endif %}
+            {% if order_item_discount_names != [] %}
+              promotion_name: "{{ order_item_discount_names|join('|') }}",
+            {% endif %}
+            index: {{loop.index0}},
+          }{% if loop.last == false %},{% endif %}
+        {% endfor %}
+        ]
+      }
+    });
+  </script>
+{% endif %}

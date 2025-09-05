@@ -1,0 +1,299 @@
+{#
+  /**
+  * @file
+  * Default order total summary template.
+  *
+  * Available variables:
+  * - attributes: HTML attributes for the wrapper.
+  * - totals: An array of order totals values with the following keys:
+  * - subtotal: The order subtotal price.
+  * - adjustments: An array of adjustment totals:
+  * - type: The adjustment type.
+  * - label: The adjustment label.
+  * - total: The adjustment total price.
+  * - weight: The adjustment weight, taken from the adjustment type.
+  * - total: The order total price.
+  *
+  * @ingroup themeable
+  */
+  #}
+  {# <script id='1234545'>console.log({{ _context['is_cart_block_2'] | json_encode | raw}});</script> #}
+  
+  
+  
+  
+  
+  
+  
+ {% if is_cart_block_2  %}
+  
+  <link rel="stylesheet" href="/themes/custom/jango/css/cart-checkout/order_total_component.css">
+  <div class="order-total-wrapper">
+    <div class="field--type-commerce-price">
+      <h2 style="margin-top: 0px; padding-bottom: 10px; font-size: 24px; font-weight: 700;">Order Summary</h2>
+      {{ attach_library('commerce_order/total_summary') }}
+      <div class="order-total-content">
+        {% if totals.subtotal %}
+          <div class="order-total-line order-total-line__subtotal">
+            <span class="order-total-line-label">{{ 'Subtotal'|t }} </span>
+            <span class="order-total-line-value">{{ totals.subtotal|commerce_price_format }}</span>
+          </div>
+        {% endif %}
+        {% for adjustment in totals.adjustments %}
+          <div class="order-total-line order-total-line__adjustment order-total-line__adjustment--{{ adjustment.type|clean_class }}">
+            <span class="order-total-line-label">{{ adjustment.label }} </span>
+            <span class="order-total-line-value">{{ adjustment.amount|commerce_price_format }}</span>
+          </div>
+        {% endfor %}
+        <div class="order-total-line order-total-line__total line-item-total">
+          <span class="order-total-line-label line-item-total-label">{{ 'Total:'|t }} </span>
+          <span class="order-total-line-value line-item-total-raw">{{ totals.total|commerce_price_format }}</span>
+        </div>
+ 
+      {% if progress_to_free_shipping < 100 and progress_to_free_shipping != null and is_review_page == false %}
+        <div class="order-summary">
+          <div class="progress-bar-container">
+            <span class="progress-text">{{ current_total|number_format(2, '.', ',') }} / {{ free_shipping_threshold|number_format(2, '.', ',') }}</span>
+            <div class="bar-progress" data-progress="{{ progress_to_free_shipping }}"></div>
+          </div>
+          <p style="font-size: 17px; color: #555; margin-top: 10px; width: max-content; margin-bottom: 0;">
+            Spend <span style="font-weight: 600;">{{ remaining_to_free_shipping|number_format(2, '.', ',') }}</span> more for <span style="font-weight: 600;">FREE SHIPPING!</span>
+          </p>
+        </div>
+        <style>
+          .progress-bar-container {
+              background-color:grey;
+              border-radius: 5px;
+              overflow: hidden;
+              width: 100%;
+              height: 35px;
+              margin-top: 10px;
+              position: relative;
+          }
+          .progress-text {
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              font-size: 20px;
+              font-weight: bold;
+              color: white;
+              z-index: 1;
+          }
+          
+          .order-summary .progress-bar-container .bar-progress {
+              height: 100%;
+              width: 0%;
+            /* transition: width 1.5s ease; */
+              background-color: #0265cc;
+          }
+
+        </style>
+          
+        <script>
+
+          document.addEventListener('DOMContentLoaded', function () {
+            function setProgressBarWidth() {
+              const progressBar = document.querySelector('.bar-progress');
+              if (!progressBar) return;
+          
+              const progressWidth = progressBar.getAttribute('data-progress') + '%';
+          
+              if (progressBar.style.width !== progressWidth) {
+              progressBar.style.width = progressWidth;
+              localStorage.setItem('progressBarWidth', progressWidth);
+            }
+            }
+          
+            function isInViewport(element) {
+              const rect = element.getBoundingClientRect();
+              return (
+                rect.top >= 0 &&
+                rect.left >= 0 &&
+                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+              );
+            }
+          
+            function handleScroll() {
+              const progressBarContainer = document.querySelector('.progress-bar-container');
+              if (progressBarContainer && isInViewport(progressBarContainer)) {
+                setProgressBarWidth();
+                window.removeEventListener('scroll', handleScroll);
+              }
+            }
+          
+            window.addEventListener('scroll', handleScroll);
+            handleScroll();
+          
+            const observer = new MutationObserver(() => {
+              setProgressBarWidth();
+            });
+          
+            observer.observe(document.body, { childList: true, subtree: true });
+          })
+
+        </script>  
+      {% endif %}   
+      <aside class="contact-help"><div class="contact-inner"><h1><i class="fa fa-life-ring"></i> Need Assistance?</h1><p>Contact us at <a href="mailto:orders@norgenbiotek.com">orders@norgenbiotek.com</a> or call <a href="tel:+18666674362">1-866-NORGENB</a>.</p></div></aside>  
+      </div>
+    </div>
+  </div>
+  
+  
+
+  
+
+
+  {% else %}
+  
+    {% if totals.subtotal %}
+      <style>
+        /*#form[id^="views-form-commerce-cart-form-block-2_"] */
+  
+        .sidebar_order_total {
+          text-align: center;
+          padding: 28px 0;
+          background: #fff;
+          color: black;
+        }
+  
+        .sidebar_div {
+          display: flex;
+          justify-content: space-between;
+          padding: 10px 20px;
+        }
+  
+        .sidebar_total_div {
+          border-top: 2px solid #ddd; /* Line before total */
+          padding-top: 20px;
+          margin-top: 10px;
+        }
+  
+        .sidebar_label {
+          font-weight: bold;
+          text-align: left;
+          flex: 1;
+        }
+  
+        .sidebar_value {
+          text-align: right;
+          flex: 1;
+        }
+        .sidebar_subtotal_div
+        {
+          
+        }
+        .sidebar_subtotal_label
+        {
+          
+        }
+        .sidebar_subtotal_value
+        {
+          
+        }
+        .sidebar_shipping_label
+        {
+          
+        }
+        .sidebar_shipping_value
+        {
+          
+        }
+        .sidebar_tax_div
+        {
+          
+        }
+        .sidebar_tax_label
+        {
+          
+        }
+        .sidebar_tax_value
+        {
+          
+        }
+        .sidebar_total_label
+        {
+          
+        }
+        .sidebar_total_value
+        {
+          
+        }
+        .scrollable{
+          max-height:75px;
+          overflow-y:auto;
+        }
+        .c-layout-header .c-cart-menu {
+              overflow-y: scroll;
+        }
+        #sidebar_order_total .scrollable::-webkit-scrollbar {
+            width: 10px; /* Adjust the width for thinness */
+        }
+        #sidebar_order_total .scrollable::-webkit-scrollbar-thumb {
+            background-color: #636363;
+            border-radius: 14px;
+        }
+        #sidebar_order_total .scrollable::-webkit-scrollbar-track {
+            background-color: transparent; /* Track color */
+        }
+      </style>
+    
+      <div id='sidebar_order_total' class='sidebar_order_total' style="    box-shadow: rgb(60 64 67 / 0%) 0px -5px 0px 0px, rgb(60 64 67 / 6%) 0px -5px 8px 0px;margin-top:20px;width:100%;">
+        <div class="scrollable">
+        {% if totals.subtotal %}
+        <div class="sidebar_subtotal_div sidebar_div">
+          <span class="sidebar_subtotal_label sidebar_label" style="font-weight:normal;letter-spacing:1px;line-height:0.25;">{{ 'Subtotal:'|t }}</span>
+          <span class="sidebar_subtotal_value sidebar_value">{{ totals.subtotal|commerce_price_format }}</span>
+        </div>
+        {% endif %}
+        
+        {% set taxTotal = 0 %}
+        {% for adjustment in totals.adjustments %}
+          {% if 'tax' in adjustment.label|lower %}
+            {% set taxTotal = taxTotal + adjustment.amount.getNumber() %}
+          {% else %}
+            <div class="sidebar_shipping_div sidebar_div">
+              <span class="sidebar_shipping_label sidebar_label" style="font-weight:normal;letter-spacing:1px;line-height:1.25;">{{ adjustment.label }}:</span>
+              <span class="sidebar_shipping_value sidebar_value">{{ adjustment.amount|commerce_price_format }}</span>
+            </div>
+          {% endif %}
+        {% endfor %}
+  
+        {# Check whether to show Tax label or not #}
+        {% set showTax = taxTotal > 0 %}
+  
+        {# Display Total tax amount if we merged AvaTax Tax labels #}
+        {% if showTax %}
+        <div class="sidebar_tax_div sidebar_div">
+          <span class="sidebar_tax_label sidebar_label" style="font-weight:normal;letter-spacing:1px;line-height:0.25;">Tax:</span>
+          <span class="sidebar_tax_value sidebar_value">US${{ taxTotal }}</span>
+        </div>
+        {% endif %}
+        </div>
+        <div class="sidebar_total_div sidebar_div">
+          <span class="sidebar_total_label sidebar_label" style="font-weight:normal;letter-spacing:1px;line-height:0.25;">{{ 'Total:'|t }}</span>
+          <span class="sidebar_total_value sidebar_value">{{ totals.total|commerce_price_format }}</span>
+        </div>
+      </div>
+  
+    {% endif %}
+  {% endif %}
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  

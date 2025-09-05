@@ -1,0 +1,2188 @@
+<?php
+
+use Drupal\Core\Url;
+use Drupal\file\Entity\File;
+use Drupal\tb_megamenu\TBMegaMenuBuilder;
+use Drupal\image\Plugin\Field\FieldType\ImageItem;
+use Drupal\image\Entity\ImageStyle;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
+
+// Cart
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\commerce_cart\CartProviderInterface;
+use Drupal\commerce_cart\CartManagerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+
+//Redirect
+use Drupal\Core\Routing\TrustedRedirectResponse;
+
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\node\Entity\Node;
+use Drupal\views\Views;
+
+use Drupal\Core\Form\FormState;
+
+use Drupal\commerce\Context;
+
+/**
+ * @param $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ * @param null $form_id
+ */
+function jango_form_system_theme_settings_alter(&$form, \Drupal\Core\Form\FormStateInterface &$form_state, $form_id = NULL)
+{
+    $form['#attached']['library'][] = 'jango/theme-settings-styling';
+    // Work-around for a core bug affecting admin themes. See issue #943212.
+    if (isset($form_id)) {
+        return;
+    }
+
+    $form['options'] = [
+        '#type' => 'vertical_tabs',
+        '#default_tab' => 'nikadevs_layout_builder',
+        '#weight' => '-10',
+        '#title' => t('Jango Theme settings'),
+    ];
+
+    $moduleHandler = \Drupal::service('module_handler');
+    if ($moduleHandler->moduleExists('nikadevs_cms')) {
+        $form['nikadevs_layout_builder'] = [
+            '#type' => 'details',
+            '#title' => t('Nikadevs Settings'),
+            '#group' => 'options',
+        ];
+        $form['nikadevs_layout_builder']['layout_builder'] = nikadevs_cms_layout_builder();
+    } else {
+        drupal_set_message('Enable NikaDevs CMS module to use layout builder.');
+    }
+
+    // Main details.
+    $form['main'] = [
+        '#type' => 'details',
+        '#title' => t('Main settings'),
+        '#group' => 'options',
+    ];
+    $skins = [
+        'default',
+        'green1',
+        'green2',
+        'green3',
+        'yellow1',
+        'yellow2',
+        'yellow3',
+        'red1',
+        'red2',
+        'red3',
+        'purple1',
+        'purple2',
+        'purple3',
+        'blue1',
+        'blue2',
+        'blue3',
+        'brown1',
+        'brown2',
+        'brown3',
+        'dark1',
+        'dark2',
+        'dark3',
+    ];
+    $form['main']['skin'] = [
+        '#type' => 'radios',
+        '#title' => t('Skin'),
+        '#options' => array_combine($skins, $skins),
+        '#default_value' => theme_get_setting('skin'),
+        '#attributes' => [
+            'class' => ['color-radios'],
+        ],
+    ];
+    $form['main']['retina'] = [
+        '#type' => 'checkbox',
+        '#title' => t('Enable Retina Script'),
+        '#default_value' => theme_get_setting('retina'),
+        '#description' => t("Only for retina displays and for manually added images. The script will check if the same image with suffix @2x exists and will show it."),
+    ];
+    $form['main']['phone'] = [
+        '#type' => 'textfield',
+        '#title' => t('Phone'),
+        '#default_value' => theme_get_setting('phone'),
+    ];
+    $form['main']['loader_image'] = [
+        '#type' => 'checkbox',
+        '#title' => t('Page loading GIF image'),
+        '#default_value' => theme_get_setting('loader_image'),
+    ];
+
+    // Pagination.
+    $pagination_type = [
+        'pagination pagination-sm' => t('Default pagination small'),
+        'pagination' => t('Default pagination'),
+        'pagination pagination-lg' => t('Default pagination large'),
+        'c-content-pagination c-theme' => t('Pagination element circle'),
+        'c-content-pagination c-square c-theme' => t('Pagination element square'),
+        'c-content-pagination c-theme advanced' => t('Pagination element circle advanced'),
+        'c-content-pagination c-square c-theme advanced' => t('Pagination element square advanced'),
+        'pager' => t('Pager'),
+    ];
+    $form['main']['pagination_type'] = [
+        '#type' => 'select',
+        '#title' => t('Pagination type'),
+        '#options' => $pagination_type,
+        '#default_value' => theme_get_setting('pagination_type'),
+        '#attributes' => ['class' => ['form-control']],
+    ];
+
+    // Megamenu.
+    $form['mega_menu'] = [
+        '#type' => 'details',
+        '#title' => t('Mega Menu'),
+    ];
+    $mega_menu_bg_color = [
+        'dark' => t('Dark'),
+        'light' => t('Light'),
+    ];
+    $form['mega_menu']['mega_menu_bg_color'] = [
+        '#type' => 'select',
+        '#title' => t('Skin'),
+        '#options' => $mega_menu_bg_color,
+        '#default_value' => theme_get_setting('mega_menu_bg_color'),
+        '#attributes' => ['class' => ['form-control']],
+    ];
+
+    // 404.
+    $form['404'] = [
+        '#type' => 'details',
+        '#title' => t('Page not Found -404'),
+        '#group' => 'options',
+    ];
+    $form['404']['404_bg'] = [
+        '#title' => t('Background Image'),
+        '#type' => 'managed_file',
+        '#default_value' => theme_get_setting('404_bg'),
+        '#upload_location' => 'public://',
+        '#required' => FALSE,
+    ];
+
+    // Maintenance.
+    $form['maintenance'] = [
+        '#type' => 'details',
+        '#title' => t('Maintenance Page'),
+        '#group' => 'options',
+    ];
+    $form['maintenance']['maintenance_bg'] = [
+        '#title' => t('Background Image'),
+        '#type' => 'managed_file',
+        '#default_value' => theme_get_setting('maintenance_bg'),
+        '#upload_location' => 'public://',
+        '#required' => FALSE,
+    ];
+
+    // GMap.
+    $form['gmap'] = [
+        '#type' => 'details',
+        '#title' => t('Google Map Settings'),
+        '#group' => 'options',
+    ];
+    $form['gmap']['gmap_key'] = [
+        '#type' => 'textfield',
+        '#title' => t('Google Maps API Key'),
+        '#default_value' => theme_get_setting('gmap_key') ? theme_get_setting('gmap_key') : '',
+        '#description' => 'More information: <a href = "https://developers.google.com/maps/documentation/javascript/get-api-key">https://developers.google.com/maps/documentation/javascript/get-api-key</a>'
+    ];
+}
+
+/**
+ * Implements template_preprocess_form().
+ * @param $variables
+ */
+//function template_preprocess_form(&$variables) {
+//}
+
+/*Coupon buttons rename*/
+function jango_preprocess_commerce_coupon_redemption_form(&$variables) {
+    $variables['form']['apply']['#value'] = t('Apply');
+    foreach($variables['form']['coupons'] as $index => &$coupon){
+      if(is_numeric($index)) {
+        $coupon['remove_button']['#value'] = t('Remove');
+      }
+    }
+}
+
+/**
+ * Implements hook_element_info_alter().
+ */
+function jango_element_info_alter(&$elements)
+{
+    if (isset($_GET['q']) && strpos($_GET['q'], 'ajax') !== FALSE) {
+        return;
+    }
+    foreach ($elements as &$element) {
+        if (!empty($element['#input'])) {
+            $element['#process'][] = '_jango_process_input';
+        }
+    }
+}
+
+
+/**
+ * Prepares variables for input templates.
+ *
+ * Default template: input.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - element: An associative array containing the properties of the element.
+ *     Properties used: #attributes.
+ */
+
+function jango_preprocess_input__checkbox(&$variables) {
+    if (isset($variables['label']) && $variables['label'] === 'Accept Privacy Policy') {
+        $variables['label'] = [
+            '#markup' => 'I have read and accept the <a href="/about/privacy" target="_blank"class="policy">privacy policy</a>',
+        ];
+    }
+}
+
+function jango_preprocess_input(&$variables)
+{
+    $element = $variables['element'];
+    // Remove name attribute if empty, for W3C compliance.
+    if (isset($variables['attributes']['name']) && empty((string) $variables['attributes']['name'])) {
+        unset($variables['attributes']['name']);
+    }
+    $variables['children'] = $element['#children'];
+    $variables['label'] = isset($element['#title']) ? $element['#title'] : '';
+    $variables['nd_icon'] = isset($element['#nd_icon']) ? '<span class="' . $element['#nd_icon'] . ' form-control-feedback c-font-grey"></span>' : '';
+}
+
+/**
+ * @param $element
+ * @param $form_state
+ * @return mixed
+ */
+function _jango_process_input(&$element, &$form_state)
+{
+    $types = [
+        'textarea',
+        'textfield',
+        'email',
+        'webform_email',
+        'webform_number',
+        'select',
+        'password',
+        'password_confirm',
+        'search',
+    ];
+    $element['#wrapper_attributes']['class'][] = 'form-group';
+    if (!empty($element['#type']) && (in_array($element['#type'], $types))) {
+        if (
+            !isset($element['#attributes']['class']) || !is_array($element['#attributes']['class']) || (!in_array('input-lg', $element['#attributes']['class']))
+            && !in_array('input-sm', $element['#attributes']['class'])
+        ) {
+            $element['#attributes']['class'][] = 'input-lg';
+        }
+        $element['#attributes']['class'][] = 'form-control c-theme';
+    }
+    // Only for header search form.
+    if ($element['#type'] == 'search' && $element['#id'] == 'edit-keys') {
+        $element['#field_suffix'] = '×';
+    }
+    if ($element['#type'] == 'submit') {
+        $element['#attributes']['class'] = isset($element['#attributes']['class']) ? $element['#attributes']['class'] : [];
+        $element['#attributes']['class'] = array_merge($element['#attributes']['class'], [
+            'btn-medium',
+            'btn',
+            'btn-mod',
+            'c-btn',
+            'c-theme-btn',
+            'c-font-bold',
+            'c-font-uppercase',
+            'c-font-white'
+        ]);
+    }
+
+    return $element;
+}
+
+// function custom_formatted_date_string($event_dates, $start_date, $end_date, $consecutive_dates)
+
+// {
+//     // declare formatted_date_string value based on date values
+//     // Case 1: single date event. Format like: "Oct 9, 2023"
+//     if (date('M j, Y', strtotime($start_date)) == date('M j, Y', strtotime($end_date))) {
+//         $formatted_date_string = date('M', strtotime($start_date)) . ' ' . date('j', strtotime($start_date)) . ', ' . date('Y', strtotime($start_date));
+//     }
+//     // Case 2: if start and end date are within the same month of the same year, AND event dates are consecutive. Format like: "Oct 9-11, 2023"
+//     elseif (date('M Y', strtotime($start_date)) == date('M Y', strtotime($end_date)) && $consecutive_dates) {
+//         $formatted_date_string = date('M', strtotime($start_date)) . ' ' . date('j', strtotime($start_date)) . '-' . date('j', strtotime($end_date)) . ', ' . date('Y', strtotime($end_date));
+//     }
+//     // Case 3: if start and end date are within the same month of the same year, but are NOT consecutive. Format like: "Oct 9, Oct 11, 2023"
+//     elseif (date('Y', strtotime($start_date)) == date('Y', strtotime($end_date)) && !$consecutive_dates) {
+//         foreach ($dates as $key => $date) {
+//             if ($key != count($dates) - 1) { // last entry
+//                 $formatted_date_string .= date('M', strtotime($date->field_date_value)) . ' ' . date('j', strtotime($date->field_date_value)) . ', ';
+//             } else {
+//                 $formatted_date_string .= date('M', strtotime($date->field_date_end_value)) . ' ' . date('j', strtotime($date->field_date_end_value)) . ', ';
+//                 $formatted_date_string .= date('Y', strtotime($date->field_date_end_value));
+//             }
+//         }
+//     }
+//     // Case 4: different dates, different years (weird, but ok...). Format like: "Oct 9 2023, Oct 10 2024"
+//     else {
+//         foreach ($dates as $key => $date) {
+//             if ($key != count($dates) - 1) { // last entry
+//                 $formatted_date_string .= date('M', strtotime($date->field_date_value)) . ' ' . date('j', strtotime($date->field_date_value)) . ' ' . date('Y', strtotime($date->field_date_value)) . ', ';
+//             } else {
+//                 $formatted_date_string .= date('M', strtotime($date->field_date_end_value)) . ' ' . date('j', strtotime($date->field_date_end_value)) . ' ' . date('Y', strtotime($date->field_date_end_value));
+//             }
+//         }
+//     }
+//     return $formatted_date_string;
+// }
+
+
+function custom_formatted_date_string($event_dates, $start_date, $end_date, $consecutive_dates)
+{
+    // Ensure the variable is initialized
+    $formatted_date_string = ""; 
+
+    // Case: Timezone issue where database stores times in UTC, but we need local time.
+    // Manually adjust for timezone shift (assumes database is saving UTC but displaying in EST/EDT).
+
+    $start_date = date('Y-m-d H:i:s', strtotime($start_date)); 
+    $end_date = date('Y-m-d H:i:s', strtotime($end_date));
+
+    // Declare formatted_date_string value based on adjusted date values
+    // Case 1: Single date event. Format like: "Oct 9, 2023"
+    $date_diff = date_diff(date_create($start_date), date_create($end_date))->format('%a');
+
+    // check that they are actually the same day, and not just within 24 hours but separate dates
+    if($date_diff == 0 && date('d',strtotime($start_date)) !== date('d',strtotime($end_date))){
+        $date_diff = 1;
+    }
+
+    // if date_diff = 0, it's on the same day
+    if ($date_diff == 0) {
+        $formatted_date_string = date('M', strtotime($start_date)) . ' ' . date('j', strtotime($start_date)) . ', ' . date('Y', strtotime($start_date));
+    }
+    // Case 2: if start and end date are within the same month of the same year, AND event dates are consecutive. Format like: "Oct 9-11, 2023"
+    elseif (date('M Y', strtotime($start_date)) == date('M Y', strtotime($end_date)) && $consecutive_dates) {
+        $formatted_date_string = date('M', strtotime($start_date)) . ' ' . date('j', strtotime($start_date)) . '-' . date('j', strtotime($end_date)) . ', ' . date('Y', strtotime($end_date));
+    }
+    
+    // Case 3: if start and end date are within the same year, but are NOT consecutive. Format like: "Oct 9, Oct 11, 2023"
+    elseif (date('Y', strtotime($start_date)) == date('Y', strtotime($end_date)) && !$consecutive_dates) {
+        foreach ($event_dates as $key => $date) {
+            if ($key != count($event_dates) - 1) { // last entry
+                $formatted_date_string .= date('M', strtotime($date->field_event_date_value)) . ' ' . date('j', strtotime($date->field_event_date_value)) . ', ';
+            } else {
+                $formatted_date_string .= date('M', strtotime($date->field_event_date_end_value)) . ' ' . date('j', strtotime($date->field_event_date_end_value)) . ', ';
+                $formatted_date_string .= date('Y', strtotime($date->field_event_date_end_value));
+            }
+        }
+    }
+    // Case 4: different dates, different months. Format like: "Oct 9 2023, Oct 10 2024"
+    else {
+        foreach ($event_dates as $key => $date) {
+            if ($key != count($event_dates) - 1) { // last entry
+                $formatted_date_string .= date('M', strtotime($date->field_event_date_value)) . ' ' . date('j', strtotime($date->field_event_date_value)) . ' ' . date('Y', strtotime($date->field_event_date_value)) . ', ';
+            } else {
+                $formatted_date_string .= date('M', strtotime($date->field_event_date_end_value)) . ' ' . date('j', strtotime($date->field_event_date_end_value)) . ' ' . date('Y', strtotime($date->field_event_date_end_value));
+            }
+        }
+    }
+    return $formatted_date_string;
+}
+
+function jango_preprocess_block__jango_homebanner(&$variables){
+    $variables['#cache']['contexts'][] = 'session';
+    $variables['#cache']['contexts'][] = 'ip';
+    $variables['#cache']['max-age'] = 0;
+    $variables['userCountry'] = commerce_nor_cart_popup_get_user_country();
+    /* \Drupal::logger('caching_issue_test: jango_preprocess_block__jango_homebanner')->notice('Country code: '.print_r($variables['#cache'],TRUE).'',); */
+}
+
+/**
+ * @param $variables
+ */
+function jango_preprocess_node(&$variables){
+    //$variables['#cache']['contexts'][] = 'session';
+    /* \Drupal::logger('caching_issue_test: jango_preprocess_node')->notice('Country code: %country_code',
+        array(
+            '%country_code' => commerce_nor_cart_popup_get_user_country(),
+        )
+    );
+    $user = \Drupal::currentUser();
+    $roles = $user->getRoles();
+    if(in_array('canadian', $roles)){
+        \Drupal::logger('caching_issue_test: jango_preprocess_node')->notice('Canadian role'); 
+    }
+    \Drupal::logger('caching_issue_test: jango_preprocess_node')->notice('Is Canadian Guest: %cad_boolean',
+        array(
+            '%cad_boolean' => commerce_norquote_check_canada_guest(),
+        )
+    ); */
+
+    if ($variables['node']->getType() == 'distributor_page') {
+        $user = \Drupal::currentUser();
+        $variables['mail'] = $user->getEmail();
+        if (\Drupal::moduleHandler()->moduleExists('distributor_portal_email_notification')) {
+            $variables['distributor_portal_email_notification'] = \Drupal::formBuilder()->getForm('Drupal\distributor_portal_email_notification\Form\DistributorPortalEmailNotificationForm');
+        }
+    }
+
+    if ($variables['node']->getType() == 'nd_blog') {
+        $variables['comment_count'] = $variables['node']->get('field_comments')->comment_count;
+
+        if ($variables['elements']['#view_mode'] == 'full') {
+            $query = \Drupal::database()->select('node_revision', 'nr');
+            $query->leftJoin('node', 'n', 'n.nid = nr.nid');
+            $query->condition('n.type', 'nd_blog');
+            $query->fields('n', ['nid']);
+            $query->orderBy('nr.revision_timestamp', 'DESC');
+            $nids = $query->execute()->fetchAll();
+
+            $nid = $variables['node']->id();
+            $offset = 0;
+            foreach ($nids as $i => $entity) {
+                $offset = $entity->nid == $nid ? $i : $offset;
+            }
+            $next = !$offset ? $nids[count($nids) - 1] : $nids[$offset - 1];
+            $prev = ($offset + 1) == count($nids) ? $nids[0] : $nids[$offset + 1];
+
+            $variables['next'] = Url::fromRoute('entity.node.canonical', ['node' => $next->nid]);
+            $variables['prev'] = Url::fromRoute('entity.node.canonical', ['node' => $prev->nid]);
+        }
+    }
+
+    if ($variables['node']->id() == '2457') {
+        $form['#attached']['library'][] = 'jango/google-maps';
+    }
+
+
+    if ($variables['node']->getType() == 'event') {
+        $variables['node']->id();
+
+        // date formatting start
+
+        // get event dates
+        $query = \Drupal::database()->select('node__field_event_date', 'nfed');
+        $query->condition('nfed.entity_id', $variables['node']->id(), '=');
+        $query->fields('nfed', ['field_event_date_value', 'field_event_date_end_value']);
+        $query->orderBy('nfed.delta', 'ASC');
+        $event_dates = $query->execute()->fetchAll();
+
+        // get start and end dates
+        $start_date = null;
+        $end_date = null;
+        if (count($event_dates) >= 1) {
+            $start_date = $event_dates[0]->field_event_date_value;
+            $end_date = $event_dates[(count($event_dates) - 1)]->field_event_date_end_value;
+        }
+        $formatted_date_string = ''; // declare formatted_date_string - to be diplayed to the page
+        $consecutive_dates = true; // check if the dates are consecutive
+        foreach ($event_dates as $key => $event_date) {
+            if ($key != count($event_dates) - 1) { // last date, dont check
+                $interval = (date_create($event_date->field_event_date_value))->diff(date_create($event_dates[$key + 1]->field_event_date_value));
+                if ($interval->days > 1) {
+                    $consecutive_dates = false;
+                    break;
+                }
+            }
+        }
+        $variables['formatted_date_html'] = '';
+        $variables['formatted_date_html'] = '<time>' . custom_formatted_date_string($event_dates, $start_date, $end_date, $consecutive_dates) . '</time>';
+
+        // date formatting end
+    }
+
+    if (($variables['node']->getType() == 'product_category_list' || $variables['node']->id() == '1763' ) && $variables['node']->isPublished()) 
+    {
+        $node = $variables['node'];
+        $variables['restricted_country'] = commerce_norquote_check_restricted_country();
+        // Initialize category_view variable.
+        $variables['category_view'] = '';  
+    
+        // commerce_product_variation__21e1a03305
+        $current_path =  \Drupal::service('path_alias.manager')->getAliasByPath(\Drupal::service('path.current')->getPath());
+        // dump($current_path);
+        $exceptions_list=
+        [
+          'sample_collection_and_preservation_kits'=>'/category/sample-collection-and-preservation',
+          'clean_up_concentration'=>'/category/clean-concentration',
+          'cf_dna_cf_rna_from_blood'=>'/category/cf-dna-cf-rna-blood',
+          'its_library_preparation_kits_for_illumina'=>'/category/its-library-preparation-kits',
+          'microbiology_kits_and_assays'=>'/content/microbiology-kits-and-assays',
+          'quantified_dna_standards_for_pathogens'=>'/category/quantified-dna-standards-pathogens',
+          'saliva_sample_collection_and_preservation_devices'=>'/category/saliva',
+          'stool_sample_preparation_devices'=>'/category/stool',
+          'swab_collection_and_preservation'=>'/category/swab-based',
+          'urine_sample_collection_and_preservation_devices'=>'/category/urine',
+          'cell_free_dna_purification'=>'/category/cell-free-dna-isolation',
+          'dna_clean_up_and_concentration'=>'/category/dna-clean-and-concentration',
+          'plasmid_dna'=>'/category/plasmid-dna-preparation',
+          'protein_clean_up_concentration_and_endotoxin_removal'=>'/category/protein-clean-concentration-and-endotoxin-removal',
+          'rna_clean_up_and_concentration_kits'=>'/category/rna-clean-and-concentration',
+          'rna_isolation_from_purified_exosomes'=>'/category/rna-isolation-purified-exosomes',
+          'total_genomic_dna'=>'/category/total-genomic-dna-isolation',
+          'urine_protein'=>'/category/urine-protein-concentration',
+          'water_borne_pathogen_detection'=>'/category/waterborne-pathogen-detection',
+        ];
+        if (!in_array($current_path,$exceptions_list) && preg_match('/^\/category\/(.+)$/', $current_path, $matches)) 
+        {
+          // Get the second component after /category/.
+          $category_component = $matches[1];
+          // dump($category_component);
+          
+          // Replace dashes with underscores.
+          $category_component = str_replace('-', '_', $category_component);
+          $variables['category_view'] = $category_component;
+        }
+        else if(in_array($current_path,$exceptions_list) )
+        {
+          $contextual_argument = array_search($current_path,$exceptions_list);
+          // Set the modified value as a contextual filter argument.
+          $variables['category_view'] = $contextual_argument;
+        }
+        else
+        {
+          $variables['category_view'] = 'NA';
+          // $variables['category_view_1'] = 'NA '. $last_segment.' '.$second_last_segment;
+        }
+    }
+
+    if ($variables['node']->id() == '2503') {
+        // set the cache context for session so the user's country will be accurately sent to the template file.
+        /* $variables['#cache']['contexts'][] = 'session';
+        $variables['#cache']['contexts'][] = 'ip'; */
+        //$variables['#cache']['max-age'] = 0; // does not work for anonymous users
+        /* \Drupal::service('session')->set('user_country', commerce_nor_cart_popup_get_user_country());
+        $variables['user_country'] = \Drupal::service('session')->get('user_country');
+        \Drupal::service('session')->remove('user_country');
+
+        \Drupal::logger('caching_issue_test: jango_preprocess_node 2503')->notice('Country code: %country_code',
+        array(
+            '%country_code' => commerce_nor_cart_popup_get_user_country(),
+        )
+        );
+        $user = \Drupal::currentUser();
+        $roles = $user->getRoles();
+        if(in_array('canadian', $roles)){
+            \Drupal::logger('caching_issue_test: jango_preprocess_node 2503')->notice('Canadian role'); 
+        }
+        \Drupal::logger('caching_issue_test: jango_preprocess_node 2503')->notice('Is Canadian Guest: %cad_boolean',
+        array(
+            '%cad_boolean' => commerce_norquote_check_canada_guest(),
+        )
+        ); */
+
+        $variables['userCountry'] = commerce_nor_cart_popup_get_user_country();
+
+        // get published blog info
+        $query = \Drupal::database()->select('node_field_data', 'nfd');
+        $query->condition('nfd.type', 'blog', '=');
+        $query->condition('nfd.status', 1, '=');
+        $query->InnerJoin('node__field_post_date', 'nfpd', 'nfpd.entity_id=nfd.nid');
+        $query->InnerJoin('node__field_shown_title', 'nfst', 'nfst.entity_id=nfd.nid');
+        $query->InnerJoin('node__field_author', 'fdfa', 'fdfa.entity_id=nfd.nid');
+        $query->InnerJoin('taxonomy_term_field_data', 'ttfd', 'ttfd.tid=fdfa.field_author_target_id');
+        $query->InnerJoin('node__body', 'nb', 'nb.entity_id=nfd.nid');
+        $query->InnerJoin('node__field_blog_image', 'nfbi', 'nfbi.entity_id=nfd.nid');
+        $query->InnerJoin('file_managed', 'fm', 'fm.fid=nfbi.field_blog_image_target_id');
+        $query->fields('nfpd', array('field_post_date_value'));
+        $query->fields('nfst', array('field_shown_title_value'));
+        $query->fields('ttfd', array('name'));
+        $query->fields('nb', array('body_value'));
+        $query->fields('fm', array('uri'));
+        $query->fields('nfd', array('nid'));
+        $query->orderBy('nfpd.field_post_date_value', 'DESC');
+        $query->range(0, 4);
+        $blogs = $query->execute()->fetchAll();
+        // print blog information to the screen
+        $variables['recent_blogs']['#markup'] = '';
+        foreach ($blogs as $index => $blog) {
+            // get URL of blog using source pattern ('node/nid')
+            $url_path = '';
+            $options = ['absolute' => TRUE];
+            $url = \Drupal\Core\Url::fromRoute('entity.node.canonical', ['node' => $blog->nid], $options);
+            $url_path = $url->toString();
+
+            // first result will be the latest blog, which is displayed in the Primary Blog Card format
+            if ($index == 0) {
+                $variables['recent_blogs']['#markup'] .=
+                    '<article class="primary-blog">
+          <a href="' . $url_path . '">
+            <div class="img-wrapper"><img src="sites/default/files/' . (str_replace('/\s+/', '%20', trim(substr($blog->uri, 9, strlen($blog->uri))))) . '"></div>
+            <div class="text">
+              <div class="author-date">
+                <address>' . $blog->name . '</address>
+                <time datetime="' . $blog->field_post_date_value . '">' . date('M d, Y', strtotime($blog->field_post_date_value)) . '</time>
+              </div>
+              <h3>' . $blog->field_shown_title_value . '</h3>
+              <p>' . substr(strip_tags((str_replace('</p>', '', str_replace('<p>', '', $blog->body_value)))), 0, 200) . '...</p>
+              <div class="center"><span class="btn btn-primary">Continue Reading</span></div>
+            </div>
+          </a>
+        </article>';
+            }
+            // next 3 blogs are displayed in the Secondary Blog Card list
+            if ($index == 1) {
+                $variables['recent_blogs']['#markup'] .= '<div class="secondary-blogs">';
+            }
+            if ($index > 0) {
+                $variables['recent_blogs']['#markup'] .=
+                    '<article class="secondary-blog">
+          <a href="' . $url_path . '">
+            <h3>' . $blog->field_shown_title_value . '</h3>
+            <div class="author-date">
+              <address>' . $blog->name . '</address>
+              <time datetime="' . $blog->field_post_date_value . '">' . date('M d, Y', strtotime($blog->field_post_date_value)) . '</time>
+            </div>
+          </a>
+        </article>';
+            }
+            if ($index == (count($blogs) - 1)) {
+                $variables['recent_blogs']['#markup'] .= '</div>';
+            }
+        }
+
+        // get published customer story info
+        $query = \Drupal::database()->select('node_field_data', 'nfd');
+        $query->condition('nfd.type', 'customer_story', '=');
+        $query->condition('nfd.status', 1, '=');
+        $query->InnerJoin('node__field_post_date', 'nfpd', 'nfpd.entity_id=nfd.nid');
+        $query->InnerJoin('node__field_shown_title', 'nfst', 'nfst.entity_id=nfd.nid');
+        $query->InnerJoin('node__field_author', 'fdfa', 'fdfa.entity_id=nfd.nid');
+        $query->InnerJoin('taxonomy_term_field_data', 'ttfd', 'ttfd.tid=fdfa.field_author_target_id');
+        $query->InnerJoin('node__body', 'nb', 'nb.entity_id=nfd.nid');
+        $query->InnerJoin('node__field_banner', 'nfbi', 'nfbi.entity_id=nfd.nid');
+        $query->InnerJoin('file_managed', 'fm', 'fm.fid=nfbi.field_banner_target_id');
+        $query->fields('nfpd', array('field_post_date_value'));
+        $query->fields('nfst', array('field_shown_title_value'));
+        $query->fields('ttfd', array('name'));
+        $query->fields('nb', array('body_value'));
+        $query->fields('fm', array('uri'));
+        $query->fields('nfd', array('nid'));
+        $query->orderBy('nfpd.field_post_date_value', 'DESC');
+        $query->range(0, 4);
+        $customer_stories = $query->execute()->fetchAll();
+        // print blog information to the screen
+        $variables['recent_customer_stories']['#markup'] = '';
+        foreach ($customer_stories as $index => $customer_story) {
+            // get URL of blog using source pattern ('node/nid')
+            $url_path = '';
+            $options = ['absolute' => TRUE];
+            $url = \Drupal\Core\Url::fromRoute('entity.node.canonical', ['node' => $customer_story->nid], $options);
+            $url_path = $url->toString();
+
+            // first result will be the latest blog, which is displayed in the Primary Blog Card format
+            if ($index == 0) {
+                $variables['recent_customer_stories']['#markup'] .=
+                    '<article class="primary-blog">
+          <a href="' . $url_path . '">
+            <div class="img-wrapper"><img src="sites/default/files/' . (str_replace('/\s+/', '%20', trim(substr($customer_story->uri, 9, strlen($customer_story->uri))))) . '"></div>
+            <div class="text">
+              <div class="author-date">
+                <address>' . $customer_story->name . '</address>
+                <time datetime="' . $customer_story->field_post_date_value . '">' . date('M d, Y', strtotime($customer_story->field_post_date_value)) . '</time>
+              </div>
+              <h3>' . $customer_story->field_shown_title_value . '</h3>
+              <p>' . substr(strip_tags((str_replace('</p>', '', str_replace('<p>', '', $customer_story->body_value)))), 0, 200) . '...</p>
+              <div class="center"><span class="btn btn-primary">Continue Reading</span></div>
+            </div>
+          </a>
+        </article>';
+            }
+            // next 3 blogs are displayed in the Secondary Blog Card list
+            if ($index == 1) {
+                $variables['recent_customer_stories']['#markup'] .= '<div class="secondary-blogs">';
+            }
+            if ($index > 0) {
+                $variables['recent_customer_stories']['#markup'] .=
+                    '<article class="secondary-blog">
+          <a href="' . $url_path . '">
+            <h3>' . $customer_story->field_shown_title_value . '</h3>
+            <div class="author-date">
+              <address>' . $customer_story->name . '</address>
+              <time datetime="' . $customer_story->field_post_date_value . '">' . date('M d, Y', strtotime($customer_story->field_post_date_value)) . '</time>
+            </div>
+          </a>
+        </article>';
+            }
+            if ($index == (count($customer_stories) - 1)) {
+                $variables['recent_customer_stories']['#markup'] .= '</div>';
+            }
+        }
+
+        // get event dates
+        $query = \Drupal::database()->select('node_field_data', 'nfd');
+        $query->condition('nfd.type', 'event', '=');
+        $query->condition('nfd.status', 1, '=');
+        $query->InnerJoin('node__field_booth_number', 'nfbn', 'nfbn.entity_id=nfd.nid');
+        $query->InnerJoin('node__field_website_link', 'nfwl', 'nfwl.entity_id=nfd.nid');
+        $query->InnerJoin('node__field_event_location', 'nfel', 'nfel.entity_id=nfd.nid');
+        $query->InnerJoin('node__field_number_of_days', 'nfnod', 'nfnod.entity_id=nfd.nid');
+        $query->InnerJoin('node__field_event_date', 'nfed', 'nfed.entity_id=nfd.nid');
+
+        $date = date("Y-m-d H:i:s");
+
+        $query->condition('nfed.field_event_date_value', $date, '>');
+        $query->fields('nfbn', array('field_booth_number_value'));
+        $query->fields('nfwl', array('field_website_link_value'));
+        $query->fields('nfel', array('field_event_location_value'));
+        $query->fields('nfd', array('title', 'nid', 'status'));
+        $query->fields('nfnod', array('field_number_of_days_value'));
+        $query->fields('nfed', array('field_event_date_value', 'field_event_date_end_value'));
+        $query->groupBy('nid');
+        $query->orderBy('field_event_date_value', 'ASC');
+        $query->range(0, 3);
+        $events = $query->execute()->fetchAll();
+        $variables['upcoming_events']['#markup'] = '';
+        foreach ($events as $event) {
+            // get all event dates
+            $event_dates = \Drupal::database()->select('node__field_event_date', 'nfed')->condition('nfed.deleted', 0, '=')->condition('nfed.entity_id', $event->nid, '=')
+                ->fields('nfed', array('field_event_date_value', 'field_event_date_end_value'))
+                ->execute()
+                ->fetchAll();
+
+            // get start and end dates
+            $start_date = null;
+            $end_date = null;
+            if (count($event_dates) >= 1) {
+                $start_date = $event_dates[0]->field_event_date_value;
+                $end_date = $event_dates[(count($event_dates) - 1)]->field_event_date_end_value;
+            }
+            $formatted_date_string = ''; // declare formatted_date_string - to be diplayed to the page
+            $consecutive_dates = true; // check if the dates are consecutive
+            foreach ($event_dates as $key => $event_date) {
+                if ($key != count($event_dates) - 1) { // last date, dont check
+                    $interval = (date_create($event_date->field_event_date_value))->diff(date_create($event_dates[$key + 1]->field_event_date_value));
+                    if ($interval->days > 1) {
+                        $consecutive_dates = false;
+                        break;
+                    }
+                }
+            }
+            // print title, date and address
+            $variables['upcoming_events']['#markup'] .= '
+        <a href="' . $event->field_website_link_value . '" class="event">
+        <h3>' . $event->title . '</h3>
+        <div class="event-details">
+        <time>' . custom_formatted_date_string($event_dates, $start_date, $end_date, $consecutive_dates) . '</time><address>' . $event->field_event_location_value . '</address>';
+            // check if a booth number was provided, and print it if it was
+            if (isset($event->field_booth_number_value)) {
+                $variables['upcoming_events']['#markup'] .= '<span class="booth-number">Booth ' . $event->field_booth_number_value . '</span>';
+            }
+            $variables['upcoming_events']['#markup'] .= '</div></a>';
+        }
+
+        $events_page_view = Views::getView('events');
+        $events_page_view->execute();
+        $num_events = $events_page_view->total_rows;
+        $variables['num_events'] = $num_events;
+
+        // if (!empty($variables["upcoming_events"]) && !empty($variables["upcoming_events"]["#markup"])) {
+            
+        //     $markupContent = trim($variables["upcoming_events"]["#markup"]);
+        
+          
+        //     $variables["render_section"] = !empty($markupContent);
+        // } else {
+           
+        //     $variables["render_section"] = FALSE;
+        // }
+
+
+    }
+
+    if ($variables['node']->id() == '2570') 
+    {
+        $current_user = \Drupal::currentUser();
+    
+        // Check if the user has the 'administrator' or 'manager' role.
+        if (!($current_user->hasRole('administrator') || $current_user->hasRole('manager'))) {
+          // Get the last visited page from the referer header.
+          $request = \Drupal::request();
+          $referer = $request->headers->get('referer');
+          
+          // If no referer is available, default to the home page.
+          $redirect_url = $referer ? $referer : \Drupal\Core\Url::fromRoute('<front>')->toString();
+    
+          // Redirect the user.
+          $response = new TrustedRedirectResponse($redirect_url);
+          $response->send();
+          exit();
+        }
+    }
+
+    if($variables['node']->id() == '2055'){
+        $cookie_name = "my_cookie";
+        $cookie_value = "";
+        $cookie_value = rand(0,1) === 0? "chocolate_chip" : "oreo"; // randomly assign a page version to show
+        
+        if(!isset($_COOKIE[$cookie_name])) { // cookie is not set, set it and send value to node
+            $cookie_options = array(
+                'expires' => time() + (86400 * 30),
+                'path' => '/',
+                'domain' => 'norgenbiotek.com',
+                'secure' => true,
+                'httponly' => false,
+                'samesite' => 'Strict',
+            );
+            setcookie($cookie_name, $cookie_value, $cookie_options); // 86400 = 1 day
+            $variables['page_version'] = $cookie_value;
+        } else { // cookie is set, send value to node
+            $variables['page_version'] = $_COOKIE[$cookie_name];
+        }
+    }
+
+    // Check if the current node is node 2600.
+    // if ($variables['node']->id() == 2600 ) {
+    //     // Render the view block programmatically.
+    //     $view_id = 'ajax_filterable_products';
+    //     $block_display_id = 'block_1';
+
+    //     // Render the view programmatically.
+    //     $view = \Drupal\views\Views::getView($view_id);
+
+    //     if ($view) {
+    //         // Set the display ID to 'block_1'.
+    //         $view->setDisplay($block_display_id);
+
+    //         // Execute the view.
+    //         $view->preExecute();
+    //         $view->execute();
+
+    //         // Render the view output.
+    //         $view_content = $view->render();
+
+    //         // Add custom classes and ID to the view block.
+    //         $view_content['#attributes']['class'][] = 'ajax_filter'; // Add first class.
+    //         $view_content['#attributes']['class'][] = 'container';   // Add second class.
+    //         $view_content['#attributes']['id'] = 'filter_block_ajax'; // Add ID.
+
+    //         // Use the renderer service to render the view.
+    //         $rendered_view = \Drupal::service('renderer')->render($view_content);
+
+    //         // Attach the rendered view block to the node content.
+    //         $variables['content']['custom_view_block'] = [
+    //         '#markup' => $rendered_view,
+    //         '#weight' => 10, // Adjust the weight to control placement.
+    //         ];
+    //     }
+    // }
+  
+
+    if ($variables['node']->getType() == 'blog') {
+        if ($variables['node']->hasField('field_related_products')) {
+            $related_products = $variables['node']->get('field_related_products')->referencedEntities();
+    
+            foreach ($related_products as $key => $related_product) {
+
+                /* if (!commerce_norquote_check_restricted_country()) {
+                  $price = $related_product->getPrice(); 
+                    if (isset($variables['elements']['field_related_products'][$key])) {
+                      $variables['elements']['field_related_products'][$key]['#price'] = $price;
+                    }
+                } */
+                // get node URLs
+                  if (isset($variables['elements']['field_related_products'][$key]) && isset($variables['elements']['field_related_products'][$key]['#entity']->get('variation_id')->getValue()[0]['value'])) {
+                    $variables['elements']['field_related_products'][$key]['#url'] = nor_forms_node_alias_from_id($variables['elements']['field_related_products'][$key]['#entity']->get('variation_id')->getValue()[0]['value'], 'variation');
+                }
+            }
+        }
+    }
+
+    //     if ($variables['node']->getType() == 'customer_story') {
+    //         if ($variables['node']->hasField('field_related_products')) {
+    //             $related_products = $variables['node']->get('field_related_products')->referencedEntities();
+        
+    //              foreach ($related_products as $key => $related_product) {
+    
+    //                 if (!commerce_norquote_check_restricted_country()) {
+    //                   $price = $related_product->getPrice(); 
+    //                     if (isset($variables['elements']['field_related_products'][$key])) {
+    //                       $variables['elements']['field_related_products'][$key]['#price'] = $price;
+    //                     }
+//                     }
+    
+    //              }
+    //          }
+    //     }
+
+        
+
+}
+
+function jango_preprocess_status_messages(&$variables){
+    if(isset($variables['message_list']['status'])){
+        $status_messages = $variables['message_list']['status']; 
+        foreach($status_messages as $delta => $message) {
+            if ($message instanceof Markup) {
+                if ($message->__toString() == "A welcome message with further instructions has been sent to your email address.") {
+                    $variables['message_list']['status'][$delta] = t("Thanks for signing up, almost done!<p>Please use the activation email we sent you to activate your account before signing in. <ol><li>Open the email we sent</li><li>Click the activation link in the email</li></ol> If you don't receive the email within a few minutes, check your spam folder or <a href='/contact#account-issues'>contact support</a></p>");
+                    break;
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Implements template_preprocess_commerce_product().
+ * @param array $variables
+ */
+function jango_preprocess_commerce_product(&$variables){
+    //DO NOT TOUCH THE FOLLOWING LINE
+    
+    $variables['#cache']['contexts'][] = 'session';
+        
+    $route_match = \Drupal::routeMatch();
+
+    // Check if the current route is for a node.
+    if ($node_int = $route_match->getParameter('node')) {
+        // Ensure the loaded object is an instance of Node.
+        
+        if ($node_int instanceof Node) {
+        
+        $node_id = $node_int->id(); // Node ID.
+        $node_type = $node_int->getType(); // Node type.
+        
+
+        if ($node_type == 'international_norgen_product') {
+            $variables['international_documentation'] = FALSE;
+            // $node_int = $variables['node'];
+        
+            if (
+                ($node_int->hasField('field_product_flyer_fr') && count($node_int->get('field_product_flyer_fr')->getValue()) > 0) ||
+                ($node_int->hasField('field_product_information_sheets') && count($node_int->get('field_product_information_sheets')->getValue()) > 0) ||
+                ($node_int->hasField('field_protocols') && count($node_int->get('field_protocols')->getValue()) > 0) ||
+                ($node_int->hasField('field_application_notes_fr') && count($node_int->get('field_application_notes_fr')->getValue()) > 0) ||
+                ($node_int->hasField('field_safety_data_sheets') && count($node_int->get('field_safety_data_sheets')->getValue()) > 0) ||
+                ($node_int->hasField('field_posters_fr') && count($node_int->get('field_posters_fr')->getValue()) > 0) ||
+                ($node_int->hasField('field_supplementary_protocols') && count($node_int->get('field_supplementary_protocols')->getValue()) > 0)
+                //($node_int->hasField('field_protocoles') && count($node_int->get('field_protocoles')->getValue()) > 0)
+            ) 
+            {
+            $variables['international_documentation'] = TRUE;
+            }
+        }      
+        }
+    }
+    
+    // set variable so we display the old CAD price, instead of the USD one if condition matches condition set on CAD pricelist
+    // (user has Canadian role)
+    $current_user = \Drupal::currentUser();
+    $roles = $current_user->getRoles();
+    $location = \Drupal::service('smart_ip.smart_ip_location');
+    $userCountry = $location->get('countryCode');
+    $variables['to_test_country'] = $userCountry;
+
+
+    $request_test = \Drupal::request();
+
+    // Retrieve the user's IP address.
+    $ip_address = $request_test->getClientIp();
+
+    // Add the IP address to the variables array for use in the theme.
+    $variables['user_ip_custom'] = $ip_address;
+
+    // // Optionally, log the IP for debugging.
+    // \Drupal::logger('cache_test_custom')->info('User IP: @ip', ['@ip' => $ip_address]);
+
+    
+    // \Drupal::logger('cache_test')->error(
+    //             "cache array array:\n <pre>" . print_r($location, TRUE) . 
+    //             "</pre> \nStack trace:\n"
+    //           );
+    if(in_array('canadian', $roles) || ($current_user->isAnonymous() && $userCountry == 'CA')){
+      $variables['old_cad_price'] = TRUE;
+    }
+
+    $variables['url'] = $_SERVER['REQUEST_URI'];
+    // $variables['#cache']['contexts'][] = 'user';
+
+    $product = isset($variables['elements']['#commerce_product']) ? $variables['elements']['#commerce_product'] : '';
+    $variables['default_variation'] = '';
+    if (!empty($product) && $product->hasVariations()) {
+        $image_field_name = 'field_product_image';
+        $variations = $product->getVariations();
+        foreach($variations as $index => $variation){
+            foreach($variation->get('field_product_categories')->getValue() as $category_value){ // check each category value
+                if($category_value['value']=="purification_and_isolation"){
+                    $variables['ngs_popup'] = true; // enable ngs popup
+                    break;
+                }
+            }
+            $store_id = 1;
+            $store = \Drupal::entityTypeManager()->getStorage('commerce_store')->load($store_id);
+            if (!$store) {
+                \Drupal::messenger()->addMessage('Store not found.', 'error');
+                return;
+            }
+            $price_calculator = \Drupal::service('commerce_order.price_calculator');
+            $context = new Context(\Drupal::currentUser(), $store);
+            $adjustment_types = [];
+
+            $result = $price_calculator->calculate($variation, 1, $context, $adjustment_types);
+            $variables['variation_prices'][$index]['price'] = $result->getCalculatedPrice();
+
+            $variation_fields = $variation->getFields();
+            if (array_key_exists($image_field_name, $variation_fields)) {
+                if ($variation_fields[$image_field_name]->getFieldDefinition()->getType() == 'image') {
+                $fid = $variation_fields[$image_field_name]->target_id;
+                $file = File::load($fid);
+                ($file != null) ? $variables['image_urls'][$index] = \Drupal::service('file_url_generator')->generateAbsoluteString($file->getFileUri()) : $variables['image_urls'][$index] == '';
+                }
+            }
+        }
+        $variables['default_variation'] = $variation_fields['sku']->getValue();
+        $variables['default_variation'] = $variables['default_variation'][0]['value'];
+    }
+
+    if (isset($variables['elements']['#commerce_product'])) {
+        //print('<pre>'); dump($variables['elements']['#commerce_product']); print('</pre>');
+        $product_id = $variables['elements']['#commerce_product']->Id();
+        $query = \Drupal::entityQuery('node')
+            ->accessCheck(FALSE)
+            ->condition('type', 'norproduct')
+            /* ->condition('status', 1) */ // removing status=1 (published) condition will let us view full page before it is published.
+            ->condition('field_commerce_product.entity.product_id', $product_id);
+        $nids = $query->execute();
+        if (count($nids) > 0) {
+            foreach ($nids as $nidkey => $nidvalue) {
+                $nid = $nidvalue;
+            }
+        }
+        $variables['davidtest'] = $product_id;
+        $node = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
+        $variables['node'] = $node;
+
+        //this is for international product
+        $product_id = $variables['elements']['#commerce_product']->Id();
+        $query = \Drupal::entityQuery('node')
+            ->accessCheck(FALSE)
+            ->condition('type', 'international_norgen_product')
+            /* ->condition('status', 1) */
+            ->condition('field_commerce_product.entity.product_id', $product_id);
+        $nids = $query->execute();
+        if (count($nids) > 0) {
+            foreach ($nids as $nidkey => $nidvalue) {
+                $nid = $nidvalue;
+            }
+        }
+        $variables['davidtest'] = $product_id;
+        $node_international = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
+        $variables['node_international'] = $node_international;
+
+        
+        if ($node) {
+            foreach ($node->getFields()['field_related_products']->getValue() as $index => $product) {
+
+                $related_products_path_query = \Drupal::database()->select('commerce_product_variation_field_data', 'cpvfd');
+                $related_products_path_query->leftJoin('node__field_commerce_product', 'nfcp', 'cpvfd.product_id = nfcp.field_commerce_product_target_id');
+                $related_products_path_query->leftJoin('path_alias', 'pa', "CONCAT('/node/',nfcp.entity_id) = pa.path");
+                $related_products_path_query->condition('cpvfd.variation_id', $product['target_id'], '=');
+                $related_products_path_query->condition('cpvfd.product_id', NULL, 'IS NOT NULL');
+                $related_products_path_query->condition('cpvfd.status', 1, '=');
+                $related_products_path_query->condition('nfcp.deleted', 0, '=');
+                $related_products_path_query->condition('pa.status', 1, '=');
+                $related_products_path_query->fields('pa', ['alias']);
+                $related_product_path = $related_products_path_query->execute();
+                // set custom variable for each related product entity object
+                $variation_entity = \Drupal::entityTypeManager()->getStorage('commerce_product_variation')->load($product['target_id']);
+                $variables['related_products_aliases'][$index]['variation_target_id'] = $product['target_id'];
+                $variables['related_products_aliases'][$index]['product_page_alias'] = $related_product_path->fetchField() . '?v=' . $product['target_id'];
+                $variables['related_products_aliases'][$index]['alt'] = $variation_entity->field_product_image[0]->alt;
+            }
+
+            /* Check if Product Page Has Documentation */
+            $variables['documentation'] = FALSE;
+            if (
+                count($node->getFields()['norproduct_protocol']->getValue()) > 0 ||
+                count($node->getFields()['norproduct_supplementaryprotocol']->getValue()) > 0 ||
+                count($node->getFields()['norproduct_informationsheet']->getValue()) > 0 ||
+                count($node->getFields()['norproduct_applicationnote']->getValue()) > 0 ||
+                count($node->getFields()['norproduct_msds']->getValue()) > 0 ||
+                count($node->getFields()['norproduct_poster']->getValue()) > 0 ||
+                count($node->getFields()['field_product_flyer']->getValue()) > 0 ||
+                count($node->getFields()['field_related_blogs']->getValue()) > 0 ||
+                count($node->getFields()['norproduct_shortprotocol']->getValue()) > 0
+            ) {
+                $variables['documentation'] = TRUE;
+            }
+
+            $part_num_and_node_id = array(
+                "309" => ["49540"], // 49500
+                "1348" => ["57740"], // 57700
+                "1618" => ["63980"], // 63950
+                "277" => ["61040", "23640"], // 61000, 23600
+                "279" => ["17240"], // 17200
+                "323" => ["RU49010"], // RU49000
+                "286" => ["55040"], // 55000
+                "1347" => ["57440"], // 57400
+                "270" => ["25840"], // 25800
+                "1486" => ["63710"], // 63700
+                "334" => ["45674"], // 45660
+                "324" => ["18124","18120"], // 18126, 18122
+                "1393" => ["RU53810"], // RU53800
+                "1469" => ["CY-93050"], // 45670-B
+                "1579" => ["CY-93050","45683"], // 45690-B
+                "1841" => ["68803"], // 69200
+                "1350" => ["58040"], // 58000
+            );
+
+            if (array_key_exists($nid, $part_num_and_node_id)) { //if the current page is in the array of node IDs, then add the code
+                //$variables['valid_sku_array'] = array_keys($part_num_and_node_id, $nid, true);
+                if (\Drupal::moduleHandler()->moduleExists('request_sample')) {
+                    // get form
+                    $form_arg = 'Drupal\request_sample\Form\RequestSampleForm';
+                    $form_state = new FormState();
+                    $args = func_get_args();
+                    // Remove $form_arg from the arguments.
+                    unset($args[0]);
+                    $form_state->addBuildInfo('args', array_values($args));
+                    // add custom variable
+                    $form_state->addBuildInfo('default_sample', $part_num_and_node_id[$nid]);
+                    $variables['request_sample_form'] = \Drupal::formBuilder()->buildForm($form_arg, $form_state);
+                }            
+            }
+
+            // SKU collection for product pages, used for the customize product button 
+            $sku_array = [];
+            $show_customization_form = false;
+            foreach ($variations as $variation) {
+                if(!$show_customization_form){ // only continue checking categories if the previously checked variations did not have the sample collection + preservation category
+                    $variation_cats = $variation->get('field_product_categories')->getValue();
+                    foreach($variation_cats as $variation_cat){
+                        if($variation_cat["value"] == 'sample_collection_and_preservation_kits'){
+                            $show_customization_form = true;
+                            break;
+                        }
+                    }
+                }
+                $sku_array[] = $variation->getSku();
+            }
+            if ($show_customization_form && \Drupal::moduleHandler()->moduleExists('product_customization')) {
+                $form_arg = 'Drupal\product_customization\Form\ProductCustomizationForm';
+                $form_state = new FormState();
+                $args = func_get_args();
+                unset($args[0]);
+                $form_state->addBuildInfo('args', array_values($args));
+                $form_state->addBuildInfo('default_sample', $sku_array);
+                $variables['product_customization'] = \Drupal::formBuilder()->buildForm($form_arg, $form_state);
+            }
+
+            /* if (!empty($variables['default_variation'])) {
+                $variables['bioz_badge_html'] = "<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>";
+                $sku;
+                if (isset($variables['default_variation']))
+                    $sku = $variables['default_variation'];
+                if ($sku == 'Dx17200')
+                    $sku = 'Dx24300';
+                if ($sku == 'Dx55500')
+                    $sku = 'Dx55100';
+                $variables['bioz_badge_html'] .= "<div class='active' kit='" . $sku . "'>";
+                $variables['bioz_badge_html'] .= "<div id='w-m-865-" . $sku . "' style='width:156px;height:auto;position:relative;'></div><div id='bioz-w-pb-" . $sku . "-div' style='width:156px;height:0px;'><a id='bioz-w-pb-" . $sku . "' style='font-size: 12px;color:transparent' href='https://www.bioz.com/' target='_blank'><img src='https://cdn.bioz.com/assets/favicon.png' style='width:11px;height:11px;vertical-align: baseline;padding-bottom:0px;margin-left:0px;margin-bottom:0px;float:none;display:none'/> Powered by Bioz</a></div><script>$(document).ready(function() {var widget_mini_obj = new v_widget_obj('m', 1);widget_mini_obj.request_catalog_number_widget_data_internal('" . $sku . "', '" . $sku . "');});</script>";
+                $variables['bioz_badge_html'] .= "</div>";
+
+                $variables['bioz_citations_html'] = "<div class='active' kit='" . $sku . "'>";
+                $variables['bioz_citations_html'] .= "<object id='wobj-865-" . $sku . "-q' type='text/html' data='https://www.bioz.com/v_widget_6_0/865/" . $sku . "/?ex=1' style='width:100%; height: 193px'></object> <div id='bioz-w-pb-865-" . $sku . "-q-div' style='width: 100%''><a id='bioz-w-pb-865-" . $sku . "-q' style='font-size: 12px;text-decoration:none;color:#004897' href='https://www.bioz.com/' target='_blank'><img src='https://cdn.bioz.com/assets/favicon.png' style='width:11px;height:11px;vertical-align: baseline;padding-bottom:0px;margin-left:0px;margin-bottom:0px;float:none'> Powered by Bioz</a> <a style='font-size: 12px;text-decoration:none;float: right;color:transparent' href='https://www.bioz.com/result/" . $sku . "/product/Norgen Biotek/?cn=" . $sku . "' target='_blank'> See more details on Bioz</a></div>";
+                $variables['bioz_citations_html'] .= "<script>window.addEventListener('load', (event) => {setTimeout(()=>{if(document.getElementById('wobj-865-" . $sku . "-q').style.height == '359px'){document.getElementById('citations-section').remove(); document.getElementById('citations-nav').remove();}},5000)});</script>";
+                $variables['bioz_citations_html'] .= "</div>";
+                $variables['bioz_citations_html'] .= "</section>";
+            } */
+        }
+    }
+    /* if (\Drupal::moduleHandler()->moduleExists('total_rna_automation_scripts')) {
+        $variables['total_rna_automation_scripts'] = \Drupal::formBuilder()->getForm('Drupal\total_rna_automation_scripts\Form\TotalRnaAutomationScriptsForm');
+    } */
+    $script_to_attach = '';
+    if($nid == 279){
+        $script_to_attach = 'total-rna';
+    }
+    else if($nid == 173){
+        $script_to_attach = 'plant';
+    }
+    else if($nid == 1345){
+        $script_to_attach = 'saliva';
+    }
+    else if($nid == 208){
+        $script_to_attach = 'cells-and-tissue';
+    }
+    else if($nid == 187){
+        $script_to_attach = 'blood';
+    }
+    else if($nid == 177){
+        $script_to_attach = 'stool';
+    }
+    else if($nid == 1346){
+        $script_to_attach = 'soil';  
+    }
+    else if($nid == 2507){
+        $script_to_attach = 'pathogen-viral';  
+    }
+
+    if ($script_to_attach!='' && \Drupal::moduleHandler()->moduleExists('total_rna_automation_scripts')) {
+        // modify formBuilder getForm function to add additional script_to_attach build info
+        // get form
+        $form_arg = 'Drupal\total_rna_automation_scripts\Form\TotalRnaAutomationScriptsForm';
+        $form_state = new FormState();
+        $args = func_get_args();
+        // Remove $form_arg from the arguments.
+        unset($args[0]);
+        // add custom variable
+        $form_state->addBuildInfo('args', array_values($args));
+        $form_state->addBuildInfo('script_to_attach', $script_to_attach);
+        $variables['total_rna_automation_scripts'] = \Drupal::formBuilder()->buildForm($form_arg, $form_state);
+
+        /* dump($variables['total_rna_automation_scripts']); */
+        /* $variables['total_rna_automation_scripts'] = \Drupal::formBuilder()->getForm('Drupal\total_rna_automation_scripts\Form\TotalRnaAutomationScriptsForm'); */
+        /* $variables['total_rna_automation_scripts']['#attributes']['script_to_attach'] = $script_to_attach; */
+    }
+}
+function jango_preprocess_field__commerce_product_variation__field_sale_promotion(&$variables)
+{    
+
+    /*  echo "<div>attribute-value--size.html.twig variables</div>";
+     dump($variables); */
+    // $variables['test22'] = "test";
+    //count($node->getFields()['norproduct_protocol']->getValue()) > 0
+     //dump($variables['element']);
+     //dump($variables['element']['#object']->getFields()['sku']->getValue()['0']['value']);
+     $variables['default_variation'] = $variables['element']['#object']->getFields()['sku']->getValue()['0']['value'];
+     
+    /*  $variables['sku'] = "17200"; */
+}
+
+function jango_preprocess_field__commerce_product_attribute_value__size(&$variables)
+{
+    /*  echo "<div>attribute-value--size.html.twig variables</div>";
+     dump($variables); */
+    /*  dump($variables['element']);
+     dump($variables['element']['#object']->getFields()); */
+    /* echo $variables['item']->getEntity(); */
+    /*  $variables['sku'] = "17200"; */
+}
+
+/* function jango_preprocess_field(&$variables){
+  echo "hello";
+} */
+
+/**
+ * @param $variables
+ */
+function jango_preprocess_breadcrumb(&$variables)
+{
+    global $breadcrumb_page_title;
+
+    /* dump($variables); */
+    $route = \Drupal::routeMatch()->getCurrentRouteMatch()->getRouteObject();
+    $route_title = $route->getDefault('_title');
+    $title = !is_null($breadcrumb_page_title) ? $breadcrumb_page_title : $route_title;
+    $variables['breadcrumb'][] = ['text' => '/'];
+    $variables['breadcrumb'][] = ['text' => $title];
+
+    $request = \Drupal::request();
+    $route_match = \Drupal::routeMatch();
+    $page_title = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());
+    $variables['breadcrumb'][] = ['text' => $page_title];
+
+    $breadcrumb = \Drupal::service('breadcrumb')->build(\Drupal::routeMatch())->toRenderable();
+    /* dump($breadcrumb); */
+    /* $breadcrumbs = \Drupal::service('renderer')->render($breadcrumb); */
+    /* $variables['breadcrumb_test'] = $breadcrumbs; */
+}
+
+/**
+ * @param $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ * @param $form_id
+ */
+function jango_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id)
+{
+    $form['#attributes']['class'][] = 'form';
+
+    /* Need to alter form action of any view that has page/feed displays and other block displays that have exposed forms */
+    /* For example, blogs have an RSS feed, and also the block view for the landing page */
+    /* Without this, it causes issues when AJAX/JS is unavailable, or all the time if the reset button is exposed because the form action attribute is set to the page/feed path */
+
+    /* Alternatively, we can separate the feed/page into a new view but this makes it less organized and more inconvenient to make changes to all view displays */
+    if($form_id == "views_exposed_form"){
+        /* product filters */
+        /* norblog */
+        /* customer stories */
+        /* publication summaries */
+        if(
+            in_array("views_exposed_form__ajax_filterable_products", $form['#theme']) || in_array("views_exposed_form__blog", $form['#theme']) || 
+            in_array("views_exposed_form__customer_stories", $form['#theme']) || in_array("views_exposed_form__publication_summary", $form['#theme'])
+        ){
+            $current_path = \Drupal::service('path.current')->getPath();
+            $current_url = \Drupal::service('path_alias.manager')->getAliasByPath($current_path);
+            if($current_url && $form['#action']) $form['#action'] = $current_url;
+        }
+    }
+}
+
+/**
+ * @param $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ * @param $form_id
+ * @return mixed
+ */
+function jango_form_comment_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id)
+{
+    $form['author']['#prefix'] = '<div class="row mb-md-10"><div class="col-md-6 mb-md-10">';
+    $form['field_email']['#prefix'] = '</div><div class="col-md-6 mb-md-10">';
+    $form['field_email']['#suffix'] = '</div></div>';
+    return $form;
+}
+
+/* function jango_form_user_register_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id){
+    // unset extra fields from sign up form. Users can add them to their profile at a later date if they wish to.
+    unset($form['field_phone_number']);
+    unset($form['field_company_institution']);
+    unset($form['field_how_did_you_hear_about_nor']);
+    unset($form['field_job_title']);
+    unset($form['field_country']);
+} */
+
+/**
+ * Implementation of hook_page_attachments_alter().
+ */
+function jango_page_attachments_alter(&$page)
+{
+    $page['#attached']['drupalSettings']['base_path'] = base_path();
+    $page['#attached']['drupalSettings']['theme_path'] = \Drupal::service('extension.path.resolver')->getPath('theme', 'jango');
+
+    // Check if the current route is for a node and if the user is anonymous.
+    $node = \Drupal::routeMatch()->getParameter('node');
+    if ($node instanceof \Drupal\node\NodeInterface) {
+        // Replace 'your_content_type' with the machine name of your content type.
+        if (($node->bundle() === 'norproduct' || $node->bundle() === 'product_category_list') && \Drupal::currentUser()->isAnonymous()) {
+        // Trigger the page cache kill switch.
+            \Drupal::service('page_cache_kill_switch')->trigger();
+        }
+    }
+}
+
+/**
+ * Implementation of hook_preprocess_page().
+ */
+function jango_preprocess_page(array &$variables)
+{
+    // Get all regions for current theme.
+    $current_theme = \Drupal::config('system.theme')->get('default');
+    $theme_settings = $current_theme . '.settings';
+    $layouts = \Drupal::configFactory()
+        ->getEditable($theme_settings)
+        ->get('nikadevs_cms_layout');
+
+    if (function_exists('nikadevs_cms_page_layout') && $layouts != []) {
+        $variables['nikadevs_page'] = nikadevs_cms_page_layout(array('page' => $variables['page']));
+        $variables['layout_builder_activated'] = TRUE;
+    } else {
+        $variables['layout_builder_activated'] = FALSE;
+    }
+
+    $route = \Drupal::routeMatch()->getCurrentRouteMatch()->getRouteObject();
+    $title = $route->getDefault('_title');
+
+    if ($title == 'Page not found') {
+        $variables['logo'] = theme_get_setting('logo');
+        $variables['phone'] = theme_get_setting('phone');
+        $variables['mail'] = \Drupal::config('system.site')->get('mail');
+        $bg_404 = theme_get_setting('404_bg');
+        if (!empty($bg_404) && isset($bg_404[0])) {
+            $file = File::load($bg_404[0]);
+            $variables['bg_404'] = $file ? file_create_url($file->getFileUri()) : '';
+        }
+    }
+    if ($title == 'Maintenance Page') {
+        $logo = theme_get_setting('logo');
+        $variables['logo'] = $logo['url'];
+        jango_preprocess_maintenance_page($variables);
+    }
+
+    if ($node = \Drupal::routeMatch()->getParameter('node')) {
+        $variables['content_type'] = $node->bundle();
+    }
+
+    $variables['url'] = $_SERVER['REQUEST_URI'];
+}
+
+/**
+ * Implementation of hook_preprocess_page().
+ */
+function jango_preprocess_maintenance_page(&$variables)
+{
+    $variables['phone'] = theme_get_setting('phone');
+    $variables['mail'] = \Drupal::config('system.site')->get('mail');
+    $maintenance_bg = theme_get_setting('maintenance_bg');
+    if (!empty($maintenance_bg) && isset($maintenance_bg[0])) {
+        $file = File::load($maintenance_bg[0]);
+        $uri = $file->getFileUri();
+        $file_url = \Drupal::service('file_url_generator')->generateAbsoluteString($uri);
+        $variables['maintenance_bg'] = $file_url;
+    }
+}
+
+/**
+ * @param array $suggestions
+ * @param array $variables
+ * @return array
+ */
+function jango_theme_suggestions_page_alter(array &$suggestions, array $variables)
+{
+    $node = \Drupal::routeMatch()->getParameter('node');
+    if (!empty($node) && $node->getTitle() == 'Page not found') {
+        $suggestions[] = 'page__system__404';
+    }
+    if (!empty($node) && $node->getTitle() == 'Maintenance Page') {
+        $suggestions[] = 'maintenance_page';
+    }
+
+    return $suggestions;
+}
+
+/**
+ * Implementation of hook_preprocess_html().
+ */
+function jango_preprocess_html(&$variables)
+{
+    $account = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id()); 
+    $variables['mail_opt_in'] = $account->get('field_mail_opt_in')->getString();
+    
+    $variables['url'] = $_SERVER['REQUEST_URI'];
+    $variables['#cache']['contexts'][] = 'url.path';
+
+
+    $variables['#attached']['library'][] = 'jango/google-font';
+
+    $language_interface = \Drupal::languageManager()->getCurrentLanguage();
+    $lng_dir = $language_interface->getDirection() == 'rtl' ? 'rtl' : 'ltr';
+    $variables['#attached']['library'][] = 'jango/language-dir-' . $lng_dir;
+
+    $hosts = ['avoluvach', 'development'];
+    $variables['dev'] = isset($_SERVER['HTTP_HOST']) && (strpos($_SERVER['HTTP_HOST'], 'nikadevs') !== FALSE || in_array($_SERVER['HTTP_HOST'], $hosts)) ? TRUE : FALSE;
+    $variables['loader_image'] = theme_get_setting('loader_image');
+    $variables['gmap_key'] = theme_get_setting('gmap_key');
+    $variables['attributes']['class'][] = 'appear-animate';
+
+    $skin = theme_get_setting('skin');
+    $variables['#attached']['library'][] = 'jango/' . $skin . '-' . $lng_dir;
+
+    if (theme_get_setting('retina')) {
+        $variables['#attached']['library'][] = 'jango/retina';
+    }
+
+      
+    try {
+        $variables['is_front'] = \Drupal::service('path.matcher')->isFrontPage();
+    }
+    catch (Exception $e) {
+        $variables['is_front'] = FALSE;
+    }
+    // Ensure the cache varies correctly (new in Drupal 8.3).
+    $variables['#cache']['contexts'][] = 'url.path.is_front';
+    $variables['url'] = $_SERVER['REQUEST_URI'];
+
+
+    $session = \Drupal::service('session');
+  
+    // Check if the current URL is the front page and contains '/front'
+    if (\Drupal::service('path.matcher')->isFrontPage() && strpos($variables['url'], '/node') !== false) {
+  
+  
+      // Redirect to the default front page without '/front'
+      $default_frontpage_url = Url::fromRoute('<front>')->toString();
+      $response = new RedirectResponse($default_frontpage_url);
+      $response->send();
+      exit;
+    }
+    $user_choice = \Drupal::request()->cookies->get('user_choice_for_cart');
+  
+   
+  
+  
+  
+
+    if ($session->get('item_added_to_cart')) {
+      $variables['#attached']['drupalSettings']['showCartPopup'] = TRUE;
+    
+      $user_choice = "opened";
+    } 
+    else if ($session->get('item_in_cart_updated')) {
+      $variables['#attached']['drupalSettings']['showCartPopup'] = TRUE;
+     
+      $user_choice = "opened";
+    } 
+    else if ($session->get('item_in_cart_removed')) {
+      $variables['#attached']['drupalSettings']['showCartPopup'] = TRUE;
+    
+      $user_choice = "opened";
+    } 
+    else {
+      $variables['#attached']['drupalSettings']['showCartPopup'] = FALSE;
+    }
+  
+    if(is_null($user_choice) )
+    {
+      $user_choice = "opened";
+    }
+  
+    // dump( $variables['#attached']['drupalSettings']);
+    // Attach the JavaScript library
+    $variables['#attached']['library'][] = 'commerce_nor_cart_popup/cart_popup';
+  
+  
+    $path = $_SERVER['REQUEST_URI'];
+    $variables['url'] = $path;
+    $variables['is_front'] = \Drupal::service('path.matcher')->isFrontPage();
+    $variables['is_page_contact'] = ($path == '/contact');
+    
+    // Check if the cart has items.
+    /** @var CartProviderInterface $cart_provider */
+    $cart_provider = \Drupal::service('commerce_cart.cart_provider');
+    $cart = $cart_provider->getCart('default');
+    // dump($cart->getItems());
+    $variables['cart_has_items'] = $cart && count($cart->getItems()) > 0;
+  
+    // Set add_class based on the conditions.
+    $variables['add_class'] = false;
+    
+  
+    if (
+        $variables['cart_has_items'] && 
+        !$variables['is_front'] &&
+        $variables['url'] != '/cart' && 
+        strpos($variables['url'], '/user') === false && 
+        strpos($variables['url'], '/checkout') === false && 
+        $user_choice == "opened"
+    ) 
+    {
+      $variables['add_class'] = true;
+    }
+    if( $variables['#attached']['drupalSettings']['showCartPopup'])
+    {
+      // print('here');
+      $variables['add_class'] = true;
+    }
+    // dump( $variables['add_class']);
+
+}
+
+//Attached libraries for payment pages
+
+function jango_preprocess_views_view_table(&$variables) {
+    $variables['#attached']['library'][] = 'jango/nor_view';
+}
+
+function jango_preprocess_views_view_fields__commerce_checkout_order_summary(&$variables) {   
+    $variables['#attached']['library'][] = 'jango/nor_checkout';
+}
+
+function jango_preprocess_commerce_checkout_pane__review(&$variables) {
+    $variables['#attached']['library'][] = 'jango/nor_review';
+
+    $current_path =  \Drupal::service('path_alias.manager')->getAliasByPath(\Drupal::service('path.current')->getPath());
+    $path_parts = explode('/', trim($current_path, '/'));
+    $id = $path_parts[count($path_parts) - 2]; 
+    $variables['current_id'] = $id;
+}
+
+  
+/**
+ * Prepare variables for tb_megamenu_item.
+ *
+ * @param array $vars variables are declared in theme.
+ */
+function jango_preprocess_tb_megamenu_item(&$vars)
+{
+    $vars['depth_class'] = $vars['level'] == 1 ? 'c-link' : '';
+    $id = $vars['link']['id'];
+    $vars['trail_class'] = array_key_exists($id, $vars['trail']) ? 'c-active' : '';
+}
+
+/**
+ * @param $vars
+ */
+function jango_preprocess_tb_megamenu_submenu(&$vars)
+{
+    /*  $plugin_id = $vars['parent']->link->getPluginId();
+      $item_config = isset($vars['menu_config'][$plugin_id]) ? $vars['menu_config'][$plugin_id] : [];
+      $submenu_config = isset($item_config['submenu_config']) ? $item_config['submenu_config'] : [];
+      $vars['submenu_config'] = $submenu_config;
+      TBMegaMenuBuilder::editSubMenuConfig($submenu_config);
+
+      $vars['attributes']->removeClass([
+        'nav-child',
+        'tb-megamenu-submenu',
+        'mega-dropdown-menu'
+      ]);
+
+      if ($vars['level'] == 1 && isset($vars['menu_config'][$plugin_id]['rows_content'][0][0]['col_config']['width'])) {
+        if ($vars['menu_config'][$plugin_id]['rows_content'][0][0]['col_config']['width'] == 12) {
+          $vars['attributes']->addClass(['c-menu-type-classic', 'c-pull-left']);
+        }
+        else {
+          $vars['attributes']->addClass([
+            'c-menu-type-mega2',
+            'c-menu-type-fullwidth',
+            'row'
+          ]);
+        }
+      }
+      if ($vars['level'] == 1 && !isset($vars['menu_config'][$plugin_id]['rows_content'][0][0]['col_config']['width'])) {
+        $vars['attributes']->addClass(['c-menu-type-classic', 'c-pull-left']);
+      }
+      if ($vars['level'] == 2) {
+        $vars['attributes']->addClass('c-menu-type-inline');
+      }*/
+}
+
+
+/**
+ * Prepare variables for tb_megamenu_item.
+ *
+ * @param array $vars variables are declared in theme.
+ */
+function jango_preprocess_tb_megamenu_column(&$vars)
+{
+    $width = isset($vars['col']['col_config']['width']) ? $vars['col']['col_config']['width'] : '12';
+    $vars['attributes']->addClass('col-md-' . $width);
+}
+
+/**
+ * Implementation of hook_menu_local_tasks_alter().
+ */
+/*Deprecate in Drupal 9. Must be rewrite*/
+/*function jango_menu_local_tasks($variables) {
+  $output = '';
+  if (!empty($variables['primary'])) {
+    $variables['primary']['#prefix'] = '<h2 class="element-invisible">' . t('Primary tabs') . '</h2>';
+    $variables['primary']['#prefix'] .= '<ul class="tabs primary">';
+    $variables['primary']['#suffix'] = '</ul>';
+    $output .= render($variables['primary']);
+  }
+  if (!empty($variables['secondary'])) {
+    $variables['secondary']['#prefix'] = '<h2 class="element-invisible">' . t('Secondary tabs') . '</h2>';
+    $variables['secondary']['#prefix'] .= '<ul class="tabs primary">';
+    $variables['secondary']['#suffix'] = '</ul>';
+    $output .= render($variables['secondary']);
+  }
+
+  return $output;
+}*/
+function jango_menu_local_tasks_alter(&$data, $route_name, \Drupal\Core\Cache\RefinableCacheableDependencyInterface &$cacheability)
+{
+    dsm($route_name);
+    dsm($data);
+}
+
+/**
+ * Implements hook_theme().
+ */
+function jango_theme(&$existing, $type, $theme, $path)
+{
+    $hooks['user_login_form'] = [
+        'template' => 'user/user-login-form',
+        'render element' => 'form',
+    ];
+    $hooks['user_pass'] = [
+        'template' => 'user/user-pass',
+        'render element' => 'form',
+    ];
+    $hooks['user_register_form'] = [
+        'template' => 'user/user-register-form',
+        'render element' => 'form',
+    ];
+    return $hooks;
+}
+
+/**
+ * @param $variables
+ */
+function jango_preprocess_user_login_form(&$variables)
+{
+    $variables['toggle_checkbox'] = \Drupal::service('renderer')
+        ->render($variables['form']['toggle_checkbox']);
+    $variables['rendered'] = \Drupal::service('renderer')
+        ->render($variables['form']);
+    $variables['url'] = $_SERVER['REQUEST_URI'];
+}
+function jango_preprocess_user_pass(&$variables)
+{
+    $variables['toggle_checkbox'] = \Drupal::service('renderer')
+        ->render($variables['form']['toggle_checkbox']);
+    $variables['rendered'] = \Drupal::service('renderer')
+        ->render($variables['form']);
+    $variables['url'] = $_SERVER['REQUEST_URI'];
+}
+function jango_preprocess_user_register_form(&$variables)
+{
+    $variables['toggle_checkbox'] = \Drupal::service('renderer')
+        ->render($variables['form']['toggle_checkbox']);
+    $variables['rendered'] = \Drupal::service('renderer')
+        ->render($variables['form']);
+    $variables['url'] = $_SERVER['REQUEST_URI'];
+}
+/**
+ * Implements theme_field()
+ */
+/* Deprecate in Drupal 9. Must be replace*/
+/*function jango_field__field_sale_label($variables) {
+  $output = '';
+  if (count($variables['items'])) {
+    for ($i = 0; $i < count($variables['items']); $i++) {
+      if ($variables['element']['#view_mode'] == 'teaser' || $variables['element']['#view_mode'] == 'teaser_list') {
+        $output .= $variables['items'][$i]['content']['#markup'] ? '<div class="c-label c-bg-red c-font-uppercase c-font-white c-font-13 c-font-bold">' . t($variables['items'][$i]['content']['#markup']) . '</div>' : '';
+      }
+      else {
+        $output .= $variables['items'][$i]['content']['#markup'] ? '<div class="c-product-sale">' . t($variables['items'][$i]['content']['#markup']) . '</div>' : '';
+      }
+    }
+  }
+  return $output;
+}*/
+
+/**
+ * Implements theme_field()
+ */
+/* Deprecate in Drupal 9. Must be replace*/
+/*function jango_field__field_new_label($variables) {
+  $output = '';
+  if (count($variables['items'])) {
+    for ($i = 0; $i < count($variables['items']); $i++) {
+      if ($variables['element']['#view_mode'] == 'teaser' || $variables['element']['#view_mode'] == 'teaser_list') {
+        $output .= $variables['items'][$i]['content']['#markup'] ? '<div class="c-label c-label-right c-theme-bg c-font-uppercase c-font-white c-font-13 c-font-bold">' . t($variables['items'][$i]['content']['#markup']) . '</div>' : '';
+      }
+      else {
+        $output .= $variables['items'][$i]['content']['#markup'] ? '<div class="c-product-new">' . t($variables['items'][$i]['content']['#markup']) . '</div>' : '';
+      }
+    }
+  }
+  return $output;
+}*/
+
+/**
+ * Implements template_preprocess_pager().
+ * @param $variables
+ */
+function jango_preprocess_pager(&$variables)
+{
+    $element = $variables['pager']['#element'];
+    $parameters = $variables['pager']['#parameters'];
+    $quantity = $variables['pager']['#quantity'];
+    $route_name = $variables['pager']['#route_name'];
+    $route_parameters = isset($variables['pager']['#route_parameters']) ? $variables['pager']['#route_parameters'] : [];
+    global $pager_page_array, $pager_total;
+
+    // Nothing to do if there is only one page.
+    if (empty($pager_total) || empty($pager_total[$element]) || $pager_total[$element] <= 1) {
+        return;
+    }
+
+    $tags = $variables['pager']['#tags'];
+
+    // Calculate various markers within this pager piece:
+    // Middle is used to "center" pages around the current page.
+    $pager_middle = ceil($quantity / 2);
+    // current is the page we are currently paged to.
+    $pager_current = $pager_page_array[$element] + 1;
+    // first is the first page listed by this pager piece (re quantity).
+    $pager_first = $pager_current - $pager_middle + 1;
+    // last is the last page listed by this pager piece (re quantity).
+    $pager_last = $pager_current + $quantity - $pager_middle;
+    // max is the maximum page number.
+    $pager_max = $pager_total[$element];
+    // End of marker calculations.
+
+    // Prepare for generation loop.
+    $i = $pager_first;
+    if ($pager_last > $pager_max) {
+        // Adjust "center" if at end of query.
+        $i = $i + ($pager_max - $pager_last);
+        $pager_last = $pager_max;
+    }
+    if ($i <= 0) {
+        // Adjust "center" if at start of query.
+        $pager_last = $pager_last + (1 - $i);
+        $i = 1;
+    }
+    // End of generation loop preparation.
+
+    // Create the "first" and "previous" links if we are not on the first page.
+    $pagination_type = theme_get_setting('pagination_type');
+    $items = [];
+    if ($pager_page_array[$element] > 0) {
+        if ($pagination_type == 'c-content-pagination c-theme advanced' || $pagination_type == 'c-content-pagination c-square c-theme advanced') {
+            $items['first'] = [];
+            $options = [
+                'query' => pager_query_add_page($parameters, $element, 0),
+            ];
+            $items['first']['href'] = Url::fromRoute($route_name, $route_parameters, $options);
+            if (isset($tags[0])) {
+                $items['first']['text'] = $tags[0];
+            }
+        }
+
+        $items['previous'] = [];
+        $options = [
+            'query' => pager_query_add_page($parameters, $element, $pager_page_array[$element] - 1),
+        ];
+        $items['previous']['href'] = Url::fromRoute($route_name, $route_parameters, $options);
+        if (isset($tags[1])) {
+            $items['previous']['text'] = $tags[1];
+        }
+    }
+
+    $class = '';
+    if ($i != $pager_max) {
+        // Add an ellipsis if there are further previous pages.
+        if ($i > 1) {
+            $variables['ellipses']['previous'] = TRUE;
+        }
+        // Now generate the actual pager piece.
+        for (; $i <= $pager_last && $i <= $pager_max; $i++) {
+            $options = [
+                'query' => pager_query_add_page($parameters, $element, $i - 1),
+            ];
+            $items['pages'][$i]['href'] = Url::fromRoute($route_name, $route_parameters, $options);
+
+            switch ($pagination_type) {
+                case 'c-content-pagination c-theme':
+                case 'c-content-pagination c-square c-theme':
+                case 'c-content-pagination c-circle c-theme':
+                case 'c-content-pagination c-theme advanced':
+                case 'c-content-pagination c-square c-theme advanced':
+                    $class = ' c-active';
+                    break;
+                default:
+                    $class = ' active';
+                    break;
+            }
+            if ($pagination_type != 'pager') {
+                if ($i == $pager_current) {
+                    $variables['current'] = $i;
+                }
+            }
+        }
+        // Add an ellipsis if there are further next pages.
+        if ($i < $pager_max + 1) {
+            $variables['ellipses']['next'] = TRUE;
+        }
+    }
+
+    // Create the "next" and "last" links if we are not on the last page.
+    if ($pager_page_array[$element] < ($pager_max - 1)) {
+        $items['next'] = [];
+        $options = [
+            'query' => pager_query_add_page($parameters, $element, $pager_page_array[$element] + 1),
+        ];
+        $items['next']['href'] = Url::fromRoute($route_name, $route_parameters, $options);
+        if (isset($tags[3])) {
+            $items['next']['text'] = $tags[3];
+        }
+
+        if ($pagination_type == 'c-content-pagination c-theme advanced' || $pagination_type == 'c-content-pagination c-square c-theme advanced') {
+            $items['last'] = [];
+            $options = [
+                'query' => pager_query_add_page($parameters, $element, $pager_max - 1),
+            ];
+            $items['last']['href'] = Url::fromRoute($route_name, $route_parameters, $options);
+            if (isset($tags[4])) {
+                $items['last']['text'] = $tags[4];
+            }
+        }
+    }
+    $variables['items'] = $items;
+    $variables['current_class'] = $class;
+    $variables['pagination_type'] = $pagination_type;
+
+    // The rendered link needs to play well with any other query parameter used
+    // on the page, like exposed filters, so for the cacheability all query
+    // parameters matter.
+    $variables['#cache']['contexts'][] = 'url.query_args';
+}
+/**
+ * Implements template_preprocess_user().
+ * @param $variables
+ */
+function jango_preprocess_user(&$variables)
+{
+    $variables['content']['user_picture'][0]['#item_attributes']['class'] = 'media-object';
+}
+/*
+ *This function gives us the url
+ */
+function jango_preprocess_page_title(&$variables)
+{
+    $variables['url'] = $_SERVER['REQUEST_URI'];
+    $variables['#cache']['contexts'][] = 'url.path';
+}
+
+function jango_js_alter(&$javascript, \Drupal\Core\Asset\AttachedAssetsInterface $assets)
+{
+    // Swap out jQuery to use an updated version of the library.
+    // print_r($javascript);
+    if (isset($javascript['modules/contrib/eu_cookie_compliance/js/eu_cookie_compliance.min.js']['data'])) {
+        $javascript['modules/contrib/eu_cookie_compliance/js/eu_cookie_compliance.min.js']['data'] = '/themes/custom/jango/js/eu_cookie_compliance_modified.js';
+        // Set a high weight to ensure it loads last.
+        $javascript['modules/contrib/eu_cookie_compliance/js/eu_cookie_compliance.min.js']['weight'] = 999;
+    }
+
+}
+
+
+
+/**
+ * Implements hook_preprocess_HOOK() for views_view templates.
+ */
+function jango_preprocess_views_view(array &$variables) {
+    $variables['url'] = $_SERVER['REQUEST_URI'];
+    // dump($variables['view']->id());
+    // dump($variables['view']->current_display);
+    // Check if the view is 'commerce_cart_form' and the display ID is 'block_2'.
+    if ($variables['view']->id() == 'commerce_cart_form') {
+        //   if($variables['view']->current_display == 'block_2')
+        //   {
+        //     $variables['#attached']['library'][] = 'jango/cart-sidebar';
+        //   }
+      if($variables['view']->current_display == 'block_2')
+      {
+        $variables['#attached']['library'][] = 'jango/cart-sidebar-concise';
+      }
+      $variables['#attached']['library'][] = 'jango/remove-update';
+     
+    }
+    if($variables['view']->id() == 'ajax_filterable_products'){
+      $variables['#attached']['library'][] = 'jango/product-filters';
+    }
+    \Drupal::logger('publications_library')->notice('the current view ID is: '.$variables['view']->id());
+    if($variables['view']->id() == 'nor_publications_or_citations_all_results'){
+        \Drupal::logger('publications_library')->notice('the current display is: '.$variables['view']->current_display);
+        if($variables['view']->current_display == 'all_results'){
+            $variables['#attached']['library'][] = 'jango/nor_publications_or_citations_all_results';
+            \Drupal::logger('publications_library')->notice('attached the library');
+        }
+    }
+}
+
+  function jango_theme_suggestions_commerce_order_total_summary_alter(array &$suggestions, array &$variables) {
+    // Check if the request attributes contain the controller information.
+    $request = \Drupal::request();
+    $attributes = $request->attributes->all();
+  
+   
+//    echo('<pre>');
+//    print_r($attributes['_controller']);
+//    echo('</pre>');
+  
+    // Check for the specific controller and view.
+    if (isset($attributes['_controller'])) {
+        $controller = $attributes['_controller'];
+        // dump($controller);
+        // Check for the CartController and view ID.
+        //   print($controller);
+        /* if ($controller != '\Drupal\node\Controller\NodeViewController::view') 
+        {
+            $variables['is_cart_block_2'] = True;
+        
+            // dump( $variables['is_cart_block_2']);
+            //  dump($attributes);
+            // $suggestions[] = 'order_total_summary__commerce_cart_form__block_2';
+        } */
+        /* if ($controller != '\Drupal\node\Controller\NodeViewController::view' && // all node pages
+            ($controller == '\Drupal\Core\Entity\Controller\EntityViewController::view' && isset($attributes['_entity']) && $attributes['_entity']->getEntityTypeId() != 'user')) { // user pages
+            $variables['is_cart_block_2'] = TRUE;
+        } */
+
+        if($controller == '\Drupal\commerce_checkout\Controller\CheckoutController::formPage' || $controller == '\Drupal\commerce_cart\Controller\CartController::cartPage') {
+            $variables['is_cart_block_2'] = TRUE;
+        }
+    }
+  
+  
+    if (isset($variables['view']) && $variables['view']->id() == 'commerce_cart_form' && $variables['view']->current_display == 'block_2') {
+        // $suggestions[] = 'order_total_summary__commerce_cart_form__block_2';
+    }
+  }
+
+/**
+ * Implementation of hook_preprocess_html().
+ */
+function jango_preprocess_off_canvas_page_wrapper(&$variables) {
+
+   
+     $variables['url'] = $_SERVER['REQUEST_URI'];
+
+
+     $session = \Drupal::service('session');
+   
+     // Check if the current URL is the front page and contains '/front'
+     if (\Drupal::service('path.matcher')->isFrontPage() && strpos($variables['url'], '/front') !== false) {
+       // Prepare a query parameter to preserve the session state
+   
+       // Redirect to the default front page without '/front'
+       $default_frontpage_url = Url::fromRoute('<front>')->toString();
+       $response = new RedirectResponse($default_frontpage_url);
+       $response->send();
+       exit;
+     }
+     $user_choice = \Drupal::request()->cookies->get('user_choice_for_cart');
+     
+    
+    //  dump($user_choice);
+     if ($session->get('item_added_to_cart')) {
+       $variables['#attached']['drupalSettings']['showCartPopup'] = TRUE;
+       // Clear the session flag
+       $session->remove('item_added_to_cart');
+       $user_choice = "opened";
+     } 
+     else if ($session->get('item_in_cart_updated')) {
+       $variables['#attached']['drupalSettings']['showCartPopup'] = TRUE;
+       // Clear the session flag
+       $session->remove('item_in_cart_updated');
+       $user_choice = "opened";
+     } 
+     else if ($session->get('item_in_cart_removed')) {
+       $variables['#attached']['drupalSettings']['showCartPopup'] = TRUE;
+       // Clear the session flag
+       $session->remove('item_in_cart_removed');
+       $user_choice = "opened";
+     } 
+     else {
+       $variables['#attached']['drupalSettings']['showCartPopup'] = FALSE;
+     }
+     
+     if(is_null($user_choice) )
+     {
+       $user_choice = "opened";
+     }
+   
+   
+     // Attach the JavaScript library
+     $variables['#attached']['library'][] = 'commerce_nor_cart_popup/cart_popup';
+   
+     // dump($user_choice);
+     $path = $_SERVER['REQUEST_URI'];
+     $variables['url'] = $path;
+     $variables['is_front'] = \Drupal::service('path.matcher')->isFrontPage();
+     $variables['is_page_contact'] = ($path == '/contact');
+     
+     // Check if the cart has items.
+     /** @var CartProviderInterface $cart_provider */
+     $cart_provider = \Drupal::service('commerce_cart.cart_provider');
+     $cart = $cart_provider->getCart('default');
+     // dump($cart->getItems());
+     $variables['cart_has_items'] = $cart && count($cart->getItems()) > 0;
+     
+     // Set add_class based on the conditions.
+     $variables['add_class'] = false;
+   
+     if (
+         $variables['cart_has_items'] && 
+         !$variables['is_front'] &&
+         $variables['url'] != '/cart' && 
+         strpos($variables['url'], '/user') === false && 
+         strpos($variables['url'], '/checkout') === false && 
+         $user_choice == "opened"
+     ) 
+     {
+       $variables['add_class'] = true;
+     }
+     if( $variables['#attached']['drupalSettings']['showCartPopup'])
+     {
+       // print('here');
+       $variables['add_class'] = true;
+     }
+
+
+  }
+
+    // /**
+    //  * Implements hook_page_cache_maximum_age() in jango theme.
+    //  */
+    // function jango_page_cache_maximum_age(RouteMatchInterface $route_match) 
+    // {
+    //     \Drupal::logger('cache_test_max')->notice('Reached hook_page_cache_maximum_age');
+
+
+    //     if ($route_match->getRouteName() === 'entity.node.canonical') 
+    //     {
+    //         $node = $route_match->getParameter('node');
+    //         if ($node instanceof \Drupal\norproduct\NodeInterface) 
+    //         {
+    //             if ($node->bundle() === 'norprduct') 
+    //             {
+    //                 return 0; // Disable cache for this content type.
+    //             }
+    //         }
+    //     }
+    //     // Default cache age.
+    //     return \Drupal::config('system.performance')->get('cache.page.max_age');
+    // }
+    
+  function jango_library_info_alter(array &$libraries, $extension) {
+
+    // if ($extension === 'core') {
+    //   if (isset($libraries['drupal.form'])) {
+    //     $libraries['drupal.form']['js']['misc/form.js']['preprocess'] = FALSE;
+    //   }
+    // }
+    if ($extension === 'commerce_norelavon') {
+        if (isset($libraries['OffsiteIFramePayment'])) {
+          $libraries['OffsiteIFramePayment']['js']['js/OffsiteIFramePayment.js']['preprocess'] = FALSE;
+          
+        }
+        
+      }
+    //   if($extension === 'eu_cookie_compliance')
+    //   {
+       
+    //       if (isset($libraries['eu_cookie_compliance'])) {
+    //         // $libraries['eu_cookie_compliance']['js']['js/eu_cookie_compliance.min.js']['preprocess'] = True;
+    //         $libraries['eu_cookie_compliance']['js']['js/eu_cookie_compliance.min.js']['weight'] = 9999;
+    //         // \Drupal::logger('eu_custom')->error(
+    //         //     "Libraries array:\n <pre>" . print_r($libraries, TRUE) . 
+    //         //     "</pre> \nStack trace:\n"
+    //         //   );
+            
+    //       }
+    //   }
+    // if (isset($libraries['drupal.displace'])) {
+    // $libraries['drupal.displace']['js']['misc/displace.js']['preprocess'] = FALSE;
+    
+    // }
+    // if (isset($libraries['drupal.tabbingmanager'])) {
+    // $libraries['drupal.tabbingmanager']['js']['misc/tabbingmanager.js']['preprocess'] = FALSE;
+    
+    // }
+//     if ($extension === 'toolbar') {
+//         // dump($libraries);
+//       if (isset($libraries['toolbar'])) {
+//        $libraries['toolbar']['js']['js/toolbar.js']['preprocess'] = FALSE;
+//        $libraries['toolbar']['js']['js/models/MenuModel.js']['preprocess'] = FALSE;
+//        $libraries['toolbar']['js']['js/models/ToolbarModel.js']['preprocess'] = FALSE;
+//        $libraries['toolbar']['js']['js/views/BodyVisualView.js']['preprocess'] = FALSE;
+//        $libraries['toolbar']['js']['js/views/MenuVisualView.js']['preprocess'] = FALSE;
+//        $libraries['toolbar']['js']['js/views/ToolbarAuralView.js']['preprocess'] = FALSE;
+//        $libraries['toolbar']['js']['js/views/ToolbarVisualView.js']['preprocess'] = FALSE;
+       
+//      }
+//      if (isset($libraries['toolbar.menu'])) {
+//       $libraries['toolbar.menu']['js']['js/toolbar.menu.js']['preprocess'] = FALSE;
+      
+//     }
+//       if (isset($libraries['toolbar.escapeAdmin'])) {
+//       $libraries['toolbar.escapeAdmin']['js']['js/escapeAdmin.js']['preprocess'] = FALSE;
+      
+//     }
+  
+//    }
+  }
+  

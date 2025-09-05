@@ -1,0 +1,207 @@
+{# /** * @file * Default theme implementation for main view template. * *
+Available variables: * - attributes: Remaining HTML attributes for the element.
+* - css_name: A CSS-safe version of the view name. * - css_class: The
+user-specified classes names, if any. * - header: The optional header. * -
+footer: The optional footer. * - rows: The results of the view query, if any. *
+- empty: The content to display if there are no rows. * - pager: The optional
+pager next/prev links to display. * - exposed: Exposed widget form/info to
+display. * - feed_icons: Optional feed icons to display. * - more: An optional
+link to the next page of results. * - title: Title of the view, only used when
+displaying in the admin preview. * - title_prefix: Additional output populated
+by modules, intended to be * displayed in front of the view title. * -
+title_suffix: Additional output populated by modules, intended to be * displayed
+after the view title. * - attachment_before: An optional attachment view to be
+displayed before the * view content. * - attachment_after: An optional
+attachment view to be displayed after the * view content. * - dom_id: Unique id
+for every view being printed to give unique class for * JavaScript. * * @see
+template_preprocess_views_view() * * @ingroup themeable */ #}
+
+<div class="c-content-event-post-card-1-slider" data-navigation-label="true" data-slider="owl" data-items="3" data-auto-play="20000" style = "position:relative;">
+
+
+
+  <div class="owl-carousel owl-theme c-theme">
+
+
+    {% for row in rows.0['#rows'] %}
+      {%
+      set row_classes = [
+      default_row_class ? 'views-row',
+      'item',
+      ]
+      %}
+
+
+
+
+
+    <div class="item">
+    {# {{ row['#row']._entity.field_event_picture.0.value }} #}
+    {# {{row['#row']._entity.field_event_picture.value}}
+    {{dump(row)}}
+    {{row}} #}
+        {# <img class = "img_event" style = "border-radius:10px; height :250px;"src="{{file_url(row['#row']._entity.field_event_picture.0.entity.uri.value) }}" > #}
+        <div class="img_event" style="display:flex; background-image:url('{{ file_url(row['#row']._entity.field_event_picture.0.entity.uri.value) }}'); background-size: cover; height: 300px; border-radius: 10px; background-position: center;">   </div>
+
+        {# <div class="logo">{{ field_event_logo.0.entity.uri.value }}</div> #}
+        <img class = "event-logo" style = "max-width: 200px; max-height: 100px; width: auto; height: auto; object-fit: contain; display: block;"src="{{file_url(row['#row']._entity.field_event_logo.0.entity.uri.value) }}" >
+
+        {# {{dump(row['#row']._entity.field_event_picture.0.entity)}} #}
+      <div class="c-content-event-post-card-1 display  :flex;height:;">
+        <div class="c-title c-font-uppercase c-font-bold">
+          <a href="{{ path('entity.node.canonical', {'node': row['#row'].nid }) }}" hreflang="en">{{
+            row['#row']._entity.title.0.value }}</a>
+        </div>
+        <div class="c-date">
+          <span class="c-font-uppercase c-font-bold" style = "display:flex; align-items: flex-end; gap : 12px;">
+            <span class="">
+            <img style="height: 30px; width: 30px; position: relative;" src="/sites/default/files/images/icons/calendar_747310.png" alt="Calander Icon" <a href="https://www.freepik.com/icon/calendar_747310#fromView=search&page=1&position=0&uuid=95be5cb5-bd96-4e4c-ab50-ff5b50dc46cc" title="Calander icons created by Freepik - Freepik"></a>
+
+            </span>
+            <time datetime="{{ row['#row']._entity.field_event_date.0.value }}">
+              {{ row['#row']._entity.field_event_date.0.value|date('D Y-m-d') }}
+            </time>
+          </span>
+          {% if row['#row']._entity.field_event_booth_number.0.value is not empty %}
+          <span class="c-font-uppercase">Booth {{ row['#row']._entity.field_event_booth_number.0.value }} </span>
+          {% endif %}
+          <div>
+            <br>
+            <span class="c-font" style = "display: flex; align-items: flex-start; gap: 20px;">
+              <div style="flex-shrink: 0;">
+                <img src="/sites/default/files/images/icons/gps_15949802.png"  style="height: 30px; display: block;" alt="Saliva Funnel Tube" <a href="https://www.freepik.com/icon/gps_15949802#fromView=search&page=1&position=8&uuid=d16c9e2c-c20e-4544-a2fc-2e1a88c35bff" title="GPS icons created by Ihdizein - Freepik"></a>
+              </div>
+              <p class="address" translate="no">
+                {{ row['#row']._entity.field_event_location.0.value }}
+              </p>
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+<style>
+#event-section .view-content {
+    display: -ms-grid;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 24px;
+    margin-bottom: 24px;
+    margin: auto;
+  }
+
+  #event-section .views-row {
+    box-shadow: 0 4px 40px 0 rgba(0, 0, 0, 0.09),
+      0 6px 20px 0 rgba(0, 0, 0, 0.17);
+    border-radius: 12px;
+    padding: 0 0 15px 0;
+    transition: 0.5s;
+    max-height: 600px;
+    display: -ms-grid;
+    -ms-grid-rows: 150px max-content max-content 1fr max-content;
+    -ms-grid-columns: 1fr 1fr;
+    display: grid;
+    grid-template: max-content max-content max-content 1fr max-content / 1fr 1fr;
+  }
+
+  #event-section .views-row .views-field-field-event-picture {
+    grid-column: span 2;
+    text-align: center;
+  }
+
+  #event-section .views-row .views-field-title {
+    grid-column: span 2;
+    text-align: center;
+  }
+
+  #event-section .views-row div img {
+    border-radius: 12px 12px 0 0;
+    height: 200px;
+    min-height: 10vw;
+    object-fit: contain;
+    width: 100%;
+    max-height: 90%;
+  }
+
+  #event-section .views-field-field-event-date {
+    text-align: right;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+    color: black;
+    max-height: 50px;
+  }
+
+  #event-section .views-field-field-event-location {
+    margin-top: 12px;
+    margin-bottom: 12px;
+    width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+    color: black;
+    max-height: 50px;
+  }
+
+  #event-section .views-field-title .field-content {
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+
+
+
+.owl-prev::before {
+    content: '\f053';
+    font-family: 'Font Awesome 5 Free';
+    display: table-cell;
+    font-size: 30px;
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: 900;
+    background-color: var(--norgen-primary-blue);
+    border-radius: 100px;
+    width: 50px;
+    height: 50px;
+}
+
+.owl-next::before {
+    content: '\f054';
+    font-family: 'Font Awesome 5 Free';
+    display: table-cell;
+    font-size: 30px;
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: 900;
+    background-color: var(--norgen-primary-blue);
+    border-radius: 100px;
+    width: 50px;
+    height: 50px;
+}
+
+
+@media (max-width: 991px) {
+  .owl-next{
+    right:-8%;
+  }
+  .owl-prev{
+    left:-8%;
+  }
+}
+
+@media (max-width: 767px) {
+    .owl-theme:not(.owl-single):not(.owl-bordered) {
+        margin-left: -10px;
+        width: calc(100% - 84px) !important;
+          margin-left: 40px !important; 
+
+    }
+}
+
+</style>

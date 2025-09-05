@@ -1,0 +1,48 @@
+{# /** * @file * Theme override for a breadcrumb trail. * * Available variables:
+{# * - breadcrumb: Breadcrumb trail items. */ #} {# {% if breadcrumb %}
+<nav role="navigation" aria-labelledby="system-breadcrumb">
+  <h2 id="system-breadcrumb" class="visually-hidden">{{ "Breadcrumb" | t }}</h2>
+  <ol>
+    {% for item in breadcrumb %}
+    <li>
+      {% if item.url %}
+      <a href="{{ item.url }}">{{ item.text }}</a>
+      {% else %}
+      {{ item.text }}
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ol>
+</nav>
+{% endif %} #} {% if breadcrumb %}
+<div id="block-breadcrumbswhite" class="contextual-region">
+  <div class="field field--name-body field--type-text-with-summary field--label-hidden field__item">
+    <div class="c-layout-breadcrumbs-1 c-fonts-uppercase c-fonts-bold c-bordered c-bordered-both" align="text-left">
+      <div class="c-breadcrumbs-wrapper">
+        <div class="container">
+          <div class="c-page-title c-pull-left">
+            <h3 class="c-font-uppercase c-font-sbold">
+              Modern purchase design {# page title #}
+            </h3>
+          </div>
+          <nav role="navigation" aria-labelledby="system-breadcrumb">
+            <ol class="c-page-breadcrumbs c-theme-nav c-pull-right c-fonts-regular">
+              {% for item in breadcrumb %}
+              <li>
+                {% if item.url %}
+                <a href="{{ item.url }}">
+                  {{ item.text }}
+                </a>
+                {% else %}
+                {{ item.text }}
+                {% endif %}
+              </li>
+              {% endfor %}
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}

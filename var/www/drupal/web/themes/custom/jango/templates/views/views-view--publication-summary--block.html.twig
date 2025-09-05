@@ -1,0 +1,250 @@
+{#
+  /**
+  * @file
+  * Default theme implementation for main view template.
+  *
+  * Available variables:
+  * - attributes: Remaining HTML attributes for the element.
+  * - css_name: A CSS-safe version of the view name.
+  * - css_class: The user-specified classes names, if any.
+  * - header: The optional header.
+  * - footer: The optional footer.
+  * - rows: The results of the view query, if any.
+  * - empty: The content to display if there are no rows.
+  * - pager: The optional pager next/prev links to display.
+  * - exposed: Exposed widget form/info to display.
+  * - feed_icons: Optional feed icons to display.
+  * - more: An optional link to the next page of results.
+  * - title: Title of the view, only used when displaying in the admin preview.
+  * - title_prefix: Additional output populated by modules, intended to be
+  * displayed in front of the view title.
+  * - title_suffix: Additional output populated by modules, intended to be
+  * displayed after the view title.
+  * - attachment_before: An optional attachment view to be displayed before the
+  * view content.
+  * - attachment_after: An optional attachment view to be displayed after the
+  * view content.
+  * - dom_id: Unique id for every view being printed to give unique class for
+  * JavaScript.
+  *
+  * @see template_preprocess_views_view()
+  *
+  * @ingroup themeable
+  */
+  #}
+  {%
+  set classes = [
+  dom_id ? 'js-view-dom-id-' ~ dom_id,
+  ]
+  %}
+  <div{{ attributes.addClass(classes) }}>
+    {{ title_prefix }}
+    {{ title }}
+    {{ title_suffix }}
+  
+    {% if header %}
+    <header>
+      {{ header }}
+    </header>
+    {% endif %}
+  
+    {{ exposed }}
+    {{ attachment_before }}
+  
+    {% if rows -%}
+    <div class="view-content">
+      {{ rows }}
+      {# {% for row in rows %}
+      {{ row.content }}
+      {{ path('entity.node.canonical', {'node': row['#rows'].0['#row'].nid}) }}
+      {% endfor %} #}
+    </div>
+    {% elseif empty -%}
+    {{ empty }}
+    {% endif %}
+    {{ pager }}
+  
+    {{ attachment_after }}
+    {{ more }}
+  
+    {% if footer %}
+    <footer>
+      {{ footer }}
+    </footer>
+    {% endif %}
+  
+    {{ feed_icons }}
+    </div>
+  
+  
+    <style>
+      /* Cards */
+      /* .views-element-container {
+        width: 75%;
+        margin: auto;
+        margin-bottom: 3%;
+      } */
+  
+      .views-element-container h2 {
+        font-size: 32px;
+        text-align: center;
+        margin-top: 3%;
+        margin-bottom: 3%;
+      }
+  
+      .view-content {
+        display: -ms-grid;
+        /* -ms-grid-columns: 1fr (24px 1fr)[3];
+      -ms-grid-rows: 1fr 40px 1fr; */
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 24px;
+        margin-bottom: 24px;
+        margin: auto;
+      }
+  
+      .views-row :nth-child(1) {
+        -ms-grid-column: 1;
+        -ms-grid-row: 1;
+      }
+  
+      .views-row {
+        box-shadow: 0 4px 40px 0 rgba(0, 0, 0, 0.09), 0 6px 20px 0 rgba(0, 0, 0, 0.17);
+        border-radius: 12px;
+        padding: 0 0 15px 0;
+        transition: .5s;
+        /* max-height: 600px; */
+        display: -ms-grid;
+        -ms-grid-rows: 150px max-content max-content 1fr max-content;
+        -ms-grid-columns: 1fr 1fr;
+        display: grid;
+        grid-template: max-content max-content max-content 1fr max-content / 1fr 1fr;
+      }
+  
+      .views-row .views-field-field-blog-image {
+        -ms-grid-row: 1;
+        -ms-grid-column-span: 2;
+        grid-column: span 2;
+      }
+  
+      .views-row div img {
+        border-radius: 12px 12px 0 0;
+        height: 200px;
+        /* min-height: 10vw; */
+        object-fit: cover;
+        width: 100%;
+        max-height: 300px;
+      }
+  
+      .views-row .views-field-field-author {
+        -ms-grid-row: 2;
+        -ms-grid-column: 1;
+      }
+  
+      .views-row .views-field-field-author .field-content,
+      .views-row .views-field-field-sort-date .field-content {
+        width: 100%;
+      }
+  
+      .views-field-body {
+        grid-column: span 2;
+      }
+  
+      .views-row:hover {
+        transform: scale(1.04);
+        transition: .5s;
+      }
+  
+      .views-row .views-field-title {
+        -ms-grid-row: 3;
+        -ms-grid-column-span: 2;
+        grid-column: span 2;
+        margin-bottom: 20px;
+        margin-top: 20px;
+  
+      }
+  
+      .views-field-title .field-content {
+        font-size: 18px;
+        font-weight: bold;
+      }
+  
+      .views-field-field-sort-date,
+      .views-field-field-author {
+        margin-top: 12px;
+        margin-bottom: 12px;
+        width: 100%;
+        color: black;
+        max-height: 50px;
+      }
+  
+      .views-field-field-sort-date {
+        text-align: right;
+      }
+  
+      .views-field-field-read-time {
+      }
+  
+  
+      /* Page navigation */
+  
+      .js-pager__items {
+        list-style: none;
+        list-style-position: outside;
+        padding-left: 0;
+        text-align: center;
+        margin-top: 4%;
+      }
+  
+      .js-pager__items li {
+        display: inline-block;
+        font-size: 2rem;
+        font-weight: bold;
+        color: #004897;
+        margin-left: 20px;
+      }
+  
+      .js-pager__items .is-active a {
+        background-color: #c9c9c9;
+        border: none;
+      }
+  
+      .js-pager__items li a {
+        padding: 5px 14px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 15px;
+      }
+  
+      .js-pager__items li a:hover {
+        text-decoration: none;
+        background-color: #eee;
+      }
+  
+      .bl-land-list .views-field-view-node {
+        width: 100%;
+        grid-column: span 1;
+        display: flex;
+        flex-direction: column-reverse;
+      }
+  
+      .views-field-view-node {
+      }
+  
+      .views-field-view-node .btn-primary {
+        width: max-content;
+      }
+
+
+
+      
+      .views-field-field-read-time{padding: 0px;}
+      .views-field-view-node {
+        margin: 10px 10px 10px 0px;
+      }
+      [class*="views-field"] { padding-left: 15px; padding-right: 15px; }
+      [class*="views-field"].views-field-field-blog-image {padding-left: 0px; padding-right: 0px;}
+  
+
+  
+    </style>

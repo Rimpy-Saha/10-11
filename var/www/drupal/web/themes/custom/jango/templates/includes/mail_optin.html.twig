@@ -1,0 +1,115 @@
+<style>
+.signup-grid{
+	display:flex;
+	justify-content: center;
+	gap: 20px;
+    align-items: center;
+    padding: 10px;
+}
+#outline-btn{
+	border-radius:12px;
+	background:transparent;
+	border:1px solid white;
+	padding:5px 20px;
+}
+.signup-div{
+	background: #004893;
+    color: white;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+    position: sticky;
+    top: 100px;
+    z-index: 9;
+    display:none;
+}
+.signup-grid p{
+	letter-spacing:2px;
+	margin-bottom: 0;
+}
+.signup-div a{
+	color:white;
+}
+.signup-div .close{
+	margin-right:15px !important;
+	margin-top:10px !important;
+}
+@media (max-width:1201px) {
+	.signup-div{
+		top:6%;
+	}
+	
+}
+@media (max-width:728px) {
+	.signup-grid p{
+		font-size: 12px;
+	}
+	#outline-btn{
+		font-size:12px;
+	}
+}
+@media (max-width:571px) {
+	.signup-grid{
+		flex-direction:column;
+		gap:0;
+	}
+}
+
+</style>
+
+
+<div class="signup-div">
+<p class="close" onclick="close_signupdiv();return false;" style="font-size:30px;color:white;">x</p>
+	<a href="https://ayzop-zgpvh.maillist-manage.net/ua/Optin?od=11287ecbedfab1&zx=12f92098f&tD=1d306d931da36411&sD=1d306d931e7b0351"><div class="signup-grid">
+		<p>SIGN UP TO OUR NEWSLETTER AND GET 10% OFF*</p>
+		<span id="outline-btn">SAVE NOW</span>
+	</div></a>
+</div>
+
+
+<script>
+
+
+
+
+
+function setCookie(name,value,days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=y";
+}
+
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+
+function close_signupdiv(){
+	
+
+	document.getElementsByClassName("signup-div")[0].style.display = "none";
+	setCookie('signupdiv','yes',7);
+	
+}
+document.addEventListener("DOMContentLoaded", function(event) {
+    // Your code to run since DOM is loaded and ready
+    var y = window.location.href;
+    console.log(y);
+    var x = getCookie('signupdiv');
+	console.log(x);
+	if(x != 'yes'){
+		document.getElementsByClassName("signup-div")[0].style.display = "block";
+	}
+});
+
+</script>

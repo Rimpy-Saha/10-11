@@ -1,0 +1,2125 @@
+{#
+/**
+ * @file
+ * Theme override to display a block.
+ *
+ * Available variables:
+ * - plugin_id: The ID of the block implementation.
+ * - label: The configured label of the block if visible.
+ * - configuration: A list of the block's configuration values.
+ *   - label: The configured label for the block.
+ *   - label_display: The display settings for the label.
+ *   - provider: The module or other provider that provided this block plugin.
+ *   - Block plugin specific settings will also be stored here.
+ * - content: The content of this block.
+ * - attributes: array of HTML attributes populated by modules, intended to
+ *   be added to the main container tag of this template.
+ *   - id: A valid HTML ID and guaranteed unique.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ *
+ * @see template_preprocess_block()
+ */
+#}
+<style>
+/* Magnetic Bead Launch Styling */
+
+#magbead-home-banner {
+  background:url('https://norgenbiotek.com/sites/default/files/images/home/2025-02-27-magbead-launch/magnetic-bead-automation-banner.png');
+  background-position: right;
+  background-size: cover;
+}
+
+#magbead-home-banner .container{
+  top: 50%;
+  position: relative;
+  transform: translateY(-50%);
+}
+#magbead-home-banner .text{
+  max-width:630px;
+  color:var(--norgen-primary-blue);
+}
+#magbead-home-banner .text h1{
+  font-size: 60px;
+  font-weight: 700;
+  line-height: 1;
+  color:var(--norgen-primary-blue);
+  margin-bottom:0px;
+}
+#magbead-home-banner .text h1 span{
+  letter-spacing: 2px;
+  font-size: 1.5em;
+  line-height: 1.1;
+}
+#magbead-home-banner .text div{
+  font-size:34px;
+  color:var(--norgen-primary-blue);
+  font-weight:700;
+}
+
+#magbead-home-banner .text hr{
+  border-top:4px solid var(--norgen-tertiary-rna-red);
+}
+#magbead-home-banner .btn{
+  background-color: var(--norgen-tertiary-rna-red);
+  border: none;
+  padding: 10px 20px;
+}
+@media only screen and (max-width:1200px){
+  #magbead-home-banner {
+    background:linear-gradient(0deg, #ffffff85, #ffffff85),url('https://norgenbiotek.com/sites/default/files/images/home/2025-02-27-magbead-launch/magnetic-bead-automation-banner.png');
+    background-position: right;
+    background-size: cover;
+  }
+}
+@media only screen and (max-width:700px){
+  #magbead-home-banner .text{
+    margin: auto;
+    max-width: 400px;
+  }
+  #magbead-home-banner .text h1{
+    font-size:28px;
+  }
+}
+/* End of Magnetic Bead Launch Styling */
+
+
+/* proudly canadian */
+.home-banner#proudly-canadian-banner{
+  position:relative;
+  background:url('https://norgenbiotek.com/sites/default/files/images/home/proudly-canadian-v2.jpg');
+  background-size: cover;
+  background-position: center right;
+  background-repeat:no-repeat;
+}
+.banner-grid-2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  height:600px;
+  background:url(https://norgenbiotek.com/sites/default/files/images/home/canadian.png);
+}
+
+.banner-grid-2:after{
+  background:gray;
+}
+.home-banner#proudly-canadian-banner .banner-text-abs{
+  position:relative;
+  transform:translateY(-50%);
+  top:50%;
+  margin: auto;
+}
+.home-banner#proudly-canadian-banner .banner-text-abs h1{
+  color:white;
+  font-size: calc(17px + 2vw);
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom:20px;
+}
+@media screen and (min-width:2600px){
+  .home-banner#proudly-canadian-banner .banner-text-abs h1{
+    font-size:69px;
+  }
+}
+@media screen and (min-width:1580px) and (max-width:2000px){
+  .home-banner#proudly-canadian-banner .banner-text-abs{
+    left:-200px;
+  }
+}
+@media screen and (max-width: 1200px) {
+  .home-banner#proudly-canadian-banner{
+    background-position: center, calc(100% + 150px);
+    background-image: linear-gradient(0deg , #970000e8, #c82828a6),url('https://norgenbiotek.com/sites/default/files/images/home/proudly-canadian-v2.jpg');
+  }
+  .home-banner#proudly-canadian-banner .banner-text-abs {
+    text-align:center;
+  }
+}
+
+
+@media only screen and (max-width: 515px) {
+
+  .home-banner#proudly-canadian-banner .banner-text-abs {
+    width:auto;
+  }
+}
+@media only screen and (max-width: 300px) {
+
+  .home-banner#proudly-canadian-banner .banner-text-abs {
+    width:auto;
+  }
+  .home-banner#proudly-canadian-banner .banner-text-abs h1 {
+    font-size: 30px;
+  }
+  .home-banner#proudly-canadian-banner .banner-text-abs a {
+    width: -webkit-fill-available;
+    white-space: pre-wrap;
+  }
+
+}
+/* end of proudly canadian */
+
+
+/* EXTRAClean Promo Styling */
+
+#extraclean-hero-banner {
+  background: url(https://norgenbiotek.com/sites/default/files/images/home/2025-rna-campaign-web-banner.png), url(https://norgenbiotek.com/sites/default/files/images/home/Extraclean_BG.png);
+  background-position: bottom right;
+  background-size: auto 100%;
+  background-repeat: no-repeat, repeat-x;
+}
+.home-banner#extraclean-hero-banner h1{
+  font-size: 50px;
+  font-weight: 700;
+  line-height: 1.2;
+  color:#004893;
+}
+
+#extraclean-hero-banner .text{
+  max-width: 570px;
+  position:relative;
+  top:50%;
+  transform:translateY(-50%);
+}
+
+@media screen and (min-width:2600px){
+  #extraclean-hero-banner{
+    background-position: calc((100vw - 1170px) / 2) bottom;
+  }
+}
+@media screen and (min-width:1580px) and (max-width:2000px){
+  #extraclean-hero-banner .text{
+    left:-200px;
+  }
+}
+@media screen and (min-width:1200px) and (max-width:1580px){
+  #extraclean-hero-banner .text{
+    background-color: #ffffffc9;
+    padding: 1em;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+  }
+}
+@media screen and (max-width:1200px){
+  #extraclean-hero-banner{
+    background-image:url(https://norgenbiotek.com/sites/default/files/images/home/Extraclean_BG.png);
+  }
+  #extraclean-hero-banner .text{
+    max-width: 100%;
+    text-align:center;
+  }
+  #extraclean-hero-banner .text .plus{
+    justify-content:center;
+    text-align:left;
+  }
+}
+@media screen and (max-width:500px){
+  .home-banner#extraclean-hero-banner h1{
+    font-size:40px;
+  }
+}
+/* End of EXTRAClean Promo Styling */
+
+/* Liquid Biopsy Webinar Styling */
+#liquid-biopsy-webinar-hero-banner {
+  background-image: url('https://norgenbiotek.com/sites/default/files/images/home/liquid-biopsy-webinar-banner-bg.png');
+  background-position: bottom right;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+#liquid-biopsy-webinar-hero-banner .text img{
+  position:absolute;
+  left:80%;
+  bottom:0px;
+  height: 100%;
+}
+#liquid-biopsy-webinar-hero-banner .webinar-round{
+  background-color:var(--norgen-tertiary-rna-red);
+  border-radius:20px;
+  padding:10px 20px;
+  display:inline-block;
+}
+#liquid-biopsy-webinar-hero-banner h1, #liquid-biopsy-webinar-hero-banner p, #liquid-biopsy-webinar-hero-banner span{
+  color:white;
+}
+#liquid-biopsy-webinar-hero-banner .text{
+  position: relative;
+  max-width:900px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  height:100%;
+}
+#liquid-biopsy-webinar-hero-banner .text > *{
+  margin-bottom:20px;
+  display: inline-block;
+  width: fit-content;
+}
+@media screen and (max-width:1400px){
+  #liquid-biopsy-webinar-hero-banner{
+    background-position: bottom left;
+  }
+  #liquid-biopsy-webinar-hero-banner .text img{
+    display:none;
+  }
+}
+@media screen and (max-width:1200px){
+  #liquid-biopsy-webinar-hero-banner .text{
+    text-align: center;
+    margin: auto;
+    align-items: center;
+  }
+}
+/* End of Liquid Biopsy Webinar Styling */
+
+/* Liquid Biopsy Promo Styling */
+#liquid-biopsy-promo-banner{
+  background-image: linear-gradient(to right, #345fac 50%, transparent 70%), url('/sites/default/files/images/AdobeStock_490486537_2cc_full computer.tif.png'), url('/sites/default/files/images/Asset 28.png'), linear-gradient(to right, #345fac 80%, #345eac80 100%);
+  background-position: left, bottom right, right, center;
+  background-repeat: no-repeat, no-repeat, repeat, no-repeat;
+  background-size: contain, contain, contain, cover;
+}
+#liquid-biopsy-promo-banner .text{
+  position: relative;
+  max-width:60%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  height:100%;
+  color:white;
+}
+#liquid-biopsy-promo-banner .text > *{
+  margin-bottom: 20px;
+  display: inline-block;
+  width: fit-content;
+}
+@media screen and (max-width: 1200px){
+  #liquid-biopsy-promo-banner{
+    background-image: linear-gradient(to right, #345eac80 0%, #345eac80 100%), url('/sites/default/files/images/Asset 28.png'), linear-gradient(to right, #345fac 0%, #345eac 100%);
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  #liquid-biopsy-promo-banner .text {
+    text-align: center;
+    margin: auto;
+    align-items: center;
+    max-width:100%;
+  }
+}
+/* End fo Liquid Biopsy Promo Styling */
+
+/* EZ Collect Styling */
+#ezcollect-banner{
+  background-color:#dfebf6;
+}
+#ezcollect-banner .text{
+  position: relative;
+  max-width:60%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  height:100%;
+  color:white;
+}
+#ezcollect-banner .new-tag{
+  background-color:var(--norgen-tertiary-rna-red);
+  border-radius:10px;
+  padding:5px 10px;
+  display:inline-block;
+  font-weight:bold;
+  text-transform: uppercase;
+  font-size:1.5em;
+  margin-right: 20px;
+}
+#ezcollect-banner .ezcollect-devices{
+  position:absolute;
+  left:60%;
+  top:0px;
+  bottom:0px;
+  max-height:min(500px,80%);
+  margin:auto;
+  animation-fill-mode: forwards;
+}
+@keyframes ezcollect-fadein{
+  0% {max-height:0%;opacity:0%;}
+  100% {max-height: min(500px, 80%);opacity:100%;}
+}
+#ezcollect-banner h1{
+  color:#14385f;
+}
+#ezcollect-banner img.logo{
+  max-width:300px;
+  max-height:45px;
+  background-color:unset;
+  border-radius:0px;
+  padding:0px;
+  vertical-align:top;
+}
+#ezcollect-banner video{
+  position:absolute;
+  top:0px;
+}
+#ezcollect-banner .text > *{
+  margin-bottom: 20px;
+  display: inline-block;
+  width: fit-content;
+}
+@media screen and (max-width: 1200px){
+  #ezcollect-banner{
+    background-image: linear-gradient(to right, #345eac80 0%, #345eac80 100%), url('/sites/default/files/images/Asset 28.png'), linear-gradient(to right, #345fac 0%, #345eac 100%);
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  #ezcollect-banner .text {
+    text-align: center;
+    margin: auto;
+    align-items: center;
+    max-width:100%;
+  }
+  #ezcollect-banner .ezcollect-devices{
+    display:none;
+  }
+}
+/* End of EZ Collect Styling */
+
+/* Microbiome 2025 Banner */
+#microbiome-banner {
+    background-image: url('https://norgenbiotek.com/sites/default/files/images/campaigns/microbiome2025/bacteria-top-left.webp'), url('https://norgenbiotek.com/sites/default/files/images/campaigns/microbiome2025/bacteria-top-right.webp'), url('https://norgenbiotek.com/sites/default/files/images/campaigns/microbiome2025/bacteria-bottom-right.webp'), url('https://norgenbiotek.com/sites/default/files/images/campaigns/microbiome2025/swab.webp'), radial-gradient(white 60%, #d1e6ff 160%);
+    background-position: top -180px left -140px, top -150px right -100px, bottom 100px right -120px, 55% 90px, center;
+    background-repeat: no-repeat;
+    background-size: auto, auto, auto, auto, contain;
+}
+
+#microbiome-banner .promo-text {
+    max-width: 60%;
+    width:auto;
+    padding:40px 0px;
+}
+
+#microbiome-banner .promo-text h2 {
+    font-size: 58px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color:var(--norgen-primary-blue);
+    line-height: 1;
+}
+
+
+.main-message{
+    font-size: 18px;
+    line-height: 1.2;
+    margin-bottom: 30px;
+    color:var(--norgen-primary-blue);
+}
+
+.limited-time{
+    background-color: var(--norgen-tertiary-rna-red);
+    color: white;
+    padding: 5px 10px;
+    line-height: 1.5;
+    width: fit-content;
+    margin:auto;
+    border-radius: 0px 20px 0px 20px;
+}
+.banner-offers{
+    display: flex;
+    gap: 10px;
+    margin:20px 0px;
+    justify-content:center;
+}
+.banner-offers > .banner-offer{
+    text-align: center;
+}
+.banner-offers > .banner-offer > .name{
+    background-color: #5f8265;
+    color: white;
+    padding: 2px 15px;
+    line-height: 1.5;
+    border-radius: 0px 20px 0px 20px;
+    white-space:nowrap;
+}
+.banner-offers > .banner-offer > .offer-amount{
+    font-size: 24px;
+}
+.banner-offers > .banner-offer > .spend{
+    color:black;
+    font-size:16px;
+}
+#microbiome-banner .bonus-offer{
+    position:absolute;
+    right:0;
+    bottom:100px;
+    max-width:35%;
+}
+#microbiome-banner .pre-text{
+    margin-bottom:20px;
+    max-width: 55%;
+    font-size: 18px;
+    font-weight: 500;
+    margin-left: 30px;
+    margin-right: 90px;
+}
+#microbiome-banner .blue{
+    background-color: var(--norgen-primary-blue);
+    padding:20px 30px;
+    padding-right:90px;
+    color:white;
+    position:relative;
+}
+#microbiome-banner .blue::after{
+    content:url('https://norgenbiotek.com/sites/default/files/images/campaigns/microbiome2025/socials.svg');
+    width:80px;
+    height:50px;
+    display:block;
+    position:absolute;
+    right:0px;
+    top: 0;
+    bottom:0;
+    margin: auto;
+}
+#microbiome-banner .benefits-text{
+    position:absolute;
+    top:100px;
+    right:15%;
+    max-width:350px;
+    margin-top: 25px;
+    font-size: 18px;
+    font-weight:500;
+}
+@media (max-width: 1300px) {
+    #microbiome-banner {
+      background-image: linear-gradient(#ffffffab, #ffffff30), url('https://norgenbiotek.com/sites/default/files/images/campaigns/microbiome2025/bacteria-top-left.webp'), url('https://norgenbiotek.com/sites/default/files/images/campaigns/microbiome2025/bacteria-top-right.webp'), url('https://norgenbiotek.com/sites/default/files/images/campaigns/microbiome2025/bacteria-bottom-right.webp'), url('https://norgenbiotek.com/sites/default/files/images/campaigns/microbiome2025/swab.webp'), radial-gradient(white 60%, #d1e6ff 160%);
+      background-position: center, top -180px left -140px, top -150px right -100px, bottom 100px right -120px, 55% 90px, center;
+      background-repeat: no-repeat;
+      background-size: auto, auto, auto, auto, contain;
+    }
+    #microbiome-banner .benefits-text{
+      display:none;
+    }
+    #microbiome-banner .bonus-offer{
+      display:none;
+    }
+}
+@media (max-width:1200px){
+  #microbiome-banner .promo-text{
+    max-width: 100%;
+    width: auto;
+    text-align: center;
+  }
+}
+@media (max-width: 991px) {
+    #microbiome-banner .promo-text h2 {
+        font-size:48px;
+    }
+    #microbiome-banner {
+        background-image: linear-gradient(#ffffffab, #ffffff30), url('https://norgenbiotek.com/sites/default/files/images/campaigns/microbiome2025/bacteria-top-left.webp'), url('https://norgenbiotek.com/sites/default/files/images/campaigns/microbiome2025/bacteria-top-right.webp'), url('https://norgenbiotek.com/sites/default/files/images/campaigns/microbiome2025/bacteria-bottom-right.webp'), radial-gradient(white 60%, #d1e6ff 160%);
+        background-position: center, top -180px left -140px, top -150px right -100px, bottom 100px right -120px, center;
+        background-repeat: no-repeat;
+        background-size: auto, auto, auto, auto, contain;
+    }
+}
+@media (max-width: 600px) {
+    .promo-btn {
+        grid-template-columns: 1fr;
+    }
+
+    .promo-btn a {
+        width: 100%;
+        text-align: center;
+    }
+    .banner-offers{
+        display:block;
+    }
+    #microbiome-banner .promo-text .limited-time{
+        display:none;
+    }
+    #microbiome-banner .promo-text h2{
+      font-size:32px;
+    }
+    .liquid-biopsy-infograph-div{
+        flex-direction: column;
+    }
+    .liquid-biopsy-infograph-div img{
+        position:initial;
+    }
+}
+/* End of Microbiome 2025 Banner */
+
+/* Exosomes Webinar Styling */
+#exosomes-webinar-hero-banner {
+  background-image: url('https://norgenbiotek.com/sites/default/files/images/home/Exosome%20Webinar%20Web%20Background%20with%20Exosomes.webp');
+  background-position: bottom right;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+/*Alex and Maggie styling*/
+#exosomes-webinar-hero-banner .text img{
+  position:absolute;
+  left:40%;
+  bottom:-20%;
+  height: 114%;
+  max-width:none;
+
+}
+#exosomes-webinar-hero-banner .webinar-round{
+  background-color:var(--norgen-tertiary-rna-red);
+  border-radius:20px;
+  padding:10px 20px;
+  display:inline-block;
+}
+#exosomes-webinar-hero-banner h1, #exosomes-webinar-hero-banner p, #exosomes-webinar-hero-banner span{
+  color:white;
+}
+#exosomes-webinar-hero-banner .text{
+  position: relative;
+  max-width:900px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  height:100%;
+}
+#exosomes-webinar-hero-banner .text > *{
+  margin-bottom:20px;
+  display: inline-block;
+  width: fit-content;
+}
+@media screen and (max-width:1400px){
+  #exosomes-webinar-hero-banner .text img{
+    left:28%;
+  }
+}
+@media screen and (max-width:1200px){
+  #exosomes-webinar-hero-banner .text img{
+    display:none;
+  }
+  #exosomes-webinar-hero-banner{
+    background-position: bottom left;
+  }
+  #exosomes-webinar-hero-banner .text{
+    text-align: center;
+    margin: auto;
+    align-items: center;
+  }
+}
+/* End of Exosomes Webinar Styling */
+
+/* NGS Promo Banner */
+{# #ngs-promo-banner{
+  background-image: linear-gradient(#ffffffa1, #ffffffa1), url('https://norgenbiotek.com/sites/default/files/images/Asset 4.png');
+  background-position: center, left -50% center;
+  background-size: 125%;
+  background-repeat: no-repeat;
+} #}
+#ngs-promo-banner .text{
+  position:relative;
+  top:50%;
+  transform:translateY(-50%);
+  font-weight:500;
+}
+#ngs-promo-banner .disclaimer{
+  position: absolute;
+  bottom: 0px;
+  font-weight:400;
+}
+
+/* End of NGS Promo Banner */
+
+/* New Canadian Home Newsticker */
+#canadian-home-newsticker{
+  background-color: var(--norgen-tertiary-rna-red);
+  background: linear-gradient(#be1e2de3, #be1e2ded), url(/sites/default/files/images/home/maple-leaf-pattern.svg);
+  background-size: cover, contain;
+  background-position: center, center;
+  color: white;
+  padding: 15px 0px;
+}
+/* End of New Canadian Home Newsticker */
+
+/* Carousel Styling */
+#homeBannerCarousel .carousel-control{
+  opacity:0.25;
+}
+#homeBannerCarousel .carousel-control:hover, #homeBannerCarousel .carousel-control:focus{
+  opacity:0.75;
+}
+#homeBannerCarousel .carousel-control.right{
+  background-image: linear-gradient(to right, transparent 5%, #00489760 100%);
+}
+#homeBannerCarousel .carousel-control.left{
+  background-image: linear-gradient(to right, #00489760 5%, transparent 100%);
+}
+#homeBannerCarousel .carousel-control.right > span{
+  position: absolute;
+  top: 50%;
+  right: 15px;
+}
+#homeBannerCarousel .carousel-control.left > span{
+  position: absolute;
+  top: 50%;
+  left: 15px;
+}
+#homeBannerCarousel .carousel-indicators{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  /* background-color: #ebf1f7; */
+  width: fit-content;
+  margin-left: 0px;
+  padding: 10px;
+  gap: 10px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin-bottom: 0px;
+  max-width: 100%;
+  margin: auto;
+  bottom: 0px;
+  border-radius:10px;
+}
+#homeBannerCarousel .carousel-indicators li{
+  width: auto;
+  height: auto;
+  min-width: 275px;
+  max-width: 300px;
+  text-indent: 0px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding: 10px 20px;
+  color: white;
+  position: relative;
+  margin: 0px;
+  flex: 1;
+  flex-direction: column;
+  align-self: stretch;
+  color: var(--norgen-primary-blue);
+  background-color:#ffffffbf;
+  backdrop-filter:blur(10px);
+  border-radius:10px;
+  box-shadow:0px 2px 10px -5px var(--norgen-primary-blue-dark);
+}
+#homeBannerCarousel .carousel-indicators li div.webinar::before{
+  content: '\f26c';
+  font-family: "Font Awesome 5 Free";
+  font-size: 1.25em;
+}
+#homeBannerCarousel .carousel-indicators li div.promo::before{
+  content: '\f02c';
+  font-family: "Font Awesome 5 Free";
+  font-size: 1.25em;
+}
+#homeBannerCarousel .carousel-indicators li div.info::before,
+#homeBannerCarousel .carousel-indicators li div::before{
+  content: '\f05a';
+  font-family: "Font Awesome 5 Free";
+  font-size: 1.25em;
+}
+
+#homeBannerCarousel .carousel-indicators li > div{
+  z-index:2;
+  position: relative;
+  font-weight: 600;
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  height: 100%;
+}
+#homeBannerCarousel .carousel-indicators li.active, #homeBannerCarousel .carousel-indicators li:not(.active):hover{
+  border:2px solid var(--norgen-primary-blue);
+ /*  background-color:unset; */
+}
+#homeBannerCarousel .carousel-indicators li:not(.active):hover{
+  background-color:#b9daffbf;
+}
+#homeBannerCarousel .carousel-indicators li:not(.active){
+  border:2px solid transparent;
+}
+#homeBannerCarousel .carousel-indicators li.active::after{
+  content: '';
+  background-color: var(--norgen-primary-blue);
+  height: 2px;
+  width: 0%;
+  display: block;
+  position: relative;
+  bottom: 0px;
+  animation:none;
+}
+#homeBannerCarousel .carousel-indicators li.active.animate::after {
+  animation-name: carousel-indicator-progress;
+  animation-duration: var(--carousel-interval, 10s);
+  animation-timing-function:linear;
+}
+
+#homeBannerCarousel.paused .carousel-indicators li.active::after{
+  animation-play-state: paused;
+}
+
+@keyframes carousel-indicator-progress {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width:1660px){
+  #homeBannerCarousel .carousel-control{
+    width:5%;
+  }
+}
+@media screen and (max-width:1300px){
+  #homeBannerCarousel .carousel-control{
+    width:50px;
+  }
+}
+
+
+/* FORMATTING MORE THAN 3 SLIDES */
+/* Depending how many carousel indicators you have, you can create media queries for these 2 styles to add space to the bottom of the carousel slides */
+/* 1) increase .homer-banner .text padding bottom, and increase .home-banner height */
+.home-banner .text{
+  padding-bottom:100px;
+}
+.home-banner{
+  height:650px;
+  border-top:1px solid gray;
+  /* border-bottom:1px solid gray; */
+}
+/* FORMATTING MORE THAN 3 SLIDES */
+
+@media screen and (max-width:600px){
+  #homeBannerCarousel .carousel-indicators li > div .text{
+    display:none;
+  }
+  #homeBannerCarousel .carousel-indicators li{
+    min-width:50px;
+  }
+}
+
+/* End of Carousel Styling */
+
+
+.banner-side{
+  background:url("/sites/default/files/images/home/Virology Lab_microscope-38-Edited.png");
+  height: -webkit-fill-available;
+  background-size: cover;
+}
+.banner-grid{
+  display:grid;
+  grid-template-columns:0fr 1fr;
+  height: -webkit-fill-available;
+  align-items: center;
+}
+.verticle-side{
+  writing-mode:vertical-rl;
+  padding: 14px;
+  font-size:25px;
+  color:#004893;
+}
+
+.banner-text{
+  border: 1px solid gray;
+  top: 47%;
+  transform: translateY(-50%);
+  position: relative;
+  width: 80%;
+  padding: 100px 0;
+}
+.banner-text div{
+  width:55%;
+}
+.home-banner h1{
+  font-size: 50px;
+  font-weight: 800;
+  line-height: 1.2;
+  color:#004893;
+}
+@media only screen and (max-width: 500px) {
+  .home-banner h1{
+    font-size:40px;
+  }
+}
+@media only screen and (max-width: 425px) {
+  .home-banner{
+    height:750px;
+  }
+}
+
+
+
+
+.ngs-promo-banner {
+  background: white;
+  padding: 40px 20px;
+  position: relative;
+  overflow: hidden;
+}
+#ngs-promo-banner {
+    background-image: url(/sites/default/files/images/ngs-promo-right-img.png);
+    background-position: right;
+    background-size: 53%;
+    background-repeat: no-repeat;
+}
+.ngs-promo-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: auto;
+  justify-content: center;
+    position: absolute;
+  left: 0;
+}
+.ngs-promo-container .ngs-promo-main{
+  font-size: 68px;
+  font-weight: 600;
+  line-height: 1.0;
+  color: #79a3d6;
+  margin-top: -14px
+}
+.ngs-promo-right {
+  position: relative;
+  padding: 20px;
+
+}
+.ngs-promo-left {
+  padding: 0px;
+  width: 630px;
+
+}
+.ngs-promo-info {
+  background-color: #004897;
+  color: white;
+  font-weight: bold;
+  font-size: 34px;
+  padding: 30px 20px 30px 116px;
+  z-index: 10;
+  position: relative;
+}
+
+.ngs-promo-image {
+    bottom: -90px;
+    max-width: 100%;
+    margin-top: 20px;
+    height: 861px;
+    position: absolute;
+    left: -22px;
+}
+
+.ngs-promo-header {
+  margin-bottom: 10px;
+  margin-top: 30px;
+  font-size: 35px;
+}
+
+
+.ngs-promo-main .ngs-promo-red {
+  color: var(--norgen-tertiary-rna-red);;
+}
+
+.ngs-promo-main .ngs-promo-blue {
+  color: var(--norgen-primary-blue);;
+}
+
+.ngs-promo-sub {
+  font-size: 30px;
+  font-weight: 500;
+  margin-top: -10px;
+}
+.ngs-reminder-background-img {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    object-fit: cover;
+    z-index: 1;
+    top: 535px;
+}
+.ngs-promo-subtext-img{
+  height: 70px;
+}
+.ngs-promo-subtext{
+  font-size: 30px;
+}
+.norgen-logo-text{
+text-transform: uppercase;
+    color: var(--norgen-primary-blue);
+    letter-spacing: 1.2px;
+    font-weight:500;
+}
+.promo-type-text{
+  color: #79a3d6;
+  text-transform: uppercase;
+  letter-spacing: 5.0px;
+  font-weight: 700;
+}
+
+@media (max-width: 1800px) {
+.ngs-promo-right{
+  text-align:center;
+}
+.ngs-promo-info{
+  padding: 12px 20px 12px 30px;
+  text-align: center;
+  font-size:30px;
+}
+
+.ngs-promo-header{
+  margin-top:0px;
+}
+}
+@media(max-width:1151px){
+  .ngs-promo-sub{
+    display:none;
+  }
+  .ngs-promo-container .ngs-promo-main{
+    font-size:60px;
+  }
+  .ngs-promo-header{
+    font-size: 30px;
+  }
+  .ngs-promo-info{
+    font-size: 26px;
+  }
+}
+@media (max-width: 1024px) {
+  .ngs-promo-left {
+    width: 100%;
+    padding: 10px;
+  }
+.ngs-promo-container .ngs-promo-main{
+  font-size:55px;
+}
+  .ngs-promo-info {
+    padding: 10px;
+    font-size: 28px;
+    text-align: center;
+  }
+
+  .ngs-promo-header {
+    font-size: 25px;
+    text-align: center;
+  }
+
+  .ngs-promo-main {
+    text-align: center;
+  }
+
+  .ngs-promo-sub {
+    display:none;
+    font-size: 22px;
+    text-align: center;
+  }
+
+  .ngs-promo-image {
+    height: 600px;
+    left: 0;
+  }
+
+  .ngs-reminder-background-img {
+    top: 615px;
+  }
+  .ngs-promo-right{
+    padding:0px;
+  }
+}
+
+@media (max-width: 768px) {
+  .ngs-promo-container {
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+  }
+.ngs-promo-container .ngs-promo-main{
+  font-size:52px;
+}
+
+  .ngs-promo-subtext-img {
+    height: 50px;
+  }
+
+  .ngs-promo-subtext {
+    font-size: 24px;
+    text-align: center;
+  }
+
+  .ngs-promo-info {
+    font-size: 24px;
+    padding: 15px;
+  }
+
+  .ngs-promo-header {
+    font-size: 24px;
+  }
+
+  .ngs-promo-sub {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 580px) {
+  .ngs-reminder-background-img {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .ngs-promo-info {
+    font-size: 20px;
+    padding: 10px;
+  }
+
+  .ngs-promo-header {
+    font-size: 20px;
+  }
+
+  .ngs-promo-main {
+    font-size: 22px;
+  }
+
+  .ngs-promo-sub {
+    font-size: 16px;
+  }
+
+  .ngs-promo-subtext-img {
+    height: 40px;
+  }
+
+  .ngs-promo-subtext {
+    font-size: 20px;
+  }
+  .ngs-promo-container .ngs-promo-main{
+    font-size: 48px;
+  }
+}
+
+@media (max-width:990px){
+  #ngs-promo-banner{
+    background-position:center, center;
+    background-size:cover;
+  }
+}
+
+/* End of Magbead Automation Promo 2025 */
+#magbead-automation-banner .graphic-circle {
+  width: 13.5rem;
+  height: 13.5rem;
+  border-radius: 50%;
+  background-color: #d52b2c;
+  position: absolute;
+  left: 100%;
+  top: 24%;
+}
+#magbead-automation-banner .discount-tag {
+  top: 10px;
+  left: 10px;
+  color: white;
+  background-color: #d52b2c;
+  padding: 4px 8px;
+  font-weight: 500;
+  border-radius: 4px;
+  display:none;
+  font-size:28px;
+}
+#magbead-automation-banner.hero-section > p{
+  position: absolute;
+  bottom: 100px;
+  left: 0;
+  right: 0;
+}
+#magbead-automation-banner .graphic-circle p {
+  color: white;
+  font-weight: 600;
+  line-height: 1.0;
+  font-size: 43px;
+  margin-top: 22px;
+}
+/* Hero Section */
+#magbead-automation-banner.hero-section {
+  background-color: #fff;
+  text-align: center;
+}
+#magbead-automation-banner .section-padding {
+  padding: 20px;
+}
+
+#magbead-automation-banner.hero-section h1 {
+  font-size: 5.2rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin-bottom: 2rem;
+  color: #3e6297;
+}
+#magbead-automation-banner.hero-section h2,
+#magbead-automation-banner.hero-section .prod-title {
+  font-size: 2.5rem;
+  color: #3e6297;
+  gap: 0.5rem;
+  width: 81%;
+  line-height:1.3;
+}
+#magbead-automation-banner .hero-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 3rem;
+}
+#magbead-automation-banner .hero-image-container {
+  position: relative;
+  height: 184px;
+  overflow: hidden;
+}
+#magbead-automation-banner .hero-image-container img {
+  width: 94%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+#magbead-automation-banner .hero-image-container-two {
+  position: relative;
+}
+#magbead-automation-banner .hero-image-container-two img {
+  object-fit: cover;
+  object-position: center -26%;
+}
+#magbead-automation-banner .hero-buttons {
+  display: flex;
+  flex-direction: column;
+  margin-top: 3rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+#magbead-automation-banner .hero-buttons .btn-primary{
+  background-color: #d52b2c;
+  border-color: #d52b2c;
+  font-size: 22px;
+  font-weight: 600;
+}
+#magbead-automation-banner .hero-buttons .btn-primary:hover{
+  background-color: #ef2627;
+  border-color: #ef2627;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}
+#magbead-automation-banner .hero-info {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+@media only screen and (max-width:1200px){
+  #magbead-automation-banner .hero-image-container{
+    display:none;
+  }
+  #magbead-automation-banner .graphic-circle{
+    left: 88%;
+  }
+}
+@media only screen and (max-width:850px){
+  #magbead-automation-banner .discount-tag {
+      display:inline-block;
+  }
+  #magbead-automation-banner .graphic-circle{
+    display:none;
+  }
+}
+@media only screen and (max-width:768px){
+  #magbead-automation-banner.hero-section > p{
+    display:none;
+  }
+  #magbead-automation-banner.hero-section h2{
+    font-size:1.5rem;
+  }
+}
+@media only screen and (max-width:600px){
+  #magbead-automation-banner.hero-section h1{
+    font-size:4.2rem;
+  }
+}
+/* End of Magbead Automation Promo 2025 */
+
+
+{# Back to school styling #}
+#back-to-school-banner{
+  padding: 20px 20px;
+  background-color: #fff;
+}
+#back-to-school-banner {
+  background-color: white;
+  background-image: url("/sites/default/files/images/Student Background.png");
+  background-repeat: no-repeat;
+  background-position: right -100px top 0;
+  background-size:auto 100%;
+}
+#back-to-school-banner .promo-content {
+  margin-top: 125px; 
+  position: relative;
+}
+#back-to-school-banner .subtext {
+  padding: 5px 5px;
+  color: #004897;
+  display: inline-block;
+  font-size: 20px;
+  border-bottom: 4px solid;    
+}
+#back-to-school-banner .main-message {
+  color: #0c549e;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 50px;
+}
+#back-to-school-banner .promo-btn a {
+  font-weight: 600;
+  font-size: 20px;
+  padding: 8px 24px 8px 24px;
+}
+#back-to-school-banner .promo-text h2 {
+  font-size: 80px;
+  color: #da282b;
+  font-weight: 700;
+}
+#back-to-school-banner .graphic-circle {
+  width: 13.5rem;
+  height: 13.5rem;
+  border-radius: 50%;
+  background-color: #d52b2c;
+  position: absolute;
+  left: auto;
+  right:660px;
+  top: 48%;
+  text-align: center;
+  display:flex;
+  align-items:center;
+}
+#back-to-school-banner .graphic-circle.mob{
+  display:none;
+  position:static;
+}
+#back-to-school-banner .graphic-circle p {
+  color: white;
+  font-weight: 600;
+  line-height: 1.0;
+  font-size: 24px;
+  margin-top: 23px;
+}
+@media (max-width: 1400px) {
+  #back-to-school-banner .graphic-circle {
+    left: 88%;
+  }
+}
+@media (max-width: 992px) {
+  #back-to-school-banner{
+    background-size:cover;
+  }
+  #back-to-school-banner .promo-content{
+    text-align: center;
+    margin-top: 40px; 
+    background-color: #ffffff73;
+    padding: 10px;
+    border-radius: 10px;
+    backdrop-filter: blur(5px);
+  }
+  #back-to-school-banner  .main-message {
+    margin-bottom:10px;
+  }
+  #back-to-school-banner .promo-text{
+    width:100%;
+  }
+  #back-to-school-banner .graphic-circle.mob{
+    display:flex;
+    margin:auto;
+    margin-bottom:10px;
+  }
+  #back-to-school-banner .graphic-circle.desktop{
+    display:none;
+  }
+}
+{# End of Back to School 2025 Styling #}
+</style>
+
+<noscript>
+<style>
+  #homeBannerCarousel .carousel-indicators li.active::after,
+  #homeBannerCarousel .carousel-indicators li.active.animate::after {
+    animation-name: none;
+    width: 100%;
+  }
+</style>
+</noscript>
+
+{# <script>console.log('{{userCountry}}')</script> #}
+{% if userCountry == 'CA' %}
+<div id="canadian-home-newsticker" class="c-title c-font-20 center">Quality Canadian Products, Trusted Worldwide.</div>
+<div id="homeBannerCarousel" class="carousel slide carousel-fade1 dexp_carousel" data-ride="carousel" data-interval="10000" data-pause-"false">
+  <div class="carousel-inner prodBottom">
+    <!-- Carousel items -->
+    {# <div class='item active'>
+      <div class="carousel-item">
+        <section class="home-banner" id="liquid-biopsy-promo-banner">
+          <div class="container" style="height:100%;">
+            <div class="text">
+              <h1 style="color:white;">Liquid Biopsy: The Future of Non-Invasive Cancer Research</h1>
+              <p style="line-height:1.5">
+                Spend over $1000 on <b>plasma/serum</b>, <b>urine</b>, or <b>saliva</b> products and get <b>FREE SHIPPING</b>!<br>
+              </p>
+              <a class="btn btn-rna c-font-uppercase c-font-bold" href="/liquidbiopsy" style="box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;">Order Now</a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div> #}
+
+    {# Microbiome #}
+    {# <div class="item active">
+      <div class="carousel-item">
+        <section class="home-banner" id="microbiome-banner">
+          <div class="container">
+            <div class="promo-text">
+              <h2>Non-Invasive, easy to collect specimens for <span style="color: var(--norgen-tertiary-rna-red);">microbiome</span> analysis</h2>
+              <div class="main-message">
+                <div class="limited-time c-font-uppercase"><strong>For Limited Time Only</strong> | Save on Microbiome Products</div>
+                <div class="banner-offers">
+                  <div class="banner-offer starter">
+                    <span class="name">Toolbox <b>Starter</b></span>
+                    <div class="offer-amount c-font-uppercase"><b>8% Off</b></div>
+                    <span class="spend">$800 &amp; Up</span>
+                  </div>
+                  <div class="banner-offer pro">
+                    <span class="name">Toolbox <b>Pro</b></span>
+                    <div class="offer-amount c-font-uppercase"><b>12% Off</b></div>
+                    <span class="spend">$1200 &amp; Up</span>
+                  </div>
+                  <div class="banner-offer master">
+                    <span class="name">Toolbox <b>Master</b></span>
+                    <div class="offer-amount c-font-uppercase"><b>20% Off</b></div>
+                    <span class="spend">$2000 &amp; Up</span>
+                  </div>
+                </div>
+              </div>
+              <a href="https://norgenbiotek.com/promotions/save-microbiome-products#products-section" style="font-weight: 600; font-size: 18px; padding: 8px 24px 8px 24px;" class="btn btn-primary c-font-uppercase">Order Now</a>
+            <div class="bonus-offer">
+              <!-- <p class="pre-text"><span style="color:var(--norgen-tertiary-rna-red)"><b>Post Norgen's Kit</b></span> of your choice &amp; get <span style="color:var(--norgen-tertiary-rna-red)"><b>additional discount!</b></span></p> -->
+              <p class="blue">Share a photo/video of your Norgen microbiome kits in action to get <b>15% OFF next order</b>. <a href="https://norgenbiotek.com/promotions/save-microbiome-products#bonus-offer-details" style="color:white;text-decoration: underline;">See details</a></p>
+            </div>
+            <div class="benefits-text">
+              <p>A <b>rapid</b> and convenient method to <span style="color:var(--norgen-tertiary-rna-red)"><b>isolate total DNA &amp; RNA</b></span> from a variety of microbiome samples manually or <b>by automation</b></p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div> #}
+
+    {# Magbead Automation #}
+    {# <div class="item active">
+      <div class="carousel-item">
+        <section class="home-banner hero-section section-padding" id="magbead-automation-banner">
+            <div class="container " style="position:relative;">
+              <div class="hero-image-container">
+                <img src="/sites/default/files/promotions/magbead-2025/dropper.png" alt="The Bacteria Exosomal Isolation Kit">
+              </div>
+              <div class="graphic-circle">
+                <p>20% OFF</p><p>
+              </p></div>
+              <h1 style="margin-bottom:0px;">Automated Precision for Every Workflow.</h1>
+              <span class="discount-tag">20% OFF</span>
+              <div class="hero-info">
+                <h2 style="margin-bottom:0px; margin-top: 0px;">We've expanded our magnetic bead automation range to make your lab
+                faster, cleaner, and ready for scale—without compromising on quality.</h2>
+              </div>
+
+              <!-- Hero Buttons -->
+              <div class="hero-buttons">
+                <a class="btn btn-primary" href="/promotions/magnetic-bead-automation">View Products!</a>
+              </div>
+            </div>
+
+            <div class="hero-image-container-two">
+              <img src="/sites/default/files/promotions/magbead-2025/plates.png" alt="The Bacteria Exosomal Isolation Kit">
+            </div>
+            <p style="margin:auto;0px; font-size: 1.2rem; line-height: 1.4; width:85%;">*This promotion is available exclusively to customers in Canada and the U.S. who place orders directly with Norgen Biotek. Orders that require dry ice shipping are not eligible. Offer valid until August 25th, 2025.</p>
+        </section>
+      </div>
+    </div> #}
+
+    {# Back to School 2025 #}
+    <div class="item active">
+      <div class="carousel-item">
+        <section class="home-banner" id="back-to-school-banner">
+          <div class="graphic-circle desktop">
+            <p>+FREE Nuclease Free Water</p>
+          </div>
+          <div class="promo-content container">
+            <span class="subtext"> <strong>BACK-TO-CLASS</strong></span>
+            <div class="promo-text">
+              <h2>SAVE 20%</h2>
+              <div class="graphic-circle mob">
+                <p>+FREE Nuclease Free Water</p>
+              </div>
+              <p class="main-message">
+                On DNA, RNA, Exosome, NGS and Multi-analyte kits.
+              </p>
+              <div class="promo-btn">
+                <a href="/promotions/backtoschool" class="btn btn-rna">Order Now</a>
+              </div>
+            </div>
+            <div class="promo-image"></div>
+          </div>
+        </section>
+      </div>
+    </div>
+    {# End of Back to School 2025 #}
+
+    {# NGS Promo #}
+    {# <div class='item'>
+      <div class="carousel-item">
+        <section class="home-banner ngs-promo-banner" id="ngs-promo-banner">
+          <img src="/sites/default/files/images/glove-hand.png" alt="Gloved Hand Holding Tube" class="ngs-promo-image">
+          <p class="ngs-promo-subtext">
+            <img src="/sites/default/files/images/norgen-dna-logo.png" alt="Background Image" class="ngs-promo-subtext-img">
+            <span class="promo-type-text">Sequencing Services</span>
+          </p>
+          <div class="ngs-promo-container">
+                    
+            <div class="ngs-promo-left">
+              <div class="ngs-promo-info">
+                If we receive your samples<br>in July or August 2025
+              </div>
+            </div>
+            <div class="ngs-promo-right" style = "z-index:5;">
+              <h2 class="ngs-promo-header">
+                For RNA and small RNA Sequencing
+              </h2>
+              <h1 class="ngs-promo-main">
+                WE WILL PERFORM<br>
+                <span class="ngs-promo-red">RNA ISOLATION</span> <span class="ngs-promo-blue">AT 50% OFF</span>
+              </h1>
+              <p class="ngs-promo-sub">
+                Where others give up, we excel. Low input, high quality, half the price
+              </p>
+              <a href="https://norgenbiotek.com/services/next-generation-sequencing" style="font-weight: 600; font-size: 18px; padding: 8px 24px 8px 24px;" class="btn btn-primary c-font-uppercase">Learn More</a>
+            </div>
+          </div>
+          <img src="/sites/default/files/images/Asset 1.svg" alt="Background Image" class="ngs-reminder-background-img">
+        </section>
+      </div>
+    </div> #}
+    {# <div class='item'>
+      <div class="carousel-item">
+        <section class="home-banner" id="ngs-promo-banner">
+          <div class="container" style="height:100%;">
+            <div class="text">
+              <h1 style="color:inherit;">Save on Sequencing Services</h1>
+              <p style="line-height:1.5">
+                <b>Free</b> 6 sample pilot trials for RNA and Small RNA sequencing on applicable projects*<br>
+              </p>
+              <a class="btn btn-rna c-font-uppercase c-font-bold" href="/services/next-generation-sequencing" style="box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;">Learn More</a>
+              <p style="font-size:small" class="disclaimer">*Requests will be evaluated on a case-by-case basis on applicable projects.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div> #}
+    {# EZCollect #}
+    <div class='item'>
+      <div class="carousel-item">
+        <section class="home-banner" id="ezcollect-banner">
+          <div class="container" style="height:100%;">
+            <div class="text">
+              <div style="width:100%;"><span class="new-tag">NEW!</span><img class="logo" src="https://norgenbiotek.com/sites/default/files/images/home/2025-05-30-EZCollect/ezcollect-logo-dark.svg"></div>
+              <h1>User Friendly, <span style="color:#004897;">All in One</span> Saliva Collection &amp; Preservation Devices</h1>
+              <div>
+                <a class="btn btn-rna c-font-uppercase c-font-bold" href="/product/ezcollect-saliva-rna-device" style="box-shadow: rgba(0,0,0, 0.25) 0px 6px 12px -2px, rgba(0,0,0, 0.3) 0px 3px 7px -3px;">RNA Device</a>
+                <a class="btn btn-rna c-font-uppercase c-font-bold" href="/product/ezcollect-saliva-dna-device" style="box-shadow: rgba(0,0,0, 0.25) 0px 6px 12px -2px, rgba(0,0,0, 0.3) 0px 3px 7px -3px;background-color:#134b96;">DNA Device</a>
+              </div>
+            </div>
+            <img class="ezcollect-devices" src="https://norgenbiotek.com/sites/default/files/images/home/2025-05-30-EZCollect/ezcollect-devices.png">
+          </div>
+        </section>
+      </div>
+    </div>
+        
+    {# Exosomes Webinar #}
+    <div class='item'>
+      <div class="carousel-item">
+        <section class="home-banner" id="exosomes-webinar-hero-banner">
+          <div class="container" style="height:100%;">
+            <div class="text">
+              <span class="webinar-round">Webinar with Live Q&amp;A</span>
+              <h1>4 Factors the Pros Consider Before Isolating Exosomes</h1>
+              <p style="line-height:1.5">
+                <b>July 17, 2025, 2:30 PM EDT.</b><br>
+              </p>
+              <a class="btn btn-rna c-font-uppercase c-font-bold" href="/masterclass/webinars/4-factors-pros-consider-isolating-exosomes" style="box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;">View Recording</a>
+              <img src='/sites/default/files/images/home/Alex%20and%20Maggie%20Exosome%20Webinar.webp' alt="webinar speakers" style="margin-bottom:0px;">
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    
+    {# <div class="item">
+      <div class="carousel-item">
+        <section class="home-banner" id="proudly-canadian-banner">
+          <div class="banner-text-abs container">
+            <h1>Quality Canadian Products,<br>Trusted Worldwide.</h1>
+            <a class="btn btn-primary" href="https://norgenbiotek.com/products" style="border: 4px solid white;
+            background: none;
+            font-size: 34px;
+            padding:10px 30px;
+            font-weight: 700;
+            padding:10px 30px;
+            border-radius:10px;">Shop Now</a>
+          </div>
+        </section>
+      </div>
+    </div> #}
+    {# <div class='item'>
+      <div class="carousel-item">
+        <section class="home-banner" id="liquid-biopsy-webinar-hero-banner">
+          <div class="container" style="height:100%;">
+            <div class="text">
+              <span class="webinar-round">Webinar with Live Q&amp;A</span>
+              <h1>Transforming Cancer Care with cfDNA from Liquid Biopsy: A Prostate Cancer Perspective</h1>
+              <p style="line-height:1.5">
+                April 8, 2025 at 9:00 AM EDT and 2:00 PM EDT.<br>
+                <b>On-demand recording now available!</b>
+              </p>
+              <a class="btn btn-rna c-font-uppercase c-font-bold" href="/masterclass/webinars/transforming-cancer-care-cfdna-liquid-biopsy-prostate-cancer-perspective" style="box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;">View Recording</a>
+              <img src='https://norgenbiotek.com/sites/default/files/images/home/speakers2-v2.png' alt="webinar speakers" style="margin-bottom:0px;">
+            </div>
+          </div>
+        </section>
+      </div>
+    </div> #}
+    {# Item 2 #}
+{#     <div class='item'>
+      <div class="carousel-item">
+        <section class="home-banner" id="extraclean-hero-banner">
+          <div class="container" style="height:100%;">
+            <div class="text">
+              <img src="https://norgenbiotek.com/sites/default/files/images/extraclean-campaign/Extra_Clean_Logo.svg" alt="EXTRAClean" style="max-width:300px">
+              <h1>Purify small RNA with minimal background noise.</h1>
+              <p style="line-height:1.5">
+                <b>Buy 2</b> qualifying products, <b>get 50% off the 3rd.</b><br>
+                <b>Buy 4</b> qualifying products, <b>get the 5th free.</b>
+              </p>
+              <p class="plus" style="line-height:1.5;display: flex;align-items: center;line-height: 1.5;gap: 10px;">
+                <i class="fa fa-plus"></i>
+                <b>
+                70% off the Ultrapure Nuclease-Free Water<br>
+                with the purchase of an EXTRAClean product.
+                </b><br>
+              </p>
+              <a class="btn btn-rna c-font-uppercase c-font-bold" href="/promotions/rna-promotion" style="box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;">Order Now</a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div> #}
+    {# Item 3 #}
+    {# <div class='item'>
+      <div class="carousel-item">
+        <section class="home-banner" id="magbead-home-banner">
+          <div class="container">
+            <div class="text">
+              <h1 class="c-font-uppercase">RNA Purification, <span>Automated</span></h1>
+              <div class="c-font-uppercase">The Power of Magnetic Beads</div>
+              <hr>
+              <p><b>Now With:</b> <a href="/product/total-rna-purification-kits?v=1931">Total RNA Purification Kit (Magnetic Bead System) Cat. 75400</a><br/>&amp; <a href="/product/total-rna-purification-kits?v=1932">Total RNA Purification 96-Well Kit (Magnetic Bead System) Cat. 75500</a></p>
+              <a class="btn btn-primary c-font-uppercase c-font-bold" href="/product/total-rna-purification-kits?v=1931" style="box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;">Order Now</a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div> #}
+  </div>
+  <a class="carousel-control left" data-target="#homeBannerCarousel" role="button" data-slide="prev">
+    <span class="fa fa-2x fa-chevron-left" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control right" data-target="#homeBannerCarousel" role="button" data-slide="next">
+    <span class="fa fa-2x fa-chevron-right" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+  <ol class="carousel-indicators">
+    {# <li data-target="#homeBannerCarousel" data-slide-to='0' class="active" for="microbiome-banner">
+      <div class="promo"><span class="text">Save on Microbiome</span></div>
+    </li> #}
+    {# <li data-target="#homeBannerCarousel" data-slide-to='0' class="active" for="magbead-automation-banner">
+      <div class="promo"><span class="text">Save on Magnetic Bead</span></div>
+    </li> #}
+    <li data-target="#homeBannerCarousel" data-slide-to='0' class="active" for="back-to-school-banner">
+      <div class="promo"><span class="text">Back to school</span></div>
+    </li>
+    {# <li data-target="#homeBannerCarousel" data-slide-to='1' class="animate" for="ngs-promo-banner">
+      <div class="promo"><span class="text">RNA Isolation 50% Off</span></div>
+    </li> #}
+    {# <li data-target="#homeBannerCarousel" data-slide-to='2' class="animate" for="ngs-promo-banner">
+      <div class="promo"><span class="text">Free NGS Trials</span></div>
+    </li> #}
+    <li data-target="#homeBannerCarousel" data-slide-to='1' class="animate" for="ezcollect-banner">
+      <div class="info"><span class="text">EZCollect Saliva Devices</span></div>
+    </li>
+    <li data-target="#homeBannerCarousel" data-slide-to='2' class="animate" for="exosomes-webinar-hero-banner">
+      <div class="webinar"><span class="text">On-Demand Webinar</span></div>
+    </li>
+    {# <li data-target="#homeBannerCarousel" data-slide-to='1' class="animate" for="proudly-canadian-banner">
+      <div class="info"><span class="text">Proudly Canadian</span></div>
+    </li>
+    <li data-target="#homeBannerCarousel" data-slide-to='2' class="animate" for="liquid-biopsy-webinar-hero-banner">
+      <div class="webinar"><span class="text">Webinar with Live Q&amp;A</span></div>
+    </li> #}
+    {# <li data-target="#homeBannerCarousel" data-slide-to='3' class="animate" for="magbead-home-banner">
+      <div class="info"><span class="text">New Magnetic Bead Kits</span></div>
+    </li> #}
+  </ol>
+</div>
+
+{% else %}
+
+<div id="homeBannerCarousel" class="carousel slide carousel-fade1 dexp_carousel" data-ride="carousel" data-interval="10000" data-pause-"false">
+  <div class="carousel-inner prodBottom">
+  <!-- Carousel items -->
+    {# <div class='item active'>
+      <div class="carousel-item">
+        <section class="home-banner" id="liquid-biopsy-promo-banner">
+          <div class="container" style="height:100%;">
+            <div class="text">
+              <h1 style="color:white;">Liquid Biopsy: The Future of Non-Invasive Cancer Research</h1>
+              <p style="line-height:1.5">
+                Spend over $1000 on <b>plasma/serum</b>, <b>urine</b>, or <b>saliva</b> products and get <b>FREE SHIPPING</b>!<br>
+              </p>
+              <a class="btn btn-rna c-font-uppercase c-font-bold" href="/liquidbiopsy" style="box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;">Order Now</a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div> #}
+    {# Microbiome #}
+    {# <div class="item active">
+      <div class="carousel-item">
+        <section class="home-banner" id="microbiome-banner">
+          <div class="container">
+            <div class="promo-text">
+              <h2>Non-Invasive, easy to collect specimens for <span style="color: var(--norgen-tertiary-rna-red);">microbiome</span> analysis</h2>
+              <div class="main-message">
+                <div class="limited-time c-font-uppercase"><strong>For Limited Time Only</strong> | Save on Microbiome Products</div>
+                <div class="banner-offers">
+                  <div class="banner-offer starter">
+                    <span class="name">Toolbox <b>Starter</b></span>
+                    <div class="offer-amount c-font-uppercase"><b>8% Off</b></div>
+                    <span class="spend">$800 &amp; Up</span>
+                  </div>
+                  <div class="banner-offer pro">
+                    <span class="name">Toolbox <b>Pro</b></span>
+                    <div class="offer-amount c-font-uppercase"><b>12% Off</b></div>
+                    <span class="spend">$1200 &amp; Up</span>
+                  </div>
+                  <div class="banner-offer master">
+                    <span class="name">Toolbox <b>Master</b></span>
+                    <div class="offer-amount c-font-uppercase"><b>20% Off</b></div>
+                    <span class="spend">$2000 &amp; Up</span>
+                  </div>
+                </div>
+              </div>
+              <a href="https://norgenbiotek.com/promotions/save-microbiome-products#products-section" style="font-weight: 600; font-size: 18px; padding: 8px 24px 8px 24px;" class="btn btn-primary c-font-uppercase">Order Now</a>
+            <div class="bonus-offer">
+              <!-- <p class="pre-text"><span style="color:var(--norgen-tertiary-rna-red)"><b>Post Norgen's Kit</b></span> of your choice &amp; get <span style="color:var(--norgen-tertiary-rna-red)"><b>additional discount!</b></span></p> -->
+              <p class="blue">Share a photo/video of your Norgen microbiome kits in action to get <b>15% OFF next order</b>. <a href="https://norgenbiotek.com/promotions/save-microbiome-products#bonus-offer-details" style="color:white;text-decoration: underline;">See details</a></p>
+            </div>
+            <div class="benefits-text">
+              <p>A <b>rapid</b> and convenient method to <span style="color:var(--norgen-tertiary-rna-red)"><b>isolate total DNA &amp; RNA</b></span> from a variety of microbiome samples manually or <b>by automation</b></p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div> #}
+    {# Magbead Automation #}
+    {# <div class="item active">
+      <div class="carousel-item">
+        <section class="home-banner hero-section section-padding" id="magbead-automation-banner">
+            <div class="container " style="position:relative;">
+              <div class="hero-image-container">
+                <img src="/sites/default/files/promotions/magbead-2025/dropper.png" alt="The Bacteria Exosomal Isolation Kit">
+              </div>
+              <div class="graphic-circle">
+                <p>20% OFF</p><p>
+              </p></div>
+              <h1 style="margin-bottom:0px;">Automated Precision for Every Workflow.</h1>
+              <span class="discount-tag">20% OFF</span>
+              <div class="hero-info">
+                <h2 style="margin-bottom:0px; margin-top: 0px;">We've expanded our magnetic bead automation range to make your lab
+                faster, cleaner, and ready for scale—without compromising on quality.</h2>
+              </div>
+
+              <!-- Hero Buttons -->
+              <div class="hero-buttons">
+                <a class="btn btn-primary" href="/promotions/magnetic-bead-automation">View Products!</a>
+              </div>
+            </div>
+
+            <div class="hero-image-container-two">
+              <img src="/sites/default/files/promotions/magbead-2025/plates.png" alt="The Bacteria Exosomal Isolation Kit">
+            </div>
+            <p style="margin:auto;0px; font-size: 1.2rem; line-height: 1.4; width:85%;">*This promotion is available exclusively to customers in Canada and the U.S. who place orders directly with Norgen Biotek. Orders that require dry ice shipping are not eligible. Offer valid until August 25th, 2025.</p>
+        </section>
+      </div>
+    </div> #}
+
+    {# Back to School 2025 #}
+    <div class="item active">
+      <div class="carousel-item">
+        <section class="home-banner" id="back-to-school-banner">
+          <div class="graphic-circle desktop">
+            <p>+FREE Nuclease Free Water</p>
+          </div>
+          <div class="promo-content container">
+            <span class="subtext"> <strong>BACK-TO-CLASS</strong></span>
+            <div class="promo-text">
+              <h2>SAVE 20%</h2>
+              <div class="graphic-circle mob">
+                <p>+FREE Nuclease Free Water</p>
+              </div>
+              <p class="main-message">
+                On DNA, RNA, Exosome, NGS and Multi-analyte kits.
+              </p>
+              <div class="promo-btn">
+                <a href="/promotions/backtoschool" class="btn btn-rna">Order Now</a>
+              </div>
+            </div>
+            <div class="promo-image"></div>
+          </div>
+        </section>
+      </div>
+    </div>
+    {# End of Back to School 2025 #}
+
+    {# NGS Promo #}
+    {# <div class='item'>
+      <div class="carousel-item">
+        <section class="home-banner ngs-promo-banner" id="ngs-promo-banner">
+          <img src="/sites/default/files/images/glove-hand.png" alt="Gloved Hand Holding Tube" class="ngs-promo-image">
+          <p class="ngs-promo-subtext">
+            <img src="/sites/default/files/images/norgen-dna-logo.png" alt="Background Image" class="ngs-promo-subtext-img">
+            <span class="norgen-logo-text">Norgen </span><span class="promo-type-text">Sequencing Services</span>
+          </p>
+          <div class="ngs-promo-container">
+                    
+            <div class="ngs-promo-left">
+              <div class="ngs-promo-info">
+                If we receive your samples<br>in July or August 2025
+              </div>
+            </div>
+            <div class="ngs-promo-right" style = "z-index:5;">
+              <h2 class="ngs-promo-header">
+                For RNA and small RNA Sequencing
+              </h2>
+              <h1 class="ngs-promo-main">
+                WE WILL PERFORM<br>
+                <span class="ngs-promo-red">RNA ISOLATION</span> <span class="ngs-promo-blue">AT 50% OFF</span>
+              </h1>
+              <p class="ngs-promo-sub">
+                Where others give up, we excel. Low input, high quality, half the price
+              </p>
+              <a href="https://norgenbiotek.com/services/next-generation-sequencing" style="font-weight: 600; font-size: 18px; padding: 8px 24px 8px 24px;" class="btn btn-primary c-font-uppercase">Learn More</a>
+            </div>
+          </div>
+          <img src="/sites/default/files/images/Asset 1.svg" alt="Background Image" class="ngs-reminder-background-img">
+        </section>
+      </div>
+    </div> #}
+    {# <div class='item'>
+      <div class="carousel-item">
+        <section class="home-banner" id="ngs-promo-banner">
+          <div class="container" style="height:100%;">
+            <div class="text">
+              <h1 style="color:inherit;">Save on Sequencing Services</h1>
+              <p style="line-height:1.5">
+                <b>Free</b> 6 sample pilot trials for RNA and Small RNA sequencing on applicable projects*<br>
+              </p>
+              <a class="btn btn-rna c-font-uppercase c-font-bold" href="/services/next-generation-sequencing" style="box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;">Learn More</a>
+              <p style="font-size:small" class="disclaimer">*Requests will be evaluated on a case-by-case basis on applicable projects.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div> #}
+    {# EZCollect #}
+    <div class='item'>
+      <div class="carousel-item">
+        <section class="home-banner" id="ezcollect-banner">
+          <div class="container" style="height:100%;">
+            <div class="text">
+              <div style="width:100%;"><span class="new-tag">NEW!</span><img class="logo" src="https://norgenbiotek.com/sites/default/files/images/home/2025-05-30-EZCollect/ezcollect-logo-dark.svg"></div>
+              <h1>User Friendly, <span style="color:#004897;">All in One</span> Saliva Collection &amp; Preservation Devices</h1>
+              <div>
+                <a class="btn btn-rna c-font-uppercase c-font-bold" href="/product/ezcollect-saliva-rna-device" style="box-shadow: rgba(0,0,0, 0.25) 0px 6px 12px -2px, rgba(0,0,0, 0.3) 0px 3px 7px -3px;">RNA Device</a>
+                <a class="btn btn-rna c-font-uppercase c-font-bold" href="/product/ezcollect-saliva-dna-device" style="box-shadow: rgba(0,0,0, 0.25) 0px 6px 12px -2px, rgba(0,0,0, 0.3) 0px 3px 7px -3px;background-color:#134b96;">DNA Device</a>
+              </div>
+            </div>
+            <img class="ezcollect-devices" src="https://norgenbiotek.com/sites/default/files/images/home/2025-05-30-EZCollect/ezcollect-devices.png">
+          </div>
+        </section>
+      </div>
+    </div>
+
+    {# Exosomes Webinar #}
+    <div class='item'>
+      <div class="carousel-item">
+        <section class="home-banner" id="exosomes-webinar-hero-banner">
+          <div class="container" style="height:100%;">
+            <div class="text">
+              <span class="webinar-round">Webinar with Live Q&amp;A</span>
+              <h1>4 Factors the Pros Consider Before Isolating Exosomes</h1>
+              <p style="line-height:1.5">
+                <b>July 17, 2025, 2:30 PM EDT.</b><br>
+              </p>
+              <a class="btn btn-rna c-font-uppercase c-font-bold" href="/masterclass/webinars/4-factors-pros-consider-isolating-exosomes" style="box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;">Register Now</a>
+              <img src='/sites/default/files/images/home/Alex%20and%20Maggie%20Exosome%20Webinar.webp' alt="webinar speakers" style="margin-bottom:0px;">
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Item 2 -->
+    {# <div class='item'>
+      <div class="carousel-item">
+        <section class="home-banner" id="liquid-biopsy-webinar-hero-banner">
+          <div class="container" style="height:100%;">
+            <div class="text">
+              <span class="webinar-round">Webinar with Live Q&amp;A</span>
+              <h1>Transforming Cancer Care with cfDNA from Liquid Biopsy: A Prostate Cancer Perspective</h1>
+              <p style="line-height:1.5">
+                April 8, 2025 at 9:00 AM EDT and 2:00 PM EDT.<br>
+                <b>On-demand recording now available!</b>
+              </p>
+              <a class="btn btn-rna c-font-uppercase c-font-bold" href="/masterclass/webinars/transforming-cancer-care-cfdna-liquid-biopsy-prostate-cancer-perspective" style="box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;">View Now</a>
+              <img src='https://norgenbiotek.com/sites/default/files/images/home/speakers2-v2.png' alt="webinar speakers" style="margin-bottom:0px;">
+            </div>
+          </div>
+        </section>
+      </div>
+    </div> #}
+    {# Item 2 #}
+    {# <div class='item'>
+      <div class="carousel-item">
+        <section class="home-banner" id="extraclean-hero-banner">
+          <div class="container" style="height:100%;">
+            <div class="text">
+              <img src="https://norgenbiotek.com/sites/default/files/images/extraclean-campaign/Extra_Clean_Logo.svg" alt="EXTRAClean" style="max-width:300px">
+              <h1>Purify small RNA with minimal background noise.</h1>
+              <p style="line-height:1.5">
+                <b>Buy 2</b> qualifying products, <b>get 50% off the 3rd.</b><br>
+                <b>Buy 4</b> qualifying products, <b>get the 5th free.</b>
+              </p>
+              <p class="plus" style="line-height:1.5;display: flex;align-items: center;line-height: 1.5;gap: 10px;">
+                <i class="fa fa-plus"></i>
+                <b>
+                70% off the Ultrapure Nuclease-Free Water<br>
+                with the purchase of an EXTRAClean product.
+                </b><br>
+              </p>
+              <a class="btn btn-rna c-font-uppercase c-font-bold" href="/promotions/rna-promotion" style="box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;">Order Now</a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div> #}
+    {# Item 3 #}
+    {# <div class='item'>
+      <div class="carousel-item">
+        <section class="home-banner" id="magbead-home-banner">
+          <div class="container">
+            <div class="text">
+              <h1 class="c-font-uppercase">RNA Purification, <span>Automated</span></h1>
+              <div class="c-font-uppercase">The Power of Magnetic Beads</div>
+              <hr>
+              <p><b>Now With:</b> <a href="/product/total-rna-purification-kits?v=1931">Total RNA Purification Kit (Magnetic Bead System) Cat. 75400</a><br/>&amp; <a href="/product/total-rna-purification-kits?v=1932">Total RNA Purification 96-Well Kit (Magnetic Bead System) Cat. 75500</a></p>
+              <a class="btn btn-primary c-font-uppercase c-font-bold" href="/product/total-rna-purification-kits?v=1931" style="box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;">Order Now</a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div> #}
+  </div>
+  <a class="carousel-control left" data-target="#homeBannerCarousel" role="button" data-slide="prev">
+    <span class="fa fa-2x fa-chevron-left" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+  <a class="carousel-control right" data-target="#homeBannerCarousel" role="button" data-slide="next">
+      <span class="fa fa-2x fa-chevron-right" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+  </a>
+  <ol class="carousel-indicators">
+    {# <li data-target="#homeBannerCarousel" data-slide-to='0' class="active" for="microbiome-banner">
+      <div class="promo"><span class="text">Save on Microbiome</span></div>
+    </li> #}
+    {# <li data-target="#homeBannerCarousel" data-slide-to='0' class="active" for="magbead-automation-banner">
+      <div class="promo"><span class="text">Save on Magnetic Bead</span></div>
+    </li> #}
+    <li data-target="#homeBannerCarousel" data-slide-to='0' class="active" for="back-to-school-banner">
+      <div class="promo"><span class="text">Back to school</span></div>
+    </li>
+    {# <li data-target="#homeBannerCarousel" data-slide-to='1' class="animate" for="ngs-promo-banner">
+      <div class="promo"><span class="text">RNA Isolation 50% Off</span></div>
+    </li> #}
+    {# <li data-target="#homeBannerCarousel" data-slide-to='2' class="animate" for="ngs-promo-banner">
+      <div class="promo"><span class="text">Free NGS Trials</span></div>
+    </li> #}
+    <li data-target="#homeBannerCarousel" data-slide-to='1' class="animate" for="ezcollect-banner">
+      <div class="info"><span class="text">EZCollect Saliva Devices</span></div>
+    </li>
+    <li data-target="#homeBannerCarousel" data-slide-to='2' class="animate" for="exosomes-webinar-hero-banner">
+      <div class="webinar"><span class="text">On-Demand Webinar</span></div>
+    </li>
+    {# <li data-target="#homeBannerCarousel" data-slide-to='1' class="animate" for="liquid-biopsy-webinar-hero-banner">
+      <div class="webinar"><span class="text">Webinar with Live Q&amp;A</span></div>
+    </li> #}
+   {#  <li data-target="#homeBannerCarousel" data-slide-to='2' class="animate" for="extraclean-hero-banner">
+      <div class="promo"><span class="text">Save on RNA Products</span></div>
+    </li> #}
+    {# <li data-target="#homeBannerCarousel" data-slide-to='3' class="animate" for="magbead-home-banner">
+      <div class="info"><span class="text">New Magnetic Bead Kits</span></div>
+    </li> #}
+  </ol>
+</div>
+
+{# <section class="home-banner" id="liquid-biopsy-webinar-hero-banner">
+  <div class="container" style="height:100%;">
+    <div class="text">
+      <span class="webinar-round">Webinar with Live Q&amp;A</span>
+      <h1>Transforming Cancer Care with cfDNA from Liquid Biopsy: A Prostate Cancer Perspective</h1>
+      <p style="line-height:1.5">
+        <b>April 8, 2025 at 9:00 AM EDT and 2:00 PM EDT.</b><br>
+      </p>
+      <a class="btn btn-rna c-font-uppercase c-font-bold" href="/masterclass/webinars/transforming-cancer-care-cfdna-liquid-biopsy-prostate-cancer-perspective" style="box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;">Register Now</a>
+      <img src='https://norgenbiotek.com/sites/default/files/images/home/speakers2-v2.png' alt="webinar speakers" style="margin-bottom:0px;">
+    </div>
+  </div>
+</section> #}
+
+{# <section class="home-banner" id="extraclean-hero-banner">
+  <div class="container" style="height:100%;">
+    <div class="text">
+      <img src="https://norgenbiotek.com/sites/default/files/images/extraclean-campaign/Extra_Clean_Logo.svg" alt="EXTRAClean" style="max-width:300px">
+      <h1>Purify small RNA with minimal background noise.</h1>
+      <p style="line-height:1.5">
+        <b>Buy 2</b> qualifying products, <b>get 50% off the 3rd.</b><br>
+        <b>Buy 4</b> qualifying products, <b>get the 5th free.</b>
+      </p>
+      <p class="plus" style="line-height:1.5;display: flex;align-items: center;line-height: 1.5;gap: 10px;">
+        <i class="fa fa-plus"></i>
+        <b>
+        70% off the Ultrapure Nuclease-Free Water<br>
+        with the purchase of an EXTRAClean product.
+        </b><br>
+      </p>
+      <a class="btn btn-rna c-font-uppercase c-font-bold" href="/promotions/rna-promotion" style="box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;">Order Now</a>
+    </div>
+  </div>
+</section> #}
+
+{# <section class="home-banner" id="magbead-home-banner">
+  <div class="container">
+    <div class="text">
+      <h1 class="c-font-uppercase">RNA Purification, <span>Automated</span></h1>
+      <div class="c-font-uppercase">The Power of Magnetic Beads</div>
+      <hr>
+      <p><b>Now With:</b> <a href="/product/total-rna-purification-kits?v=1931">Total RNA Purification Kit (Magnetic Bead System) Cat. 75400</a><br/>&amp; <a href="/product/total-rna-purification-kits?v=1932">Total RNA Purification 96-Well Kit (Magnetic Bead System) Cat. 75500</a></p>
+      <a class="btn btn-primary c-font-uppercase c-font-bold" href="/product/total-rna-purification-kits?v=1931" style="box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;">Order Now</a>
+    </div>
+  </div>
+</section> #}
+
+{% endif %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+  const data_interval = document.querySelector('#homeBannerCarousel').getAttribute('data-interval');
+  var data_interval_sec = data_interval / 1000; // carousel data interval in seconds
+
+
+  /* if you hover/unhover as the slide's timer ends, it bugs out */
+
+  // Wait for DOM to be ready
+  document.addEventListener('DOMContentLoaded', function() {
+    var $carousel = $('#homeBannerCarousel');
+
+    // Store original Bootstrap carousel methods
+    var originalPause = $.fn.carousel.Constructor.prototype.pause;
+    var originalCycle = $.fn.carousel.Constructor.prototype.cycle;
+
+    const originalInterval = $carousel.data('interval') || 10000;
+    
+    // 2. State tracking
+    let remainingTime = originalInterval;
+    let cycleTimer;
+    let pauseTime;
+    let startTime;
+    let isPaused = false;
+
+    // 3. Initialize with manual control
+    $carousel.carousel({
+      interval: false, // Disable Bootstrap's interval
+      pause: false    // Disable Bootstrap's pause
+    });
+
+    // 4. Start our custom cycle
+    function startCycle() {
+      if (isPaused) return;
+      startTime = Date.now();
+      clearTimeout(cycleTimer);
+      cycleTimer = setTimeout(() => {
+        $carousel.carousel('next');
+        remainingTime = originalInterval;
+        startCycle();
+      }, remainingTime);
+    }
+
+    // 5. Handle pause/resume
+    $carousel
+      .on('mouseenter', () => {
+        if (!isPaused) {
+          clearTimeout(cycleTimer);
+          pauseTime = Date.now();
+          remainingTime = Math.max(0, remainingTime - (pauseTime - startTime));  
+          //console.log('calculated remainingTime: '+remainingTime);  
+          isPaused = true;
+          $carousel.addClass('paused');
+        }
+      })
+      .on('mouseleave', () => {
+        if (isPaused) {
+          isPaused = false;
+          $carousel.removeClass('paused');
+          startCycle();
+        }
+      });
+
+    // 6. Initial start
+
+    startCycle();
+
+    document.documentElement.style.setProperty('--carousel-interval', `${data_interval_sec}s`);
+    var activeIndicator = document.querySelector('#homeBannerCarousel .carousel-indicators li.active');
+    activeIndicator.classList.remove('animate'); // Reset
+    void activeIndicator.offsetWidth; // Trigger reflow (forces browser to recognize the reset)
+    activeIndicator.classList.add('animate'); // Start animation fresh
+
+    // 7. Optional: Keep manual controls working
+    $('[data-slide="prev"], [data-slide="next"], .carousel-indicators > li').click(() => {
+      clearTimeout(cycleTimer);
+      remainingTime = originalInterval; // Reset for next cycle
+      startCycle();
+    });
+  
+
+
+  });
+</script>

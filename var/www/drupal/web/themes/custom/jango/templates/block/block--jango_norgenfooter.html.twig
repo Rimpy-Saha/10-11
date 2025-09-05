@@ -1,0 +1,203 @@
+{# /** * @file * Default theme implementation to display a block. * * Available
+variables: * - plugin_id: The ID of the block implementation. * - label: The
+configured label of the block if visible. * - configuration: A list of the
+block's configuration values. * - label: The configured label for the block. * -
+label_display: The display settings for the label. * - provider: The module or
+other provider that provided this block plugin. * - Block plugin specific
+settings will also be stored here. * - in_preview: Whether the plugin is being
+rendered in preview mode. * - content: The content of this block. * -
+attributes: array of HTML attributes populated by modules, intended to * be
+added to the main container tag of this template. * - id: A valid HTML ID and
+guaranteed unique. * - title_attributes: Same as attributes, except applied to
+the main title * tag that appears in the template. * - title_prefix: Additional
+output populated by modules, intended to be * displayed in front of the main
+title tag that appears in the template. * - title_suffix: Additional output
+populated by modules, intended to be * displayed after the main title tag that
+appears in the template. * * @see template_preprocess_block() * * @ingroup
+themeable */ #}
+<div{{ attributes }}>
+  {{ title_prefix }}
+  {% if label %}
+  <h2{{ title_attributes }}>{{ label }}</h2> {% endif %}
+    {{ title_suffix }}
+
+    <style>
+      .social-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        justify-content: center;
+        display: flex;
+        justify-content: center;
+      }
+
+      .content-social {
+        display: inline-block;
+      }
+
+      .social-list li {
+        max-height: 20px;
+        margin-right: 10px;
+      }
+
+      .content-social i {
+        font-size: 30px;
+        color:black;
+      }
+
+      .content-social svg {
+        fill:black;
+      }
+    </style>
+    <div class="field field--name-body field--type-text-with-summary field--label-hidden field__item"></div>
+    <div class="c-layout-footer c-layout-footer-1">
+      <div class="c-prefooter" id="contact">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-3" style="padding-left: 0px; padding-right: 0px">
+              <div class="c-links">
+                <div class="c-content-title-1 c-title">
+                  <h3 class="c-left c-font"><a href="#"> Products</a></h3>
+                  <div class="c-line-left c-bg-blue"></div>
+                  <p class="c-left c-font-uppercase"></p>
+                </div>
+                <ul class="c-nav">
+                  <li><a href="#">Discounts</a></li>
+                  <li><a href="#">COVID-19 Workflow</a></li>
+                  <li><a href="#">Sample Collection &amp; Preservation</a></li>
+                  <li><a href="#">Purification &amp; Isolation</a></li>
+                  <li><a href="#">NGS Library Preparation Kits</a></li>
+                  <li><a href="#">Molecular Diagnostics</a></li>
+                  <li><a href="#">Lab Essentials</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-sm-3" style="padding-left: 0px; padding-right: 0px">
+              <div class="c-links">
+                <div class="c-content-title-1 c-title">
+                  <h3 class="c-left c-font"><a href="#">Services</a></h3>
+                  <div class="c-line-left c-bg-blue"></div>
+                  <p class="c-left c-font-uppercase"></p>
+                </div>
+                <ul class="c-nav">
+                  <li><a href="#">Discounts</a></li>
+                  <li><a href="#">COVID-19 Testing</a></li>
+                  <li><a href="#">Next Generation Sequencing</a></li>
+                  <li><a href="#">Isolation Services</a></li>
+                  <li><a href="#">Contract Manufacturing</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-sm-3" style="padding-left: 0px; padding-right: 0px">
+              <div class="c-links">
+                <div class="c-content-title-1 c-title">
+                  <h3 class="c-left c-font"><a href="#"> Company</a></h3>
+                  <div class="c-line-left c-bg-blue"></div>
+                  <p class="c-left c-font-uppercase"></p>
+                </div>
+                <ul class="c-nav">
+                  <li><a href="#">About Norgen</a></li>
+                  <li><a href="#">Contact</a></li>
+                  <li><a href="#">Events</a></li>
+                  <li><a href="#">Careers</a></li>
+                  <li><a href="#">Out-Licensing Opportunities</a></li>
+                  <li><a href="#">Distributors</a></li>
+                  <li><a href="#">Testimonials</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-sm-3" style="padding-left: 0px; padding-right: 0px">
+              <div class="c-links">
+                <div class="c-content-title-1 c-title">
+                  <h3 class="c-left c-font"><a href="#"> Resources</a></h3>
+                  <div class="c-line-left c-bg-blue"></div>
+                  <p class="c-left c-font-uppercase"></p>
+                </div>
+                <ul class="c-nav">
+                  <li><a href="#">Blogs</a></li>
+                  <li><a href="#">MasterClass Webinars</a></li>
+                  <li><a href="#">Complete Workflows</a></li>
+                  <li><a href="#">Videos</a></li>
+                  <li><a href="#">Application Notes</a></li>
+                  <li><a href="#">Infographics</a></li>
+                  <li><a href="#">Publications</a></li>
+                  <li><a href="#">Press Releases</a></li>
+                  <li><a href="#">Patents</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="c-bg-grey-1 copyright">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-6" style="
+              padding-top: 12px;
+              padding-bottom: 12px;
+              height: 60px;
+              padding-left: 0px;
+            ">
+              <div style="
+                font-size: 12px;
+                transform: translateY(-50%);
+                top: 50%;
+                position: relative;
+              ">
+                Copyright © 2023 Norgen Biotek Corp. All Rights Reserved
+              </div>
+            </div>
+            <div class="col-sm-6 text-center" style="
+              padding-right: 32px;
+              padding-top: 12px;
+              padding-bottom: 12px;
+              height: 60px;
+              text-align: right;
+            ">
+              <ul class="social-list">
+                <li class="content-social">
+                  <a target="_blank" data-placement="auto" data-toggle="tooltip" title=""
+                    href="http://facebook.com/norgenbiotek" class="dtooltip social-icon fbclick"
+                    data-original-title="Facebook" aria-label="Facebook"><span><i class="fa-facebook fab"
+                        alt="Facebook"></i></span></a>
+                </li>
+                <li class="content-social">
+                  <a target="_blank" data-placement="auto" data-toggle="tooltip" title=""
+                    href="http://twitter.com/norgenbiotek" class="dtooltip social-icon twclick"
+                    data-original-title="Twitter" aria-label="Twitter"><span><svg
+                        style="max-width: 31px; max-height: 29px" width="1200" height="1227" viewBox="0 0 1200 1227"
+                        fill="var(--default-text-color)" xmlns="http://www.w3.org/2000/svg"
+                        aria-labelledby="twitter-footer-title">
+                        <title id="twitter-footer-title" lang="en">
+                          X formerly known as Twitter
+                        </title>
+                        <path
+                          d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z">
+                        </path>
+                      </svg></span></a>
+                </li>
+                <li class="content-social">
+                  <a target="_blank" data-placement="auto" data-toggle="tooltip" title=""
+                    href="http://instagram.com/norgen.biotek" class="dtooltip social-icon igclick"
+                    data-original-title="Instagram" aria-label="Instagram"><span><i class=" fa-instagram fab"
+                        alt="Instagram"></i></span></a>
+                </li>
+                <li class="content-social">
+                  <a target="_blank" data-placement="auto" data-toggle="tooltip" title=""
+                    href="https://www.youtube.com/user/norgenbiotek" class="dtooltip social-icon ytclick"
+                    data-original-title="Youtube" aria-label="YouTube"><span><i class=" fa-youtube fab"
+                        alt="YouTube"></i></span></a>
+                </li>
+                <li class="content-social">
+                  <a target="_blank" data-placement="auto" data-toggle="tooltip" title=""
+                    href="https://www.linkedin.com/company/norgenbiotek/" class="dtooltip social-icon liclick"
+                    data-original-title="LinkedIn" aria-label="LinkedIn"><span><i class="fa-linkedin fab"
+                        alt="LinkedIn"></i></span></a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>

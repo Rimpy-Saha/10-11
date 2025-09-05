@@ -1,0 +1,1032 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a node.
+ *
+ * Available variables:
+ * - node: The node entity with limited access to object properties and methods.
+ *   Only method names starting with "get", "has", or "is" and a few common
+ *   methods such as "id", "label", and "bundle" are available. For example:
+ *   - node.getCreatedTime() will return the node creation timestamp.
+ *   - node.hasField('field_example') returns TRUE if the node bundle includes
+ *     field_example. (This does not indicate the presence of a value in this
+ *     field.)
+ *   - node.isPublished() will return whether the node is published or not.
+ *   Calling other methods, such as node.delete(), will result in an exception.
+ *   See \Drupal\node\Entity\Node for a full list of public properties and
+ *   methods for the node object.
+ * - label: (optional) The title of the node.
+ * - content: All node items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - author_picture: The node author user entity, rendered using the "compact"
+ *   view mode.
+ * - metadata: Metadata for this node.
+ * - date: (optional) Themed creation date field.
+ * - author_name: (optional) Themed author name field.
+ * - url: Direct URL of the current node.
+ * - display_submitted: Whether submission information should be displayed.
+ * - attributes: HTML attributes for the containing element.
+ *   The attributes.class element may contain one or more of the following
+ *   classes:
+ *   - node: The current template type (also known as a "theming hook").
+ *   - node--type-[type]: The current node type. For example, if the node is an
+ *     "Article" it would result in "node--type-article". Note that the machine
+ *     name will often be in a short form of the human readable label.
+ *   - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+ *     teaser would result in: "node--view-mode-teaser", and
+ *     full: "node--view-mode-full".
+ *   The following are controlled through the node publishing options.
+ *   - node--promoted: Appears on nodes promoted to the front page.
+ *   - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+ *     teaser listings.
+ *   - node--unpublished: Appears on unpublished nodes visible only to site
+ *     admins.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main
+ *   content tag that appears in the template.
+ * - author_attributes: Same as attributes, except applied to the author of
+ *   the node tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ * - view_mode: View mode; for example, "teaser" or "full".
+ * - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+ * - page: Flag for the full page state. Will be true if view_mode is 'full'.
+ * - readmore: Flag for more state. Will be true if the teaser content of the
+ *   node cannot hold the main body content.
+ * - logged_in: Flag for authenticated user status. Will be true when the
+ *   current user is a logged-in member.
+ * - is_admin: Flag for admin user status. Will be true when the current user
+ *   is an administrator.
+ *
+ * @see template_preprocess_node()
+ *
+ * @ingroup themeable
+ */
+#}
+
+{# <article{{ attributes }}>
+
+  {{ title_prefix }}
+  {% if label and not page %}
+    <h2{{ title_attributes }}>
+      <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+    </h2>
+  {% endif %}
+  {{ title_suffix }}
+
+  {% if display_submitted %}
+    <footer>
+      {{ author_picture }}
+      <div{{ author_attributes }}>
+        {% trans %}Submitted by {{ author_name }} on {{ date }}{% endtrans %}
+        {{ metadata }}
+      </div>
+    </footer>
+  {% endif %}
+  {{ custom_breadcrumb|raw }}
+  <div{{ content_attributes }}>
+    {{ content }}
+  </div>
+
+</article> #}
+
+<style>
+
+  #db-content.overflow-hidden{
+    overflow:hidden;
+  }
+  #db-content.no-access{
+    opacity:0;
+    visibility:hidden;
+    max-height:0px;
+  }
+  #db-content.access{
+    opacity:1;
+    visibility:visible;
+    transition:0.5s 3s;
+    max-height:1000000px;
+    transition:1s 4s;
+  }
+
+  /* Old Banner */
+
+  /* #banner > .container{
+    height:100%;
+    position:relative;
+  }
+  #banner > .container > .grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+  }
+  #banner > .container > .grid > lite-youtube{
+    min-width:200px;
+  }
+  #banner .text > h2{
+    color:var(--norgen-primary-blue);
+    font-weight:bold;
+    font-size:48px;
+  }
+  #banner .text > a{
+    color:var(--norgen-tertiary-rna-red);
+  }
+  #banner img{
+    position:absolute;
+    right:-10%;
+    top:0;
+    bottom:0;
+    margin:auto;
+    height:90%;
+  } */
+  #resources-anchor{
+    position:relative;
+    top:-100px;
+  }
+  #resources-content{
+    margin:40px auto;
+  }
+
+  #contact-section{
+    background-color:var(--norgen-primary-blue-light);
+    padding: 60px 0px;
+  }
+  #contact-section h2 {
+    font-size: 40px;
+    font-weight: bold;
+    margin-bottom: 0px;
+  }
+  #contact-section .cta-text{
+    font-size:24px;
+  }
+  #contact-section .cta-content a.btn {
+    font-size: 16px;
+    padding: 10px 20px;
+    height: 45px;
+  }
+
+  /* @media only screen and (max-width:1200px){
+    #banner{
+      text-align:center;
+    }
+    #banner img{
+      display:none;
+    }
+  }
+  @media only screen and (max-width:600px){
+    #banner .text > h2{
+      font-size:32px;
+    }
+     #banner .text {
+      position:static;
+      transform:none;
+    }
+    #banner .text > a{
+      display:none;
+    }
+  }  */
+  /* End of Old Banner */
+
+  ul.section-select, ul.cat-select{
+    margin:auto;
+    margin-bottom:40px;
+    background-color:#E8F2FC;
+    list-style-type:none;
+    padding:5px;
+    border-radius: 10px;
+    /* border: 1px solid #ddd; */
+    box-shadow:0px 0px 10px -5px #00000080;
+    width: fit-content;
+    max-width:100%;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+  .section-select > li.option > button, .cat-select > li.option > button{
+    background-color:#E8F2FC;
+    border:none;
+    border-radius:10px;
+    padding:10px 20px;
+    height:100%;
+    color:var(--norgen-primary-blue);
+    font-weight:bold;
+  }
+  .section-select > li.option.selected > button, .cat-select > li.option.selected > button{
+    background-color:white;
+  }
+  .section-select > li.option:not(.selected):hover > button, .cat-select > li.option:not(.selected):hover > button{
+    background-color:#ffffff80;
+  }
+  /* Publications Search + Sort */
+  .views-exposed-form[data-drupal-selector="views-exposed-form-publications-or-citations-all-results"]{
+    display:flex;
+    justify-content:end;
+    gap:10px;
+  }
+  .form-item-combine.form-item .form-group, .form-item-combine.form-item input{
+    height:100%;
+  }
+  .form-item-combine.form-item input{
+    font-size:17px;
+    padding:5px 10px;
+  }
+  .form-item-combine.form-item > label{
+    display:none;
+  }
+  .form-item-sort-bef-combine.form-item{
+    position: relative;
+  }
+   .form-item-sort-bef-combine.form-item > label{
+    position: absolute;
+    top: 5px;
+    left: 20px;
+    font-size: 12px;
+    color: inherit;
+    font-weight:bold;
+  }
+  .form-item-sort-bef-combine.form-item > select.form-control.input-lg{
+    padding-top:22px;
+    height:auto;
+  }
+
+  .database-page-files fieldset > legend, .database-page-figures fieldset > legend{
+    border-bottom:none!important;
+    display: none;
+  }
+  .publications .views-exposed-form{
+    margin-top:10px;
+  }
+
+  .database-page-figures fieldset[data-drupal-selector="edit-search-sort"] .fieldset-wrapper{
+    display:flex;
+    justify-content:end;
+  }
+
+  .vip-wrapper{
+    min-height:calc(100vh - 1px);
+    position:relative;
+    /* background-image: linear-gradient(rgba(0, 0, 0, 0.10),rgba(0, 0, 0, 0.10)), linear-gradient(rgba(0, 73, 151, 0.15),rgba(0, 73, 151, 0.15)), url('/sites/default/files/lattice-bg-blue.jpg'); */
+    background-size:cover;
+    background-repeat:no-repeat;
+    background-position:bottom;
+  }
+  .vip-wrapper.access{
+    background:white;
+  }
+
+  /* header{
+    padding-top:16px;
+    padding-bottom:16px;
+    padding-left:16px;
+    padding-right:16px;
+    display:flex;
+    justify-content:space-between;
+  }
+  header .title{
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    gap:5px;
+  }
+  header .title h1{
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+  header .title img{
+    display:inline-block;
+    max-height:30px;
+  }
+  header > a > img{
+    max-width:200px;
+    max-height:100px;
+    min-width:150px;
+  }
+  header #name-company{
+    text-align:center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  header #name-company .name{
+    text-transform:uppercase;
+    font-weight:bold;
+    font-size:18px;
+  }
+  header #name-company .company{
+    font-size:14px;
+  } */
+
+  #vip-loading-cover{
+    visibility:hidden;
+    opacity:0; 
+    width:100%;
+    height:100%;
+    position:absolute;
+    top:0;
+    z-index:4;
+    background:white;
+    transition:1s 2s linear;
+  }
+  #vip-loading-cover.active{
+    visibility:visible;
+    opacity:1; 
+    transition:1s 1s linear;
+  }
+  #vip-loading-cover .welcome-message{
+    visibility:hidden;
+    opacity:0;
+    font-size:48px;
+    margin-top:30vh;
+    text-align:center;
+    transition:0.5s 1s linear;
+  }
+  #vip-loading-cover.active .welcome-message{
+    visibility:visible;
+    opacity:1; 
+    margin-top:30vh;
+    transition:0.5s 2s linear;
+  }
+  .vip-crown{
+    max-width: 100px;
+    margin-bottom: 10px;
+  }
+
+  .promo-products-cards .views-field-field-product-image .field-content{
+    display:flex;
+  }
+  .promo-products-cards .views-field-field-product-image .field-content > img{
+    max-height:250px;
+    width:auto;
+    margin:auto;
+  }
+
+  @media only screen and (max-width:992px){
+    .catalogs, .presentations{
+      grid-template-columns:1fr;
+    }
+    .database-page-figures fieldset[data-drupal-selector="edit-search-sort"] .fieldset-wrapper{
+      display:block:
+    }
+    #vip-loading-cover .welcome-message{
+      font-size:24px;
+    }
+    #banner > .container > .grid{
+      grid-template-columns:1fr;
+    }
+  }
+
+
+/* Banner */
+
+  #banner{
+    height: 600px;
+    /* padding:40px 0px; */
+    /* background-image: url('/sites/default/files/resources-banner.png');
+    background-repeat: no-repeat;
+    background-size: auto 80%;
+    background-position: 80% center; */
+    position:relative;
+    overflow:hidden;
+  }
+  #banner .left-cover-wrapper{
+    position: absolute;
+    left: 0;
+    width: 60%;
+    height: 100%;
+    filter:drop-shadow(10px 0px 10px rgba(0,0,0,0.5));
+    z-index: 1;
+  }
+  #banner .left-cover{
+    clip-path: polygon(0% 0%, 100% -1%, 90% 100%, 0% 100%);
+    background-color: white;
+    width:100%;
+    height:calc(100% + 5px);
+    transform: translateY(-12px);
+    /* background: radial-gradient(#65BFFF, transparent 60%) -300px -400px no-repeat,radial-gradient(#65E8FF, transparent 60%) 480px 350px no-repeat, white;*/
+    /* background: radial-gradient(#65BFFF, transparent 70%) 207px 400px no-repeat, radial-gradient(#65E8FF, transparent 70%) -220px 150px no-repeat, white; */
+    /* background-size: 100%, 200%; */
+    /* background: radial-gradient(#65bfff6b, transparent 70%) 207px 400px no-repeat, radial-gradient(#65e8ff9e, transparent 70%) -220px 150px no-repeat, radial-gradient(#fffa658a, transparent 70%) -293px -300px no-repeat, radial-gradient(#b6ff9485, transparent 70%) -920px -150px no-repeat, white; */
+    /* background-size: 100%, 200%; */
+    background: radial-gradient(#65e8ff9e, transparent 70%) 207px 400px no-repeat, radial-gradient(#3ca9f76b, transparent 70%) -220px 150px no-repeat, radial-gradient(#ff658438, transparent 70%) -293px -300px no-repeat, radial-gradient(#a16dfc66, transparent 70%) -920px -150px no-repeat, white;
+    background-size: 100%, 200%;
+    padding: 0 10% 0 15px;
+  }
+  #banner
+  .vid-wrapper{
+    max-height:600px;
+    border-radius:20px;
+    width:fit-content;
+    margin:auto;
+    overflow:hidden;
+  }
+  #banner #great-journey-bg{
+    position: absolute;
+    margin: auto auto auto auto;
+    width: 60%;
+    height: 100%;
+    background-color: white;
+    border-radius: 20px;
+    top: 0;
+    bottom: 0;
+    right: -5%;
+    transform: translateX(5%);
+  }
+  #banner #great-journey-bg > video{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  #banner #great-journey-bg > button{
+    position:absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    margin:auto;
+    width: fit-content;
+    height: fit-content;
+    color: #333;
+    background-color: #ffffff80;
+    backdrop-filter: blur(10px);
+  }
+  #banner > .container{
+    height:100%;
+    position:relative;
+  }
+  #banner .text {
+    max-width: 900px;
+    z-index: 2;
+    position: relative;
+    top: 50%;
+    margin: auto auto;
+    transform: translateY(-50%);
+    padding-bottom: 40px;
+    border-radius: 20px;
+  }
+  #banner .text > h2{
+    color:var(--norgen-primary-blue);
+    font-weight:bold;
+    font-size:48px;
+  }
+  #banner .text > a{
+    color:var(--norgen-tertiary-rna-red);
+  }
+  #banner img{
+    position:absolute;
+    right:-10%;
+    top:0;
+    bottom:0;
+    margin:auto;
+    height:90%;
+  }
+@media only screen and (max-width:1200px){
+    #banner{
+      text-align:center;
+      /* height:auto; */
+    }
+    #banner img{
+      display:none;
+    }
+  }
+  @media only screen and (max-width:900px){
+    #banner #great-journey-bg{
+      position: static;
+      width: 100%;
+      transform:none;
+    }
+    #banner .left-cover-wrapper{
+      position:static;
+      width:100%;
+      filter:none;
+    }
+    #banner .left-cover{
+      clip-path:none;
+      transform:none;
+    }
+    #banner{
+      height:auto;
+    }
+    #banner .text{
+      transform:none;
+    }
+    #vid-fullscreen-toggle{
+      display:none;
+    }
+  }
+  @media only screen and (max-width:600px){
+    #banner .text > h2{
+      font-size:32px;
+    }
+     #banner .text {
+      position:static;
+      transform:none;
+      box-shadow:none;
+    }
+    #banner .text > a{
+      display:none;
+    }
+    #banner #great-journey-bg{
+      max-height:300px;
+      max-width: 100%;
+    }
+    #banner .container{
+      padding-left:0px;
+      padding-right:0px;
+    }
+    .vid-wrapper{
+      overflow:visible;
+    }
+  } 
+  /* End of Banner */
+
+  #molecular-prod-content img{
+    margin:auto;
+    max-width:600px;
+  }
+  #molecular-prod-content h2{
+    font-size: 24px;
+    /* margin: 20px 0px;
+    display: block; */
+  }
+  .figure-image img{
+    max-height: 400px;
+  }
+</style>
+
+{{ attach_library('database_page_figures/database_page_figures') }}
+
+
+<section id="banner" name="banner">
+  <div class="left-cover-wrapper">
+    <div class="left-cover">
+      <div class="text">
+        <h2>Total Solutions in Collection, Extraction, and Analytic Services</h2>
+        <p>Explore our complete suite of research tools - with downloadable flyers and product insights</p>
+        <a href="#resources-anchor">Browse Resources <i class="fa fa-arrow-down"></i></a>
+      </div>
+    </div>
+  </div>
+  <div id="great-journey-bg">
+    <video id="great-journey-video" preload autoplay muted loop>
+      <source src="https://norgenbiotek.com/sites/default/files/videos/Every_Great_Journey2025_sound.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <button id="vid-fullscreen-toggle" class="btn btn-grey">Watch Video <i style="margin-left:5px;margin-right:0px;" class="fa fa-play"></i></button>
+  </div>
+
+</section>
+
+<a id="resources-anchor" name="resources-anchor"></a>
+
+<section id="resources-selection" name="resources-selection" class="mt-40 mb-40">
+    <ul class="cat-select">
+      <li class="option selected"><button id="immune-select">Immuno Assays</button></li>
+      <li class="option"><button id="molecular-select">Molecular Assays</button></li>
+    </ul>
+</section>
+
+<section id="immune-content" name="immune-content" class="cat-section active mb-40">
+  <ul class="section-select mb-40">
+    <li class="option selected"><button id="immune-pub-select">Publications</button></li>
+    <li class="option"><button id="immune-prod-select">Product Information</button></li>
+    <li class="option"><button id="immune-data-select">Supporting Data</button></li>
+  </ul>
+
+  <div class="container publications active" id="immune-pub-content">
+    {# {{drupal_view('publications_or_citations_norgen_publications', 'all_results')}} #} {# View #}
+    <table class="cols-4 table table-bordered table-hover mt-40 mb-40">
+      <thead>
+        <tr>
+          <th id="view-field-nor-title-table-column" class="views-field views-field-field-nor-title" scope="col">Title</th>
+          <th id="view-field-nor-journal-table-column" class="views-field views-field-field-nor-journal" scope="col">Journal</th>
+          <th id="view-field-nor-alert-year-table-column" class="views-field views-field-field-nor-alert-year" scope="col">Year</th>
+          <th id="view-field-nor-authors-table-column" class="views-field views-field-field-nor-authors" scope="col">Authors</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td headers="view-field-nor-title-table-column" class="views-field views-field-field-nor-title"><a href="https://doi.org/10.1016/j.cej.2025.159806">Catapult-like DNA actuator for highly stable and ultrasensitive detection of urinary miRNA</a></td>
+          <td headers="view-field-nor-journal-table-column" class="views-field views-field-field-nor-journal">Chemical Engineering Journal</td>
+          <td headers="view-field-nor-alert-year-table-column" class="views-field views-field-field-nor-alert-year">2025</td>
+          <td headers="view-field-nor-authors-table-column" class="views-field views-field-field-nor-authors">Jae Chul Park a 1, Sungwook Park a 1, Seunghwan Bang a b, Hyunro Kim a c, Yongjin Lee a c, Min Gu Park e, Sung Goo Yoon e, Youngdo Jeong a d, Hojun Kim a b, Seok Ho Kang e, Kwan Hyi Lee</td>
+        </tr>
+        <tr>
+          <td headers="view-field-nor-title-table-column" class="views-field views-field-field-nor-title"><a href="https://doi.org/10.3390/diagnostics14070741">PD-L1 as a Urine Biomarker in Renal Cell Carcinoma—A Case Series and Proof-of-Concept Study</a></td>
+          <td headers="view-field-nor-journal-table-column" class="views-field views-field-field-nor-journal">Diagnostics</td>
+          <td headers="view-field-nor-alert-year-table-column" class="views-field views-field-field-nor-alert-year">2024</td>
+          <td headers="view-field-nor-authors-table-column" class="views-field views-field-field-nor-authors">Reimold P, Tosev G, Kaczorowski A, Friedhoff J, Schwab C, Schütz V, Görtz M, Panzer N, Heller M, Aksoy C, Himmelsbach R, Walle T, Zschäbitz S, Jäger D, Duensing A, Stenzinger A, Hohenfellner M, Duensing S.</td>
+        </tr>
+        <tr>
+          <td headers="view-field-nor-title-table-column" class="views-field views-field-field-nor-title"><a href="https://doi.org/10.1016/j.urology.2024.03.043">Risk Classification for Interstitial Cystitis/Bladder Pain Syndrome (IC/BPS) Using Machine Learning Based Predictions</a></td>
+          <td headers="view-field-nor-journal-table-column" class="views-field views-field-field-nor-journal">Urology</td>
+          <td headers="view-field-nor-alert-year-table-column" class="views-field views-field-field-nor-alert-year">2024</td>
+          <td headers="view-field-nor-authors-table-column" class="views-field views-field-field-nor-authors">Laura E. Lamb a b, Joseph J. Janicki c, Sarah N. Bartolone d, Elijah P. Ward d, Nitya Abraham e, Melissa Laudano e, Christopher P. Smith f, Kenneth M. Peters a d c, Bernadette M.M. Zwaans a d, Michael B. Chancellor</td>
+        </tr>
+        <tr>
+          <td headers="view-field-nor-title-table-column" class="views-field views-field-field-nor-title"><a href="https://doi.org/10.3390/cancers15102868">Accurate Detection of Urothelial Bladder Cancer Using Targeted Deep Sequencing of Urine DNA</a></td>
+          <td headers="view-field-nor-journal-table-column" class="views-field views-field-field-nor-journal">Cancers</td>
+          <td headers="view-field-nor-alert-year-table-column" class="views-field views-field-field-nor-alert-year">2023</td>
+          <td headers="view-field-nor-authors-table-column" class="views-field views-field-field-nor-authors">Dongin Lee, Wookjae Lee, Hwang-Phil Kim, Myong Kim, Hyun Kyu Ahn, Duhee Bang and Kwang Hyun Kim</td>
+        </tr>
+        <tr>
+          <td headers="view-field-nor-title-table-column" class="views-field views-field-field-nor-title"><a href="https://doi.org/10.1016/j.euo.2022.03.005">Highly Sensitive and Specific Detection of Bladder Cancer via Targeted Ultra-deep Sequencing of Urinary DNA</a></td>
+          <td headers="view-field-nor-journal-table-column" class="views-field views-field-field-nor-journal">European Urology Oncology</td>
+          <td headers="view-field-nor-alert-year-table-column" class="views-field views-field-field-nor-alert-year">2023</td>
+          <td headers="view-field-nor-authors-table-column" class="views-field views-field-field-nor-authors">Douglas G. Ward, Laura Baxter, Sascha Ott, Naheema S. Gordon, Junhui Wang, Prashant Patel, Kim Piechocki, Lee Silcock, Chris Sale, Maurice P. Zeegers, K.K. Cheng, Nicholas D. James, Richard T. Bryan, BladderPath Trial Management Group</td>
+        </tr>
+        <tr>
+          <td headers="view-field-nor-title-table-column" class="views-field views-field-field-nor-title"><a href="https://doi.org/10.1097/JU9.0000000000000009">Postradiotherapy Urinary Extracellular Vesicle Concentrations Predict Late Bladder Toxicity in Patients with Prostate Cancer</a></td>
+          <td headers="view-field-nor-journal-table-column" class="views-field views-field-field-nor-journal">JU Open Plus</td>
+          <td headers="view-field-nor-alert-year-table-column" class="views-field views-field-field-nor-alert-year">2023</td>
+          <td headers="view-field-nor-authors-table-column" class="views-field views-field-field-nor-authors">Molony, Ryan; Kerns, Sarah L; Marples, Brian; Oshodi, Emmanuel; Chen, YuhChyau; Lee, Yi-Fen</td>
+        </tr>
+        <tr>
+          <td headers="view-field-nor-title-table-column" class="views-field views-field-field-nor-title"><a href="https://doi.org/10.1186/s12885-016-2877-x">A prospective multicenter study on bladder cancer: the COBLAnCE cohort</a></td>
+          <td headers="view-field-nor-journal-table-column" class="views-field views-field-field-nor-journal">BMC Cancer</td>
+          <td headers="view-field-nor-alert-year-table-column" class="views-field views-field-field-nor-alert-year">2016</td>
+          <td headers="view-field-nor-authors-table-column" class="views-field views-field-field-nor-authors">Benhamou, S., Bonastre, J., Groussard, K., Radvanyi, F., Allory, Y., &amp; Lebret, T</td>
+        </tr>
+        <tr>
+          <td headers="view-field-nor-title-table-column" class="views-field views-field-field-nor-title"><a href="https://doi.org/10.1002/pros.23059">Effects of hexanic extract of serenoa repens (permixon® 160 mg) on inflammation biomarkers in the treatment of lower urinary tract symptoms related to benign prostatic hyperplasia</a></td>
+          <td headers="view-field-nor-journal-table-column" class="views-field views-field-field-nor-journal">The Prostate</td>
+          <td headers="view-field-nor-alert-year-table-column" class="views-field views-field-field-nor-alert-year">2015</td>
+          <td headers="view-field-nor-authors-table-column" class="views-field views-field-field-nor-authors">A Latil, M Pétrissans, J Rouquet, G Robert, A de la Taille</td>
+        </tr>
+        <tr>
+          <td headers="view-field-nor-title-table-column" class="views-field views-field-field-nor-title"><a href="https://doi.org/10.1016/j.jmoldx.2014.06.009">Long Noncoding RNAs as Putative Biomarkers for Prostate Cancer Detection</a></td>
+          <td headers="view-field-nor-journal-table-column" class="views-field views-field-field-nor-journal">The Journal of Molecular Diagnostics</td>
+          <td headers="view-field-nor-alert-year-table-column" class="views-field views-field-field-nor-alert-year">2014</td>
+          <td headers="view-field-nor-authors-table-column" class="views-field views-field-field-nor-authors">B Lee, J Mazar, MN Aftab, F Qi, J Shelley, JL Li, S Govindarajan, F Valerio, I Rivera, T Thum, TA Tran, D Kameh, V Patel, RJ Perera</td>
+        </tr>
+        <tr>
+          <td headers="view-field-nor-title-table-column" class="views-field views-field-field-nor-title"><a href="https://doi.org/10.1007/s00345-013-1191-3">Detection of specifi chrmosomal aberrations in urine using BCA-1 (oligo-CGH-array) enhances diagnostic sensitivity and predicts the aggressiveness of non-muscle-invasive bladder transitional cell carcinoma</a></td>
+          <td headers="view-field-nor-journal-table-column" class="views-field views-field-field-nor-journal">World Journal of Urology</td>
+          <td headers="view-field-nor-alert-year-table-column" class="views-field views-field-field-nor-alert-year">2013</td>
+          <td headers="view-field-nor-authors-table-column" class="views-field views-field-field-nor-authors">O Cussenot, K Sighar, M Mohammed, S Hugonin, V Ondet, S Larre, R Lacave, M Roupret, G Cancel-Tassin</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="container product hidden" id="immune-prod-content">
+    <div class="mt-40 mb-40">
+      {{drupal_view('promotion_products', 'cards', '18118,18122,18113,18126,18129')}}
+    </div>
+
+    <div class="field-name-norproduct-keypoints">
+      <ul style="list-style-type:none;">
+        <li>cfRNA/microRNA/cfDNA/Proteins are preserved for more than 2 years at room temperature in Norgen's Urine Preservative</li>
+        <li>Compatible with most DNA, Total RNA, microRNA and protein isolation methods</li>
+        <li>Preservative is available in a single dose liquid format (ampule)</li>
+        <li>Preservative is also available in a dried format in tubes - Urine Collection and Preservation Tubes</li>
+        <li>Urine Collection and Preservation Devices are available in 4 convenient sizes: 5 cc tubes, 15 cc tubes, 50 cc tubes, and 120 cc cups</li>
+      </ul>
+    </div>
+    <p style="text-align: justify">Norgen's Urine Preservative is designed for the rapid preservation of DNA, RNA, microRNA and proteins from fresh urine samples. In addition, the Urine Preservative eliminates the need to immediately process or freeze samples and allows the samples to be shipped to centralized testing facilities at ambient temperatures. The components of the Urine Preservative allow samples to be stored for over 2 years at room temperature with no detected degradation of urine DNA, RNA or proteins.</p>
+    <p style="text-align: justify">Norgen's Urine Preservative is available in 2 convenient formats:</p>
+    <p style="text-align: justify"><strong>1. Urine Preservative Single Dose Ampules</strong><br>
+      With this product Norgen's Urine Preservative is supplied in a liquid format in single dose ampules. The user simply collects 5 - 50 mL of urine into a urine collection container and adds the contents of the Urine Preservative Single Dose (Cat# 18126). The urine and preservative are then mixed, and the urine nucleic acids and proteins are preserved at room temperature.<br>
+      <br>
+      <strong>2.&nbsp; Urine Collection and Preservation Tubes</strong><br>
+      Norgen's Urine Preservative is also available in a dried format in Norgen's Urine Collection and Preservation Tubes. The user simply collects urine into the tubes and mixes gently until the orange preservative pellet in the tube has dissolved. Norgen's Urine Collection and Preservation Tubes are available in 3 convenient sizes:
+    </p>
+    <ul>
+      <li>5 cc tubes, 1 - 5 mL of urine</li>
+      <li>15 cc tubes, 5 - 15 mL of urine</li>
+      <li>50 cc tubes, 5 - 45 mL of urine</li>
+      <li>120 cc cup, 100 - 120 mL of urine</li>
+    </ul>
+  </div>
+
+  <div class="container data hidden" id="immune-data-content">
+    <div class="results-container">
+      <div class="views-row row-0">
+        <div class="">
+          <div class="figure-image">
+            <a target="_blank" href="https://norgenbiotek.com/sites/default/files/images/product_figures/Figure%201%20-%20Part%201%20SVG-01.svg">
+              <img src="https://norgenbiotek.com/sites/default/files/images/product_figures/Figure%201%20-%20Part%201%20SVG-01.svg" title="Figure 1. Stability of DNA in Norgen's Urine Preservative" alt="Figure 1. Stability of DNA in Norgen's Urine Preservative" filemime="image/svg">
+              <div>View Fullsize Image</div>
+            </a>
+          </div>
+          <div class="info">
+            <h2>
+            <p><strong>Figure 1. Stability of DNA in Norgen's Urine Preservative.</strong> Urine samples were collected from numerous healthy donors and pooled, and then the urine was aliquoted into 5 mL aliquots in Norgen's Urine Collection and Preservation Tubes (5 cc) (Cat# 18116). The preserved urine was stored at -20°C, 4°C and room temperature for up to 48 months. Urine DNA was subsequently isolated at time 0, 1 month, 2 months, 4 months, 8 months, 12 months, 16 months, 20 months and 24 months from the preserved urine using Norgen's Urine DNA Isolation Kit (Slurry Format) (Cat# 48800). To test the integrity of the purified DNA, 3 μL of each elution was used in a 20 μL Taqman PCR reaction run on a CFX96 Touch Real-Time PCR Detection System (Bio-Rad) using Norgens 2X PCR Master Mix with 5s rRNA primers. As it can be seen, all the DNA samples were successfully amplified. Furthermore, the quality of the concentrated and preserved urine DNA stored at all 3 temperatures did not significantly change from 0 months to 24 months, as indicated by the fact that the Ct value remained consistent.</p>
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="views-row row-1">
+        <div class="">
+          <div class="figure-image">
+            <a target="_blank" href="https://norgenbiotek.com/sites/default/files/images/product_figures/Figure%201%20-%20Part%202%20SVG.svg">
+              <img src="https://norgenbiotek.com/sites/default/files/images/product_figures/Figure%201%20-%20Part%202%20SVG.svg" title="Figure 2. Stability of RNA in Norgen's Urine Preservative" alt="Figure 2. Stability of RNA in Norgen's Urine Preservative" filemime="image/svg">
+              <div>View Fullsize Image</div>
+            </a>
+          </div>
+          <div class="info">
+            <h2>
+            <p><strong>Figure 2. Stability of RNA in Norgen's Urine Preservative.</strong> Urine samples were collected from numerous healthy donors and pooled, and then the urine was aliquoted into 5 mL aliquots in Norgen's Urine Collection and Preservation Tubes (5 cc) (Cat. 18116). The preserved urine was stored at -20°C, 4°C, and room temperature for up to 24 months. Urine RNA was then subsequently isolated at time 0, 1 month, 2 months, 4 months, 8 months, 12 months, 16 months, and 24 months from the preserved urine using Norgen's Urine Total RNA Purification Maxi Kit (Slurry Format) (Cat. 29600).</p>
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="molecular-content" name="molecular-content" class="cat-section hidden mb-40">
+  <ul class="section-select mb-40">
+    <li class="option selected"><button id="molecular-pub-select">Publications</button></li>
+    <li class="option"><button id="molecular-prod-select">Product Information</button></li>
+    <li class="option"><button id="molecular-data-select">Supporting Data</button></li>
+  </ul>
+
+  <div class="container publications active" id="molecular-pub-content">
+     {# {{drupal_view('publications_or_citations_norgen_publications', 'all_results')}} #} {# View #}
+    <table class="cols-4 table table-bordered table-hover mt-40 mb-40">
+      <thead>
+        <tr>
+          <th id="view-field-nor-title-table-column" class="views-field views-field-field-nor-title" scope="col">Title</th>
+          <th id="view-field-nor-journal-table-column" class="views-field views-field-field-nor-journal" scope="col">Journal</th>
+          <th id="view-field-nor-alert-year-table-column" class="views-field views-field-field-nor-alert-year" scope="col">Year</th>
+          <th id="view-field-nor-authors-table-column" class="views-field views-field-field-nor-authors" scope="col">Authors</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td headers="view-field-nor-title-table-column" class="views-field views-field-field-nor-title"><a href="https://doi.org/10.1186/s40168-017-0305-3">The urinary microbiota of men and women and its changes in women during bacterial vaginosis and antibiotic treatment</a></td>
+          <td headers="view-field-nor-journal-table-column" class="views-field views-field-field-nor-journal">Microbiome</td>
+          <td headers="view-field-nor-alert-year-table-column" class="views-field views-field-field-nor-alert-year">2017</td>
+          <td headers="view-field-nor-authors-table-column" class="views-field views-field-field-nor-authors">Gottschick C, Deng ZL, Vital M, Masur C, Abels C, Pieper DH, Wagner-Döbler I.</td>
+        </tr>
+        <tr>
+          <td headers="view-field-nor-title-table-column" class="views-field views-field-field-nor-title"><a href="https://doi.org/10.1101/2025.05.21.25327630">Unlocking uterine biology at home: a validated system for DNA, RNA, and microbial analysis from menstrual effluence</a></td>
+          <td headers="view-field-nor-journal-table-column" class="views-field views-field-field-nor-journal">medRxiv</td>
+          <td headers="view-field-nor-alert-year-table-column" class="views-field views-field-field-nor-alert-year">2025</td>
+          <td headers="view-field-nor-authors-table-column" class="views-field views-field-field-nor-authors">Gire S, Li X, Toth C, Doshi M, Gupta SK, Parker S, Boles D, Tariyal R.</td>
+        </tr>
+        <tr>
+          <td headers="view-field-nor-title-table-column" class="views-field views-field-field-nor-title"><a href="https://www.questjournals.org/jmdsr/papers/vol8-issue12/D08121624.pdf">Metagenomic Analysis of Vaginal Microbiome of Post Menopausal Women Living In South Easthern, Nigeria</a></td>
+          <td headers="view-field-nor-journal-table-column" class="views-field views-field-field-nor-journal">Journal of Medical and Dental Science Research</td>
+          <td headers="view-field-nor-alert-year-table-column" class="views-field views-field-field-nor-alert-year">2021</td>
+          <td headers="view-field-nor-authors-table-column" class="views-field views-field-field-nor-authors">Onyeulor P.N.*, Emele F. E., Nwaokorie F.O. and Asogwa D.C</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="container product hidden" id="molecular-prod-content">
+    <div style="display:flex;flex-direction:column;gap:10px;justify-content:center;">
+      <img src="/sites/default/files/images/Urine_Collection_Mailer_Box_Mockup_1.jpg">
+      <h2>Urine Nucleic Acid Collection and Preservation System</h2>
+      <p>Norgen's Urine Preservative will be a Vacutainer-based urine preservative, designed for the efficient and rapid preservation of DNA, RNA, and microRNA from fresh urine samples. This format will eliminate the immediate need for processing or freezing samples, facilitating ambient temperature shipping to centralized testing facilities. The formulation will ensure sample stability for over two years at room temperature, preventing detectable degradation of urine DNA and RNA. The kit will have a urine collection cup with pre-installed cap to fill vacutainer.</p>
+      {# <a style="text-align:center;" href="https://norgenbiotek.com/sites/default/files/resources/Urine%20Collection%20Vaccutainer%20instructions_Proof%202.pdf">Urine Collection Vaccutainer Collection Protocol</a> #}
+      {# <iframe style="margin:auto;" width="auto" height="940px" src="https://norgenbiotek.com/sites/default/files/resources/Urine%20Collection%20Vaccutainer%20instructions_Proof%202.pdf#view=FitH"></iframe> #}
+      <a href="https://norgenbiotek.com/sites/default/files/resources/Urine%20Collection%20Vaccutainer%20instructions_Proof%202.pdf" style="margin:auto"><img src="/sites/default/files/images/urine-nucleic-acid-collection-and-preservation-system-collection-protocol.png"></a>
+    </div>
+  </div>
+
+
+  <div class="container data hidden" id="molecular-data-content">
+    <div class="results-container">
+      <div class="views-row row-0">
+        <div class="">
+          <div class="figure-image">
+            <a target="_blank" href="https://norgenbiotek.com/sites/default/files/images/product_figures/urine-data-room-figures/figure-1.png">
+              <img src="https://norgenbiotek.com/sites/default/files/images/product_figures/urine-data-room-figures/figure-1.png" title="Figure 1. Nucleic acid stability in urine samples spiked with HeLa cells, E. coli and Human adenovirus 5 preserved in Urine Nucleic Acid Preservative at 55°C." alt="Figure 1. Nucleic acid stability in urine samples spiked with HeLa cells, E. coli and Human adenovirus 5 preserved in Urine Nucleic Acid Preservative at 55°C." filemime="image/png">
+              <div>View Fullsize Image</div>
+            </a>
+          </div>
+          <div class="info">
+            <h2>
+            <p><strong>Figure 1. Nucleic acid stability in urine samples spiked with HeLa cells, E. coli and Human adenovirus 5 preserved in Urine Nucleic Acid Preservative at 55°C.</strong> Urine spiked with Human adenovirus 5 (Ad5; 10<sup>4</sup> particles/mL), E. coli (10<sup>5</sup> CFU/mL), and HeLa cells (10<sup>3</sup> cells/mL) was collected in vacutainers containing Urine Nucleic Acid Preservative. Samples were stored at 55°C and nucleic acid was extracted at multiple time points (Day 0 to 92 days) using Norgen's DNA/RNA purification kits. TaqMan qPCR was used to detect HPV18 DNA, Ad5 DNA, 16S, and RNase P. DNA and RNA was found to be stable for 92 days at 55°C which is estimated to be equivalent to 2 years of stability at room temperature.</p>
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="views-row row-1">
+        <div class="">
+          <div class="figure-image">
+            <a target="_blank" href="https://norgenbiotek.com/sites/default/files/images/product_figures/urine-data-room-figures/figure-2.png">
+              <img src="https://norgenbiotek.com/sites/default/files/images/product_figures/urine-data-room-figures/figure-2.png" title="Figure 2. HPV18 DNA stability in  urine samples spiked with HeLa cells and preserved in Urine Nucleic Acid Preservative at room temperature, 37°C, and 55°C" alt="Figure 2. HPV18 DNA stability in  urine samples spiked with HeLa cells and preserved in Urine Nucleic Acid Preservative at room temperature, 37°C, and 55°C" filemime="image/png">
+              <div>View Fullsize Image</div>
+            </a>
+          </div>
+          <div class="info">
+            <h2>
+            <p><strong>Figure 2. HPV18 DNA stability in  urine samples spiked with HeLa cells and preserved in Urine Nucleic Acid Preservative at room temperature, 37°C, and 55°C.</strong> Urine spiked with HeLa cells (103 cells/mL) was collected in vacutainers containing Urine Nucleic Acid Preservative. Samples were stored at room temperature and 37°C and DNA was extracted at multiple time points (Day 0 to 180 days) using Norgen's DNA purification kits. qPCR was used to detect HPV18 DNA. HPV18 DNA was found to be stable for 180 days (6 months) at room temperature and 37°C. HPV18 DNA was found to be stable for 92 days at 55°C which is equivalent to 2 years of stability at room temperature.</p>
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="views-row row-2">
+        <div class="">
+          <div class="figure-image">
+            <a target="_blank" href="https://norgenbiotek.com/sites/default/files/images/product_figures/urine-data-room-figures/figure-3.png">
+              <img src="https://norgenbiotek.com/sites/default/files/images/product_figures/urine-data-room-figures/figure-3.png" title="Figure 3. RNA stability in urine samples spiked with HeLa, cells and preserved with Urine Nucleic Acid Preservative at room temperature, 37°C, or 55°C" alt="Figure 3. RNA stability in urine samples spiked with HeLa, cells and preserved with Urine Nucleic Acid Preservative at room temperature, 37°C, or 55°C" filemime="image/png">
+              <div>View Fullsize Image</div>
+            </a>
+          </div>
+          <div class="info">
+            <h2>
+            <p><strong>Figure 3. RNA stability in urine samples spiked with HeLa, cells and preserved with Urine Nucleic Acid Preservative at room temperature, 37°C, or 55°C.</strong> Urine samples spiked with HeLa cells (103 cells/mL) were collected in vacutainers pre-filled with Urine Nucleic Acid Preservative. Samples were stored at either room temperature, 37°C, or 55°C. RNA was extracted at multiple time points (Day 0 to Day 180) using Norgen's RNA purification kit and RNAse P was quantified by TaqMan qPCR. RNA remained stable for up to 180 days (6 months) at both room temperature and 37°C, and for 92 days at 55°C, which corresponds to an estimated 2 years of stability under room temperature conditions.</p>
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="views-row row-3">
+        <div class="">
+          <div class="figure-image">
+            <a target="_blank" href="https://norgenbiotek.com/sites/default/files/images/product_figures/urine-data-room-figures/figure-4.png">
+              <img src="https://norgenbiotek.com/sites/default/files/images/product_figures/urine-data-room-figures/figure-4.png" title="Figure 4. DNA stability in urine samples spiked with E. coli and preserved with Urine Nucleic Acid Preservative at room temperature, 37°C, or 55°C" alt="Figure 4. DNA stability in urine samples spiked with E. coli and preserved with Urine Nucleic Acid Preservative at room temperature, 37°C, or 55°C" filemime="image/png">
+              <div>View Fullsize Image</div>
+            </a>
+          </div>
+          <div class="info">
+            <h2>
+            <p><strong>Figure 4. DNA stability in urine samples spiked with E. coli and preserved with Urine Nucleic Acid Preservative at room temperature, 37°C, or 55°C.</strong> Urine samples spiked with E. coli (105 CFU/mL) were collected in vacutainers pre-filled with Urine Nucleic Acid Preservative. Samples were stored at either room temperature, 37°C, or 55°C. DNA was extracted at multiple time points (Day 0 to Day 180) using Norgen's DNA isolation kit and 16S was quantified by TaqMan qPCR. DNA remained stable for up to 180 days (6 months) at both room temperature and 37°C, and for 92 days at 55°C, which corresponds to an estimated 2 years of stability under room temperature conditions.</p>
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="views-row row-4">
+        <div class="">
+          <div class="figure-image">
+            <a target="_blank" href="https://norgenbiotek.com/sites/default/files/images/product_figures/urine-data-room-figures/figure-5.png">
+              <img src="https://norgenbiotek.com/sites/default/files/images/product_figures/urine-data-room-figures/figure-5.png" title="Figure 5. DNA stability in urine samples spiked with Human adenovirus 5 and preserved with Urine Nucleic Acid Preservative at room temperature, 37°C, or 55°C" alt="Figure 5. DNA stability in urine samples spiked with Human adenovirus 5 and preserved with Urine Nucleic Acid Preservative at room temperature, 37°C, or 55°C" filemime="image/png">
+              <div>View Fullsize Image</div>
+            </a>
+          </div>
+          <div class="info">
+            <h2>
+            <p><strong>Figure 5. DNA stability in urine samples spiked with Human adenovirus 5 and preserved with Urine Nucleic Acid Preservative at room temperature, 37°C, or 55°C.</strong> Urine samples spiked with Human adenovirus 5 (Ad5; 104 particles/mL) were collected in vacutainers pre-filled with Urine Nucleic Acid Preservative. Samples were stored at either room temperature, 37°C, or 55°C. Ad5 DNA was extracted at multiple time points (Day 0 to Day 180) using Norgen's DNA isolation kit and quantified by TaqMan qPCR. Ad5 DNA remained stable for up to 180 days (6 months) at both room temperature and 37°C, and for 92 days at 55°C, which corresponds to an estimated 2 years of stability under room temperature conditions.</p>
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="views-row row-5">
+        <div class="">
+          <div class="figure-image">
+            <a target="_blank" href="https://norgenbiotek.com/sites/default/files/images/product_figures/urine-data-room-figures/figure-6-v3.png">
+              <img src="https://norgenbiotek.com/sites/default/files/images/product_figures/urine-data-room-figures/figure-6-v3.png" title="Figure 6. HPV18 Detection in Preserved Urine Following Magnetic Bead-Based and Slurry-Based DNA Extraction" alt="Figure 6. HPV18 Detection in Preserved Urine Following Magnetic Bead-Based and Slurry-Based DNA Extraction" filemime="image/png">
+              <div>View Fullsize Image</div>
+            </a>
+          </div>
+          <div class="info">
+            <h2>
+            <p><strong>Figure 6. HPV18 Detection in Preserved Urine Following Magnetic Bead-Based and Slurry-Based DNA Extraction.</strong> Two milliliters of urine samples were spiked at concentrations ranging from 50,000 copies/mL to 5 copies/mL resulting in 10,000 copies/PCR to 1 copy/PCR. Spiked urine samples were preserved with Urine Nucleic Acid Preservative and extracted using Norgen's magnetic bead-based nucleic acid extraction and slurry-based DNA extraction kit. TaqMan qPCR targeting HPV18 was performed using 5 µL of extracted nucleic acid per reaction. All kits successfully detected HPV18 down to 10 copies per PCR reaction (equivalent to 50 copies/mL urine). A gradual increase in Ct value was observed with decreasing viral load.</p>
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact-section" name="contact-section">
+  <div class="container">
+    <div class="cta-content">
+      <h2 class="">How can we help you today?</h2>
+      <p class="cta-text">Consult with Our Team of Experts.</p>
+      <a class="btn btn-primary" href="/contact">Contact Now</a>
+    </div>
+  </div>
+</section>
+
+<script>
+  console.log('hello?');
+  /* Product Selection */
+  function changeProductSection(e){
+    button = e.currentTarget;
+    selected_buttons = document.querySelector('.cat-select .option.selected');
+    active_container = document.querySelector('.cat-section.active');
+
+    selected_buttons.classList.remove('selected');
+    active_container.classList.remove('active');
+    active_container.classList.add('hidden');
+
+    switch(button.id){
+      case "immune-select":
+        button.parentElement.classList.add('selected');
+        section = document.getElementById('immune-content');
+        section.classList.remove('hidden');
+        section.classList.add('active')
+        break;
+      case "molecular-select":
+        button.parentElement.classList.add('selected');
+        section = document.getElementById('molecular-content');
+        section.classList.remove('hidden');
+        section.classList.add('active')
+        break;
+    }
+  }
+
+  product_buttons = document.querySelectorAll('.cat-select .option > button');
+
+  product_buttons.forEach(element => {
+    element.addEventListener('click',function(event){
+      changeProductSection(event)
+    });
+    element.addEventListener('keydown',function(event){
+      if (event.key === 'Enter') {
+        changeProductSection(event);
+      }
+    });
+  });
+
+  /* Selection */
+  function changeSection(e){
+    button = e.currentTarget;
+    if(button.id.includes('immune')){
+      selected_buttons = document.querySelector('#immune-content .section-select .option.selected');
+      active_container = document.querySelector('#immune-content .container.active');
+    }
+    else{ /* Molecular */
+      selected_buttons = document.querySelector('#molecular-content .section-select .option.selected');
+      active_container = document.querySelector('#molecular-content .container.active');
+    } 
+
+    selected_buttons.classList.remove('selected');
+    active_container.classList.remove('active');
+    active_container.classList.add('hidden');
+
+    switch(button.id){
+      /* Immune */
+      case "immune-prod-select":
+        button.parentElement.classList.add('selected');
+        section = document.getElementById('immune-prod-content');
+        section.classList.remove('hidden');
+        section.classList.add('active');
+        break;
+      case "immune-pub-select":
+        button.parentElement.classList.add('selected');
+        section = document.getElementById('immune-pub-content');
+        section.classList.remove('hidden');
+        section.classList.add('active');
+        break;
+      case "immune-data-select":
+        button.parentElement.classList.add('selected');
+        section = document.getElementById('immune-data-content');
+        section.classList.remove('hidden');
+        section.classList.add('active');
+        break;
+      /* Molecular */
+      case "molecular-prod-select":
+        button.parentElement.classList.add('selected');
+        section = document.getElementById('molecular-prod-content');
+        section.classList.remove('hidden');
+        section.classList.add('active');
+        break;
+      case "molecular-pub-select":
+        button.parentElement.classList.add('selected');
+        section = document.getElementById('molecular-pub-content');
+        section.classList.remove('hidden');
+        section.classList.add('active');
+        break;
+      case "molecular-data-select":
+        button.parentElement.classList.add('selected');
+        section = document.getElementById('molecular-data-content');
+        section.classList.remove('hidden');
+        section.classList.add('active');
+        break;
+    }
+  }
+
+  option_buttons = document.querySelectorAll('.section-select .option > button');
+
+  option_buttons.forEach(element => {
+    element.addEventListener('click',function(event){
+      changeSection(event)
+    });
+    element.addEventListener('keydown',function(event){
+      if (event.key === 'Enter') {
+        changeSection(event);
+      }
+    });
+  });
+
+
+  video_btn = document.getElementById('vid-fullscreen-toggle');
+  video_player = document.getElementById('great-journey-video');
+  video_btn.addEventListener('click', function(e){
+    video_player.requestFullscreen();
+    video_player.setAttribute('controls', true);
+    video_player.muted = false;
+  });
+  video_player.addEventListener('fullscreenchange', function(e){
+    if(document.fullscreenElement === null){
+      // exited fullscreen
+      video_player.removeAttribute('controls');
+      video_player.muted = true;
+    }
+    else{
+      // entered fullscreen
+    }
+  });
+
+  </script>

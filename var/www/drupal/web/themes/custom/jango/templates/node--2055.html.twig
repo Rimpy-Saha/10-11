@@ -1,0 +1,35 @@
+
+<article{{ attributes }}>
+
+  {{ title_prefix }}
+  {% if label and not page %}
+    <h2{{ title_attributes }}>
+      <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+    </h2>
+  {% endif %}
+  {{ title_suffix }}
+
+  {% if display_submitted %}
+    <footer>
+      {{ author_picture }}
+      <div{{ author_attributes }}>
+        {% trans %}Submitted by {{ author_name }} on {{ date }}{% endtrans %}
+        {{ metadata }}
+      </div>
+    </footer>
+  {% endif %}
+  {{ custom_breadcrumb|raw }}
+  <div{{ content_attributes }}>
+    <p>Random Number: {{ random_number }}</p>
+    {{ content }}
+  </div>
+
+</article>
+
+<section class="container">
+  {% set promo_skus_saliva = '27650,55700,27600,45670-B,49500,63100,45660,45600,65600,63700' %}
+  {% set promo_skus_saliva = 'RU35720,RU55400,RU45400,46200,69100,69200,45690-B,RU53800,RU35200,RU49000,65400,65300,RU62900,69300' %}
+
+  {{ drupal_view('promotion_products', 'table', promo_skus_saliva)}}
+  {{ drupal_view('promotion_products', 'cards', promo_skus_saliva)}}
+</section>

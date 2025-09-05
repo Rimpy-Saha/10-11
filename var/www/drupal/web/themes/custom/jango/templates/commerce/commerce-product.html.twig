@@ -1,0 +1,2973 @@
+{#
+  /**
+  * @file
+  *
+  * Default product template.
+  *
+  * Available variables:
+  * - attributes: HTML attributes for the wrapper.
+  * - product: The rendered product fields.
+  * Use 'product' to print them all, or print a subset such as
+  * 'product.title'. Use the following code to exclude the
+  * printing of a given field:
+  * @code
+  * {{ product|without('title') }}
+  * @endcode
+  * - product_entity: The product entity.
+  * - product_url: The product URL.
+  *
+  * @ingroup themeable
+  */
+  #}
+  <style>
+    .product-table,
+    .format-table {
+      margin-bottom: 0px;
+      padding-bottom: 1em;
+      width: 100%;
+      max-width: calc(100% - 15px);
+      overflow: auto;
+      display: -ms-grid;
+      -ms-grid-columns: 1fr (10px 1fr)[2];
+      -ms-grid-rows: max-content (10px max-content)[5];
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: 10px;
+      margin-bottom: 1em;
+    }
+  
+    .commerce-order-item-add-to-cart-form .attribute-widgets div.product-row,
+    .commerce-order-item-add-to-cart-form .attribute-widgets div.format-row {
+      background: none;
+      font-size: 18px;
+      border: 2px solid #ddd;
+      border-radius: 12px;
+      padding: 20px;
+      overflow-x: auto;
+      text-align: center;
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+    }
+  
+    .commerce-order-item-add-to-cart-form .attribute-widgets div.format-row:not(.active):hover,
+    .commerce-order-item-add-to-cart-form .attribute-widgets div.product-row:not(.active):hover {
+      cursor: pointer;
+    }
+  
+    .commerce-order-item-add-to-cart-form .attribute-widgets div.format-row:hover,
+    .commerce-order-item-add-to-cart-form .attribute-widgets div.product-row:hover {
+      background-color: #E5ECF4;
+    }
+  
+    .commerce-order-item-add-to-cart-form .attribute-widgets div.format-row hr,
+    .commerce-order-item-add-to-cart-form .attribute-widgets div.product-row hr {
+      border-top: 2px solid #ddd;
+    }
+  
+    .commerce-order-item-add-to-cart-form .attribute-widgets div {
+      display: inline-block;
+      height: 100%;
+    }
+  
+    .commerce-order-item-add-to-cart-form .attribute-widgets div,
+    .commerce-order-item-add-to-cart-form .product--rendered-attribute label.option {
+      width: 100%;
+      height: 100%;
+      margin:0px;
+    }
+  
+    .commerce-order-item-add-to-cart-form .attribute-widgets div.form-group.has-feedback {
+      margin-bottom: 0px;
+      display: none;
+    }
+  
+    .product--rendered-attribute.fieldgroup>.fieldset-wrapper>div {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: 1em;
+      overflow:auto;
+    }
+  
+    .form-group.has-feedback:has(input:checked)+label .product-row,
+    .form-group.has-feedback:has(input:checked)+label .format-row,
+    .form-group.has-feedback:has(input.product--rendered-attribute__selected)+label .product-row,
+    .form-group.has-feedback:has(input.product--rendered-attribute__selected)+label .format-row {
+      background-color: var(--norgen-primary-blue-light);
+      border: 2px solid var(--norgen-primary-blue);
+    }
+  
+    .ajax-progress.ajax-progress-throbber {
+      display: none !important;
+    }
+  
+    /* .button--add-to-cart,
+    .button--primary {
+      background-color: var(--norgen-primary-blue);
+    }
+   */
+    .button--secondary-teal {
+      background-color: var(--norgen-secondary-teal);
+    }
+  
+    fieldset.product--rendered-attribute>legend {
+      display: block;
+    }
+  
+  
+    /* Testimonials field */
+    .quote-box {
+      position: relative;
+      max-width:calc(100% - 40px);
+      margin-left:15px;
+      margin-top: max(30px, 5%);
+      border-radius: 24px;
+      padding: 20px 27px 40px;
+      font-size: 14px;
+      height: max-content;
+      transition-duration: 0.5s;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+  
+    .quote-box>p {
+      overflow: hidden;
+      transition: max-height 0.7s;
+      max-height: 100px;
+      display: inline;
+    }
+  
+    .quote-box .quote-image {
+      content: '\f10e';
+      position: absolute;
+      right: -30px;
+      top: -30px;
+      font-family: 'Font Awesome 5 Pro' !important;
+      font-weight: 700;
+      font-size: 20px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      text-align: center;
+      color: #fff;
+      padding: 5px;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+  
+    .quote-box .quote-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 50%;
+      border: 2px solid #004897;
+      background-color: #fff;
+    }
+  
+    .quote-box ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0 0 0 20px;
+    }
+  
+    .quote-box li:before {
+      content: '—';
+      padding-right: 10px;
+      grid-row: span 2;
+    }
+  
+    .field--name-field-commerce-product .front-featured {
+      height: auto;
+      transition: all 0.2s ease-in-out;
+      display: block;
+    }
+  
+    .field--name-field-commerce-product .carousel-inner-feat {
+      overflow: inherit;
+      overflow-x: hidden;
+      height: 275px;
+    }
+  
+    .field--name-field-commerce-product .carousel-inner-feat .row {
+      padding: 0px 15px 0;
+    }
+  
+    .field--name-field-commerce-product #CarouselTestimonials .carousel-indicators {
+      bottom: 0px;
+      margin-bottom: 0px;
+    }
+  
+    .field--name-field-commerce-product .carousel-indicators li {
+      border: solid #1A3C93 8px;
+      background-color: #FFF;
+      background: #1A3C93;
+      width: 16px;
+      height: 16px;
+      border-radius: 100%;
+      opacity: 0.5;
+    }
+  
+    .field--name-field-commerce-product .carousel-indicators li.active {
+      background: #363636;
+      opacity: 0.2;
+      width: 16px;
+      height: 16px;
+    }
+  
+    .myBtn,
+    .myBtn2,
+    .myBtn3,
+    .myBtn4,
+    .myBtn5 {
+      background-color: transparent !important;
+      color: #004897;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      text-align: center;
+    }
+  
+  
+    .sticky-top {
+      position: sticky;
+      top: 130px;
+    }
+  
+    .product_variation_sku_wrapper {
+      margin-bottom: 2em;
+      margin-top: -1em;
+    }
+  
+    .field--name-sku {
+      display: inline-block;
+    }
+  
+    lite-youtube {
+      max-width: 600px;
+    }
+  
+    /* Documentation */
+    #documentation-section .panel-body a {
+      word-break: break-word;
+      text-wrap: wrap;
+    }
+  
+  
+    /* Related Products */
+    .carousel-indicators {
+      margin-bottom: -5%;
+    }
+  
+    #Carouselprod .carousel-item img {
+      min-height: 230px;
+    }
+  
+    .btn:hover {
+      opacity: 0.7;
+    }
+  
+    .c-content-title-1>h1 {
+      font-size: 30px;
+    }
+  
+    /* FAQs */
+    #faqs-section .faq-accordion-wrapper:not(:last-child){
+      margin-bottom:20px;
+    }
+  
+    /* Carousel */
+    .olProd-desc {
+      margin-bottom: 10px;
+      width: 100%;
+    }
+  
+    .olProd-desc .carousel-indicators {
+      z-index: 15;
+      width: 100%;
+      margin-left: -30%;
+      padding-left: 0;
+      list-style: none;
+      text-align: left;
+      float: right;
+      top: 100%;
+      right: 0;
+      left: inherit;
+      margin-right: 0;
+    }
+  
+    .olProd-desc .carousel-indicators li {
+      display: inline-block;
+      text-indent: 20%;
+      border: none;
+      border-radius: 0;
+      background: none;
+      width: 80px;
+      height: 80px;
+      border-radius: 0;
+      border-color: none;
+      opacity: 0.5;
+      transition: 0.5s;
+      margin: 12px;
+    }
+  
+    .olProd-desc .carousel-indicators li:active {
+      opacity: 0.2;
+      margin: 12px;
+    }
+  
+    .olProd-desc .carousel-indicators li:hover {
+      opacity: 1;
+    }
+  
+    .olProd-desc .carousel-indicators .active {
+      background: none;
+      opacity: 1;
+      width: 80px;
+      height: 80px;
+    }
+  
+    .olProd-desc .carousel-indicators li img {
+      max-width: 100%;
+      max-height: 100%;
+      margin-bottom: 20px;
+    }
+  
+    .olProd {
+      position: relative;
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+  
+    .olProd .carousel-indicators {
+      position: relative;
+      margin-left: 0px;
+      margin-right: 0px;
+      padding-right: 0px;
+      margin-bottom: 0px;
+      text-align: left;
+      left: 0%;
+      bottom: 0%;
+      width:100%;
+    }
+  
+    .olProd .carousel-indicators li {
+      display: inline-block;
+      text-indent: 0px;
+      border: none;
+      background: none;
+      width: 100px;
+      height: 67px;
+      border-radius: 0;
+      opacity: 0.5;
+      transition: 0.5s;
+      margin: 0;
+      overflow: hidden;
+    }
+  
+    .olProd .carousel-indicators li:active {
+      opacity: 0.2;
+      margin: 0;
+    }
+  
+    .olProd .carousel-indicators li:hover {
+      opacity: 1;
+    }
+  
+    .olProd .carousel-indicators li.active {
+      background: none;
+      opacity: 1;
+      width: 100px;
+      height: 67px;
+    }
+  
+    #norproduct-image-description-carousel .carousel-indicators li.active,
+    .carousel-indicators li.active {
+      border: 2px solid #004897;
+    }
+  
+    .prodcarimg .olProd .carousel-indicators img {
+      height: auto;
+      width: auto;
+    }
+  /* 
+    .flag-wishlist.action-flag,
+    .flag-wishlist.action-unflag {
+      border: 1px solid var(--norgen-primary-blue);
+    }
+  
+    .flag-wishlist.action-flag a:after {
+      content: "\f004";
+      font-family: "Font Awesome 5 Free";
+      position: relative;
+      left: 0.25em;
+      font-weight: normal;
+      color: var(--norgen-primary-blue);
+    }
+  
+    .flag-wishlist.action-unflag a:after {
+      content: "\f004";
+      font-family: "Font Awesome 5 Free";
+      position: relative;
+      left: 0.25em;
+      color: var(--norgen-primary-blue);
+      font-weight: 900;
+    }
+    .flag-wishlist.action-unflag a:hover:after{
+      font-weight: normal;
+    }
+    .flag-wishlist.action-flag a:hover:after{
+      font-weight: 900;
+    } */
+  
+    a.related-services-product-page:hover, a.related-services-product-page:focus{
+      text-decoration: none;
+    }
+  
+    /* Media Queries */
+    @media (min-width:992px) {
+      #mobile-title {
+        display: none;
+      }
+  
+      .mobile {
+        display: none;
+      }
+    }
+  
+    @media (max-width:991px) {
+      .sticky-top {
+        top: auto;
+        position: static;
+      }
+  
+      .desktop {
+        display: none;
+      }
+    }
+  
+    @media (max-width:415px) {
+      .carousel-indicators {
+        margin-bottom: -7%;
+      }
+    }
+  
+    /*new styles */
+    .btn-ncov,
+    .moldx .moldx-box .moldx-yellow,
+    .tableyellowcell,
+    .btn-plasma {
+      background-color: #fbbf13;
+    }
+  
+    .moldx .moldx-box-out .moldx-yellow {
+      color: #000;
+      border-radius: 24px;
+      font-weight: 400;
+      height: auto;
+      line-height: 50px;
+      margin: 0 auto;
+      text-align: center;
+    }
+  
+    .moldx .moldx-box {
+      border: 1px solid #a9a9a9;
+      margin: 20px 10px;
+      padding: 18px;
+      border-radius: 24px;
+    }
+  
+    .moldx .moldx-box .moldx-content li:before {
+      content: '\f14a';
+      font-family: 'fa-awsome';
+      float: left;
+      margin-left: -1.5em;
+    }
+  
+    .moldx .moldx-box .moldx-content {
+      list-style: none outside none;
+      padding: 6px 6px 0;
+      margin-left: 4%;
+    }
+  
+    .field-name-norproduct-keypoints li:before {
+      content: '\f14a';
+      font-family: 'fa-awsome';
+      float: left;
+      margin-left: -1.5em;
+      color: #be1e2d;
+    }
+  
+    .field-name-norproduct-keypoints ul {
+      list-style-type: none;
+      text-align: left;
+      line-height: 1.8;
+      padding: 24px;
+      margin-left:0px;
+    }
+  
+    .product-page-content section {
+      padding: 3em 0;
+    }
+  
+    .commerce-order-item-add-to-cart-form .form-required {
+      color: inherit;
+    }
+  
+    .fa.search-bar-close {
+      font-size: 30px;
+    }
+  
+    .citation-list{
+      display:none;
+    }
+    .newdiv2{
+    /*position:absolute;*/
+    display:none;
+    }
+    /*#citations-section{
+      position:relative; 
+      height:1300px;
+    } */
+    .newdiv2{
+    width:100%;
+    }
+    .pagination_div{
+      display:flex;
+      justify-content: flex-end;
+      gap:10px;
+      /*width:50%;*/
+      flex-wrap: wrap;
+    }
+    .active_pagenum{
+      color:#004897 !important;
+    }
+    .pagenum{
+    color:#969595;
+    }
+    .pagenum:hover{
+      cursor:pointer;
+    }
+    .next_btn:hover{
+      cursor:pointer;
+    }
+    .citation-header{
+    display:none;
+    }
+    .next_btn{
+      display:none;
+    }
+      /* Make price fields inline-block -Noooo */
+    /* .c-product-price > div, .c-product-price > span{
+      display:inline-block;
+    } */
+  
+     .stool-technical-guide-div{
+  display:flex;
+  background:#0048920a;
+  gap:60px;
+  padding:25px 50px 25px 80px;
+  align-items: center;
+      justify-content: center;
+  }
+      .stool-technical-guide-div img{
+  width:inherit;
+  position:absolute;
+  top:-150px;
+  transform:rotate(10deg);
+      filter: drop-shadow(2px 4px 6px gray);
+  }
+
+     .extraclean-infographic-div{
+  display:flex;
+  background:#0048920a;
+  gap:60px;
+  padding:25px 50px 25px 80px;
+  align-items: center;
+      justify-content: center;
+  }
+      .extraclean-infographic-div img{
+  width:inherit;
+  position:absolute;
+  top:-105px;
+  transform:rotate(10deg);
+      filter: drop-shadow(2px 4px 6px gray);
+  }
+
+  .extraclean-infographic-div .img-div{
+    width:350px;
+    position:relative;
+  }
+
+  .img-div{
+    width:250px;
+    position:relative;
+  }
+  @media (max-width: 600px) {
+    .stool-technical-guide-div{
+      flex-direction: column;
+    }
+    .stool-technical-guide-div img{
+      position:initial;
+    }
+
+    .extraclean-infographic-div{
+      flex-direction: column;
+    }
+    .extraclean-infographic-div img{
+      position:initial;
+    }
+  }
+  .lyo-flex{
+    display: flex;
+    align-items: center;
+    background: #2E69A6;
+    width: fit-content;
+    padding: 10px 30px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+  }
+    .lyo-grid{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    align-items: center;
+    background: #2E69A6;
+    width: fit-content;
+    padding: 10px 30px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+  }
+  .lyo-grid h2, .lyo-flex h2{
+    color:white;
+    font-size:35px;
+    margin-bottom:0px;
+    margin-top:0;
+    font-weight: 700;
+  }
+  .lyo-grid p, .lyo-flex p{
+    color:white;
+    margin-bottom:0;
+  }
+  .verticle-line{
+    color:white;
+    font-size:60px;
+    margin: 0 14px;
+  }
+  .side1{
+    border-right: 5px solid white;
+      padding-right: 20px;
+  }
+  .side2{
+    padding-left: 20px;
+  }
+
+
+  /* New Wishlist */
+
+.flag-wish-list{
+  position:absolute;
+  top:5px;
+  right:5px;
+  z-index:2;
+  line-height:1;
+  padding:0px;
+  background-color:#ffffff80;
+  border-radius:100%;
+  width:45px;
+  height:45px;
+}
+.flag-wish-list:hover{
+  box-shadow:0px 2px 4px 0px #ddd;
+}
+.flag-wish-list a{
+  padding: 10px;
+  display:block;
+  line-height:1;
+}
+.flag-wish-list a:hover{
+  text-decoration: none;
+}
+.js-flag-message{
+  position:absolute;
+  top:100%;
+  right:0;
+  color:#5c6873;
+}
+.flag-wish-list.action-flag a:after,
+.flag-wish-list.action-unflag a:after{
+  content: "\f004";
+  font-family: "Font Awesome 5 Free";
+  color: var(--norgen-primary-blue);
+  font-size:2.5rem;
+}
+.flag-wish-list.action-flag a:after {
+  font-weight: normal;
+}
+
+.flag-wish-list.action-unflag a:after, .flag-wish-list.action-flag a:hover:after{
+  font-weight: 900;
+}
+
+/* End New Wishlist */
+  .promo-div{
+    background: #ba1e2d;
+    padding: 5px 20px;
+    color: white;
+    margin: 10px 0;
+    display: flex;
+    font-size: 15px;
+    gap: 10px;
+    align-items: center;
+        border-radius: 12px;
+    width: fit-content;
+  }
+  .promo-div-div a:hover{
+    text-decoration:none;
+  }
+  .promo-div p{
+    margin-bottom:0;
+  }
+  
+
+  /********* Table  ********/
+  .pagers {
+    grid-area: pagers;    
+  }
+  .pagers {
+      /* display: flex; */
+      /* justify-content: center; */
+      /* align-items: center; */
+      padding: 10px;
+      border-radius: 5px; /* Rounded corners for a professional look */
+  }
+
+  .pager__items {
+      /* display: flex; */
+      list-style: none; /* Remove bullet points */
+      padding: 0;
+      margin: 0;
+      /* flex-wrap: wrap; */
+  }
+  .pager__items li{
+      margin-left:0px;
+      font-weight:inherit;
+      font-size:inherit;
+  }
+
+  .pager__item {
+      margin: 0 5px; /* Space between pager items */
+  }
+
+  .pager__item a {
+      display: inline-block;
+      padding: 8px 12px;
+      color: #fff; /* White text color */
+      text-decoration: none; /* Remove underline from links */
+      border-radius: 3px;
+      background: white;
+      color: black;
+      border: none !important;
+      font-weight: 400;
+      font-size: 17px;
+  }
+
+  .pager__item a:hover,
+  .pager__item.is-active a {
+      background-color: white;
+      border-bottom: 1px solid !important;
+      border-radius: 0;
+  }
+  .pager__item--first a,
+  .pager__item--previous a,
+  .pager__item--next a,
+  .pager__item--last a {
+      font-weight: bold; /* Bold text for navigation arrows */
+  }
+
+  table.norpublication {
+    width: 100%;
+    padding: 0;
+    border-spacing: 0;
+    border-collapse: collapse;
+  }
+
+  .table {
+    border: 1px solid #ddd;
+  }
+
+  .components-table-wrapper table.table.table-striped{
+    margin-bottom:0px;
+  }
+  .components-table-wrapper .table-striped > thead > tr > th{
+    background-color: white;
+    position:sticky;
+    top:0;
+    left:0;
+    z-index:1;
+    min-width:140px;
+  }
+  .components-table-wrapper .table-striped > thead > tr > th:first-child{
+    z-index:2;
+  }
+  .components-table-wrapper .table-striped > tbody > tr > td:first-child{
+    position: sticky;
+    left: 0;
+    background-color: white;
+    z-index:1;
+  }
+  .components-table-wrapper .table-striped > tbody > tr:nth-of-type(odd) > td:first-child{
+    background-color: #fbfcfd;
+  }
+  .components-table-wrapper{
+    max-height:600px;
+    overflow:auto;
+  }
+
+  td.norpublicationlabel {
+    width: 9%;
+  }
+
+/* DNASE Bundle Info */
+  #magbead-promo-info-overlay .img-and-prices{
+    display: grid;
+    grid-template-columns: 1fr min-content 1fr min-content;
+    align-items: center;
+    grid-gap:10px;
+    margin-bottom:20px;
+    text-align:center;
+  }
+  #magbead-promo-info-overlay .img-and-prices .fa{
+    font-size:24px;
+  }
+  #magbead-promo-info-overlay .img-and-prices .product{
+    height:100%;
+  }
+  #magbead-promo-info-overlay .img-and-prices .product img{
+    max-height:150px;
+  }
+  #magbead-promo-info-overlay .img-and-prices .prices{
+    font-size:24px;
+  }
+  #magbead-promo-info-overlay .img-and-prices .prices > b{
+    margin-left:10px;
+  }
+  @media only screen and (max-width:600px){
+    #magbead-promo-info-overlay .img-and-prices{
+      grid-template-columns: 1fr
+    }
+    #magbead-promo-info-overlay .img-and-prices .product{
+      padding:10px;
+      border: 1px solid #eeeeee;
+    }
+  }
+
+  /* Gated Automation Scripts */
+  #total-rna-automation-form-overlay, #magbead-promo-info-overlay,
+  #sample-request-form-overlay{
+    display:none;
+    width:100%;
+    height:100vh;
+    left:0;
+    top:0;
+    position:fixed;
+    background-color:rgba(0,0,0,0.5);
+    z-index:999999;
+  }
+  #total-rna-automation-form-overlay.active, #magbead-promo-info-overlay.active,
+  #sample-request-form-overlay.active{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  #total-rna-automation-form-overlay > .total-rna-automation-form-wrapper,
+  #magbead-promo-info-overlay > .magbead-promo-info-wrapper,
+  #sample-request-form-overlay > .sample-request-form-wrapper,
+  #product-customization-form-overlay > .product-customization-form-wrapper{
+    background-color:white;
+    max-width:900px;
+    max-height:95%;
+    overflow:auto;
+    margin: auto auto;
+    padding: 20px 40px;
+    border-radius: 10px;
+    position:relative;
+  }
+
+  #sample-request-form-overlay > .sample-request-form-wrapper{
+    width:930px;
+    max-width:100%;
+  }
+
+  #total-rna-automation-form-overlay > .total-rna-automation-form-wrapper .disclaimer,
+  #magbead-promo-info-overlay > .magbead-promo-info-wrapper .disclaimer{
+    font-size:12px;
+  }
+  .automation-script-cta{
+    margin-bottom:15px;
+  }
+  form.total-rna-automation-scripts .form-item-rna-mailing{
+    margin-bottom:5px;
+  }
+  form.total-rna-automation-scripts .form-checkboxes{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+  }
+  html.scroll-lock{
+    overflow:hidden;
+  }
+
+  #total-rna-automation-form-overlay > .total-rna-automation-form-wrapper .fieldset-legend.form-required{
+    font-weight:300;
+    color:inherit;
+  }
+  #total-rna-automation-form-overlay > .total-rna-automation-form-wrapper .fieldset-legend.form-required::after{
+    color:red;
+    content: "*";
+  }
+
+  .total-rna-gated-automation-scripts-prompt{
+    background-color:var(--norgen-primary-blue-light);
+    border:1px solid var(--norgen-primary-blue-light);
+    padding:20px;
+    border-radius:12px;
+  }
+  .total-rna-gated-automation-scripts-prompt > h2{
+    margin-top:0px;
+  }
+
+  .total-rna-automation-form-wrapper form{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    grid-column-gap:20px;
+  }
+  .total-rna-automation-form-wrapper form > .form-group .form-group,
+  .total-rna-automation-form-wrapper form .form-item-rna-mailing label{
+    margin:0px 0px;
+  }
+  .total-rna-automation-form-wrapper form #sample-type-wrapper .form-group{
+    margin-bottom:10px;
+  }
+  .total-rna-automation-form-wrapper form #sample-type-wrapper,
+  .total-rna-automation-form-wrapper form .form-item-rna-mailing,
+  .total-rna-automation-form-wrapper form .disclaimer,
+  .total-rna-automation-form-wrapper form fieldset[data-drupal-selector="edit-google-recaptcha"]{
+    grid-column: 1 / 3;
+  }
+  /* End Gated Automation Scripts */
+
+  /* Product Customization Styling*/
+  #product-customization-form-overlay{
+    display:none;
+    width:100%;
+    height:100vh;
+    left:0;
+    top:0;
+    position:fixed;
+    background-color:rgba(0,0,0,0.5);
+    z-index:999999;
+  }
+  #product-customization-form-overlay.active{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  #product-customization-form-overlay > .product-customization-form-wrapper{
+    width:930px;
+    max-width:100%;
+  }
+
+  fieldset.customization-form-grid > .fieldset-wrapper{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap:20px;
+  }
+  .product-customization-form .form-group > .form-group{
+    margin-bottom:0px;
+  }
+  fieldset.customization-form-grid > .fieldset-wrapper > div:last-child,
+  fieldset.customization-form-grid > .fieldset-wrapper > div:nth-last-child(2){
+    grid-column: 1 / 3;
+  }
+
+  @media only screen and (max-width:600px){
+    fieldset.customization-form-grid > .fieldset-wrapper{
+      grid-template-columns: 1fr;
+    }
+    fieldset.customization-form-grid > .fieldset-wrapper > div:last-child,
+    fieldset.customization-form-grid > .fieldset-wrapper > div:nth-last-child(2){
+      grid-column: 1 / 2;
+    }
+  }
+
+  .testimonial-card {
+    position: relative;
+    max-width: 95%;
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    font-size: 15px;
+    line-height: 1.6;
+    color: #444;
+    margin-bottom:15px;
+  }
+
+  .testimonial-text p {
+    margin: 0;
+  }
+
+  .testimonial-text a {
+    color: #3366cc;
+    text-decoration: underline;
+  }
+
+  .testimonial-avatar {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  }
+
+  /* End of Product Customization Styling*/
+
+  .ce-pos{
+    margin-bottom: 15px;
+  }
+
+/* End of Product Customization Styling*/
+{% if ngs_popup %}
+/* NGS Popup */
+#ngs-popup{
+  position: fixed;
+  visibility:visible;
+  opacity:100%;
+  right: -1px;
+  top: 0px;
+  bottom: 0px;
+  margin: auto;
+  height: fit-content;
+  border-radius: 20px 0px 0px 20px;
+  max-width: 360px;
+  padding: 20px;
+  background-image: linear-gradient(#ffffffd1, #fffffffa), url(/sites/default/files/images/Asset%204.png), linear-gradient(white, white);
+  background-position: center;
+  box-shadow: 0px 0px 10px 0px #f0f0f0;
+  border: 1px solid var(--norgen-primary-blue);
+  z-index:50;
+  transition: opacity 0.5s, right 0.5s, visibility 0s 0s;
+}
+#ngs-popup.closed{
+  visibility:hidden;
+  opacity:0%;
+  right:-361px;
+  transition: opacity 0.5s, right 0.5s, visibility 0s 0.5s;
+}
+
+#ngs-popup .title{
+  margin-top:-10px;
+}
+#ngs-popup .flex{
+  display: inline-flex;
+  width: 100%;
+  gap: 5px;
+  margin-bottom:15px;
+}
+#ngs-popup .flex > a{
+  flex-grow: 1;
+  flex-basis: 0;
+}
+#ngs-popup .flex > a > div{
+  display:flex;
+  flex-direction:column;
+  align-items: center;
+  flex-grow: 1;
+  flex-basis: 0;
+}
+#ngs-popup .flex img{
+  width:50px;
+}
+#ngs-popup .flex > a > div > div.center{
+  font-size:16px;
+}
+/* End of NGS Popup */
+{% endif %}
+
+.product-page-content .c-shop-product-tab-1 .nav{
+  width: fit-content;
+  margin: auto;
+  padding: 0px 0px;
+}
+@media (min-width: 768px) {
+  .product-page-content .nav-justified > li, .nav-tabs.nav-justified > li{
+    display:inline-block;
+    width:auto;
+  }
+}
+
+/* Kostia's Custom Styling for New Stool Product Page Design */
+.table-container {
+  margin-bottom: 100px;
+}
+.responsive-table { 
+  width: 100%; 
+  border-collapse: collapse; 
+  margin: 20px 0; 
+  font-size: 18px; 
+  text-align: left; 
+} 
+.responsive-table th, 
+.responsive-table td { 
+  padding: 12px 15px; 
+  border: 1px solid #ddd; 
+} 
+.responsive-table th { 
+  background-color: #E5ECF4; 
+} 
+.cat-number a { 
+  color: #004897; 
+  text-decoration: none; 
+} 
+.cat-number a:hover { 
+  text-decoration: underline; 
+}
+.table > tbody > tr:nth-of-type(odd) {
+  background-color: #fbfcfd;
+}
+/* body { 
+  margin: 0; 
+  padding: 0; 
+}  */
+.container1 {
+  display: flex; 
+  flex-wrap: wrap;
+  justify-content: space-between; 
+  align-items: flex-start; 
+  margin-bottom: 20px; 
+} 
+.column { 
+  flex-basis: 48%; 
+  padding: 10px; 
+  box-sizing: border-box; 
+} 
+.title { 
+  font-weight: bold; 
+  margin-bottom: 20px; 
+} 
+/* img { 
+max-width: 100%; 
+height: auto; 
+margin-bottom: 10px; 
+}  */
+.icon { 
+  width: 64px; 
+  height: 64px; 
+  display: block; 
+  text-align: center; 
+  margin-bottom: 10px; 
+}
+.imgs { 
+  max-width: 100%; 
+} 
+.key-benefit-container1 { 
+  background-color: #EBF0F7; 
+  padding: 40px 40px; 
+  border-radius: 5px; 
+  margin-top: 5%; 
+  margin-bottom: 5%; 
+  position: relative; 
+  overflow: hidden; 
+} 
+.key-benefit-container1 p {
+  line-height: 1.3;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.full-width { 
+  width: 100%; 
+} 
+.bounceInLeft {
+  animation-name: bounceInLeft;
+}
+.key-benefit-container1 ol {
+  font-size: 22px; 
+  color: #5c6873; 
+}
+.key-benefit-container1::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/themes/custom/jango/img/stool_basket_img.png'); 
+  background-size: cover;
+  background-position: center;
+  opacity: 0.3; 
+  z-index: 0; 
+}
+@media screen and (max-width: 565px) {
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+/* END Kostia's Custom Styling for New Stool Product Page Design */
+</style>
+  
+  {# Check if FAQs exist for any of the variations #}
+  {% set faq_exists = false %}
+  {% set node_faqs = false %}
+  {% for variation in product.variations['#items'] %}
+    {% if variation.entity.field_faq.value|length > 0 %}
+      {% set faq_exists = true %}
+    {% endif %}
+  {% endfor %}
+  {% for faq in node.field_faq %}
+    {% if faq.entity.field_faq.value|length > 0 %}
+      {% set faq_exists = true %}
+      {% set node_faqs = true %}
+    {% endif %}
+  {% endfor %}
+  
+  <article{{ attributes }}>
+    {% if total_rna_automation_scripts %}
+    <div id="total-rna-automation-form-overlay" class="fixed">
+      <div class="total-rna-automation-form-wrapper">
+        <h2 class="center">Access Automation Scripts</h2>
+        <button onclick="toggleAutomationScriptsForm()" style="float:right;background:none;border:none;font-size:40px;line-height:1;position:absolute;top:0;right:0;">×</button>
+        {{ total_rna_automation_scripts }}
+      </div>
+    </div>
+    {% endif %}
+
+    
+    {% if request_sample_form %}
+    <div id="sample-request-form-overlay" class="fixed">
+      <div class="sample-request-form-wrapper">
+        <button onclick="toggleSampleRequestForm()" style="float:right;background:none;border:none;font-size:40px;line-height:1;position:absolute;top:0;right:0;">×</button>
+        {{ request_sample_form }}
+      </div>
+    </div>
+    {% endif %}
+
+    {% if product_customization %}
+    <div id="product-customization-form-overlay" class="fixed">
+      <div class="product-customization-form-wrapper">
+        <button onclick="toggleProductCustomizationForm()" style="float:right;background:none;border:none;font-size:40px;line-height:1;position:absolute;top:0;right:0;">×</button>
+        {{ product_customization }}
+      </div>
+    </div>
+    {% endif %}
+
+    <div>
+      <div class="c-shop-product-details-2">
+        <div class="row">
+          <div class="col-md-6 sticky-top">
+            <div id="mobile-title" class="c-content-title-1 mobile">
+              <h1 class="product-title c-font-uppercase c-font-bold">{{ product.title }}</h1>
+            </div>
+            <div id="mobile-summary-line" class="field-name-field-product-summary-line mobile" style="clear:both;">
+              {% if '/product/' in url %}
+              {{ node.field_product_summary_line.0.value|raw }}
+              <hr>
+              {% else %}
+              {{ node_international.field_product_summary_line_fr.0.value|raw }}
+              <hr>
+              {% endif %}
+            </div>
+            <div style="position:relative;">
+              {{ product.variation_flag_wish_list }}
+              {{ product.variation_field_product_image }}
+            </div>
+  
+  
+            <div class="product-uses-wrapper">
+              <hr class="mobile">
+              {% for product_use in node.norproduct_use %}
+                {{product_use.value|raw}}
+              {% endfor %}
+
+              {{ product.variation_field_not_for_sale_in }}
+
+              {% if node.field_health_canada_approved.0.value == 1 or node.field_ce_marked_image.0.value == 1 %}
+              <div class="ce-pos">
+                {% if node.field_health_canada_approved.0.value == 1 %}
+                <div>
+                  <img src="/sites/default/files/norproduct/Maple_Leaf.svg" style="height:36px;max-width:none;"
+                    alt="red maple leaf" title="Health Canada Approved">
+                </div>
+                {% endif %}
+                {% if node.field_ce_marked_image.0.value == 1 %}
+                <div>
+                  <img src="/sites/default/files/norproduct/European_Conformity_logo.svg"
+                    style="height:36px;max-width:none;" alt="CE logo" title="CE Marked Product">
+                </div>
+                {% endif %}
+              </div>
+              {% endif %}
+
+              {% if product_customization %}
+                <button onclick ="toggleProductCustomizationForm()" class = "btn btn-primary c-font-uppercase c-font-bold" style = "border: 1px solid var(--norgen-primary-blue);background-color: white;color: var(--norgen-primary-blue);margin-bottom:10px;"><i class="fa fa-cogs"></i>Customize Product</button>
+              {% endif %}
+
+              {% if node.field_testimonial.0.value != null %}
+              <div class="desktop">
+                <hr style="width:calc(100% - 30px);margin:auto;margin-top:30px;">
+                {{ node.field_testimonial.0.value|raw }}
+              </div>
+              {% endif %}
+
+              {# {{ product.variation_field_show_automation_scripts }} #}
+            </div>
+            {# <div class="bioz">
+              {{ bioz_badge_html|raw }}
+            </div> #}
+            {% if node.field_extraclean_version_link.0.value != null %}
+              <a href={{node.field_extraclean_version_link.0.value|raw}} style="color:white;">
+                <div style="display:flex;align-items: center;background: #8E1F1F;width: fit-content;padding:10px 15px;border-top-right-radius: 12px;border-bottom-right-radius: 12px;gap:20px;margin-bottom:20px;">
+                  <div style="border-right: 5px solid white;padding: 0px 20px 0px 0px;">
+                    <img src="https://norgenbiotek.com/sites/default/files/images/extraclean-campaign/Extra%20Clean_Logo_Colour_White.png" style="z-index:-1;width:225px;">
+                  </div>
+                  <div>
+                    <h2 class="heading-3" style="color:white;line-height:1.2;font-weight:700;font-size:21px;">Version Available <a href={{node.field_extraclean_version_link.0.value|raw}} style="color:white;text-decoration:underline;">Here</a>.</h2>
+                  </div>
+                </div>
+              </a>
+            {% endif %}
+            {% if node.field_lyophilized_versionlink.0.value != null %}
+              <a href={{node.field_lyophilized_versionlink.0.value|raw}} style="color:white;">
+                <div class="lyo-flex">
+                  <div class="side1">
+                    <h2>Lyophilized</h2>
+                    <p>Version Available Here</p>
+                  </div>
+                  <div class="side2">
+                    {# <p>Save on Shipping</p> #}
+                    <p>Same performance, reduced price</p>
+                  </div>
+                </div>
+              </a>
+            {% endif %}
+  
+          </div>
+          <div class="col-md-6">
+            <div class="c-product-meta">
+              <div id="desktop-title" class="c-content-title-1 desktop">
+                <h3 class="c-font-uppercase c-font-bold">{{ product.title }}</h3>
+                {% if node.field_extraclean_boolean.0.value == '1' %}
+                  <div style="display:flex;align-items: center;background: #8E1F1F;width: fit-content;padding:15px 20px;border-top-right-radius: 40px;border-bottom-right-radius: 40px;gap:20px;margin-bottom:20px;">
+                    <div style="border-right: 5px solid white;padding: 0px 20px 0px 0px;">
+                      <img src="/sites/default/files/images/extraclean-campaign/Extra Clean_Logo_Colour_White.png" style="z-index:-1;width:410px;">
+                      <h2 style="color:white;font-size:20px;margin-top:0;margin-bottom:0;">Best & First In Class!</h2>
+                    </div>
+                    <div>
+                      <h2 class="heading-3" style="color:white;line-height:1.2;font-weight:700;font-size:25px;">Enhance your sequencing reads.</h2>
+                    </div>
+                  </div>
+                {% endif %}
+                {% if node.field_lyophilized_boolean.0.value == '1' %}
+                  <div class="lyo-grid">
+                      <div class="side1">
+                        <h2>Lyophilized</h2>
+                        {# <p>Save on Shipping</p> #}
+                        <p>Same performance, reduced price</p>
+                      </div>
+                      <div class="side2">
+                        <p>Taqman PCR Detection Kits</p>
+                      </div>
+                  </div>
+                {% endif %}
+              </div>
+              <div class="c-product-badge">
+                {% if product.field_sale_label[0]['#markup'] != 'Off' %}
+                {{ product.field_sale_label }}
+                {% endif %}
+                {% if product.field_new_label[0]['#markup'] != 'Off' %}
+                {{ product.field_new_label }}
+                {% endif %}
+              </div>
+              {# <div class="c-product-review">
+                {{ product.field_rating }}
+                <div class="c-product-write-review">
+                  <a class="c-font-red write-review-link" href="#reviews">
+                    {{ 'Write a review'|t }}
+                  </a>
+                </div>
+              </div> #}
+              <div id="desktop-summary-line" class="field-name-field-product-summary-line desktop" style="clear:both;">
+                {% if '/product/' in url %}
+                {{ node.field_product_summary_line.0.value|raw }}
+                {% else %}
+                {{ node_international.field_product_summary_line_fr.0.value|raw }}
+                {% endif %}
+                <hr>
+              </div>
+
+              {% if default_variation == 75500 or default_variation == 25720 %}
+                {% if not restricted_country %}
+                <button class="promo-div" onclick="toggleMagbeadDnaseBundleInfo()" style="font-weight:600;border:none;">
+                  <p style="margin-bottom:0px;">Bundle &amp; Save with Magnetic Bead &amp; DNase</p><span class="glyphicon glyphicon-question-sign"></span>
+                </button>
+                {% endif %}
+              {% endif %}
+
+              {% if '/product/' in url %}
+              <div class="c-product-price">
+                {# <script>
+                  {% if restricted_country == true %}
+                    const restrictedTESTINGCountry = 'true';
+                  {% elseif restricted_country == false %}
+                    const restrictedTESTINGCountry = 'false';
+                  {% endif %}
+
+                  {% if test_restricted_country == true %}
+                    const testrestrictedTESTINGCountry = 'true';
+                  {% elseif test_restricted_country == false %}
+                    const testrestrictedTESTINGCountry = 'false';
+                  {% endif %}
+                  console.log("Restricted Country:", restrictedTESTINGCountry," user_country: ","{{user_country}}"," to_test_country: ","{{to_test_country}}");
+                  console.log("testing restricted country. Restricted?", testrestrictedTESTINGCountry, "{{test_restricted_country_method}}");
+                </script> #}
+                {% if restricted_country == false %}
+                  {#{{ product.variation_field_smart_save_product }}#}
+                  {{ product.variation_field_sale_promotion }}
+                  {# <div class="label">Price</div> #}
+                  {# <span class="c-font-16 c-font-line-through c-font-red"> #}
+                  {#   {% if old_cad_price %}
+                    {{ product.variation_field_old_cad_price }}
+                    {% else %}
+                    {{ product.variation_field_old_price }}
+                    {% endif %} #}
+                  {# </span> #}
+                  {{ product.variation_price}}
+                {% endif %}
+              </div>
+              {% endif %}
+  
+              <div class="product_variation_sku_wrapper">
+                <div class="label">SKU</div><span class="notranslate">{{product.variation_sku}}</span>
+              </div>
+              
+              {{ product.variations }}
+
+              {% if logged_in == false %}
+                {# {% if restricted_country %}
+                {% else %} #}
+                  <p><strong><a href="https://norgenbiotek.com/user/login" target="_blank">Register today</a></strong> to receive an exclusive <strong><u>15% off*</u></strong> on your first order.</p>
+                {# {% endif %} #}
+              {% endif %}
+  
+              {#{% if '/product/' not in url %}
+              <div>
+                <div>
+                  <div class="input-group norshoppingtable active">
+                    <a href="/fr/trouver-un-distributeur" style="margin-right:1em;">
+                      <div class="btn form-submit">Trouver un distributeur</div>
+                    </a>
+                    <a href="/fr/contacter-norgen">
+                      <div class="btn form-submit" style="background: #0f6b7a;border-color: #0f6b7a;">Contact
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              {% endif %}#}
+  
+              {# {% if valid_sku_array|length > 0 %}
+              <a class="btn request-sample-btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button--secondary-teal"
+                href="/request-sample">Request sample</a>
+              {% endif %} #}
+  
+              {% if request_sample_form %}
+                <button onclick="toggleSampleRequestForm()" class="btn" style="border: 1px solid var(--norgen-primary-blue);background-color: white;color: var(--norgen-primary-blue);text-transform: uppercase;font-weight: 600;">Request a Sample</button>
+              {% endif %}
+             
+              {# {{ product.flag_wishlist }} #}
+              
+  
+              {# {% if logged_in %}<a href="{{ url('<front>')|render ~ 'user/' ~ user.id ~ '/wishlist' }}">View
+                Wishlist</a>{% endif %} #}
+  
+              <span class="flag-outer flag-outer-compare ">
+                {{ product.flag_compare }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- JSON-LD  -->
+    <script type="application/ld+json">
+           
+        {% for variation in product.variations['#object'].getVariations() %}
+          {
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": "{{ variation.title.value }}",
+            "image": [
+              {% for image_url in image_urls %}
+                {% if loop.last %}
+                "{{ image_url }}"
+                {% else %}
+                "{{ image_url }}",
+                {% endif %}
+              {% endfor %}
+            ],
+            "description": "{{ node.body.0.value|striptags|trim|truncate(500, true, '...')|escape('js') }}",
+            "sku": "{{ variation.sku.value }}",
+            "brand": {
+              "@type": "Brand",
+              "name": "Norgen Biotek Corp."
+            },
+            "offers": {
+              "@type": "Offer",
+              "priceCurrency": "{{ variation_prices[loop.index0].price.getCurrencyCode() }}",
+              "price": "{{ variation_prices[loop.index0].price.getNumber() }}",
+              "availability": "https://schema.org/InStock"
+            }
+          }
+        {% endfor %}
+        
+      </script>
+    
+    <!--  JSON-LD end -->
+
+</article>
+    <div class="c-content-box c-size-lg pb-0 product-field-groups">
+      <!-- End Product Content -->
+      <div class="c-shop-product-tab-1 pb-0">
+        <div class="nav-justified  bootstrap-nav-wrapper">
+          <ul class="nav nav-justified  nav-tabs">
+            {% if node.body.0.value|length > 0 %}
+            <li class="nav_item " id="overview-nav"><a href="#overview">{{ 'Overview'|t }}</a></li>
+            {% endif %}
+            {% if node_international.body.0.value|length > 0 and node == null and '/fr/' in url %}
+            <li class="nav_item " id="overview-nav"><a href="#overview">{{ 'Aperçu du produit'|t }}</a></li>
+            {% endif %}
+            {% if node_international.body.0.value|length > 0 and node == null and '/es/' in url %}
+            <li class="nav_item " id="overview-nav"><a href="#overview">{{ 'Descripción general del producto'|t }}</a></li>
+            {% endif %}
+            {% if node_international.body.0.value|length > 0 and node == null and '/cn/' in url %}
+            <li class="nav_item " id="overview-nav"><a href="#overview">{{ '概述'|t }}</a></li>
+            {% endif %}
+            {% if node_international.body.0.value|length > 0 and node == null and '/de/' in url %}
+            <li class="nav_item " id="overview-nav"><a href="#overview">{{ 'Überblick'|t }}</a></li>
+            {% endif %}
+            {% if node_international.body.0.value|length > 0 and node == null and '/ja/' in url %}
+            <li class="nav_item " id="overview-nav"><a href="#overview">{{ '概要'|t }}</a></li>
+            {% endif %}
+
+            {% if (node.norproduct_image|length > 0) or (product.variation_field_specification.0) and node != null %}
+            <li class="nav_item" id="details-nav"><a href="#details">{{ 'Details'|t }}</a></li>
+            {% endif %}
+            {% if node_international.field_applications_image|length > 0 and node == null and '/fr/' in url %}
+            <li class="nav_item" id="details-nav"><a href="#details">{{ 'Détails'|t }}</a></li>
+            {% endif %}
+            {% if node_international.field_applications_image|length > 0 and node == null and '/es/' in url %}
+            <li class="nav_item" id="details-nav"><a href="#details">{{ 'Detalles'|t }}</a></li>
+            {% endif %}
+            {% if node_international.field_applications_image|length > 0 and node == null and '/cn/' in url %}
+            <li class="nav_item" id="details-nav"><a href="#details">{{ '细节'|t }}</a></li>
+            {% endif %}
+            {% if node_international.field_applications_image|length > 0 and node == null and '/de/' in url %}
+            <li class="nav_item" id="details-nav"><a href="#details">{{ 'Einzelheiten'|t }}</a></li>
+            {% endif %}
+            {% if node_international.field_applications_image|length > 0 and node == null and '/ja/' in url %}
+            <li class="nav_item" id="details-nav"><a href="#details">{{ '詳細'|t }}</a></li>
+            {% endif %}
+
+
+            {% if node.field_automation.0.value|length > 0 %}
+            <li class="nav_item " id="automation-nav"><a href="#automation">{{ 'Automation'|t }}</a></li>
+            {% endif %}
+            {% if documentation == true %}
+            <li class="nav_item" id="documentation-nav"><a href="#documentation">{{ 'Documentation'|t }}</a></li>
+            {% endif %}
+            {% if international_documentation == true and '/fr/' in url %}
+            <li class="nav_item" id="documentation-nav"><a href="#documentation">{{ 'Documentation'|t }}</a></li>
+            {% endif %}
+            {% if international_documentation == true and '/es/' in url %}
+            <li class="nav_item" id="documentation-nav"><a href="#documentation">{{ 'Documentación'|t }}</a></li>
+            {% endif %}
+            {% if international_documentation == true and '/cn/' in url %}
+            <li class="nav_item" id="documentation-nav"><a href="#documentation">{{ '文档'|t }}</a></li>
+            {% endif %}
+            {% if international_documentation == true and '/de/' in url %}
+            <li class="nav_item" id="documentation-nav"><a href="#documentation">{{ 'Dokumentationen'|t }}</a></li>
+            {% endif %}
+            {% if international_documentation == true and '/ja/' in url %}
+            <li class="nav_item" id="documentation-nav"><a href="#documentation">{{ 'ドキュメント'|t }}</a></li>
+            {% endif %}
+
+
+            {% if node.field_product_videos.0.value|length > 0 %}
+            <li class="nav_item" id="videos-nav"><a href="#videos">{{ 'Videos'|t }}</a></li>
+            {% endif %}
+            {% if faq_exists %}
+            <li class="nav_item" id="faqs-nav"><a href="#faqs">{{ 'FAQs'|t }}</a></li>
+            {% endif %}
+            {% if node.field_citations|length > 0 %}
+            <li class="nav_item" id="citations-nav"><a href="#citations">{{ 'Citations'|t }}</a></li>
+            {% endif %}
+           {#  {% if node_international.field_citations_fr|length > 0 and '/fr/' in url %}
+            <li class="nav_item" id="citations-nav"><a href="#citations">{{ 'Citations'|t }}</a></li>
+            {% endif %}
+            {% if node_international.field_citations_fr|length > 0 and '/es/' in url %}
+            <li class="nav_item" id="citations-nav"><a href="#citations">{{ 'Citas'|t }}</a></li>
+            {% endif %}
+            {% if node_international.field_citations_fr|length > 0 and '/es/' not in url and '/fr' not in url %}
+            <li class="nav_item" id="citations-nav"><a href="#citations">{{ '引文'|t }}</a></li>
+            {% endif %} #}
+            {# <li class="nav_item ">
+              <a href="#documentation" class="review-toggler" id="reviews" data-toggle="tab">{{ 'Reviews'|t }}</a>
+            </li> #}
+          </ul>
+  
+          <div class="tab-content nav-justified">
+            <div class="tab-pane active">
+              {# {{- product|without('variation_attributes', 'title', 'variation_title', 'variation_field_stock_amount',
+              'variation_field_images', 'field_product_category', 'field_sale_label', 'field_new_label', 'field_rating',
+              'variation_price', 'variations', 'flag_compare', 'flag_wishlist', 'variation_field_old_price',
+              'variation_sku',
+              'field_short_description','variation_commerce_price','variation_commerce_dry_ice','variation_commerce_shipping_box','variation_commerce_shipping_box_amount','variation_field_product_citations','variation_field_figure_image','variation_field_figure_image_caption','variation_field_product_image','variation_field_french_specification')
+              -}} #}
+              <!-- Product Page Key Points -->
+  
+              <!-- Product Page Body -->
+              {% if node.body.0.value|length > 0 or node_international.body.0.value|length > 0 %}
+              <a id="overview" class="anchor-link"></a>
+              <section id="overview-section" class="menu-section">
+  
+                {% if '/product/' in url %}
+                <h2 class="c-font-uppercase c-font-bold">Features and Benefits</h2>
+                <div class="field-name-norproduct-keypoints">
+                  {{ node.norproduct_keypoints.0.value|raw}}
+                </div>
+                {{ node.body.0.value|raw }}
+                <div style="margin:50px 0">
+                {{ node.field_technical_guide_lead.0.value|raw }}
+                </div>
+                {% elseif '/fr' in url %}
+                <h2 class="c-font-uppercase c-font-bold">Aperçu du produit</h2>
+                {{ node_international.body.0.value|raw }}
+                {% elseif '/es' in url %}
+                <h2 class="c-font-uppercase c-font-bold">Descripción general del producto</h2>
+                {{ node_international.body.0.value|raw }}
+
+                {% elseif '/cn' in url %}
+                <!--chineese-->
+                <h2 class="c-font-uppercase c-font-bold">概述</h2>
+                {{ node_international.body.0.value|raw }}
+
+                {% elseif '/de' in url %}
+                <!--german-->
+                <h2 class="c-font-uppercase c-font-bold">Überblick</h2>
+                {{ node_international.body.0.value|raw }}
+
+                {% elseif '/ja' in url %}
+                <!--japan-->
+                <h2 class="c-font-uppercase c-font-bold">概要</h2>
+                {{ node_international.body.0.value|raw }}
+
+
+                {% endif %}
+              </section>
+              {% endif %}
+  
+              <!-- Product Page Figure Carousel -->
+              {% if (node.norproduct_image|length > 0) or
+              (product.variation_field_specification.0|length > 0) or
+              (node_international.field_applications_image|length > 0) %}
+              <a id="details" class="anchor-link"></a>
+              <section id="details-section" class="menu-section">
+                {% if '/product/' in url %}
+                <h2 class="c-font-uppercase c-font-bold">Details</h2>
+                {% elseif '/fr' in url %}
+                <h2 class="c-font-uppercase c-font-bold">Détails</h2>
+                {% elseif '/es' in url %}
+                <h2 class="c-font-uppercase c-font-bold">Detalles</h2>
+                {% elseif '/cn' in url %}
+                <!--chineese-->
+                <h2 class="c-font-uppercase c-font-bold">细节</h2>
+                
+                {% elseif '/de' in url %}
+                <!--german-->
+                <h2 class="c-font-uppercase c-font-bold">Einzelheiten</h2>
+
+                {% elseif '/ja' in url %}
+                <!--japan-->
+                <h2 class="c-font-uppercase c-font-bold">詳細</h2>
+
+                {% endif %}
+
+  
+                {% if node.norproduct_image|length > 0 %}
+                <h3 class="body-heading">Supporting Data</h3>
+                <div class="figures-carousel mb-40">
+                  <div id="norproduct-image-description-carousel" class="carousel slide norproduct" data-ride="carousel"
+                    data-wrap="false" data-interval="false">
+                    <div id="carousel-slide-number"></div>
+                    <button id="close-expanded-carousel" tab-index=0 class="fa fa-times"></button>
+                    <a class="carousel-control left" href="#norproduct-image-description-carousel" role="button"
+                      data-slide="prev">
+                      <span class="fa fa-2x fa-chevron-left" aria-hidden="true"></span>
+                      <span class="sr-only">Previous</span>
+                    </a>
+                    <div class="carousel-inner-wrapper">
+                      <div class="carousel-inner norproduct">
+                        {% for fig_image in node.norproduct_image %}
+                        {% set active = '' %}
+                        {% if loop.index0 == 0 %}
+                        {% set active = 'active' %}
+                        {% endif %}
+                        <div class='item norproduct {{ active }}'>
+                          <div class="item-wrapper">
+                            <button class="norproduct-carousel-btn-wrapper">
+                              <img typeof="foaf:Image" src="{{file_url(fig_image.entity.fileuri)}}"
+                              data-src="{{file_url(fig_image.entity.fileuri)}}" width="{{fig_image.value.width}}" 
+                              height="{{fig_image.value.height}}" alt="{{fig_image.value.alt}}"
+                                loading="lazy" class="norproduct-carousel lazy" />
+                            </button>
+                            <div class="fig-caption">
+                              {{ node.field_image_caption[loop.index0].value|raw }}
+                            </div>
+                          </div>
+                        </div>
+                        {% endfor %}
+                      </div>
+                      <div class="carousel-indicators-wrapper">
+                        <div class="blur-edges left"></div>
+                        <ol class="carousel-indicators norproduct">
+                          {% for fig_image in node.norproduct_image %}
+                          <li data-target="#norproduct-image-description-carousel" data-slide-to={{loop.index0}} {% if
+                            loop.index0==0 %} class="active" tab-index="0" {% endif %}>
+                            <button style="background-color:transparent;border:none;" aria-label="Data Selector">
+                              <img src="{{file_url(fig_image.entity.fileuri)}}" alt="{{fig_image.value.alt}}"
+                                loading="lazy" class="lazy">
+                            </button>
+                          </li>
+                          {% endfor %}
+                        </ol>
+                        <div class="blur-edges right"></div>
+                      </div>
+                    </div>
+  
+                    <a class="carousel-control right" href="#norproduct-image-description-carousel" role="button"
+                      data-slide="next">
+                      <span class="fa fa-2x fa-chevron-right" aria-hidden="true"></span>
+                      <span class="sr-only">Next</span>
+                    </a>
+                  </div>
+                  <div class="click-for-expanded-tooltip">Click for expanded view</div>
+                </div>
+                {% endif %}
+                {% if node_international.field_applications_image|length > 0 %}
+                    {% if '/fr' in url %}
+                        <h3 class="body-heading">Données justificatives</h3>
+                    {% elseif '/es' in url %}
+                        <h3 class="body-heading">Datos de respaldo</h3>
+                    {% elseif '/cn' in url %}
+                        <!--chineese-->
+                        <h3 class="body-heading">支持数据</h3>
+                    {% elseif '/de' in url %}
+                        <!--german-->
+                        <h3 class="body-heading">Unterstützende Daten</h3>
+                    {% elseif '/ja' in url %}
+                        <!--Japan-->
+                        <h3 class="body-heading">裏付けとなるデータ</h3>
+
+                    {% endif %}
+                <div class="figures-carousel mb-40">
+                  <div id="norproduct-image-description-carousel" class="carousel slide norproduct" data-ride="carousel"
+                    data-wrap="false" data-interval="false">
+                    <div id="carousel-slide-number"></div>
+                    <button id="close-expanded-carousel" tab-index=0 class="fa fa-times"></button>
+                    <a class="carousel-control left" href="#norproduct-image-description-carousel" role="button"
+                      data-slide="prev">
+                      <span class="fa fa-2x fa-chevron-left" aria-hidden="true"></span>
+                      <span class="sr-only">Previous</span>
+                    </a>
+                    <div class="carousel-inner-wrapper">
+                      <div class="carousel-inner norproduct">
+                        {% for fig_image in node_international.field_applications_image %}
+                        {% set active = '' %}
+                        {% if loop.index0 == 0 %}
+                        {% set active = 'active' %}
+                        {% endif %}
+                        <div class='item norproduct {{ active }}'>
+                          <div class="item-wrapper">
+                            <button class="norproduct-carousel-btn-wrapper">
+                              <img typeof="foaf:Image" src="{{file_url(fig_image.entity.fileuri)}}" 
+                                data-src="{{file_url(fig_image.entity.fileuri)}}" width="{{fig_image.value.width}}" 
+                                height="{{fig_image.value.height}}" alt="{{fig_image.value.alt}}"
+                                loading="lazy" class="norproduct-carousel lazy" />
+                            </button>
+                            <div class="fig-caption">
+                              {{ node_international.field_applications_image_caption[loop.index0].value|raw }}
+                            </div>
+                          </div>
+                        </div>
+                        {% endfor %}
+                      </div>
+                      <div class="carousel-indicators-wrapper">
+                        <div class="blur-edges left"></div>
+                        <ol class="carousel-indicators norproduct">
+                          {% for fig_image in node_international.field_applications_image %}
+                          <li data-target="#norproduct-image-description-carousel" data-slide-to={{loop.index0}} {% if
+                            loop.index0==0 %} class="active" tab-index="0" {% endif %}>
+                            <button style="background-color:transparent;border:none;" aria-label="Data Selector">
+                              <img src={{ "#{file_url(fig_image.entity.fileuri)}" }} alt={{ "#{fig_image.value.alt}" }}
+                                loading="lazy" class="lazy">
+                            </button>
+                          </li>
+                          {% endfor %}
+                        </ol>
+                        <div class="blur-edges right"></div>
+                      </div>
+                    </div>
+  
+                    <a class="carousel-control right" href="#norproduct-image-description-carousel" role="button"
+                      data-slide="next">
+                      <span class="fa fa-2x fa-chevron-right" aria-hidden="true"></span>
+                      <span class="sr-only">Next</span>
+                    </a>
+                  </div>
+                  <div class="click-for-expanded-tooltip">Cliquez pour afficher les données</div>
+                </div>
+                {% endif %}
+  
+                <!-- Product Variation Specfications -->
+                {{ product.variation_field_specification }}
+                {% if node.field_kit_components.value is not empty %}
+                <div class="mt-90">
+                  <div class="components-table-wrapper">
+                    {{ node.field_kit_components.value|raw }}
+                  </div>
+                </div>
+                {% endif %}
+              </section>
+              {% endif %}
+  
+              <!-- Automation -->
+              {% if node.field_automation.0.value|length > 0 %}
+              <a id="automation" class="anchor-link"></a>
+              <section id="automation-section" class="menu-section">
+                <h2 class="c-font-uppercase c-font-bold">Automation</h2>
+                {{ node.field_automation.0.value|raw }}
+              </section>
+              {% endif %}
+  
+              <!-- Product Documentation -->
+              {% if documentation == true %}
+              <a id="documentation" class="anchor-link"></a>
+              <section id="documentation-section" class="menu-section">
+                <h2 class="c-font-uppercase c-font-bold">Documentation</h2>
+                <div class="c-content-accordion-norgen c-accordion-norgen-primary-blue-light">
+                  <div class="panel-group" id="accordion-1" role="tablist">
+                    {% if node.norproduct_protocol|length > 0 %}
+                    <div class="panel">
+                      <div class="panel-heading" role="tab" id="accordiontab">
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                            data-parent="#accordion-1" href="#protocols" aria-expanded="false"
+                            aria-controls="2595394">PROTOCOLS <i class="fa fa-chevron-down"></i></a></h3>
+                      </div>
+                      <div id="protocols" class="panel-collapse collapse" role="tabpanel" aria-labelledby="accordiontab"
+                        aria-expanded="false" style="height: 0px;">
+                        <div class="panel-body c-font-18">
+                          {% for doc in node.norproduct_protocol %}
+                          <a href={{ file_url(doc.entity.uri.value) }} target="_blank">
+                            {% if doc.description is not empty %}
+                              {{ doc.description }}
+                            {% else %}
+                              {{ doc.entity.filename.value }}
+                            {% endif %}
+                          </a>
+                          {% if loop.last == false %}
+                          <hr>{% endif %}
+                          {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                    {% endif %}
+                    {% if node.norproduct_shortprotocol|length > 0 %}
+                    <div class="panel">
+                      <div class="panel-heading" role="tab" id="accordiontab">
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                            data-parent="#accordion-1" href="#short-protocols" aria-expanded="false"
+                            aria-controls="9523657">SHORT PROTOCOLS <i class="fa fa-chevron-down"></i></a>
+                        </3>
+                      </div>
+                      <div id="short-protocols" class="panel-collapse collapse" role="tabpanel"
+                        aria-labelledby="accordiontab" aria-expanded="false" style="height: 0px;">
+                        <div class="panel-body c-font-18">
+                          {% for doc in node.norproduct_shortprotocol %}
+                          <a href={{ file_url(doc.entity.uri.value) }} target="_blank">
+                            {% if doc.description is not empty %}
+                              {{ doc.description }}
+                            {% else %}
+                              {{ doc.entity.filename.value }}
+                            {% endif %}
+                          </a>
+                          {% if loop.last == false %}
+                          <hr>{% endif %}
+                          {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                    {% endif %}
+                    {% if node.norproduct_supplementaryprotocol|length > 0 %}
+                    <div class="panel">
+                      <div class="panel-heading" role="tab" id="accordiontab">
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                            data-parent="#accordion-1" href="#supplementary-protocols" aria-expanded="false"
+                            aria-controls="824715">SUPPLEMENTARY PROTOCOLS <i
+                              class="fa fa-chevron-down"></i></a></h3>
+                      </div>
+                      <div id="supplementary-protocols" class="panel-collapse collapse" role="tabpanel"
+                        aria-labelledby="accordiontab" aria-expanded="false" style="height: 0px;">
+                        <div class="panel-body c-font-18">
+                          {% for doc in node.norproduct_supplementaryprotocol %}
+                          <a href={{ file_url(doc.entity.uri.value) }} target="_blank">
+                            {% if doc.description is not empty %}
+                              {{ doc.description }}
+                            {% else %}
+                              {{ doc.entity.filename.value }}
+                            {% endif %}
+                          </a>
+                          {% if loop.last == false %}
+                          <hr>{% endif %}
+                          {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                    {% endif %}
+                    {% if node.norproduct_informationsheet|length > 0 %}
+                    <div class="panel">
+                      <div class="panel-heading" role="tab" id="accordiontab">
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                            data-parent="#accordion-1" href="#product-information-sheets" aria-expanded="false"
+                            aria-controls="9523657">PRODUCT INFORMATION SHEETS <i
+                              class="fa fa-chevron-down"></i></a></h3>
+                      </div>
+                      <div id="product-information-sheets" class="panel-collapse collapse" role="tabpanel"
+                        aria-labelledby="accordiontab" aria-expanded="false" style="height: 0px;">
+                        <div class="panel-body c-font-18">
+                          {% for doc in node.norproduct_informationsheet %}
+                          <a href={{ file_url(doc.entity.uri.value) }} target="_blank">
+                            {% if doc.description is not empty %}
+                              {{ doc.description }}
+                            {% else %}
+                              {{ doc.entity.filename.value }}
+                            {% endif %}
+                          </a>
+                          {% if loop.last == false %}
+                          <hr>{% endif %}
+                          {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                    {% endif %}
+                    {% if node.norproduct_applicationnote|length > 0 %}
+                    <div class="panel">
+                      <div class="panel-heading" role="tab" id="accordiontab">
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                            data-parent="#accordion-1" href="#application-notes" aria-expanded="false"
+                            aria-controls="9523657">APPLICATION NOTES <i
+                              class="fa fa-chevron-down"></i></a></h3>
+                      </div>
+                      <div id="application-notes" class="panel-collapse collapse" role="tabpanel"
+                        aria-labelledby="accordiontab" aria-expanded="false" style="height: 0px;">
+                        <div class="panel-body c-font-18">
+                          {% for doc in node.norproduct_applicationnote %}
+                          <a href={{ file_url(doc.entity.uri.value) }} target="_blank">
+                            {% if doc.description is not empty %}
+                              {{ doc.description }}
+                            {% else %}
+                              {{ doc.entity.filename.value }}
+                            {% endif %}
+                          </a>
+                          {% if loop.last == false %}
+                          <hr>{% endif %}
+                          {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                    {% endif %}
+                    {# Removed Safety Data Sheets until errors are fixed by regulatory - 2024-08-27 #}
+                    {# Added Safety Data Sheets back - 2024-10-04 #}
+                    {% if node.norproduct_msds|length > 0 %}
+                    <div class="panel">
+                      <div class="panel-heading" role="tab" id="accordiontab">
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                            data-parent="#accordion-1" href="#safety-data-sheets" aria-expanded="false"
+                            aria-controls="9523657">SAFETY DATA SHEETS <i
+                              class="fa fa-chevron-down"></i></a></h3>
+                      </div>
+                      <div id="safety-data-sheets" class="panel-collapse collapse" role="tabpanel"
+                        aria-labelledby="accordiontab" aria-expanded="false" style="height: 0px;">
+                        <div class="panel-body c-font-18">
+                          {% for doc in node.norproduct_msds %}
+                          <a href={{ file_url(doc.entity.uri.value) }} target="_blank">
+                            {% if doc.description is not empty %}
+                              {{ doc.description }}
+                            {% else %}
+                              {{ doc.entity.filename.value }}
+                            {% endif %}
+                          </a>
+                          {% if loop.last == false %}
+                          <hr>{% endif %}
+                          {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                    {% endif %}
+                    {% if node.norproduct_poster|length > 0 %}
+                    <div class="panel">
+                      <div class="panel-heading" role="tab" id="accordiontab">
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                            data-parent="#accordion-1" href="#posters" aria-expanded="false" aria-controls="9523657"><i
+                              class=""></i>POSTERS <i class="fa fa-chevron-down"></i></a></h3>
+                      </div>
+                      <div id="posters" class="panel-collapse collapse" role="tabpanel" aria-labelledby="accordiontab"
+                        aria-expanded="false" style="height: 0px;">
+                        <div class="panel-body c-font-18">
+                          {% for doc in node.norproduct_poster %}
+                          <a href={{ file_url(doc.entity.uri.value) }} target="_blank">
+                            {% if doc.description is not empty %}
+                              {{ doc.description }}
+                            {% else %}
+                              {{ doc.entity.filename.value }}
+                            {% endif %}
+                          </a>
+                          {% if loop.last == false %}
+                          <hr>{% endif %}
+                          {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                    {% endif %}
+                    {% if node.field_product_flyer|length > 0 %}
+                    <div class="panel">
+                      <div class="panel-heading" role="tab" id="accordiontab">
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                            data-parent="#accordion-1" href="#product-flyers" aria-expanded="false"
+                            aria-controls="9523657">FLYERS <i class="fa fa-chevron-down"></i></a></h3>
+                      </div>
+                      <div id="product-flyers" class="panel-collapse collapse" role="tabpanel"
+                        aria-labelledby="accordiontab" aria-expanded="false" style="height: 0px;">
+                        <div class="panel-body c-font-18">
+                          {% for doc in node.field_product_flyer %}
+                          <a href={{ file_url(doc.entity.uri.value) }} target="_blank">
+                            {% if doc.description is not empty %}
+                              {{ doc.description }}
+                            {% else %}
+                              {{ doc.entity.filename.value }}
+                            {% endif %}
+                          </a>
+                          {% if loop.last == false %}
+                          <hr>{% endif %}
+                          {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                    {% endif %}
+                    {% if node.field_related_blogs|length > 0 %}
+                    <div class="panel">
+                      <div class="panel-heading" role="tab" id="accordiontab">
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                            data-parent="#accordion-1" href="#related-blogs" aria-expanded="false"
+                            aria-controls="9523657">RELATED BLOGS <i class="fa fa-chevron-down"></i></a>
+                        </h3>
+                      </div>
+                      <div id="related-blogs" class="panel-collapse collapse" role="tabpanel"
+                        aria-labelledby="accordiontab" aria-expanded="false" style="height: 0px;">
+                        <div class="panel-body c-font-18">
+                          {% for doc in node.field_related_blogs %}
+                          {{ node.field_related_blogs.value|raw }}
+                          {% if loop.last == false %}
+                          <hr>{% endif %}
+                          {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </section>
+              {% endif %}
+
+
+              <!-- international documents -->
+              <!-- Product Documentation -->
+              {% if international_documentation == true %}
+              <a id="documentation" class="anchor-link"></a>
+              <section id="documentation-section" class="menu-section">
+                {% if '/fr' in url %}
+                <h2 class="c-font-uppercase c-font-bold">Documentation</h2>
+                {% elseif '/es' in url %}
+                <h2 class="c-font-uppercase c-font-bold">Documentación</h2>
+                {% elseif '/ja' in url %}
+                <h2 class="c-font-uppercase c-font-bold">ドキュメント</h2>
+                {% endif %}
+                <div class="c-content-accordion-norgen c-accordion-norgen-primary-blue-light">
+                  <div class="panel-group" id="accordion-1" role="tablist">
+                    {% if node_international.field_protocols |length > 0 %}
+                    <div class="panel">
+                      <div class="panel-heading" role="tab" id="accordiontab">
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                            data-parent="#accordion-1" href="#protocols" aria-expanded="false"
+                            aria-controls="2595394">PROTOCOLS <i class="fa fa-chevron-down"></i></a></h3>
+                      </div>
+                      <div id="protocols" class="panel-collapse collapse" role="tabpanel" aria-labelledby="accordiontab"
+                        aria-expanded="false" style="height: 0px;">
+                        <div class="panel-body c-font-18">
+                          {% for doc in node_international.field_protocols %}
+                          <a href={{ file_url(doc.entity.uri.value) }} target="_blank">
+                            {% if doc.description is not empty %}
+                              {{ doc.description }}
+                            {% else %}
+                              {{ doc.entity.filename.value }}
+                            {% endif %}
+                          </a>
+                          {% if loop.last == false %}
+                          <hr>{% endif %}
+                          {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if node_international.field_supplementary_protocols|length > 0 %}
+                    <div class="panel">
+                      <div class="panel-heading" role="tab" id="accordiontab">
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                            data-parent="#accordion-1" href="#supplementary-protocols" aria-expanded="false"
+                            aria-controls="824715">SUPPLEMENTARY PROTOCOLS <i
+                              class="fa fa-chevron-down"></i></a></h3>
+                      </div>
+                      <div id="supplementary-protocols" class="panel-collapse collapse" role="tabpanel"
+                        aria-labelledby="accordiontab" aria-expanded="false" style="height: 0px;">
+                        <div class="panel-body c-font-18">
+                          {% for doc in node_international.field_supplementary_protocols %}
+                          <a href={{ file_url(doc.entity.uri.value) }} target="_blank">
+                            {% if doc.description is not empty %}
+                              {{ doc.description }}
+                            {% else %}
+                              {{ doc.entity.filename.value }}
+                            {% endif %}
+                          </a>
+                          {% if loop.last == false %}
+                          <hr>{% endif %}
+                          {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                    {% endif %}
+                    {% if node_international.field_product_information_sheets|length > 0 %}
+                    <div class="panel">
+                      <div class="panel-heading" role="tab" id="accordiontab">
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                            data-parent="#accordion-1" href="#product-information-sheets" aria-expanded="false"
+                            aria-controls="9523657">PRODUCT INFORMATION SHEETS <i
+                              class="fa fa-chevron-down"></i></a></h3>
+                      </div>
+                      <div id="product-information-sheets" class="panel-collapse collapse" role="tabpanel"
+                        aria-labelledby="accordiontab" aria-expanded="false" style="height: 0px;">
+                        <div class="panel-body c-font-18">
+                          {% for doc in node_international.field_product_information_sheets %}
+                          <a href={{ file_url(doc.entity.uri.value) }} target="_blank">
+                            {% if doc.description is not empty %}
+                              {{ doc.description }}
+                            {% else %}
+                              {{ doc.entity.filename.value }}
+                            {% endif %}
+                          </a>
+                          {% if loop.last == false %}
+                          <hr>{% endif %}
+                          {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                    {% endif %}
+                    {% if node_international.field_application_notes_fr|length > 0 %}
+                    <div class="panel">
+                      <div class="panel-heading" role="tab" id="accordiontab">
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                            data-parent="#accordion-1" href="#application-notes" aria-expanded="false"
+                            aria-controls="9523657">APPLICATION NOTES <i
+                              class="fa fa-chevron-down"></i></a></h3>
+                      </div>
+                      <div id="application-notes" class="panel-collapse collapse" role="tabpanel"
+                        aria-labelledby="accordiontab" aria-expanded="false" style="height: 0px;">
+                        <div class="panel-body c-font-18">
+                          {% for doc in node_international.field_application_notes_fr %}
+                          <a href={{ file_url(doc.entity.uri.value) }} target="_blank">
+                            {% if doc.description is not empty %}
+                              {{ doc.description }}
+                            {% else %}
+                              {{ doc.entity.filename.value }}
+                            {% endif %}
+                          </a>
+                          {% if loop.last == false %}
+                          <hr>{% endif %}
+                          {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                    {% endif %}
+                    {# Removed Safety Data Sheets until errors are fixed by regulatory - 2024-08-27 #}
+                     {% if node_international.field_safety_data_sheets|length > 0 %}
+                    <div class="panel">
+                      <div class="panel-heading" role="tab" id="accordiontab">
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                            data-parent="#accordion-1" href="#safety-data-sheets" aria-expanded="false"
+                            aria-controls="9523657">SAFETY DATA SHEETS <i
+                              class="fa fa-chevron-down"></i></a></h3>
+                      </div>
+                      <div id="safety-data-sheets" class="panel-collapse collapse" role="tabpanel"
+                        aria-labelledby="accordiontab" aria-expanded="false" style="height: 0px;">
+                        <div class="panel-body c-font-18">
+                          {% for doc in node_international.field_safety_data_sheet %}
+                          <a href={{ file_url(doc.entity.uri.value) }} target="_blank">
+                            {% if doc.description is not empty %}
+                              {{ doc.description }}
+                            {% else %}
+                              {{ doc.entity.filename.value }}
+                            {% endif %}
+                          </a>
+                          {% if loop.last == false %}
+                          <hr>{% endif %}
+                          {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                    {% endif %} 
+                    {% if node_international.field_posters_fr|length > 0 %}
+                    <div class="panel">
+                      <div class="panel-heading" role="tab" id="accordiontab">
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                            data-parent="#accordion-1" href="#posters" aria-expanded="false" aria-controls="9523657"><i
+                              class=""></i>POSTERS <i class="fa fa-chevron-down"></i></a></h3>
+                      </div>
+                      <div id="posters" class="panel-collapse collapse" role="tabpanel" aria-labelledby="accordiontab"
+                        aria-expanded="false" style="height: 0px;">
+                        <div class="panel-body c-font-18">
+                          {% for doc in node_international.field_posters_fr %}
+                          <a href={{ file_url(doc.entity.uri.value) }} target="_blank">
+                            {% if doc.description is not empty %}
+                              {{ doc.description }}
+                            {% else %}
+                              {{ doc.entity.filename.value }}
+                            {% endif %}
+                          </a>
+                          {% if loop.last == false %}
+                          <hr>{% endif %}
+                          {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                    {% endif %}
+                    {% if node_international.field_product_flyer_fr|length > 0 %}
+                    <div class="panel">
+                      <div class="panel-heading" role="tab" id="accordiontab">
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                            data-parent="#accordion-1" href="#product-flyers" aria-expanded="false"
+                            aria-controls="9523657">FLYERS <i class="fa fa-chevron-down"></i></a></h3>
+                      </div>
+                      <div id="product-flyers" class="panel-collapse collapse" role="tabpanel"
+                        aria-labelledby="accordiontab" aria-expanded="false" style="height: 0px;">
+                        <div class="panel-body c-font-18">
+                          {% for doc in node_international.field_product_flyer_fr %}
+                          <a href={{ file_url(doc.entity.uri.value) }} target="_blank">
+                            {% if doc.description is not empty %}
+                              {{ doc.description }}
+                            {% else %}
+                              {{ doc.entity.filename.value }}
+                            {% endif %}
+                          </a>
+                          {% if loop.last == false %}
+                          <hr>{% endif %}
+                          {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </section>
+              {% endif %}
+  
+              <!-- Product Page Videos -->
+              {% if node.field_product_videos|length > 0 %}
+              <a id="videos" class="anchor-link"></a>
+              <section id="videos-section" class="menu-section">
+                <h2 class="c-font-uppercase c-font-bold">Videos</h2>
+                {{ node.field_product_videos.0.value|raw }}
+              </section>
+              {% endif %}
+  
+              <!-- FAQs -->
+              {% if faq_exists %}
+                <a id="faqs" class="anchor-link"></a>
+                <section id="faqs-section" class="menu-section">
+                  <h2 class="c-font-uppercase c-font-bold">FAQs</h2>
+                  <div itemscope itemtype="https://schema.org/FAQPage">
+                    {% if node_faqs %}
+                      <div class="faq-accordian-wrapper">
+                        {% if product.variations['#items']|length > 0 %}
+                          <h3>
+                            {% set uniqueVariations = [] %}
+                            {% for variation in product.variations['#items'] %}
+                              {% if variation.entity.attribute_format.entity.name.value not in uniqueVariations %}
+                                {% set uniqueVariations = uniqueVariations|merge([variation.entity.attribute_format.entity.name.value]) %}
+                              {% endif %}
+                            {% endfor %}
+                            {% for uniqueVariation in uniqueVariations %}
+                              {{uniqueVariation|trim}}{% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                          </h3>
+                        {% endif %}    
+                        <div class="c-content-accordion-norgen c-accordion-norgen-primary-blue-light">
+                          <div class="panel-group" id="accordion-{{faq.entity.sku.value}}" role="tablist">
+                            {% for faq in node.field_faq %}
+                              {% if faq.value|length > 0 %}
+                                <div class="panel" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                                  <div class="panel-heading" role="tab" id="accordiontab">
+                                    <h4 
+                                      class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-toggle="collapse"
+                                      data-parent="#accordion-{{variation.entity.sku.value}}" href="#variation{{loop.parent.loop.index}}question{{loop.index}}" aria-expanded="false" aria-controls="9523657"><i
+                                      class=""></i><span itemprop="name">{{ faq.value.question }}</span> <i class="fa fa-chevron-down"></i></a>
+                                    </h4>
+                                  </div>
+                                  <div id="variation{{loop.parent.loop.index}}question{{loop.index}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="accordiontab"
+                                    aria-expanded="false" style="height: 0px;">
+                                    <div class="panel-body c-font-18" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                                      <div itemprop="text">
+                                      {{ faq.value.answer|raw }}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              {% endif %}
+                            {% endfor %}
+                          </div>
+                        </div>
+                      </div>
+                    {% else %}
+                      {% for variation in product.variations['#items'] %}
+                        {% if variation.entity.field_faq.value|length > 0 %}
+                          <div class="faq-accordian-wrapper">
+                            {% if variation.entity.field_format|length > 0 %}<h3>{{ variation.entity.field_format.value }}</h3>{% endif %}
+                            <div class="c-content-accordion-norgen c-accordion-norgen-primary-blue-light">
+                              <div class="panel-group" id="accordion-{{variation.entity.sku.value}}" role="tablist">
+                                {% for faq in variation.entity.field_faq.value %}
+                                  <div class="panel" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                                    <div class="panel-heading" role="tab" id="accordiontab">
+                                      <h4 
+                                        class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-toggle="collapse"
+                                        data-parent="#accordion-{{variation.entity.sku.value}}" href="#variation{{loop.parent.loop.index}}question{{loop.index}}" aria-expanded="false" aria-controls="9523657"><i
+                                        class=""></i><span itemprop="name">{{ faq.question }}</span> <i class="fa fa-chevron-down"></i></a>
+                                      </h4>
+                                    </div>
+                                    <div id="variation{{loop.parent.loop.index}}question{{loop.index}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="accordiontab"
+                                      aria-expanded="false" style="height: 0px;">
+                                      <div class="panel-body c-font-18" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                                        <div itemprop="text">
+                                          {{ faq.answer|raw }}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                {% endfor %}
+                              </div>
+                            </div>
+                          </div>
+                        {% endif %}
+                      {% endfor %}
+                    {% endif %}
+                  </div>
+                  {# {{ product.variation_field_faq }} #}
+                </section>
+              {% endif %}
+  
+              <!-- Product Page Citations -->
+              <a id="citations" class="anchor-link"></a>
+              <section id="citations-section" class="menu-section">
+                {% if '/product/' in url %}
+                  {# {% if default_variation == '17200' or default_variation == '21000' or default_variation == '46800' or default_variation == '48300' or default_variation == '51800' or default_variaion == '23600'or default_variation == '27600' or default_variation == '58100' or default_variation == '58000' or default_variation == '35300' or default_variation == '48800' or default_variation == '55000' or default_variation == '26800' or default_variation == '47200' or default_variation == '45660' or default_variation == '58200' or default_variation == '59800' or default_variation == '49500' or default_variation == '48500' or default_variation == '55100' or default_variation == '49000' or default_variation == '59100' or default_variation == '50600' or default_variation == '18113' or default_variation == '63700' or default_variation == 'RU49000' or default_variation == 'Dx24300' or default_variation == '63950' or default_variation == '56600' or default_variation == '29600' or default_variation == '61900' or default_variation == 'RU53800' or default_variation == '45670-B' or default_variation == '45690-B' or default_variation == '53800' or default_variation == '68000' or default_variation == '69200' or default_variation == '60700' or default_variation == '58400' or default_variation == '65300' or default_variation == '58300' or default_variation == '65400' or default_variation == 'Dx27600' or default_variation == '59500' or default_variation == 'TM38750' or default_variation == 'Dx63950' or default_variation == 'Dx42550' or default_variation == 'TM42550' or default_variation == 'Dx55100' %}
+                  <!--DX69100, 59200, tm30450, tm30650, tm32250, 59200, 69100 was in bioz but didnt have citations so removed it from if statement for now-->
+                  <h2 class="c-font-uppercase c-font-bold">Citations</h2>
+                  <div class="bioz">
+                    {% set bioz = 'true' %}
+                    {{ bioz_citations_html|raw }}                  
+                  </div>
+                  {% else %} #}
+                  {% set view_result = drupal_view('publications_or_citations', 'block_1', product_entity.id) %}
+                  {% set view_output = render_var(drupal_view('publications_or_citations', 'block_1', product_entity.id)) %} 
+                  {% if view_output|striptags|trim is not empty %}
+                    <h2 class="c-font-uppercase c-font-bold">Citations</h2>
+                    <div class="">
+                      {{ view_result }}
+                    </div>
+               
+                  {% else %}
+                    {% if node.field_citations|length > 0  %}
+                      {% set no_bioz = 'false' %}
+                      <h2 class="c-font-uppercase c-font-bold">Citations</h2>
+                      <div class="citation-list">{{ node.field_citations.0.value|raw }}</div>
+                    {% endif %}
+                  {% endif %}
+                  {# {% endif %} #}
+                {# {% elseif '/fr' in url %}
+                  <div class="bioz">
+                    {% if node_international.field_citations_fr|length > 0  %}
+                      {% set no_bioz = 'false' %}
+                      <h2 class="c-font-uppercase c-font-bold">Citations</h2>
+                      <div>{{ node_international.field_citations_fr.0.value|raw }}</div>
+                    {% endif %}                  
+                  </div>
+                
+                {% elseif '/es' in url %}
+                  <div class="bioz">
+                    {% if node_international.field_citations_fr|length > 0  %}
+                      {% set no_bioz = 'false' %}
+                      <h2 class="c-font-uppercase c-font-bold">Citas</h2>
+                      <div>{{ node_international.field_citations_fr.0.value|raw }}</div>
+                    {% endif %}                  
+                  </div>
+
+                {% elseif '/es' not in url and '/fr' not in url %}
+                <!--chinese-->
+                  <div class="bioz">
+                    {% if node_international.field_citations_fr|length > 0  %}
+                      {% set no_bioz = 'false' %}
+                      <h2 class="c-font-uppercase c-font-bold">引文</h2>
+                      <div>{{ node_international.field_citations_fr.0.value|raw }}</div>
+                    {% endif %}                  
+                  </div> #}
+                {% endif %}
+              </section>
+  
+              <!-- Product Related Services -->
+              {% if node.field_related_services|length > 0 %}
+              <a id="related-services" class="anchor-link"></a>
+              <section id="related-services-section" class="menu-section">
+                <h2 class="c-font-uppercase c-font-bold">Related Services</h2>
+                <div class="row">
+                  {% for item in node.field_related_services %}
+                  {% if item.entity.name.value == 'ngs' %}
+                  <div class="reffect col-md-4 col-sm-12">
+                    <div class="rinfo">
+                      <h4><a href="/services/next-generation-sequencing">NGS</a></h4>
+                    </div>
+                    <div class="rimg">
+                      <a href="/services/next-generation-sequencing" class="related-services-product-page ngs"
+                        aria-label="NGS"><i class="iconex-rna-seq fa-8x ico-rengs"
+                          aria-hidden="true"></i></a>
+                    </div>
+                  </div>
+                  {% elseif item.entity.name.value == 'plant' %}
+                  <img src="/sites/default/files/images/services-btn-ngs.png" alt="NGS Service">
+                  {% elseif item.entity.name.value == 'rna' %}
+                  <div class="reffect col-md-4 col-sm-12">
+                    <div class="rinfo">
+                      <h4><a href="/services/rna-isolation-service" > RNA Isolation</a></h4>
+                    </div>
+                    <div class="rimg">
+                      <a href="/services/rna-isolation-service" class="related-services-product-page rna-isolation"
+                         aria-label="NGS"><i class="iconex-rna fa-8x ico-rerna" aria-hidden="true"></i></a>
+                    </div>
+                  </div>
+                  {% endif %}
+                  {% endfor %}
+                </div>
+              </section>
+              {% endif %}
+  
+              <!-- Product Related Products -->
+              {% if node.field_related_products|length > 0 %}
+              <a id="related-products" class="anchor-link"></a>
+              <section id="related-products-section" class="menu-section">
+                <h2 class="c-font-uppercase c-font-bold">Related Products</h2>
+                <div class="row">
+                  <div class="col-md-12 col-sm-12 prodBlock">
+                    <div id="Carouselprod" class="carousel slide carousel-fade1 dexp_carousel" data-ride="carousel">
+                      <ol class="carousel-indicators">
+                        {% for product in node.field_related_products %}
+                        {% if (loop.index0 == 0) or (loop.index0 % 3 == 0) %}
+                        <li data-target="#Carouselprod" data-slide-to='{{loop.index0 / 3}}' class={% if loop.first==true
+                          %}"active"{% endif %}></li>
+                        {% endif %}
+                        {% endfor %}
+                      </ol>
+                      <div class="carousel-inner prodBottom">
+                        <!-- Carousel items -->
+                        {% for product in node.field_related_products %}
+                        {% if (loop.index0 == 0) or (loop.index0 % 3 == 0) %} {# one carousel slide for every three
+                        products #}
+                        <div class='item {% if loop.index0 == 0 %}active{% endif %}'>
+                          {% endif %}
+                          <div class="col-md-12 col-lg-4 col-sm-8 prodRow">
+                            <div class="carousel-item">
+                              <a class="related-products-product-page related-products-product1"
+                                href='{{ related_products_aliases[loop.index0].product_page_alias}}'>
+                                <img src="{{ file_url(product.entity.field_product_image.entity.uri.value) }}" alt="{{ related_products_aliases[loop.index0].alt }}">
+                                <h4>{{ product.entity.title.value }}</h4>
+                              </a>
+                            </div>
+                          </div>
+                          {% if (loop.last == true) or (loop.index % 3 == 0) %} {# close item div after every three
+                          products, or after all products looped #}
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              {% endif %}
+  
+            </div>
+            {# <div id="bootstrap-fieldgroup-nav-item--reviews" class="tab-pane ">
+              <h3 class="c-font-uppercase c-font-bold c-font-22 c-center c-margin-b-40 c-margin-t-40">{{ 'Reviews for'|t
+                }} {{ product.title }}</h3>
+              <div class="c-product-review-input">
+                {{ product.field_reviews }}
+              </div>
+            </div> #}
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    {# NGS promo popup #}
+    {% if ngs_popup %}
+      <script>
+      
+        function closeNGSPopup(){
+          const popup = document.querySelector('#ngs-popup');
+          if(popup){
+            popup.classList.add('closed');
+            // user consented to cookies but the cookie doesn't exist
+            if(Drupal.eu_cookie_compliance.hasAgreed() && document.cookie.indexOf('hideNGSpopup=')==-1){
+              document.cookie = "hideNGSpopup=true;max-age=" + 60 * 60 * 24 * 2; // set cookie - expires in 2 days
+            }
+          }
+        }
+        document.addEventListener('DOMContentLoaded', function(){
+          const popup = document.querySelector('#ngs-popup');
+          if(popup){
+            setTimeout(() => { 
+              if(Drupal.eu_cookie_compliance.hasAgreed()){ // user has consented to cookies
+                if(document.cookie.indexOf('hideNGSpopup=')==-1){ // cookie to hide popup doesn't exist
+                  console.log(document.cookie);
+                  popup.classList.remove('closed'); // show popup
+                }
+              }
+              else{
+                popup.classList.remove('closed'); // no cookies, show popup every time
+              }
+            }, 2000);
+          }
+        });
+        
+      </script>
+      <div id="ngs-popup" class="center closed">
+        <button onclick="closeNGSPopup()" style="float:right;background:none;border:none;font-size:40px;line-height:1;position:absolute;top:0;right:0;">×</button>
+        <h2 class="title center"><strong>NGS Services</strong></h2>
+        <div class="flex">
+          <a href="/services/small-rna-sequencing">
+            <div>
+              <img class="service-img" src="/sites/default/files/images/icons/Small%20RNA_Blue.svg" alt="icon" data-nopreview="true" data-ignore-preview="true">
+              <div class="center">Small RNA</div>
+            </div>
+          </a>
+          <a href="/services/rna-sequencing">
+            <div>
+              <img class="service-img" src="/sites/default/files/images/icons/RNA%20SEQ_Red.svg" alt="icon" data-nopreview="true" data-ignore-preview="true">
+              <div class="center">RNA</div>
+            </div>
+          </a>
+          <a href="/services/ngs-16s-rrna-microbiome-sequencing">
+            <div>
+              <img class="service-img" src="/sites/default/files/images/icons/Metagenomics.svg" alt="icon" data-nopreview="true" data-ignore-preview="true">
+              <div class="center">Metagenomics</div>
+            </div>
+          </a>
+        </div>
+        <p><b>Free trials available</b> for Small RNA and RNA sequencing projects!</p>
+        <a href="/content/service-consultation-request?utm_source=next-generation-sequencing&amp;utm_medium=internal_link&amp;utm_campaign=service_inquiry" class="btn btn-primary" style="margin-right:5px;">Book Consultation</a>
+        <a href="/services/next-generation-sequencing?utm_source=ngs-popup&amp;utm_medium=internal_link" class="">Learn More</a>
+      </div>
+    {% endif %}
+    {# End NGS promo popup #}
+
+    {% if default_variation == 75500 or default_variation == 25720 %}
+    
+    {# magbead promo INFO #}
+    <div id="magbead-promo-info-overlay" class="fixed">
+      <div class="magbead-promo-info-wrapper">
+        <h2 class="center" style="font-size: 24px;font-weight: bold;">Bundle and Save!</h2>
+        <button onclick="toggleMagbeadDnaseBundleInfo()" style="float:right;background:none;border:none;font-size:40px;line-height:1;position:absolute;top:0;right:0;">×</button>
+        <p class="center">Bundle a Total RNA Magnetic Bead Purification Kit with DNase and receive the DNase for a special low price!</p>
+        <div class="img-and-prices">
+          <div class="product">
+            <img src="/sites/default/files/styles/norproduct_imagekit/public/images/product_images/75400-1.jpg">
+            <div><a href="/product/total-rna-purification-kits?v=1656">Total RNA Purification Kit (Magnetic Bead System) - 50 Reactions</a></div>
+            {% if not restricted_country %}
+              <div class="prices">
+                {% if user_country == 'CA' %}CA$161.24
+                {% else %}$139.00{% endif %}
+              </div>
+            {% endif %}
+          </div>
+          <div><i class="fa fa-plus"></i></div>
+          <div class="product">
+            <img src="/sites/default/files/styles/norproduct_imagekit/public/25710.png">
+            <div>
+              <div><a href="/product/rnase-free-dnase-i-kit?v=79">RNase-Free DNase I Kit - 50 Reactions</a></div>
+              {% if not restricted_country %}
+              <div class="prices">
+                {% if user_country == 'CA' %}<s>CA$150.00</s><b>CA$70.00</b>
+                {% else %}<s>$129.00</s><b>$60.00</b>{% endif %}
+              </div>
+              {% endif %}
+            </div>
+          </div>
+          {# {% if not restricted_country %}
+          <a class="c-font-bold c-font-uppercase btn btn-primary">Add to Cart</a>
+          {% endif %} #}
+        </div>
+        <hr>
+        <div class="img-and-prices">
+          <div class="product">
+            <img src="/sites/default/files/styles/norproduct_imagekit/public/images/product_images/75500-box.png">
+            <div><a href="/product/total-rna-purification-kits?v=1657">Total RNA Purification 96-Well Kit (Magnetic Bead System) - 200 Preps</a></div>
+            {% if not restricted_country %}
+              <div class="prices">
+                {% if user_country == 'CA' %}CA$486.04
+                {% else %}$419.00{% endif %}
+              </div>
+            {% endif %}
+          </div>
+          <div><i class="fa fa-plus"></i></div>
+          <div class="product">
+            <img src="/sites/default/files/styles/norproduct_imagekit/public/25710.png">
+            <div>
+              <div><a href="/product/rnase-free-dnase-i-kit?v=493">RNase-Free DNase I Kit - 200 Reactions</a></div>
+              {% if not restricted_country %}
+              <div class="prices">
+                {% if user_country == 'CA' %}<s>CA$556.00</s><b>CA$240.00</b>
+                {% else %}<s>$479.00</s><b>$200.00</b>{% endif %}
+              </div>
+              {% endif %}
+            </div>
+          </div>
+          {# {% if not restricted_country %}
+          <a class="c-font-bold c-font-uppercase btn btn-primary">Add to Cart</a>
+          {% endif %} #}
+        </div>
+        <div class="c-content-accordion-norgen" style="background-color:var(--norgen-grey-light);border-radius:10px;overflow:hidden;">
+          <div class="panel-group" id="magbead-dnase-bundle-info-accord" role="tablist">
+            <div class="panel">
+              <div class="panel-heading" role="tab" id="accordiontab">
+                <h3 class="panel-title"><a class="c-font-bold collapsed disclaimer" data-toggle="collapse" data-parent="#magbead-dnase-bundle-info-accord" href="#magbead-dnase-bundle-info-terms" aria-expanded="false" aria-controls="2595394" style="border-radius: 10px 10px 0px 0px;background-color:var(--norgen-grey-light);padding:10px;">Terms &amp; Conditions <i class="fa fa-chevron-down" style="font-size:12px;"></i></a></h3>
+              </div>
+              <div id="magbead-dnase-bundle-info-terms" class="panel-collapse collapse" role="tabpanel" aria-labelledby="accordiontab" aria-expanded="false" style="">
+                <div class="panel-body c-font-12" style="border-radius:0px 0px 10px 10px;padding:10px;background-color:var(--norgen-grey-light);border-top:none;">
+                  <p>Offer valid with every purchase of a Total RNA Magnetic Bead Purification Kit. Additional purchases of RNase-Free DNase I Kit will not receive the discount without the purchase of the accompanying Total RNA Magnetic Bead Purification Kit. Discount is applied at the order level.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {# END magbead promo INFO #}
+
+    <script>
+
+      function toggleMagbeadDnaseBundleInfo(){
+        let magbeaddnase_wrapper_wrapper = document.getElementById('magbead-promo-info-overlay');
+        document.documentElement.classList.toggle('scroll-lock');
+        if(magbeaddnase_wrapper_wrapper) magbeaddnase_wrapper_wrapper.classList.toggle('active');
+      }
+      let magbeaddnase_wrapper = document.getElementById('magbead-promo-info-overlay');
+      if(magbeaddnase_wrapper){
+        magbeaddnase_wrapper.addEventListener('click', function(e){
+          if(e.target === this){
+            toggleMagbeadDnaseBundleInfo();
+          }
+        });
+      }
+
+    </script>
+    {% endif %}
+
+    {# Sample Request #}
+    {% if request_sample_form %}
+    <script>
+      function toggleSampleRequestForm(){
+        let sample_request_form_wrapper = document.getElementById('sample-request-form-overlay');
+        document.documentElement.classList.toggle('scroll-lock');
+        if(sample_request_form_wrapper) sample_request_form_wrapper.classList.toggle('active');
+      }
+
+      let sample_request_form_wrapper = document.getElementById('sample-request-form-overlay');
+      if(sample_request_form_wrapper){
+        sample_request_form_wrapper.addEventListener('click', function(e){
+          if(e.target === this){
+            toggleSampleRequestForm();
+          }
+        });
+      }
+
+
+      /* auto-select */
+      /* const default_variation_sku = {{default_variation}};
+      console.log('{{part_num}}');
+
+      matching_checkbox = document.querySelector('.samples-wrapper table input[type="checkbox"][value="{{part_num}}"]');
+      if(matching_checkbox) matching_checkbox.click(); */
+
+    </script>
+    {% endif %}
+    {# End Sample Request #}
+
+    {# Product Customization Request #}
+    {% if product_customization %}
+    <script>
+      function toggleProductCustomizationForm(){
+        let customization_form_wrapper = document.getElementById('product-customization-form-overlay');
+        document.documentElement.classList.toggle('scroll-lock');
+        if(customization_form_wrapper) customization_form_wrapper.classList.toggle('active');
+      }
+
+      let customization_form_wrapper = document.getElementById('product-customization-form-overlay');
+      if(customization_form_wrapper){
+        customization_form_wrapper.addEventListener('click', function(e){
+          if(e.target === this){
+            toggleProductCustomizationForm();
+          }
+        });
+      }
+    </script>
+    {% endif %}
+    {# Product Customization Request #}
+    
+    {% if total_rna_automation_scripts %}
+    <script>
+        function toggleAutomationScriptsForm(){
+          let automation_scripts_form_wrapper = document.getElementById('total-rna-automation-form-overlay');
+          document.documentElement.classList.toggle('scroll-lock');
+          if(automation_scripts_form_wrapper) automation_scripts_form_wrapper.classList.toggle('active');
+        }
+
+        let automation_scripts_form_wrapper = document.getElementById('total-rna-automation-form-overlay');
+        if(automation_scripts_form_wrapper){
+          automation_scripts_form_wrapper.addEventListener('click', function(e){
+            if(e.target === this){
+              toggleAutomationScriptsForm();
+            }
+          });
+        }
+    </script>
+    {% endif %}
+
+    <script>
+      function readMore() {
+        let p = document.querySelector(`.quote-box .hiddenp`);
+        let btnText = document.querySelector(`.myBtn`);
+  
+        if (!p.classList.contains('collapse')) {
+          p.classList.add('collapse');
+          btnText.innerHTML = "Read more";
+        } else {
+          p.classList.remove('collapse');
+          btnText.innerHTML = "Read less";
+        }
+      }
+  
+      function readMore2() {
+        let p = document.querySelector(`.quote-box .hiddenp2`);
+        let btnText = document.querySelector(`.myBtn2`);
+  
+        if (!p.classList.contains('collapse')) {
+          p.classList.add('collapse');
+          btnText.innerHTML = "Read more";
+        } else {
+          p.classList.remove('collapse');
+          btnText.innerHTML = "Read less";
+        }
+      }
+  
+      function readMore3() {
+        let p = document.querySelector(`.quote-box .hiddenp3`);
+        let btnText = document.querySelector(`.myBtn3`);
+  
+        if (!p.classList.contains('collapse')) {
+          p.classList.add('collapse');
+          btnText.innerHTML = "Read more";
+        } else {
+          p.classList.remove('collapse');
+          btnText.innerHTML = "Read less";
+        }
+      }
+  
+      var external_publication_bool = '{{ bioz|json_encode|raw }}';
+      var no_external_publication_bool = {{ no_bioz|json_encode|raw }};
+      if(external_publication_bool == 'null' && no_external_publication_bool == 'false'){
+        var publications = document.getElementsByClassName("norpublication");
+  
+        const divided = publications.length/5;
+        var loops = Math.ceil(divided);
+        
+        var newdiv;
+        
+        var cit_sec = document.getElementById("citations-section");
+        cit_sec.style.height = "fit-content";
+        cit_sec.style.position = "relative";
+        var count = 0;
+        const l = publications.length;
+        for(var i = 0; i<loops; i++){
+          newdiv = document.createElement("div");
+          newdiv.setAttribute('class','newdiv2');
+          newdiv.style.left = i * 100 + "%";
+          cit_sec.appendChild(newdiv);
+          
+          var loop_count = count + 5;
+          for(var j = count; j < loop_count; j++){
+            if(count < l){
+              newdiv.appendChild(publications[j].cloneNode(true));
+              count++;
+            }
+          }
+        }
+        var citation_header = document.getElementsByClassName("citation-header");
+        //pagination
+        if(loops > 1){
+  
+          var pagination_div = document.createElement("div");
+          pagination_div.setAttribute("class",'pagination_div');
+          cit_sec.appendChild(pagination_div);
+          for(var i = 0; i < loops; i++){
+            var pagenum = document.createElement("div");
+            pagenum.setAttribute("class","pagenum");
+            pagenum.setAttribute("id","pagenum" + (i+1));
+            pagenum.innerHTML = i+1;
+            var count = i;
+            pagination_div.appendChild(pagenum);
+            
+            document.getElementById("pagenum"+(i+1)).setAttribute('onclick','change(this)');
+            
+          }
+          var atag = document.createElement("a");
+          atag.setAttribute("class",'next_btn');
+          atag.innerHTML = "... Next";
+          atag.setAttribute("onClick",'next_citation()');
+          atag.style.display = "none";
+          pagination_div.appendChild(atag);
+  
+          var pretag = document.createElement("a");
+          pretag.setAttribute("class",'next_btn');
+          pretag.innerHTML = "Previous ...";
+          pretag.setAttribute("onClick",'pre_citation()');
+          pagination_div.insertBefore(pretag,document.getElementById("pagenum1"))
+          pretag.style.display = "none";
+  
+          if(loops > 4){
+            atag.style.display = "block";
+          }
+          document.getElementById("pagenum1").classList.add("active_pagenum");
+          show_limited_pagination();
+        }
+      
+        var newdiv2 = document.getElementsByClassName("newdiv2");  
+        newdiv2[0].style.display= "block";
+        //document.getElementById("pagenum1").classList.add("active_pagenum");
+        
+        function next_citation(){
+          var pagenum_active = document.getElementsByClassName("active_pagenum");
+          const id = pagenum_active[0].innerHTML;
+          const id_plus = +id + +1;
+          change(document.getElementById("pagenum"+(+id + +1)));
+          if(document.getElementById("pagenum1").style.display == "none"){
+            pretag.style.display = "block";
+          }
+        }
+        function pre_citation(){
+          var pagenum_active = document.getElementsByClassName("active_pagenum");
+          const id = pagenum_active[0].innerHTML;
+          const id_plus = +id - +1;
+          change(document.getElementById("pagenum"+(+id - +1)));
+          if(document.getElementById("pagenum1").style.display == "block"){
+            pretag.style.display = "none";
+          }
+          
+        }
+        function change(elem){
+          const num = elem.innerHTML;
+          document.getElementById("pagenum"+num).classList.add("active_pagenum");
+          var newdiv2 = document.getElementsByClassName("newdiv2");
+          for(var i = 0; i < newdiv2.length;i++){
+            if(num == (i+1)){
+              newdiv2[num-1].style.display= "block";
+            }
+            else{
+              newdiv2[i].style.display = "none";
+            }
+            
+          }
+          var pagenum = document.getElementsByClassName("pagenum");
+          for(var j = 0; j < pagenum.length;j++){
+            if(pagenum[j].classList.contains("active_pagenum") && num != (j+1)){
+                pagenum[j].classList.remove("active_pagenum");
+              }
+            else if(num == (j+1)){
+              pagenum[num-1].classList.add("active_pagenum");
+  
+            }
+            if(newdiv2[newdiv2.length-1].style.display == "block"){
+              atag.style.display = "none";
+            }
+            else{
+              atag.style.display = "block";
+            }
+            
+          }
+          show_limited_pagination();
+          if(document.getElementById("pagenum1").style.display == "block"){
+            pretag.style.display = "none";
+          }
+          else{
+            pretag.style.display = "block";
+          }
+        }
+        function show_limited_pagination(){
+  
+          var pagenum_active = document.getElementsByClassName("active_pagenum");
+          const id = pagenum_active[0].innerHTML;
+          const id_minus = +id - 3;
+          const id_plus = +id + 3;
+  
+          var pagenum = document.getElementsByClassName("pagenum");
+          for(var i = 0; i < pagenum.length; i++){
+            if(i < id_plus && i >= id_minus){
+              pagenum[i].style.display = "block";
+            }
+            else{
+              pagenum[i].style.display = "none"; 
+            }
+          }
+        }
+        //show_limited_pagination();
+      }
+      
+    </script>

@@ -1,0 +1,143 @@
+{#
+/**
+ * @file
+ * Theme override for a field.
+ *
+ * To override output, copy the "field.html.twig" from the templates directory
+ * to your theme's directory and customize it, just like customizing other
+ * Drupal templates such as page.html.twig or node.html.twig.
+ *
+ * Instead of overriding the theming for all fields, you can also just override
+ * theming for a subset of fields using
+ * @link themeable Theme hook suggestions. @endlink For example,
+ * here are some theme hook suggestions that can be used for a field_foo field
+ * on an article node type:
+ * - field--node--field-foo--article.html.twig
+ * - field--node--field-foo.html.twig
+ * - field--node--article.html.twig
+ * - field--field-foo.html.twig
+ * - field--text-with-summary.html.twig
+ * - field.html.twig
+ *
+ * Available variables:
+ * - attributes: HTML attributes for the containing element.
+ * - label_hidden: Whether to show the field label or not.
+ * - title_attributes: HTML attributes for the title.
+ * - label: The label for the field.
+ * - multiple: TRUE if a field can contain multiple items.
+ * - items: List of all the field items. Each item contains:
+ *   - attributes: List of HTML attributes for each item.
+ *   - content: The field item's content.
+ * - entity_type: The entity type to which the field belongs.
+ * - field_name: The name of the field.
+ * - field_type: The type of the field.
+ * - label_display: The display settings for the label.
+ *
+ * @see template_preprocess_field()
+ */
+#}
+{%
+    set classes = [
+      'field',
+      'field--name-' ~ field_name|clean_class,
+      'field--type-' ~ field_type|clean_class,
+      'field--label-' ~ label_display,
+    ]
+  %}
+  {%
+    set title_classes = [
+      'field__label',
+      label_display == 'visually_hidden' ? 'visually-hidden',
+    ]
+  %}
+  {% if label_hidden %}
+
+    {% if multiple %}
+      {# <div{{ attributes.addClass(classes, 'field__items') }}>
+        {% for item in items %}
+          <div{{ item.attributes.addClass('field__item') }}>{{ item.content }}</div>
+        {% endfor %}
+      </div> #}
+      <div{{ attributes.addClass(classes, 'field__items', 'carousel', 'slide', 'carousel-fade1', 'prodcarimg', 'dexp_carousel', 'active') }} id="norproduct-imagekit-carousel">
+      {# <div id="norproduct-imagekit-carousel" class="row carousel slide carousel-fade1 prodcarimg dexp_carousel active" data-ride="" keyboard=""> #}
+        <div class="carousel-inner">
+          {% if items|length > 0 %}
+            {% for kit_image in items %}
+            {% set a  = kit_image.content['#item'].entity.fileuri|split(".") %}
+            {% if a|last == "jpg" or a|last == "png" or a|last == "gif" or a|last == "jpeg" or a|last == "svg" %}
+              <div class="field__item item {% if loop.index0 == 0 %}active {% endif %}zoom-disabled">
+                <div class="image-box prod-car-img">
+                  <img {% if loop.index0 == 0 %} fetchpriority="high" loading="eager" {% endif %} typeof="foaf:Image" src={{ kit_image.content['#item'].entity.fileuri | image_style('norproduct_imagekit') }} alt="{{ kit_image.content['#item'].alt }}">
+                </div>
+              </div>
+              {% else %}
+
+              {% set b = kit_image.content['#item'].entity.fileuri|slice(9,length) %}
+              {% set c = "/sites/default/files/" ~ b %}
+              <div class="field__item item {% if loop.index0 == 0 %}active {% endif %}zoom-disabled">
+                <div class="prod-car-img">
+                  <video preload="none" poster="/sites/default/files/images/product_images/video_poster.png" controls>
+                      <source src={{ c }} type="video/mp4">
+                      <source src={{ c }} type="video/ogg">
+                      <a href={{ c }}>Download the video</a>
+                  </video>
+                </div>
+              </div>
+              {% endif %}
+            {% endfor %}
+          {% elseif items|length == 0 %}<!-- No image supplied by user, show a default "no image" image -->
+					<div class="item active zoom-disabled">
+						<div class="image-box prod-car-img">
+              <img fetchpriority="high" loading="eager" title="placeholder image" typeof="foaf:Image" src="https://norgenbiotek.com/sites/default/files/No_Image_Placeholder.png" alt="placeholder image" />
+						</div>
+					</div>
+				{% endif %}
+          {# <div class="zoom-lens" style="width: 100px;height:100px;"></div> #}
+        </div>
+        <div class="olProd row">
+          <div class="xs-col-12 sm-col-6 col-lg-12">
+            <ol class="carousel-indicators">
+              {% for kit_image in items %} 
+              {% set a  = kit_image.content['#item'].entity.fileuri|split(".") %}
+              {% if a[1] == "jpg" or a[1] == "png" or a[1] == "gif" or a[1] == "jpeg" or a[1] == "svg" %}     
+                <!-- Controls -->
+                <li data-target="#norproduct-imagekit-carousel" data-slide-to="{{loop.index0}}" class="{% if loop.index0 == 0 %}active{% endif %}">
+                  <img typeof="foaf:Image" src={{ kit_image.content['#item'].entity.fileuri | image_style('thumbnail') }} alt="{{ kit_image.content['#item'].alt }}">
+                </li>
+                {% else %}
+                <li data-target="#norproduct-imagekit-carousel" data-slide-to="{{loop.index0}}" class="{% if loop.index0 == 0 %}active{% endif %}">
+                  <img typeof="foaf:Image" src="/sites/default/files/images/product_images/unboxing-img.png" alt="{{ kit_image.content['#item'].alt }}">
+                </li>
+            {% endif %}
+              {% endfor %}
+              </ol>
+          </div>
+        </div>
+      </div>
+
+    {% else %}
+      {% for item in items %}
+        <div{{ attributes.addClass(classes, 'field__item') }}>{{ item.content }}</div>
+      {% endfor %}
+
+    {% endif %}
+
+
+  {% else %}
+    <div{{ attributes.addClass(classes) }}>
+      <div{{ title_attributes.addClass(title_classes) }}>{{ label }}</div>
+
+      {% if multiple %}
+        <div class="field__items">
+      {% endif %}
+
+      {% for item in items %}
+        <div{{ item.attributes.addClass('field__item') }}>{{ item.content }}</div>
+      {% endfor %}
+
+      {% if multiple %}
+        </div>
+      {% endif %}
+
+    </div>
+  {% endif %}

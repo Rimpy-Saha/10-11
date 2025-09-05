@@ -1,0 +1,704 @@
+{#
+/**
+* @file
+* Default theme implementation to display a node.
+*
+* Available variables:
+* - node: The node entity with limited access to object properties and methods.
+* Only method names starting with "get", "has", or "is" and a few common
+* methods such as "id", "label", and "bundle" are available. For example:
+* - node.getCreatedTime() will return the node creation timestamp.
+* - node.hasField('field_example') returns TRUE if the node bundle includes
+* field_example. (This does not indicate the presence of a value in this
+* field.)
+* - node.isPublished() will return whether the node is published or not.
+* Calling other methods, such as node.delete(), will result in an exception.
+* See \Drupal\node\Entity\Node for a full list of public properties and
+* methods for the node object.
+* - label: (optional) The title of the node.
+* - content: All node items. Use {{ content }} to print them all,
+* or print a subset such as {{ content.field_example }}. Use
+* {{ content|without('field_example') }} to temporarily suppress the printing
+* of a given child element.
+* - author_picture: The node author user entity, rendered using the "compact"
+* view mode.
+* - metadata: Metadata for this node.
+* - date: (optional) Themed creation date field.
+* - author_name: (optional) Themed author name field.
+* - url: Direct URL of the current node.
+* - display_submitted: Whether submission information should be displayed.
+* - attributes: HTML attributes for the containing element.
+* The attributes.class element may contain one or more of the following
+* classes:
+* - node: The current template type (also known as a "theming hook").
+* - node--type-[type]: The current node type. For example, if the node is an
+* "Article" it would result in "node--type-article". Note that the machine
+* name will often be in a short form of the human readable label.
+* - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+* teaser would result in: "node--view-mode-teaser", and
+* full: "node--view-mode-full".
+* The following are controlled through the node publishing options.
+* - node--promoted: Appears on nodes promoted to the front page.
+* - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+* teaser listings.
+* - node--unpublished: Appears on unpublished nodes visible only to site
+* admins.
+* - title_attributes: Same as attributes, except applied to the main title
+* tag that appears in the template.
+* - content_attributes: Same as attributes, except applied to the main
+* content tag that appears in the template.
+* - author_attributes: Same as attributes, except applied to the author of
+* the node tag that appears in the template.
+* - title_prefix: Additional output populated by modules, intended to be
+* displayed in front of the main title tag that appears in the template.
+* - title_suffix: Additional output populated by modules, intended to be
+* displayed after the main title tag that appears in the template.
+* - view_mode: View mode; for example, "teaser" or "full".
+* - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+* - page: Flag for the full page state. Will be true if view_mode is 'full'.
+* - readmore: Flag for more state. Will be true if the teaser content of the
+* node cannot hold the main body content.
+* - logged_in: Flag for authenticated user status. Will be true when the
+* current user is a logged-in member.
+* - is_admin: Flag for admin user status. Will be true when the current user
+* is an administrator.
+*
+* @see template_preprocess_node()
+*
+* @ingroup themeable
+*/
+#}
+
+<article{{ attributes }}>
+
+  {{ title_prefix }}
+  {% if label and not page %}
+  <h2{{ title_attributes }}>
+    <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+    </h2>
+    {% endif %}
+    {{ title_suffix }}
+
+    {% if display_submitted %}
+    <footer>
+      {{ author_picture }}
+      <div{{ author_attributes }}>
+        {% trans %}Submitted by {{ author_name }} on {{ date }}{% endtrans %}
+        {{ metadata }}
+        </div>
+    </footer>
+    {% endif %}
+    {{ custom_breadcrumb|raw }}
+    <div{{ content_attributes }}>
+      {{ content }}
+      </div>
+
+      </article>
+
+      <!-- FORM STYLING -->
+      <style>
+        html {
+          --container-width: 100%;
+        }
+
+        .captcha-admin-links {
+          display: none;
+        }
+
+        form#norgen-h2o-promo-form {
+          margin-top: 2em;
+        }
+
+        .title-section>h1 {
+          font-size: 5em;
+          color: #004897;
+          line-height: 1.2;
+          margin-bottom: 20px;
+        }
+
+        .form-wrapper legend {
+          border-bottom: none;
+          background-color: #004897;
+          padding: 0.5em 1em;
+          color: #fff;
+          position: relative;
+          font-size: 14px;
+        }
+
+        fieldset.full-form-wrapper {
+          padding: 0 0;
+        }
+
+        .full-form-wrapper>legend>span {
+          display: block;
+        }
+
+        .full-form-wrapper>legend,
+        .mailing-list-opt-in legend {
+          border-bottom: none;
+          font-weight: bold;
+          font-size: 1em;
+          margin-bottom: 0px;
+          padding: 0 0;
+          padding-left: 0px;
+          width: 100%;
+          left: auto;
+          background-color: transparent;
+          color: #000;
+        }
+
+        .full-form-wrapper>legend {
+          font-size: 18px;
+          text-align: center;
+          margin-bottom: 14px;
+        }
+
+        fieldset.mailing-list-opt-in {
+          grid-column: 1 / 3;
+        }
+
+        .g-recaptcha>div:first-child {
+          margin-right: 0px;
+          margin-left: auto;
+        }
+
+        #norgen-h2o-promo-form fieldset .form-item.form-type-textfield input,
+        #norgen-h2o-promo-form fieldset .form-item.form-type-select select {
+          vertical-align: middle;
+          min-width: 50px;
+          min-height: 36px;
+          width: 100%;
+          max-width: 800px;
+          background-color: #fff;
+          border: #a9a9a969;
+          border-style: solid;
+          border-width: thin;
+          max-height: 60px;
+          padding: 0.5em 1em;
+        }
+
+        input.submit {
+          display: block;
+          margin-right: 0px;
+          margin-left: auto;
+          background-color: #0f6b7a;
+          border-color: #0f6b7a;
+        }
+
+        .title-big-red {
+          font-size: 1.5em;
+          color: #ec1d25;
+          display: block;
+        }
+
+        h1,
+        h2 {
+          font-weight: bold;
+          margin: 0 auto;
+        }
+
+        .ways-to-save {
+          /* margin-left:1.2em; */
+          font-size: 1.5em;
+        }
+
+        .ways-to-save li {
+          margin: 1em;
+          margin-left: 0px;
+        }
+
+        .ways-to-save li::marker {
+          font-weight: bold;
+        }
+
+        .title-section {
+          margin-top: 5em;
+          margin-bottom: 2em;
+          width: 50%;
+          padding: 0 10%;
+          position: relative;
+        }
+
+
+        .title-section>p {
+          color: #004897;
+          font-size: 2em;
+        }
+
+        .nuclease-order-btn {
+          border-radius: 10px;
+          background: #be1e2d;
+          color: white;
+          padding: 10px 45px;
+          font-size: 25px;
+        }
+
+        .grid {
+          display: grid;
+        }
+
+        .grid.two-column {
+          grid-template-columns: 1fr max-content;
+          overflow: visible;
+          margin-bottom: -140px;
+        }
+
+        .grid.two-column>img {
+          position: relative;
+          top: -140px;
+          max-height: 450px;
+        }
+
+        #eligible-products,
+        #terms-and-conditions {
+          margin-top: 5em;
+        }
+
+        #terms-and-conditions {
+          margin-bottom: 5em;
+        }
+
+        /* Copy Code */
+        .copytip .copytiptext {
+          visibility: hidden;
+          background-color: #555;
+          color: #fff;
+          text-align: center;
+          border-radius: 6px;
+          padding: 10px;
+          position: absolute;
+          z-index: 1;
+          bottom: 110%;
+          left: 75px;
+          margin-left: -75px;
+          opacity: 0;
+          transition: all 0.3s;
+          width: 100%;
+        }
+
+        .copytip:hover .copytiptext {
+          visibility: visible;
+          opacity: 1;
+          transition: all 0.3s;
+        }
+
+        .copytip button {
+          text-transform: uppercase;
+          text-align: center;
+          position: relative;
+          padding: 7px 14px;
+          display: inline-block;
+          background: #0A183B;
+          border: none;
+        }
+
+        .copytip {
+          width: fit-content;
+          margin: 0 auto;
+          display: inline-block;
+        }
+
+        .copytip h2 {
+          color: #fff;
+        }
+
+        .fa-chevron-down:hover {
+          cursor: default;
+          color: inherit;
+        }
+
+        #eligible-products h3>i {
+          font-size: 24px;
+        }
+
+        #eligible-products h4>i {
+          font-size: 18px;
+        }
+
+        .product-section-title:hover {
+          cursor: pointer;
+          background-color: #E5ECF4;
+        }
+
+        .product-section {
+          overflow: hidden;
+          max-height: 0px;
+          transition: max-height 0.2s ease-in-out;
+        }
+
+        .product-section.expanded {
+          max-height: 10000px;
+          transition: max-height 0.2s ease-in-out;
+        }
+
+        .product-section-title>i {
+          transform: rotate(0deg);
+          transition: transform 0.2s ease-in-out;
+        }
+
+        .product-section-title.expanded>i {
+          transform: rotate(180deg) translateX(-7px);
+          transition: transform 0.2s ease-in-out;
+        }
+
+        #shipping-fieldset>fieldset.form-wrapper>.fieldset-wrapper,
+        #customer-fieldset>fieldset.form-wrapper>.fieldset-wrapper {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          row-gap: 1em;
+          column-gap: 1em;
+        }
+
+
+        .title-bg-image {
+          background: url("https://norgenbiotek.com/sites/default/files/promotions/water-2024/water-droplets-bg.jpg");
+          height: 600px;
+          background-size: cover;
+          background-repeat: no-repeat;
+          position: relative;
+        }
+
+        .grid-bg {
+          display: flex;
+          align-items: center;
+          /*justify-content: center;*/
+        }
+
+        .floating-img-banner {
+          position: absolute;
+          right: 1em;
+          bottom: 0px;
+        }
+
+        #nuclease-bottle {
+          position: relative;
+        }
+
+        .purchase-purity-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          grid-gap: 1em;
+        }
+
+        .purchase-purity-grid .table-striped>tbody>tr>td,
+        .purchase-purity-grid .table-striped>tbody>tr>th {
+          vertical-align: middle;
+        }
+
+        lite-youtube {
+          min-height: 315px;
+          aspect-ratio: 16 / 9;
+          max-width: 600px;
+        }
+
+        h2 {
+          font-size: 30px;
+          font-weight: bold;
+        }
+
+        @media (max-width:1600px) {
+          .title-section {
+            width: 80%;
+          }
+        }
+
+        @media (max-width:1440px) {
+          .title-section {
+            width: 80%;
+          }
+        }
+
+        @media only screen and (max-width: 600px) {
+          .title-section>P {
+            font-size: 30px;
+          }
+
+          .title-section>h1 {
+            font-size: 60px;
+          }
+
+          lite-youtube {
+            max-width: 400px;
+          }
+        }
+
+        @media only screen and (max-width: 400px) {
+          lite-youtube {
+            max-width: 300px;
+          }
+        }
+
+        @media only screen and (max-width:300px) and (min-height:720px) {
+          fieldset.mailing-list-opt-in {
+            grid-column: 1 / 2;
+          }
+
+          .grid.two-column {
+            grid-template-columns: 1fr;
+            margin-bottom: 0px;
+          }
+
+          .grid.two-column>img {
+            position: absolute;
+            z-index: -1;
+            right: 0;
+            top: 20em;
+            opacity: 0.2;
+          }
+
+          #shipping-fieldset>fieldset.form-wrapper>.fieldset-wrapper,
+          #customer-fieldset>fieldset.form-wrapper>.fieldset-wrapper {
+            grid-template-columns: 1fr;
+          }
+
+          form#norgen-h2o-promo-form {
+            margin-top: 5em;
+          }
+        }
+
+        @media only screen and (max-width:400px) and (min-height:720px) {
+          fieldset.mailing-list-opt-in {
+            grid-column: 1 / 2;
+          }
+
+          .grid.two-column {
+            grid-template-columns: 1fr;
+            margin-bottom: 0px;
+          }
+
+          .grid.two-column>img {
+            position: absolute;
+            z-index: -1;
+            right: 0;
+            top: 10em;
+            opacity: 0.2;
+          }
+
+          #shipping-fieldset>fieldset.form-wrapper>.fieldset-wrapper,
+          #customer-fieldset>fieldset.form-wrapper>.fieldset-wrapper {
+            grid-template-columns: 1fr;
+          }
+
+          form#norgen-h2o-promo-form {
+            margin-top: 5em;
+          }
+        }
+
+        @media only screen and (max-width:480px) and (max-height:719px) {
+          fieldset.mailing-list-opt-in {
+            grid-column: 1 / 2;
+          }
+
+          .grid.two-column {
+            grid-template-columns: 1fr;
+            margin-bottom: 0px;
+          }
+
+          .grid.two-column>img {
+            position: absolute;
+            z-index: -1;
+            right: 0;
+            top: 10em;
+            opacity: 0.2;
+          }
+
+          #shipping-fieldset>fieldset.form-wrapper>.fieldset-wrapper,
+          #customer-fieldset>fieldset.form-wrapper>.fieldset-wrapper {
+            grid-template-columns: 1fr;
+          }
+
+          form#norgen-h2o-promo-form {
+            margin-top: 5em;
+          }
+        }
+
+        @media only screen and (max-width:600px) and (max-height:719px) {
+          fieldset.mailing-list-opt-in {
+            grid-column: 1 / 2;
+          }
+
+          .grid.two-column {
+            grid-template-columns: 1fr;
+            margin-bottom: 0px;
+          }
+
+          .grid.two-column>img {
+            position: absolute;
+            z-index: -1;
+            right: 0;
+            top: 10em;
+            opacity: 0.2;
+          }
+
+          #shipping-fieldset>.fieldset-wrapper {
+            grid-template-columns: 1fr;
+          }
+
+          form#norgen-h2o-promo-form {
+            margin-top: 5em;
+          }
+
+          .floating-img-banner#nuclease-bubble {
+            display: none;
+          }
+        }
+
+        @media (max-width:900px) and (min-height:720px) {
+          .title-section {
+            width: 100%;
+          }
+
+          #nuclease-bubble {
+            display: none;
+          }
+        }
+
+        @media (max-width:320px) {
+          .title-section>h1 {
+            font-size: 3em;
+          }
+        }
+
+        @media (max-width:990px) {
+          .purchase-purity-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .title-section {
+            width: auto;
+          }
+        }
+      </style>
+      <div class="title-bg-image">
+        <div class="grid-bg">
+          <div class="floating-img-banner">
+            <img src="https://norgenbiotek.com/sites/default/files/promotions/water-2024/microbiology-grade-water.png"
+              id="nuclease-bubble" style="left: 40px;bottom: 50px;position: relative;">
+            {# <div class="nuclease-bubble" id="nuclease-bubble" style="left: 40px;bottom: 50px;position: relative;">
+            </div> #}
+            <img src="https://norgenbiotek.com/sites/default/files/promotions/water-2024/28015_IMG_6960_CC.png"
+              id="nuclease-bottle">
+          </div>
+          <div class="title-section">
+            <p>NUCLEASE-FREE WATER</p>
+            <h1>Buy <span style="color:#be1e2d;">500mL</span> for the Price of <span style="color:#be1e2d;">100mL</span>
+            </h1>
+            <a href="/product/nuclease-free-water" class="nuclease-order-btn btn">ORDER NOW</a>
+            <!--<h1>500mL of <span class="title-big-red">Nuclease-Free Water</span> for the price of 100mL</h1>-->
+          </div>
+        </div>
+      </div>
+      <div class="container" style="position:relative;">
+        <div style="margin:5em 0;">
+          <h2>Purchase Purity</h2>
+          <div class="purchase-purity-grid">
+            <lite-youtube videotitle="Unlock Precision With Norgen's Ultraclean Nuclease-Free Water - Purchase Purity"
+              videoid="0uypDJldbv8" autoload=""
+              title="Play: Unlock Precision With Norgen's Ultraclean Nuclease-Free Water - Purchase Purity"></lite-youtube>
+            <table class="table table-striped" style="margin-bottom:0px;max-width:600px;">
+              <thead>
+                <tr>
+                  <th>Nuclease-Free Water Product</th>
+                  <th>Catalogue Number</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><a href="/product/nuclease-free-water?sku=28014&v=382">100 mL</a></td>
+                  <td>28014</td>
+                </tr>
+                <tr>
+                  <td><a href="/product/nuclease-free-water?sku=28014&v=383">500 mL</a></td>
+                  <td>28015</td>
+                </tr>
+                <tr>
+                  <td><a href="/product/nuclease-free-water?sku=28014&v=384">1000 mL</a></td>
+                  <td>28016</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <hr>
+        <a id="terms-and-conditions-anchor" name="terms-and-conditions-anchor"
+          style="position:relative;visibility:hidden;pointer-events:none;top:-90px;"></a>
+        <div id="terms-and-conditions">
+          <h2>Terms and Conditions</h2>
+          <p>For a limited time only, while quantities last. Not applicable to Norgen Biotek distributors. Discount will
+            be applied automatically during checkout.</p>
+        </div>
+      </div>
+      <script>
+        function toggleCollapseSection() {
+          // section title
+          if (event.currentTarget.classList.contains('expanded')) {
+            event.currentTarget.classList.remove('expanded');
+          }
+          else if (!event.currentTarget.classList.contains('expanded')) {
+            event.currentTarget.classList.add('expanded');
+          }
+          // title's content section
+          if (event.currentTarget.nextElementSibling.classList.contains('expanded')) {
+            event.currentTarget.nextElementSibling.classList.remove('expanded');
+          }
+          else if (!event.currentTarget.nextElementSibling.classList.contains('expanded')) {
+            event.currentTarget.nextElementSibling.classList.add('expanded');
+          }
+
+        }
+        let product_sections = document.querySelectorAll('.product-section-title');
+        for (let i = 0; i < product_sections.length; i++) {
+          product_sections[i].addEventListener('click', toggleCollapseSection);
+        }
+      </script>
+      <script>
+        function copyCode(button) {
+          /* Copy the button's value text*/
+          navigator.clipboard.writeText(button.value);
+
+          /* Alert the copied text */
+          var tooltip = document.getElementById(button.id + "toolTip");
+          tooltip.innerHTML = "Copied: " + button.value;
+          tooltip.style = ""; //clear in-line styling applied from previous setTimeout() function(s)
+
+          /* close message automatically after timeout (useful for mobile users)*/
+          setTimeout(
+            function () {
+              tooltip.style.visibility = "hidden";
+              tooltip.style.opacity = "0";
+              tooltip.style.transition = "all 0.3s"
+            }, 3000);
+        }
+        function outFunction(toolTipDiv) {
+          var span = toolTipDiv.querySelector('span')
+          span.innerHTML = "Copy to clipboard";
+          span.style = "";
+        }
+      </script>
+      <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script>
+        $(document).ready(function () {
+          // Add smooth scrolling to all links
+          $("a.anchor-link").on('click', function (event) {
+
+            // Make sure this.hash has a value before overriding default behavior
+            if (this.hash !== "") {
+              // Prevent default anchor click behavior
+              event.preventDefault();
+
+              // Store hash
+              var hash = this.hash;
+
+              // Using jQuery's animate() method to add smooth page scroll
+              // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+              $('html, body').animate({
+                scrollTop: $('[name="' + $.attr(this, 'href').substr(1) + '"]').offset().top
+              }, 800, function () {
+
+                // Add hash (#) to URL when done scrolling (default click behavior)
+                window.location.hash = hash;
+              });
+            } // End if
+          });
+        });
+      </script>

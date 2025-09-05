@@ -1,0 +1,724 @@
+{#
+/**
+ * @file
+ *
+ * Default product template.
+ *
+ * Available variables:
+ * - attributes: HTML attributes for the wrapper.
+ * - product: The rendered product fields.
+ *   Use 'product' to print them all, or print a subset such as
+ *   'product.title'. Use the following code to exclude the
+ *   printing of a given field:
+ *   @code
+ *   {{ product|without('title') }}
+ *   @endcode
+ * - product_entity: The product entity.
+ * - product_url: The product URL.
+ *
+ * @ingroup themeable
+ */
+#}
+<style>
+  .product-table, .format-table {
+    margin-bottom: 0px;
+    padding-bottom: 1em;
+    width: 100%;
+    max-width: calc(100% - 15px);
+    overflow: auto;
+    display: -ms-grid;
+    -ms-grid-columns: 1fr (10px 1fr)[2];
+    -ms-grid-rows: max-content (10px max-content)[5];
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    grid-gap: 10px;
+    margin-bottom: 1em; 
+  }
+  .commerce-order-item-add-to-cart-form .webform-container-inline div.product-row, .commerce-order-item-add-to-cart-form .webform-container-inline div.format-row {
+    background: none;
+    font-size: 18px;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    padding: 20px;
+    overflow-x: auto;
+    text-align: center;
+    display: flex!important;
+    align-items: center;
+    justify-content: center;
+  }
+  .commerce-order-item-add-to-cart-form .webform-container-inline div.format-row:not(.active):hover, .commerce-order-item-add-to-cart-form .webform-container-inline div.product-row:not(.active):hover{
+    cursor:pointer;
+  }
+  .commerce-order-item-add-to-cart-form .webform-container-inline div.format-row:hover, .commerce-order-item-add-to-cart-form .webform-container-inline div.product-row:hover{
+    background-color: #E5ECF4;
+  }
+  .commerce-order-item-add-to-cart-form .webform-container-inline div.format-row hr, .commerce-order-item-add-to-cart-form .webform-container-inline div.product-row hr{
+    border-top:2px solid #ddd;
+  }
+
+  .commerce-order-item-add-to-cart-form .webform-container-inline div{
+    display:inline-block;
+    height:100%;
+  }
+  .commerce-order-item-add-to-cart-form .webform-container-inline div, .commerce-order-item-add-to-cart-form .product--rendered-attribute label.option{
+    width:100%;
+    height:100%;
+  }
+  .commerce-order-item-add-to-cart-form .webform-container-inline div.form-group.has-feedback{
+    margin-bottom:0px;
+    display:none;
+  }
+
+  .product--rendered-attribute.fieldgroup > .fieldset-wrapper > div{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    grid-gap:1em;
+  }
+  .form-group.has-feedback:has(input:checked)+label .product-row, .form-group.has-feedback:has(input:checked)+label .format-row{ 
+    background-color: var(--norgen-primary-blue-light);
+    border:2px solid var(--norgen-primary-blue);
+  } 
+  .ajax-progress.ajax-progress-throbber{ 
+    display: none!important;
+  }
+  .button--add-to-cart, .button--primary{
+    background-color: var(--norgen-primary-blue);
+  }
+  .button--secondary-teal{
+    background-color: var(--norgen-secondary-teal);
+  }
+
+  fieldset.product--rendered-attribute > legend{
+    display:block;
+  }
+
+
+  /* Testimonials field */
+  .quote-box {
+    position: relative;
+    margin-top: max(30px, 5%);
+    margin-right: 30px;
+    border-radius: 24px;
+    padding: 20px 27px 40px;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 14px;
+    height: max-content;
+    transition-duration: 0.5s;
+    border: 1px solid #004897;
+  }
+  .quote-box > p {
+    overflow: hidden;
+    transition: max-height 0.7s;
+    max-height: 100px;
+    display: inline;
+  }
+  .quote-box .quote-image {
+    content: '\f10e';
+    position: absolute;
+    right: -30px;
+    top: -30px;
+    font-family: 'Font Awesome 5 Pro' !important;
+    font-weight: 700;
+    font-size: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    text-align: center;
+    color: #fff;
+    padding: 5px;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+  .quote-box .quote-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 50%;
+    border: 5px solid #004897;
+    background-color: #fff;
+  }
+  .quote-box ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0 0 0 20px;
+  }
+  .quote-box li:before {
+    content: '—';
+    padding-right: 10px;
+    grid-row: span 2;
+  }
+  .field--name-field-commerce-product .front-featured {
+    height: auto;
+    max-height: 220px;
+    transition: all 0.2s ease-in-out;
+    display: block;
+    height: 600px;
+  }
+  .field--name-field-commerce-product .carousel-inner-feat {
+    overflow: inherit;
+    overflow-x: hidden;
+    height: 250px;
+  }
+  .field--name-field-commerce-product .carousel-inner-feat .row {
+    padding: 0px 15px 0;
+  }
+  .field--name-field-commerce-product .carousel-indicators{
+    bottom:-30px;
+    margin-bottom:0px;
+  }
+  .field--name-field-commerce-product .carousel-indicators li {
+    border: solid #1A3C93 8px;
+    background-color: #FFF;
+    background: #1A3C93;
+    width: 16px;
+    height: 16px;
+    border-radius: 100%;
+    opacity: 0.5;
+  }
+  .field--name-field-commerce-product .carousel-indicators li.active {
+    background: #363636;
+    opacity: 0.2;
+    width: 16px;
+    height: 16px;
+  }
+  .myBtn, .myBtn2, .myBtn3, .myBtn4, .myBtn5 {
+    background-color: transparent!important;
+    color: #004897;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+  }
+
+
+  .sticky-top{
+    position:sticky;
+    top:50px;
+  }
+
+  .product_variation_sku_wrapper{
+    margin-bottom:2em;
+    margin-top:-1em;
+  }
+  .field--name-sku{
+    display:inline-block;
+  }
+
+  lite-youtube{
+    max-width: 600px;
+  }
+
+  /* Related Products */
+  .prodBlock{
+    height:300px;
+  }
+  #Carouselprod .carousel-item img{
+    min-height:230px;
+  }
+
+  .btn:hover{
+    opacity:0.7;
+  }
+
+  .c-content-title-1 > h1{
+    font-size:30px;
+  }
+
+  /* Media Queries */
+  @media (min-width:992px){
+    #mobile-title{
+      display:none;
+    }
+    .mobile{
+      display:none;
+    }
+  }
+  @media (max-width:991px){
+    .sticky-top{
+      top:auto;
+      position:static;
+    }
+    .desktop{
+      display:none;
+    }
+  }
+
+</style>
+
+<article{{ attributes }}>
+  <div>
+    <h1>test2</h1>
+    <div class="c-shop-product-details-2">
+      <div class="row">
+        <div class="col-md-6 sticky-top">
+          <div id="mobile-title" class="c-content-title-1 mobile">
+            <h1 class="product-title c-font-uppercase c-font-bold">{{ product.title }}</h1>
+            <div class="c-line-left"></div>
+          </div>
+          <div id="mobile-summary-line" class="field-name-field-product-summary-line mobile" style="clear:both;">{{ node.field_product_summary_line.0.value|raw }}<hr></div>
+          {{ product.variation_field_product_image }}
+          {{ node.field_testimonial.0.value|raw }}
+        </div>
+        <div class="col-md-6">
+          <div class="c-product-meta">
+            <div id="desktop-title" class="c-content-title-1 desktop">
+              <h3 class="c-font-uppercase c-font-bold">{{ product.title }}</h3>     
+              <div class="c-line-left"></div>
+            </div>
+            <div class="c-product-badge">
+              {% if product.field_sale_label[0]['#markup'] != 'Off' %}
+                {{ product.field_sale_label }}
+              {% endif %}
+              {% if product.field_new_label[0]['#markup'] != 'Off' %}
+                {{ product.field_new_label }}
+              {% endif %}
+            </div>
+            {# <div class="c-product-review">
+              {{ product.field_rating }}
+              <div class="c-product-write-review">
+                <a class="c-font-red write-review-link" href="#reviews">
+                  {{ 'Write a review'|t }}
+                </a>
+              </div>
+            </div> #}
+            <div id="desktop-summary-line" class="field-name-field-product-summary-line desktop" style="clear:both;">{{ node.field_product_summary_line.0.value|raw }}<hr></div>
+            <div class="product-uses-wrapper">
+              <hr class="mobile" style="margin-top:3em;">
+              {{node.norproduct_use.0.value|raw}}
+              {% if node.field_health_canada_approved.0.value == 1 or node.field_ce_marked_image.0.value == 1 %}
+							<div class="ce-pos">
+                {% if node.field_health_canada_approved.0.value == 1 %}
+                  <div>
+										<img src="/sites/default/files/norproduct/Maple_Leaf.svg" style="height:36px;max-width:none;" alt="red maple leaf" title="Health Canada Approved">
+									</div>
+                {% endif %}
+                {% if node.field_ce_marked_image.0.value == 1 %}
+									<div>
+										<img src="/sites/default/files/norproduct/European_Conformity_logo.svg" style="height:36px;max-width:none;" alt="CE logo" title="CE Marked Product">
+									</div>
+                {% endif %}
+							</div>
+              {% endif %}
+						</div>
+						<div class="bioz">
+              {{ bioz_badge_html|raw }}
+						</div>
+            <hr>
+            <!-- Need to display price in product.variations... Find where that is being rendered -->
+            <div class="c-product-price">
+            {% if restricted_country %}
+            {% else %}
+              {{ product.variation_price }}
+              <span class="c-font-16 c-font-line-through c-font-red">
+                {{ product.variation_field_old_price }}
+              </span>
+              {% endif %}
+            </div>
+
+            <div class="product_variation_sku_wrapper"><div class="label">SKU</div>{{product.variation_sku}}</div>
+            
+            {{ product.variations }}
+
+            {% if valid_sku_array|length > 0 %}
+            <a class="btn request-sample-btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button--secondary-teal" href="/request-sample">Request sample</a>
+            {% endif %}
+
+            <span class="flag-outer flag-outer-compare ">
+              {{ product.flag_compare }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+<div class="c-content-box c-size-lg pb-0 product-field-groups">
+  <!-- End Product Content -->
+  <div class="c-shop-product-tab-1 pb-0">
+    <div class="nav-justified  bootstrap-nav-wrapper">
+      <ul class="nav nav-justified  nav-tabs">
+        {% if node.body.0.value|length > 0 %}
+        <li class="nav_item " id="overview-nav"><a href="#overview">{{ 'Overview'|t }}</a></li>
+        {% endif %}
+        {% if (node.norproduct_image|length > 0) or (product.variation_field_specifications.0['#context'].value|length > 0)  %}
+        <li class="nav_item" id="details-nav"><a href="#details">{{ 'Details'|t }}</a></li>
+        {% endif %}
+        {% if node.field_product_videos.0.value|length > 0 %}
+        <li class="nav_item" id="documentation-nav"><a href="#documentation">{{ 'Documentation'|t }}</a></li>
+        {% endif %}
+        {% if node.field_product_videos.0.value|length > 0 %}
+        <li class="nav_item" id="videos-nav"><a href="#videos">{{ 'Videos'|t }}</a></li>
+        {% endif %}
+        <li class="nav_item" id="citations-nav"><a href="#citations">{{ 'Citations'|t }}</a></li>
+        {# <li class="nav_item ">
+          <a href="#documentation" class = "review-toggler" id = "reviews" data-toggle="tab">{{ 'Reviews'|t }}</a>
+        </li> #}
+      </ul>
+
+      <div class="tab-content nav-justified">
+        <div class="tab-pane active">
+          {# {{- product|without('variation_attributes', 'title', 'variation_title', 'variation_field_stock_amount', 'variation_field_images', 'field_product_category', 'field_sale_label', 'field_new_label', 'field_rating', 'variation_price', 'variations', 'flag_compare', 'flag_wishlist', 'variation_field_old_price', 'variation_sku', 'field_short_description','variation_commerce_price','variation_commerce_dry_ice','variation_commerce_shipping_box','variation_commerce_shipping_box_amount','variation_field_product_citations','variation_field_figure_image','variation_field_figure_image_caption','variation_field_product_image','variation_field_french_specification') -}} #}
+          <!-- Product Page Key Points -->
+          
+
+          <!-- Product Page Body -->
+          {% if node.body.0.value|length > 0 %}
+          <a id="overview" class="anchor-link"></a>
+          <section id="overview-section" class="menu-section">
+            <h2 class="c-font-uppercase c-font-bold">Overview</h2>
+            {{ node.body.0.value|raw }}
+          </section>
+          {% endif %}
+
+          <!-- Product Page Figure Carousel -->
+          {% if (node.norproduct_image|length > 0) or (product.variation_field_specifications.0['#context'].value|length > 0)  %}
+          <a id="details" class="anchor-link"></a>
+					<section id="details-section" class="menu-section">
+            <h2 class="c-font-uppercase c-font-bold">Details</h2>
+            {% if node.norproduct_image|length > 0 %}
+            <h3 class="body-heading">Supporting Data</h3>
+            <div class="figures-carousel">
+              <div id="norproduct-image-description-carousel" class="carousel slide norproduct" data-ride="carousel" data-wrap="false" data-interval="false">
+                <div id="carousel-slide-number"></div>
+                <button id="close-expanded-carousel" tab-index=0 class="fa fa-times"></button>
+                <a class="carousel-control left" href="#norproduct-image-description-carousel" role="button" data-slide="prev">
+                  <span class="fa fa-2x fa-chevron-left" aria-hidden="true"></span>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <div class="carousel-inner-wrapper">
+                  <div class="carousel-inner norproduct">
+                    {% for fig_image in node.norproduct_image %}
+                      {% set active = '' %}
+                      {% if loop.index0 == 0 %}
+                      {% set active = 'active' %}
+                      {% endif %}
+                      <div class='item norproduct {{ active }}'>
+                        <div class="item-wrapper">
+                          <button class="norproduct-carousel-btn-wrapper">
+                            <img typeof="foaf:Image" src={{ "#{file_url(fig_image.entity.fileuri)}" }} data-src={{ "#{file_url(fig_image.entity.fileuri)}" }} width={{ "#{fig_image.value.width}" }} height={{ "#{fig_image.value.height}" }} alt={{ "#{fig_image.value.alt}" }} loading="lazy" class="norproduct-carousel lazy"/>
+                          </button>
+                          <div class="fig-caption">
+                            {{ node.field_image_caption[loop.index0].value|raw }}
+                          </div>
+                        </div>
+                      </div>
+                    {% endfor %}
+                  </div>
+                  <div class="carousel-indicators-wrapper">
+                    <div class="blur-edges left"></div>
+                    <ol class="carousel-indicators norproduct">
+                      {% for fig_image in node.norproduct_image %}
+                      <li data-target="#norproduct-image-description-carousel" data-slide-to={{loop.index0}} {% if loop.index0 == 0 %} class="active" tab-index="0" {% endif %}>
+                        <button style="background-color:transparent;border:none;" aria-label="Data Selector">
+                          <img src={{ "#{file_url(fig_image.entity.fileuri)}" }} alt={{ "#{fig_image.value.alt}" }} loading="lazy" class="lazy">
+                        </button>
+                      </li>   
+                      {% endfor %}
+                    </ol>
+                    <div class="blur-edges right"></div>
+                  </div>	
+                </div>
+
+                <a class="carousel-control right" href="#norproduct-image-description-carousel" role="button" data-slide="next">
+                  <span class="fa fa-2x fa-chevron-right" aria-hidden="true"></span>
+                  <span class="sr-only">Next</span>
+                </a>		
+              </div>
+              <div class="click-for-expanded-tooltip">Click for expanded view</div>
+            </div>
+            {% endif %}
+
+            <!-- Product Variation Specfications -->
+            {{ product.variation_field_specifications.0['#context'].value|raw }}
+          </section>
+          {% endif %}
+
+          <!-- Product Documentation -->
+          {% if documentation == true %}
+          <a id="documentation" class="anchor-link"></a>
+          <section id="documentation-section" class="menu-section">
+            <h2 class="c-font-uppercase c-font-bold">Documentation</h2>
+            <div class="c-content-accordion-norgen c-accordion-norgen-primary-blue-light">
+              <div class="panel-group" id="accordion-1" role="tablist">
+                {% if node.norproduct_protocol|length > 0 %}
+                <div class="panel">
+                  <div class="panel-heading" role="tab" id="accordiontab">
+                    <h4 class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-toggle="collapse" data-parent="#accordion-1" href="#protocols" aria-expanded="false" aria-controls="2595394">PROTOCOLS <i class="fa fa-chevron-down"></i></a></h4>
+                  </div>
+                  <div id="protocols" class="panel-collapse collapse" role="tabpanel" aria-labelledby="accordiontab" aria-expanded="false" style="height: 0px;">
+                    <div class="panel-body c-font-18">
+                      {% for doc in node.norproduct_protocol %}
+                        <a href={{ file_url(doc.entity.uri.value) }}>{{ doc.entity.filename.value }}</a>
+                        {% if loop.last == false %}<hr>{% endif %}
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+                {% if node.norproduct_shortprotocol|length > 0 %}
+                <div class="panel">
+                  <div class="panel-heading" role="tab" id="accordiontab">
+                    <h4 class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-toggle="collapse" data-parent="#accordion-1" href="#short-protocols" aria-expanded="false" aria-controls="9523657"><i class=""></i>SHORT PROTOCOLS <i class="fa fa-chevron-down"></i></a></h4>
+                  </div>
+                  <div id="short-protocols" class="panel-collapse collapse" role="tabpanel" aria-labelledby="accordiontab" aria-expanded="false" style="height: 0px;">
+                    <div class="panel-body c-font-18">
+                      {% for doc in node.norproduct_shortprotocol %}
+                        <a href={{ file_url(doc.entity.uri.value) }}>{{ doc.entity.filename.value }}</a>
+                        {% if loop.last == false %}<hr>{% endif %}
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+                {% if node.norproduct_supplementaryprotocol|length > 0 %}
+                <div class="panel">
+                  <div class="panel-heading" role="tab" id="accordiontab">
+                    <h4 class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-toggle="collapse" data-parent="#accordion-1" href="#supplementary-protocols" aria-expanded="false" aria-controls="824715"><i class=""></i>SUPPLEMENTARY PROTOCOLS <i class="fa fa-chevron-down"></i></a></h4>
+                  </div>
+                  <div id="supplementary-protocols" class="panel-collapse collapse" role="tabpanel" aria-labelledby="accordiontab" aria-expanded="false" style="height: 0px;">
+                    <div class="panel-body c-font-18">
+                      {% for doc in node.norproduct_supplementaryprotocol %}
+                        <a href={{ file_url(doc.entity.uri.value) }}>{{ doc.entity.filename.value }}</a>
+                        {% if loop.last == false %}<hr>{% endif %}
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+                {% if node.norproduct_informationsheet|length > 0 %}
+                <div class="panel">
+                  <div class="panel-heading" role="tab" id="accordiontab">
+                    <h4 class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-toggle="collapse" data-parent="#accordion-1" href="#product-information-sheets" aria-expanded="false" aria-controls="9523657"><i class=""></i>PRODUCT INFORMATION SHEETS <i class="fa fa-chevron-down"></i></a></h4>
+                  </div>
+                  <div id="product-information-sheets" class="panel-collapse collapse" role="tabpanel" aria-labelledby="accordiontab" aria-expanded="false" style="height: 0px;">
+                    <div class="panel-body c-font-18">
+                      {% for doc in node.norproduct_informationsheet %}
+                        <a href={{ file_url(doc.entity.uri.value) }}>{{ doc.entity.filename.value }}</a>
+                        {% if loop.last == false %}<hr>{% endif %}
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+                {% if node.norproduct_applicationnote|length > 0 %}
+                <div class="panel">
+                  <div class="panel-heading" role="tab" id="accordiontab">
+                    <h4 class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-toggle="collapse" data-parent="#accordion-1" href="#application-notes" aria-expanded="false" aria-controls="9523657"><i class=""></i>APPLICATION NOTES <i class="fa fa-chevron-down"></i></a></h4>
+                  </div>
+                  <div id="application-notes" class="panel-collapse collapse" role="tabpanel" aria-labelledby="accordiontab" aria-expanded="false" style="height: 0px;">
+                    <div class="panel-body c-font-18">
+                      {% for doc in node.norproduct_applicationnote %}
+                        <a href={{ file_url(doc.entity.uri.value) }}>{{ doc.entity.filename.value }}</a>
+                        {% if loop.last == false %}<hr>{% endif %}
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+                {% if node.norproduct_msds|length > 0 %}
+                <div class="panel">
+                  <div class="panel-heading" role="tab" id="accordiontab">
+                    <h4 class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-toggle="collapse" data-parent="#accordion-1" href="#safety-data-sheets" aria-expanded="false" aria-controls="9523657"><i class=""></i>SAFETY DATA SHEETS <i class="fa fa-chevron-down"></i></a></h4>
+                  </div>
+                  <div id="safety-data-sheets" class="panel-collapse collapse" role="tabpanel" aria-labelledby="accordiontab" aria-expanded="false" style="height: 0px;">
+                    <div class="panel-body c-font-18">
+                      {% for doc in node.norproduct_msds %}
+                        <a href={{ file_url(doc.entity.uri.value) }}>{{ doc.entity.filename.value }}</a>
+                        {% if loop.last == false %}<hr>{% endif %}
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+                {% if node.norproduct_poster|length > 0 %}
+                <div class="panel">
+                  <div class="panel-heading" role="tab" id="accordiontab">
+                    <h4 class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-toggle="collapse" data-parent="#accordion-1" href="#posters" aria-expanded="false" aria-controls="9523657"><i class=""></i>POSTERS <i class="fa fa-chevron-down"></i></a></h4>
+                  </div>
+                  <div id="posters" class="panel-collapse collapse" role="tabpanel" aria-labelledby="accordiontab" aria-expanded="false" style="height: 0px;">
+                    <div class="panel-body c-font-18">
+                      {% for doc in node.norproduct_poster %}
+                        <a href={{ file_url(doc.entity.uri.value) }}>{{ doc.entity.filename.value }}</a>
+                        {% if loop.last == false %}<hr>{% endif %}
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+                {% if node.norproduct_product_flyer|length > 0 %}
+                <div class="panel">
+                  <div class="panel-heading" role="tab" id="accordiontab">
+                    <h4 class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-toggle="collapse" data-parent="#accordion-1" href="#product-flyers" aria-expanded="false" aria-controls="9523657"><i class=""></i>FLYERS <i class="fa fa-chevron-down"></i></a></h4>
+                  </div>
+                  <div id="product-flyers" class="panel-collapse collapse" role="tabpanel" aria-labelledby="accordiontab" aria-expanded="false" style="height: 0px;">
+                    <div class="panel-body c-font-18">
+                      {% for doc in node.field_product_flyer %}
+                        <a href={{ file_url(doc.entity.uri.value) }}>{{ doc.entity.filename.value }}</a>
+                        {% if loop.last == false %}<hr>{% endif %}
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+                {% if node.field_related_blogs|length > 0 %}
+                <div class="panel">
+                  <div class="panel-heading" role="tab" id="accordiontab">
+                    <h4 class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-toggle="collapse" data-parent="#accordion-1" href="#related-blogs" aria-expanded="false" aria-controls="9523657"><i class=""></i>RELATED BLOGS <i class="fa fa-chevron-down"></i></a></h4>
+                  </div>
+                  <div id="related-blogs" class="panel-collapse collapse" role="tabpanel" aria-labelledby="accordiontab" aria-expanded="false" style="height: 0px;">
+                    <div class="panel-body c-font-18">
+                      {% for doc in node.field_related_blogs %}
+                        {{ node.field_related_blogs.value|raw }}
+                        {% if loop.last == false %}<hr>{% endif %}
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          </section>
+          {% endif %}
+
+          <!-- Product Page Videos -->
+          {% if node.field_product_videos|length > 0 %}
+          <a id="videos" class="anchor-link"></a>
+          <section id="videos-section" class="menu-section">
+            <h2 class="c-font-uppercase c-font-bold">Videos</h2>
+            {{ node.field_product_videos.0.value|raw }}
+          </section>
+          {% endif %}
+
+          <!-- Product Page Citations -->
+          <a id="citations" class="anchor-link"></a>
+          <section id="citations-section" class="menu-section">
+            <h2 class="c-font-uppercase c-font-bold">Citations</h2>
+            <div class="bioz">
+              {{ bioz_citations_html|raw }}
+            </div>
+          </section>
+
+          <!-- Product Related Services -->
+          {% if node.field_related_services|length > 0 %}
+            <a id="related-services" class="anchor-link"></a>
+            <section id="related-services-section" class="menu-section">
+              <h2 class="c-font-uppercase c-font-bold">Related Services</h2>
+              <div class="row">
+                {% for item in node.field_related_services %}
+                  {% if item.entity.name.value == 'ngs' %}
+                    <div class="reffect col-md-4 col-sm-12">
+                      <div class="rinfo">
+                        <h4><a href="/services/next-generation-sequencing" target="_blank">NGS</a></h4>
+                      </div>
+                      <div class="rimg">
+                        <a href="/services/next-generation-sequencing" class="related-services-product-page ngs" target="_blank" aria-label="NGS"><i class="iconex-rna-seq fa-8x ico-rengs" aria-hidden="true"></i></a>
+                      </div>
+                    </div>  
+                  {% elseif item.entity.name.value == 'plant' %}
+                    <img src="/sites/default/files/images/services-btn-ngs.png" alt="NGS Service" >
+                  {% elseif item.entity.name.value == 'rna' %}
+                  <div class="reffect col-md-4 col-sm-12">
+                      <div class="rinfo"><h4><a href="/services/rna-isolation-service" target="_blank"> RNA Isolation</a></h4></div>
+                      <div class="rimg">
+                          <a href="/services/rna-isolation-service" class="related-services-product-page rna-isolation" target="_blank" aria-label="NGS"><i class="iconex-rna fa-8x ico-rerna" aria-hidden="true"></i></a>
+                      </div>
+                  </div>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </section>
+          {% endif %}
+
+          <!-- Product Related Products -->
+          {% if node.field_related_products|length > 0 %}
+            <a id="related-products" class="anchor-link"></a>
+            <section id="related-products-section" class="menu-section">
+              <h2 class="c-font-uppercase c-font-bold">Related Products</h2>
+              <div class="row">
+                <div class="col-md-12 col-sm-12 prodBlock">
+                  <div id="Carouselprod" class="carousel slide carousel-fade1 dexp_carousel" data-ride="carousel">  
+                    <ol class="carousel-indicators">
+                      {% for product in node.field_related_products %}
+                        {% if (loop.index0 == 0) or (loop.index0 % 3 == 0) %} 
+                          <li data-target="#Carouselprod" data-slide-to='{{loop.index0 / 3}}' class={% if loop.first == true %}"active"{% endif %}></li>
+                        {% endif %}
+                      {% endfor %}
+                    </ol>
+                    <div class="carousel-inner prodBottom"> 
+                      <!-- Carousel items -->  
+                      {% for product in node.field_related_products %}  
+                        {% if (loop.index0 == 0) or (loop.index0 % 3 == 0) %} {# one carousel slide for every three products #}
+                          <div class='item {% if loop.index0 == 0 %}active{% endif %}'>
+                        {% endif %}   
+                            <div class="col-md-4 col-sm-12 prodRow">
+                              <div class="carousel-item">
+                                <a class="related-products-product-page related-products-product1" href='{{ related_products_aliases[loop.index0].product_page_alias}}'>
+                                  <img src={{ file_url(product.entity.field_product_image.entity.uri.value) }}>
+                                  <h4>{{ product.entity.title.value }}</h4>
+                                </a>
+                              </div>
+                            </div>
+                        {% if (loop.last == true) or (loop.index % 3 == 0) %} {# close item div after every three products, or after all products looped #}
+                          </div>
+                        {% endif %}         
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          {% endif %}
+
+        </div>
+        {# <div id="bootstrap-fieldgroup-nav-item--reviews" class="tab-pane ">
+          <h3 class="c-font-uppercase c-font-bold c-font-22 c-center c-margin-b-40 c-margin-t-40">{{ 'Reviews for'|t }} {{ product.title }}</h3>
+          <div class="c-product-review-input">
+            {{ product.field_reviews }}
+          </div>
+        </div> #}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function readMore() {
+    let p = document.querySelector(`.quote-box .hiddenp`);
+    let btnText = document.querySelector(`.myBtn`);
+
+    if (!p.classList.contains('collapse')) {
+    p.classList.add('collapse');
+    btnText.innerHTML = "Read more";
+    } else {
+    p.classList.remove('collapse');
+    btnText.innerHTML = "Read less";
+    }
+}
+    
+function readMore2() {
+    let p = document.querySelector(`.quote-box .hiddenp2`);
+    let btnText = document.querySelector(`.myBtn2`);
+
+    if (!p.classList.contains('collapse')) {
+    p.classList.add('collapse');
+    btnText.innerHTML = "Read more";
+    } else {
+    p.classList.remove('collapse');
+    btnText.innerHTML = "Read less";
+    }
+}
+    
+function readMore3() {
+    let p = document.querySelector(`.quote-box .hiddenp3`);
+    let btnText = document.querySelector(`.myBtn3`);
+
+    if (!p.classList.contains('collapse')) {
+    p.classList.add('collapse');
+    btnText.innerHTML = "Read more";
+    } else {
+    p.classList.remove('collapse');
+    btnText.innerHTML = "Read less";
+    }
+}
+</script>

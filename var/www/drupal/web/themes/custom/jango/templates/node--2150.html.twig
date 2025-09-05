@@ -1,0 +1,577 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a node.
+ *
+ * Available variables:
+ * - node: The node entity with limited access to object properties and methods.
+ *   Only method names starting with "get", "has", or "is" and a few common
+ *   methods such as "id", "label", and "bundle" are available. For example:
+ *   - node.getCreatedTime() will return the node creation timestamp.
+ *   - node.hasField('field_example') returns TRUE if the node bundle includes
+ *     field_example. (This does not indicate the presence of a value in this
+ *     field.)
+ *   - node.isPublished() will return whether the node is published or not.
+ *   Calling other methods, such as node.delete(), will result in an exception.
+ *   See \Drupal\node\Entity\Node for a full list of public properties and
+ *   methods for the node object.
+ * - label: (optional) The title of the node.
+ * - content: All node items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - author_picture: The node author user entity, rendered using the "compact"
+ *   view mode.
+ * - metadata: Metadata for this node.
+ * - date: (optional) Themed creation date field.
+ * - author_name: (optional) Themed author name field.
+ * - url: Direct URL of the current node.
+ * - display_submitted: Whether submission information should be displayed.
+ * - attributes: HTML attributes for the containing element.
+ *   The attributes.class element may contain one or more of the following
+ *   classes:
+ *   - node: The current template type (also known as a "theming hook").
+ *   - node--type-[type]: The current node type. For example, if the node is an
+ *     "Article" it would result in "node--type-article". Note that the machine
+ *     name will often be in a short form of the human readable label.
+ *   - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+ *     teaser would result in: "node--view-mode-teaser", and
+ *     full: "node--view-mode-full".
+ *   The following are controlled through the node publishing options.
+ *   - node--promoted: Appears on nodes promoted to the front page.
+ *   - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+ *     teaser listings.
+ *   - node--unpublished: Appears on unpublished nodes visible only to site
+ *     admins.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main
+ *   content tag that appears in the template.
+ * - author_attributes: Same as attributes, except applied to the author of
+ *   the node tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ * - view_mode: View mode; for example, "teaser" or "full".
+ * - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+ * - page: Flag for the full page state. Will be true if view_mode is 'full'.
+ * - readmore: Flag for more state. Will be true if the teaser content of the
+ *   node cannot hold the main body content.
+ * - logged_in: Flag for authenticated user status. Will be true when the
+ *   current user is a logged-in member.
+ * - is_admin: Flag for admin user status. Will be true when the current user
+ *   is an administrator.
+ *
+ * @see template_preprocess_node()
+ *
+ * @ingroup themeable
+ */
+#}
+<article{{attributes}}>
+
+	{{ title_prefix }}
+	{% if label and not page %}
+		<h2{{title_attributes}}>
+			<a href="{{ url }}" rel="bookmark">{{ label }}</a>
+		</h2>
+	{% endif %}
+	{{ title_suffix }}
+
+	{% if display_submitted %}
+		<footer>
+			{{ author_picture }}
+			<div{{author_attributes}}>
+				{% trans %}Submitted by
+				{{ author_name }}
+				on
+				{{ date }}{% endtrans %}
+				{{ metadata }}
+			</div>
+		</footer>
+	{% endif %}
+
+	<div{{content_attributes}}>
+		{{ content.body }}
+	</div>
+
+</article>
+
+
+<style>
+	.thankyou-screen {
+		margin: 20px auto 150px;
+		background: white;
+		padding: 1%;
+		width: 100%;
+		padding: 1%;
+		border: #12508b;
+		border-style: solid;
+		box-shadow: 0 4px 40px 0 rgb(0 0 0 / 9%), 0 6px 20px 0 rgb(0 0 0 / 17%);
+		border-radius: 20px;
+		border-bottom-color: #1d7280;
+		border-right-color: #126b7a;
+	}
+	.survey {
+		margin: 20px auto 150px;
+		background: white;
+		padding: 1%;
+		width: 100%;
+		padding: 1%;
+    max-width: 600px;
+	}
+	.section-page-title {
+		display: none;
+	}
+	.img-header p {
+		width: 100%;
+		max-width: 100% !important;
+		min-width: auto;
+		text-shadow: none;
+	}
+	.highlight-tm {
+		background: #fffae6;
+		padding: 24px;
+		border-radius: 24px 24px 0 0;
+		border-left: 1px solid #fbbf13;
+		border-top: 1px solid #fbbf13;
+		border-right: 1px solid #fbbf13;
+	}
+
+	.survey-overlay {
+		position: fixed;
+		z-index: 1000;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		transition: opacity 500ms ease-in-out 0s, visibility linear 500ms, transform 0s linear 500ms;
+		text-align: center;
+	}
+
+	.overlay:target,
+	.overlay:target .popup {
+		visibility: visible;
+		opacity: 1;
+	}
+
+	.rating {
+		margin-top: 5%;
+		width: 100%;
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
+		-webkit-box-orient: horizontal;
+		-webkit-box-direction: normal;
+		-ms-flex-direction: row;
+		flex-direction: row;
+		margin-bottom: 12px;
+	}
+
+	.rating input {
+		display: none
+	}
+	.rating label:hover {
+		background-color: #e6f2f3;
+	}
+	.rating input[type="radio"]:checked+label {
+		border-color: #007c89;
+		background: linear-gradient(0deg,rgba(0,124,137,.2),rgba(0,124,137,.2)), #fff;
+	}
+	.rating label {
+		font-size: 18px;
+		cursor: pointer;
+		flex-grow: 1;
+		min-width: 36px !important;
+		text-align: center;
+		padding: 4px;
+		border: 1px solid #dedddc;
+		border-radius: 3px;
+		margin-left: 6px;
+		margin-right: 6px;
+	}
+	.rating label {
+		border: 1px #999 solid;
+		transition: 0.3s;
+	}
+	#fname,
+	#lname,
+	#email,
+	#projectnum,
+	#institution {
+		width: 100%;
+		height: 4%;
+		margin-bottom: 8%;
+		vertical-align: middle;
+		min-width: 50px;
+		max-width: 635px;
+		width: 100%;
+		min-height: 36px;
+		background-color: #fff;
+		border: #a9a9a969;
+		border-style: solid;
+		border-width: thin;
+		max-height: 60px;
+		padding: 2%;
+	}
+	#product {
+		height: 6% !important;
+	}
+	.comment-sec {
+		margin-top: 10%;
+	}
+	.comment-text {
+		width: 100%;
+		height: 110px;
+	}
+	.feedback-btn {
+		margin-top: 10%;
+		padding: 12px 20px;
+		border-radius: 12px;
+		white-space: normal;
+	}
+	.logo {
+		max-width: 50%;
+	}
+	.image-logo {
+		text-align: center;
+		padding: 5%;
+	}
+	.label-hide {
+		display: none;
+	}
+	input,
+	textarea {
+		border-radius: 20px;
+	}
+	input::placeholder {
+		color: gray;
+		padding: 1%;
+	}
+	.thankyou-screen {
+		display: none;
+	}
+	.animation-ctn {
+		text-align: center;
+		margin-top: 5em;
+	}
+	.comment-text {
+		padding: 1em;
+	}
+	.inlinesvg .svg svg {
+		display: inline
+	}
+
+	.icon--order-success svg polyline {
+		-webkit-animation: checkmark 0.25s ease-in-out 0.7s backwards;
+		animation: checkmark 0.25s ease-in-out 0.7s backwards
+	}
+
+	.icon--order-success svg circle {
+		-webkit-animation: checkmark-circle 0.6s ease-in-out backwards;
+		animation: checkmark-circle 0.6s ease-in-out backwards;
+	}
+	.icon--order-success svg circle#colored {
+		-webkit-animation: colored-circle 0.6s ease-in-out 0.7s backwards;
+		animation: colored-circle 0.6s ease-in-out 0.7s backwards;
+	}
+
+	@media only screen and(max-width: 510px) {
+		.label-show {
+			display: none;
+		}
+		.label-hide {
+			display: block;
+		}
+	}
+	@media only screen and(max-width: 60em) {
+		.rating {
+			-ms-flex-wrap: wrap;
+			flex-wrap: wrap;
+			-webkit-box-pack: center;
+			-ms-flex-pack: center;
+			justify-content: center;
+		}
+	}
+
+	@-webkit-keyframes checkmark {
+		0% {
+			stroke-dashoffset: 100px
+		}
+
+		100% {
+			stroke-dashoffset: 200px
+		}
+	}
+
+	@-ms-keyframes checkmark {
+		0% {
+			stroke-dashoffset: 100px
+		}
+
+		100% {
+			stroke-dashoffset: 200px
+		}
+	}
+
+	@keyframes checkmark {
+		0% {
+			stroke-dashoffset: 100px
+		}
+
+		100% {
+			stroke-dashoffset: 0
+		}
+	}
+
+	@-webkit-keyframes checkmark-circle {
+		0% {
+			stroke-dashoffset: 480px
+		}
+
+		100% {
+			stroke-dashoffset: 960px;
+
+		}
+	}
+
+	@-ms-keyframes checkmark-circle {
+		0% {
+			stroke-dashoffset: 240px
+		}
+
+		100% {
+			stroke-dashoffset: 480px
+		}
+	}
+
+	@keyframes checkmark-circle {
+		0% {
+			stroke-dashoffset: 480px
+		}
+
+		100% {
+			stroke-dashoffset: 960px
+		}
+	}
+
+	@keyframes colored-circle {
+		0% {
+			opacity: 0
+		}
+
+		100% {
+			opacity: 100
+		}
+	}
+
+	/* new styles */
+	.btn-primary:hover {
+		background-color: #3276b1;
+		border-color: #285e8e;
+	}
+
+	.btn-primary {
+		background-color: #004897;
+		border-color: #004897;
+	}
+</style>
+
+
+<div class="whole-page" style="background-color: #f2f2f2;">
+	<br>
+	<section class="survey">
+		<div class="image-logo">
+			<img src="/sites/default/files/norgen-logo.png" class="logo">
+		</div>
+		<hr>
+		<p style="margin-bottom:1em;font-size: 18px;">How was your experience using Norgen services? Please fill out the quick survey below so we can better meet your needs.</p>
+		<form action="" method="post">
+			<div class="form-table">
+				<label for="fname" style="margin-top:10%;font-size: 16px;font-weight: 100;">First Name<span class="form-required" title="This field is required.">*</span>
+				</label>
+				<input type="text" id="fname" name="fname" placeholder="First Name (required)" required>
+
+				<label for="lname" style="font-size: 16px;font-weight: 100;">Last Name<span class="form-required" title="This field is required.">*</span>
+				</label>
+				<input type="text" id="lname" name="lname" placeholder="Last Name (required)" required>
+
+				<label for="email" style="font-size: 16px;font-weight: 100;">Email<span class="form-required" title="This field is required.">*</span>
+				</label>
+				<input type="email" id="email" name="email" placeholder="Email (required)" required>
+
+				<label for="projectnum" style="font-size: 16px;font-weight: 100;">Project Number<span class="form-required" title="This field is required.">*</span>
+				</label>
+				<input type="text" id="projectnum" name="projectnum" placeholder="Project Number (eg. sv12345)" required>
+
+				<label for="institution" style="font-size: 16px;font-weight: 100;">Institution<span class="form-required" title="This field is required.">*</span>
+				</label>
+				<input type="text" id="institution" name="institution" placeholder="Institution (required)" required>
+
+				<div>
+					<p style="font-size: 16px;">Project Type</p>
+					<fieldset>
+						<input type="checkbox" name="projectType[]" id="Isolation" value="Isolation"><label for="Isolation" style="display:inline;">
+							<span style="padding: 1%;font-size: 16px;font-weight: 100;">Isolation</span>
+						</label><br>
+						<input type="checkbox" name="projectType[]" id="NGS" value="Next Generation Sequencing"><label for="NGS" style="display:inline;">
+							<span style="padding: 1%;font-size: 16px;font-weight: 100;">Next Generation Sequencing</span>
+						</label><br>
+						<input type="checkbox" name="projectType[]" id="PCRDetection" value="PCR Detection"><label for="PCRDetection" style="display:inline;">
+							<span style="padding: 1%;font-size: 16px;font-weight: 100;">PCR Detection</span>
+						</label><br>
+					</fieldset>
+				</div>
+				<hr>
+				<div style="margin:8% 0;">
+					<p style="font-size: 16px;">Was the final deliverable clearly defined?<span class="form-required" title="This field is required.">*</span>
+					</p>
+					<div class="rate-label label-hide" style="padding-left: 2%;padding-right: 2%;padding-bottom: 2%; height:2em">
+						<span style="float: left;">1 = worst</span>
+						<span style="float: right;">5 = best</span>
+					</div>
+					<div class="rating">
+						<input type="radio" id="ra1" value="1" name="clearly_defined" required><label for="ra1">1</label>
+						<input type="radio" id="ra2" value="2" name="clearly_defined"><label for="ra2">2</label>
+						<input type="radio" id="ra3" value="3" name="clearly_defined"><label for="ra3">3</label>
+						<input type="radio" id="ra4" value="4" name="clearly_defined"><label for="ra4">4</label>
+						<input type="radio" id="ra5" value="5" name="clearly_defined"><label for="ra5">5</label>
+					</div>
+					<div class="rate-label label-show" style="padding-left: 2%;padding-right: 2%;padding-bottom: 2%; height:2em">
+						<span style="float: left;">1 = worst</span>
+						<span style="float: right;">5 = best</span>
+					</div>
+				</div>
+				<hr>
+				<div style="margin:8% 0;">
+					<p style="font-size: 16px;">Was pricing clearly communicated during your initial consultation?<span class="form-required" title="This field is required.">*</span>
+					</p>
+					<div class="rating">
+						<input type="radio" id="rb1" value="1" name="pricing_communicated" required><label for="rb1">1</label>
+						<input type="radio" id="rb2" value="2" name="pricing_communicated"><label for="rb2">2</label>
+						<input type="radio" id="rb3" value="3" name="pricing_communicated"><label for="rb3">3</label>
+						<input type="radio" id="rb4" value="4" name="pricing_communicated"><label for="rb4">4</label>
+						<input type="radio" id="rb5" value="5" name="pricing_communicated"><label for="rb5">5</label>
+					</div>
+				</div>
+				<hr>
+				<div style="margin:8% 0;">
+					<p style="font-size: 16px;">Do you feel that the service was fairly priced?<span class="form-required" title="This field is required.">*</span>
+					</p>
+					<div class="rating">
+						<input type="radio" id="rc1" value="1" name="fairly_priced" required><label for="rc1">1</label>
+						<input type="radio" id="rc2" value="2" name="fairly_priced"><label for="rc2">2</label>
+						<input type="radio" id="rc3" value="3" name="fairly_priced"><label for="rc3">3</label>
+						<input type="radio" id="rc4" value="4" name="fairly_priced"><label for="rc4">4</label>
+						<input type="radio" id="rc5" value="5" name="fairly_priced"><label for="rc5">5</label>
+					</div>
+				</div>
+				<hr>
+				<div style="margin:8% 0;">
+					<p style="font-size: 16px;">Was the project completed within the agreed upon timeframe?<span class="form-required" title="This field is required.">*</span>
+					</p>
+					<div class="rating">
+						<input type="radio" id="rd1" value="1" name="completed_on_time" required><label for="rd1">1</label>
+						<input type="radio" id="rd2" value="2" name="completed_on_time"><label for="rd2">2</label>
+						<input type="radio" id="rd3" value="3" name="completed_on_time"><label for="rd3">3</label>
+						<input type="radio" id="rd4" value="4" name="completed_on_time"><label for="rd4">4</label>
+						<input type="radio" id="rd5" value="5" name="completed_on_time"><label for="rd5">5</label>
+					</div>
+				</div>
+				<hr>
+				<div style="margin:8% 0;">
+					<p style="font-size: 16px;">Did Norgen's project analysis meet your expectations?<span class="form-required" title="This field is required.">*</span>
+					</p>
+					<div class="rating">
+						<input type="radio" id="re1" value="1" name="meet_expectations" required><label for="re1">1</label>
+						<input type="radio" id="re2" value="2" name="meet_expectations"><label for="re2">2</label>
+						<input type="radio" id="re3" value="3" name="meet_expectations"><label for="re3">3</label>
+						<input type="radio" id="re4" value="4" name="meet_expectations"><label for="re4">4</label>
+						<input type="radio" id="re5" value="5" name="meet_expectations"><label for="re5">5</label>
+					</div>
+				</div>
+				<hr>
+				<div style="margin:8% 0;">
+					<p style="font-size: 16px;">Was the final delivery method of your service satisfactory (download and mail)?<span class="form-required" title="This field is required.">*</span>
+					</p>
+					<div class="rating">
+						<input type="radio" id="rf1" value="1" name="delivery_method" required><label for="rf1">1</label>
+						<input type="radio" id="rf2" value="2" name="delivery_method"><label for="rf2">2</label>
+						<input type="radio" id="rf3" value="3" name="delivery_method"><label for="rf3">3</label>
+						<input type="radio" id="rf4" value="4" name="delivery_method"><label for="rf4">4</label>
+						<input type="radio" id="rf5" value="5" name="delivery_method"><label for="rf5">5</label>
+					</div>
+				</div>
+				<hr>
+				<div style="margin:8% 0;">
+					<p style="font-size: 16px;">Was technical support readily accessible or needed?<span class="form-required" title="This field is required.">*</span>
+					</p>
+					<div class="rating">
+						<input type="radio" id="rg1" value="1" name="tech_support_access" required><label for="rg1">1</label>
+						<input type="radio" id="rg2" value="2" name="tech_support_access"><label for="rg2">2</label>
+						<input type="radio" id="rg3" value="3" name="tech_support_access"><label for="rg3">3</label>
+						<input type="radio" id="rg4" value="4" name="tech_support_access"><label for="rg4">4</label>
+						<input type="radio" id="rg5" value="5" name="tech_support_access"><label for="rg5">5</label>
+					</div>
+				</div>
+				<hr>
+				<div style="margin:8% 0;">
+					<p style="font-size: 16px;">If you answered yes, please rate your experience with our technical support.<span class="form-required" title="This field is required.">*</span>
+					</p>
+					<div class="rating">
+						<input type="radio" id="rh1" value="1" name="tech_support_exp"><label for="rh1">1</label>
+						<input type="radio" id="rh2" value="2" name="tech_support_exp"><label for="rh2">2</label>
+						<input type="radio" id="rh3" value="3" name="tech_support_exp"><label for="rh3">3</label>
+						<input type="radio" id="rh4" value="4" name="tech_support_exp"><label for="rh4">4</label>
+						<input type="radio" id="rh5" value="5" name="tech_support_exp"><label for="rh5">5</label>
+					</div>
+				</div>
+				<hr>
+				<div style="margin:8% 0;">
+					<p style="font-size: 16px;">Overall, how would you rate Norgen's level of professionalism during this project?<span class="form-required" title="This field is required.">*</span>
+					</p>
+					<div class="rating">
+						<input type="radio" id="ri1" value="1" name="norgen_professionalism" required><label for="ri1">1</label>
+						<input type="radio" id="ri2" value="2" name="norgen_professionalism"><label for="ri2">2</label>
+						<input type="radio" id="ri3" value="3" name="norgen_professionalism"><label for="ri3">3</label>
+						<input type="radio" id="ri4" value="4" name="norgen_professionalism"><label for="ri4">4</label>
+						<input type="radio" id="ri5" value="5" name="norgen_professionalism"><label for="ri5">5</label>
+					</div>
+				</div>
+				<hr>
+				<div style="margin:8% 0;">
+					<p style="font-size: 16px;">Would you recomment our services to other institutions and colleagues?<span class="form-required" title="This field is required.">*</span>
+					</p>
+					<div class="responses">
+						<fieldset>
+							<label for="answer2_yes"><input type="radio" id="answer2_yes" value="true" name="recommend_answer" required>
+								<span style="padding: 1%;font-size: 16px; font-weight: 100;">Yes</span>
+							</label>
+							<label for="answer2_no"><input type="radio" id="answer2_no" value="false" name="recommend_answer">
+								<span style="padding: 1%;font-size: 16px; font-weight: 100;">No</span>
+							</label>
+						</fieldset>
+					</div>
+				</div>
+				<div class="comment-sec">
+					<p style="font-size: 16px;">Please let us know about any other feedback that you may have.</p>
+					<textarea class="comment-text" id="additional_feedback_text" name="additional_feedback_text"></textarea>
+				</div>
+			</div>
+			<div class="center-div" style="padding-bottom: 15px;text-align: center;">
+				<button class="btn-primary feedback-btn" type="submit" id="submit" name="submit">Send Feedback</button>
+			</div>
+		</form>
+	</section>
+	<br>
+	<br>
+	<br>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+	function success_in() {
+document.querySelector('.whole-page').style.display = "none";
+document.querySelector('.survey').style.display = "none";
+document.querySelector('.thankyou-screen').style.display = "block";
+}
+</script>

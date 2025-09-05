@@ -1,0 +1,1175 @@
+
+<style>
+	/*html {
+  scroll-behavior: smooth;
+}*/
+	.each-prod{
+		    display: flex;
+    gap: 20px;
+    margin: 2% 0%;
+    align-items: center;
+	}
+	.right-side{
+
+    gap: 60px;
+    flex-direction: row-reverse;
+	}
+	.right-side  .number{
+		color:#004897;
+	}
+	.left-side  .number{
+		color:#EC1D25;
+	}
+	.more-info-btn{
+		    background: #ec1d25;
+    border: #ec1d25;
+    font-weight: 600;
+    font-size: 17px;
+	}
+	.more-info-btn:hover{
+		opacity: 0.4;
+		 background: #ec1d25;
+    border: #ec1d25;
+
+	}
+	.more-info-btn-blue{
+		 background: #004897;
+    border: #004897;
+    font-weight: 600;
+    font-size: 17px;
+	}
+	.main-banner{
+		height: 500px;
+		background-image: linear-gradient(to right, #f8fcfff2,#022954a6), url(/sites/default/files/images/aboutus-fr/top_products.jpg);
+		/*background-image: url(/sites/default/files/images/aboutus-fr/top_products.jpg);*/
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-position: center;
+	}
+	.prod-banner-text{
+    	/*margin: -1% 10%;
+    margin-top: max(350px, 1em);
+    margin-bottom: 20px;
+        display: inline-flex;
+    flex-direction: column;*/
+    top:50%;
+    position:relative;
+    translate:transformY(-50%);
+	}
+	.prod-banner-text h1{
+		font-weight: 700;
+    	color: #004897;
+    	font-size: 55px;
+    	line-height: 1.4;
+	}
+	.banner-btn{
+		background-color: #0f6b7a;
+    	color: white;
+    	font-weight: 700;
+    	font-size: 22px;
+    	width: 50%;
+	}
+
+	
+	hr.header-separator {
+    border-top: 0px;
+    margin-left: -15px;
+    margin-right: -15px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    height: 24px;
+    background: linear-gradient(90deg, #ec1d25,#004897,#0f6b7a);
+}
+
+
+.number{
+	font-size: 70px;
+    font-weight: 600;
+    display: flex;
+    gap:10px;
+}
+.number span{
+	font-size: 63px;
+	font-weight: 500;
+}
+.step-text{
+	display: flex;
+	align-items: center;
+}
+
+.step-title{
+	font-size: 22px;
+	line-height: 1.3;
+	margin-left: 1%;
+	font-weight: 500;
+	text-align: left;
+}
+
+.blue-text{
+	color: #004897;
+}
+.red-text{
+	color: #EC1D25;
+}
+
+ 
+
+.btn-primary:hover{
+	opacity: 0.7;
+	color: white;
+}
+.region-breadcrumb{
+	display: none;
+}
+.text-side > p{
+	font-size: 17px;
+    line-height: 1.4;
+    margin-top: -19px;
+    margin-bottom: 20px;
+}
+.step-icon {
+    border: 7px solid transparent;
+    width: 150px;
+    height: 150px;
+    border-radius: 200px;
+}
+.step-icon-nav{
+	background: linear-gradient(to right, white, white), linear-gradient(to right, #ffffff , #ffffff);
+	width:75px;
+	height:75px;
+	border: 7px solid transparent;
+    border-radius: 200px;
+}
+.step-icon-nav img{
+	padding:10%;
+	max-width:none;
+}
+.sub-nav{
+	position:sticky;
+	top:0px;
+}
+.sub-nav .flex-child h3{
+	margin-top:0px;
+	margin-bottom:0px;
+}
+.sub-nav .flex-child{
+	padding:1em 0;
+}
+.icon-seperator{
+	/*border: 7px solid transparent;*/
+    width: 50px;
+    height: 50px;
+    /*border-radius: 200px;
+    background: linear-gradient(to right, white, white), linear-gradient(to right, #EC1D25 , #662d91);
+    background-clip: padding-box, border-box;
+    background-origin: padding-box, border-box;*/
+}
+#first-icon {
+    background: linear-gradient(to right, white, white), linear-gradient(to right, #EC1D25 , #662d91);
+    background-clip: padding-box, border-box;
+    background-origin: padding-box, border-box;
+}
+#first-icon-nav, #second-icon-nav, #third-icon-nav {
+	background: linear-gradient(to right, white, white), linear-gradient(to right, #ffffff , #ffffff);
+	width:75px;
+	height:75px;
+    background-clip: padding-box, border-box;
+    background-origin: padding-box, border-box;
+}
+.step-icon-nav{
+	display:flex;
+}
+.step-icon img {
+    padding: 13%;
+}
+.section-title{
+	display: flex;
+	align-items: center;
+    gap: 30px;
+       flex-wrap: wrap;
+}
+.section-title h1{
+	font-weight: 700;
+}
+.prod-section-name{
+	background: linear-gradient(90deg, #ec1d252e,#00489738,#0f6b7a52);
+    padding: 2%;
+
+}
+.text-side{
+	width: 70%;
+}
+.img-side{
+	width: 40%;
+}
+.img-side > img{
+	min-width: 500px;
+}
+#second-icon {
+    background: linear-gradient(to right, white, white), linear-gradient(to right, #EC1D25 , #662d91, #004897, #3974b6);
+    background-clip: padding-box, border-box;
+    background-origin: padding-box, border-box;
+}
+#third-icon {
+    background: linear-gradient(to right, white, white), linear-gradient(to right, #004897, #3974b6);
+    background-clip: padding-box, border-box;
+    background-origin: padding-box, border-box;
+}
+
+
+.section-seperator > a {
+  display: flex;
+  align-items: center;
+  gap:30px;
+}
+.section-seperator > a:before,
+.section-seperator > a:after {
+  flex: 1;
+  content: '';
+  height: 3px;
+  background: black;
+}
+.section-seperator{
+	padding: 3%;
+	text-align: center;
+	    width: 80%;
+    margin: 15% auto;
+}
+.section-seperator h1{
+	font-weight: 700;
+	margin-bottom: 2%;
+}
+.section-seperator h2{
+	font-weight: 600;
+	margin-bottom: 2%;
+}
+.flex-parent{
+	display: flex;
+	justify-content: center;
+}
+.flex-child{
+	display: flex;
+	align-items: center;
+	gap:10px;
+	
+	justify-content: center;
+	
+}
+.flex-parent > a{
+	padding: 0.5% 3%;
+	width: 100%;
+}
+.flex-child h3{
+	color: white;
+        font-size: 20px;
+    font-weight: 600;
+}
+.flex-child > img{
+	width: 75px;
+}
+.sub-nav.fixed2 {
+    position: fixed;
+    width: 100%;
+    top: 75px;
+    z-index: 501;
+}
+html {
+  scroll-padding-top: 30rem;
+}
+
+@media (max-width: 1100px){
+	.each-prod{
+		flex-wrap: wrap;
+	}
+	.step-icon-nav{
+		display: none;
+	}
+	}
+	@media (max-width: 1100px){
+	.right-side{
+		flex-direction: inherit;
+	}
+	.text-side{
+		width: auto;
+	}
+	.img-side{
+		width: auto;
+	}
+	.img-side > img{
+		min-width: auto;
+	}
+}
+@media (max-width: 530px){
+	.flex-child > img{
+		display: none;
+	}
+	.prod-banner-text {
+		margin-top: max(230px, 1em);
+	}
+	.text-side > p{
+		margin-top:0px;
+	}
+}
+@media (max-width: 450px){
+	.flex-parent {
+		flex-direction: column;
+	}
+	.sub-nav{
+		position:relative;
+		top:0px;
+	}
+	.flex-child h3{
+		font-size:13px;
+		text-align:center;
+	}
+	.prod-banner-text h1 {
+		font-size: 40px;
+		line-height: 1.4;
+	}
+	.text-side > p {
+		margin-top: 5px;
+	}
+}
+@media only screen and (max-width: 700px) and (max-height: 719px){
+	.flex-parent{
+		flex-direction:column;
+	}
+	.sub-nav{
+		position:relative;
+		top:0px;
+	}
+	.flex-child h3{
+		text-align:center;
+	}
+}
+@media (max-width: 1200px) and (max-height: 721px){
+	.prod-banner-text {
+		margin-top: max(230px, 1em);
+	}
+}
+@media (max-width: 740px) and (max-height: 721px){
+	.each-prod {
+		flex-wrap: wrap;
+	}
+	.right-side {
+		flex-direction: inherit;
+	}
+}
+.container:before{
+	display:none;
+}
+/*#samplecollection::before { content: ''; display: block; height: 150px; margin: -50px 0 0 0; }
+#purificationisolation::before { content: ''; display: block; height: 150px; margin: -50px 0 0 0; }
+#diagnostic::before { content: ''; display: block; height: 150px; margin: -50px 0 0 0; }*/
+</style>
+
+<section class="main-banner">
+	<div class="prod-banner-text container">
+		<h1>Prodotti di punta</h1>
+	</div>
+</section>
+<hr class="header-separator">
+<div id="sticky"></div>
+<section class="sub-nav">
+	<div class="flex-parent">
+
+		<a href="#samplecollection" style="background: linear-gradient(to right, #ed707a , #ad7cb2);border-right: 1px solid white;"><div class="flex-child" >
+				<div class="step-icon-nav" id="first-icon-nav" >
+					<img src="/sites/default/files/images/homepage-fr/sample-collection-icon_Gradient-01.svg">
+				</div>
+				<h3>Raccolta e conservazione dei campioni</h3>
+				</div>
+		</a>
+		<a href="#purificationisolation" style="background: linear-gradient(to right, #ad7cb2, #698fc4);border-right: 1px solid white;">
+			<div class="flex-child"  >
+				<div class="step-icon-nav" id="second-icon-nav" >
+					<img src="/sites/default/files/images/homepage-fr/isolation-purification_Gradient-01.svg">
+				</div>
+				<h3>Isolamento e purificazione</h3>
+			</div>
+		</a>
+		<a href="#diagnostic" style="background:linear-gradient(to right, #698fc4, #5182b8);">
+			<div class="flex-child" >
+				<div class="step-icon-nav" id="third-icon-nav" >
+					<img src="/sites/default/files/images/homepage-fr/molecular-diagnostics.svg">
+				</div>
+				<h3>Diagnostica molecolare</h3>
+			</div>
+		</a>
+
+	</div>
+</section>
+
+<div id="samplecollection"></div>
+<section class="prod-section-name">
+	<div class="section-title container">
+	<div class="step-icon" id="first-icon">
+		<img src="/sites/default/files/images/homepage-fr/sample-collection-icon_Gradient-01.svg">
+	</div>
+	<h1>Raccolta e conservazione dei campioni</h1>
+	
+</div>
+</section>
+
+<!-- <section class="prod-section-name"> -->
+	<!-- <div class="section-title"> -->
+	<!-- <div class="step-icon" id="first-icon">
+		<img src="/sites/default/files/images/homepage-fr/sample-collection-icon_Gradient-01.svg">
+	</div> -->
+<!-- 	<section class="section-seperator">
+	<h1>Sample Collection and Preservation</h1>
+	<a href="">
+  		<div class="step-icon" id="first-icon">
+			<img src="/sites/default/files/images/homepage-fr/sample-collection-icon_Gradient-01.svg">
+		</div>
+	</a>
+</section> -->
+	
+<!-- </div> -->
+<!-- </section> -->
+<section class="prod-list container">
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >1  <span> |</span></p><p class="step-title"><strong>Provette con conservante per cf-DNA/cf-RNA</strong><br>(cat. 63950)</p>
+			
+		</div>
+			<p>Le Provette con conservante per cf-DNA/cf-RNA di Norgen sono provette di plastica chiuse e sottovuoto per la raccolta e la conservazione di cf-DNA, DNA tumorale circolante, cf-RNA e cellule tumorali circolanti in campioni di sangue intero umano durante la conservazione e la spedizione. </p>
+			<a class="btn-primary btn more-info-btn" href="/fr/produit/tubes-de-conservation-ADN-cfARN-cf" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/cftube2web.jpg?itok=6tQJGmjX">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >2  <span> |</span></p><p class="step-title"><strong>Provette con conservante per cf-DNA/cf-RNA Dx</strong><br>(cat. Dx63950)</p><div style="text-align: right;width: 35%;"><img src="https://norgenbiotek.com/sites/default/files/norproduct/European_Conformity_logo.svg" style="width: 70px;"></div>
+			
+		</div>
+			<p>I tubi di conservazione del cf-DNA/cf-RNA di Norgen sono tubi di plastica chiusi e sottovuoto progettati per la raccolta e la conservazione del cf-DNA, del DNA tumorale circolante, del cf-RNA e delle cellule tumorali circolanti presenti nei campioni di sangue intero umano durante la conservazione e la spedizione. </p>
+			<a class="btn-primary btn more-info-btn-blue" href="/fr/produit/tubes-de-conservation-adn-cfarn-cf-dx" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/cftube2web.jpg?itok=6tQJGmjX">
+		</div>
+	</div>
+
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >3  <span> |</span></p><p class="step-title"><strong>Dispositivi per la raccolta e la conservazione delle urine</strong><br>(cat. 18118, 18122, 18113, 18126, 18129)</p>
+			
+		</div>
+			<p>Il conservante per urina di Norgen è progettato per la conservazione rapida del DNA, dell’RNA, del microRNA e delle proteine da campioni di urina fresca.</p>
+			<a class="btn-primary btn more-info-btn" href="/fr/produit/dispositifs-de-collecte-et-de-préservation-de-l'urine" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/urine-tubes_700.jpg?itok=yN3JFgE-">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >4  <span> |</span></p><p class="step-title"><strong>Provette per la raccolta e la conservazione degli acidi nucleici delle feci	</strong><br>(cat. 45660)</p>
+			
+		</div>
+			<p>Le provette di raccolta e conservazione degli acidi nucleici da feci di Norgen sono progettate per la conservazione rapida degli acidi nucleici da campioni di feci fresche. </p>
+			<a class="btn-primary btn more-info-btn-blue" href="/fr/produit/tubes-de-prélèvement-et-de-préservation-de-lacide-nucléique-des-selles" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/45660-new-web.jpg?itok=SoL2XKr7%22">
+		</div>
+	</div>
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >5  <span> |</span></p><p class="step-title"><strong>Sistema di raccolta e conservazione degli acidi nucleici delle feci	</strong><br>(cat. 63700)</p>
+			
+		</div>
+			<p>Il sistema di raccolta e conservazione degli acidi nucleici da feci di Norgen è un sistema completo progettato per la raccolta, la conservazione a temperatura ambiente e il trasporto degli acidi nucleici da campioni di feci. </p>
+			<a class="btn-primary btn more-info-btn" href="/fr/produit/Système-de-collecte-et-de-préservation-de-l'acide-nucléique-des-selles" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/63700_2.jpg?itok=3KDICEnj">
+		</div>
+	</div>
+
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >6  <span> |</span></p><p class="step-title"><strong>Dispositivi per la raccolta e la conservazione del DNA salivare Dx</strong><br>(cat. 49000)</p><div style="text-align: right;width: 35%;"><img src="https://norgenbiotek.com/sites/default/files/norproduct/European_Conformity_logo.svg" style="width: 70px;"></div>
+			
+		</div>
+			<p>Il conservante per DNA salivare di Norgen è un tampone di conservazione acquoso progettato per una rapida lisi cellulare e la successiva conservazione del DNA da campioni freschi. </p>
+			<a class="btn-primary btn more-info-btn-blue" href="/fr/produit/dispositifs-de-collecte-et-de-préservation-de-ladn-salivaire-dx" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/49000-Saliva-DNA-Collection-kit-WEB.jpg?itok=XYmmez_V%22">
+		</div>
+	</div>
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >7  <span> |</span></p><p class="step-title"><strong>Dispositivi per la raccolta e la conservazione del DNA salivare</strong><br>(cat. RU49000)</p>
+			
+		</div>
+			<p>Il conservante per DNA salivare di Norgen è un tampone di conservazione acquoso progettato per una rapida lisi cellulare e la successiva conservazione del DNA da campioni freschi. </p>
+			<a class="btn-primary btn more-info-btn" href="/fr/produit/dispositifs-de-collecte-et-de-préservation-de-l'ADN-salivaire" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/RU49000-web.jpg?itok=rdzOMBi7%22">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >8  <span> |</span></p><p class="step-title"><strong>Dispositivi per la raccolta e la conservazione dell'RNA salivare Dx</strong><br>(cat. 53800)</p><div style="text-align: right;width: 35%;"><img src="https://norgenbiotek.com/sites/default/files/norproduct/European_Conformity_logo.svg" style="width: 70px;"></div>
+			
+		</div>
+			<p>Il conservante per RNA salivare di Norgen è un tampone di conservazione acquoso progettato per una rapida lisi cellulare e la successiva conservazione dell’RNA da campioni freschi di saliva.</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/fr/produit/dispositifs-de-collecte-et-de-préservation-de-larn-de-la-salive-dx" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/RU53800-blue-web-min.jpg?itok=B2MI5l16%22">
+		</div>
+	</div>
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >9  <span> |</span></p><p class="step-title"><strong>Dispositivi per la raccolta e la conservazione dell'RNA salivare</strong><br>(cat. RU53800)</p>
+			
+		</div>
+			<p>Il conservante per RNA salivare di Norgen è un tampone di conservazione acquoso progettato per una rapida lisi cellulare e la successiva conservazione dell’RNA da campioni freschi.</p>
+			<a class="btn-primary btn more-info-btn" href="/fr/produit/Dispositifs-de-collecte-et-de-préservation-de-l%27ARN-de-la-salive" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/RU53800-blue-web-min.jpg?itok=B2MI5l16%22">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >10  <span> |</span></p><p class="step-title"><strong>Provette per la conservazione degli acidi nucleici totali </strong><br>(cat. 69200)</p>
+			
+		</div>
+			<p>I campioni raccolti e conservati con i tubi di conservazione dell'acido nucleico totale di Norgen sono compatibili con la maggior parte dei metodi commerciali per l’isolamento di DNA e RNA.</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/fr/produit/tubes-de-conservation-de-l%27acide-nucléique-total" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/69200-Total-Nucleic-Acid-Preservation-Tubes_2_WEB.jpg?itok=1mSVfdsx">
+		</div>
+	</div>
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >11  <span> |</span></p><p class="step-title"><strong>Sistema di raccolta dei tamponi e conservazione del DNA </strong><br>(cat. Dx69200)</p><div style="text-align: right;width: 35%;"><img src="https://norgenbiotek.com/sites/default/files/norproduct/European_Conformity_logo.svg" style="width: 70px;"></div>
+			
+		</div>
+			<p>I tubi di conservazione dell'acido nucleico totale Dx di Norgen sono destinati a utenti professionali come tecnici, medici e biologi esperti e formati nelle tecniche di biologia molecolare.</p>
+			<a class="btn-primary btn more-info-btn" href="/fr/produit/tubes-de-conservation-de-lacide-nucléique-total-dx" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/69200-Total-Nucleic-Acid-Preservation-Tubes_2_WEB.jpg?itok=1mSVfdsx">
+		</div>
+	</div>
+
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >12  <span> |</span></p><p class="step-title"><strong>Sistema di raccolta dei tamponi e conservazione del DNA</strong><br>(cat. 45690-B)</p>
+			
+		</div>
+			<p>I campioni da tampone raccolti e conservati con il sistema di raccolta e conservazione del DNA di Norgen sono compatibili con la maggior parte dei metodi di isolamento del DNA. </p>
+			<a class="btn-primary btn more-info-btn-blue" href="/fr/produit/Système-de-collection-d%27échantillons-et-de-préservation-d%27ADN" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/45690-%20Swab%20collection%20and%20Total%20Nucleic%20Acid-web.jpg?itok=-UnlWthU%22">
+		</div>
+	</div>
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >13  <span> |</span></p><p class="step-title"><strong>Sistema di raccolta e conservazione dei tamponi fecali</strong><br>(cat. 45670-B)</p>
+			
+		</div>
+			<p>Il sistema di raccolta e conservazione dei tamponi fecali di Norgen è progettato per la raccolta, la conservazione a temperatura ambiente e il trasporto di acidi nucleici da campioni di feci. </p>
+			<a class="btn-primary btn more-info-btn" href="/fr/produit/Système-de-collecte-et-de-préservation-des-écouvillons-fécaux" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/45670-B-Fecal-Swab-Collection-and-Preservation--WEB.jpg?itok=PvXByNcl%22">
+		</div>
+	</div>
+</section>
+<!--purification-->
+<div id="purificationisolation"></div>
+<section class="prod-section-name">
+	<div class="section-title container">
+		<div class="step-icon" id="second-icon">
+			<img src="/sites/default/files/images/homepage-fr/isolation-purification_Gradient-01.svg">
+		</div>
+	<h1>Isolamento e purificazione</h1>
+</div>
+</section>
+
+<section class="prod-list container">
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >1  <span> |</span></p><p class="step-title"><strong>Kit de purification de l'ARN total (Collone de Spin)</strong><br>(cat. 17200, 17250, 17270, 37500, 24350, 24380, 24300, 24370)</p>
+			
+		</div>
+			<p>Questi kit sono adatti per l’isolamento dell’RNA totale da una varietà di campioni tra cui cellule, batteri, lieviti, virus e fluidi corporei come plasma/siero, sangue, saliva, liquido cerebrospinale (LCR) e molti altri.</p>
+			<a class="btn-primary btn more-info-btn" href="/fr/produit/Kit-de-purification-de-l'ARN-total" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/17200-Total-RNA-Purification_WEB_2.jpg?itok=u67KZDoT%22">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >2  <span> |</span></p><p class="step-title"><strong>Kit di purificazione dell'RNA totale - Colonna spin</strong><br>(cat. Dx17200, Dx24300, Dx24350, Dx24380)</p><div style="text-align: right;width: 35%;"><img src="https://norgenbiotek.com/sites/default/files/norproduct/European_Conformity_logo.svg" style="width: 70px;"></div>
+			
+		</div>
+			<p>I kit Dx per la purificazione dell’RNA totale di Norgen forniscono metodi rapidi per l’isolamento e la purificazione dell’RNA totale da campioni di tessuti, sangue, plasma, siero, saliva, batteri, lieviti, funghi e virus per applicazioni di diagnostica in vitro.</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/fr/produit/kits-de-purification-de-larn-total-dx" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/17200-Total-RNA-Purification-Kit_WEB_1_0.jpg?itok=mXtFXZuQ">
+		</div>
+	</div>
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >3  <span> |</span></p><p class="step-title"><strong>Kit di purificazione dell'RNA totale Plus</strong><br>(cat. 48300, 48400)</p>
+			
+		</div>
+			<p>Questo kit purifica l’RNA totale, incluso il microRNA, da campioni biologici e utilizza una colonna aggiuntiva per rimuovere efficacemente il DNA genomico contaminante, eliminando così la necessità del trattamento enzimatico con DNasi. </p>
+			<a class="btn-primary btn more-info-btn" href="/fr/produit/Kit-de-Purification-de-l'ARN-Total-Plus" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/48300-Total-RNA-Purification-Plus-Kit_WEB.jpg?itok=RtuQjoW9">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >4  <span> |</span></p><p class="step-title"><strong>Kit di purificazione dell'RNA totale Plus Micro</strong><br>(cat. 48500)</p>
+			
+		</div>
+			<p>La purificazione si basa sulla cromatografia su colonna a centrifuga utilizzando la resina proprietaria di Norgen come matrice di separazione. </p>
+			<a class="btn-primary btn more-info-btn-blue" href="/fr/produit/Kit-de-purification-de-l'ARN-total-micro-plus" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/48500-Total-RNA-Purification-Plus-Micro-Kit-WEB.jpg?itok=OYajbXH3">
+		</div>
+	</div>
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >5  <span> |</span></p><p class="step-title"><strong>Kit di micropurificazione dell'RNA totale</strong><br>(cat. 35300, 35350)</p>
+			
+		</div>
+			<p>Questo kit estrae l’RNA totale da campioni con un basso numero di cellule ed eluisce in un volume pratico di 20 µL per diverse applicazioni a valle. </p>
+			<a class="btn-primary btn more-info-btn" href="/fr/produit/Kit-de-purification-de-l%27ARN-Total-micro" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/35300-Total-RNA-Purification-Micro-Kit-WEB.jpg?itok=nzzClMkm">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >6  <span> |</span></p><p class="step-title"><strong>Kit di purificazione dell'RNA totale Maxi</strong><br>(cat. 26800)</p>
+			
+		</div>
+			<p>La purificazione si basa sulla cromatografia su colonna a centrifuga utilizzando la resina proprietaria di Norgen come matrice di separazione. </p>
+			<a class="btn-primary btn more-info-btn-blue" href="/fr/produit/kit-de-purification-de-larn-total-maxi" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/26800-Total-RNA-Purification-Maxi-Kit-WEB.jpg?itok=ty8TWpeq">
+		</div>
+	</div>
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >7  <span> |</span></p><p class="step-title"><strong>Mini provette per la raccolta e la conservazione del DNA fecale</strong><br>(cat. 27650)</p>
+			
+		</div>
+			<p>I mini-tubi per la raccolta e conservazione del DNA fecale di Norgen sono progettati per la conservazione rapida del DNA da campioni fecali freschi. </p>
+			<a class="btn-primary btn more-info-btn" href="/fr/produit/mini-tubes-pour-la-collecte-et-la-préservation-de-ladn-fécal" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/27650-web_1.jpg?itok=4RnRAg52%22">
+		</div>
+	</div>
+
+
+
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >8  <span> |</span></p><p class="step-title"><strong>Kit di purificazione dell'RNA da plasma/siero</strong><br>(cat. 55000, 56100, 56200)</p>
+			
+		</div>
+			<p>Questi kit offrono un metodo rapido, affidabile e pratico per purificare e concentrare RNA circolante ed esosomiale di alta qualità, elevata purezza e privo di inibitori, utilizzando un comodo formato a colonna di spin. </p>
+			<a class="btn-primary btn more-info-btn-blue" href="/fr/produit/Kits-de-purification-de-l'ARN-du-plasma" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/55000-Plasma_Serum-RNA-Purification-Mini-Kit-2-WEB_0.jpg?itok=q8ccmkpW%22">
+		</div>
+	</div>
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >9  <span> |</span></p><p class="step-title"><strong>Kit di purificazione degli esosomi da plasma/siero e per l'isolamento dell'RNA</strong><br>(cat. 58300, 58500, 58600)</p>
+			
+		</div>
+			<p>I kit di isolamento degli esosomi e dell’RNA circolante libero nel plasma/siero di Norgen sono sistemi tutto-in-uno per la purificazione degli esosomi e l’isolamento sequenziale dell’RNA esosomiale e dell’RNA circolante libero da diversi volumi di campioni di plasma/siero.</p>
+			<a class="btn-primary btn more-info-btn" href="/fr/produit/Kits-de-purification-d'exosomes-de-plasma-sérum-et-d'isolation-de-l'ARN" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/58300-Plasma-Serum-Exosome-Reflection-Web.jpg?itok=XFQYtMj5%22">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >10  <span> |</span></p><p class="step-title"><strong>Kit di isolamento dell'RNA esosomiale</strong><br>(cat. 58000)</p>
+			
+		</div>
+			<p>Questo kit fornisce un metodo rapido, affidabile e pratico per isolare e concentrare RNA esosomiale da esosomi precedentemente purificati con i kit per la purificazione degli esosomi di Norgen.</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/fr/produit/Kit-d'isolement-de-l'ARN-exosomal">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/58000-web.jpg?itok=3TvG1ELI%22">
+		</div>
+	</div>
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >11  <span> |</span></p><p class="step-title"><strong>Purificazione dell'RNA citoplasmatico/nucleare</strong><br>(cat. 21000, 37400)</p>
+			
+		</div>
+			<p>Questo kit fornisce un metodo rapido per l’isolamento e la purificazione dell’RNA citoplasmatico e nucleare da cellule animali in coltura e piccoli campioni di tessuto.</p>
+			<a class="btn-primary btn more-info-btn" href="/fr/produit/Purification-de-l'ARN-cytoplasmique-et-nucléaire" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/21000%20Cytoplasmic%20and%20Nuclear%20RNA-WEB_0.jpg?itok=IYLnTJU5%22">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >12  <span> |</span></p><p class="step-title"><strong>Kit di purificazione dell'RNA di una singola cellula</strong><br>(cat. 51800)</p>
+			
+		</div>
+			<p>Kit ad alta sensibilità progettato per lavorare con una singola cellula fino a 100.000 cellule. Il design speciale della microcolonna di centrifugazione consente un volume di eluizione ridotto fino a soli 8 µL.</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/fr/produit/Kit-de-purification-d'ARN-d'une-cellule-unique" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/51800-Single-Cell-RNA-purification-Kit-WEB_0.jpg?itok=bcxCCtCQ%22">
+		</div>
+	</div>
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >13  <span> |</span></p><p class="step-title"><strong>Kit di pulizia e concentrazione dell'RNA</strong><br>(cat. 23600, 43200, 25100, 61000)</p>
+			
+		</div>
+			<p>Questi kit sono progettati per pulire e concentrare RNA (incluso il microRNA) da TRIzol®, TRI Reagent®, reazioni enzimatiche, trascrizione in vitro, reazioni di marcatura, ecc.</p>
+			<a class="btn-primary btn more-info-btn" href="/fr/produit/Kits-de-nettoyage-et-de-concentration-de-l'ARN" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/23600-RNA-Clean-Up-and-Concentration-Kit-WEB_0.jpg?itok=322TKX0T">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >14  <span> |</span></p><p class="step-title"><strong>Kit di purificazione del DNA circolante libero da cellule da plasma/siero</strong><br>(cat. 55500, 55100, 55600, 55800)</p>
+			
+		</div>
+			<p>Questi kit offrono un metodo rapido, affidabile e pratico per isolare DNA circolante libero da cellule (cf-DNA) di alta qualità, elevata purezza e privo di inibitori da volumi di campioni di plasma/siero. </p>
+			<a class="btn-primary btn more-info-btn-blue" href="/fr/produit/Kits-de-purification-de-l'ADN-circulant-exempt-de-cellules-du-plasmasérum" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/55100-web_0.jpg?itok=16SgQB1n">
+		</div>
+	</div>
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >15  <span> |</span></p><p class="step-title"><strong>Kit di isolamento del DNA delle feci</strong><br>(cat. 27600, 65600, 55700, 63100)</p>
+			
+		</div>
+			<p>Questi kit rappresentano un metodo pratico e veloce per isolare il DNA totale da campioni di feci freschi, congelati e conservati, inclusi quelli conservati con i tubi per la raccolta e conservazione dell’acido nucleico fecale di Norgen (Cat. 45660)</p>
+			<a class="btn-primary btn more-info-btn" href="/fr/produit/Kits-d'isolement-de-l'ADN-des-selles" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/27600-Stool-DNA-Isolation-Kit_WEB.jpg?itok=47HFkc13%22">
+		</div>
+	</div>
+
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >16  <span> |</span></p><p class="step-title"><strong>Kit di isolamento del DNA delle feci Dx</strong><br>(cat. Dx27600)</p><div style="text-align: right;width: 35%;"><img src="https://norgenbiotek.com/sites/default/files/norproduct/European_Conformity_logo.svg" style="width: 70px;"></div>
+			
+		</div>
+			<p>Questo kit rappresenta un metodo pratico e veloce per isolare il DNA totale da campioni di feci freschi, congelati e conservati, inclusi quelli conservati con i dispositivi Dx per la raccolta e conservazione dell’acido nucleico fecale di Norgen (Cat. Dx45660)</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/fr/produit/kits-disolement-de-ladn-des-selles-dx" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/27600.jpg?itok=GdluIv_u%22">
+		</div>
+	</div>
+
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >17  <span> |</span></p><p class="step-title"><strong>Kit di isolamento del DNA fagico</strong><br>(cat. 46800, 46850)</p>
+			
+		</div>
+			<p>Questo kit fornisce un metodo rapido a colonna per la purificazione del DNA totale da un ampio spettro di batteriofagi propagati in batteri coltivati in terreno liquido.</p>
+			<a class="btn-primary btn more-info-btn" href="/fr/produit/Kit-d'isolation-de-l'ADN-des-phages" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/46800-Reflection-web_0.jpg?itok=iReo6_i9%22">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >18  <span> |</span></p><p class="step-title"><strong>Dispositivi per la raccolta e la conservazione degli acidi nucleici delle feci Dx</strong><br>(cat. Dx45660)</p><div style="text-align: right;width: 35%;"><img src="https://norgenbiotek.com/sites/default/files/norproduct/European_Conformity_logo.svg" style="width: 70px;"></div>
+			
+		</div>
+			<p>I dispositivi Dx di raccolta e conservazione dell’acido nucleico fecale di Norgen sono progettati per la raccolta e conservazione degli acidi nucleici da campioni di feci fresche.</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/fr/produit/dispositifs-de-prélèvement-et-de-préservation-de-lacide-nucléique-dans-les-selles-dx" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/45630_0.png?itok=A5GCCCny%22">
+		</div>
+	</div>
+
+
+	<!-- <div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >19  <span> |</span></p><p class="step-title"><strong>NGS Normalization 96-Well Kit</strong><br>(Cat. 61900)</p>
+			
+		</div>
+			<p>Norgen Biotek's NGS Normalization 96-Well Kit are suitable for high-throughput NGS Library PCR amplicon clean-up and normalization of NGS library PCR product concentration</p>
+			<button class="btn-primary btn more-info-btn">Maggiori informazioni</button>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/61900-Reflection-web.jpg?itok=x7nN-Bdy%22">
+		</div>
+	</div> -->
+</section>
+
+<!--Diagnostics-->
+<div id="diagnostic"></div>
+<section class="prod-section-name">
+	<div class="section-title container">
+		<div class="step-icon" id="third-icon">
+				<img src="/sites/default/files/images/homepage-fr/molecular-diagnostics.svg">
+			</div>
+	<h1>Diagnostica molecolare</h1>
+</div>
+</section>
+
+<section class="prod-list container">
+
+	<section class="section-seperator">
+	<h2>Rilevamento di agenti patogeni umani</h2>
+	<a href="">
+  		<div class="icon-seperator">
+			<img src="https://norgenbiotek.com/sites/default/files/banner-ribbon.webp">
+		</div>
+	</a>
+</section>
+<!-- <div class="seperator">
+	<hr>
+	<h2>Human Pathogen Detection</h2>
+	<hr>
+</div> -->
+	<!-- <div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >1  <span> |</span></p><p class="step-title"><strong>Kit de détection TaqMan PCR du papillomavirus humain (PVH) (risque élevé et faible)</strong><br>(cat. TM31550, TM31510)</p>
+			
+		</div>
+			<p>Kits de détection du HPV (risque élevé et faible)</p>
+			<a class="btn-primary btn more-info-btn" href="https://norgenbiotek.com/fr/produit/Kit-de-détection-TaqMan-PCR-du-papillomavirus-humain" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/TM31550-Human-Papillomavirus-%28HPV%29-%28High-and-Low-Risk%29-WEB.jpg?itok=d-5_YdW_%22">
+		</div>
+	</div> -->
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >1  <span> |</span></p><p class="step-title"><strong>Kit di rilevamento PCR TaqMan per la Chlamydia/Neisseria gonorrhoeae TaqMan PCR</strong><br>(cat. TM42550, TM42510)</p>
+			
+		</div>
+			<p>Kit di rilevamento per Chlamydia/Neisseria gonorrhoeae</p>
+			<a class="btn-primary btn more-info-btn" href="/fr/produit/kits-de-détection-chlamydianeisseria-gonorrhoeae-taqman-pcr" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/TM31450-Chlamydia-Detection-Kit%20WEB.jpg?itok=2IUXrhXy%22">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >2  <span> |</span></p><p class="step-title"><strong>Kit di rilevamento PCR TaqMan per l’Herpes simplex virus 1 e 2 (HSV-1&2)</strong><br>(cat. TM31750, TM31710)</p>
+			
+		</div>
+			<p>Kit di rilevamento per HSV-1&2</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/fr/produit/kits-de-détection-taqman-pcr-du-virus-de-lherpès-simplex-1-et-2-hsv-12" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/TM32650%20Herpes%20Simplex%20Virus%201%20%28HSV-1%29%20TaqMan-WEB.jpg?itok=2i4hN-u4%22">
+		</div>
+	</div>
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >3  <span> |</span></p><p class="step-title"><strong>Kit di rilevamento PCR TaqMan per l’Herpes Simplex Virus 1 (HSV-1)</strong><br>(cat. TM32650, TM32610)</p>
+			
+		</div>
+			<p>Kit di rilevamento per HSV-1</p>
+			<a class="btn-primary btn more-info-btn" href="/fr/produit/Virus-de-l'herpès-simplex1-HSV-1-Kits-de-détection-TaqMan-PCR" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/TM32650%20Herpes%20Simplex%20Virus%201%20%28HSV-1%29%20TaqMan-WEB.jpg?itok=2i4hN-u4%22">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >4  <span> |</span></p><p class="step-title"><strong>Kit di rilevamento PCR TaqMan per l'Herpes Simplex Virus 1 (HSV-1) Dx</strong><br>(cat. DxTM32600)</p><div style="text-align: right;width: 35%;"><img src="https://norgenbiotek.com/sites/default/files/norproduct/European_Conformity_logo.svg" style="width: 70px;"></div>
+			
+		</div>
+			<p>Kit di rilevamento per HSV-1</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/fr/produit/kit-de-détection-taqman-pcr-du-virus-de-lherpès-simplex-1-hsv-1-dx" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/TM32650%20Herpes%20Simplex%20Virus%201%20%28HSV-1%29%20TaqMan-WEB.jpg?itok=2i4hN-u4%22">
+		</div>
+	</div>
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >5  <span> |</span></p><p class="step-title"><strong>Kit di rilevamento PCR TaqMan per l’Herpes Simplex Virus 2 (HSV-2)</strong><br>(cat. TM32450, TM32410)</p>
+			
+		</div>
+			<p>Kit di rilevamento per HSV-2</p>
+			<a class="btn-primary btn more-info-btn" href="/fr/produit/virus-de-lherpès-simplex-2-hsv-2-kits-de-détection-taqman-pcr" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/TM32650%20Herpes%20Simplex%20Virus%201%20%28HSV-1%29%20TaqMan-WEB.jpg?itok=2i4hN-u4%22">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >6  <span> |</span></p><p class="step-title"><strong>Kit di rilevamento PCR TaqMan per l’Herpes Simplex Virus 2 (HSV-2) Dx</strong><br>(cat. DxTM32400)</p><div style="text-align: right;width: 35%;"><img src="https://norgenbiotek.com/sites/default/files/norproduct/European_Conformity_logo.svg" style="width:70px;"></div>
+			
+		</div>
+			<p>Kit di rilevamento per HSV-2</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/fr/produit/virus-de-lherpès-simplex-2-hsv-2-kits-de-détection-taqman-pcr-dx" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/TM32650%20Herpes%20Simplex%20Virus%201%20%28HSV-1%29%20TaqMan-WEB.jpg?itok=2i4hN-u4%22">
+		</div>
+	</div>
+
+
+	<section class="section-seperator">
+	<h2>Rilevamento di patogeni vegetali</h2>
+	<a href="">
+  		<div class="icon-seperator">
+			<img src="https://norgenbiotek.com/sites/default/files/banner-ribbon.webp">
+		</div>
+	</a>
+		</section>
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >7  <span> |</span></p><p class="step-title"><strong>Kit di rilevamento RT-PCR TaqMan per il viroide latente del luppolo (HLVd)</strong><br>(cat. TM38750, TM38710)</p>
+			
+		</div>
+			<p>Kit di rilevamento del viroide latente del luppolo (HLVd) basato su RT-PCR</p>
+			<a class="btn-primary btn more-info-btn" href="/fr/produit/Kit-de-détection-TaqMan-RTPCR-du-viroïde-latent-du-houblon-HLVd" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/TM38750-Hop-latent-viroid-WEB.jpg?itok=sirT4AKT%22">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >8  <span> |</span></p><p class="step-title"><strong>Kit di rilevamento PCR TaqMan per il Saccharomyces cerevisiae</strong><br>(cat. TM33350, TM33310)</p>
+			
+		</div>
+			<p>Kit di rilevamento per Saccharomyces cerevisiae</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/fr/produit/Kits-de-détection-TaqMan-PCR-pour-Saccharomyces-cerevisiae" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/TM33300-Taqman-24rxn-WEB_0.jpg?itok=o7ln0U8q%22">
+		</div>
+	</div>
+
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >9  <span> |</span></p><p class="step-title"><strong>Kit di rilevamento RT-PCR TaqMan per l’Avocado Sunblotch Viroid (ASBVd)</strong><br>(cat. TM38850, TM38810)</p>
+			
+		</div>
+			<p>Kit di rilevamento per ASBVd</p>
+			<a class="btn-primary btn more-info-btn" href="/fr/produit/Kit-de-détection-TaqMan-RT-PCR-du-viroïde-de-la-tache-solaire-de-l'avocat-ASBVd" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/TM38850-Avocado-Sunblotch-Viroid-WEB.jpg?itok=h-Y4kVl3%22">
+		</div>
+	</div>
+		<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >10  <span> |</span></p><p class="step-title"><strong>Kit di rilevamento PCR TaqMan per la Legionella sp.</strong><br>(Cat. TM64450, TM64410)</p>
+			
+		</div>
+			<p>Kit di rilevamento per Legionella sp.</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/fr/produit/Legionella-sp-Kits-de-détection-TaqMan-PCR" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/DxTM64400-Taqman-24rxn-WEB.jpg?itok=2XGU_B_G%22">
+		</div>
+	</div>
+	<section class="section-seperator">
+	<h2>Rilevamento di agenti patogeni negli alimenti e nel latte</h2>
+	<a href="">
+  		<div class="icon-seperator">
+			<img src="https://norgenbiotek.com/sites/default/files/banner-ribbon.webp">
+		</div>
+	</a>
+</section>
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >11  <span> |</span></p><p class="step-title"><strong>Kit di rilevamento PCR TaqMan per lo Streptococcus agalactiae</strong><br>(cat. TM30650, TM30610)</p>
+			
+		</div>
+			<p>Kit di rilevamento per Streptococcus agalactiae</p>
+			<a class="btn-primary btn more-info-btn" href="/fr/produit/Kits-de-détection-Streptococcus-agalactiae-TaqMan-PCR" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/TM30600-Taqman-24rxn-WEB.jpg?itok=ULDSFZe6%22">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >12  <span> |</span></p><p class="step-title"><strong>Kit di rilevamento PCR TaqMan per il Listeria monocytogenes</strong><br>(cat. TM30450, TM30410)</p>
+			
+		</div>
+			<p>Kit di rilevamento per Listeria monocytogenes</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/fr/produit/Kits-de-détection-Listeria-monocytogenes-TaqMan-PCR">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/TM30400-Taqman-24rxn-WEB_1.jpg?itok=PEfjkeBy%22">
+		</div>
+	</div>
+	<section class="section-seperator">
+	<h2>Rilevamento di patogeni di origine idrica</h2>
+	<a href="">
+  		<div class="icon-seperator">
+			<img src="https://norgenbiotek.com/sites/default/files/banner-ribbon.webp">
+		</div>
+	</a>
+</section>
+	<div class="each-prod left-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >13 <span> |</span></p><p class="step-title"><strong>Kit di rilevamento RT-PCR TaqMan per il Cryptosporidium</strong><br>(cat. TM39150, TM39110)</p>
+			
+		</div>
+			<p>Kits de détection pour Cryptosporidium</p>
+			<a class="btn-primary btn more-info-btn" href="/fr/produit/Kits-de-détection-Cryptosporidium-TaqMan-RTPCR" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/TM39100-Taqman-24rxn-WEB.jpg?itok=GBvJqOCc%22">
+		</div>
+	</div>
+
+	<div class="each-prod right-side">
+		<div class="text-side">
+		<div class="step-text">
+			<p class="number" >14  <span> |</span></p><p class="step-title"><strong>Kit di rilevamento RT-PCR TaqMan per la Giardia intestinalis</strong><br>(cat. TM43850, TM43810)</p>
+			
+		</div>
+			<p>Kits de détection de Giardia intestinalis</p>
+			<a class="btn-primary btn more-info-btn-blue" href="/fr/produit/Kit-de-détection-Giardia-intestinalis-TaqMan-RTPCR" target="_blank">Maggiori informazioni</a>
+		</div>
+		<div class="img-side">
+			<img src="https://norgenbiotek.com/sites/default/files/styles/original/public/images/product_images/TM43800-Taqman-24rxn-WEB.jpg?itok=EE7DfdZ1%22">
+		</div>
+	</div>
+
+
+</section>
+
+<script>
+
+	document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+    	console.log("anchoring");
+        e.preventDefault();
+
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+});
+
+</script>

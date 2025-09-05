@@ -1,0 +1,608 @@
+
+.table {border: 0px !important;margin-bottom: 0px !important;}
+#edit-coupon-redemption td {padding:0px !important;padding-top: 8px !important;}
+.coupon-redemption-form__coupons.coupon-redemption-form__coupons--multiple{display:grid;}
+#edit-coupon-redemption tbody tr td{
+  border:none;
+}
+#edit-coupon-redemption tbody tr td:nth-child(2) {
+  width: 20%;
+  text-align:right;
+}
+input.input-lg.form-control.c-square.c-theme.form-search:focus {
+  outline: none !important;
+}
+
+/*    Product containers Fields        */   
+.c-cart-details {
+  display: flex;
+  flex-direction: column;
+}
+  
+.unit_line{ 
+  grid-area: price;
+  font-weight: 600;
+  align-self:end;
+  text-align:right;
+  margin-top:5px;
+}
+
+.unit_line .quantity{
+  display:inline-block;
+}
+.unit_line .quantity .times{
+  line-height: 0.6;
+  display: inline-block;
+  font-size: 24px;
+  vertical-align: middle;
+}
+
+.c-item-title {
+  font-weight: 600;
+  grid-area: title;
+  margin-bottom:5px;
+}
+
+.c-item-sku {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.c-item-sku::before {
+    content: "SKU: ";
+    font-weight: 600;
+}
+
+.c-item-quantity, .c-item-price {
+    font-size: 14px;
+    margin-bottom: 0px;
+}
+
+.c-item-price {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/*  Format */
+.format-value::before {
+  content: 'Format: ';
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.format-value {
+  font-weight: 400;
+  font-size: 14px;
+}
+
+/* Size */
+.size-value::before {
+  content: 'Size: ';
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.size-value {
+  font-weight: 400;
+  font-size: 14px;
+  margin-bottom:0px;
+}
+
+/*SCROLL//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+/* Main container style */
+.views-view-responsive-grid.views-view-responsive-grid--vertical {
+  padding-right: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  max-height: 600px;
+  margin-bottom:20px;
+}
+
+/* Scrollbar style */
+.views-view-responsive-grid.views-view-responsive-grid--vertical::-webkit-scrollbar {
+  width: 8px !important; /* Hide scrollbar by default */
+}
+
+/* Scrollbar thumb style */
+.views-view-responsive-grid.views-view-responsive-grid--vertical::-webkit-scrollbar-thumb {
+  background-color: #4B5563 !important; /* Scroll button color */
+  border-radius: 10px !important; /* Rounded corners for the thumb */
+  box-sizing: content-box; 
+}
+
+/* Scrollbar track style */
+.views-view-responsive-grid.views-view-responsive-grid--vertical::-webkit-scrollbar-track {
+  background-color: #E5E7EB !important; /* Track background color */
+  border-radius: 10px !important; /* Rounded corners for the track */
+  box-sizing: content-box; 
+}
+
+/* Show scrollbar on hover */
+.views-view-responsive-grid.views-view-responsive-grid--vertical:hover::-webkit-scrollbar {
+  width: 8px !important; /* Show scrollbar when hovering over the container */
+  transition: width 0.3s ease; /* Smooth width transition */
+}
+
+/* SCROLL END */
+
+
+.layout-region.order-summary > h2,
+.layout-region.billing-information > h2{
+font-weight:600;
+font-size:24px;
+text-transform:uppercase;
+}
+
+/*general */
+.views-view-responsive-grid--horizontal {display:block !important}
+#norproduct-imagekit-carousel {
+  display: none !important;
+}
+
+.marker .form-required {
+  color: inherit;
+}
+   /*Update button remove */
+#edit-submit {display:none;}
+.form-group.js-form-item.form-item.js-form-type-radio.form-item label {font-weight: 500 !important ;font-size: 18px; margin-bottom:0px;}
+
+.checkout_h {display: none !important}
+
+
+.field-name-total-price.field--type-commerce-price.field--label-hidden.field__item h2.checkout_h {
+    display: none !important;
+}
+
+fieldset[data-drupal-selector="edit-payment-information-payment-method"]{
+  margin-top:0px;
+}
+.form-item.form-item-payment-information-billing-information-copy-fields-enable{
+  margin-bottom:0px;
+}
+  
+.form-group.js-form-item.form-item.js-form-type-radio {   /* Dot and text in one line  */
+    display: flex;
+    margin-top:0px;
+    margin-bottom:5px;
+    align-items: center;
+    gap: 10px;
+}
+
+.c-cart-desc {padding-top:10px;}
+
+  /*Card structure */
+  .product-container {
+    display: grid;
+    grid-template-areas:
+      "image title title"
+      "image details price";
+    grid-template-columns: 100px 1fr 1fr;
+    gap:5px;
+    padding: 0px;
+    background-color: #fff;
+  }
+
+  .image-box-img  {
+    grid-column-gap: 10px;
+    grid-area: image;
+    max-width: 100px;
+  }
+  .views-view-responsive-grid__item{padding: 20px 0px;}
+/*//////////////////////////  Position in shipping block      /////////////////////////////////////*/
+
+.views-view-responsive-grid {
+  --views-responsive-grid--layout-gap: 1px !important;
+}
+
+.layout-region .order-summary {position:sticky; top:0; }
+
+.option {order:3;}
+.description {order:2 ;}
+
+.billing-information > fieldset > .fieldset-wrapper, .billing-information #shipping-information-wrapper > fieldset > .fieldset-wrapper{
+  padding:20px;
+}
+
+.fieldset-legend {font-size:24px;font-weight:600;  }
+
+.layout-region.billing-information > fieldset fieldset legend .fieldset-legend,
+.layout-region.billing-information #shipping-information-wrapper > fieldset fieldset legend .fieldset-legend { 
+  font-size: 20px; 
+}
+
+.form-group.has-feedback{
+  padding: 0px !important;
+  margin: 0px !important;
+}
+
+
+.layout-region.billing-information > fieldset > legend,
+.layout-region.billing-information #shipping-information-wrapper > fieldset > legend{ 
+  padding: 20px;
+  border-bottom: 1px solid #ccc !important; 
+  border-radius: 12px 12px 0px 0px;
+  background-color: #f9f9f9; 
+  float:left;
+  margin-bottom:0px;
+}
+
+.checkout-pane fieldset{
+  width:100%;
+}
+
+.form-item.form-item-order-fieldscheckout-field-quote-number-0-value{
+  margin-top:0px;
+}
+
+/* Quote button   */
+
+input[value="Request Quote"] {
+  background-color: white !important;
+  color: #004893 !important;
+  border-color: #004893 !important;
+  height: 50px;
+}
+
+
+.commerce-checkout-flow .form-group{ /* remove all default margins */
+  margin: 0 0 0 0;
+}
+/* add new margins */
+
+.form-item-shipping-information-shipping-profile-select-address.form-item.form-group{
+  margin-top:0px;
+  margin-bottom:10px;
+}
+
+.commerce-checkout-flow .layout-region.billing-information #shipping-information-wrapper > fieldset > .fieldset-wrapper > :not(:last-child),
+.commerce-checkout-flow .layout-region.billing-information > fieldset > .fieldset-wrapper > :not(:last-child){
+  margin-bottom:20px;
+}
+
+.commerce-checkout-flow .layout-region.billing-information #shipping-information-wrapper > fieldset > .fieldset-wrapper,
+.commerce-checkout-flow .layout-region.billing-information > fieldset > .fieldset-wrapper{
+  float:left;
+  width:100%;
+  display:grid;
+}
+
+.commerce-checkout-flow .layout-region.billing-information #shipping-information-wrapper > fieldset,
+.commerce-checkout-flow .layout-region.billing-information > fieldset {
+  margin-bottom:20px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+/*/////////////////////////////////*/  
+  
+[data-drupal-selector="edit-order-fieldscheckout"].form-item.form-group {
+  padding: 0px ;
+  position: relative; 
+  border-radius: 10px; 
+  border: 1px solid #ccc; 
+  margin-top: 0px;
+  margin-bottom:20px;
+}
+#edit-payment-information > fieldset .fieldset-legend {
+  visibility: hidden;
+  position: relative;
+}
+
+#edit-payment-information-payment-method--wrapper > fieldset legend {
+  border: none !important;
+  padding: 0 !important;
+}
+
+
+.checkout-pane.checkout-pane-order-fields\:checkout.js-form-wrapper.form-wrapper.form-container {
+  display: grid;    /* grid for order 99  */
+}
+
+.field--type-boolean.field--name-field-customer-accepted-terms.field--widget-boolean-checkbox.js-form-wrapper.form-wrapper.form-container {
+  order: 99;/*Policy for bottom */ 
+}
+
+ /* Edit#1  button*/
+input[id^="edit-shipping-information-shipping-profile-edit-button"]
+{
+  background-color: #808080;
+  border: 1px solid #808080; 
+  color: #fff;
+  box-shadow: none; 
+  outline: none; 
+  border-radius: 5px; 
+  padding: 5px 10px;
+}
+
+/* Edit#2 button*/
+input[id^="edit-payment-information-billing-information-edit-button"] {
+  background-color: #808080;
+  border: 1px solid #808080;
+  color: #fff;
+  box-shadow: none;
+  outline: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+}
+
+/* Quote icon */
+label[for^="edit-order-fieldscheckout-field-quote-number-0-value"]::before{
+  content: '';
+  display: inline-block;
+  height: 35px;
+  width: 35px;
+  bottom: -5px;
+  position: relative;
+  background-image: url(/themes/custom/jango/images/notes.png);
+  background-size: contain;
+}
+  
+#edit-sidebar-coupon-redemption-form {
+  gap:10px;
+  display:flex;
+  justify-content:space-between;
+}
+
+#edit-sidebar-coupon-redemption-form > .form-item-sidebar-coupon-redemption-form-code,
+#edit-sidebar-coupon-redemption-form > .coupon-redemption-form__coupons {
+  flex-grow:1;
+}
+
+#edit-coupon-redemption label{
+  font-size: 17px;
+  font-weight: 600;
+  color: inherit;
+}
+/* Position coupon throbber for both states */
+#edit-coupon-redemption .coupon-redemption-form__coupons .form-group.submit .ajax-progress-throbber,
+#edit-coupon-redemption [data-drupal-selector="edit-sidebar-coupon-redemption-form"] .form-group.submit .ajax-progress-throbber{ /* prevent ajax coupon throbber from affecting layout */
+  position:absolute;
+}
+#edit-coupon-redemption .coupon-redemption-form__coupons .form-group.submit .ajax-progress-throbber{
+  bottom:-25px;
+  left:-10px;
+}
+#edit-coupon-redemption [data-drupal-selector="edit-sidebar-coupon-redemption-form"] .form-group.submit .ajax-progress-throbber{
+  bottom:-25px;
+  left:-10px;
+}
+.form-item--error-message {    
+  color: var(--norgen-secondary-red);
+  background-color: transparent;
+  border-color: transparent;
+  padding: 0 !important;
+  border-radius: 0px !important;
+}
+
+div[id^="edit-shipping-information-shipping-profile-address-0-address-container0"] {
+  grid-row: 2;
+  display: flex;
+  gap: 20px;
+  grid-column: 1 / 2 span;
+}
+
+
+.checkout-pane-order-summary .views-form [data-drupal-selector="edit-actions"]{ 
+  display: none;
+}
+
+/* order block */
+#edit-coupon-redemption .form-group.submit input{background-color: grey;border-color: grey;height:45px;}
+#edit-coupon-redemption .form-group.submit input[value="Apply"] {margin-top:47px; }
+
+
+.checkout-pane-order-summary footer [data-drupal-selector="order-total-summary"]{
+  padding:20px 20px 0px 20px;
+  border-top-left-radius:12px;
+  border-top-right-radius:12px;
+  border:1px solid #ccc;
+  border-bottom:none;
+  background-color:#f7f7f7;
+}
+
+.border {
+  padding: 20px 20px 0px 20px;
+  background-color: #f9f9f9;
+  padding-bottom: 0px;
+  position: relative; 
+}
+
+/* Apply coupon  */
+[id^="edit-coupon-redemption-remove-coupon"] {
+  margin-top: 20px;
+  margin-left: 10px;
+}
+[id^="edit-coupon-redemption-apply"] { margin-top:-20px   }
+.custom-remove-coupon-wrapper {     margin-top: -25px !important;
+  margin-left: 180px  !important;
+}
+
+
+#edit-shipping-information-shipments-0-shipping-method-0--wrapper .fieldset-wrapper {
+  padding: 0;
+}
+
+[id^="edit-actions"] {  margin-left: 0% !important; margin-top: 0% !important; margin-right:40px;    }
+
+
+
+
+/* ~~~ Audited CSS ~~~ */
+
+/* General */
+input:focus, textarea:focus, select:focus {
+  outline: 2px solid grey !important;
+}
+.layout-region.billing-information > fieldset > legend::before,
+.layout-region.billing-information #shipping-information-wrapper > fieldset > legend::before {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  border-radius: 50%;
+  background-color: #3f444a;
+  color: #fff;
+  text-align: center;
+  font-size: 20px;
+  margin-right: 10px;
+  font-weight: bold;
+  margin-bottom: 0px;
+  content: attr(data-number);
+}
+.btn-medium.btn.btn-mod.c-btn.c-theme-btn.c-font-bold.c-font-uppercase.c-font-white.button.button--primary.js-form-submit.form-submit {
+  height: 50px;
+}
+.layout-region.billing-information > fieldset fieldset legend,
+.layout-region.billing-information #shipping-information-wrapper > fieldset fieldset legend{
+  border-bottom:none;
+  margin-bottom:10px;
+}
+.return_b{
+  text-align:right;
+  margin-top:20px;
+}
+.return_b a {
+  color: white;
+  display:inline-block;
+  background-color: grey;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: 600;
+  padding: 10px 20px;
+}
+.layout-checkout-form{
+  display:grid;
+  grid-template-columns: 5fr 7fr;
+  grid-gap:40px;
+  margin: 40px 0px;
+}
+#edit-actions-next{ 
+  margin-right: 0px; 
+  height:50px; 
+}
+
+/* Shipping */
+.form-select.available-profiles{
+  width:fit-content;
+}
+.layout-region.billing-information #shipping-information-wrapper [data-drupal-selector="edit-shipping-information-shipments"] fieldset .form-required{
+  color:inherit;
+}
+
+/* Additional Information Fields */
+.form-group.js-form-item.form-item.js-form-type-checkbox.form-item-order-fieldscheckout-field-customer-accepted-terms-value.js-form-item-order-fieldscheckout-field-customer-accepted-terms-value{
+  display: flex;
+  margin-bottom:0px;
+  margin-top:20px;
+}
+.form-group.js-form-item.form-item.js-form-type-checkbox.form-item-shipping-information-shipping-profile-copy-to-address-book.js-form-item-shipping-information-shipping-profile-copy-to-address-book{margin-top:20px;}
+
+
+
+.field--name-field-customer-accepted-terms .description::after{
+  content:'*';
+  color:red;
+}
+[data-drupal-selector="edit-order-fieldscheckout-field-quote-number-wrapper"] .description {
+  font-size: 14px;
+  margin-top:5px;
+}
+textarea[data-drupal-selector="edit-order-fieldscheckout-field-special-instructions-0-value"] {
+  resize:vertical;
+}
+/*.c-checkbox.c-toggle-hide label[for^="edit-order-fieldscheckout-field-customer-accepted-terms-value"] {
+ 
+} */
+
+/* Address Forms */
+.address-container-inline.form-container, .form-container[data-drupal-selector$="address-country-code"]{
+  grid-column:1 / 3;
+}
+.country.input-lg.form-control.c-theme.form-select.required{
+  padding: 10px 10px;
+}
+.form-group.form-item[class$="address-organization"]{
+  grid-column: span 2;
+}
+.field--type-address .form-wrapper[data-drupal-selector^="edit-shipping-information-shipping-profile-address"][data-drupal-selector$="address"],
+.address-container-inline.form-container,
+.field--type-address .form-wrapper[data-drupal-selector^="edit-payment-information-billing-information-address"][data-drupal-selector$="address"]{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap:10px;
+}
+[data-drupal-selector^="edit-shipping-information-shipping-profile-address"] [class*="address-address-line2"] > label.visually-hidden,
+[data-drupal-selector^="edit-payment-information-billing-information-address"] [class*="address-address-line2"] > label.visually-hidden{
+  visibility: visible;
+  display: block;
+  height: auto;
+  width: auto;
+  position: relative !important;
+}
+
+/* Coupon Code */
+#edit-coupon-redemption .container{ /* error message */
+  display:none;
+}
+#edit-coupon-redemption label::before, #edit-coupon-redemption h3::before{
+  content: '';
+  display: inline-block;
+  height: 35px;
+  width: 35px;
+  bottom: -6px;
+  position: relative;
+  background-image: url(/themes/custom/jango/images/cupon.png);
+  background-size: contain;
+}
+#edit-sidebar-coupon-redemption-form tbody tr td{
+  vertical-align:middle;
+}
+#edit-coupon-redemption {
+  background-color: #f7f7f7;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  border-radius: 0 0 10px 10px;
+  border-top: none;
+  padding:20px
+}
+
+/* Media Queries */
+@media only screen and (max-width:992px){
+  .layout-checkout-form{
+    grid-template-columns:1fr;
+  }
+}
+
+/* Override commerce module styling */
+@media screen and (min-width: 780px), (orientation: landscape) and (min-device-height: 780px) {
+  .layout-region-checkout-main, .layout-region-checkout-footer {
+      float: none;
+      width: 100%;
+      padding-right: 0px;
+  }
+}
+
+
+.layout-region-checkout-footer .form-actions a {display:none !important;}
+
+.policy::after {
+    content: '*';
+    color: red;
+    margin-left: 5px;
+    font-size: 14px; /* ?????? ?????? */
+    font-weight: bold; /* ?????? ????? */
+}
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,69 @@
+
+/*  From-order-total    */
+
+.field--type-commerce-price h2 {
+    border-bottom: 1px solid;
+    border-color: #e5e5e5;
+}
+
+.order-total-line {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+}
+
+.order-total-line-value {
+    width: auto !important;
+}
+
+.order-total-line-label .order-total-line-value {
+    font-weight: bold !important;
+}
+
+
+.line-item-total { 
+    width: 100%;              
+    border-bottom: 0px;
+    border-top: 1px solid #e5e5e5;
+    margin-top:5px;
+    margin-bottom:0px;
+    padding-top:10px;
+}
+
+.checkout_h {
+    font-size:24px;
+    font-weight:600;
+    border-bottom: 0px !important;   
+    text-transform: uppercase;
+} 
+
+.contact-help{
+    padding: 20px 20px 0px 20px;
+    border: 1px solid #ccc;
+    border-top: none;
+    border-bottom: none;
+    background-color: #f7f7f7;
+    font-size: 16px;
+}
+.order-total-wrapper .contact-help { /* cart page */
+    border:none;
+    padding:20px 0px 0px 0px;
+}
+.contact-help .contact-inner{
+    border:1px solid #e7e7e7;
+    border-left:none;
+    border-right:none;
+    padding:10px 0px;
+}
+.contact-help h1{
+    font-size:inherit;
+    font-weight:600;
+    margin:0px
+}
+.contact-help p{
+    margin-bottom:0px;
+    line-height:1.5;
+}
+.contact-help a{
+    white-space:nowrap;
+}

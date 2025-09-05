@@ -1,0 +1,261 @@
+{#
+/**
+ * @file
+ * Default theme implementation to present all user data.
+ *
+ * This template is used when viewing a registered user's page,
+ * e.g., example.com/user/123. 123 being the user's ID.
+ *
+ * Available variables:
+ * - content: A list of content items. Use 'content' to print all content, or
+ *   print a subset such as 'content.field_example'. Fields attached to a user
+ *   such as 'user_picture' are available as 'content.user_picture'.
+ * - attributes: HTML attributes for the container element.
+ * - user: A Drupal User entity.
+ *
+ * @see template_preprocess_user()
+ *
+ * @ingroup themeable
+ */
+#}
+
+{% set current_url = url('<current>')['#markup'] %}
+{% set is_french = ('/fr/' in current_url) or (current_url ends with '/fr') %}
+{% set is_spanish = ('/es/' in current_url) or (current_url ends with '/es') %}
+{% set is_chineese = ('/cn/' in current_url) or (current_url ends with '/cn') %}
+{% set is_german = ('/de/' in current_url) or (current_url ends with '/de') %}
+{% set is_japan = ('/ja/' in current_url) or (current_url ends with '/ja') %}
+{% set user_page = path('entity.user.canonical', {'user': user.id}) %}
+
+{% if user_page in current_url %}
+  {% set username = user.name.value %}
+  {% set email = user.mail.value %}
+  {% if is_french %}
+    {# French content #}
+    <div class="c-content-title-1" style="padding:2%;background:#004897;color:white;">
+      <div class="container">
+        <div style="display:flex;justify-content: space-between; align-items: center;">
+          <h1 class="c-font-uppercase c-font-bold" style="color:white;font-size:18px;">Mon Tableau de Bord</h1>
+          <a href="{{ url('user.logout') }}" class="c-theme-link btn btn-primary" style="background:white;color:#004897;">Déconnexion</a>
+        </div>
+        <div class="c-line-left" style="background-color:white;"></div>
+        <div style="margin:6% 0 12%;">
+          <h2 style="color:white;font-size:35px;margin:3% 0;">
+            Bonjour {{ content.field_first_name[0] }}
+          </h2>
+          <p style="margin:0;">Ceci est votre profil. Vous pouvez voir vos informations personnelles, votre historique de commandes et votre liste de souhaits ici.</p>
+          <p style="margin:0;">Vous pouvez également modifier vos informations personnelles.</p>
+          <br>
+        </div>
+      </div>
+    </div>
+    <article{{ attributes.addClass('profile', 'row', 'container') }} style="border-radius:20px;margin:-75px auto 50px;">
+      <h2 style="border-top-left-radius: 10px;border-top-right-radius: 10px;padding: 1% 2%;margin: 0;background: white;">Mes Informations Personnelles</h2>
+      <div class="col-md-6 col-sm-6 col-xs-12 c-margin-b-20" style="padding:2%;border-bottom-left-radius:10px;border-bottom-right-radius:10px;width: 100%;background:#f7f7f7;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;">
+          <div class="field" style="color:#5c6873;"><strong>Nom d’utilisateur</strong> {{ username }}</div>
+          <div class="field" style="color:#5c6873;"><strong>Email</strong> {{ email }}</div>
+          {% if content %}
+            {{ content|without('user_picture', 'member_for') }}
+          {% endif %}
+        </div>
+      </div>
+    </article>
+  {% elseif is_spanish %}
+    {# French content #}
+    <div class="c-content-title-1" style="padding:2%;background:#004897;color:white;">
+      <div class="container">
+        <div style="display:flex;justify-content: space-between; align-items: center;">
+          <h1 class="c-font-uppercase c-font-bold" style="color:white;font-size:18px;">Mi panel</h1>
+          <a href="{{ url('user.logout') }}" class="c-theme-link btn btn-primary" style="background:white;color:#004897;">Desconectar</a>
+        </div>
+        <div class="c-line-left" style="background-color:white;"></div>
+        <div style="margin:6% 0 12%;">
+          <h2 style="color:white;font-size:35px;margin:3% 0;">
+            Buen día {{ content.field_first_name[0] }}
+          </h2>
+          <p style="margin:0;">Este es tu perfil. Puede ver su información personal, historial de pedidos y lista de deseos aquí.</p>
+          <p style="margin:0;">También puedes modificar tu información personal.</p>
+          <br>
+        </div>
+      </div>
+    </div>
+    <article{{ attributes.addClass('profile', 'row', 'container') }} style="border-radius:20px;margin:-75px auto 50px;">
+      <h2 style="border-top-left-radius: 10px;border-top-right-radius: 10px;padding: 1% 2%;margin: 0;background: white;">Mi información personal</h2>
+      <div class="col-md-6 col-sm-6 col-xs-12 c-margin-b-20" style="padding:2%;border-bottom-left-radius:10px;border-bottom-right-radius:10px;width: 100%;background:#f7f7f7;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;">
+          <div class="field" style="color:#5c6873;"><strong>Nombre de usuario</strong> {{ username }}</div>
+          <div class="field" style="color:#5c6873;"><strong>correo electrónico</strong> {{ email }}</div>
+          {% if content %}
+            {{ content|without('user_picture', 'member_for') }}
+          {% endif %}
+        </div>
+      </div>
+    </article>
+  {% elseif is_chineese %}
+    {# Chineese content #}
+    <div class="c-content-title-1" style="padding:2%;background:#004897;color:white;">
+      <div class="container">
+        <div style="display:flex;justify-content: space-between; align-items: center;">
+          <h1 class="c-font-uppercase c-font-bold" style="color:white;font-size:18px;">中面板</h1>
+          <a href="{{ url('user.logout') }}" class="c-theme-link btn btn-primary" style="background:white;color:#004897;">断开</a>
+        </div>
+        <div class="c-line-left" style="background-color:white;"></div>
+        <div style="margin:6% 0 12%;">
+          <h2 style="color:white;font-size:35px;margin:3% 0;">
+            再会 {{ content.field_first_name[0] }}
+          </h2>
+          <p style="margin:0;">这是您的个人资料。您可以在此处查看您的个人信息、订单历史记录和愿望清单。</p>
+          <p style="margin:0;">您还可以修改您的个人信息。</p>
+          <br>
+        </div>
+      </div>
+    </div>
+    <article{{ attributes.addClass('profile', 'row', 'container') }} style="border-radius:20px;margin:-75px auto 50px;">
+      <h2 style="border-top-left-radius: 10px;border-top-right-radius: 10px;padding: 1% 2%;margin: 0;background: white;">我的个人信息</h2>
+      <div class="col-md-6 col-sm-6 col-xs-12 c-margin-b-20" style="padding:2%;border-bottom-left-radius:10px;border-bottom-right-radius:10px;width: 100%;background:#f7f7f7;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;">
+          <div class="field" style="color:#5c6873;"><strong>用户名</strong> {{ username }}</div>
+          <div class="field" style="color:#5c6873;"><strong>电子邮件</strong> {{ email }}</div>
+          {% if content %}
+            {{ content|without('user_picture', 'member_for') }}
+          {% endif %}
+        </div>
+      </div>
+    </article>
+
+  {% elseif is_german %}
+    {# Chineese content #}
+    <div class="c-content-title-1" style="padding:2%;background:#004897;color:white;">
+      <div class="container">
+        <div style="display:flex;justify-content: space-between; align-items: center;">
+          <h1 class="c-font-uppercase c-font-bold" style="color:white;font-size:18px;">mein Profil</h1>
+          <a href="{{ url('user.logout') }}" class="c-theme-link btn btn-primary" style="background:white;color:#004897;">abmelden</a>
+        </div>
+        <div class="c-line-left" style="background-color:white;"></div>
+        <div style="margin:6% 0 12%;">
+          <h2 style="color:white;font-size:35px;margin:3% 0;">
+            Hallo {{ content.field_first_name[0] }}
+          </h2>
+          <p style="margin:0;">Das ist Ihr Profil. Hier können Sie Ihre persönlichen Daten, Ihren Bestellverlauf und Ihre Wunschliste einsehen.</p>
+          <p style="margin:0;">Sie können auch Ihre persönlichen Daten bearbeiten.</p>
+          <br>
+        </div>
+      </div>
+    </div>
+    <article{{ attributes.addClass('profile', 'row', 'container') }} style="border-radius:20px;margin:-75px auto 50px;">
+      <h2 style="border-top-left-radius: 10px;border-top-right-radius: 10px;padding: 1% 2%;margin: 0;background: white;">Meine persönlichen Daten</h2>
+      <div class="col-md-6 col-sm-6 col-xs-12 c-margin-b-20" style="padding:2%;border-bottom-left-radius:10px;border-bottom-right-radius:10px;width: 100%;background:#f7f7f7;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;">
+          <div class="field" style="color:#5c6873;"><strong>Benutzername</strong> {{ username }}</div>
+          <div class="field" style="color:#5c6873;"><strong>E-Mail-Adresse</strong> {{ email }}</div>
+          {% if content %}
+            {{ content|without('user_picture', 'member_for') }}
+          {% endif %}
+        </div>
+      </div>
+    </article>
+
+
+    {% elseif is_japan %}
+    {# Chineese content #}
+    <div class="c-content-title-1" style="padding:2%;background:#004897;color:white;">
+      <div class="container">
+        <div style="display:flex;justify-content: space-between; align-items: center;">
+          <h1 class="c-font-uppercase c-font-bold" style="color:white;font-size:18px;">私のダッシュボード</h1>
+          <a href="{{ url('user.logout') }}" class="c-theme-link btn btn-primary" style="background:white;color:#004897;">サインアウト</a>
+        </div>
+        <div class="c-line-left" style="background-color:white;"></div>
+        <div style="margin:6% 0 12%;">
+          <h2 style="color:white;font-size:35px;margin:3% 0;">
+            こんにちは {{ content.field_first_name[0] }}
+          </h2>
+          <p style="margin:0;">これはあなたのプロフィールです。ここであなたの個人情報、注文履歴、ウィッシュリストを見ることができます。</p>
+          <p style="margin:0;">個人情報を編集することもできます。</p>
+          <br>
+        </div>
+      </div>
+    </div>
+    <article{{ attributes.addClass('profile', 'row', 'container') }} style="border-radius:20px;margin:-75px auto 50px;">
+      <h2 style="border-top-left-radius: 10px;border-top-right-radius: 10px;padding: 1% 2%;margin: 0;background: white;">私の個人情報</h2>
+      <div class="col-md-6 col-sm-6 col-xs-12 c-margin-b-20" style="padding:2%;border-bottom-left-radius:10px;border-bottom-right-radius:10px;width: 100%;background:#f7f7f7;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;">
+          <div class="field" style="color:#5c6873;"><strong>ユーザー名</strong> {{ username }}</div>
+          <div class="field" style="color:#5c6873;"><strong>電子メールアドレス</strong> {{ email }}</div>
+          {% if content %}
+            {{ content|without('user_picture', 'member_for') }}
+          {% endif %}
+        </div>
+      </div>
+    </article>
+
+
+
+  {% else %}
+    <div class="c-content-title-1" style="padding:2%;background:#004897;color:white;">
+    <div class="container">
+      <div style="display:flex;justify-content: space-between;    align-items: center;">
+      <h1 class="c-font-uppercase c-font-bold" style="color:white;font-size:18px;">{{ 'My Dashboard'|t }}</h1>
+      <a href="{{ url('user.logout') }}" class="c-theme-link btn btn-primary" style="background:white;color:#004897;">{{ 'Sign out'|t }}</a>
+      </div>
+      <div class="c-line-left" style="background-color:white;"></div>
+      <div style="margin:6% 0 12%;">
+      <h2 style="color:white;font-size:35px;margin:3% 0;">
+        {{ 'Hello'|t }}
+        {% set test = content.field_first_name %}
+        {{ test[0] }}
+  
+        {# /**<a href="{{ path('entity.user.canonical', {'user': user.id}) }}" class="c-theme-link">{{ username }}</a>**/ #}
+  
+      </h2>
+      <p style="margin:0;">This is your profile. You can see your personal information, order history and wish list here.</p>
+      <p style="margin:0;">You may also edit your personal information.</p>
+      <br>
+      </div>
+      {# /**<a href="{{ url('user.logout') }}" class="c-theme-link btn btn-primary">{{ 'Sign out'|t }}</a>**/ #}
+    </div>
+    </div>
+    <article{{ attributes.addClass('profile', 'row', 'container') }} style="border-radius:20px;margin:-75px auto 50px;">
+      <h2 style="border-top-left-radius: 10px;border-top-right-radius: 10px;padding: 1% 2%;margin: 0;background: white;">My Personal Information</h2>
+      <div class="col-md-6 col-sm-6 col-xs-12 c-margin-b-20" style="padding:2%;border-bottom-left-radius:10px;border-bottom-right-radius:10px;width: 100%;background:#f7f7f7;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;">
+          <div class="field" style="color:#5c6873;"><strong>Username</strong><span class="notranslate"> {{ username }}</span></div>
+          <div class="field" style="color:#5c6873;"><strong>Email</strong> {{ email }}</div>
+        {% if content %}
+          {{ content|without('user_picture', 'member_for') }}
+        {% endif %}
+        </div>
+      </div>
+    </article>
+
+  {% endif %}
+
+{% else %}
+
+  <article{{ attributes }}>
+    {% if content %}
+      <div style="width: 50px;">
+        {{- content -}}
+      </div>
+    {% endif %}
+  </article>
+
+{% endif %}
+
+<style>
+  .field {
+    padding: 5px 0;
+  }
+  .c-line-left {
+    width: 30px;
+    height: 3px;
+    background-color: var(--norgen-primary-blue);
+    margin: 0 0 30px 0;
+  }
+</style>
+
+<script>
+  console.log("test");
+  console.log(document.getElementById("block-jango-primary-local-tasks"));
+  document.getElementById("block-jango-primary-local-tasks").parentNode.style.background = "#f7f7f7";
+</script>

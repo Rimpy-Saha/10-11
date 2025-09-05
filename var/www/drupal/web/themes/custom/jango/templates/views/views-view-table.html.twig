@@ -1,0 +1,238 @@
+{#
+/**
+ * @file
+ * Default theme implementation for displaying a view as a table.
+ *
+ * Available variables:
+ * - attributes: Remaining HTML attributes for the element.
+ *   - class: HTML classes that can be used to style contextually through CSS.
+ * - title : The title of this group of rows.
+ * - header: The table header columns.
+ *   - attributes: Remaining HTML attributes for the element.
+ *   - content: HTML classes to apply to each header cell, indexed by
+ *   the header's key.
+ *   - default_classes: A flag indicating whether default classes should be
+ *     used.
+ * - caption_needed: Is the caption tag needed.
+ * - caption: The caption for this table.
+ * - accessibility_description: Extended description for the table details.
+ * - accessibility_summary: Summary for the table details.
+ * - rows: Table row items. Rows are keyed by row number.
+ *   - attributes: HTML classes to apply to each row.
+ *   - columns: Row column items. Columns are keyed by column number.
+ *     - attributes: HTML classes to apply to each column.
+ *     - content: The column content.
+ *   - default_classes: A flag indicating whether default classes should be
+ *     used.
+ * - responsive: A flag indicating whether table is responsive.
+ * - sticky: A flag indicating whether table header is sticky.
+ *
+ * @see template_preprocess_views_view_table()
+ *
+ * @ingroup themeable
+ */
+#}
+
+
+{% if view.id == "commerce_cart_form" and view.current_display == "block_2" %} {# Cart Popup #}
+ 
+        
+{% elseif view.id == "commerce_cart_form" and view.current_display == "default" %} {# Cart Page #}
+    
+  {%
+    set classes = [
+      'cols-' ~ header|length,
+      'cart-items',
+      responsive ? 'responsive-enabled',
+      sticky ? 'sticky-enabled',
+    ]
+  %}
+  
+  <style>
+
+    /* Style for free shipping progress bar */
+
+    .progress-bar-container {
+      background-color: #e0e0e0;
+      border-radius: 5px;
+      overflow: hidden;
+      width: 100%; 
+      height: 20px;
+      margin-top: 10px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0; 
+      border-radius: 5px;
+      transition: width 5s ease; 
+    }
+
+    .progress-bar.red {
+      background-color: #ae2424;
+    }
+
+    .progress-bar.orange {
+      background-color: #ffa827;
+    }
+
+    .order-summary p {font-size:20px;font-weight:bold;justify-self:center;}
+
+    .current-total.red {
+      color: #ae2424;
+    }
+
+    .current-total.orange {
+      color: #ffa827;
+    }
+  </style> 
+  <div {{ attributes.addClass(classes) }}>
+    {% set items = "Item" %}
+  {% if multiple_cart_items == true %}
+    {% set items = "Items" %}
+  {% endif %}
+    <h2 class="c-font-uppercase" style="font-size: 24px; font-weight: 600;text-transform:uppercase;">{% trans %} Your Cart <span style="font-size:17px;">{{ cart_count }} {{items}}</span>{% endtrans %}</h2>    
+    
+    {% if caption_needed %}
+      <div class="caption">
+        {% if caption %}
+          {{ caption }}
+        {% else %}
+          {{ title }}
+        {% endif %}
+        {% if (summary is not empty) or (description is not empty) %}
+          <details>
+            {% if summary is not empty %}
+              <summary>{{ summary }}</summary>
+            {% endif %}
+            {% if description is not empty %}
+              {{ description }}
+            {% endif %}
+          </details>
+        {% endif %}
+      </div>
+    {% endif %}
+    
+    <div class="field__wrapper paddings">
+  
+      <div>
+        {% for row in rows %}
+          <div class="product-container">
+            
+            
+            <div class="card-body">
+              <img src="{{file_url(result[loop.index0]._relationship_entities.order_items.purchased_entity.0.entity.field_product_image.0.entity.uri.value)}}">
+        
+              {% for key, column in row.columns %}             
+                {% for content in column.content %}
+                  {{ content.field_output }}
+                {% endfor %}
+              {% endfor %}
+
+            </div>
+          </div>
+         
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>  
+
+{% elseif view.id != "commerce_cart_form" %}
+
+
+
+{%
+  set classes = [
+    'cols-' ~ header|length,
+    responsive ? 'responsive-enabled',
+    sticky ? 'sticky-enabled',
+    'table table-bordered table-hover mt-40 mb-40',
+  ]
+%}
+<table{{ attributes.addClass(classes) }}>
+  {% if caption_needed %}
+    <caption>
+    {% if caption %}
+      {{ caption }}
+    {% else %}
+      {{ title }}
+    {% endif %}
+    {% if (summary is not empty) or (description is not empty) %}
+      <details>
+        {% if summary is not empty %}
+          <summary>{{ summary }}</summary>
+        {% endif %}
+        {% if description is not empty %}
+          {{ description }}
+        {% endif %}
+      </details>
+    {% endif %}
+    </caption>
+  {% endif %}
+  {% if header %}
+    <thead>
+      <tr>
+        {% for key, column in header %}
+          {% if column.default_classes %}
+            {%
+              set column_classes = [
+                'views-field',
+                'views-field-' ~ fields[key],
+              ]
+            %}
+          {% endif %}
+          <th{{ column.attributes.addClass(column_classes).setAttribute('scope', 'col') }}>
+            {%- if column.wrapper_element -%}
+              <{{ column.wrapper_element }}>
+                {%- if column.url -%}
+                  <a href="{{ column.url }}" title="{{ column.title }}">{{ column.content }}{{ column.sort_indicator }}</a>
+                {%- else -%}
+                  {{ column.content }}{{ column.sort_indicator }}
+                {%- endif -%}
+              </{{ column.wrapper_element }}>
+            {%- else -%}
+              {%- if column.url -%}
+                <a href="{{ column.url }}" title="{{ column.title }}">{{ column.content }}{{ column.sort_indicator }}</a>
+              {%- else -%}
+                {{- column.content }}{{ column.sort_indicator }}
+              {%- endif -%}
+            {%- endif -%}
+          </th>
+        {% endfor %}
+      </tr>
+    </thead>
+  {% endif %}
+  <tbody>
+    {% for row in rows %}
+      <tr{{ row.attributes }}>
+        {% for key, column in row.columns %}
+          {% if column.default_classes %}
+            {%
+              set column_classes = [
+                'views-field'
+              ]
+            %}
+            {% for field in column.fields %}
+              {% set column_classes = column_classes|merge(['views-field-' ~ field]) %}
+            {% endfor %}
+          {% endif %}
+          <td{{ column.attributes.addClass(column_classes) }}>
+            {%- if column.wrapper_element -%}
+              <{{ column.wrapper_element }}>
+              {% for content in column.content %}
+                {{ content.separator }}{{ content.field_output }}
+              {% endfor %}
+              </{{ column.wrapper_element }}>
+            {%- else -%}
+              {% for content in column.content %}
+                {{- content.separator }}{{ content.field_output -}}
+              {% endfor %}
+            {%- endif %}
+          </td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}

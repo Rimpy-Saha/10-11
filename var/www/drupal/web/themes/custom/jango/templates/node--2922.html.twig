@@ -1,0 +1,374 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a node.
+ *
+ * Available variables:
+ * - node: The node entity with limited access to object properties and methods.
+ *   Only method names starting with "get", "has", or "is" and a few common
+ *   methods such as "id", "label", and "bundle" are available. For example:
+ *   - node.getCreatedTime() will return the node creation timestamp.
+ *   - node.hasField('field_example') returns TRUE if the node bundle includes
+ *     field_example. (This does not indicate the presence of a value in this
+ *     field.)
+ *   - node.isPublished() will return whether the node is published or not.
+ *   Calling other methods, such as node.delete(), will result in an exception.
+ *   See \Drupal\node\Entity\Node for a full list of public properties and
+ *   methods for the node object.
+ * - label: (optional) The title of the node.
+ * - content: All node items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - author_picture: The node author user entity, rendered using the "compact"
+ *   view mode.
+ * - metadata: Metadata for this node.
+ * - date: (optional) Themed creation date field.
+ * - author_name: (optional) Themed author name field.
+ * - url: Direct URL of the current node.
+ * - display_submitted: Whether submission information should be displayed.
+ * - attributes: HTML attributes for the containing element.
+ *   The attributes.class element may contain one or more of the following
+ *   classes:
+ *   - node: The current template type (also known as a "theming hook").
+ *   - node--type-[type]: The current node type. For example, if the node is an
+ *     "Article" it would result in "node--type-article". Note that the machine
+ *     name will often be in a short form of the human readable label.
+ *   - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+ *     teaser would result in: "node--view-mode-teaser", and
+ *     full: "node--view-mode-full".
+ *   The following are controlled through the node publishing options.
+ *   - node--promoted: Appears on nodes promoted to the front page.
+ *   - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+ *     teaser listings.
+ *   - node--unpublished: Appears on unpublished nodes visible only to site
+ *     admins.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main
+ *   content tag that appears in the template.
+ * - author_attributes: Same as attributes, except applied to the author of
+ *   the node tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ * - view_mode: View mode; for example, "teaser" or "full".
+ * - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+ * - page: Flag for the full page state. Will be true if view_mode is 'full'.
+ * - readmore: Flag for more state. Will be true if the teaser content of the
+ *   node cannot hold the main body content.
+ * - logged_in: Flag for authenticated user status. Will be true when the
+ *   current user is a logged-in member.
+ * - is_admin: Flag for admin user status. Will be true when the current user
+ *   is an administrator.
+ *
+ * @see template_preprocess_node()
+ *
+ * @ingroup themeable
+ */
+#}
+
+<style>
+
+  #db-content.overflow-hidden{
+    overflow:hidden;
+  }
+  #db-content.no-access{
+    opacity:0;
+    visibility:hidden;
+    max-height:0px;
+  }
+  #db-content.access{
+    opacity:1;
+    visibility:visible;
+    transition:0.5s 3s;
+    max-height:1000000px;
+    transition:1s 4s;
+  }
+
+  /* Banner */
+
+  #banner{
+    height: 600px;
+    padding:40px 0px;
+    /* background-image: url('/sites/default/files/resources-banner.png');
+    background-repeat: no-repeat;
+    background-size: auto 80%;
+    background-position: 80% center; */
+  }
+  #banner > .container{
+    height:100%;
+    position:relative;
+  }
+  #banner .text {
+    max-width:800px;
+    z-index:2;
+    position:relative;
+    top:50%;
+    transform:translateY(-50%);
+  }
+  #banner .text > h2{
+    color:var(--norgen-primary-blue);
+    font-weight:bold;
+    font-size:48px;
+  }
+  #banner .text > a{
+    color:var(--norgen-tertiary-rna-red);
+  }
+  #banner img{
+    position:absolute;
+    right:-10%;
+    top:0;
+    bottom:0;
+    margin:auto;
+    height:90%;
+  }
+  #resources-anchor{
+    position:relative;
+    top:-100px;
+  }
+  #resources-content{
+    margin:40px auto;
+  }
+
+  #contact-section{
+    background-color:var(--norgen-primary-blue-light);
+    padding: 60px 0px;
+  }
+  #contact-section h2 {
+    font-size: 40px;
+    font-weight: bold;
+    margin-bottom: 0px;
+  }
+  #contact-section .cta-text{
+    font-size:24px;
+  }
+  #contact-section .cta-content a.btn {
+    font-size: 16px;
+    padding: 10px 20px;
+    height: 45px;
+  }
+
+  @media only screen and (max-width:1200px){
+    #banner{
+      text-align:center;
+    }
+    #banner img{
+      display:none;
+    }
+  }
+  @media only screen and (max-width:600px){
+    #banner{
+      height:auto;
+    }
+    #banner .text > h2{
+      font-size:32px;
+    }
+     #banner .text {
+      position:static;
+      transform:none;
+    }
+    #banner .text > a{
+      display:none;
+    }
+  } 
+  /* End of Banner */
+
+
+  ul.section-select{
+    margin:auto;
+    background-color:white;
+    list-style-type:none;
+    padding:10px 10px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    width: fit-content;
+    max-width:100%;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+  .section-select > li.option > button{
+    background-color:var(--norgen-primary-blue-light);
+    border:none;
+    border-radius:10px;
+    padding:10px 20px;
+    height:100%;
+  }
+  .section-select > li.option.selected > button{
+    background-color:var(--norgen-primary-blue);
+    color:white;
+  }
+  /* Publications Search + Sort */
+  .views-exposed-form[data-drupal-selector="views-exposed-form-publications-or-citations-all-results"]{
+    display:flex;
+    justify-content:end;
+    gap:10px;
+  }
+  .form-item-combine.form-item .form-group, .form-item-combine.form-item input{
+    height:100%;
+  }
+  .form-item-combine.form-item input{
+    font-size:17px;
+    padding:5px 10px;
+  }
+  .form-item-combine.form-item > label{
+    display:none;
+  }
+  .form-item-sort-bef-combine.form-item{
+    position: relative;
+  }
+   .form-item-sort-bef-combine.form-item > label{
+    position: absolute;
+    top: 5px;
+    left: 20px;
+    font-size: 12px;
+    color: inherit;
+    font-weight:bold;
+  }
+  .form-item-sort-bef-combine.form-item > select.form-control.input-lg{
+    padding-top:22px;
+    height:auto;
+  }
+
+  .database-page-files fieldset > legend, .database-page-figures fieldset > legend{
+    border-bottom:none!important;
+    display: none;
+  }
+  .publications .views-exposed-form{
+    margin-top:10px;
+  }
+
+  .database-page-figures fieldset[data-drupal-selector="edit-search-sort"] .fieldset-wrapper{
+    display:flex;
+    justify-content:end;
+  }
+
+  /* Catalogue eBooks */
+  .catalogs, .presentations{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+    margin:20px auto;
+  }
+  .container.catalogs::before,.container.catalogs::after,
+  .container.presentations::before,.container.presentations::after{
+    display:none;
+  }
+  .catalogs .catalog, .presentations .presentation{
+    padding:20px;
+    box-shadow:2px 2px 16px -8px #00000047;
+    border-radius:10px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+  }
+  .catalogs .catalog h2, .presentations .presentation h2{
+    font-weight:bold;
+  }
+  .catalogs .catalog h2 > .subheading, .presentations .presentation h2 > .subheading{
+    font-weight:normal;
+    font-size:16px;
+  }
+  .catalogs .catalog .preview, .presentations .catalog .preview{
+
+  }
+  .catalogs .catalog .info, .presentations .catalog .info{
+    flex-grow: 1;
+    display: flex;
+    align-items: end;
+  }
+  .catalogs .catalog .info .pdf-link a, .presentations .catalog .info .pdf-link a{
+    width:300px;
+  }
+
+  .vip-wrapper{
+    min-height:calc(100vh - 1px);
+    position:relative;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.10),rgba(0, 0, 0, 0.10)), linear-gradient(rgba(0, 73, 151, 0.15),rgba(0, 73, 151, 0.15)), url('/sites/default/files/lattice-bg-blue.jpg');
+    background-size:cover;
+    background-repeat:no-repeat;
+    background-position:center bottom;
+  }
+  .vip-wrapper.access{
+    background:white;
+  }
+
+  header{
+    padding-top:16px;
+    padding-bottom:16px;
+    padding-left:16px;
+    padding-right:16px;
+  }
+  header > a > img{
+    max-width:200px;
+    max-height:100px;
+  }
+
+  #vip-loading-cover{
+    visibility:hidden;
+    opacity:0; 
+    width:100%;
+    height:100%;
+    position:absolute;
+    top:0;
+    z-index:4;
+    background:white;
+    transition:1s 2s linear;
+  }
+  #vip-loading-cover.active{
+    visibility:visible;
+    opacity:1; 
+    transition:1s 1s linear;
+  }
+  #vip-loading-cover .welcome-message{
+    visibility:hidden;
+    opacity:0;
+    font-size:48px;
+    margin-top:30vh;
+    text-align:center;
+    transition:0.5s 1s linear;
+  }
+  #vip-loading-cover.active .welcome-message{
+    visibility:visible;
+    opacity:1; 
+    margin-top:30vh;
+    transition:0.5s 2s linear;
+  }
+  .vip-crown{
+    max-width: 100px;
+    margin-bottom: 10px;
+  }
+
+  @media only screen and (max-width:992px){
+    .catalogs, .presentations{
+      grid-template-columns:1fr;
+    }
+    .database-page-figures fieldset[data-drupal-selector="edit-search-sort"] .fieldset-wrapper{
+      display:block:
+    }
+    #vip-loading-cover .welcome-message{
+      font-size:24px;
+    }
+  }
+
+</style>
+
+<div id="vip-wrapper" class="vip-wrapper">
+  <div id="vip-loading-cover">
+    <div class="welcome-message"></div>
+  </div>
+  <header id="vip-header">
+    <a href="/"><img src="/sites/default/files/norgen-logo-white.svg"></a>
+  </header>
+  <div{{ content_attributes }}>
+    {{ content }}
+
+    {{ urine_login_form }}
+
+  </div>
+</div>
+

@@ -1,0 +1,2522 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+            section{
+                padding: 40px 0px;
+            }
+            .subtext {
+                background-color: #b59812;
+                padding: 10px 34px;
+                color: white;
+                display: inline-block;
+                font-size:20px;
+            }
+            .anchor-section {
+                display: block;
+                top: -100px;
+                position: relative;
+            }
+            .plasma-serum {
+                background: linear-gradient(to right, #BF0C0C, #EF8D8D);
+                color: white;
+                padding: 40px 0px 50px 0px;
+                border-radius: 15px;
+                text-align: center;
+                box-shadow: 7px 11px 10px 0px rgba(0, 0, 0, 0.2);
+                display: flex;
+                flex-direction: column;
+                width: 55%;
+            }
+            .plasma-serum h2 {
+                font-size: 35px;
+                font-weight: bold;
+                text-align: center;
+                color:white;
+                margin-bottom: 50px;
+            }
+
+            .urine {
+                background: linear-gradient(to right, #9f5f28, #ffab40);
+                color: white;
+                padding: 40px 0px 50px 0px;
+                border-radius: 15px;
+                text-align: center;
+                box-shadow: 7px 11px 10px 0px rgba(0, 0, 0, 0.2);
+                display: flex;
+                flex-direction: column;
+                width: 55%;
+            }
+            .urine .features{
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+                text-align: left;
+                flex-wrap: wrap;
+                justify-content: flex-end;
+            }
+            .urine .feature{
+                display: flex;
+                align-items: flex-start;
+                gap: 15px;
+                /* text-align: right; */
+                /*margin-right: 25px;*/
+                flex: 0 0 41%;
+                justify-content: center;
+                }
+            .urine h2 {
+                font-size: 35px;
+                font-weight: bold;
+                text-align: center;
+                color:white;
+                margin-bottom: 50px;
+            }
+
+            .saliva {
+                background: linear-gradient(to right, #1C3587, #54A7D2);
+                color: white;
+                padding: 40px 0px 50px 0px;
+                border-radius: 15px;
+                text-align: center;
+                box-shadow: 7px 11px 10px 0px rgba(0, 0, 0, 0.2);
+                display: flex;
+                flex-direction: column;
+                width: 55%;
+            }
+            .saliva h2 {
+                font-size: 35px;
+                font-weight: bold;
+                text-align: center;
+                color:white;
+                margin-bottom: 50px;
+            }
+
+
+            .keypoint-titles {
+                text-align: center;
+            }
+            .keypoint-title{
+                font-size: 45px;
+                font-weight: bold;
+                margin-top:100px;
+            }
+
+            .keypoint-title-subheader{
+                font-size: 30px;
+
+                margin-top:10px;
+            }
+
+            .keypoint-box {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 40px;
+                flex-wrap: wrap;
+            }
+            .keypoint-title p {
+                font-size: 1em;
+                color: #666;
+            }
+            .keypoint-text{
+                font-weight: bold;
+                text-align: center;
+            }
+            .keypoint-text p{
+                font-size: 1em;
+            }
+
+            .features {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+                text-align: left;
+            }
+
+            .feature {
+                display: flex;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .feature img {
+                height: 50px;
+            }
+
+            .plasma-serum .feature:nth-of-type(2) .feature-text {
+                max-width: 67%;
+            }
+
+            .plasma-serum .feature:nth-of-type(4) .feature-text {
+                max-width: 72%;
+            }
+
+            .plasma-serum .feature:nth-of-type(6) .feature-text {
+                max-width: 72%;
+            }
+
+            .saliva .feature:nth-of-type(2) .feature-text {
+                max-width: 60%;
+            }
+
+            .saliva .feature:nth-of-type(4) .feature-text {
+                max-width: 60%;
+            }
+
+            .urine .feature:nth-of-type(1) {
+                margin-left: 100px;
+                margin-right: 0px;
+            }
+
+            .urine .feature:nth-of-type(3) {
+                margin-left: 100px;
+                margin-right: 0px;
+            }
+            .urine .feature:nth-of-type(5) {
+                margin-left: 100px;
+                margin-right: 0px;
+            }
+
+            .feature-text {
+                max-width: 350px;
+            }
+
+            .feature-title {
+                font-weight: 600;
+                font-size: 18px;
+            }
+
+            .feature-description {
+                font-size: 17px;
+            }
+
+            .feature:nth-of-type(1) {
+                margin-left:30px;
+            }
+
+            .saliva .feature:nth-of-type(1) {
+                margin-left:35px;
+                /*gap:22px;*/
+            }
+
+            .feature:nth-of-type(3) {
+                margin-left:30px;
+            }
+
+            .feature:nth-of-type(5) {
+                margin-left: 30px;
+            }
+
+            .button-container {
+                display: flex;
+                justify-content: center;
+                margin-top: 20px;
+                gap: 20px;
+                margin-bottom: 40px;
+            }
+
+            .prod-btn.selected {
+                background-color: #3484db;
+                color: white;
+                transform: translateY(-2px);
+                box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+                -webkit-transition: all 0.2s ease-out;
+            }
+            #ps-button{
+                color:red:
+            }
+            #urine-button{
+                color:blue;
+            }
+
+            a.cta-button {
+                display: inline-block;
+                padding: 10px 20px;
+                background-color: white;
+                text-decoration: none;
+                border-radius: 6px;
+                font-weight: bold;
+                transition: background-color 0.3s;
+                width: auto; 
+                max-width: fit-content; 
+                align-self: center;
+                margin-top: 40px;
+            }
+
+
+
+            .cta-button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0px 10px 5px rgba(0, 0, 0, 0.2);
+                -webkit-transition: all 0.2s ease-out;
+            }
+
+            .button-container button {
+                display: inline-block;
+                background-color: #004897;
+                text-decoration: none;
+                color: white;
+                margin-bottom: 0;
+                font-weight: normal;
+                text-align: center;
+                vertical-align: middle;
+                touch-action: manipulation;
+                cursor: pointer;
+                background-image: none;
+                border: 1px solid transparent;
+                white-space: nowrap;
+                padding: 6px 12px;
+                font-size: 16px;
+                line-height: 1.42857;
+                border-radius: 4px;
+                height: 45px;
+                width:200px;
+            }
+
+
+
+            .cards {
+                display: flex;
+                justify-content: center;
+                gap: 20px;
+                margin: 30px 0px;
+                /*height:100%;*/
+            }
+
+            .card {
+                background-color: #fff;
+                border: 1px solid #ddd;
+                border-radius: 10px;
+                width: 260px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                text-align: left;
+                padding: 15px;
+            }
+
+            .views-view-responsive-grid__item-inner {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+            }
+            .views-field-nothing-1 {
+                margin-bottom: 10px;
+            }
+            .views-field.views-field-title {
+                flex-grow: 1;
+            }
+            .views-field-price__number {
+                margin: 10px 0 !important;
+            }
+            .view-price-filter {
+                font-size: 16px;
+                font-weight: 600;
+                padding: 3px 0;
+            }
+
+            .views-field.views-field-field-product-summary-line {
+                font-size: 14px;
+                flex-grow: 4;
+            }
+
+            .lb-container{
+                margin: 20px auto;
+                max-width: 1300px;
+            }
+            .prod-container{
+                margin: 20px auto;
+                max-width: 1300px;
+            }
+            .chart-table-container {
+                display: flex;
+                align-items: flex-start;
+                gap: 40px;
+                flex-wrap: wrap; 
+                padding:40px;
+            }
+
+
+            .table-container {
+                flex: 1;
+                background: #FBFBFB;
+                padding: 20px;
+                width: 90%;
+                max-width: 850px;
+                border-radius: 12px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                max-height: 500px; 
+                overflow-y: auto; 
+                position: relative;
+                overflow-x: auto;
+            }
+
+            .table-container h3{
+                font-weight:bold;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            .table{
+                border:none;
+            }
+
+            th {
+                font-size: 16px;
+                padding: 12px;
+                text-align: left;
+                color: #333;
+            }
+            .table > tbody > tr > td{
+                border:none;
+            }
+            .table > thead > tr > th{
+                border:none;
+            }
+            td {
+                padding: 12px;
+                text-align: left;
+                color: #444;
+                border:none;
+            }
+
+            tr:last-child td {
+                border-bottom: none;
+            }
+
+            tr:hover {
+                background-color: #f1f1f1;
+                transition: 0.3s ease;
+            }
+
+            td.category-dna,
+            td.category-rna,
+            td.category-protein,
+            td.catergory-purification,
+            td.category-collection {
+                white-space: normal;
+                word-break: break-word;
+            }
+
+            .table-container table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            .table-fade {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 30px; 
+                background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.95));
+                pointer-events: none;
+                transition: opacity 0.3s ease-in-out;
+                opacity: 0;
+            }
+
+            /* Category colors */
+            .category-dna {
+                color: #E65160;
+                font-weight: bold;
+            }
+
+            .category-rna {
+                color: #3874B6;
+                font-weight: bold;
+            }
+
+            .category-collection {
+                color: #A5CC83;
+                font-weight: bold;
+            }
+
+            .category-purification {
+                color:rgb(81 141 145);
+                font-weight: bold;
+            }
+
+            .category-protein {
+                color:rgb(219, 127, 21);
+                font-weight: bold;
+            }
+            .col-category {
+                width: 160px;
+            }
+            .table-scroll-wrapper {
+                overflow-x: auto;
+                max-width: 100%;
+            }
+
+            .table {
+                width: max-content;
+                min-width: 100%;
+                border-collapse: collapse;
+            }
+
+            .table-label {
+                text-align: center;
+                font-size: 20px;
+                font-weight: bold;
+                margin-bottom: 25px;
+            }
+            .col-sku {
+                width: 120px;
+            }
+
+            .col-cart {
+                width: 150px;
+            }
+
+            .col-name {
+                width: auto;
+            }
+
+
+            .add-to-cart {
+                background: #004085;
+                color: white;
+                padding: 10px 15px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 14px;
+                font-weight: bold;
+                transition: 0.3s;
+                display: inline-block;
+                text-align: center;
+                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+            }
+
+            .add-to-cart:hover {
+                background: #002752;
+                transform: scale(1.05);
+            }
+
+
+            .filterable-add-to-cart a {
+                background-color: #004897;
+                border-color: #004897;
+                opacity: 1;
+                color: #fff;
+                cursor: pointer;
+                border-radius: 4px;
+                font-weight: 600;
+                text-align: center;
+                touch-action: manipulation;
+                white-space: nowrap;
+                width: 100%;
+                width: -webkit-fill-available;
+                display: block;
+                padding: 10px;
+                line-height: 1;
+            }
+
+
+
+            .add-to-cart {
+                background: #004085;
+                color: white;
+                padding: 10px 15px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 14px;
+                font-weight: bold;
+                transition: 0.3s;
+                display: inline-block;
+                text-align: center;
+                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+            }
+
+
+            .svg-container {
+                /*width: 300px;*/
+                height: 375px;
+            }
+            .svg-part {
+                transition: transform 0.3s ease-out;
+                transform-origin: center;
+                cursor: pointer;
+            }
+
+            .svg-part:hover {
+                opacity: 0.8;
+                filter: brightness(1.15);
+                cursor: pointer;
+            }
+
+            .selected-svg {
+                transform: scale(1.08);
+            }
+
+
+            .svg-container svg {
+                overflow: visible; 
+            }
+
+            .svg-text {
+                pointer-events: none;      
+                user-select: none; 
+            }
+
+            .svg-part:hover { opacity: 0.8; cursor: pointer; }
+
+            .chart-label {
+                text-align: center;
+                font-size: 18px;
+                font-weight: bold;
+                margin-bottom: 25px;
+            }
+            .svg-container, .table-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .selected-svg {
+            transform: scale(1.08);
+            filter: drop-shadow(0px 0px 6px rgba(0,0,0,0.3));
+            }
+
+
+
+
+
+            .promo-products {
+                position:relative;
+            }
+
+            .products-title {
+                font-size: 40px;
+                font-weight: bold;
+                margin-bottom: 30px;
+                text-align: center;
+            }
+
+
+            .improved-products {
+                position:relative;
+            }
+
+            .improved-products::before {
+                opacity: 0.3;
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-image: url('/sites/default/files/images/simplecancerribbon.png');
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: 100% auto;
+                z-index: -1;
+            }
+
+            .improved-products-title {
+                font-size: 40px;
+                font-weight: bold;
+                margin-bottom: 30px;
+                text-align: center;
+            }
+            /* Category Headers */
+            .product-category h3 {
+                font-size: 26px;
+                font-weight: bold;
+                margin-bottom: 15px;
+                text-align:center;
+            }
+
+            /* Product Layout */
+            .products-container {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 40px;
+                max-width: 1100px;
+                margin: 0 auto;
+            }
+            .image-wish-list-wrapper img{
+                width:100%;
+            }
+            .product-category {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .product-title {
+                font-weight: bold;
+                font-size: 16px;
+                margin: 10px 0;
+            }
+
+            .product-sku {
+                font-size: 14px;
+                color: #777;
+            }
+
+            .product-price {
+                font-size: 18px;
+                font-weight: bold;
+                color: #004085;
+                margin: 10px 0;
+            }
+
+            .buy-button {
+                display: inline-block;
+                background-color: #004897;
+                color: white;
+                font-weight: bold;
+                padding: 10px 15px;
+                border-radius: 5px;
+                text-decoration: none;
+                transition: 0.3s;
+            }
+
+            .buy-button:hover {
+                background-color: #003065;
+            }
+
+
+            .promo-section {
+                padding: 20px 20px;
+                background-color: #fff;
+                height:650px;
+            }
+
+            .promo-section {
+                background-image: linear-gradient(to right, #345fac 50%, transparent 60%), url('/sites/default/files/images/AdobeStock_490486537_2cc_full computer.tif.png'), url('/sites/default/files/images/Asset 28.png'), url('/sites/default/files/images/Asset 29.png');
+                background-position: left, bottom right, right, center;
+                background-repeat: no-repeat;
+                background-size: contain, 50%, contain, cover;
+            }
+                
+            @media (max-width: 1300px) {
+                .promo-section {
+                background-image: 
+                    linear-gradient(to right, #345fac 50%, transparent 60%),
+                    url('/sites/default/files/images/Asset 28.png'),
+                    url('/sites/default/files/images/Asset 29.png');
+                background-position: left, right, center;
+                background-repeat: no-repeat;
+                background-size: contain, cover, cover;
+                }
+            }
+
+
+            .promo-content {
+                margin-top:25px;
+            }
+
+            .promo-text {
+                max-width: 60%;
+                flex: 1;
+            }
+
+            .promo-text h2 {
+                font-size: 58px;
+                margin-bottom: 15px;
+                font-weight: bold;
+                color: white;
+                line-height: 1.3;
+            }
+
+
+            .main-message{
+                font-size: 18px;
+                line-height: 1.5;
+                margin-bottom: 30px;
+                color:white;
+            }
+
+            .sample-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+                margin-bottom: 30px;
+            }
+
+            .sample-item {
+                background: white;
+                padding: 14px 14px;
+                border-radius: 12px;
+                font-size: 16px;
+                box-shadow: 0 4px 15px rgb(0 0 0 / 20%);
+                font-weight: 600;
+            }
+            .span-two {
+                grid-column: span 2;
+                text-align: center;
+            }
+
+            .promo-btn {
+                align-items: center;
+                gap:20px;
+            }
+            .promo-btn a{
+                width: 35%;
+            }
+            
+
+            .promo-note {
+                font-size: 11px;
+                line-height: 1.4;
+                margin-top: 10px;
+                margin-bottom: 30px;
+                color: white;
+                max-width: 85%;
+            }
+
+            .promo-image img {
+                height: 500px;
+            }
+            .btn-rna:hover{
+                background-color: #ec1d25;
+                transform: translateY(-2px);
+                -webkit-transition: all 0.2s ease-out;
+            }
+            .btn-primary:hover{
+                background-color: #0056b3;;
+                transform: translateY(-2px);
+                -webkit-transition: all 0.2s ease-out;
+            }
+            /* promo section load animations*/
+            .promo-section {
+                opacity: 0;
+                transform: translateY(40px);
+                transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            }
+            .promo-section.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            .promo-section::after.visible {
+                opacity:0;
+            }
+            /* Inner element animations */
+            .promo-text h2,
+            .promo-text .main-message,
+            .sample-grid,
+            .promo-btn,
+            .promo-note,
+            .promo-image {
+                opacity: 0;
+                transform: translateY(20px);
+                transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            }
+
+            .promo-section.visible .promo-text h2 {
+                transition-delay: 0.1s;
+                opacity: 1;
+                transform: translateY(0);
+            }
+            .promo-section.visible .promo-btn {
+                transition-delay: 0.5s;
+                opacity: 1;
+                transform: translateY(0);
+            }
+            .promo-section.visible .promo-text .main-message {
+                transition-delay: 0.2s;
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .promo-section.visible .sample-grid {
+                transition-delay: 0.3s;
+                opacity: 1;
+                transform: translateY(0);
+            }
+            .promo-section.visible .promo-note {
+                transition-delay: 0.4s;
+                opacity: 1;
+                transform: translateY(0);
+            }
+            .promo-section.visible .promo-image {
+                transition-delay: 0.5s;
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            /* Key points section load animations*/
+
+            /* Fade-in base styles */
+            .keypoint-section {
+                opacity: 0;
+                transform: translateY(40px);
+                transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            }
+            .keypoint-section.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            /* Inner box animations */
+            .keypoint-box {
+                opacity: 0;
+                transform: translateY(30px);
+                transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            }
+            .keypoint-box.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .keypoint-box .feature {
+                opacity: 0;
+                transform: translateY(15px);
+                transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+            }
+            .keypoint-box.visible .feature {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            .keypoint-box.visible .feature:nth-child(1) { transition-delay: 0.1s; }
+            .keypoint-box.visible .feature:nth-child(2) { transition-delay: 0.2s; }
+            .keypoint-box.visible .feature:nth-child(3) { transition-delay: 0.3s; }
+            .keypoint-box.visible .feature:nth-child(4) { transition-delay: 0.4s; }
+            .keypoint-box.visible .feature:nth-child(5) { transition-delay: 0.4s; }
+            .keypoint-box.visible .feature:nth-child(6) { transition-delay: 0.4s; }
+
+            /* Base state for table rows */
+            .table-container tbody tr {
+                opacity: 0;
+                transform: translateY(20px);
+                transition: opacity 0.4s ease, transform 0.4s ease;
+            }
+
+            /* Animate in when table is visible */
+            .table-container.visible tbody tr {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            /* Improved Products Section load animations*/
+
+            /* Fade/slide base state */
+            .products-title,
+            .improved-products-title,
+            .svg-container,
+            .improved-products,
+            .table-label,
+            .product-category h3,
+            .table-container {
+                opacity: 0;
+                transform: translateY(30px);
+                transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            }
+
+            /* Triggered state */
+            .products-title.visible,
+            .improved-products.visible, .improved-products-title, 
+            .svg-container.visible,
+            .table-label.visible,
+            .product-category h3,
+            .table-container.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+
+
+            /* Initial hidden state */
+            .improved-products .card {
+                opacity: 0;
+                transform: translateY(30px);
+                transition: opacity 0.6s ease, transform 0.6s ease;
+            }
+
+            /* Final visible state */
+            .improved-products .card.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            .vd-wrapper{
+                margin-top: 40px;
+                margin-bottom:80px;
+                max-width:1300px;
+                width: 100%;
+            }
+            .liquid-biopsy-infograph-div{
+                display: flex;
+                background: #0048920a;
+                gap: 60px;
+                padding: 30px 35px 30px 35px;
+                align-items: center;
+                justify-content: center;
+                opacity:0;
+                transform: translateY(40px);
+                transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            }
+            .liquid-biopsy-infograph-div.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .liquid-biopsy-infograph-div img{
+                width:inherit;
+                position:absolute;
+                top:-150px;
+                transform:rotate(10deg);
+                filter: drop-shadow(2px 4px 6px gray);
+            }
+            .liquid-biopsy-infograph-div .img-div{
+                width:250px;
+                position:relative;
+                flex-shrink:0;
+            }
+
+            .btn-lb {
+                background-color: #004897;
+                border-color: #004897;
+            }
+
+            .btn-ln:hover{
+                background-color: #0056b3;
+                transform: translateY(-2px);
+                -webkit-transition: all 0.2s ease-out;
+            }
+
+            .publications-section {
+                padding: 60px 20px;
+                text-align: center;
+                position: relative;
+
+                opacity: 0;
+                transform: translateY(40px);
+                transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            }
+
+            .publications-section.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .publications-section::before {
+                opacity: 0.3;
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-image: url('/sites/default/files/images/cancerribbon.png');
+                background-position: bottom;
+                background-repeat: no-repeat;
+                background-size: 130% auto;
+                z-index: -1;
+            }
+
+            .publication-section-title {
+                font-size: 40px;
+                font-weight: bold;
+                margin-bottom: 30px;
+            }
+
+            .publication-cards {
+                display: flex;
+                gap: 20px;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .publication-card {
+                background: white;
+                border-radius: 15px;
+                padding: 25px;
+                width: 400px;
+                box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+
+            .pub-title {
+                font-size: 17px;
+                font-weight: 600;
+                margin-bottom: 12px;
+                text-align: left;
+            }
+
+            .pub-meta {
+                display: flex;
+                justify-content: space-between;
+                font-size: 15px;
+                color: #555;
+                margin-bottom: 10px;
+            }
+            .pub-body {
+                margin-top: auto;
+                display: flex;
+                flex-direction: column;
+                flex-grow: 1;
+                justify-content: flex-end;
+            }
+
+            .pub-description {
+                font-size: 16px;
+                color: #444;
+                text-align: left;
+                flex-grow: 1;
+                margin-bottom: 20px;
+            }
+
+            .pub-footer {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .pub-button {
+                background-color: #003087;
+                color: white;
+                text-decoration: none;
+                padding: 8px 16px;
+                font-weight: 600;
+                font-size: 14px;
+                border-radius: 6px;
+                transition: background 0.3s;
+            }
+
+            .pub-button:hover {
+                background-color: #001f5e;
+            }
+
+            .pub-read-time {
+                font-size: 13px;
+                color: #777;
+            }
+
+            .dot {
+                height: 10px;
+                width: 10px;
+                background-color: #ccc;
+                border-radius: 50%;
+                display: inline-block;
+                margin: 0 6px;
+            }
+
+            .dot.active {
+            background-color: #003087;
+            }
+
+            /* Initial state */
+            .publication-card {
+                opacity: 0;
+                transform: translateY(30px);
+                transition: opacity 0.6s ease, transform 0.6s ease;
+            }
+
+            /* Final animated state */
+            .publication-card.visible{
+                opacity: 1;
+                transform: translateY(0);
+            }
+            .publication-section-title {
+                opacity: 0;
+                transform: translateY(20px);
+                transition: opacity 0.6s ease, transform 0.6s ease;
+            }
+
+            .publication-section-title.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+
+
+            .engagement-cta-section {
+                position: relative;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                background-color: #0048970d;
+                padding: 60px 0px;
+            }
+
+
+            .engagement-cta-section h2 {
+                font-size: 40px;
+                font-weight: bold;
+                margin-bottom: 0px;
+            }
+            .cta-text {
+                font-size: 26px;
+            }
+            .cta-content a.btn {
+                font-size: 16px;
+                padding: 10px 20px;
+                height: 45px;
+            }
+
+            /* Responsive */
+            @media (max-width: 1246px) {
+                .promo-image{
+                    display:none;
+                }
+            }
+
+            @media (max-width: 1064px){
+                .keypoint-box > img:last-child {
+                    display: none;
+                }
+                .plasma-serum, .urine, .saliva {
+                width: 100%;
+                padding: 30px 15px 40px 15px;
+                }
+                .plasma-serum .feature-text {
+                max-width:350px;
+                }
+                .ps-image-box{
+                    display:none;
+                }
+                .plasma-serum .feature:nth-of-type(2) .feature-text {
+                max-width: 350px;
+                }
+
+                .plasma-serum .feature:nth-of-type(4) .feature-text {
+                max-width: 350px;
+                }
+
+                .plasma-serum .feature:nth-of-type(6) .feature-text {
+                max-width: 350px;
+                }
+
+                .saliva .feature:nth-of-type(2) .feature-text {
+                max-width: 350px;
+                }
+
+                .saliva .feature:nth-of-type(4) .feature-text {
+                max-width: 350px;
+                }
+                .urine .feature:nth-of-type(1) {
+                margin-left: 30px;
+                }
+                .urine .feature:nth-of-type(3) {
+                margin-left: 30px;
+                }
+                .urine .feature:nth-of-type(5) {
+                margin-left: 30px;
+                }
+            }
+
+
+            @media (max-width: 991px) {
+                .promo-text h2 {
+                    font-size:48px;
+                }
+
+            }
+
+            @media (max-width: 960px) {
+                .products-container {
+                    grid-template-columns: 1fr;
+                }
+                .product-grid {
+                    flex-direction: column;
+                    align-items: center;
+                }
+                .promo-image{
+                    display:none;
+                }
+            }
+
+            @media (max-width: 860px) {
+                .publications-section::before{
+                    display: none;
+                }
+                .improved-products::before{
+                    display: none;
+                }
+
+                .promo-section::after {
+                    opacity:0.2;
+                }
+            }
+
+            @media (max-width: 768px) {
+
+                .promo-content {
+                flex-direction: column;
+                align-items: flex-start;
+                }
+
+                .promo-text {
+                    max-width: 100%;
+                }
+
+                .promo-image {
+                text-align: center;
+                }
+                table {
+                    font-size: 14px;
+                }
+                .add-to-cart {
+                    padding: 8px 12px;
+                }
+                .container { 
+                    flex-direction: column; align-items: center; 
+                }
+                .table-container { 
+                    width: 100%; 
+                }
+                .chart-table-container {
+                    flex-direction: column;
+                    gap: 20px;
+                }
+                .svg-container {
+                    width: 100%;
+                    height: auto;
+                    max-width: 300px;
+                    margin: 0 auto;
+                }
+                .keypoint-box {
+                flex-direction: column;
+                padding: 20px;
+                }
+                .plasma-serum,
+                .urine,
+                .saliva {
+                width: 100%;
+                padding: 30px 15px 40px 15px;
+                }
+                .features {
+                grid-template-columns: 1fr;
+                justify-items: center;
+                }
+                .urine .features{
+                justify-items: center;
+                flex-direction: column;
+                grid-template-columns: 1fr;
+                }
+                .feature:nth-of-type(1) {
+                    margin-left:0px;
+                }
+
+                .urine .feature:nth-of-type(1) {
+                margin-left: 0px;
+                }
+
+                .urine .feature:nth-of-type(3) {
+                margin-left: 0px;
+                }
+                .urine .feature:nth-of-type(5) {
+                margin-left: 0px;
+                }
+                .feature:nth-of-type(3) {
+                    margin-left:0px;
+                    gap:15px;
+                }
+                .feature:nth-of-type(5) {
+                    margin-left:0px;
+                    gap:15px;
+                }
+                .saliva .feature:nth-of-type(1) {
+                    margin-left: 0px;
+                }
+            }
+
+            @media (max-width: 600px) {
+                .promo-btn {
+                    grid-template-columns: 1fr;
+                }
+
+                .promo-btn a {
+                    width: 100%;
+                    text-align: center;
+                }
+            }
+
+            @media (max-width: 600px) {
+                .liquid-biopsy-infograph-div{
+                    flex-direction: column;
+                }
+                .liquid-biopsy-infograph-div img{
+                    position:initial;
+                }
+            }
+
+            @media (max-width: 600px) {
+                .liquid-biopsy-infograph-div{
+                flex-direction: column;
+                }
+                .liquid-biopsy-infograph-div img{
+                position:initial;
+                }
+            }
+
+            @media (max-width: 500px) {
+                .card {
+                    width: 100%;
+                }
+                .cards{
+                    flex-direction:column;
+                }
+                .promo-section::after{
+                    display:hidden;
+                }
+                .chart-table-container{
+                    padding:0px;
+                }
+            }
+
+
+            @media (max-width: 768px) {
+                .liquid-biopsy-infograph-div {
+                    padding: 20px;
+                    gap: 30px;
+                }
+
+                .liquid-biopsy-infograph-div .img-div {
+                    width: 180px;
+                    position: relative;
+                }
+
+                .liquid-biopsy-infograph-div img {
+                    top: -100px;
+                    transform: rotate(8deg);
+                }
+            }
+
+            @media (max-width: 485px) {
+                .promo-text h2 {
+                    font-size:45px;
+                }
+
+            }
+            @media (max-width: 480px) {
+                .liquid-biopsy-infograph-div {
+                    padding: 15px;
+                    gap: 20px;
+                }
+
+                .liquid-biopsy-infograph-div .img-div {
+                    width: 140px;
+                }
+
+                .liquid-biopsy-infograph-div img {
+                    top: -80px;
+                    transform: rotate(6deg);
+                }
+
+                .liquid-biopsy-infograph-div h2 {
+                    font-size: 22px;
+                }
+            }
+            .divider {
+                width: 100%;
+                margin-bottom: 10px;
+                max-width:490px;
+            }
+            .promo-text hr {
+                border-top: 6px solid #004897;
+                margin-top: 0px;
+                margin-bottom: 5px;
+                width: 100%;
+            }
+            @media (max-width: 457px) {
+                .promo-section {
+                    height: 700px;
+                }
+            }
+
+            @media (max-width: 397px) {
+                .promo-section {
+                    height: 850px;
+                }
+            }
+    </style>
+
+
+    
+</head>
+<body>
+
+
+
+
+
+<section class="promo-section">
+      {# <img  class = "promo-sectionbg" style = "" src="/sites/default/files/images/cancerbg.png" alt="DNA tube image" /> #}
+
+
+  <div class="promo-content container">
+    <span class="subtext"> <strong>Special Promotion</strong></span>
+    <div class="promo-text">
+      <h2>Liquid biopsy:  The future of non-invasive cancer research.</h2>
+
+      <p class="main-message">
+
+        <strong> Don't Miss Out:</strong> <strong>Spend over $1000</strong> on Liquid Biopsy Category Products <br>and <strong>Get Free Shipping!</strong>
+
+
+      </p>
+
+
+
+    <div class =  "promo-btn">
+        <a href="#products-section" style = "font-weight: 600; font-size: 18px; padding: 8px 24px 8px 24px;" class="btn btn-rna">Order Now</a>
+    </div>
+    <p class="promo-note">
+        *This promotion is available exclusively to customers in Canada and the U.S. who place orders directly with Norgen Biotek.
+        The discount applies only to orders containing $1000 or more in eligible product value. This offer cannot be combined with any other
+        existing promotions. Orders that require dry ice shipping are not eligible. Offer valid until June 2nd, 2025.
+    </p>    
+    </div>
+
+  </div>
+
+    <a id = "keypoint-section" class="anchor-section"></a>
+
+</section>
+
+    <section class="keypoint-section">
+        <div class="keypoint-titles">
+        <h2 class = "keypoint-title">Simple, Non-Invasive, Yet Powerful,</h2>
+        <h2 class = "keypoint-title-subheader" style = "margin-top:10px;">Liquid Biopsy Samples From <a style = "color: #d74d4d;" href="#blood" >Plasma/Serum</a>, <a style = "color: #d38835;" href="#urine">Urine</a> and <a style = "color: #3a73b0;" href="#saliva">Saliva</a></h2>
+        </div>
+
+    <a id = "blood" class="anchor-section"></a>
+        <!-- Blood/Plasma/Serum Section -->
+        <div class="keypoint-container">
+            <div class="keypoint-box" style="padding: 40px;">
+            <div class="plasma-serum">
+                <h2>Blood / Plasma / Serum</h2>
+                <div class="features">
+                <div class="feature">
+                    <img style="height: 40px;" src="/sites/default/files/images/campaigns/blood-plasma-2024/icons/capture-white.svg" alt="Icon 1">
+                    <div class="feature-text">
+                    {# <div class="feature-title">Holistic Sample Coverage</div> #}
+                    <div class="feature-description">Collect blood samples and seperate plasma while preventing hemolysis.</div>
+                    </div>
+                </div>
+                 <div class="feature">
+                    <img style="height: 45px;" src="/sites/default/files/images/campaigns/blood-plasma-2024/icons/workflow-white.svg" alt="Icon 2">
+                    <div class="feature-text" style = "">
+                    {# <div class="feature-title">Diverse Research Applications</div> #}
+                    <div class="feature-description">Proprietary silicon carbide tech captures ultra-low levels of cf-DNA, small RNA, and exosomes.</div>
+                    </div>
+                </div>
+                <div class="feature">
+                    <img style="height: 40px;" src="/sites/default/files/images/icons/thermometer.png" alt="Icon 3" <a href="https://www.freepik.com/icon/thermometer_3293059#fromView=search&page=1&position=63&uuid=a8ec3930-527e-4ffd-bfcc-4ae71bea6dc7" title="Thermometer icons created by Uniconlabs - Freepik"></a>
+                    <div class="feature-text">
+                    {# <div class="feature-title">Seamless Workflow Integration</div> #}
+                    <div class="feature-description">Room temperature preservation of nucleic acids for 30 days</div>
+                    </div>
+                </div>
+                <div class="feature">
+                    <img style="height: 45px;" src="/sites/default/files/images/icons/bioengineering.png" alt="Icon 4" <a href="https://www.freepik.com/icon/bioengineering_6433241#fromView=search&page=1&position=3&uuid=d5e9d5c2-18a3-4180-a13d-0ee264b7bec5" title="bioengineering icons created by Freepik - Freepik"></a>
+                    <div class="feature-text" style = "">
+                    {# <div class="feature-title">Diverse Research Applications</div> #}
+                    <div class="feature-description">Seamlessly integrates into existing workflows.</div>
+                    </div>
+                </div>
+
+                <div class="feature">
+                    <img style="height: 65px; margin-left: 10px; margin-right: 8px;" src="/sites/default/files/images/campaigns/blood-plasma-2024/icons/rna-white.svg" alt="Icon 5">
+                    <div class="feature-text" style = "">
+                    {# <div class="feature-title">Exceptional Capture Efficiency</div> #}
+                    <div class="feature-description">Kits optimized for various samples and analytes: blood, plasma, cf-DNA, cf-RNA, and more.</div>
+                    </div>
+                </div>
+
+                <div class="feature">
+                    <img style="height: 75px;" src="/sites/default/files/images/campaigns/blood-plasma-2024/icons/research-white.svg" alt="Icon 6" >
+                    <div class="feature-text" style = "">
+                    {# <div class="feature-title">Exceptional Capture Efficiency</div> #}
+                    <div class="feature-description">Supports research in cancer biomarkers, prenatal testing, transplant monitoring, and more.</div>
+                    </div>
+                </div>
+
+                </div>
+                <a style="color: #d84f4f;" onclick="selectDonutSegment('Plasma/Serum')" href="#products-section" class="cta-button">See All Eligible Plasma/Serum Products</a>
+                
+            </div>
+            <div style = "width: 227.97px;" class = "ps-image-box">
+                <img style="height: 460px; position: relative; right: 60px;" src="/sites/default/files/images/271.png" alt="Blood Tube">
+            </div>
+            </div>
+        </div>
+
+    <a id = "urine" class="anchor-section"></a>
+        <div class="keypoint-container">
+        <!-- Urine Section -->
+            <div class="keypoint-box" style="padding: 40px; flex-direction: row-reverse;">
+            <div class="urine">
+                <h2>Urine</h2>
+                <div class="features">
+                <div class="feature">
+                    <img src="/sites/default/files/images/icons/petri-dish.png" alt="icon 7" <a href="https://www.freepik.com/icon/petri-dish_2667515#fromView=search&page=1&position=1&uuid=cda06dab-1062-4785-b8f8-f27b800b91e0" title="Petri dish icons created by amonrat rungreangfangsai - Freepik"></a>
+                    <div class="feature-text">
+                    {# <div class="feature-title">Comprehensive Analyte Coverage</div> #}
+                    <div class="feature-description">Collect and preserve cf-DNA, cf-RNA, proteins, and exosomes.</div>
+                    </div>
+                </div> 
+            <div class="feature">
+                    <img src="/sites/default/files/images/icons/research.png" alt="icon 8" <a href="https://www.flaticon.com/free-icons/scientific" title="scientific icons created by juicy_fish - Flaticon"></a>
+                    <div class="feature-text">
+                    {# <div class="feature-title">Diverse Research Applications</div> #}
+                    <div class="feature-description">Isolation solutions for cell-free and cellular analytes.</div>
+                    </div>
+                </div> 
+            <div class="feature">
+                    <img src="/sites/default/files/images/icons/urine-sample (1).png" alt="icon 9" <a href="https://www.freepik.com/icon/urine-sample_6098648" title="Urine sample icons created by Flowicon - Freepik"></a>
+                    <div class="feature-text">
+                    {# <div class="feature-title">Tailored Volume Options</div> #}
+                    <div class="feature-description">Flexible volume options to suit different workflows.</div>
+                    </div>
+                </div> 
+            <div class="feature">
+                    <img src="/sites/default/files/images/icons/microscope.png" alt="icon 10" <a href="https://www.freepik.com/icon/microscope_4712507#fromView=search&page=1&position=6&uuid=916f31ec-7584-4e87-9fd4-2c1e2ff000ac" title="Microscope icons created by Smashicons - Freepik"></a>
+                    <div class="feature-text">
+                    {# <div class="feature-title">Broad Species Compatibility</div> #}
+                    <div class="feature-description">Supports applications from STD/UTI diagnostics to transplant, cancer, and biomarker research.</div>
+                    </div>
+                </div> 
+            <div class="feature">
+                    <img src="/sites/default/files/images/icons/evolution.png" alt="icon 11" <a href="https://www.freepik.com/icon/evolution_5869066" title="Evolution icons created by Freepik - Freepik"></a>
+                    <div class="feature-text">
+                    {# <div class="feature-title">Broad Species Compatibility</div> #}
+                    <div class="feature-description">Validated for various applications in both human and animal research.</div>
+                    </div>
+                </div>
+                </div>
+                <a style="color: #d08635;" onclick="selectDonutSegment('Urine')" href="#products-section" class="cta-button">See All Eligible Urine Products</a>
+            </div>
+            <img style="height: 400px; position: relative; left: 100px;" src="/sites/default/files/images/272.png" alt="Urine Container">
+            </div>
+        </div>
+
+    <a id = "saliva" class="anchor-section"></a>
+        <div class="keypoint-container">
+        <!-- Saliva Section -->
+            <div class="keypoint-box" style="padding: 40px;">
+            <div class="saliva">
+                <h2>Saliva</h2>
+                <div class="features">
+                <div class="feature">
+                    <img style="height: 45px;" src="/sites/default/files/images/icons/like.png" alt="icon 12" <a href="https://www.freepik.com/icon/like_7933085#fromView=search&page=1&position=43&uuid=3480f4f7-c6ab-4224-8abf-2003b5d6f097" title="Like icons created by Freepik - Freepik"></a>
+                    <div class="feature-text">
+                    {# <div class="feature-title">Easy, Non-Invasive Collection</div> #}
+                    <div class="feature-description">User-friendly and non-invasive-suitable for all users and clinical researchers.</div>
+                    </div>
+                </div>
+                <div class="feature"> 
+                    <img style="height: 60px;" src="/sites/default/files/images/icons/urine-sample.png" alt="icon 13" <a href="https://www.flaticon.com/free-icons/urine" title="urine icons created by Khoirul Huda - Flaticon"></a>
+                    <div class="feature-text">
+                    {# <div class="feature-title">High-Quality Preservation</div> #}
+                    <div class="feature-description">Preserve nucleic acids for downstream applications like NGS, PCR/RT-PCR, microarrays, SNP, and more.</div>
+                    </div>
+                </div>
+                <div class="feature">
+                    <img src="/sites/default/files/images/icons/balance.png" alt="icon 14" <a href="https://www.freepik.com/icon/scale_8052104#fromView=search&page=1&position=1&uuid=ff0ff99e-13c6-4e6f-bbff-288b85d735a8" title="Scale icons created by Freepik - Freepik"></a>
+
+                    <div class="feature-text">
+                    {# <div class="feature-title">Room Temperature Storage &amp; transportation</div> #}
+                    <div class="feature-description">Long-term stability : DNA and exosomes for up to 2 years, RNA for 2 months.</div>
+                    </div>
+                </div>
+                <div class="feature">
+                    <img style="height: 55px;" src="/sites/default/files/images/icons/dna-preserve.png" alt="Icon 15" <a href="https://www.freepik.com/icon/dna_5011324" title="DNA icons created by Witdhawaty - Freepik"></a>
+                    <div class="feature-text">
+                    {# <div class="feature-title">Sample inactivation for safe handling</div> #}
+                    <div class="feature-description">Enable ambient temperature shipping and inactivate samples for safe handling.</div>
+                    </div>
+                </div>
+                </div>
+                <a style="color: #366aaa;" onclick="selectDonutSegment('Saliva')" href="#products-section" class="cta-button">See All Eligible Saliva Products</a>
+            </div>
+            <img style="height: 460px; position: relative; right: 100px;" src="/sites/default/files/images/273.png" alt="Saliva Funnel Tube">
+            </div>
+        </div>
+    </section>
+
+
+<section class="publications-section">
+  <h2 class="publication-section-title">Selected Publications Supporting Our Technology</h2>
+
+  <div class="publication-cards">
+
+    <div class="publication-card">
+        <h3 class="pub-title">Plasma-derived exosomal miR-326, a prognostic biomarker and novel candidate for treatment of drug resistant pediatric acute lymphoblastic leukemia.</h3>
+        <div class="pub-body">
+            <div class="pub-meta">
+            <span>Nature.com</span>
+            <span>06 Jan 2024</span>
+            </div>
+            <p class="pub-description">
+            Acute lymphoblastic leukemia (ALL) is a cancer with high incidence rate in pediatrics and drug resistance is a major clinical concern for ALL treatment...</p>
+            <a class="pub-button" href="https://www.nature.com/articles/s41598-023-50628-w">Continue Reading</a>
+        </div>
+    </div>
+
+    <div class="publication-card">
+        <h3 class="pub-title">Fecal miRNAs as potential biomarkers for early detection of colorectal cancer: An updated review.</h3>
+        <div class="pub-body">
+            <div class="pub-meta">
+                <span>SceinceDirect.com</span>
+                <span>17 Jul 2024</span>
+            </div>
+            <p class="pub-description">
+                Colorectal cancer (CRC) is a significant global health concern. It is the second leading cause of cancer-related deaths and the third most commonly diagnosed cancer worldwide...</p>
+            <a class="pub-button" href="https://www.sciencedirect.com/science/article/pii/S2319417024000726">Continue Reading</a>
+        </div>
+    </div>
+
+    <div class="publication-card">
+        <h3 class="pub-title">Urine-Based Biomarker Test Uromonitor® in the Detection and Disease Monitoring of Non-Muscle-Invasive Bladder Cancer—A Systematic Review and Meta-Analysis of Diagnostic Test Performance.</h3>
+        <div class="pub-body">
+            <div class="pub-meta">
+                <span>MDPI</span>
+                <span>11 Feb 2024</span>
+            </div>
+            <p class="pub-description">
+                Optimal urine-based diagnostic tests (UBDT) minimize unnecessary follow-up cystoscopies in patients with non-muscle-invasive bladder-cancer (NMIBC), while accurately detecting high-grade bladder-cancer without false-negative results...      </p>
+            <a class="pub-button" href="https://www.mdpi.com/2072-6694/16/4/753#:~:text=This%20systematic%20review%20supports%20the,cases%20(false-negatives).">Continue Reading</a>
+        </div>
+    </div>
+
+    <div class="publication-card">
+    <h3 class="pub-title">Evaluation of Storage Tubes for Combined Analysis of Circulating Nucleic Acids in Liquid Biopsies.</h3>
+        <div class="pub-body">
+            <div class="pub-meta">
+                <span>MDPI</span>
+                <span>6 Feb 2019</span>
+            </div>
+            <p class="pub-description">
+                In the last decade, circulating nucleic acids such as microRNAs (miRNAs) and cell-free DNA (cf-DNA) have become increasingly important in serving as potential novel biomarkers for a variety of human diseases...      </p>
+            <a class="pub-button" href="https://www.mdpi.com/1422-0067/20/3/704">Continue Reading</a>
+        </div>
+    </div>
+
+  </div>
+
+
+
+<a id = "products-section" class="anchor-section"></a>
+<section class = "promo-products">
+    
+    <h2 class="products-title">Discover Our Products</h2>
+
+    <div class="lb-container">
+        <div class="chart-table-container">
+
+            <!-- SVG Donut Chart Container -->
+            <div class="svg-container">
+                <p style = "color: #3f444A;" class="chart-label">Choose a Category:</p>
+
+                <svg id="donutChart" viewBox="0 0 611.74 611.74" width="100%" height="100%">
+                <defs>
+                <!-- Saliva: Gray to Silver -->
+                <linearGradient id="salivaGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#1C3587" />
+                    <stop offset="100%" stop-color="#54A7D2" />
+                </linearGradient>
+
+                <!-- Plasma/Serum: Deep Red to Light Coral -->
+                <linearGradient id="plasmaGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#BF0C0C" />
+                    <stop offset="100%" stop-color="#EF8D8D" />
+                </linearGradient>
+
+                <!-- Urine: Navy Blue to Sky Blue -->
+                <linearGradient id="urineGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#9f5f28" />
+                    <stop offset="100%" stop-color="#ffab40" />
+                </linearGradient>
+                </defs>
+
+                    <!-- Saliva (Gray Gradient) -->
+                    <path class="svg-part" id="saliva-svg" fill="url(#salivaGradient)"
+                    d="M305.89,305.84L41.24,458.64C-43.14,312.48,6.93,125.58,153.1,41.19,201.77,13.09,249.69.25,305.89.25v305.59Z"
+                    onclick="updateTable('Saliva', this)">
+                    </path>
+
+                    <!-- Plasma/Serum (Red Gradient) -->
+                    <path class="svg-part plasma-serum-selected selected-svg" id="plasma-serum-svg" fill="url(#plasmaGradient)"
+                    d="M305.89,305.84l264.65,152.8c-84.39,146.16-271.29,196.24-417.45,111.86-48.67-28.1-83.75-63.18-111.86-111.86l264.65-152.8Z"
+                    onclick="updateTable('Plasma/Serum', this)">
+                    </path>
+
+                    <!-- Urine (Blue Gradient) -->
+                    <path class="svg-part" id="urine-svg" fill="url(#urineGradient)"
+                    d="M305.89,305.84V.25c168.77,0,305.59,136.82,305.59,305.59,0,56.2-12.84,104.12-40.94,152.8l-264.65-152.8Z"
+                    onclick="updateTable('Urine', this)">
+                    </path>
+
+                    <!-- Center Circle -->
+                    <circle class = "svg-part" id = "center-circle" cx="309.77" cy="311.41" r="120" fill="white"></circle>
+
+                    <!-- Text Labels -->
+                    <text class="svg-text" x="140" y="240" font-size="36" fill="white" text-anchor="middle">Saliva</text>
+                    <text class="svg-text" x="475" y="240" font-size="36" fill="white" text-anchor="middle">Urine</text>
+                    <text class="svg-text" x="310" y="500" font-size="36" fill="white" text-anchor="middle">Blood/Plasma/Serum</text>
+
+                    <!-- Center Text -->
+                    <text class="svg-text" id="center-text" x="310" y="300" font-size="30" fill="black" font-weight="bold" text-anchor="middle">
+                    <tspan x="310" dy="0">Liquid</tspan>
+                    <tspan x="310" dy="1.6em">Biopsy</tspan>
+                    </text>
+
+                </svg>
+            </div>
+
+            <!-- Table Container -->
+            <div class="table-container">
+                <h3 class="table-label">Our Eligible <span id="category-title">Plasma/Serum</span> Products</h3>
+            <div class="table-scroll-wrapper">
+                <table>
+                    <colgroup>
+                        <col class="col-category">
+                        <col class="col-sku">
+                        <col class="col-name">
+                        <col class="col-cart">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>SKU</th>
+                            <th style = "width: 350px;" >Name</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="product-table">
+                        <!-- rows inserted here -->
+                    </tbody>
+                    <div class="table-fade"></div>
+                </table>
+            </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+</section>
+
+
+
+<section class = "improved-products">
+    <h2 class="improved-products-title">Enchanced Automation-Ready Products</h2>
+
+    <div class="products-container">
+        <div class="product-category">
+            <h3> <img style = "height: 55px;" src="/sites/default/files/images/icons/salivafunneltube.svg" alt="Icon 16" <a href="https://www.freepik.com/icon/pcr-test_5325134#fromView=search&page=1&position=2&uuid=02f225da-69b0-492e-b908-6f8f0cfda5a5" title="Saliva icons created by bearicons - Freepik">  Saliva DNA <img style = "height: 45px; margin-left: -7px;" src="/sites/default/files/images/icons/pcr-test_5325134.png" alt="Icon 17" <a href="https://www.freepik.com/icon/pcr-test_5325134#fromView=search&page=1&position=2&uuid=02f225da-69b0-492e-b908-6f8f0cfda5a5" title="Saliva icons created by bearicons - Freepik"></h3> 
+            <div class="cards">
+                <div class="card" data-product="cp" style="display: flex;">
+                    <div class="views-view-responsive-grid__item">
+                        <div class="views-view-responsive-grid__item-inner">
+                            <div class="views-field views-field-nothing-1">
+                                <span class="field-content">
+                                    <div class="image-wish-list-wrapper">
+                                    <img itemprop="image" src="/sites/default/files/images/RU55400-saliva-dna-isolation-kit-magnetic-bead-system.jpg" width="325" height="217" loading="lazy">            </div>
+                                </span>
+                                    </div>
+                        <div class="views-field views-field-nothing-4">
+                            <span class="field-content"><a href="https://norgenbiotek.com/promotions/liquid-biopsy-promotion"></a></span><a href="https://norgenbiotek.com/promotions/liquid-biopsy-promotion">
+                        </a></div><a href="https://norgenbiotek.com/promotions/liquid-biopsy-promotion">
+                        <div class="views-field views-field-nothing-2">
+                            <span class="field-content"></span>
+                        </div>
+                        <div class="views-field views-field-nothing-3">
+                            <span class="field-content"></span>
+                        </div>
+                        
+                        </a><div class="views-field views-field-title"><a href="https://norgenbiotek.com/promotions/liquid-biopsy-promotion">
+                            <span class="field-content title-filter-2"></span></a><a href="https://norgenbiotek.com/product/saliva-dna-isolation-kit-magnetic-bead-system?v=571">Saliva DNA Isolation Kit (Magnetic Bead System) 50 Preps</a>
+                        </div>
+
+                        <div class="views-field views-field-nothing">
+                            <span class="field-content">SKU RU55400 | 50 Units</span>
+                        </div>
+                        <div class="views-field views-field-price__number-1">
+                            <span class="field-content view-price-filter"></span>
+                        </div>
+                        <div class="views-field views-field-price__number">
+                        <span class="field-content view-price-filter">CA$184.00</span>
+                        </div>
+
+                        <div class="views-field views-field-commerce-add-to-cart-link">
+                            <span class="field-content filterable-add-to-cart"><a href="/add-to-cart/1345/571" hreflang="en">ADD TO CART</a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                <div class="card" data-product="cp" style="display: flex;">
+                    <div class="views-view-responsive-grid__item">
+                        <div class="views-view-responsive-grid__item-inner">
+                            <div class="views-field views-field-nothing-1">
+                                <span class="field-content">
+                                    <div class="image-wish-list-wrapper">
+                                    <img itemprop="image" src="/sites/default/files/images/RU62900-saliva-dna-isolation-96-well-kit-magnetic-bead-system.jpg" width="325" height="217" loading="lazy">            </div>
+                                </span>
+                                    </div>
+                        <div class="views-field views-field-nothing-4">
+                            <span class="field-content"><a href="https://norgenbiotek.com/promotions/liquid-biopsy-promotion"></a></span><a href="https://norgenbiotek.com/promotions/liquid-biopsy-promotion">
+                        </a></div><a href="https://norgenbiotek.com/promotions/liquid-biopsy-promotion">
+                        <div class="views-field views-field-nothing-2">
+                            <span class="field-content"></span>
+                        </div>
+                        <div class="views-field views-field-nothing-3">
+                            <span class="field-content"></span>
+                        </div>
+                        </a><div class="views-field views-field-title"><a href="https://norgenbiotek.com/promotions/liquid-biopsy-promotion">
+                            <span class="field-content title-filter-2"></span></a><a href="https://norgenbiotek.com/product/saliva-dna-isolation-kit-magnetic-bead-system?v=671">Saliva DNA Isolation Kit (High Throughput Magnetic Bead System) 96 Well</a>
+                        </div>
+
+                        <div class="views-field views-field-nothing">
+                            <span class="field-content">SKU RU62900 | 2 x 96 Well Plates</span>
+                        </div>
+                        <div class="views-field views-field-price__number-1">
+                            <span class="field-content view-price-filter"></span>
+                        </div>
+                        <div class="views-field views-field-price__number">
+                        <span class="field-content view-price-filter">CA$980.00</span>
+                        </div>
+                        <div class="views-field views-field-commerce-add-to-cart-link">
+                            <span class="field-content filterable-add-to-cart"><a href="/add-to-cart/1345/671" hreflang="en">ADD TO CART</a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-category">
+        <h3 style = "height:55px;"> <img style = "height: 45px; margin-right: -12px;" src="/sites/default/files/images/icons/test-tube (2).png" alt="Icon 18" <a href="https://www.flaticon.com/free-icons/test-tube" title="Saliva icons created by Nikita Golubev - Freepik"> Blood DNA <img style = "height: 45px; margin-right:10px;" src="/sites/default/files/images/icons/droplets_7963724.png" alt="Icon 19" <a href="https://www.freepik.com/icon/rain-drop_9361652" title="Droplets icons created by Graficon - Freepik"></h3> 
+        <div class="cards">
+            <div class="card" data-product="cp" style="display: flex;">
+                <div class="views-view-responsive-grid__item">
+                    <div class="views-view-responsive-grid__item-inner">
+                        <div class="views-field views-field-nothing-1">
+                            <span class="field-content">
+                                <div class="image-wish-list-wrapper">
+                                <img itemprop="image" src="/sites/default/files/images/62500-Cells-and-Tissue-DNA-Iosolation-96-Well-Kit(Magnetic-Bead-System).jpg" width="325" height="217" loading="lazy">            </div>
+                            </span>
+                                </div>
+                    <div class="views-field views-field-nothing-4">
+                        <span class="field-content"><a href="https://norgenbiotek.com/promotions/liquid-biopsy-promotion"></a></span><a href="https://norgenbiotek.com/promotions/liquid-biopsy-promotion">
+                    </a></div><a href="https://norgenbiotek.com/promotions/liquid-biopsy-promotion">
+                    <div class="views-field views-field-nothing-2">
+                        <span class="field-content"></span>
+                    </div>
+                    <div class="views-field views-field-nothing-3">
+                        <span class="field-content"></span>
+                    </div>
+                    
+                    </a><div class="views-field views-field-title"><a href="https://norgenbiotek.com/promotions/liquid-biopsy-promotion">
+                        <span class="field-content title-filter-2"></span></a><a href="https://norgenbiotek.com/product/cells-and-tissue-dna-isolation-kits?v=672">Blood DNA Isolation Kits (High Throughput Magnetic Bead System) 96 Well</a>
+                    </div>
+
+                    <div class="views-field views-field-nothing">
+                        <span class="field-content">SKU 62600 | 2 x 96 Well Plates</span>
+                    </div>
+                    <div class="views-field views-field-price__number-1">
+                        <span class="field-content view-price-filter"></span>
+                    </div>
+                    <div class="views-field views-field-price__number">
+                    <span class="field-content view-price-filter">CA$614.00</span>
+                    </div>
+
+                    <div class="views-field views-field-commerce-add-to-cart-link">
+                        <span class="field-content filterable-add-to-cart"><a href="/add-to-cart/187/670" hreflang="en">ADD TO CART</a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-product="cp" style="display: flex;">
+            <div class="views-view-responsive-grid__item">
+                <div class="views-view-responsive-grid__item-inner">
+                    <div class="views-field views-field-nothing-1">
+                        <span class="field-content">
+                            <div class="image-wish-list-wrapper">
+                            <img itemprop="image" src="/sites/default/files/images/59800.jpg" width="325" height="217" loading="lazy">            </div>
+                        </span>
+                            </div>
+                <div class="views-field views-field-nothing-4">
+                    <span class="field-content"><a href="https://norgenbiotek.com/promotions/liquid-biopsy-promotion"></a></span><a href="https://norgenbiotek.com/promotions/liquid-biopsy-promotion">
+                </a></div><a href="https://norgenbiotek.com/promotions/liquid-biopsy-promotion">
+                <div class="views-field views-field-nothing-2">
+                    <span class="field-content"></span>
+                </div>
+                <div class="views-field views-field-nothing-3">
+                    <span class="field-content"></span>
+                </div>
+                </a><div class="views-field views-field-title"><a href="https://norgenbiotek.com/promotions/liquid-biopsy-promotion">
+                    <span class="field-content title-filter-2"></span></a><a href="https://norgenbiotek.com/product/blood-dna-isolation-kits?v=568">Blood DNA Isolation Kits (Magnetic Bead System) 50 Preps</a>
+                </div>
+
+                <div class="views-field views-field-nothing">
+                    <span class="field-content">SKU 59800 | 50 Units</span>
+                </div>
+                <div class="views-field views-field-price__number-1">
+                    <span class="field-content view-price-filter"></span>
+                </div>
+                <div class="views-field views-field-price__number">
+                <span class="field-content view-price-filter">CA$184.00</span>
+                </div>
+                <div class="views-field views-field-commerce-add-to-cart-link">
+                    <span class="field-content filterable-add-to-cart"><a href="/add-to-cart/187/568" hreflang="en">ADD TO CART</a></span>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+</section>
+
+<div class="vd-wrapper" style="">
+            
+            <div class="field field--name-field-technical-guide field--type-text-with-summary field--label-hidden field__item"><div class="liquid-biopsy-infograph-div">
+              <div class="img-div">
+              <img src="/sites/default/files/images/webp/Liquid-Biopsy-Solutions-Early-Cancer-Detection-NIPT-cover.webp">
+              </div>
+              <div>
+                <p><strong>Free Download</strong></p>
+                <h2 style="font-size:30px;">Solutions for Early Cancer Detection and NIPT</h2>
+                <p>Valuable insights into liquid biopsy solutions for cancer detection and Non-Invasive Prenatal Testing (NIPT).</p>
+                <a class="btn btn-primary" href="https://norgenbiotek.com/content/liquid-biopsy-solutions-early-cancer-detection-and-nipt?_gl=1*z541ks*_gcl_au*Njc2OTg5MTgzLjE3NDMwOTk1MjEuNDM1MTg2MDAzLjE3NDMwOTk1MjEuMTc0MzA5OTUyMQ.." target="_blank">
+                  Download for Free
+                </a>
+              </div>
+            </div></div>
+      
+</div>
+
+
+
+
+
+<section class="engagement-cta-section">
+
+    <div class="container">
+    <div class="cta-content">
+        <h2 class="">How can we help you today?</h2>
+        <p class="cta-text">Consult with Our Team of Experts.</p>
+
+        <a class="btn btn-primary" href="https://norgenbiotek.com/contact">Contact Now</a>
+
+    </div>
+
+    </div>
+
+</section>
+
+<script>
+    // Liquid Boipsy promotion products
+    const products = {
+        "Plasma/Serum": [
+            { category: "DNA", sku: "50600", name: "Plasma/Serum Circulating DNA Purification Mini Kit (Slurry Format)", class: "category-dna", addToCartUrl: "/add-to-cart/209/82", productUrl: "https://norgenbiotek.com/product/plasmaserum-circulating-dna-purification-kits-slurry-format?v=82"},
+            { category: "DNA", sku: "51200", name: "Plasma/Serum Circulating DNA Purification Midi Kit (Slurry Format)", class: "category-dna", addToCartUrl: "/add-to-cart/209/454", productUrl: "https://norgenbiotek.com/product/plasmaserum-circulating-dna-purification-kits-slurry-format?v=454"},
+            { category: "DNA", sku: "51300", name: "Plasma/Serum Circulating DNA Purification Maxi Kit (Slurry Format)", class: "category-dna", addToCartUrl: "/add-to-cart/209/476", productUrl: "https://norgenbiotek.com/product/plasmaserum-circulating-dna-purification-kits-slurry-format?v=476"},
+            { category: "DNA", sku: "55500", name: "Plasma/Serum Cell-Free Circulating DNA Purification Micro Kit", class: "category-dna", addToCartUrl: "/add-to-cart/200/520", productUrl: "https://norgenbiotek.com/product/plasmaserum-cell-free-circulating-dna-purification-kits?v=520"},
+            { category: "DNA", sku: "55100", name: "Plasma/Serum Cell-Free Circulating DNA Purification Mini Kit", class: "category-dna", addToCartUrl: "/add-to-cart/200/512", productUrl: "https://norgenbiotek.com/product/plasmaserum-cell-free-circulating-dna-purification-kits?v=512"},
+            { category: "DNA", sku: "55600", name: "Plasma/Serum Cell-Free Circulating DNA Purification Midi Kit", class: "category-dna", addToCartUrl: "/add-to-cart/200/521", productUrl: "https://norgenbiotek.com/product/plasmaserum-cell-free-circulating-dna-purification-kits?v=521"},
+            { category: "DNA", sku: "55800", name: "Plasma/Serum Cell-Free Circulating DNA Purification Maxi Kit", class: "category-dna", addToCartUrl: "/add-to-cart/200/522", productUrl: "https://norgenbiotek.com/product/plasmaserum-cell-free-circulating-dna-purification-kits?v=522"},
+            { category: "DNA", sku: "55200", name: "Plasma/Serum RNA/DNA Purification Mini Kit", class: "category-dna", addToCartUrl: "/add-to-cart/306/345", productUrl: "https://norgenbiotek.com/product/plasmaserum-rnadna-purification-mini-kit?v=345"},
+            { category: "DNA", sku: "46300", name: "Blood DNA Isolation Mini Kit (50 Preps)", class: "category-dna", addToCartUrl: "/add-to-cart/187/428", productUrl: "https://norgenbiotek.com/product/blood-dna-isolation-kits?v=428"},
+            { category: "DNA", sku: "46380", name: "Blood DNA Isolation Mini Kit (100 Preps)", class: "category-dna", addToCartUrl: "/add-to-cart/187/677", productUrl: "https://norgenbiotek.com/product/blood-dna-isolation-kits?v=677"},
+            { category: "DNA", sku: "51400", name: "Blood DNA Isolation Midi Kit", class: "category-dna", addToCartUrl: "/add-to-cart/187/474", productUrl: "https://norgenbiotek.com/product/blood-dna-isolation-kits?v=474"},
+            { category: "DNA", sku: "31200", name: "Blood DNA Isolation Maxi Kit", class: "category-dna", addToCartUrl: "/add-to-cart/187/475", productUrl: "https://norgenbiotek.com/product/blood-dna-isolation-kits?v=475"},
+            { category: "DNA", sku: "46350", name: "Blood DNA Isolation Kit (High Throughput)", class: "category-dna", addToCartUrl: "/add-to-cart/187/494", productUrl: "https://norgenbiotek.com/product/blood-dna-isolation-kits?v=494"},
+            { category: "DNA", sku: "59800", name: "Blood DNA Isolation Kit (Magnetic Bead System)", class: "category-dna", addToCartUrl: "/add-to-cart/187/568", productUrl: "https://norgenbiotek.com/product/blood-dna-isolation-kits?v=568"},
+            { category: "DNA", sku: "62600", name: "Blood DNA Isolation Kit (High Throughput Magnetic Bead System)", class: "category-dna", addToCartUrl: "/add-to-cart/187/670", productUrl: "https://norgenbiotek.com/product/blood-dna-isolation-kits?v=670"},
+            { category: "DNA", sku: "36000", name: "Dried Blood Spot (DBS) DNA Isolation Kit", class: "category-dna", addToCartUrl: "/add-to-cart/189/353", productUrl: "https://norgenbiotek.com/product/dried-blood-spot-dbs-dna-isolation-kit?v=353"},
+            { category: "DNA", sku: "68000", name: "Plasma/Serum cfc-DNA Advanced Purification Kit", class: "category-dna", addToCartUrl: "/add-to-cart/1698/1170", productUrl: "https://norgenbiotek.com/product/plasmaserum-cfc-dna-advanced-purification-kit?v=1170"},
+
+            { category: "RNA", sku: "73100", name: "EXTRAClean Plasma/Serum Exosome Purification and RNA Isolation Mini Kit", class: "category-rna", addToCartUrl: "/add-to-cart/2474/1493", productUrl: "https://norgenbiotek.com/product/extraclean-plasmaserum-exosome-purification-and-rna-isolation-kits?v=1493"},
+            { category: "RNA", sku: "73110", name: "EXTRAClean Plasma/Serum Exosome Purification and RNA Isolation Midi Kit", class: "category-rna", addToCartUrl: "/add-to-cart/2474/1494", productUrl: "https://norgenbiotek.com/product/extraclean-plasmaserum-exosome-purification-and-rna-isolation-kits?v=1494"},
+            { category: "RNA", sku: "73120", name: "EXTRAClean Plasma/Serum Exosome Purification and RNA Isolation Maxi Kit", class: "category-rna", addToCartUrl: "/add-to-cart/2474/1495", productUrl: "https://norgenbiotek.com/product/extraclean-plasmaserum-exosome-purification-and-rna-isolation-kits?v=1495"},
+            { category: "RNA", sku: "73400", name: "EXTRAClean Plasma/Serum Exosome and Free-Circulating RNA Isolation Mini Kit", class: "category-rna", addToCartUrl: "/add-to-cart/2479/1508", productUrl: "https://norgenbiotek.com/product/extraclean-plasmaserum-exosome-and-free-circulating-rna-isolation-kit?v=1508"},
+            { category: "RNA", sku: "73410", name: "EXTRAClean Plasma/Serum Exosome and Free-Circulating RNA Isolation Midi Kit", class: "category-rna", addToCartUrl: "/add-to-cart/2479/1506", productUrl: "https://norgenbiotek.com/product/extraclean-plasmaserum-exosome-and-free-circulating-rna-isolation-kit?v=1506"},
+            { category: "RNA", sku: "73420", name: "EXTRAClean Plasma/Serum Exosome and Free-Circulating RNA Isolation Maxi Kit", class: "category-rna", addToCartUrl: "/add-to-cart/2479/1502", productUrl: "https://norgenbiotek.com/product/extraclean-plasmaserum-exosome-and-free-circulating-rna-isolation-kit?v=1502"},
+            { category: "RNA", sku: "73700", name: "ExtraClean Plasma/Serum RNA Purification Mini Kit", class: "category-rna", addToCartUrl: "/add-to-cart/2485/1515", productUrl: "https://norgenbiotek.com/product/extraclean-plasmaserum-rna-purification-kit?v=1515"},
+            { category: "RNA", sku: "73710", name: "EXTRAClean Plasma/Serum RNA Purification Midi Kit", class: "category-rna", addToCartUrl: "/add-to-cart/2485/1516", productUrl: "https://norgenbiotek.com/product/extraclean-plasmaserum-rna-purification-kit?v=1516"},
+            { category: "RNA", sku: "73720", name: "EXTRAClean Plasma/Serum RNA Purification Maxi Kit", class: "category-rna", addToCartUrl: "/add-to-cart/2485/1517", productUrl: "https://norgenbiotek.com/product/extraclean-plasmaserum-rna-purification-kit?v=1517"},
+            { category: "RNA", sku: "51000", name: "Plasma/Serum Circulating and Exosomal RNA Purification Mini Kit (Slurry)", class: "category-rna", addToCartUrl: "/add-to-cart/312/452", productUrl: "https://norgenbiotek.com/product/plasmaserum-circulating-and-exosomal-rna-purification-kits-slurry-format?v=452"},
+            { category: "RNA", sku: "42800", name: "Plasma/Serum Circulating and Exosomal RNA Purification Kit (Slurry Format)", class: "category-rna", addToCartUrl: "/add-to-cart/312/356", productUrl: "https://norgenbiotek.com/product/plasmaserum-circulating-and-exosomal-rna-purification-kits-slurry-format?v=356"},
+            { category: "RNA", sku: "29500", name: "Plasma/Serum Circulating and Exosomal RNA Purification 96-well Kit (Slurry Format)", class: "category-rna", addToCartUrl: "/add-to-cart/312/110", productUrl: "https://norgenbiotek.com/product/plasmaserum-circulating-and-exosomal-rna-purification-kits-slurry-format?v=110"},
+            { category: "RNA", sku: "50900", name: "Plasma/Serum Circulating and Exosomal RNA Purification (Maxi Slurry)", class: "category-rna", addToCartUrl: "/add-to-cart/312/477", productUrl: "https://norgenbiotek.com/product/plasmaserum-circulating-and-exosomal-rna-purification-kits-slurry-format?v=477"},
+            { category: "RNA", sku: "55000", name: "Plasma/Serum RNA Purification Mini Kit", class: "category-rna", addToCartUrl: "/add-to-cart/286/348", productUrl: "https://norgenbiotek.com/product/plasmaserum-rna-purification-kits?v=348"},
+            { category: "RNA", sku: "56100", name: "Plasma/Serum RNA Purification Midi Kit", class: "category-rna", addToCartUrl: "/add-to-cart/286/526", productUrl: "https://norgenbiotek.com/product/plasmaserum-rna-purification-kits?v=526"},
+            { category: "RNA", sku: "56200", name: "Plasma/Serum RNA Purification Maxi Kit", class: "category-rna", addToCartUrl: "/add-to-cart/286/527", productUrl: "https://norgenbiotek.com/product/plasmaserum-rna-purification-kits?v=527"},
+            { category: "RNA", sku: "59500", name: "Plasma/Serum Exosome and Free-Circulating RNA Isolation Mini Kit", class: "category-rna", addToCartUrl: "/add-to-cart/1377/561", productUrl: "https://norgenbiotek.com/product/plasmaserum-exosome-and-free-circulating-rna-isolation-kits?v=561"},
+            { category: "RNA", sku: "59600", name: "Plasma/Serum Exosome and Free-Circulating RNA Isolation Midi Kit", class: "category-rna", addToCartUrl: "/add-to-cart/1377/562", productUrl: "https://norgenbiotek.com/product/plasmaserum-exosome-and-free-circulating-rna-isolation-kits?v=562"},
+            { category: "RNA", sku: "59700", name: "Plasma/Serum Exosome and Free-Circulating RNA Isolation Maxi Kit", class: "category-rna", addToCartUrl: "/add-to-cart/1377/563", productUrl: "https://norgenbiotek.com/product/plasmaserum-exosome-and-free-circulating-rna-isolation-kits?v=563"},
+
+            { category: "RNA", sku: "58300", name: "Plasma/Serum Exosome Purification and RNA Isolation Mini Kit", class: "category-rna", addToCartUrl: "/add-to-cart/1366/550", productUrl: "https://norgenbiotek.com/product/plasmaserum-exosome-purification-and-rna-isolation-kits?v=550"},
+
+            { category: "RNA", sku: "58500", name: "Plasma/Serum Exosome Purification and RNA Isolation Midi Kit", class: "category-rna", addToCartUrl: "/add-to-cart/1366/551", productUrl: "https://norgenbiotek.com/product/plasmaserum-exosome-purification-and-rna-isolation-kits?v=551"},
+
+            { category: "RNA", sku: "58600", name: "Plasma/Serum Exosome Purification and RNA Isolation Maxi Kit", class: "category-rna", addToCartUrl: "/add-to-cart/1366/552", productUrl: "https://norgenbiotek.com/product/plasmaserum-exosome-purification-and-rna-isolation-kits?v=552"},
+            
+            { category: "RNA", sku: "68200", name: "Plasma/Serum cfc-RNA Advanced Purification Kit", class: "category-rna", addToCartUrl: "/add-to-cart/1697/1171", productUrl: "https://norgenbiotek.com/product/plasmaserum-cfc-rna-advanced-purification-kit?v=1171"},
+            { category: "RNA", sku: "43400", name: "Preserved Blood RNA Purification Kit I (for use with Tempus Blood RNA Tubes)", class: "category-rna", addToCartUrl: "/add-to-cart/285/390", productUrl: "https://norgenbiotek.com/product/preserved-blood-rna-purification-kit-i-use-tempus-blood-rna-tubes?v=390"},
+            { category: "RNA", sku: "43500", name: "Preserved Blood RNA Purification Kit II (for use with Paxgene Blood RNA Tubes)", class: "category-rna", addToCartUrl: "/add-to-cart/304/391", productUrl: "https://norgenbiotek.com/product/preserved-blood-rna-purification-kit-ii-use-paxgene-blood-rna-tubes?v=391"},
+            { category: "RNA", sku: "21200", name: "Leukocyte RNA Purification Kit", class: "category-rna", addToCartUrl: "/add-to-cart/275/28", productUrl: "https://norgenbiotek.com/product/leukocyte-rna-purification-kits?v=28"},
+            { category: "RNA", sku: "21250", name: "Leukocyte RNA Purification Plus Kit", class: "category-rna", addToCartUrl: "/add-to-cart/275/1110", productUrl: "https://norgenbiotek.com/product/leukocyte-rna-purification-kits?v=1110"},
+
+            { category: "Collection & Preservation", sku: "63950", name: "cf-DNA/cf-RNA Preservative Tubes", class: "category-collection", addToCartUrl: "/add-to-cart/1618/1046", productUrl: "https://norgenbiotek.com/product/cf-dnacf-rna-preservative-tubes?v=1046"},
+            
+            { category: "Purification", sku: "68300", name: "Plasma/Serum cfc-DNA/cfc-RNA Advanced Fractionation Kit", class: "category-purification", addToCartUrl: "/add-to-cart/1700/1173", productUrl: "https://norgenbiotek.com/product/plasmaserum-cfc-dnacfc-rna-advanced-fractionation-kit?v=1173"},
+            { category: "Purification", sku: "57400", name: "Plasma/Serum Exosome Purification Mini Kit", class: "category-purification", addToCartUrl: "/add-to-cart/1347/537", productUrl: "https://norgenbiotek.com/product/plasmaserum-exosome-purification-kit?v=537"},
+            { category: "Purification", sku: "57500", name: "Plasma/Serum Exosome Purification Midi Kit", class: "category-purification", addToCartUrl: "/add-to-cart/1347/538", productUrl: "https://norgenbiotek.com/product/plasmaserum-exosome-purification-kit?v=538"},
+            { category: "Purification", sku: "57600", name: "Plasma/Serum Exosome Purification Maxi Kit", class: "category-purification", addToCartUrl: "/add-to-cart/1347/539", productUrl: "https://norgenbiotek.com/product/plasmaserum-exosome-purification-kit?v=539"},
+            { category: "Purification", sku: "56300", name: "Plasma/Serum Cell-Free Circulating and Viral Nucleic Acid Purification Mini Kit", class: "category-purification", addToCartUrl: "/add-to-cart/1286/528", productUrl: "https://norgenbiotek.com/product/plasmaserum-cell-free-circulating-and-viral-nucleic-acid-purification-kits?v=528"},
+            { category: "Purification", sku: "56400", name: "Plasma/Serum Cell-Free Circulating and Viral Nucleic Acid Purification Midi Kit", class: "category-purification", addToCartUrl: "/add-to-cart/1286/529", productUrl: "https://norgenbiotek.com/product/plasmaserum-cell-free-circulating-and-viral-nucleic-acid-purification-kits?v=529"},
+            { category: "Purification", sku: "56500", name: "Plasma/Serum Cell-Free Circulating and Viral Nucleic Acid Purification Maxi Kit", class: "category-purification", addToCartUrl: "/add-to-cart/1286/530", productUrl: "https://norgenbiotek.com/product/plasmaserum-cell-free-circulating-and-viral-nucleic-acid-purification-kits?v=530"},
+            { category: "Purification", sku: "68100", name: "Plasma/Serum Total cfc-Nucleic Acid Advanced Purification Kit", class: "category-purification", addToCartUrl: "/add-to-cart/1699/1174", productUrl: "https://norgenbiotek.com/product/plasmaserum-total-cfc-nucleic-acid-advanced-purification-kit?v=1174"},
+        ],
+
+        "Urine": [
+            { category: "DNA", sku: "18100", name: "Urine DNA Isolation Kit (Spin Column)", class: "category-dna", addToCartUrl: "/add-to-cart/172/16", productUrl: "https://norgenbiotek.com/product/urine-dna-isolation-kits?v=16" },
+            { category: "DNA", sku: "48800", name: "Urine DNA Isolation Kit (Slurry Format)", class: "category-dna", addToCartUrl: "/add-to-cart/172/447", productUrl: "https://norgenbiotek.com/product/urine-dna-isolation-kits?v=447" },
+            { category: "DNA", sku: "50100", name: "Urine DNA Isolation Kit (Maxi Slurry)", class: "category-dna", addToCartUrl: "/add-to-cart/172/441", productUrl: "https://norgenbiotek.com/product/urine-dna-isolation-kits?v=441" },
+            { category: "DNA", sku: "47050", name: "Urine DNA Isolation Kit for Exfoliated Cells or Bacteria", class: "category-dna", addToCartUrl: "/add-to-cart/213/4", productUrl: "https://norgenbiotek.com/product/urine-dna-isolation-kit-exfoliated-cells-or-bacteria?v=4" },
+            { category: "DNA", sku: "56600", name: "Urine Cell-Free Circulating DNA Purification Mini Kit", class: "category-dna", addToCartUrl: "/add-to-cart/1332/534", productUrl: "https://norgenbiotek.com/product/urine-cell-free-circulating-dna-purification-kits?v=534" },
+            { category: "DNA", sku: "56700", name: "Urine Cell-Free Circulating DNA Purification Midi Kit", class: "category-dna", addToCartUrl: "/add-to-cart/1332/535", productUrl: "https://norgenbiotek.com/product/urine-cell-free-circulating-dna-purification-kits?v=535" },
+            { category: "DNA", sku: "56800", name: "Urine Cell-Free Circulating DNA Purification Maxi Kit", class: "category-dna", addToCartUrl: "/add-to-cart/1332/536", productUrl: "https://norgenbiotek.com/product/urine-cell-free-circulating-dna-purification-kits?v=536" },
+            { category: "DNA", sku: "67900", name: "Synovial Fluid Bacterial Genomic DNA Isolation Kit", class: "category-dna", addToCartUrl: "/add-to-cart/1691/1168", productUrl: "https://norgenbiotek.com/product/synovial-fluid-bacterial-genomic-dna-purification-kit?v=1168" },
+
+            { category: "RNA", sku: "22550", name: "Urine Exfoliated Cell and Bacteria RNA Purification Kit", class: "category-rna", addToCartUrl: "/add-to-cart/266/30", productUrl: "https://norgenbiotek.com/product/urine-exfoliated-cell-and-bacteria-rna-purification-kit?v=30" },
+            { category: "RNA", sku: "29000", name: "Urine microRNA Purification Kit", class: "category-rna", addToCartUrl: "/add-to-cart/288/83", productUrl: "https://norgenbiotek.com/product/urine-microrna-purification-kit?v=83" },
+
+            { category: "RNA", sku: "29600", name: "Urine Total RNA Purification Maxi Kit (Slurry Format)", class: "category-rna", addToCartUrl: "/add-to-cart/292/113", productUrl: "https://norgenbiotek.com/product/urine-total-rna-purification-maxi-kit-slurry-format?v=113" },
+            { category: "RNA", sku: "29650", name: "Urine Total RNA Purification Maxi 96-Well Kit (Slurry Format)", class: "category-rna", addToCartUrl: "/add-to-cart/292/111", productUrl: "https://norgenbiotek.com/product/urine-total-rna-purification-maxi-kit-slurry-format?v=111" },
+            { category: "RNA", sku: "56900", name: "Urine Cell-Free Circulating RNA Purification Mini Kit", class: "category-rna", addToCartUrl: "/add-to-cart/1329/531", productUrl: "https://norgenbiotek.com/product/urine-cell-free-circulating-rna-purification-kits?v=531" },
+            { category: "RNA", sku: "57000", name: "Urine Cell-Free Circulating RNA Purification Midi Kit", class: "category-rna", addToCartUrl: "/add-to-cart/1329/532", productUrl: "https://norgenbiotek.com/product/urine-cell-free-circulating-rna-purification-kits?v=532" },
+            { category: "RNA", sku: "57100", name: "Urine Cell-Free Circulating RNA Purification Maxi Kit", class: "category-rna", addToCartUrl: "/add-to-cart/1329/533", productUrl: "https://norgenbiotek.com/product/urine-cell-free-circulating-rna-purification-kits?v=533" },
+            { category: "RNA", sku: "47200", name: "Urine Exosome RNA Isolation Kit", class: "category-rna", addToCartUrl: "/add-to-cart/307/436", productUrl: "https://norgenbiotek.com/product/urine-exosome-rna-isolation-kit?v=436" },
+            { category: "RNA", sku: "58400", name: "Urine Exosome Purification and RNA Isolation Mini Kit", class: "category-rna", addToCartUrl: "/add-to-cart/1357/547", productUrl: "https://norgenbiotek.com/product/urine-exosome-purification-and-rna-isolation-kits?v=547" },
+            { category: "RNA", sku: "58700", name: "Urine Exosome Purification and RNA Isolation Midi Kit", class: "category-rna", addToCartUrl: "/add-to-cart/1357/548", productUrl: "https://norgenbiotek.com/product/urine-exosome-purification-and-rna-isolation-kits?v=548" },
+            { category: "RNA", sku: "58800", name: "Urine Exosome Purification and RNA Isolation Maxi Kit", class: "category-rna", addToCartUrl: "/add-to-cart/1357/549", productUrl: "https://norgenbiotek.com/product/urine-exosome-purification-and-rna-isolation-kits?v=549" },
+            
+            { category: "RNA", sku: "73210", name: "EXTRAClean Urine Exosome Purification and RNA Isolation Mini Kit", class: "category-rna", addToCartUrl: "/add-to-cart/2478/1500", productUrl: "https://norgenbiotek.com/product/extraclean-urine-exosome-purification-and-rna-isolation-kits?v=1500" },
+            { category: "RNA", sku: "73200", name: "EXTRAClean Urine Exosome Purification and RNA Isolation Midi Kit", class: "category-rna", addToCartUrl: "/add-to-cart/2478/1499", productUrl: "https://norgenbiotek.com/product/extraclean-urine-exosome-purification-and-rna-isolation-kits?v=1499" },
+            { category: "RNA", sku: "73220", name: "EXTRAClean Urine Exosome Purification and RNA Isolation Maxi Kit", class: "category-rna", addToCartUrl: "/add-to-cart/2478/1501", productUrl: "https://norgenbiotek.com/product/extraclean-urine-exosome-purification-and-rna-isolation-kits?v=1501" },
+            { category: "RNA", sku: "73500", name: "EXTRAClean Urine Exosome and Free-Circulating RNA Isolation Mini Kit", class: "category-rna", addToCartUrl: "/add-to-cart/2476/1497", productUrl: "https://norgenbiotek.com/product/extraclean-urine-exosome-and-free-circulating-rna-isolation-kit?v=1497" },
+            { category: "RNA", sku: "73510", name: "EXTRAClean Urine Exosome and Free-Circulating RNA Isolation Midi Kit", class: "category-rna", addToCartUrl: "/add-to-cart/2476/1496", productUrl: "https://norgenbiotek.com/product/extraclean-urine-exosome-and-free-circulating-rna-isolation-kit?v=1496" },
+            { category: "RNA", sku: "73520", name: "EXTRAClean Urine Exosome and Free-Circulating RNA Isolation Maxi Kit", class: "category-rna", addToCartUrl: "/add-to-cart/2476/1492", productUrl: "https://norgenbiotek.com/product/extraclean-urine-exosome-and-free-circulating-rna-isolation-kit?v=1492" },
+            { category: "RNA", sku: "73900", name: "EXTRAClean Urine Cell-Free-Circulating RNA Purification Mini Kit", class: "category-rna", addToCartUrl: "/add-to-cart/2488/1519", productUrl: "https://norgenbiotek.com/product/extraclean-urine-cell-free-circulating-rna-purification-kits?v=1519" },
+            { category: "RNA", sku: "73910", name: "EXTRAClean Urine Cell-Free-Circulating RNA Purification Midi Kit", class: "category-rna", addToCartUrl: "/add-to-cart/2488/1520", productUrl: "https://norgenbiotek.com/product/extraclean-urine-cell-free-circulating-rna-purification-kits?v=1520" },
+            { category: "RNA", sku: "73920", name: "EXTRAClean Urine Cell-Free-Circulating RNA Purification Maxi Kit", class: "category-rna", addToCartUrl: "/add-to-cart/2488/1521", productUrl: "https://norgenbiotek.com/product/extraclean-urine-cell-free-circulating-rna-purification-kits?v=1521" },
+
+            { category: "RNA", sku: "59900", name: "Urine Cell-Free Circulating and Viral Nucleic Acid Purification Mini Kit", class: "category-rna", addToCartUrl: "/add-to-cart/1382/573", productUrl: "https://norgenbiotek.com/product/urine-cell-free-circulating-and-viral-nucleic-acid-purification-kits?v=573" },
+            { category: "RNA", sku: "60000", name: "Urine Cell-Free Circulating and Viral Nucleic Acid Purification Midi Kit", class: "category-rna", addToCartUrl: "/add-to-cart/1382/574", productUrl: "https://norgenbiotek.com/product/urine-cell-free-circulating-and-viral-nucleic-acid-purification-kits?v=574" },
+            { category: "RNA", sku: "60100", name: "Urine Cell-Free Circulating and Viral Nucleic Acid Purification Maxi Kit", class: "category-rna", addToCartUrl: "/add-to-cart/1382/575", productUrl: "https://norgenbiotek.com/product/urine-cell-free-circulating-and-viral-nucleic-acid-purification-kits?v=575" },
+            { category: "RNA", sku: "59200", name: "Urine Exosome and Free-Circulating RNA Isolation Mini Kit", class: "category-rna", addToCartUrl: "/add-to-cart/1374/558", productUrl: "https://norgenbiotek.com/product/urine-exosome-and-free-circulating-rna-isolation-kits?v=558" },
+            { category: "RNA", sku: "59300", name: "Urine Exosome and Free-Circulating RNA Isolation Midi Kit", class: "category-rna", addToCartUrl: "/add-to-cart/1374/559", productUrl: "https://norgenbiotek.com/product/urine-exosome-and-free-circulating-rna-isolation-kits?v=559" },
+
+            { category: "RNA", sku: "59400", name: "Urine Exosome and Free-Circulating RNA Isolation Maxi Kit", class: "category-rna", addToCartUrl: "/add-to-cart/1374/560", productUrl: "https://norgenbiotek.com/product/urine-exosome-and-free-circulating-rna-isolation-kits?v=560" },
+            { category: "RNA", sku: "72900", name: "Pathogen/Viral Nucleic Acid Isolation Kit (Magnetic Bead System)", class: "category-rna", addToCartUrl: "/add-to-cart/2470/1480", productUrl: "https://norgenbiotek.com/product/pathogenviral-nucleic-acid-isolation-kit-magnetic-bead-system?v=1480" },
+
+            { category: "RNA", sku: "73500", name: "EXTRAClean Urine Exosome and Free-Circulating RNA Isolation Mini Kit", class: "category-rna", addToCartUrl: "/add-to-cart/2476/1497", productUrl: "https://norgenbiotek.com/product/extraclean-urine-exosome-and-free-circulating-rna-isolation-kit?v=1497" },
+            { category: "RNA", sku: "73510", name: "EXTRAClean Urine Exosome and Free-Circulating RNA Isolation Midi Kit", class: "category-rna", addToCartUrl: "/add-to-cart/2476/1496", productUrl: "https://norgenbiotek.com/product/extraclean-urine-exosome-and-free-circulating-rna-isolation-kit?v=1496" },
+            { category: "RNA", sku: "73520", name: "EXTRAClean Urine Exosome and Free-Circulating RNA Isolation Maxi Kit", class: "category-rna", addToCartUrl: "/add-to-cart/2476/1492", productUrl: "https://norgenbiotek.com/product/extraclean-urine-exosome-and-free-circulating-rna-isolation-kit?v=1492" },
+            { category: "RNA", sku: "73900", name: "EXTRAClean Urine Cell-Free Circulating RNA Purification Mini Kit", class: "category-rna", addToCartUrl: "/add-to-cart/2488/1519", productUrl: "https://norgenbiotek.com/product/extraclean-urine-cell-free-circulating-rna-purification-kits?v=1519" },
+            { category: "RNA", sku: "73910", name: "EXTRAClean Urine Cell-Free Circulating RNA Purification Midi Kit", class: "category-rna", addToCartUrl: "/add-to-cart/2488/1520", productUrl: "https://norgenbiotek.com/product/extraclean-urine-cell-free-circulating-rna-purification-kits?v=1520" },
+            { category: "RNA", sku: "73920", name: "EXTRAClean Urine Cell-Free Circulating RNA Purification Maxi Kit", class: "category-rna", addToCartUrl: "/add-to-cart/1488/1521", productUrl: "https://norgenbiotek.com/product/extraclean-urine-cell-free-circulating-rna-purification-kits?v=1521" },
+
+            { category: "Collection & Preservation", sku: "18118", name: "Urine Collection and Preservation Tube 5cc", class: "category-collection", addToCartUrl: "/add-to-cart/324/259", productUrl: "https://norgenbiotek.com/product/urine-collection-and-preservation-devices?v=259" },
+            { category: "Collection & Preservation", sku: "18122", name: "Urine Collection and Preservation Tube 15cc", class: "category-collection", addToCartUrl: "/add-to-cart/324/261", productUrl: "https://norgenbiotek.com/product/urine-collection-and-preservation-devices?v=261" },
+            { category: "Collection & Preservation", sku: "18113", name: "Urine Collection and Preservation Tube 50cc", class: "category-collection", addToCartUrl: "/add-to-cart/324/263", productUrl: "https://norgenbiotek.com/product/urine-collection-and-preservation-devices?v=263" },
+            { category: "Collection & Preservation", sku: "18129", name: "Urine Collection and Preservation Cup 120 cc", class: "category-collection", addToCartUrl: "/add-to-cart/324/1090", productUrl: "https://norgenbiotek.com/product/urine-collection-and-preservation-devices?v=1090" },
+            { category: "Collection & Preservation", sku: "18126", name: "Urine Preservation Solution Single Dose Format", class: "category-collection", addToCartUrl: "/add-to-cart/324/265", productUrl: "https://norgenbiotek.com/product/urine-collection-and-preservation-devices?v=265" },
+
+            { category: "Purification", sku: "57700", name: "Urine Exosome Purification Mini Kit", class: "category-purification", addToCartUrl: "/add-to-cart/1348/540", productUrl: "https://norgenbiotek.com/product/urine-exosome-purification-kit?v=540" },
+            { category: "Purification", sku: "57800", name: "Urine Exosome Purification Midi Kit", class: "category-purification", addToCartUrl: "/add-to-cart/1348/541", productUrl: "https://norgenbiotek.com/product/urine-exosome-purification-kit?v=541" },
+            { category: "Purification", sku: "57900", name: "Urine Exosome Purification Maxi Kit", class: "category-purification", addToCartUrl: "/add-to-cart/1348/542", productUrl: "https://norgenbiotek.com/product/urine-exosome-purification-kit?v=542" },
+
+            { category: "Protein", sku: "17400", name: "ProteoSpin™ Urine Protein Concentration Micro Kit", class: "category-protein", addToCartUrl: "/add-to-cart/238/50", productUrl: "https://norgenbiotek.com/product/urine-protein-concentration-kits?v=50" },
+            { category: "Protein", sku: "52300", name: "ProteoSpin™ Urine Protein Concentration Midi Kit", class: "category-protein", addToCartUrl: "/add-to-cart/238/354", productUrl: "https://norgenbiotek.com/product/urine-protein-concentration-kits?v=354" },
+            { category: "Protein", sku: "21600", name: "ProteoSpin™ Urine Protein Concentration Maxi Kit", class: "category-protein", addToCartUrl: "/add-to-cart/238/51", productUrl: "https://norgenbiotek.com/product/urine-protein-concentration-kits?v=51" },
+
+        ],
+
+        "Saliva": [
+            { category: "DNA", sku: "RU49000", name: "Saliva DNA Collection and Preservation Devices (50)", class: "category-dna", addToCartUrl: "/add-to-cart/323/455", productUrl: "https://norgenbiotek.com/product/saliva-dna-collection-and-preservation-devices-50?v=455"},
+            { category: "DNA", sku: "RU35720", name: "Saliva DNA Isolation Reagent Kit (up to 4 mL)", class: "category-dna", addToCartUrl: "/add-to-cart/1407/601", productUrl: "https://norgenbiotek.com/product/saliva-dna-isolation-reagent-kit?v=601"},
+            { category: "DNA", sku: "46200", name: "Sputum DNA Isolation Kit", class: "category-dna", addToCartUrl: "/add-to-cart/196/421", productUrl: "https://norgenbiotek.com/product/sputum-dna-isolation-kit?v=421"},
+            { category: "DNA", sku: "RU45400", name: "Saliva DNA Isolation Kit", class: "category-dna", addToCartUrl: "/add-to-cart/197/422", productUrl: "https://norgenbiotek.com/product/saliva-dna-isolation-kit?v=422"},
+            { category: "DNA", sku: "RU55400", name: "Saliva DNA Isolation Kit (Magnetic Bead System)", class: "category-dna", addToCartUrl: "/add-to-cart/1345/571", productUrl: "https://norgenbiotek.com/product/saliva-dna-isolation-kit-magnetic-bead-system?v=571"},
+            { category: "DNA", sku: "RU62900", name: "Saliva DNA Isolation Kit (High Throughput)", class: "category-dna", addToCartUrl: "/add-to-cart/1345/671", productUrl: "https://norgenbiotek.com/product/saliva-dna-isolation-kit-magnetic-bead-system?v=671"},
+            { category: "DNA", sku: "RU35200", name: "Saliva DNA Isolation 96-Well Kit", class: "category-dna", addToCartUrl: "/add-to-cart/198/196", productUrl: "https://norgenbiotek.com/product/saliva-dna-isolation-96-well-kit?v=196"},
+            { category: "DNA", sku: "45690-B", name: "Swab Collection and DNA Preservation System", class: "category-dna", addToCartUrl: "/add-to-cart/1579/1215", productUrl: "https://norgenbiotek.com/product/swab-collection-and-dna-preservation-system?v=1215"},
+            { category: "RNA", sku: "69100", name: "Saliva/Swab RNA Purification Kits (Spin Column)", class: "category-rna", addToCartUrl: "/add-to-cart/1846/1490", productUrl: "https://norgenbiotek.com/product/salivaswab-rna-purification-kits?v=1490"},
+            { category: "RNA", sku: "69300", name: "Saliva/Swab RNA Purification Kits (High Throughput)", class: "category-rna", addToCartUrl: "/add-to-cart/1846/1195", productUrl: "https://norgenbiotek.com/product/salivaswab-rna-purification-kits?v=1195"},
+            { category: "RNA", sku: "65300", name: "Saliva Exosome Purification Kit", class: "category-rna", addToCartUrl: "/add-to-cart/1628/1089", productUrl: "https://norgenbiotek.com/product/saliva-exosome-purification-kit?v=1089"},
+            { category: "Collection & Preservation", sku: "65400", name: "Saliva Exosome Collection and Preservation Kit", class: "category-collection", addToCartUrl: "/add-to-cart/1608/1085", productUrl: "https://norgenbiotek.com/product/saliva-exosome-collection-and-preservation-kit?v=1085"},
+            { category: "Collection & Preservation", sku: "69200", name: "Total Nucleic Acid Preservation Tubes", class: "category-collection", addToCartUrl: "/add-to-cart/1841/1191", productUrl: "https://norgenbiotek.com/product/total-nucleic-acid-preservation-tubes?v=1191"},
+            { category: "Collection & Preservation", sku: "RU53800", name: "Saliva RNA Collection and Preservation Devices", class: "category-collection", addToCartUrl: "/add-to-cart/1393/588", productUrl: "https://norgenbiotek.com/product/saliva-rna-collection-and-preservation-devices?v=588"},
+        ]
+    };
+
+    products["All"] = [
+    ...products["Plasma/Serum"],
+    ...products["Urine"],
+    ...products["Saliva"]
+    ];
+        // Function to populate table with selected category
+    let selectedElement = null; // Store the currently selected SVG part
+
+    function updateTable(category, clickedElement) {
+        const tableBody = document.getElementById("product-table");
+        const categoryTitle = document.getElementById("category-title");
+        const tableContainer = document.querySelector(".table-container");
+
+        if (category === "All"){
+            categoryTitle.textContent = "";    
+            tableBody.innerHTML = "";
+        }
+        else{
+            categoryTitle.textContent = category;
+        tableBody.innerHTML = "";
+        }
+        products[category].forEach(product => {
+            const row = document.createElement("tr");
+                row.innerHTML = `
+                <td class="${product.class}">${product.category}</td>
+                <td>${product.sku}</td>
+                <td>
+                    <a href="${product.productUrl}" target="_blank">
+                    ${product.name}
+                    </a>
+                </td>
+                <td>
+                    <div class="views-field views-field-commerce-add-to-cart-link">
+                    <span class="field-content filterable-add-to-cart">
+                        <a href="${product.addToCartUrl}" hreflang="en">ADD TO CART</a>
+                    </span>
+                    </div>
+                </td>
+                `;
+            tableBody.appendChild(row);
+        });
+
+        if (selectedElement) {
+            selectedElement.classList.remove("selected-svg");
+        }
+        if (clickedElement) {
+            clickedElement.classList.add("selected-svg");
+            selectedElement = clickedElement;
+        }
+    }
+
+
+
+    // Ensure Plasma/Serum is selected by default
+    document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(() => {
+            const defaultSelection = document.querySelector(".plasma-serum-selected"); // Select Plasma/Serum SVG path
+            if (defaultSelection) {
+                updateTable("Plasma/Serum", defaultSelection);
+            }
+        }, 100); // Small delay to ensure the DOM is ready
+    });
+
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const centerCircle = document.getElementById("center-circle");
+        const centerText = document.getElementById("center-text");
+        let isTextEnlarged = false; // New flag
+
+        const svgParts = [
+            document.getElementById("urine-svg"),
+            document.getElementById("saliva-svg"),
+            document.getElementById("plasma-serum-svg")
+        ];
+
+        centerCircle.addEventListener("click", function () {
+            if (selectedElement) {
+                selectedElement.classList.remove("selected-svg");
+            }
+
+            centerCircle.classList.add("selected-svg");
+            selectedElement = centerCircle;
+
+            centerCircle.animate([
+                { transform: 'scale(1)' },
+                { transform: 'scale(1.1)' }
+            ], {
+                duration: 400,
+                easing: 'ease-out'
+            });
+
+            // Animate text only if not already enlarged
+            if (!isTextEnlarged) {
+                    centerText.animate([
+                    { fontSize: '30px' },
+                    { fontSize: '33px' }
+                    ], {
+                    duration: 400,
+                    easing: 'ease-out',
+                    fill: 'forwards' // makes it stay enlarged
+                });
+                isTextEnlarged = true;
+            }
+
+            updateTable("All", centerCircle);
+        });
+
+        svgParts.forEach(part => {
+            part.addEventListener("click", function () {
+                if (selectedElement) {
+                    selectedElement.classList.remove("selected-svg");
+                }
+
+                this.classList.add("selected-svg");
+                selectedElement = this;
+
+                // Only reset text scale if it was enlarged
+                if (isTextEnlarged) {
+                    centerText.animate([
+                    { fontSize: '33px' },
+                    { fontSize: '30px' }
+                    ], {
+                    duration: 400,
+                    easing: 'ease-out',
+                    fill: 'forwards' // makes it stay enlarged
+                });      
+                    isTextEnlarged = false;
+                }
+
+                updateTable(
+                    this.id === "urine-svg" ? "Urine" :
+                    this.id === "saliva-svg" ? "Saliva" :
+                    "Plasma/Serum",
+                    this
+                );
+            });
+        });
+    });
+
+
+    function selectDonutSegment(category) {
+        const idMap = {
+            "Plasma/Serum": "plasma-serum-svg",
+            "Urine": "urine-svg",
+            "Saliva": "saliva-svg"
+        };
+
+        const svgElement = document.getElementById(idMap[category]);
+
+        // Reapply the animation by first removing the class if it's already selected
+        if (selectedElement && selectedElement === svgElement) {
+            svgElement.classList.remove("selected-svg");
+            void svgElement.offsetWidth; // Force reflow to restart animation
+        }
+
+        updateTable(category, svgElement);
+    }
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const promoSection = document.querySelector('.promo-section');
+
+        const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+            promoSection.classList.add('visible');
+            observer.unobserve(entry.target); // Only trigger once
+            }
+        });
+        }, {
+        threshold: 0.1 // Trigger when 20% of the section is visible
+        });
+
+        observer.observe(promoSection);
+    });
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  const sectionTitle = document.querySelector(".keypoint-section");
+  const contentContainers = document.querySelectorAll(".keypoint-container");
+
+  // Animate title when it enters the viewport
+  const titleObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  // Animate each keypoint box inside its container when it appears
+  const boxObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const box = entry.target.querySelector(".keypoint-box");
+        if (box) {
+          box.classList.add("visible");
+        }
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  // Start observing the title and all container sections
+  if (sectionTitle) titleObserver.observe(sectionTitle);
+  contentContainers.forEach(container => boxObserver.observe(container));
+});
+
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+    const title = document.querySelector(".products-title");
+    const svg = document.querySelector(".svg-container");
+    const label = document.querySelector(".table-label");
+    const table = document.querySelector(".table-container");
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+
+            // 💡 Extra: Add stagger animation for table rows once the container is visible
+            if (entry.target === table) {
+            const rows = table.querySelectorAll("tbody tr");
+            rows.forEach((row, i) => {
+                row.style.transitionDelay = `${i * 100}ms`;
+            });
+            }
+        }
+        });
+    }, { threshold: 0.2 });
+
+    [title, svg, label, table].forEach(el => {
+        if (el) observer.observe(el);
+    });
+    });
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+    const improvedSection = document.querySelector(".improved-products");
+    const improvedCards = document.querySelectorAll(".improved-products .card");
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+            // Add .visible to the section (triggers title animation)
+            if (entry.target.classList.contains("improved-products")) {
+            entry.target.classList.add("visible");
+            }
+
+            // Add .visible to each card with stagger
+            if (entry.target.classList.contains("card")) {
+            setTimeout(() => {
+                entry.target.classList.add("visible");
+            }, index * 150);
+            }
+
+            observer.unobserve(entry.target); // only run once
+        }
+        });
+    }, {
+        threshold: 0.1
+    });
+
+    if (improvedSection) observer.observe(improvedSection);
+    improvedCards.forEach(card => observer.observe(card));
+    });
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const infograph = document.querySelector(".liquid-biopsy-infograph-div");
+
+    if (infograph) {
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            obs.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.1
+      });
+
+      observer.observe(infograph);
+    }
+  });
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  const cards = document.querySelectorAll(".publication-card");
+  const sectionTitle = document.querySelector(".publication-section-title");
+
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry, index) => {
+      if (entry.isIntersecting) {
+        if (entry.target.classList.contains("publication-card")) {
+          setTimeout(() => {
+            entry.target.classList.add("visible");
+          }, index * 150);
+        } else if (entry.target.classList.contains("publication-section-title")) {
+          entry.target.classList.add("visible");
+        }
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.1
+  });
+
+  cards.forEach(card => observer.observe(card));
+  if (sectionTitle) observer.observe(sectionTitle);
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  const publicationsSection = document.querySelector(".publications-section");
+
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        publicationsSection.classList.add("visible");
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+
+  if (publicationsSection) {
+    observer.observe(publicationsSection);
+  }
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  const improvedSection = document.querySelector(".improved-products");
+  const improvedCards = document.querySelectorAll(".improved-products .card");
+
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry, index) => {
+      if (entry.isIntersecting) {
+        if (entry.target.classList.contains("card")) {
+          setTimeout(() => {
+            entry.target.classList.add("visible");
+          }, index * 150);
+        } else if (entry.target.classList.contains("improved-products")) {
+          entry.target.classList.add("visible");
+        }
+
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.1
+  });
+
+  if (improvedSection) observer.observe(improvedSection);
+  improvedCards.forEach(card => observer.observe(card));
+});
+
+
+</script>
+
+</body>
+</html>

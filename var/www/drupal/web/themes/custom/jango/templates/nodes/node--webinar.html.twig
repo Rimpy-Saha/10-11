@@ -1,0 +1,768 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a node.
+ *
+ * Available variables:
+ * - node: The node entity with limited access to object properties and methods.
+ *   Only method names starting with "get", "has", or "is" and a few common
+ *   methods such as "id", "label", and "bundle" are available. For example:
+ *   - node.getCreatedTime() will return the node creation timestamp.
+ *   - node.hasField('field_example') returns TRUE if the node bundle includes
+ *     field_example. (This does not indicate the presence of a value in this
+ *     field.)
+ *   - node.isPublished() will return whether the node is published or not.
+ *   Calling other methods, such as node.delete(), will result in an exception.
+ *   See \Drupal\node\Entity\Node for a full list of public properties and
+ *   methods for the node object.
+ * - label: (optional) The title of the node.
+ * - content: All node items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - author_picture: The node author user entity, rendered using the "compact"
+ *   view mode.
+ * - metadata: Metadata for this node.
+ * - date: (optional) Themed creation date field.
+ * - author_name: (optional) Themed author name field.
+ * - url: Direct URL of the current node.
+ * - display_submitted: Whether submission information should be displayed.
+ * - attributes: HTML attributes for the containing element.
+ *   The attributes.class element may contain one or more of the following
+ *   classes:
+ *   - node: The current template type (also known as a "theming hook").
+ *   - node--type-[type]: The current node type. For example, if the node is an
+ *     "Article" it would result in "node--type-article". Note that the machine
+ *     name will often be in a short form of the human readable label.
+ *   - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+ *     teaser would result in: "node--view-mode-teaser", and
+ *     full: "node--view-mode-full".
+ *   The following are controlled through the node publishing options.
+ *   - node--promoted: Appears on nodes promoted to the front page.
+ *   - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+ *     teaser listings.
+ *   - node--unpublished: Appears on unpublished nodes visible only to site
+ *     admins.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main
+ *   content tag that appears in the template.
+ * - author_attributes: Same as attributes, except applied to the author of
+ *   the node tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ * - view_mode: View mode; for example, "teaser" or "full".
+ * - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+ * - page: Flag for the full page state. Will be true if view_mode is 'full'.
+ * - readmore: Flag for more state. Will be true if the teaser content of the
+ *   node cannot hold the main body content.
+ * - logged_in: Flag for authenticated user status. Will be true when the
+ *   current user is a logged-in member.
+ * - is_admin: Flag for admin user status. Will be true when the current user
+ *   is an administrator.
+ *
+ * @see template_preprocess_node()
+ *
+ * @ingroup themeable
+ */
+#}
+
+<style>
+
+
+
+.main-content > div, .video-wrapper, .webinar-info, .key-point-card, .speaker {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s ease-out;
+}
+.main-content > div.animate, .video-wrapper.animate, .webinar-info.animate, .key-point-card.animate, .speaker.animate{
+    opacity: 1;
+    transform: translateY(0px);
+}
+
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+
+
+
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.speaker, .field--name-field-key-points {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.8s ease-out 0.8s forwards;
+}
+
+
+.video-wrapper {
+    display: flex;
+    flex: 1;
+    max-width: 67%;
+}
+
+        .main-content {
+            padding: 20px 0px 20px;
+            display: grid;
+            gap: 20px;  /* Space between description & sidebar */
+            grid-template-columns: 2fr 1fr;
+            align-items: start; /* Aligns sections at the top */
+        }
+        .main-content p{
+            padding-left: 10px;
+        }
+        .key-point-card {
+            max-width: 900px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .key-point-card h2{
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .key-point-card h3{
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+        .key-point-card p{
+            margin-top:10px;
+            border-left: 3px solid #004897; 
+            transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out, border-left-color 0.3s ease-in-out;
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+        .key-point-card p:hover{
+            background-color: rgba(0, 73, 151, 0.1); /* Light blue background */
+            border-left-color: #002D62; /* Darker blue on hover */
+            transform: translateX(5px); /* Moves text slightly to the right */
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .header .video-placeholder {
+            width: 150px;
+            height: 100px;
+            background: #ddd;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .header .details {
+            max-width: 60%;
+        }
+        .header .details h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+        .register-btn {
+            display: inline-block;
+            background: #004897;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+        .category {
+            background: #e0e0e0;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
+        .description {
+            min-width: 740px;
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            /*box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);*/
+
+        }
+        .description h2{
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .description p{
+            margin-top:10px;
+            
+        }
+        .sidebar {
+            flex: 1;  /* Sidebar takes up less space */
+            min-width: 300px;
+        }
+        article .box {
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .video-thumbnail {
+            flex: 1;
+            aspect-ratio: 16 / 9;
+            background: #f1f1f1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+
+        .video-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .speaker {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #fff;
+            border-radius: 8px;
+            /*box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);*/
+        }
+        .speaker img {
+            height: 70px;
+            border-radius: 50%;
+            margin-right: 15px;
+            background-color: #ddd;
+            transition: box-shadow 0.3s ease-in-out;
+        }
+        .speaker img:hover {
+            box-shadow: 0px 0px 20px #0056b3;
+        }
+        .speaker-info {
+            flex: 1;
+        }
+        .speaker-info p{
+            border-left: 3px solid #004897;
+            margin-top:10px;
+            transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out, border-left-color 0.3s ease-in-out;
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+            width:97%;
+        }
+        .speaker-info p:hover{
+            background-color: rgba(0, 73, 151, 0.1); /* Light blue background */
+            border-left-color: #002D62; /* Darker blue on hover */
+            transform: translateX(5px); /* Moves text slightly to the right */
+        }
+        .speaker h3 {
+            margin: 0;
+            color: #004897;
+        }
+        .speaker h4 {
+            margin: 5px 0;
+        }
+
+
+/* Category Container */
+.field--name-field-webinar-card-tags {
+    background-color: #EFF4F9; /* Light blue background */
+    padding: 15px 15px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    overflow-x: auto; /* Allows scrolling if too many items */
+    white-space: nowrap;
+}
+.field--name-field-about-the-speakers{
+    width:740px;
+}
+.field--name-field-about-the-speakers h2{
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Category Label */
+.field__label {
+    font-weight: bold;
+    font-size: 16px;
+    color: #4A5568; /* Darker gray text */
+    margin-right: 10px;
+}
+.field--name-field-key-points{
+    max-width:100%;
+}
+/* Category Items Container */
+.field__items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Individual Category Item */
+.field--name-field-webinar-card-tags .field__item a {
+    background: white;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #4A5568; /* Dark gray text */
+    text-decoration: none;
+    border: 1px solid #E2E8F0; /* Subtle border */
+    font-weight: 500;
+    transition: background 0.3s ease-in-out;
+        transition: background 0.3s ease-in-out, color 0.3s ease-in-out; /* ✅ Added smooth color transition */
+
+}
+
+/* Hover Effect */
+.field--name-field-webinar-card-tags .field__item a:hover {
+    background: #004897; /* Very light gray hover effect */
+    color: white;
+}
+
+/* Webinar Section Layout */
+.webinar-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: stretch;
+    justify-content: space-between;
+    padding: 20px 0px;
+}
+
+.webinar-container .c-content-accordion-norgen.c-accordion-norgen-primary-blue-light .panel>.panel-heading>.panel-title>a{
+    border-radius:10px 10px 0px 0px;
+}
+.webinar-container .c-content-accordion-norgen.c-accordion-norgen-primary-blue-light .panel>.panel-heading>.panel-title>a.collapsed:hover{
+    background-color:var(--norgen-primary-blue-light);
+}
+.webinar-container .c-content-accordion-norgen.c-accordion-norgen-primary-blue-light .panel>.panel-heading>.panel-title>a.collapsed{
+    background-color:#f7f7f7;
+    border-radius:10px 10px 10px 10px;
+}
+.webinar-container .c-content-accordion-norgen.c-accordion-norgen-primary-blue-light .panel>.panel-collapse>.panel-body{
+    border-radius:0px 0px 10px 10px;
+}
+
+/* Left Side: Video Embed */
+.webinar-video {
+    flex: 1;
+    aspect-ratio: 16 / 9;
+    background: #f1f1f1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Right Side: Webinar Info */
+.webinar-info {
+    flex: 1;
+    max-width: 33%;
+    background: #f8f9fc;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100%;
+}
+
+/* Time & Duration Styles */
+.webinar-details {
+    padding: 15px 0px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
+.field--name-field-date,
+.field--name-field-webinar-duration {
+    font-size: 16px;
+    font-weight: normal;
+    margin-bottom: 6px;
+    text-align:end;
+}
+
+{# .label {
+    font-weight: bold;
+    color: #333;
+} #}
+
+/* Description Styling */
+.webinar-description {
+    font-size: 15px;
+    line-height: 1.5;
+    margin-bottom: 65px;
+}
+
+/* Register Button Styling */
+.register-button {
+    display: block;
+    width: 100%;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    /* font-size: 16px; */
+    /* font-weight: bold; */
+    cursor: pointer;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.register-button:hover {
+    background-color: #0056b3;
+    -webkit-transition: all 0.2sease-out;
+    transform: translateY(-2px);
+}
+
+.feedback-button {
+    display: block;
+    width: 100%;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    /* font-size: 16px; */
+    /* font-weight: bold; */
+    cursor: pointer;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.feedback-button:hover {
+    background-color: #0056b3;
+    -webkit-transition: all 0.2sease-out;
+    transform: translateY(-2px);
+}
+
+#speakers{
+    position:relative;
+    top:-185px;
+}
+
+
+@media (max-width: 1024px) {
+
+    .video-wrapper {
+        max-width: 100%; 
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .video-thumbnail, .webinar-video {
+        max-width: 100%;
+    }
+
+
+    /* Make the Webinar Section Stack */
+    .webinar-container {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .webinar-video,
+    .webinar-info {
+        max-width: 100%;
+    }
+    .field--name-field-key-points {
+        order: -1; /* Moves it before all other elements */
+    }
+    .key-point-card {
+        max-width:100%;
+    }
+    
+    .field--name-field-about-the-speakers {
+        order:0;
+        width: 100%;
+    }
+    .webinar-info {
+        order: 0; /* Move info below video */
+    }
+
+    .main-content {
+    grid-template-columns: 1fr; /* Stack items on top of each other */
+    }
+
+    .description,
+    .sidebar {
+        max-width: 100%; 
+    }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .webinar-container {
+        flex-direction: column;
+    }
+
+    .webinar-video,
+    .webinar-info {
+        max-width: 100%;
+    }
+
+    /* Stack Content Area */
+    .main-content {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    /* Ensure Description Takes Full Width */
+    .description {
+        min-width: 100%;
+    }
+
+    /* Ensure Sidebar Stacks */
+    .sidebar {
+        min-width: 100%;
+    }
+
+    /* Ensure About the Speakers Section is Full Width */
+    .field--name-field-about-the-speakers {
+        width: 100%;
+    }
+}
+
+
+/* Registration Form */
+#webinar-registration-form-overlay{
+display:none;
+width:100%;
+height:100vh;
+left:0;
+top:0;
+position:fixed;
+background-color:rgba(0,0,0,0.5);
+z-index:999999;
+}
+#webinar-registration-form-overlay.active{
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+}
+#webinar-registration-form-overlay > .webinar-registration-form-wrapper{
+background-color:white;
+max-width:900px;
+max-height:95%;
+overflow:auto;
+margin: auto auto;
+padding: 20px 40px;
+border-radius: 10px;
+position:relative;
+}
+#sample-request-form-overlay > .sample-request-form-wrapper{
+width:930px;
+max-width:100%;
+}
+
+#webinar-registration-form-overlay > .webinar-registration-form-wrapper .disclaimer{
+font-size:12px;
+}
+#webinar-registration-form-overlay > .webinar-registration-form-wrapper .fieldset-legend.form-required{
+font-weight:300;
+color:inherit;
+}
+#webinar-registration-form-overlay > .webinar-registration-form-wrapper .fieldset-legend.form-required::after{
+color:red;
+content: "*";
+}
+
+</style>
+
+
+<article{{ attributes }}>
+
+
+
+<div class="webinar-container">
+    <!-- Left Side: Video Embed -->
+        {# <div onclick="videoOpen('https://www.youtube.com/embed/eCz-1NTCMEU')" class="webinar-video" data-terms="keywords" itemscope="" itemtype="https://schema.org/VideoObject">
+        <lite-youtube videoid="eCz-1NTCMEU" title="Play: Video"></lite-youtube>
+        <div class="video-desc">
+            <meta itemprop="thumbnailUrl" content="https://img.youtube.com/vi/eCz-1NTCMEU/hqdefault.jpg">
+            <meta itemprop="contentUrl" content="https://www.youtube.com/watch?v=eCz-1NTCMEU">
+            <meta itemprop="embedUrl" content="https://www.youtube.com/embed/eCz-1NTCMEU">
+            <meta itemprop="uploadDate" content="2023-04-14T00:00:00Z">
+        </div>
+        </div> #}
+    <div class="video-wrapper">
+        {% if content.field_webinar_video.0 %}
+            <lite-youtube videoid="{{ content.field_webinar_video.0['#url'].toString()|replace({'https://www.youtube.com/watch?v=':''}) }}" 
+                title="Play: Video" class="webinar-video">
+            </lite-youtube>
+        {% else %}
+            <div class="video-thumbnail">
+                {{ content.field_video_thumbnail }}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="webinar-info">
+        <div class="webinar-details">
+            {{ content.field_date }}
+            {{ content.field_webinar_duration }}
+        </div>
+        {{ content.field_webinar_description }}
+        {# <button class="btn btn-primary register-button" onclick="toggleWebinarRegistrationForm()">Register Now</button> #}
+        {{content.field_registration_link_1}}
+    </div>
+
+    
+    <div class = "field--name-field-abstract">
+        {# {{content.field_webinar_card_tags}} #}
+        <div class = "main-content">
+            {# {{content.field_tags_webinar}} #}
+            <div class = "">
+                {{content.field_abstract}}
+                <div id = "speakers">
+                    <a></a>
+                </div>
+                {{content.field_about_the_speakers}}
+            </div>
+            {{content.field_key_points}}
+        </div>
+        {{content.field_speaker_headshot}}
+    </div>
+
+    {# {{content.field_speakers}} #}
+
+    {% if content.field_faq['#items']|length > 0 %}
+    <h2 style="font-size:18px;"><b>FAQs</b></h2>
+    <div itemscope itemtype="https://schema.org/FAQPage">
+        <div class="c-content-accordion-norgen c-accordion-norgen-primary-blue-light">
+            <div class="panel-group" id="accordion-{{content.field_faq.0['#id']}}" role="tablist">
+            {% for faq in content.field_faq['#items'] %}
+                <div class="panel" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                    <div class="panel-heading" role="tab" id="accordiontab">
+                    <h4 
+                        class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-toggle="collapse"
+                        data-parent="#accordion-{{content.field_faq.0['#id']}}" href="#variation{{loop.parent.loop.index}}question{{loop.index}}" aria-expanded="false" aria-controls="9523657">
+                        <span itemprop="name">{{ faq.value.question }}</span> <i class="fa fa-chevron-down"></i></a>
+                    </h4>
+                    </div>
+                    <div id="variation{{loop.parent.loop.index}}question{{loop.index}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="accordiontab"
+                    aria-expanded="false" style="height: 0px;">
+                    <div class="panel-body c-font-18" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                        <div itemprop="text">
+                        {{ faq.value.answer|raw }}
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+
+<script>
+
+{# Webinar Registration #}
+{% if webinar_registration %}
+    function toggleWebinarRegistrationForm(){
+        let webinar_registration_form_wrapper = document.getElementById('webinar-registration-form-overlay');
+        document.documentElement.classList.toggle('scroll-lock');
+        if(webinar_registration_form_wrapper) webinar_registration_form_wrapper.classList.toggle('active');
+    } 
+{% endif %}
+
+/* //.webinar-container,  */
+document.addEventListener("DOMContentLoaded", function () {
+    const elements = document.querySelectorAll('.main-content > div, .video-wrapper, .webinar-info, .key-point-card, .speaker');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate');
+            }
+        });
+    });
+
+    elements.forEach((element) => observer.observe(element));
+
+    {% if webinar_registration %}
+        let webinar_registration_form_wrapper = document.getElementById('webinar-registration-form-overlay');
+        if(webinar_registration_form_wrapper){
+            webinar_registration_form_wrapper.addEventListener('click', function(e){
+                if(e.target === this){
+                    toggleWebinarRegistrationForm();
+                }
+            });
+        }
+    {% endif %}
+});
+
+
+</script>
+
+</article>
+{% if webinar_registration %}
+    <div id="webinar-registration-form-overlay" class="fixed">
+        <div class="webinar-registration-form-wrapper">
+            <h2 class="center">Webinar Registration Form</h2>
+            <button style="float:right;background:none;border:none;font-size:40px;line-height:1;position:absolute;top:0;right:0;" onclick="toggleWebinarRegistrationForm()">×</button>
+            {{ webinar_registration }}
+        </div>
+    </div>
+{% endif %}

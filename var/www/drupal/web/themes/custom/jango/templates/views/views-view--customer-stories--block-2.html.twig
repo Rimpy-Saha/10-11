@@ -1,0 +1,149 @@
+{#
+/**
+* @file
+* Default theme implementation for main view template.
+*
+* Available variables:
+* - attributes: Remaining HTML attributes for the element.
+* - css_name: A CSS-safe version of the view name.
+* - css_class: The user-specified classes names, if any.
+* - header: The optional header.
+* - footer: The optional footer.
+* - rows: The results of the view query, if any.
+* - empty: The content to display if there are no rows.
+* - pager: The optional pager next/prev links to display.
+* - exposed: Exposed widget form/info to display.
+* - feed_icons: Optional feed icons to display.
+* - more: An optional link to the next page of results.
+* - title: Title of the view, only used when displaying in the admin preview.
+* - title_prefix: Additional output populated by modules, intended to be
+* displayed in front of the view title.
+* - title_suffix: Additional output populated by modules, intended to be
+* displayed after the view title.
+* - attachment_before: An optional attachment view to be displayed before the
+* view content.
+* - attachment_after: An optional attachment view to be displayed after the
+* view content.
+* - dom_id: Unique id for every view being printed to give unique class for
+* JavaScript.
+*
+* @see template_preprocess_views_view()
+*
+* @ingroup themeable
+*/
+#}
+{%
+set classes = [
+dom_id ? 'js-view-dom-id-' ~ dom_id,
+]
+%}
+<div{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {{ title }}
+  {{ title_suffix }}
+
+  {% if header %}
+  <header>
+    {{ header }}
+  </header>
+  {% endif %}
+
+  {{ exposed }}
+  {{ attachment_before }}
+
+  {% if rows -%}
+  {{ rows }}
+  {% elseif empty -%}
+  {{ empty }}
+  {% endif %}
+  {{ pager }}
+
+  {{ attachment_after }}
+  {{ more }}
+
+  {% if footer %}
+  <footer>
+    {{ footer }}
+  </footer>
+  {% endif %}
+
+  {{ feed_icons }}
+  </div>
+
+
+  <style>
+
+    .collapsiblesection {
+      display: none;
+    }
+
+    .popular-blog-categories .views-field .field-content a {
+      font-size: 18px;
+      width: 10%;
+    }
+
+    .c-content-recent-posts-1 .views-field-title {
+      font-size: 16px;
+      color: black;
+    }
+
+    .c-content-recent-posts-1 .views-field-field-author,
+    .c-content-recent-posts-1 .views-field-field-post-date {
+      font-size: 15px;
+    }
+
+    .views-field-field-banner .field-content img {
+      max-width: 100px;
+      max-height: 100px;
+      background-size: cover;
+      background-position: center;
+      grid-area: b;
+    }
+
+    .c-content-recent-posts-1 li {
+      display: grid;
+      grid-template:
+        "a b" auto
+        "c b" auto / 1fr 85px;
+      grid-column-gap: 1em;
+      row-gap: 0.5em;
+      border: none;
+      padding: 0;
+      margin-bottom: 14px;
+      border-bottom: 1px solid #d6d6d6;
+    }
+
+    .views-field-field-sort-date {
+      text-align: right;
+    }
+
+    .node-nd-blog .field--name-body img {
+      display: block;
+      max-width: min(926px, 100%);
+      max-height: 700px;
+      margin: 0 auto 40px;
+    }
+
+    .popular-blog-categories {
+      border-bottom: 2px solid #eee;
+      border-top: 2px solid #eee;
+      padding-top: 20px;
+      padding-bottom: 20px;
+      min-height: 260px;
+    }
+
+    .views-row {
+      display: inline-block;
+      margin-left: 2px;
+    }
+
+    .sidebar .views-element-container h2 {
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .popular-blog-categories .views-field .field-content a {
+      font-size: 18px;
+      width: 10%;
+    }
+  </style>

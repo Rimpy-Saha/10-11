@@ -1,0 +1,623 @@
+{#
+/**
+* @file
+* Default theme implementation to display a node.
+*
+* Available variables:
+* - node: The node entity with limited access to object properties and methods.
+* Only method names starting with "get", "has", or "is" and a few common
+* methods such as "id", "label", and "bundle" are available. For example:
+* - node.getCreatedTime() will return the node creation timestamp.
+* - node.hasField('field_example') returns TRUE if the node bundle includes
+* field_example. (This does not indicate the presence of a value in this
+* field.)
+* - node.isPublished() will return whether the node is published or not.
+* Calling other methods, such as node.delete(), will result in an exception.
+* See \Drupal\node\Entity\Node for a full list of public properties and
+* methods for the node object.
+* - label: (optional) The title of the node.
+* - content: All node items. Use {{ content }} to print them all,
+* or print a subset such as {{ content.field_example }}. Use
+* {{ content|without('field_example') }} to temporarily suppress the printing
+* of a given child element.
+* - author_picture: The node author user entity, rendered using the "compact"
+* view mode.
+* - metadata: Metadata for this node.
+* - date: (optional) Themed creation date field.
+* - author_name: (optional) Themed author name field.
+* - url: Direct URL of the current node.
+* - display_submitted: Whether submission information should be displayed.
+* - attributes: HTML attributes for the containing element.
+* The attributes.class element may contain one or more of the following
+* classes:
+* - node: The current template type (also known as a "theming hook").
+* - node--type-[type]: The current node type. For example, if the node is an
+* "Article" it would result in "node--type-article". Note that the machine
+* name will often be in a short form of the human readable label.
+* - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+* teaser would result in: "node--view-mode-teaser", and
+* full: "node--view-mode-full".
+* The following are controlled through the node publishing options.
+* - node--promoted: Appears on nodes promoted to the front page.
+* - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+* teaser listings.
+* - node--unpublished: Appears on unpublished nodes visible only to site
+* admins.
+* - title_attributes: Same as attributes, except applied to the main title
+* tag that appears in the template.
+* - content_attributes: Same as attributes, except applied to the main
+* content tag that appears in the template.
+* - author_attributes: Same as attributes, except applied to the author of
+* the node tag that appears in the template.
+* - title_prefix: Additional output populated by modules, intended to be
+* displayed in front of the main title tag that appears in the template.
+* - title_suffix: Additional output populated by modules, intended to be
+* displayed after the main title tag that appears in the template.
+* - view_mode: View mode; for example, "teaser" or "full".
+* - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+* - page: Flag for the full page state. Will be true if view_mode is 'full'.
+* - readmore: Flag for more state. Will be true if the teaser content of the
+* node cannot hold the main body content.
+* - logged_in: Flag for authenticated user status. Will be true when the
+* current user is a logged-in member.
+* - is_admin: Flag for admin user status. Will be true when the current user
+* is an administrator.
+*
+* @see template_preprocess_node()
+*
+* @ingroup themeable
+*/
+#}
+<article{{attributes}}>
+
+  {{ title_prefix }}
+  {% if label and not page %}
+  <h2{{title_attributes}}>
+    <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+    </h2>
+    {% endif %}
+    {{ title_suffix }}
+
+    {% if display_submitted %}
+    <footer>
+      {{ author_picture }}
+      <div{{author_attributes}}>
+        {% trans %}Submitted by
+        {{ author_name }}
+        on
+        {{ date }}{% endtrans %}
+        {{ metadata }}
+        </div>
+    </footer>
+    {% endif %}
+
+    <div{{content_attributes}}>
+      {{ content.body }}
+      </div>
+
+      </article>
+
+      <style>
+        .thankyou-screen {
+          margin: 20px auto 150px;
+          /* margin: 18%; */
+          background: white;
+          padding: 1%;
+          width: 100%;
+          padding: 1%;
+          border: #12508b;
+          border-style: solid;
+          box-shadow: 0 4px 40px 0 rgb(0 0 0 / 9%), 0 6px 20px 0 rgb(0 0 0 / 17%);
+          border-radius: 20px;
+          border-bottom-color: #1d7280;
+          border-right-color: #126b7a;
+        }
+
+        .survey {
+          margin: 20px auto 150px;
+          /* margin: 18%; */
+          background: white;
+          padding: 1%;
+          width: 100%;
+          padding: 1%;
+          max-width: 600px;
+        }
+
+        .section-page-title {
+          display: none;
+        }
+
+        .img-header p {
+          width: 100%;
+          max-width: 100% !important;
+          min-width: auto;
+          text-shadow: none;
+        }
+
+        .highlight-tm {
+          background: #fffae6;
+          padding: 24px;
+          border-radius: 24px 24px 0 0;
+          border-left: 1px solid #fbbf13;
+          border-top: 1px solid #fbbf13;
+          border-right: 1px solid #fbbf13;
+        }
+
+        .survey-overlay {
+          position: fixed;
+          z-index: 1000;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          transition: opacity 500ms ease-in-out 0s, visibility linear 500ms, transform 0s linear 500ms;
+          text-align: center;
+        }
+
+        .overlay:target,
+        .overlay:target .popup {
+          visibility: visible;
+          opacity: 1;
+        }
+
+        .rating {
+          margin-top: 5%;
+          width: 100%;
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-orient: horizontal;
+          -webkit-box-direction: normal;
+          -ms-flex-direction: row;
+          flex-direction: row;
+          margin-bottom: 12px;
+
+        }
+
+        @media only screen and(max-width: 60em) {
+          .rating {
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+          }
+        }
+
+        .rating input {
+          display: none
+        }
+
+        .rating label:hover {
+          background-color: #e6f2f3;
+        }
+
+        .rating input[type="radio"]:checked+label {
+          border-color: #007c89;
+          background: linear-gradient(0deg, rgba(0, 124, 137, .2), rgba(0, 124, 137, .2)), #fff;
+        }
+
+        .rating label {
+
+          font-size: 18px;
+
+          cursor: pointer;
+          flex-grow: 1;
+          min-width: 36px !important;
+          text-align: center;
+          padding: 4px;
+          border: 1px solid #dedddc;
+          border-radius: 3px;
+          margin-left: 6px;
+          margin-right: 6px;
+        }
+
+        .rating label {
+          border: 1px #999 solid;
+          transition: 0.3s;
+        }
+
+        #fname,
+        #lname,
+        #email,
+        #product {
+          width: 100%;
+          height: 4%;
+          margin-bottom: 8%;
+          vertical-align: middle;
+          min-width: 50px;
+          max-width: 635px;
+          width: 100%;
+          min-height: 36px;
+          background-color: #fff;
+          border: #a9a9a969;
+          border-style: solid;
+          border-width: thin;
+          max-height: 60px;
+          padding: 2%;
+        }
+
+        #product {
+          height: 6% !important;
+        }
+
+        .comment-sec {
+          margin-top: 10%;
+        }
+
+        .comment-text {
+          width: 100%;
+          height: 110px;
+        }
+
+        .feedback-btn {
+          margin-top: 10%;
+          /*padding-left: 2%;
+    padding-right: 2%;
+    padding-top: 1%;
+    padding-bottom: 1%;*/
+          padding: 12px 20px;
+          border-radius: 12px;
+          white-space: normal;
+        }
+
+        .logo {
+          max-width: 50%;
+        }
+
+        .image-logo {
+          text-align: center;
+          padding: 5%;
+        }
+
+        .label-hide {
+          display: none;
+        }
+
+        input,
+        textarea {
+          border-radius: 20px;
+        }
+
+        @media only screen and(max-width: 510px) {
+          .label-show {
+            display: none;
+          }
+
+          .label-hide {
+            display: block;
+          }
+
+        }
+
+        input::placeholder {
+          color: gray;
+          padding: 1%;
+        }
+
+        .thankyou-screen {
+          display: none;
+        }
+
+        .animation-ctn {
+          text-align: center;
+          margin-top: 5em;
+        }
+
+        @-webkit-keyframes checkmark {
+          0% {
+            stroke-dashoffset: 100px
+          }
+
+          100% {
+            stroke-dashoffset: 200px
+          }
+        }
+
+        @-ms-keyframes checkmark {
+          0% {
+            stroke-dashoffset: 100px
+          }
+
+          100% {
+            stroke-dashoffset: 200px
+          }
+        }
+
+        @keyframes checkmark {
+          0% {
+            stroke-dashoffset: 100px
+          }
+
+          100% {
+            stroke-dashoffset: 0
+          }
+        }
+
+        @-webkit-keyframes checkmark-circle {
+          0% {
+            stroke-dashoffset: 480px
+          }
+
+          100% {
+            stroke-dashoffset: 960px;
+
+          }
+        }
+
+        @-ms-keyframes checkmark-circle {
+          0% {
+            stroke-dashoffset: 240px
+          }
+
+          100% {
+            stroke-dashoffset: 480px
+          }
+        }
+
+        @keyframes checkmark-circle {
+          0% {
+            stroke-dashoffset: 480px
+          }
+
+          100% {
+            stroke-dashoffset: 960px
+          }
+        }
+
+        @keyframes colored-circle {
+          0% {
+            opacity: 0
+          }
+
+          100% {
+            opacity: 100
+          }
+        }
+
+        /* other styles */
+        /* .svg svg {
+    display: none
+}
+ */
+        .inlinesvg .svg svg {
+          display: inline
+        }
+
+        /* .svg img {
+    display: none
+} */
+
+        .icon--order-success svg polyline {
+          -webkit-animation: checkmark 0.25s ease-in-out 0.7s backwards;
+          animation: checkmark 0.25s ease-in-out 0.7s backwards
+        }
+
+        .icon--order-success svg circle {
+          -webkit-animation: checkmark-circle 0.6s ease-in-out backwards;
+          animation: checkmark-circle 0.6s ease-in-out backwards;
+        }
+
+        .icon--order-success svg circle#colored {
+          -webkit-animation: colored-circle 0.6s ease-in-out 0.7s backwards;
+          animation: colored-circle 0.6s ease-in-out 0.7s backwards;
+        }
+
+
+        /* new styles */
+        .btn-primary:hover {
+          background-color: #3276b1;
+          border-color: #285e8e;
+        }
+
+        .btn-primary {
+          background-color: #004897;
+          border-color: #004897;
+        }
+      </style>
+
+
+      <div class="whole-page" style="background-color: #f2f2f2;">
+        <br>
+        <section class="survey">
+          <div class="image-logo">
+            <img src="/sites/default/files/norgen-logo.png" class="logo">
+          </div>
+          <hr>
+          <p style="margin-bottom:1em;font-size: 18px;">How was your experience using Norgen products? Please fill out
+            the quick survey below so we can better meet your needs. In return, we'll send you a promo code for 10% off
+            your next order with us!</p>
+          <form action="" method="post">
+            <div class="form-table">
+              <label for="fname" style="margin-top:10%;font-size: 16px;font-weight: 100;">First Name</label>
+              <input type="text" id="fname" name="fname" placeholder="First Name (required)" required>
+
+              <label for="lname" style="font-size: 16px;font-weight: 100;">Last Name</label>
+              <input type="text" id="lname" name="lname" placeholder="Last Name (required)" required>
+
+              <label for="email" style="font-size: 16px;font-weight: 100;">Email</label>
+              <input type="email" id="email" name="email" placeholder="Email (required)" required>
+
+              <!-- <label for="product" style="font-size: 16px;font-weight: 100;">Product Name</label>
+				                            <input type="text" id="product" name="product" placeholder="Products" required> -->
+
+              <label for="product">Sample product</label>
+              <select id="product" name="product" required>
+                <option value="" disabled selected>-Please Select (required)-</option>
+                <option value="Animal Tissue RNA Purification Kit - 4.0 Preps (Cat#25740)">Animal Tissue RNA
+                  Purification Kit - 4.0 Preps (Cat#25740)</option>
+                <option value="Blood DNA Isolation Mini Kit (Cat#46340)">Blood DNA Isolation Mini Kit (Cat#46340)
+                </option>
+                <option value="Cells and Tissue DNA Isolation Kit (Cat#53140)">Cells and Tissue DNA Isolation Kit
+                  (Cat#53140)</option>
+                <option value="cf-DNA/cf-RNA Preservative Tubes - 6 units (Cat#63980)">cf-DNA/cf-RNA Preservative Tubes
+                  - 6 units (Cat#63980)</option>
+                <option
+                  value="Clamshell Individual Saliva RNA Collection and Preservation Device - 1 unit (Cat#RU53810)">
+                  Clamshell Individual Saliva RNA Collection and Preservation Device - 1 unit (Cat#RU53810)</option>
+                <option value="DNA Clean-Up and Concentration Micro Elute Kit (Cat#67240)">DNA Clean-Up and
+                  Concentration Micro Elute Kit (Cat#67240)</option>
+                <option value="Exosomal RNA Isolation Kit - 4.0 Preps (Cat#58040)">Exosomal RNA Isolation Kit - 4.0
+                  Preps (Cat#58040)</option>
+                <option value="Fatty Tissue RNA Purification Kit (Cat#36240)">Fatty Tissue RNA Purification Kit
+                  (Cat#36240)</option>
+                <option value="Fecal Swab Collection and Preservation System - 1 unit (Cat#45674/Cat#CY-93050)">Fecal
+                  Swab Collection and Preservation System - 1 unit (Cat#45674/Cat#CY-93050)</option>
+                <option value="FFPE RNA Purification Kit (Cat#25360)">FFPE RNA Purification Kit (Cat#25360)</option>
+                <option value="FFPE RNA/DNA Purification Plus Kit (Cat#54340)">FFPE RNA/DNA Purification Plus Kit
+                  (Cat#54340)</option>
+                <option value="Nuclease-Free Water - 1000.0 mL (Cat#28016)">Nuclease-Free Water - 1000.0 mL (Cat#28016)
+                </option>
+                <option value="Plant/Fungi DNA Isolation Kit (Cat#26240)">Plant/Fungi DNA Isolation Kit (Cat#26240)
+                </option>
+                <option value="Plant/Fungi Total RNA Purification Kit - 4.0 Preps (Cat#25840)">Plant/Fungi Total RNA
+                  Purification Kit - 4.0 Preps (Cat#25840)</option>
+                <option value="Plasma RNA/DNA Purification Kit (Cat#55240)">Plasma RNA/DNA Purification Kit (Cat#55240)
+                </option>
+                <option value="Plasma/Serum Cell-free Circulating DNA Purification Mini Kit (Cat#55140)">Plasma/Serum
+                  Cell-free Circulating DNA Purification Mini Kit (Cat#55140)</option>
+                <option value="Plasma/Serum Exosome Purification Kit - 4.0 Preps (Cat#57440)">Plasma/Serum Exosome
+                  Purification Kit - 4.0 Preps (Cat#57440)</option>
+                <option value="Plasma/Serum RNA Purification Kit (Cat#55040)">Plasma/Serum RNA Purification Kit
+                  (Cat#55040)</option>
+                <option value="RNA Clean-Up and Concentration Kit (Cat#23640)">RNA Clean-Up and Concentration Kit
+                  (Cat#23640)</option>
+                <option value="RNA Clean-Up and Concentration Micro-Elute Kit (Cat#61040)">RNA Clean-Up and
+                  Concentration Micro-Elute Kit (Cat#61040)</option>
+                <option value="RNA/DNA Purification Kit (Cat#48740)">RNA/DNA Purification Kit (Cat#48740)</option>
+                <option value="RNA/DNA/Protein Purification Plus Kit (Cat#47740)">RNA/DNA/Protein Purification Plus Kit
+                  (Cat#47740)</option>
+                <option value="RNA/DNA/Protein Purification Plus Micro Kit (Cat#51640)">RNA/DNA/Protein Purification
+                  Plus Micro Kit (Cat#51640)</option>
+                <option value="Saliva DNA Collection and Preservation Devices - 6 units (Cat#RU49010)">Saliva DNA
+                  Collection and Preservation Devices - 6 units (Cat#RU49010)</option>
+                <option value="Saliva DNA Isolation Kit (Cat#RU45410)">Saliva DNA Isolation Kit (Cat#RU45410)</option>
+                <option value="Saliva Exosome Collection and Preservation Device - 1 Device (Cat#65451)">Saliva Exosome
+                  Collection and Preservation Device - 1 Device (Cat#65451)</option>
+                <option value="Saliva/Swab RNA Purification Kit (Cat#69140)">Saliva/Swab RNA Purification Kit
+                  (Cat#69140)</option>
+                <option value="Single Cell RNA Purification Kit - 4.0 Preps (Cat#51840)">Single Cell RNA Purification
+                  Kit - 4.0 Preps (Cat#51840)</option>
+                <option value="Soil DNA Isolation Plus Kit - 4.0 Preps (Cat#64040)">Soil DNA Isolation Plus Kit - 4.0
+                  Preps (Cat#64040)</option>
+                <option value="Stool DNA Isolation Kit (Cat#27640)">Stool DNA Isolation Kit (Cat#27640)</option>
+                <option value="Stool Nucleic Acid Collection and Preservation Systems (Cat#63710)">Stool Nucleic Acid
+                  Collection and Preservation Systems (Cat#63710)</option>
+                <option value="Stool Nucleic Acid Collection and Preservation Tube - 1 unit (Cat#45630)">Stool Nucleic
+                  Acid Collection and Preservation Tube - 1 unit (Cat#45630)</option>
+                <option value="Stool Total RNA Purification Kit (Cat#49540)">Stool Total RNA Purification Kit
+                  (Cat#49540)</option>
+                <option value="Swab Collection and DNA Preservation Kit - 1 unit (Cat#45683/Cat#CY-930050)">Swab
+                  Collection and DNA Preservation Kit - 1 unit (Cat#45683/Cat#CY-930050)</option>
+                <option value="Total Nucleic Acid Preservation Tube + Swab - 1 unit (Cat#68803)">Total Nucleic Acid
+                  Preservation Tube + Swab - 1 unit (Cat#68803)</option>
+                <option value="Total RNA Purification Kit (Cat#17240)">Total RNA Purification Kit (Cat#17240)</option>
+                <option value="Urine Collection and Preservation Cup (120 cc) - 1 unit (Cat#18129)">Urine Collection and
+                  Preservation Cup (120 cc) - 1 unit (Cat#18129)</option>
+                <option value="Urine Collection and Preservation Tube (15 cc) - 1 unit (Cat#18120)">Urine Collection and
+                  Preservation Tube (15 cc) - 1 unit (Cat#18120)</option>
+                <option value="Urine Collection and Preservation Tube (5 cc) - 1 unit (Cat#18116)">Urine Collection and
+                  Preservation Tube (5 cc) - 1 unit (Cat#18116)</option>
+                <option value="Urine Collection and Preservation Tube (50 cc) - 1 unit (Cat#18111)">Urine Collection and
+                  Preservation Tube (50 cc) - 1 unit (Cat#18111)</option>
+                <option value="Urine Exosome Purification Kit - 4.0 Preps (Cat#57740)">Urine Exosome Purification Kit -
+                  4.0 Preps (Cat#57740)</option>
+
+              </select>
+
+              <div>
+                <p style="font-size: 16px;">Was the product protocol easy to follow?</p>
+                <div class="responses">
+                  <fieldset>
+                    <label for="answer1_yes"><input type="radio" id="answer1_yes" value="true" name="answer1" required>
+                      <span style="padding: 1%;font-weight: 100;font-size: 16px;">Yes</span>
+                    </label>
+                    <label for="answer1_no"><input type="radio" id="answer1_no" value="false" name="answer1">
+                      <span style="padding: 1%; font-size: 16px; font-weight: 100;">No</span>
+                    </label>
+                  </fieldset>
+                </div>
+              </div>
+              <div>
+                <p style="font-size: 16px;">Did the quality of DNA/RNA/Exosomes/Protein purified meet your expectations?
+                </p>
+                <div class="responses">
+                  <fieldset>
+                    <label for="answer2_yes"><input type="radio" id="answer2_yes" value="true" name="answer2" required>
+                      <span style="padding: 1%;font-size: 16px; font-weight: 100;">Yes</span>
+                    </label>
+                    <label for="answer2_no"><input type="radio" id="answer2_no" value="false" name="answer2">
+                      <span style="padding: 1%;font-size: 16px; font-weight: 100;">No</span>
+                    </label>
+                  </fieldset>
+                </div>
+              </div>
+              <div class="rate-sec">
+                <p style="font-size: 16px;">Would you recommend this product to a colleague?</p>
+                <div class="rate-label label-hide" style="padding-left: 2%;padding-right: 2%;padding-bottom: 2%;">
+                  <span style="float: left;">1 is very unlikely</span>
+                  <span style="float: right;">10 is very likely</span>
+                </div>
+                <div class="rating">
+
+                  <input type="radio" name="rating" id="rata1" value="1" required><label for="rata1">1</label>
+                  <input type="radio" name="rating" id="rata2" value="2"><label for="rata2">2</label>
+                  <input type="radio" name="rating" id="rata3" value="3"><label for="rata3">3</label>
+                  <input type="radio" name="rating" id="rata4" value="4"><label for="rata4">4</label>
+                  <input type="radio" name="rating" id="rata5" value="5"><label for="rata5">5</label>
+                  <input type="radio" name="rating" id="rata6" value="6"><label for="rata6">6</label>
+                  <input type="radio" name="rating" id="rata7" value="7"><label for="rata7">7</label>
+                  <input type="radio" name="rating" id="rata8" value="8"><label for="rata8">8</label>
+                  <input type="radio" name="rating" id="rata9" value="9"><label for="rata9">9</label>
+                  <input type="radio" name="rating" id="rata10" value="10"><label for="rata10">10</label>
+
+                </div>
+                <div class="rate-label label-show" style="padding-left: 2%;padding-right: 2%;padding-bottom: 2%;">
+                  <span style="float: left;">Very unlikely</span>
+                  <span style="float: right;">Very likely</span>
+                </div>
+              </div>
+              <div class="comment-sec">
+                <p style="font-size: 16px;">Any other comments regarding your experience with this kit?</p>
+                <textarea class="comment-text" id="comment-text" name="comment"></textarea>
+                <!-- <input type="text" id="comment" > -->
+              </div>
+
+            </div>
+            <div class="center-div" style="padding-bottom: 15px;text-align: center;">
+              <button class="btn-primary feedback-btn" type="submit" id="submit" name="submit">Send Feedback</button>
+            </div>
+          </form>
+
+        </section>
+
+        <!-- <section class="thankyou-screen" style="background-color: white;">
+	                    		<div class="image-logo">
+	                    		<img src="/sites/default/files/norgen-logo.png" class="logo">	
+	                    		</div>
+	                    		<div class="animation-ctn">
+	  								<div class="icon icon--order-success svg">
+	          						<svg xmlns="http://www.w3.org/2000/svg" width="154px" height="154px">  
+	            						<g fill="none" stroke="#12508b" stroke-width="2"> 
+	              						<circle cx="77" cy="77" r="72" style="stroke-dasharray:480px, 480px; stroke-dashoffset: 960px;"></circle>
+	              						<circle id="colored" fill="#12508b" cx="77" cy="77" r="72" style="stroke-dasharray:480px, 480px; stroke-dashoffset: 960px;"></circle>
+	              						<polyline class="st0" stroke="#fff" stroke-width="10" points="43.5,77.8 63.7,97.9 112.2,49.4 " style="stroke-dasharray:100px, 100px; stroke-dashoffset: 200px;"/>   
+	            						</g> 
+	          						</svg>
+	        						</div>
+								</div>
+	                    		<h2 style="text-align: center;">Thank you!</h2>
+	                    		<p style="font-size: 18px;text-align: center;">Thank you for sending us your feedback. We really appreciate it!</p>
+	                    	</section> -->
+        <br>
+        <br>
+        <br>
+      </div>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script type="text/javascript">
+        function success_in() {
+          document.querySelector('.whole-page').style.display = "none";
+          document.querySelector('.survey').style.display = "none";
+          document.querySelector('.thankyou-screen').style.display = "block";
+        }
+      </script>

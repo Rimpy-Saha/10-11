@@ -1,0 +1,661 @@
+<style>
+:root {
+  --number-of-logos: 17;
+    --logo-width: 150px;
+    --institutions-logos-gap: 2em;
+    --institutions-loop-start: 0px;
+    --institutions-loop-end: calc(-1*((150px + 2em + 1px)*var(--number-of-logos)) - 1em - 15px - (1px*(var(--number-of-logos))));
+}
+
+@keyframes institutions-loop{
+  0%{
+        left: var(--institutions-loop-start);
+  }
+  100%{
+        left: var(--institutions-loop-end);
+  }
+}
+  .institution-logos-container {
+    left: 0;
+    right: 0;
+    margin: auto;
+    overflow: hidden;
+}
+.institution-logos-container {
+    left: 15px;
+    white-space: nowrap;
+    gap: var(--institutions-logos-gap);
+    position: relative;
+}
+.institution-logos-container::before {
+    content: '';
+    background-image: linear-gradient(to right, rgb(255, 255, 255), rgba(255, 255, 255, 0));
+    width: 10%;
+    height: 100%;
+    z-index: 1;
+    position: absolute;
+    left: 0;
+    margin: auto;
+}
+.institution-logos-container::after {
+    content: '';
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+    width: 10%;
+    height: 100%;
+    z-index: 1;
+    position: absolute;
+    right: 0;
+    margin: auto;
+}
+ .institution-logos:first-child {
+    margin-right: var(--institutions-logos-gap);
+}
+ .institution-logos {
+    position: relative;
+    left: 0;
+    display: inline-block;
+    white-space: nowrap;
+    margin-top: 42px;
+    height: 75px;
+   padding-left: 20px; 
+   padding-right: 20px; 
+    width: calc(((150px + 2em + 1px)*var(--number-of-logos)) + 1em);
+    animation: institutions-loop 30s infinite linear;;
+}
+  .institution-logos img {
+    width: var(--logo-width);
+    object-fit: contain;
+    display: inline;
+    height: 75px;
+    margin-right: var(--institutions-logos-gap);
+}
+  
+  
+  .home-client-success-slider .home-client-success, .home-client-success-slider .home-client-success blockquote footer, .home-client-success-slider .home-client-success h2, .client-success-section, .client-success-section .c-content-title-1 > p {
+    color: white;
+  }
+  .home-client-success-slider .home-client-success, .home-client-success-slider .home-client-success blockquote footer, .home-client-success-slider .home-client-success h2, .client-success-section, .client-success-section .c-content-title-1 > p {
+    color: white;
+  }
+  .home-client-success-slider .home-client-success {
+    max-width: 900px;
+    margin: auto;
+  }
+  .home-client-success-slider blockquote {
+    border-left: none;
+  }
+  .home-client-success-slider .owl-carousel.c-theme .owl-controls .owl-dot.active {
+    background-color: white;
+    outline: 1px solid black;
+}
+.consultation h2{
+  font-size: 50px;
+  line-height:60px;
+  font-weight: 700;
+  margin-top: 0;
+}
+.consultation{
+  background:aliceblue;
+  padding:60px 0;
+}
+.ngs-banner{
+	background-image:url('/sites/default/files/images/ngs-campaign/ngs_banner.jpg');
+	background-repeat: no-repeat;
+    background-size: cover;
+    height:680px;
+    position:relative;
+}
+.ngs-banner h1{
+	font-size: 60px;
+    font-weight: 800;
+    line-height: 60px;
+    color: white;
+}
+.ngs-banner p{
+	color:white;
+}
+.ngs-banner-grid{
+	display:grid;
+	grid-template-columns:1fr 1fr;
+	gap:50px;
+	top: 40%;
+    transform: translateY(35%);
+    position:relative;
+    align-items: center;
+}
+#first-tier{
+	grid-area:first;
+}
+#second-tier{
+	grid-area:second;
+}
+#third-tier{
+	grid-area:third;
+}
+.ngs-promo-grid{
+	display:grid;
+	grid-template-areas:'first second'
+						'third third';
+	gap:10px;
+}
+.ngs-promo-grid div{
+	background: #012638;
+    padding: 5px 20px;
+    color: white;
+    text-align:center;
+}
+.ngs-promo-grid h3{
+	color:white;
+	font-size:25px;
+	font-weight:600;
+	margin-bottom:0;
+}
+.ngs-service-section{
+	position:absolute;
+	bottom:-5%;
+	background: #01263873;
+	backdrop-filter: blur(10px);
+	width: -webkit-fill-available;
+	padding: 10px 0 10px;
+}
+.ngs-service-section-flex{
+	display:flex;
+	gap:20px;
+	align-items: center;
+}
+.ngs-service-section img{
+	width:300px;
+	filter: drop-shadow(2px 2px 3px white);
+}
+.buy-grid{
+	display:grid;
+	grid-template-columns:320px 1fr;
+	gap:100px;
+	align-items: center;
+}
+.buy-grid h2{
+	font-size: 50px;
+    font-weight: 700;
+    line-height: 60px;
+}
+.buy-flex{
+	display:flex;
+	gap:20px;
+}
+
+.selling-points > div{
+  display:flex;
+  align-items: baseline;
+  flex-direction: column;
+}
+.key-features-div{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  justify-items: center;
+  margin:150px 0;
+  gap:40px;
+}
+.exosome-svg-div{
+  position: relative;
+    top: -25%;
+}
+.key-features-div h2{
+      font-size: 50px;
+    font-weight: 700;
+    margin-top: 0;
+    line-height:60px;
+}
+.selling-points img{
+  width:50px;
+}
+
+.exosomes-svg{
+      position: absolute;
+    top: 0;
+    /* width: unset; */
+    width: 400px;
+        transform: rotate(-30deg);
+}
+
+
+@keyframes glass_moving_exosome {
+  0%{
+    opacity:1;
+    top:20%;
+  }
+  50%{
+    opacity:1;
+    top:30%;
+  }
+  100%{
+    opacity:1;
+    top:20%;
+  }
+}
+.magnifying_glass_exosome{
+  opacity:0;
+  position:absolute;
+  width:200px;
+  left:50%;
+  top:30%;
+  animation: glass_moving_exosome 16s infinite;
+  animation-delay:2.75s;
+
+}
+.services-section{
+	background: #e0e9f2;
+    padding: 100px;
+    text-align:center;
+}
+.services-section h2{
+	font-size: 50px;
+    font-weight: 700;
+    line-height: 60px;
+}
+.services-grid{
+	display: grid;
+    gap: 50px;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    justify-items: center;
+    margin:50px 0;
+}
+.services-grid img{
+	width:150px;
+
+}
+.caption{
+  font-size:12px;
+  text-transform: uppercase;
+      margin: 0;
+}
+.boxes_stacked{
+  display:flex;
+  flex-direction: column;
+  position:relative;
+  height:500px;
+  right:-30%;
+  bottom:0;
+}
+.boxes_stacked img{
+  width:250px;
+  position:absolute;
+  opacity:0;
+}
+#zero-box{
+    bottom: 91%;
+    z-index: 7;
+    left: 5px;
+    animation: 0.5s moving-down linear forwards;
+    animation-delay:2s;
+}
+#first-box{
+bottom: 69%;
+    z-index: 6;
+    left: -11px;
+    animation: 0.5s moving-down linear forwards;
+    animation-delay:1.5s;
+}
+#second-box{
+bottom: 47%;
+    z-index: 5;
+    left: 1px;
+    animation: 0.5s moving-down linear forwards;
+    animation-delay:1s;
+}
+#third-box{
+bottom: 23.5%;
+    left: -9px;
+    z-index: 4;
+    animation: 0.5s moving-down linear forwards;
+    animation-delay:0.5s;
+}
+#fourth-box{
+  bottom:0;
+  animation: 0.5s moving-down linear forwards;
+}
+@keyframes moving-down{
+  0%{
+  opacity:0;
+    bottom:100%;
+  }
+  100%{
+  opacity:1;
+    bottom:revert-layer;
+  }
+}
+.stock-banner{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+      margin: 100px 0;
+}
+.stock-banner h1{
+      font-size: 60px;
+    font-weight: 800;
+    line-height: 60px;
+    letter-spacing:2px;
+}
+.stock-text{
+  color: #b83a2a;
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: 5px;
+}
+.stock-up{
+  display:flex;box-shadow:rgba(0,0,0,0.35) 0px 5px 15px;position:absolute;bottom:0px;background:white;padding:10px;right:295px;width:max-content;gap:15px;
+}
+.stock-up p{
+  letter-spacing:4px;font-size:25px;font-weight:600;color:red;margin-bottom:0;
+}
+.stock-up img{
+ width:46px;
+position:relative;
+opacity:1;
+}
+</style>
+
+<div class="container">
+  <div class="stock-banner">
+    <div style="position:relative;">
+        <div style="padding:2px 0;border-top:1px solid;border-bottom:1px solid;width: fit-content;"><span style="font-size:21px;border-top:1px solid;border-bottom:1px solid;">Limited Time Offer</span></div>
+        <h1>Next Generation<br>Sequencing</h1>
+        <div style="display:flex;align-items: center;gap: 10px;margin: 15px 0;">
+          <img src="/sites/default/files/images/ngs-campaign/icon1.png" style="width:50px;">
+          <p style="font-size:20px;font-style:italic;margin-bottom:0;">Now Optimized for Low Ultra Input RNA</p>
+        </div>
+        <div class="ngs-promo-grid">
+          <div id="first-tier">
+            <h3>Free Shipping</h3>
+            <p>Buy this and get free shipping</p>
+          </div>
+          <div id="second-tier">
+            <h3>Free Shipping</h3>
+            <p>Buy this and get free shipping</p>
+          </div>
+          <div id="third-tier">
+            <h3>Free Shipping</h3>
+            <p>Buy this and get free shipping</p>
+          </div>
+        </div>
+        <p>*Promotion available only to customers in Canada or the US. Discount ot available to Norgen Biotek distributors. ffers valid until July 29th, 2024.</p>
+        
+    </div>
+    <div class="boxes_stacked">
+      <img src="/sites/default/files/images/ngs-campaign/empty_Bg_prod.png" id="second-box">
+      <img src="/sites/default/files/images/ngs-campaign/empty_Bg_prod.png" id="third-box">
+      <img src="/sites/default/files/images/ngs-campaign/empty_Bg_prod.png" id="fourth-box">
+      <div class="stock-up">
+        <img src="/sites/default/files/images/ngs-campaign/icon1.png">
+        <p>STOCK IT UP<p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="stock-banner">
+    <div style="position:relative;">
+        <div style="padding:2px 0;border-top:1px solid;border-bottom:1px solid;position:absolute;right:36%;top:25px;"><span style="font-size:21px;border-top:1px solid;border-bottom:1px solid;">Limited Time Offer</span></div>
+        <h1>Next<br>Generation<br>Sequencing</h1>
+        <h3 class="stock-text">STOCK IT UP</h3>
+        <div class="ngs-promo-grid">
+          <div id="first-tier">
+            <h3>Free Shipping</h3>
+            <p>Buy this and get free shipping</p>
+          </div>
+          <div id="second-tier">
+            <h3>Free Shipping</h3>
+            <p>Buy this and get free shipping</p>
+          </div>
+          <div id="third-tier">
+            <h3>Free Shipping</h3>
+            <p>Buy this and get free shipping</p>
+          </div>
+        </div>
+        <p>*Promotion available only to customers in Canada or the US. Discount ot available to Norgen Biotek distributors. ffers valid until July 29th, 2024.</p>
+        <div style="display:flex;align-items: center;gap: 10px;">
+          <img src="/sites/default/files/images/ngs-campaign/icon1.png" style="width:50px;">
+          <p style="font-size:20px;font-style:italic;margin-bottom:0;">Now Optimized for Low Ultra Input RNA</p>
+        </div>
+    </div>
+    <div class="boxes_stacked">
+      <img src="/sites/default/files/images/ngs-campaign/empty_Bg_prod.png" id="zero-box">
+      <img src="/sites/default/files/images/ngs-campaign/empty_Bg_prod.png" id="first-box">
+      <img src="/sites/default/files/images/ngs-campaign/empty_Bg_prod.png" id="second-box">
+      <img src="/sites/default/files/images/ngs-campaign/empty_Bg_prod.png" id="third-box">
+      <img src="/sites/default/files/images/ngs-campaign/empty_Bg_prod.png" id="fourth-box">
+    </div>
+  </div>
+</div>
+<div class="ngs-banner">
+	<div class="container">
+		<div class="ngs-banner-grid">
+			<div style="position:relative;">
+				<div style="padding:2px 0;border-top:1px solid;border-bottom:1px solid;position:absolute;right:25%;top:25px;"><span style="font-size:25px;border-top:1px solid;border-bottom:1px solid;">Limited Time Offer</span></div>
+				<h1>Next<br>Generation<br>Sequencing</h1>
+				<p>*Promotion available only to customers in Canada or the US. Discount ot available to Norgen Biotek distributors. ffers valid until July 29th, 2024.</p>
+			</div>
+			<div>
+				<div class="ngs-promo-grid">
+					<div id="first-tier">
+						<h3>Free Shipping</h3>
+						<p>Buy this and get free shipping</p>
+					</div>
+					<div id="second-tier">
+						<h3>Free Shipping</h3>
+						<p>Buy this and get free shipping</p>
+					</div>
+					<div id="third-tier">
+						<h3>Free Shipping</h3>
+						<p>Buy this and get free shipping</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--ngs service div-->
+	<div class="ngs-service-section">
+		<div class="container ngs-service-section-flex">
+			<img src="/sites/default/files/images/ngs-campaign/NGS_Icon_DNA.svg">
+			<div>
+				<p>Norgen's NGS Services perfectly complement our sale on NGS products, ensuring you receive comprehensive genomic solutions at discounted rates.</p>
+				<a class="btn btn-primary btn-lg">Learn more about our NGS Services</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div style="background:#e0e9f2;padding:130px 100px 100px;">
+	<div class="container">
+		<div class="buy-grid">
+			<div>
+				<p>Next Generation Sequence</p>
+				<div class="c-content-title-1">
+					<div class="c-line-left c-bg-blue"></div>
+				</div>
+				<h2>Choose Your Library Prep Kit</h2>
+			</div>
+			<div class="buy-flex">
+				<div class="item ">
+                        <img src="/sites/default/files/images/exosome campaign/65300.jpg" class="img-fluid   rounded-circle" alt="image1">
+                        <a href="https://norgenbiotek.com//product/fbs-exosome-depletion-kits?v=584" target="_blank"><h3>FBS Exosome Depletion Kit I (Column Format)</h3></a>
+                        <p>Cat. 61200</p>
+                        <form action="" method="post" id="add-to-cart-variation-584" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-584" siq_id="autopick_7891">
+                      <input type="hidden" id="variation_id" name="variation_id" value="584">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-584" name="op" value="Add to cart">
+                    </form>
+                </div>
+                <div class="item ">
+                        <img src="/sites/default/files/images/exosome campaign/65300.jpg" class="img-fluid   rounded-circle" alt="image1">
+                        <a href="https://norgenbiotek.com//product/fbs-exosome-depletion-kits?v=584" target="_blank"><h3>FBS Exosome Depletion Kit I (Column Format)</h3></a>
+                        <p>Cat. 61200</p>
+                        <form action="" method="post" id="add-to-cart-variation-584" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-584" siq_id="autopick_7891">
+                      <input type="hidden" id="variation_id" name="variation_id" value="584">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-584" name="op" value="Add to cart">
+                    </form>
+                </div>
+                <div class="item ">
+                        <img src="/sites/default/files/images/exosome campaign/65300.jpg" class="img-fluid   rounded-circle" alt="image1">
+                        <a href="https://norgenbiotek.com//product/fbs-exosome-depletion-kits?v=584" target="_blank"><h3>FBS Exosome Depletion Kit I (Column Format)</h3></a>
+                        <p>Cat. 61200</p>
+                        <form action="" method="post" id="add-to-cart-variation-584" class="full-width-btn col-sm-12 home-bestsellers-btn-div" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-584" siq_id="autopick_7891">
+                      <input type="hidden" id="variation_id" name="variation_id" value="584">
+                      <input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-584" name="op" value="Add to cart">
+                    </form>
+                </div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+<div class="key-features-div">
+    <div>
+        <p class="caption">Benefits</p>
+        <h2>Why Buy Our Library Prep Kit</h2>
+        <div class="c-content-title-1">
+			<div class="c-line-left c-bg-blue"></div>
+		</div>
+        <div class="selling-points">
+            <div>
+                <img src="/sites/default/files/images/ngs-campaign/icon1.png">
+                <div>
+
+                    <h3>Optimized Protocol</h3>
+                    <p>Protocol optimized for DNA and RNA isolated from a large range of sample types</p>
+                </div>
+            </div>
+            <div>
+                <img src="/sites/default/files/images/ngs-campaign/icon2.png">
+                <div>
+                    <h3>Unique Dual Index</h3>
+                    <p>Upto 300 unique dual-index libraries in a single run</p>
+                </div>
+            </div>
+            <div>
+                <img src="/sites/default/files/images/ngs-campaign/icon3.png">
+                <div>
+                    <h3>Simple and Quick</h3>
+                    <p>Simple and quick workflow. Prepare time is less than 4 hours</p>
+                </div>
+            </div>
+        </div>
+    </div>
+  <div class="exosome-svg-div">
+    <div class="exosomes-svg">
+    
+    <img src="/sites/default/files/images/ngs-campaign/dna-strand.svg" id="exosome-img">
+    <img src="/sites/default/files/images/ngs-campaign/microscope_with_ngs.png" class="magnifying_glass_exosome">
+
+    </div>
+  </div>
+</div>
+</div>
+
+
+<div class="services-section">
+	<div class="container">
+		<p class="caption">NGS Services</p>
+		<h2>Make Your Next Discovery with Norgen</h2>
+		<div class="c-content-title-1">
+			<div class="c-line-center c-bg-blue"></div>
+		</div>
+		<p>Receive comprehensive NGS services for small RNA, RNA, metagenomics and SARS-CoV-2. We specialize in working with challenging sample types and volumes often rejected by core facilities. Each service includes an advanced bioinformatics report that is customized to your project's specific needs.</p>
+		<div class="services-grid">
+			<div>
+				<img src="/sites/default/files/images/ngs-campaign/NGS_Icon_small_RNA (1).svg">
+				<h3>Small RNA-Seq</h3>
+				<p>Capture a complete range of small RNA including micro RNA from ultra-low inputs</p>
+				<a href="">Learn More</a>
+			</div>
+
+			<div>
+				<img src="/sites/default/files/images/ngs-campaign/NGS_Icon_RNA (1).svg">
+				<h3>RNA-Seq</h3>
+				<p>Comprehensive service for mRNA and lncRNA sequencing</p>
+				<a href="">Learn More</a>
+			</div>
+
+			<div>
+				<img src="/sites/default/files/images/ngs-campaign/NGS_Icon_DNA (1).svg">
+				<h3>Metagenomics</h3>
+				<p>Comprehensive service for 16S, ITS and shallow shotgun sequencing</p>
+				<a href="">Learn More</a>
+			</div>
+
+
+			<div>
+				<img src="/sites/default/files/images/ngs-campaign/NGS_Icon_COVID19 (1).svg">
+				<h3>SARS-CoV-2 Seq</h3>
+				<p>Sequence the entire SARS-CoV-2 viral genome from various sample types</p>
+				<a href="">Learn More</a>
+			</div>
+		</div>
+
+
+	</div>
+</div>
+
+
+
+<section class="campaign-testimonials " style="padding:60px 0;">
+  <div class="c-content-box c-size-md" style="padding-top:0;">
+    <div class="container wow animate fadeInUp" data-wow-delay="0.2s" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeInUp; opacity: 1;">
+      <div class="c-content-title-1 c-title home-heading-padding">
+        <h2 class="c-center c-font" style="font-size:50px;font-weight:700;">Trusted By Leading Institutions</h2>
+        <p>Delighted to collaborate with premier institutions across 155+ countries, including esteemed partners like Harvard University, Mount Sinai, Roswell Park, USDA, Mayo Clinic, and Vineland Research and Innovation Center. Our global partnerships underscore our commitment to excellence, as we work alongside renowned institutions to advance research and innovation.</p>
+      </div>
+      <div class="institution-logos-container">
+        <div class="institution-logos">
+          <img class="lazy" src="/sites/default/files/services/service-customer/harvard.png" srcset="/sites/default/files/services/service-customer/harvard.png 300w, /sites/default/files/services/service-customer/harvard-half.png 150w" alt="Harvard University">
+          <img class="lazy" src="/sites/default/files/services/service-customer/SVGs/roswell.svg" alt="Roswell Park Cancer Research">
+          <img class="lazy" src="/sites/default/files/services/service-customer/SVGs/sinai.svg" alt="Mount Sinai Beth Israel">
+          <img class="lazy" src="/sites/default/files/services/service-customer/SVGs/mayo.svg" alt="Mayo Clinic">
+          <img class="lazy" src="/sites/default/files/services/service-customer/SVGs/vineland.svg" alt="Vineland Research and Innovation Centre">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/brainstorm.png" alt="Brainstorm Cell Therapeutics">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/SVGs/bwh.svg" alt="Brigham and Women's Hospital">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/jefferson.png" srcset="/sites/default/files/services/service-customer/jefferson.png 300w, /sites/default/files/services/service-customer/jefferson-half.png 150w" alt="Thomas Jefferson University">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/SVGs/guelph.svg" alt="University of Guelph">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/planck.png" srcset="/sites/default/files/services/service-customer/planck.png 300w, /sites/default/files/services/service-customer/planck-half.png 150w" alt="Max Planck Institute for Medical Research">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/queens.png" srcset="/sites/default/files/services/service-customer/queens.png 300w, /sites/default/files/services/service-customer/queens-half.png 150w" alt="Queen's University">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/SVGs/usda.svg" alt="United States Department of Agriculture">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/warsaw.png" alt="customer">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/zenbio.png" alt="ZenBio">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/maryland.png" srcset="/sites/default/files/services/service-customer/maryland.png 300w, /sites/default/files/services/service-customer/maryland-half.png 150w" alt="University of Maryland School of Medicine">    
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/SVGs/biodesix.svg" alt="Biodesix">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/magee.png" alt="MaGee Women's Research Institute">
+        </div>
+        <div class="institution-logos">
+          <img class="lazy" src="/sites/default/files/services/service-customer/harvard.png" srcset="/sites/default/files/services/service-customer/harvard.png 300w, /sites/default/files/services/service-customer/harvard-half.png 150w" alt="Harvard University">
+          <img class="lazy" src="/sites/default/files/services/service-customer/SVGs/roswell.svg" alt="Roswell Park Cancer Research">
+          <img class="lazy" src="/sites/default/files/services/service-customer/SVGs/sinai.svg" alt="Mount Sinai Beth Israel">
+          <img class="lazy" src="/sites/default/files/services/service-customer/SVGs/mayo.svg" alt="Mayo Clinic">
+          <img class="lazy" src="/sites/default/files/services/service-customer/SVGs/vineland.svg" alt="Vineland Research and Innovation Centre">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/brainstorm.png" alt="Brainstorm Cell Therapeutics">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/SVGs/bwh.svg" alt="Brigham and Women's Hospital">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/jefferson.png" srcset="/sites/default/files/services/service-customer/jefferson.png 300w, /sites/default/files/services/service-customer/jefferson-half.png 150w" alt="Thomas Jefferson University">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/SVGs/guelph.svg" alt="University of Guelph">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/planck.png" srcset="/sites/default/files/services/service-customer/planck.png 300w, /sites/default/files/services/service-customer/planck-half.png 150w" alt="Max Planck Institute for Medical Research">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/queens.png" srcset="/sites/default/files/services/service-customer/queens.png 300w, /sites/default/files/services/service-customer/queens-half.png 150w" alt="Queen's University">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/SVGs/usda.svg" alt="United States Department of Agriculture">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/warsaw.png" alt="customer">
+          <img class="University of Warsaw" loading="lazy" src="/sites/default/files/services/service-customer/zenbio.png" alt="ZenBio">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/maryland.png" srcset="/sites/default/files/services/service-customer/maryland.png 300w, /sites/default/files/services/service-customer/maryland-half.png 150w" alt="University of Maryland School of Medicine">    
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/SVGs/biodesix.svg" alt="Biodesix">
+          <img class="lazy" loading="lazy" src="/sites/default/files/services/service-customer/magee.png" alt="MaGee Women's Research Institute">
+        </div>
+      </div>
+    </div>
+  </div> 
+  
+
+  
+</section>
+
+<div class="consultation">
+  <div class="container">
+    <p class="caption">Free consultation</p>
+    <h2>Talk to Norgen's NGS Experts</h2>
+    <p>Our team of dedicated scientisits will be happy to learn more about your specific project needs and provide you with information about NGS Library Prep Kits.</p>
+    <a class="btn btn-primary" href="https://norgenbiotek.com/bookmeeting" target="_blank">Book Consultation Now!</a>
+  </div>
+</div>

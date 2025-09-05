@@ -1,0 +1,2279 @@
+{# /** * @file * Default theme implementation to display a node. * * Available
+  variables: * - node: The node entity with limited access to object properties
+  and methods. * Only method names starting with "get", "has", or "is" and a few
+  common * methods such as "id", "label", and "bundle" are available. For example:
+  * - node.getCreatedTime() will return the node creation timestamp. * -
+  node.hasField('field_example') returns TRUE if the node bundle includes *
+  field_example. (This does not indicate the presence of a value in this * field.)
+  * - node.isPublished() will return whether the node is published or not. *
+  Calling other methods, such as node.delete(), will result in an exception. * See
+  \Drupal\node\Entity\Node for a full list of public properties and * methods for
+  the node object. * - label: (optional) The title of the node. * - content: All
+  node items. Use {{ content }} to print them all, * or print a subset such as
+  {{ content.field_example }}. Use * {{ content|without('field_example') }} to
+  temporarily suppress the printing * of a given child element. * -
+  author_picture: The node author user entity, rendered using the "compact" * view
+  mode. * - metadata: Metadata for this node. * - date: (optional) Themed creation
+  date field. * - author_name: (optional) Themed author name field. * - url:
+  Direct URL of the current node. * - display_submitted: Whether submission
+  information should be displayed. * - attributes: HTML attributes for the
+  containing element. * The attributes.class element may contain one or more of
+  the following * classes: * - node: The current template type (also known as a
+  "theming hook"). * - node--type-[type]: The current node type. For example, if
+  the node is an * "Article" it would result in "node--type-article". Note that
+  the machine * name will often be in a short form of the human readable label. *
+  - node--view-mode-[view_mode]: The View Mode of the node; for example, a *
+  teaser would result in: "node--view-mode-teaser", and * full:
+  "node--view-mode-full". * The following are controlled through the node
+  publishing options. * - node--promoted: Appears on nodes promoted to the front
+  page. * - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+  * teaser listings. * - node--unpublished: Appears on unpublished nodes visible
+  only to site * admins. * - title_attributes: Same as attributes, except applied
+  to the main title * tag that appears in the template. * - content_attributes:
+  Same as attributes, except applied to the main * content tag that appears in the
+  template. * - author_attributes: Same as attributes, except applied to the
+  author of * the node tag that appears in the template. * - title_prefix:
+  Additional output populated by modules, intended to be * displayed in front of
+  the main title tag that appears in the template. * - title_suffix: Additional
+  output populated by modules, intended to be * displayed after the main title tag
+  that appears in the template. * - view_mode: View mode; for example, "teaser" or
+  "full". * - teaser: Flag for the teaser state. Will be true if view_mode is
+  'teaser'. * - page: Flag for the full page state. Will be true if view_mode is
+  'full'. * - readmore: Flag for more state. Will be true if the teaser content of
+  the * node cannot hold the main body content. * - logged_in: Flag for
+  authenticated user status. Will be true when the * current user is a logged-in
+  member. * - is_admin: Flag for admin user status. Will be true when the current
+  user * is an administrator. * * @see template_preprocess_node() * * @ingroup
+  themeable */ #}
+  
+  <style>
+    #section-main-content .container {
+      width: 100% !important;
+      padding: 0;
+    }
+  
+    /* Page Specific For Category Pages */
+    .region-pagetitle,
+    .region-breadcrumb {
+      display: none;
+    }
+  
+    .img-header {
+      margin: 0 -15px;
+      width: calc(100% + 30px);
+    }
+  
+    .img-header {
+      background-image: url(/sites/default/files/images/building-sized-dark.jpg);
+    }
+  
+    /* #searchWarning {
+          font-size: 18px;
+          margin: 20px 0;
+      } */
+  
+    #filterSearch {
+      color: #555;
+      font-size: 16px;
+      line-height: 16px;
+      padding: 12px 20px;
+      box-sizing: border-box;
+      width: 100%;
+      border-radius: 4px;
+      border: 1px solid #bfc1c3;
+      font-weight: normal;
+      height: auto;
+      box-shadow: none;
+      max-width:600px;
+    }
+  
+    #dist-list {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  
+    #dist-list.row>.col-xs-12 {
+      padding: 12px;
+      float: none;
+      display: none;
+    }
+    .distributors-results a:hover{
+      text-decoration:none;
+    }
+    .distributors-results a:hover .dist-box{
+      box-shadow: inset 0px -2px 0px 0px var(--norgen-primary-blue), 0px 4px 20px -4px rgba(0, 0, 0, 0.09);
+    }
+    .distributors-results a{
+      color:inherit;
+    }
+    .distributors-results a:hover h3,
+    .distributors-results a:hover div{
+      color:var(--norgen-primary-blue);
+    }
+    .dist-box {
+      box-shadow: 0px 4px 20px -4px rgba(0, 0, 0, 0.09);
+      border-radius: 10px;
+      padding: 20px;
+      display:grid;
+      gap:20px;
+      grid-template-columns: 1fr 170px;
+      margin-bottom:20px;
+    }
+  
+    .dist-box img {
+      display: block;
+      max-width: 170px;
+      max-height: 75px;
+      align-self: center;
+      margin-right: 0px;
+      margin-left: auto;
+    }
+
+    .dist-box .flags img{
+      display:inline-block;
+      margin:0px 5px;
+      max-width: 32px;
+    }
+  
+    .dist-box h3 {
+      margin-top:0px;
+      font-weight: 500;
+      font-size: 20px;
+    }
+  
+    .dist-box ul {
+      list-style-type: none;
+      padding: 0;
+      margin-top:10px;
+    }
+  
+    .dist-box ul li {
+      padding: 10px 00px;
+      border-top: 1px solid #ccc;
+    }
+  
+    .dist-box ul li:last-child {
+      padding-bottom: 0;
+    }
+  
+    .alphabet-div {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+  
+    .alphabet-div button {
+      padding: 1px 20px;
+      border-radius: 20px;
+      font-size: 20px;
+      background: white;
+      border: 1px solid #004897;
+      color: #004897;
+    }
+  
+    .alphabet-div button:hover {
+      background: #004897;
+      color: white;
+      border: none;
+    }
+  
+    .alphabet-div button:focus {
+      background: #004897;
+      color: white;
+      border: none;
+    }
+  
+    .continent {
+      font-weight: 700;
+    }
+  
+    .company {
+      color: #004897;
+      grid-area: one;
+    }
+  
+    .country {
+      grid-area: two;
+    }
+  
+    .logo {
+      grid-area: three;
+      width: 150px;
+    }
+  
+    .icon {
+      background: none;
+      border: none;
+    }
+  
+    .icon img {
+      width: 35px;
+    }
+  
+    .button_div {
+      grid-area: five;
+      display: flex;
+      gap: 10%;
+      align-items: center;
+      width: 400px;
+      justify-content: flex-end;
+    }
+  
+    .name_div {
+      display: grid;
+      grid-template-areas:
+        "one five"
+        "two five";
+      align-items: center;
+      justify-items: stretch;
+      justify-content: space-between;
+      padding: 1% 0 1% 0;
+    }
+  
+    .grid-panel {
+      display: grid;
+      grid-template: "b a" / 60% 40%;
+      grid-gap: 5%;
+      margin: 5% 0;
+      justify-content: left;
+    }
+  
+    .interested {
+      background: aliceblue;
+      padding: 6%;
+      border-radius: 10px;
+      height: fit-content;
+      margin: 4% auto;
+      transition: transform 2s ease;
+      grid-area: a;
+    }
+  
+    .btn-contact {
+      background: #004897;
+      border: none;
+      padding: 2% 4%;
+      color: white;
+      font-size: 21px;
+    }
+  
+    .dist-card {
+      display: flex;
+      gap: 2%;
+      justify-content: flex-start;
+      border: 1px solid #7c97b45c;
+    }
+  
+    .dist-card li {
+      list-style: none;
+      border-bottom: 1px solid gray;
+      width: 95%;
+      padding: 2% 0;
+    }
+  
+    .contact-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1%;
+      width: 50%;
+      background: #7795b52e;
+    }
+  
+    .contact-info {
+      padding: 2% 0;
+    }
+  
+    .card-outside {
+      max-height: 0;
+      overflow: hidden;
+      transition: 1s all;
+    }
+  
+    .down {
+      max-height: 500px;
+    }
+  
+    .selected {
+      background: #004897 !important;
+      color: white !important;
+    }
+  
+    input[type="text"],
+    input[type="email"],
+    select {
+      width: 100%;
+      border: 1px solid #c6c6c6;
+      padding: 0.5%;
+      background: transparent !important;
+      background: #fff;
+      border-color: #c6c6c6;
+      border-width: 1 px;
+      padding: 8px;
+      font-color: #c6c6c6;
+    }
+  
+    .form-section {
+      background: white;
+      box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+      position: fixed;
+      top: 13%;
+      right: 35%;
+      left: 35%;
+      padding: 1%;
+      display: none;
+      z-index: 2;
+    }
+  
+    .thankyou-form {
+      background: white;
+      box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+      position: fixed;
+      top: 16%;
+      right: 35%;
+      left: 35%;
+      padding: 1%;
+      display: none;
+      text-align: center;
+      z-index: 2;
+    }
+  
+    .thankyou-form>div {
+      padding: 5% 8%;
+    }
+  
+    .dist-form {
+      /*box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+      position: fixed;
+      top: 16%;
+      right: 35%;
+      left: 35%;*/
+      /*background: white;*/
+      padding: 5% 8%;
+    }
+  
+    .dist-form>div {
+      text-align: center;
+      margin: 0 auto 4% 0;
+    }
+  
+    .dist-form>div>img {
+      width: 100px;
+    }
+  
+    .close {
+      float: right;
+      font-size: 21px;
+      font-weight: 700;
+      line-height: 0.75;
+      color: #000;
+      text-shadow: 0 1px 0 #fff;
+      opacity: 0.2;
+      filter: alpha(opacity=20);
+    }
+  
+    #test-iframe2 {
+      display: none;
+    }
+  
+    @media only screen and (max-width: 1516px) {
+      .grid-panel {
+        display: grid;
+        grid-template-columns: 50% 50%;
+      }
+    }
+  
+    @media only screen and (max-width: 1310px) {
+      .alphabet-div {
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+      }
+  
+      .grid-panel {
+        grid-template:
+          "a"
+          "b" / 100%;
+        grid-gap: 0;
+        margin: 0;
+      }
+  
+      .interested {
+        margin: 30px 0;
+        padding: 40px;
+        text-align: center;
+      }
+    }
+  
+    @media only screen and (max-width: 785px) {
+      .grid-panel {
+        display: grid;
+      }
+  
+      .alphabet-div {
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+      }
+  
+      .grid-panel {
+        grid-template-columns: auto;
+        grid-gap: 0;
+      }
+  
+      .interested {
+        width: 100%;
+      }
+  
+      .name_div {
+        grid-template-areas:
+          "one"
+          "two"
+          "five";
+      }
+  
+      .form-section {
+        right: 10%;
+        left: 10%;
+      }
+    }
+  
+    @media only screen and (max-width: 600px) {
+      .dist-card {
+        flex-direction: column;
+      }
+  
+      .contact-header {
+        width: 100%;
+      }
+  
+      .button_div {
+        justify-content: flex-start;
+      }
+  
+      .anchorSection {
+        padding: 30px !important;
+      }
+    }
+  
+    @media only screen and (max-width: 435px) and (max-height: 720px) {
+      .card-outside {
+        width: 85vw;
+      }
+    }
+  
+    @media only screen and (max-width: 300px) {
+      .button_div {
+        justify-content: flex-start;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+  
+      .card-outside {
+        width: 135vw;
+      }
+  
+      .icon {
+        margin-top: 5%;
+      }
+  
+      .company {
+        width: min-content;
+      }
+    }
+  
+    .anchorSection {
+      padding: 0px 0px;
+    }
+  
+    .overlay-form,
+    .overlay-thankyou {
+      position: fixed;
+      display: none;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 2;
+      cursor: pointer;
+    }
+  
+    label {
+      margin: 2% 0;
+    }
+  
+    @media only screen and (max-width: 721px) {
+      .dist-form {
+        /* background: white; */
+        padding: 0% 3%;
+      }
+  
+      .dist-form>div>img {
+        width: 100px;
+        display: none;
+      }
+  
+      .form-section {
+        top: 11%;
+      }
+  
+      input[type="text"],
+      input[type="email"] {
+        padding: 0;
+      }
+    }
+  
+    .name_div:hover {
+      cursor: pointer;
+    }
+  
+    #error_file {
+      color: red;
+    }
+  
+    .distributors-results {
+      grid-area: b;
+    }
+  
+    .hide-company {
+      display: none;
+    }
+  
+    /* new styles*/
+    #drop-down-continents,
+    #drop-down-country-list {
+      outline: none;
+      border-radius: 4px;
+      max-width: 400px;
+    }
+  
+    #drop-down-country-list {
+      /* margin-top: 20px; */
+    }
+  
+    .dispay-country {
+      display: block;
+    }
+  
+    #select-country,
+    #select-continent {
+      margin-bottom: 5px;
+    }
+
+    #select-country {
+      margin-top: 10px;
+      max-width:300px;
+    }
+  </style>
+  <div class="overlay-form" onclick="close_form()"></div>
+  <div class="overlay-thankyou" onclick="close_thankyou()"></div>
+  <iframe name="content2" id="test-iframe2"> </iframe>
+  <!-- Header -->
+  <section>
+    <div id="map"></div>
+  </section>
+  
+  <section class="anchorSection prod-cat-list container">
+    <div style="padding: 0 0 30px">
+      <h2>Find a Distributor</h2>
+      <p>
+        If you do not see a distributor listed for your country, please
+        <a href="/contact">contact</a> Norgen Biotek directly.
+      </p>
+      <p>Filter by Search</p>
+      <input class="form-control" id="filterSearch" placeholder="Search for company or country" onkeyup="filterFunction()" />
+    </div>
+  
+    <div id="dist-list" class="row"></div>
+  </section>
+  
+  <section class="anchorSection container">
+    <p>Filter by Country</p>
+    <div id="drop-down-country">
+      <select id="select-country" name="select-country" class="notranslate" onChange="filterCountrySelect()">
+        <option value="All" default>All Countries</option>
+      </select>
+    </div>
+    <div class="grid-panel">
+      {% if restricted_country %} {% else %}
+      <div class="interested" id="interested-id">
+        <img src="/sites/default/files/images/distributors/distribution.png" />
+        <h3>Interested in becoming a Norgen Biotek Distributor?</h3>
+        <a class="btn btn-contact" href="/distributor-application-form">Apply today</a>
+      </div>
+      {% endif %}
+      <div class="distributors-results" id="distributor-results-wrapper" name="distributor-results-wrapper">
+      
+      </div>
+    </div>
+  </section>
+  
+  <!--------------------------------------------------------------------------****---------------------------------------------------------------------------------->
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script>
+    const flags = {
+      algeria: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Algeria.png`,
+      angola: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Angola.png`,
+      argentina: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Argentina.png`,
+      australia: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Australia.png`,
+      austria: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Austria.png`,
+      azerbaijan: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Azerbaijan.png`,
+      bahrain: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Bahrain.png`,
+      bangladesh: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Bangladesh.png`,
+      belgium: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Belgium.png`,
+      benin: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Benin.png`,
+      belize: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Belize.png`,
+      bolivia: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Bolivia.png`,
+      bosniaandherzegovina: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Bosnia-and-Herzegovina.png`,
+      botswana: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Botswana.png`,
+      brazil: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Brazil.png`,
+      brunei: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Brunei.png`,
+      bulgaria: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Bulgaria.png`,
+      burkinafaso: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Burkina-Faso.png`,
+      burundi: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Burundi.png`,
+      cameroon: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Cameroon.png`,
+      canada: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Canada.png`,
+      capeverde: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Cape-Verde.png`,
+      caymanislands: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Cayman-Islands.png`,
+      centralafricanrepublic: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Central-African-Republic.png`,
+      chad: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Chad.png`,
+      chile: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Chile.png`,
+      china: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/China.png`,
+      christmasisland: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Christmas-Island.png`,
+      colombia: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Colombia.png`,
+      comoros: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Comoros.png`,
+      costarica: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Costa-Rica.png`,
+      cotedivoire: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Cote-dIvoire.png`,
+      croatia: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Croatia.png`,
+      cyprus: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Cyprus.png`,
+      czechrepublic: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Czech-Republic.png`,
+      democraticrepubliccongo: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Democratic-Republic-of-the-Congo.png`,
+      denmark: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Denmark.png`,
+      djibouti: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Djibouti.png`,
+      dominicanrepublic: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Dominican-Republic.png`,
+      ecuador: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Ecuador.png`,
+      egypt: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Egypt.png`,
+      elsalvador: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/El-Salvador.png`,
+      equatorialguinea: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Equatorial-Guinea.png`,
+      estonia: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Estonia.png`,
+      eswatini: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Eswatini.png`,
+      eritrea: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Eritrea.png`,
+      ethiopia: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Ethiopia.png`,
+      finland: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Finland.png`,
+      france: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/France.png`,
+      falklandislands: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Falkland-Islands.png`,
+      frenchguiana: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/French-Guiana.png`,
+      gabon: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Gabon.png`,
+      gambia: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Gambia.png`,
+      georgia: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Georgia.png`,
+      germany: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Germany.png`,
+      ghana: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Ghana.png`,
+      greece: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Greece.png`,
+      guatemala: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Guatemala.png`,
+      guinea: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Guinea.png`,
+      guineabissau: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Guinea-Bissau.png`,
+      guyana: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Guyana.png`,
+      honduras: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Honduras.png`,
+      hongkong: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Hong-Kong.png`,
+      hungary: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Hungary.png`,
+      iceland: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Iceland.png`,
+      india: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/India.png`,
+      indonesia: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Indonesia.png`,
+      iran: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Iran.png`,
+      iraq: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Iraq.png`,
+      ireland: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Ireland.png`,
+      israel: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Israel.png`,
+      italy: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Italy.png`,
+      ivorycoast: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Cote-dIvoire.png`,
+      japan: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Japan.png`,
+      jordan: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Jordan.png`,
+      kazakhstan: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Kazakhstan.png`,
+      kenya: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Kenya.png`,
+      kiribati: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Kiribati.png`,
+      kosovo: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Kosovo.png`,
+      kuwait: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Kuwait.png`,
+      latvia: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Latvia.png`,
+      lebanon: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Lebanon.png`,
+      lesotho: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Lesotho.png`,
+      liberia: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Liberia.png`,
+      libya: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Libya.png`,
+      lithuania: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Lithuania.png`,
+      luxembourg: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Luxembourg.png`,
+      macau: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Macau.png`,
+      madagascar: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Madagascar.png`,
+      malawi: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Malawi.png`,
+      malaysia: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Malaysia.png`,
+      mali: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Mali.png`,
+      martinique: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Martinique.png`,
+      mauritania: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Mauritania.png`,
+      mauritius: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Mauritius.png`,
+      mexico: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Mexico.png`,
+      morocco: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Morocco.png`,
+      mozambique: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Mozambique.png`,
+      myanmar: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Myanmar.png`,
+      namibia: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Namibia.png`,
+      netherlands: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Netherlands.png`,
+      newzealand: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/New-Zealand.png`,
+      nicaragua: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Nicaragua.png`,
+      niger: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Niger.png`,
+      nigeria: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Nigeria.png`,
+      norway: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Norway.png`,
+      oman: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Oman.png`,
+      pakistan: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Pakistan.png`,
+      panama: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Panama.png`,
+      paraguay: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Paraguay.png`,
+      peru: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Peru.png`,
+      philippines: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Philippines.png`,
+      poland: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Poland.png`,
+      portugal: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Portugal.png`,
+      qatar: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Qatar.png`,
+      kosovo: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Kosovo.png`,
+      republicofcongo: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Republic-of-the-Congo.png`,
+      romania: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Romania.png`,
+      russia: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Russia.png`,
+      rwanda: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Rwanda.png`,
+      saotomeprincipe: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Sao-Tome-and-Principe.png`,
+      saudiarabia: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Saudi-Arabia.png`,
+      senegal: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Senegal.png`,
+      serbia: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Serbia.png`,
+      seychelles: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Seychelles.png`,
+      sierraleone: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Sierra-Leone.png`,
+      singapore: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Singapore.png`,
+      slovakia: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Slovakia.png`,
+      somalia: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Somalia.png`,
+      southafrica: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/South-Africa.png`,
+      southgeorgia: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/South-Georgia-and-the-South-Sandwich-Islands.png`,
+      southkorea: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/South-Korea.png`,
+      southsudan: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/South-Sudan.png`,
+      spain: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Spain.png`,
+      srilanka: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Sri-Lanka.png`,
+      sudan: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Sudan.png`,
+      suriname: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Suriname.png`,
+      swaziland: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Swaziland.png`,
+      sweden: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Sweden.png`,
+      switzerland: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Switzerland.png`,
+      taiwan: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Taiwan.png`,
+      tanzania: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Tanzania.png`,
+      thailand: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Thailand.png`,
+      togo: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Togo.png`,
+      tunisia: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Tunisia.png`,
+      trinidad: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Trinidad-and-Tobago.png`,
+      turkey: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Turkey.png`,
+      uganda: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Uganda.png`,
+      uae: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/United-Arab-Emirates.png`,
+      uk: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/United-Kingdom.png`,
+      usa: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/United-States.png`,
+      uruguay: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Uruguay.png`,
+      venezuela: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Venezuela.png`,
+      vietnam: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Vietnam.png`,
+      westernsahara: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Western-Sahara.png`,
+      zambia: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Zambia.png`,
+      zimbabwe: `https://norgenbiotek.com/sites/default/files/distributors/flags-32/Zimbabwe.png`,
+    };
+  
+    const distributors = [
+      //START LIST OF DISTRIBUTOR INFO
+
+      {
+        name: `Accuscience Ireland Ltd.`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/accuscience-logo.png`,
+        coverage: [`Ireland`],
+        coverageFlags: `<img src=${flags.ireland} />`,
+        address: `Unit C3, M7 Business Park, Naas, Kildare, W91 XF79, Ireland`,
+        contact: `<li><b>Phone:</b> 353 45 882 600, (045) 882600</li>
+           <li><b>Fax:</b> 353 45 873 799, (045) 873799</li>
+           <li><b>Email:</b> <a href="mailto:info@accuscience.ie">info@accuscience.ie</a></li>
+           <li><b>Website:</b> <a href="https://www.accuscience.ie" target="_blank">www.accuscience.ie</a></li>`,
+        website: `https://www.accuscience.ie`,
+        longitude: -6.6560212,
+        latitude: 53.2417985,
+        continent: ["Europe"],
+      },
+  
+      /* { name: `Accuvis Bio`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/accuvis.png`,
+        coverage: `United Arab Emirates`,
+        coverageFlags: `<img src=${flags.uae} />`,
+        address: `Office #g*, Sharjah Islamic Bank Bldg, Wasit Street, Sharjah, United Arab Emirates`,
+        contact: `<li><a href="mailto:sales@accuvisbio.com">sales@accuvisbio.com</a></li>`,
+        website: ``,
+        longitude: 55.454930,
+        latitude: 25.372640, }, */
+  
+      {
+        name: `Aegis-Advanced Healthcare Solutions Single Member P.C.`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/aegis-logo.jpg`,
+        coverage: [`Greece`],
+        coverageFlags: `<img src=${flags.greece} />`,
+        address: `43, Koritsas str, 17342, Agios Dimitrios, Athens, Greece`,
+        contact: `<li><b>Phone:</b> +30 211 012 7870</li>
+           <li><b>Fax:</b> +30 211 012 7869</li>
+           <li><b>Email:</b> <a href="mailto:info@aegishealth.gr">info@aegishealth.gr</a></li>
+           <li><b>Website:</b> <a href="https://www.aegishealth.gr" target="_blank">www.aegishealth.gr</a></li>`,
+        website: `https://www.aegishealth.gr`,
+        longitude: 23.71622,
+        latitude: 37.97945,
+        continent: ["Europe"],
+      },
+
+      {
+        name: `Alkali Scientific`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/alkali-scientific.png`,
+        coverage: ['United States','Canada'],
+        coverageFlags: `<img src=${flags.usa} /><img src=${flags.canada} />`,
+        address: `5370 NW 35th Terrace, Suite 112, Fort Lauderdale, FL 33309`,
+        contact: `<li><b>Phone:</b> 954 586 4170</li>
+           <li><b>Email:</b> <a href="mailto:sales@alkalisci.com">sales@alkalisci.com</a></li>
+           <li><b>Website:</b> <a href="https://alkalisci.com/" target="_blank">https://alkalisci.com/</a></li>`,
+        website: `https://alkalisci.com/`,
+        longitude: -80.19629690232179,
+        latitude: 26.192756802779034,
+        continent: ["North America"],
+      },
+
+      {
+        name: `AllScience LLC`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/allscience-logo.png`,
+        coverage: ['Argentina','Belize','Bolivia','Costa Rica','El Salvador','Guatemala','Guyana','Honduras','Nicaragua','Panama','Paraguay','Suriname','Trinidad and Tobago','Uruguay','Venezuela'],
+        coverageFlags: `<img src=${flags.argentina} /><img src=${flags.belize} /><img src=${flags.bolivia} /><img src=${flags.costarica} /><img src=${flags.elsalvador} /><img src=${flags.guatemala} /><img src=${flags.guyana} /><img src=${flags.honduras} /><img src=${flags.nicaragua} /><img src=${flags.panama} /><img src=${flags.paraguay} /><img src=${flags.suriname} /><img src=${flags.trinidad} /><img src=${flags.uruguay} /><img src=${flags.venezuela} />`,
+        address: `3637 NW 82nd Ave, Miami, Florida, 33122`,
+        contact: `<li><b>Phone:</b> 1 (305) 424-8263</li>
+           <li><b>Fax:</b> (786) 755-3550</li>
+           <li><b>Email:</b> <a href="mailto:info@e-allscience.com">info@e-allscience.com</a></li>
+           <li><b>Website:</b> <a href="https://www.e-allscience.com/" target="_blank">www.e-allscience.com</a></li>`,
+        website: `https://www.e-allscience.com/`,
+        longitude: -80.32919,
+        latitude: 25.80739,
+        continent: ["South America"],
+      },
+  
+  
+      {
+        name: `Ally-Bio Pvt. Ltd.`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/ally-bio.jpg`,
+        coverage: [`India`],
+        coverageFlags: `<img src=${flags.india} />`,
+        address: `F8-106, Bhumi World Industrial Park, Mumbai-Nashik Highway, Pimplas, Bhiwandi, Thane 421302`,
+        contact: `<li><b>Phone:</b> +91 2522 672409</li>
+           <li><b>Phone 2:</b> +91 77387 35004</li>
+           <li><b>Email:</b> <a href="mailto:info@ally-bio.com">info@ally-bio.com</a></li>
+           <li><b>Website:</b> <a href="https://www.ally-bio.com/" target="_blank">https://www.ally-bio.com/</a></li>`,
+        website: `https://www.ally-bio.com/`,
+        longitude: 72.94880151287042,
+        latitude: 19.23427411274713,
+        continent: ["Asia"],
+      },
+  
+      /* {
+        name: `Aloquence Science.`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/aloquence-logo.jpg`,
+        coverage: `Slovakia`,
+        coverageFlags: `<img src=${flags.slovakia} />`,
+        address: `Aloquence, s.r.o., Martina Benku 1151/6, 952 01  Vráble, Slovakia`,
+        contact: `<li><b>Phone:</b> 00421910296233</li>
+           <li><b>Email:</b> <a href="mailto:info@aloquence.com">info@aloquence.com</a></li>
+           <li><b>Website:</b> <a href="https://aloquence.eu/" target="_blank">https://aloquence.eu/</a></li>`,
+        website: ``,
+        longitude: 18.31360505316942,
+        latitude: 48.238208828280136,
+        continent: "Europe",
+      }, */
+  
+      {
+        name: `AmyJet Scientific Inc`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/amyJet-1.jpg`,
+        coverage: [`China`],
+        coverageFlags: `<img src=${flags.china} />`,
+        address: `13/F, Block 1, Harbour of Technology Times, No.35 Optical Valley Ave, Wuhan, Hubei, China, 430070`,
+        contact: `<li><b>Toll free:</b> 400-6800-868, 027-59626688</li>
+           <li><b>Phone:</b> 13797054060</li>
+           <li><b>Fax:</b> 027-59716800</li>
+           <li><b>Email:</b> <a href="mailto:sales@amyjet.com">sales@amyjet.com</a></li>
+           <li><b>Website:</b> <a href="https://www.amyjet.com/" target="_blank">www.amyjet.com</a></li>`,
+        website: `https://www.amyjet.com/`,
+        longitude: 114.26667,
+        latitude: 30.58333,
+        continent: ["Asia"],
+      },
+  
+      /*   {
+          name: `ASIA BIOSCIENCE CO., LTD.`,
+          logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/asia-bioscience-logo.svg`,
+          coverage: `Taiwan`,
+          coverageFlags: `<img src=${flags.taiwan} />`,
+          address: `1 F, No.1, Lane 661 Wenlin Road, Shihlin District, Taipei City 111, Taiwan (R.O.C.)`,
+          contact: `<li><b>Phone:</b> +886-2-8866-33660</li>
+             <li><b>Email:</b> <a href="mailto:info@abscience.com.tw">info@abscience.com.tw</a> / <a href="mailto:asiabioscience@gmail.com">asiabioscience@gmail.com</a></li>
+             <li><b>Website:</b> <a href="https://www.abscience.com.tw" target="_blank">https://www.abscience.com.tw</a></li>`,
+          website: `https://www.abscience.com.tw`,
+          longitude: 121.52219517101882,
+          latitude: 25.100593272475315,
+          continent: "Non UN Member Nations",
+        }, */
+  
+      /* {
+        name: `Arcada Company for Medical & Laboratories Supplies`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/Arcadas_Logo.png`,
+        coverage: [`Jordan`],
+        coverageFlags: `<img src=${flags.jordan} />`,
+        address: `Petra St.46 Irbid 21146 Jordan`,
+        contact: `<li><b>Phone:</b> 00962795900474</li>
+           <li><b>Email:</b> <a href="mailto:wessam_a@arcadajo.com">wessam_a@arcadajo.com</a></li>
+           <li><b>Contact Person:</b> Mr. Wessam Awawdeh</li>`,
+        website: ``,
+        longitude: 35.93003098077788,
+        latitude: 32.50678953842973,
+        continent: ["Asia"],
+      },
+   */
+  
+      /*  {
+         name: `Bio Zyme SRL`,
+         logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/biozyme-logo.png`,
+         coverage: `Romania`,
+         coverageFlags: `<img src=${flags.romania} />`,
+         address: `Strada G. V. Bibescu 31, Cluj-Napoca 400000, Romania`,
+         contact: `<li><b>Phone:</b> 40 (264) 523 281</li>
+            <li><b>Fax:</b> 40 (264) 523 281</li>
+            <li><b>Email:</b> <a href="mailto:contact@biozyme.ro">contact@biozyme.ro</a></li>
+            <li><b>Website:</b> <a href="https://www.biozyme.ro">www.biozyme.ro</a></li>`,
+         website: ``,
+         longitude: 23.6,
+         latitude: 46.76667,
+         continent: "Europe",
+       }, */
+  
+      /*  { name: `Bio-Connect Diagnostics B.V.`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/bio-connect.jpeg`,
+        coverage: `Netherlands and Luxembourg `,
+        coverageFlags: `<img src=${flags.belgium} /><img src=${flags.netherlands} /><img src=${flags.luxembourg} />`,
+        address: `Begonialaan 3A, 
+      6851TE Huissen, The Netherlands`,
+        contact: `<li><b>Phone:</b> +31 (0)26 326 4450</li>
+               <li><b>Fax:</b> +31 (0)26 326 4451</li>
+               <li><a href="mailto:info@bio-connect.nl">info@bio-connect.nl</a></li>
+               <li><b>Website:</b> <a href="https://www.bio-connect.nl">www.bio-connect.nl</a></li>`,
+        website: ``,
+        longitude: 5.9180134,
+        latitude: 51.9134811, }, */
+  
+      {
+        name: `BioAdvanced Systems, S.a De C.v.`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/bioadvanced-logo.jpg`,
+        coverage: [`Mexico`],
+        coverageFlags: `<img src=${flags.mexico} />`,
+        address: `S.A. de C.V.Av. Leyes de Reforma, No. 1211D, Col. Leyes de Reforma 3a Sección, C.P 09310 Del. Iztapalapa, Ciudad de México`,
+        contact: `<li><b>Phone:</b> 55 56917875, 55 26085624</li>
+           <li><b>Fax:</b> 56917875, 26085624</li>
+           <li><b>Email:</b> <a href="mailto:biasys@biasys.com.mx">biasys@biasys.com.mx</a></li>
+           <li><b>Website:</b> <a href="https://biasys.com.mx">www.biasys.com.mx</a></li>`,
+        website: `https://biasys.com.mx`,
+        longitude: -105.25944,
+        latitude: 27.64389,
+        continent: ["North America"],
+      },
+  
+      {
+        name: `BioCat GmbH`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/biocat-weblogo.jpg`,
+        coverage: [`Austria`, `Germany`],
+        coverageFlags: `<img src=${flags.austria} /><img src=${flags.germany} />`,
+        address: `Technologiepark Heidelberg, Im Neuenheimer Feld 584, D-69120 Heidelberg, Germany`,
+        contact: `<li><b>Phone:</b> +49(0)6221-7141516</li>
+           <li><b>Fax:</b> +49(0)6221-7141529</li>
+           <li><b>Email:</b> <a href="mailto:info@biocat.com">info@biocat.com</a></li>
+           <li><b>Website:</b> <a href="https://www1.biocat.com/partners/norgen">www1.biocat.com</a></li>`,
+        website: `https://www.biocat.com/partners/norgen`,
+        longitude: 8.6733597,
+        latitude: 49.4220892,
+        continent: ["Europe"],
+      },
+  
+      {
+        name: `Biocell Science`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/bcs-logo.jpg`,
+        coverage: [`Colombia`],
+        coverageFlags: `<img src=${flags.colombia} />`,
+        address: `Carrera 47C No. 76D sur - 94 Sabaneta Antioquia Colombia`,
+        contact: `<li><b>Phone:</b> +57 312 715 47 40</li>
+           <li><b>Fax:</b> 5745797995</li>
+           <li><b>Email:</b> <a href="mailto:gerencia@biocellsci.com">gerencia@biocellsci.com</a></li>
+           <li><b>Website:</b> <a href="https://www.biocellsci.com">www.biocellsci.com</a></li>`,
+        website: `https://www.biocellsci.com`,
+        longitude: -75.61657,
+        latitude: 6.15153,
+        continent: ["South America"],
+      },
+  
+      {
+        name: `BioConsult`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/bioconsult-logo.jpg`,
+        coverage: [`Israel`],
+        coverageFlags: `<img src=${flags.israel} />`,
+        address: `Alfasi 33 Street, P.O. Box 7672, Jerusalem, 91076, Israel`,
+        contact: `<li><b>Phone:</b> 972-2-5667043</li>
+           <li><b>Fax:</b> 972-2-5662790</li>
+           <li><b>Email:</b> <a href="mailto:leurer@bioconsult.co.il">leurer@bioconsult.co.il</a></li>
+           <li><b>Website:</b> <a href="https://www.bioconsult.co.il">www.bioconsult.co.il</a></li>`,
+        website: `https://www.bioconsult.co.il`,
+        longitude: 35.2112892,
+        latitude: 31.7722892,
+        continent: ["Asia"],
+      },
+  
+      {
+        name: `Bioportugal`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/bioportugal-logo.jpg`,
+        coverage: [`Portugal`],
+        coverageFlags: `<img src=${flags.portugal} />`,
+        address: `Rua do Campo Alegre, 1306, Porto, Portugal`,
+        contact: `<li><b>Phone:</b> +351 22 600 4800</li>
+           <li><b>Fax:</b> +351 22 600 4801</li>
+           <li><b>Email:</b> <a href="mailto:bioportugal@bioportugal.pt">bioportugal@bioportugal.pt</a></li>
+           <li><b>Website:</b> <a href="https://www.bioportugal.pt">www.bioportugal.pt</a></li>`,
+        website: `https://www.bioportugal.pt`,
+        longitude: -8.6296472,
+        latitude: 41.1525286,
+        continent: ["Europe"],
+      },
+  
+      {
+        name: `Biosonda`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/biosonda.jpg`,
+        coverage: [`Chile`],
+        coverageFlags: `<img src=${flags.chile} />`,
+        address: `Av. Eduardo Castillo Velasco 2902, Ñuñoa - Santiago - CHILE`,
+        contact: `<li><b>Phone:</b> 562 2209 6770</li>
+           <li><b>Email:</b> <a href="mailto:biosonda@biosonda.cl">biosonda@biosonda.cl</a></li>
+           <li><b>Website:</b> <a href="https://www.biosonda.cl">www.biosonda.cl</a></li>`,
+        website: `https://www.biosonda.cl`,
+        longitude: -70.58279,
+        latitude: -33.44735,
+        continent: ["South America"],
+      },
+  
+     /*  {
+        name: `Biosistemi Grupa`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/biosistemi-grupa.jpg`,
+        coverage: [`Croatia`],
+        coverageFlags: `<img src=${flags.croatia} />`,
+        address: `Trnjanska cesta 73, HR-10000 Zagreb, Croatia`,
+        contact: `<li><b>Phone:</b> +385 1 3460 838</li>
+           <li><b>Email:</b> <a href="mailto:marketing@biosistemigrupa.com">marketing@biosistemigrupa.com</a></li>
+           <li><a href="www.biosistemigrupa.com">www.biosistemigrupa.com</a></li>`,
+        website: `www.biosistemigrupa.com`,
+        longitude: 15.98137,
+        latitude: 45.79555,
+        continent: ["Europe"],
+      }, */
+
+      {
+        name: `BioStem Co., Ltd`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/biostem.png`,
+        coverage: [`Thailand`],
+        coverageFlags: `<img src=${flags.thailand} />`,
+        address: `599/15-17 Moo 5, Srinakarin Rd., Samrong Nua, Muang Samutprakan, Samutprakan 10270, Thailand`,
+        contact: `<li><b>Phone:</b> (66) 89 481 1266 </li>
+           <li><b>Email:</b> <a href="mailto:servicebiostem@gmail.com">servicebiostem@gmail.com</a></li>
+           <li><a href="https://www.biostem.co.th/">https://www.biostem.co.th/</a></li>`,
+        website: `https://www.biostem.co.th/`,
+        longitude: 100.63314709734543,
+        latitude: 13.638855623436152,
+        continent: ["Asia"],
+      },
+  
+      {
+        name: `Biotech Concern`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/biotech-concern.png`,
+        coverage: [`Bangladesh`],
+        coverageFlags: `<img src=${flags.bangladesh} />`,
+        website: `https://biotechconcern.com/`,
+        continent: "Europe",
+      },
+
+      {
+        name: `BN Korea`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/BN-Korea-Logo.png`,
+        coverage: [`South Korea`],
+        coverageFlags: `<img src=${flags.southkorea} />`,
+        website: `http://www.bnkorea.co.kr/`,
+        continent: "Europe",
+      },
+  
+      {
+        name: `BTL Biotechno Labs Pvt Ltd`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/Biotechno_labs_logo.jpg`,
+        coverage: [`India`],
+        coverageFlags: `<img src=${flags.india} />`,
+        address: `613-A, Ansal Chamber-II, Bhikaji Cama Place, New Delhi-110066, India`,
+        contact: `<li><b>Phone:</b>  91-8860924629, +91-7291852429</li>
+           <li><b>Email:</b> <a href="mailto:info@biotechnolabs.com">info@biotechnolabs.com</a></li>
+           <li><a href="www.biotechnolabs.com">www.biotechnolabs.com</a></li>`,
+        website: `https://www.biotechnolabs.com`,
+        longitude: 77.18736414860734,
+        latitude: 28.567880793145118,
+        continent: ["Asia"],
+      },
+  
+      {
+        name: `Cedarlane Laboratories`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/cedarlane-logo.png`,
+        coverage: [`Canada`],
+        coverageFlags: `<img src=${flags.canada} />`,
+        address: `4410 Paletta Court, Burlington, Ontario, L7L 5R2`,
+        contact: `<li><b>Toll-Free (North America):</b> 1 800 268 5058</li>
+           <li><b>Phone:</b> +1 289 288 0001</li>
+           <li><b>Fax:</b> +1 289 288 0020</li>
+           <li><b>Email:</b> <a href="mailto:general@cedarlanelabs.com">general@cedarlanelabs.com</a></li>
+           <li><b>Website:</b> <a href="https://www.cedarlanelabs.com" target="_blank">www.cedarlanelabs.com</a></li>`,
+        website: `https://www.cedarlanelabs.com`,
+        longitude: -79.77448,
+        latitude: 43.37703,
+        continent: ["North America"],
+      },
+  
+      {
+        name: `Central European Biosystems`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/cebiosys-logo.jpg`,
+        coverage: [`Hungary`],
+        coverageFlags: `<img src=${flags.hungary} />`,
+        address: `Budapest, Óradna u. 4, 1044 Hungary`,
+        contact: `<li><b>Phone:</b> 36 1 226 5256, 36 23 502 195</li>
+           <li><b>Fax:</b> 36 1 226 5257, 36 23 502 196</li>
+           <li><b>Email:</b> <a href="mailto:cebiosys@cebiosys.com">cebiosys@cebiosys.com</a></li>
+           <li><b>Website:</b> <a href="https://www.cebiosys.hu" target="_blank">www.cebiosys.hu</a></li>`,
+        website: `https://www.cebiosys.hu`,
+        longitude: 19.1073234,
+        latitude: 47.5959975,
+        continent: ["Europe"],
+      },
+  
+      {
+        name: `CliniSciences S.A.S.`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/clinisciences-logo.png`,
+        coverage: [`France`,`Portugal`,`Iceland`],
+        coverageFlags: `<img src=${flags.france} /><img src=${flags.portugal} /><img src=${flags.iceland} />`,
+        address: `CliniSciences S.A.S. 74, rue des Suisses 92000 Nanterre - France`,
+        contact: `<li><b>Phone:</b> +33 9 77 40 09 09</li>
+           <li><b>Email:</b> <a href="mailto:info@clinisciences.com">info@clinisciences.com</a></li>
+           <li><b>Website:</b> <a href="https://www.clinisciences.com/en/" target="_blank">https://www.clinisciences.com/en/</a></li>`,
+        website: `https://www.clinisciences.com/en/`,
+        latitude: 48.8900,
+        longitude: 2.2060,
+        continent: ["Europe"],
+      },
+
+      {
+        name: `Conda Lab`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/conda-logo.png`,
+        coverage: [`Spain`,`Portugal`],
+        coverageFlags: `<img src=${flags.spain} /><img src=${flags.portugal} />`,
+        address: `Calle La Forja, nº 9, 28850 Torrejón de Ardoz, Madrid, Spain`,
+        contact: `<li><b>Phone:</b> +34 91 761 02 06</li>
+           <li><b>Email:</b> <a href="mailto:comercial@condalab.com">comercial@condalab.com</a></li>
+           <li><b>Website:</b> <a href="https://www.condalab.com" target="_blank">www.condalab.com</a></li>`,
+        website: `https://www.condalab.com`,
+        longitude: -3.4697,
+        latitude: 40.4554,
+        continent: ["Europe"],
+      },
+  
+      {
+        name: `Cosmo Bio Co. Ltd.`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/cosmobio-logo.jpg`,
+        coverage: [`Japan`],
+        coverageFlags: `<img src=${flags.japan} />`,
+        address: `Toyo Ekimae Bldg.2-2-20 Toyo, Koto-Ku, 135-0016, Tokyo, 104-0061, Japan`,
+        contact: `<li><b>Phone:</b> (+81)3-5632-9610, (+81)3-5632-9620, (+81)3-5632-9608, (+81)3-5632-9622</li>
+           <li><b>Fax:</b> (+81)3-5632-9619, (+81)3-5632-9965, (+81)3-5632-9614</li>
+           <li><b>Email:</b> <a href="mailto:mail@cosmobio.co.jp">mail@cosmobio.co.jp</a></li>
+           <li><b>Website:</b> <a href="https://www.cosmobio.co.jp" target="_blank">www.cosmobio.co.jp</a></li>`,
+        website: `https://www.cosmobio.co.jp`,
+        longitude: 139.8135,
+        latitude: 35.6702,
+        continent: ["Asia"],
+      },
+  
+      {
+        name: `Diamed Enterprise`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/diamed-logo-wo-backdrop.jpg`,
+        coverage: [`Philippines`],
+        coverageFlags: `<img src=${flags.philippines} />`,
+        address: ` 10683 Sta. Fe Subd Los Baños Laguna 4030 Philippines`,
+        contact: `<li><b>Phone:</b> (+6)-349-310-0878</li>
+           <li><b>Fax:</b> (+6) 328-584-4762</li>
+           <li><b>Email:</b> <a href="mailto:info@diamed-ph.com">info@diamed-ph.com</a></li>
+           <li><b>Website:</b> <a href="https://www.diamed-ph.com" target="_blank">https://www.diamed-ph.com</a></li>`,
+        website: `https://www.diamed-ph.com`,
+        longitude: 121.2453,
+        latitude: 14.1699,
+        continent: ["Asia"],
+      },
+  
+      /* {
+        name: `Ecuagen LLC`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/EcuagenLogo.jpg`,
+        coverage: `Argentina, Dominican Republic, Ecuador, Panama, and Venezuela`,
+        coverageFlags: `<img src=${flags.argentina} /><img src=${flags.dominicanrepublic} /><img src=${flags.ecuador} /><img src=${flags.panama} /><img src=${flags.venezuela} />`,
+        address: `1161 Golden Lakes Blvd, Unit 1322, West Palm Beach, Florida, 33411, United States`,
+        contact: `<li><b>Phone:</b> +1 561 888 3363, + 1 561 429 08019, +593 98 363 9294</li> 
+           <li><b>Email:</b> <a href="mailto:hector.zambrano@ecuagen.com">hector.zambrano@ecuagen.com</a></li>
+           <li><b>Website:</b> <a href="https://ecuagenlabs.com/" target="_blank">https://ecuagenlabs.com/</a></li>`,
+        website: ``,
+        longitude: -80.16743,
+        latitude: 26.69308,
+        continent: "South America, North America",
+      }, */
+  
+      /* { name: `Elincou Diagnostics`,
+      logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/medixbiochemica-logo.jpg`,
+      coverage: `Cyprus`,
+      coverageFlags: `<img src=${flags.cyprus} />`,
+      address: `10, Katosni Street, 1082 Nicosia, Cyprus`,
+      contact: `<li><b>Phone:</b> 357 22 57 4727</li>
+             <li><b>Email:</b> <a href="mailto:a.syrimis@elincou.com.cy">a.syrimis@elincou.com.cy</a></li>
+             <li><b>Website:</b> <a href="https://www.medixbiochemica.com">www.medixbiochemica.com</a></li>`,
+      website: ``,
+      longitude: 33.36667,
+      latitude: 35.16667, }, */
+  
+      /* {
+        name: `Elta 90`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/elta90m-logo.png`,
+        coverage: [`Bulgaria`],
+        coverageFlags: `<img src=${flags.bulgaria} />`,
+        address: `10 Ivan Marinov Yonchev Str. 1510 Sofia Bulgaria`,
+        contact: `<li><b>Phone:</b> 983 22 11, 927 42 32</li>
+           <li><b>Email:</b> <a href="mailto:office@elta90.eu">office@elta90.eu</a></li>
+           <li><b>Website:</b> <a href="https://www.elta90.com/">www.elta90.com</a></li>`,
+        website: `https://www.elta90.com/`,
+        longitude: 23.34676,
+        latitude: 42.702103,
+        continent: ["Europe"],
+      }, */
+
+      {
+        name: `Elta 90 Medical Biotechnology d.o.o.`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/ELTA90MB-LOGO.png`,
+        coverage: [`Bosnia and Herzegovina`],
+        coverageFlags: `<img src=${flags.bosniaandherzegovina} />`,
+        address: `Dr. Silve Rizvanbegović 18A, Sarajevo, BiH`,
+        contact: `<li><b>Phone:</b> +387 (0) 33 591 285</li>
+           <li><b>Email:</b> <a href="mailto:office@elta90mb.com">office@elta90mb.com</a></li>
+           <li><b>Website:</b> <a href="https://elta90mb.com">elta90mb.com</a></li>`,
+        website: `https://elta90mb.com/web/`,
+        longitude: 18.332798042327088,
+        latitude: 43.84259773812444,
+        continent: ["Europe"],
+      },
+  
+      {
+        name: `Elta 90 Medical Science DOO`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/elta-90-logo.png`,
+        coverage: [`Serbia`],
+        coverageFlags: `<img src=${flags.serbia} />`,
+        address: `Svetog Klimenta 26, 11050 Belgrade, Serbia`,
+        contact: `<li><b>Phone:</b> +38 111 283 2650</li>
+           <li><b>Fax:</b> +381 11 28 32 850</li>
+           <li><b>Email:</b> <a href="mailto:office@elta90ms.com">office@elta90ms.com</a></li>
+           <li><b>Website:</b> <a href="https://www.elta90ms.rs">www.elta90ms.rs</a></li>`,
+        website: `https://my.eunethosting.com/lp/ss/`,
+        longitude: 20.50727081298828,
+        latitude: 44.7889289855957,
+        continent: ["Europe"],
+      },
+  
+      {
+        name: `Exome Innovation Pvt. Ltd.`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/exome-innovation.png`,
+        coverage: [`India`],
+        coverageFlags: `<img src=${flags.india} />`,
+        address: `Shop No.01, Portion No.-02 Second Floor New Market, Malvia Nagar New Delhi -110017`,
+        contact: `<li><b>Phone:</b> 9910233395, 9582741175</li>
+           <li><b>Email:</b> <a href="mailto:sales@exomeinnovation.in">sales@exomeinnovation.in</a></li>
+           <li><b>Website:</b> <a href="https://www.exomeinnovation.in">www.exomeinnovation.in</a></li>`,
+        website: `https://www.exomeinnovation.in`,
+        longitude: 77.09922,
+        latitude: 27.42397,
+        continent: ["Asia"],
+      },
+
+      {
+        name: `F & S Scientific Ltd.`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/F&S-logo.jpg`,
+        coverage: [`Kenya`,`Uganda`],
+        coverageFlags: `<img src=${flags.kenya} /><img src=${flags.uganda} />`,
+        website: `https://fnscientific.com/`,
+      },
+
+      {
+        name: `Fisher Scientific Canada`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/Fisher-Canada.svg`,
+        coverage: [`Canada`],
+        coverageFlags: `<img src=${flags.canada} />`,
+        website: `https://www.fishersci.ca`,
+      },
+
+      {
+        name: `Fisher Scientific Company, LLC`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/Fisher-Canada.svg`,
+        coverage: [`United States`],
+        coverageFlags: `<img src=${flags.usa} />`,
+        website: `https://www.fishersci.com/us/en/home.html`,
+      },
+  
+      {
+        name: `Geneflow Ltd.`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/genflow-logo.jpg`,
+        coverage: [`United Kingdom`],
+        coverageFlags: `<img src=${flags.uk} />`,
+        address: `Paul Fisher House, 1 The Sycamore Tree, Elmhurst Business Park, Elmhurst, Lichfield, Staffordshire, WS13 8EX`,
+        contact: `<li><b>Phone:</b> 01543 414704</li>
+           <li><b>Fax:</b> 01543 255666</li>
+           <li><b>Email:</b> <a href="mailto:sales@geneflow.co.uk">sales@geneflow.co.uk</a></li>
+           <li><b>Website:</b> <a href="https://www.geneflow.co.uk">www.geneflow.co.uk</a></li>`,
+        website: `https://www.geneflow.co.uk`,
+        longitude: -1.836319,
+        latitude: 52.714527,
+        continent: ["Europe"],
+      },
+  
+      {
+        name: `Genesys`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/genesys.jpg`,
+        coverage: [`Costa Rica`],
+        coverageFlags: `<img src=${flags.costarica} />`,
+        website: `https://www.genesyscostarica.com/`,
+      },
+
+      
+      {
+        name: `Genome Solutions`,
+        logo: `/sites/default/files/distributors/logos/genome-solutions-logo.png`,
+        coverage: ['Pakistan'],
+        coverageFlags: `<img src=${flags.pakistan} />`,
+        address: `90 Tundra Rd Caledon, ON L7C 2E9 Canada`,
+        contact: `<li><b>Phone:</b> 437-256-4888</li>
+           <li><b>Email:</b> <a href="mailto:albusscientific@gmail.com">albusscientific@gmail.com</a></li>
+           <li><b>Website:</b> <a href="https://albusscientific.ca/" target="_blank">https://albusscientific.ca/</a></li>`,
+        website: `https://albusscientific.ca/`,
+        longitude: -79.83311385251439,
+        latitude: 43.754512660893795,
+        continent: ["North America"],
+      },
+
+      {
+        name: `Gentaur Molecular Products`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/gentaur-alt.png`,
+        coverage: [`Belgium`,`Luxembourg`,`France`,`Bulgaria `,`Poland`,`Lithuania`,`Latvia`,`Estonia`],
+        coverageFlags: `<img src=${flags.belgium} /><img src=${flags.luxembourg} /><img src=${flags.france} /><img src=${flags.bulgaria} /><img src=${flags.poland} /><img src=${flags.lithuania} /><img src=${flags.latvia} /><img src=${flags.estonia} />`,
+        address: `Voorstraat 49, Kampenhout 1910, Belgium`,
+        contact: `<li><b>Phone:</b> 00 32 2 265 09 20</li>
+           <li><b>Email:</b> <a href="mailto:info@gentaur.com">info@gentaur.com</a></li>
+           <li><b>Website:</b> <a href="https://gentaur.com/">gentaur.com</a></li>`,
+        website: `https://gentaur.com/`,
+        longitude: 4.568862099999998,
+        latitude: 50.93207053672395,
+        continent: ["Europe"],
+      },
+
+      {
+        name: `Green Vision Scientific LLC`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/gvs-logo.png`,
+        coverage: [`Jordan`,`Iraq`,`Kuwait`,`Lebanon`],
+        coverageFlags: `<img src=${flags.jordan} /><img src=${flags.iraq} /><img src=${flags.kuwait} /><img src=${flags.lebanon} />`,
+        website: `https://greenvisionsci.com/`,
+      },
+  
+      {
+        name: `Harmony Biosolution Inc`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/hmb-logo.png`,
+        coverage: [`Taiwan`],
+        coverageFlags: `<img src=${flags.taiwan} />`,
+        address: `1F., No. 309-4, Sec. 1, Wenhua Rd., Banqiao Dist., New Taipei City 220 , Taiwan (R.O.C.)`,
+        contact: `<li><b>Phone:</b> 886-2-29083971</li>
+          <li><b>Fax:</b> 886-2-29083271</li>
+          <li><b>Email:</b> <a href="mailto:harmony.biosolution@gmail.com">harmony.biosolution@gmail.com</a></li>
+          <li><b>Website:</b> <a href="https://www.harmonybios.com">www.harmonybios.com</a></li>`,
+        website: `https://www.harmonybios.com`,
+        longitude: 121.45724406761785,
+        latitude: 25.000734295700877,
+        continent: ["Asia"],
+      },
+
+
+      {
+        name: `Hayleys Lifesciences (Pvt) Ltd`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/hayleys-lifesciences-logo.svg`,
+        coverage: [`Sri Lanka`],
+        coverageFlags: `<img src=${flags.srilanka} />`,
+        website: `https://hayleyslifesciences.com/`,
+      },
+
+      {
+        name: `Hexa Healthcare Equipment Trading L.L.C.`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/hexa-healthcare-equipment-trading-logo.jpg`,
+        coverage: [`United Arab Emirates`],
+        coverageFlags: `<img src=${flags.uae} />`,
+        contact: `<li><b>Email:</b> <a href="mailto:sales@hexa-healthcare.com">sales@hexa-healthcare.com</a></li>`,
+      },
+
+      /* {
+        name: `HR Scientific Traders`,
+        logo: ``,
+        coverage: [`Pakistan`],
+        coverageFlags: `<img src=${flags.pakistan} />`,
+        website: ``,
+      }, */
+  
+      {
+        name: `Interchim`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/advion-interchim.png`,
+        coverage: [`France`],
+        coverageFlags: `<img src=${flags.france} />`,
+        address: `211 bis, avenue J.F. Kennedy, BP 1140, 03100, Montluçon, France`,
+        contact: `<li><b>Phone:</b> +33 (0)4 70 03 73 06</li>
+           <li><b>Fax:</b> +33 (0)4 70 03 82 60</li>
+           <li><b>Email:</b> <a href="mailto:biosciences@advion-interchim.com">biosciences@advion-interchim.com</a></li>
+           <li><b>Website:</b> <a href="https://www.interchim.com">www.interchim.com</a></li>`,
+        website: `https://www.interchim.com`,
+        longitude: 2.6,
+        latitude: 46.3167,
+        continent: ["Europe"],
+      },
+
+      {
+        name: `Interlab Co., Ltd.`,
+        logo: `/sites/default/files/distributors/logos/interlab-logo.jpg`,
+        coverage: [`Taiwan`],
+        coverageFlags: `<img src=${flags.taiwan} />`,
+        address: `4th Floor, No.149-17 Section 2, Keelung Road. Taipei, Taiwan 110. R.O.C.`,
+        contact: `<li><b>Phone:</b> +886 2 2736 7100</li>
+           <li><b>Fax:</b> +886 2 2735 9807</li>
+           <li><b>Email:</b> <a href="mailto:service@interlab.com.tw">service@interlab.com.tw</a></li>
+           <li><b>Website:</b> <a href="http://www.interlab.com.tw/front/bin/home.phtml">http://www.interlab.com.tw/front/bin/home.phtml</a></li>`,
+        website: `http://www.interlab.com.tw/front/bin/home.phtml`,
+        longitude: 121.55552499587407,
+        latitude: 25.026623560101303,
+        continent: ["Asia"],
+      },
+
+      {
+        name: `Intermodal Services Co. W.L.L.`,
+        logo: `/sites/default/files/distributors/logos/intermodal-logo.jpg`,
+        coverage: [`Qatar`],
+        coverageFlags: `<img src=${flags.qatar} />`,
+        website: `https://www.intermodalqatar.com`,
+      },
+  
+      /* {
+        name: `JB Scientific`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/JBS-logo.jpg`,
+        coverage: `Pakistan`,
+        coverageFlags: `<img src=${flags.pakistan} />`,
+        address: `Suite M-77, Glass Towers, Clifton, Karachi, Pakistan`,
+        contact: `<li><b>Phone:</b> +92 347 290-0305 <br> +92 333 226-1216</li>
+                  <li><b>Email:</b> <a href="mailto:farhan@jb-scientific.com">farhan@jb-scientific.com</a> <br> <a href="mailto:adnan@jb-scientific.com">adnan@jb-scientific.com</a></li>
+                  <li><b>Website:</b> <a href="https://www.jb-scientific.com/">https://www.jb-scientific.com/</a></li>`,
+        website: ``,
+        longitude: 67.03375,
+        latitude: 24.83602,
+        continent: "Asia",
+      }, */
+  
+      /* {
+        name: `Kim & Friends Inc.`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/kimandfriends-logo.jpg`,
+        coverage: [`South Korea`],
+        coverageFlags: `<img src=${flags.southkorea} />`,
+        address: `#1407 Ace High-End Tower 9th, 233, Gasan digital 1-ro, Geumcheon-gu, Seoul, South Korea (Zip: 08590)`,
+        contact: `<li><b>Phone:</b> 82-2-2647-6611</li>
+           <li><b>Fax:</b> 82-2-2647-6687</li>
+           <li><b>Email:</b> <a href="mailto:kimnfriends@hanmail.net">kimnfriends@hanmail.net</a></li>
+           <li><b>Website:</b> <a href="https://www.kimnfriends.co.kr">www.kimnfriends.co.kr</a></li>`,
+        website: `https://www.kimnfriends.co.kr`,
+        longitude: 126.88714,
+        latitude: 37.46781,
+        continent: ["Asia"],
+      }, */
+  
+      {
+        name: `Krd - Obchodni Spolecnost S.r.o`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/KRD-logo-2025.png`,
+        coverage: [`Czech Republic`],
+        coverageFlags: `<img src=${flags.czechrepublic} />`,
+        address: `Pekařská 603/12, 15500 Prague 5`,
+        contact: `<li><b>Phone:</b> +420 257 013 400</li>
+           <li><b>Email:</b> <a href="mailto:krd@krd.cz">krd@krd.cz</a></li>
+           <li><b>Website:</b> <a href="https://www.krd.cz">www.krd.cz</a></li>`,
+        website: `https://www.krd.cz`,
+        longitude: 14.3486521,
+        latitude: 50.055189,
+        continent: ["Europe"],
+      },
+  
+      /* {
+        name: `La Ensenada S.r.l.`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/laensenada-logo.jpg`,
+        coverage: [`Peru`],
+        coverageFlags: `<img src=${flags.peru} />`,
+        address: `Av. Precursores 342 Of. 01-05, San Miguel, Lima, Peru`,
+        contact: `<li><b>Phone:</b> (+51)01-5611190</li>
+           <li><b>Email:</b> <a href="mailto:biotecnologia@laensenadacorp.com">biotecnologia@laensenadacorp.com</a></li>
+           <li><b>Website:</b> <a href="https://www.laensenadacorp.com">www.laensenadacorp.com</a></li>`,
+        website: `https://www.laensenadacorp.com`,
+        longitude: -77.08678,
+        latitude: -12.07067,
+        continent: ["South America"],
+      }, */
+  
+      {
+        name: `Lab-JOT Ltd. Sp.z o.o. Sp.k.`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/labjot-logo.jpg`,
+        coverage: [`Poland`],
+        coverageFlags: `<img src=${flags.poland} />`,
+        address: `Al. Jerozolimskie 214, 02-486 Warsaw, Poland`,
+        contact: `<li><b>Phone:</b> +48 22 636 72 09</li>
+           <li><b>Fax:</b> 4822-3359819, 4822-2034156</li>
+           <li><b>Email:</b> <a href="mailto:labjot@labjot.com">labjot@labjot.com</a></li>
+           <li><b>Website:</b> <a href="https://www.labjot.com">www.labjot.com</a></li>`,
+        website: `https://www.labjot.com`,
+        longitude: 20.9185672,
+        latitude: 52.1906192,
+        continent: ["Europe"],
+      },
+  
+      {
+        name: `Labconsult`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/labconsult-logo.png`,
+        coverage: [`Belgium`, `Luxembourg`],
+        coverageFlags: `<img src=${flags.belgium} /><img src=${flags.luxembourg} />`,
+        address: `Av. Louis Bertrand, 126, B-1030 Brussels, Belgium`,
+        contact: `<li><b>Phone:</b> +32 (0)2 743 39 90</li>
+           <li><b>Fax:</b> +32 (0)2 733 15 39</li>
+           <li><b>Email:</b> <a href="mailto:info@labconsult.be">info@labconsult.be</a></li>
+           <li><b>Website:</b> <a href="https://www.labconsult.be/">www.labconsult.be</a></li>`,
+        website: `https://www.labconsult.be/`,
+        longitude: 4.38161,
+        latitude: 50.86509,
+        continent: ["Europe"],
+      },
+  
+      /*  {
+         name: `Labo-sk`,
+         logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/labosk-logo.jpg`,
+         coverage: `Slovakia`,
+         coverageFlags: `<img src=${flags.slovakia} />`,
+         address: `Slavicie udolie 102 / A 911 02 Bratislava Slovakia`,
+         contact: `<li><b>Company Office:</b> Púchovská 12 (AGRIMEX complex) 831 06 Bratislava Slovakia</li>
+            <li><b>Phone:</b> 421 90 290 2010</li>
+            <li><b>Email:</b> <a href="mailto:labo@labo.sk">labo@labo.sk</a></li>
+            <li><b>Website:</b> <a href="https://www.labo.sk">www.labo.sk</a></li>`,
+         website: ``,
+         longitude: 17.0771712,
+         latitude: 48.1536005,
+         continent: "Europe",
+       }, */
+  
+      /* {
+        name: `Lasec SA`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/lasec-logo.jpg`,
+        coverage: ["Angola", "Botswana", "Burundi", "Cameroon", "Central African Republic", "Republic of the Congo", "Djibouti", "Equatorial Guinea", "Eritrea", "Eswatini", "Ethiopia", "Gabon", "The Gambia", "Ghana", "Guinea (Conakry)", "Ivory Coast", "Lesotho", "Liberia", "Madagascar", "Malawi", "Mali", "Mozambique", "Namibia", "Niger", "Nigeria", "Republic of the Congo", "Rwanda", "Senegal", "Sierra Leone", "Somalia", "South Africa", "Tanzania", "Zambia", "Zimbabwe"]
+        ,
+        coverageFlags: `<img src=${flags.angola} /><img src=${flags.botswana} /><img src=${flags.burundi} /><img src=${flags.cameroon} /><img src=${flags.centralafricanrepublic} /><img src=${flags.democraticrepubliccongo} /><img src=${flags.djibouti} /><img src=${flags.equatorialguinea} /><img src=${flags.eritrea} /><img src=${flags.eswatini} /><img src=${flags.ethiopia} /><img src=${flags.gabon} /><img src=${flags.gambia} /><img src=${flags.ghana} /><img src=${flags.guinea} /><img src=${flags.ivorycoast} /><img src=${flags.lesotho} /><img src=${flags.liberia} /><img src=${flags.madagascar} /><img src=${flags.malawi} /><img src=${flags.mali} /><img src=${flags.mozambique} /><img src=${flags.namibia} /><img src=${flags.niger} /><img src=${flags.nigeria} /><img src=${flags.republicofcongo} /><img src=${flags.rwanda} /><img src=${flags.senegal} /><img src=${flags.sierraleone} /><img src=${flags.somalia} /><img src=${flags.southafrica} /><img src=${flags.swaziland} /><img src=${flags.tanzania} /><img src=${flags.zambia} /><img src=${flags.zimbabwe} />`,
+        address: `52 Old Mill Road, Ndabeni, Cape Town, 7405, South Africa`,
+        contact: `<li><b>Phone:</b> +27 11 052 2500</li>
+           <li><b>Fax:</b> +27 11 052 2699</li>
+           <li><b>Email:</b> <a href="mailto:biotech@lasec.com">biotech@lasec.com</a></li>
+           <li><b>Website:</b> <a href="https://www.lasec.com/" target="_blank">www.lasec.com</a></li>`,
+        website: `https://www.lasec.com/`,
+      }, */
+  
+      {
+        name: `Letgen Biotechnology`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/Letgen-Logo.png`,
+        coverage: [`Turkey`, `Azerbaijan`, `Kazakhstan`, `Georgia`],
+        coverageFlags: `<img src=${flags.turkey} /><img src=${flags.azerbaijan} /><img src=${flags.kazakhstan} /><img src=${flags.georgia} />`,
+        address: `Kazım Dirik Mah. 296/2 Sok. No:33 Origiinn 35100 Bornova Izmir - Turkiye`,
+        contact: `<li><b>Phone:</b> 8504412987</li>
+           <li><b>Email:</b> <a href="mailto:info@letgenbio.com">info@letgenbio.com</a></li>
+           <li><b>Website:</b> <a href="https://letgenbio.com">letgenbio.com</a></li>`,
+        website: `https://letgenbio.com`,
+        longitude: 27.3266,
+        latitude: 39.37919,
+        continent: ["Asia"],
+      },
+  
+      {
+        name: `LubioScience Gmbh`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/LubioScience_logo_rebrand.png`,
+        coverage: [`Switzerland`],
+        coverageFlags: `<img src=${flags.switzerland} />`,
+        address: `Baumackerstrasse 24, 8050 Zürich, Switzerland`,
+        contact: `<li><b>Phone:</b> +41 41 417 02 80</li>
+           <li><b>Fax:</b> +41 41 417 02 80</li>
+           <li><b>Email:</b> <a href="mailto:info@lubio.ch">info@lubio.ch</a></li>
+           <li><b>Website:</b> <a href="https://www.lubio.ch/">www.lubio.ch</a></li>`,
+        website: `https://www.lubio.ch/`,
+        longitude: 8.5426378,
+        latitude: 47.4087971,
+        continent: ["Europe"],
+      },
+  
+      {
+        name: `Medikonia Limited`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/medikonia_Logo_v4_Output-09.jpg`,
+        coverage: [`Hong Kong`, `Macau`],
+        coverageFlags: `<img src=${flags.hongkong} /><img src=${flags.macau} />`,
+        address: `Unit 1005-1006, 10/F, Tower I, Grand Century Place, 193 Prince Edward Road West, Mongkok, Kowloon, Hong Kong`,
+        contact: `<li><b>Phone:</b> (852) 2866 8995</li>
+           <li><b>Fax:</b> (852) 2866 8069</li>
+           <li><b>Email:</b> <a href="mailto:cs@medikonia.com">cs@medikonia.com</a></li>
+           <li><b>Website:</b> <a href="https://www.medikonia.com">www.medikonia.com</a></li>`,
+        website: `https://www.medikonia.com`,
+        longitude: 114.08333,
+        latitude: 22.41667,
+        continent: ["Asia"],
+      },
+  
+      {
+        name: `Medsol Corporation`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/Medsol_Logo.png`,
+        coverage: [`Egypt`,`Saudia Arabia`,`UAE`,`Libya`],
+        coverageFlags: `<img src=${flags.egypt} /><img src=${flags.saudiarabia} /><img src=${flags.uae} /><img src=${flags.libya} />`,
+        website: `http://www.medicalsolutionme.com`,
+      },
+
+      {
+        name: `MedTech Corporation Trading`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/MedTech-logo.jpg`,
+        coverage: [`Qatar`],
+        coverageFlags: `<img src=${flags.qatar} />`,
+        website: `https://www.med-tech.com`,
+      },
+  
+      {
+        name: `Millennium Science Pty LTd`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/Millennium-Science-LOGO.png`,
+        coverage: [`Australia`,`New Zealand`],
+        coverageFlags: `<img src=${flags.australia} /><img src=${flags.newzealand} />`,
+        address: `4 Miles Street, Mulgrave, Victoria, 3170, Australia`,
+        contact: `<li><b>Phone:</b> 1 800 678 242</li>
+           <li><b>Email:</b> <a href="customerservice@mscience.com.au">customerservice@mscience.com.au</a></li>
+           <li><b>Website:</b> <a href="https://www.mscience.com.au/">www.mscience.com.au</a></li>`,
+        website: `https://www.mscience.com.au/`,
+        longitude: 145.14886,
+        latitude: -37.92314,
+        continent: ["Oceania"],
+      },
+  
+      /* { name: `Nacalai USA, Inc.`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/nacalai-logo.png`,
+        coverage: `Japan`,
+        coverageFlags: `<img src=${flags.japan} />`,
+        address: `498 Higashitamaya-cho, Nijo Karasuma, Nakagyo-ku Kyoto, 604-0855 Japan`,
+        contact: `<li><b>Phone:</b> 81 75-211-2703</li>
+               <li><b>Fax:</b> 0120-489-552</li>
+               <li><b>Email:</b> <a href="mailto:reagent@nacalai.co.jp">reagent@nacalai.co.jp</a></li>
+               <li><b>Website:</b> <a href="https://www.nacalai.co.jp/global/">www.nacalai.co.jp/global</a></li>`,
+        website: ``,
+        longitude: 135.7588,
+        latitude: 35.0137, }, */
+  
+      /*{ name: `NBS Scientific`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/nbsscientific-logo.png`,
+        coverage: `USA`,
+        coverageFlags: `<img src=${flags.usa} />`,
+        address: `1003 Ashwood Drive, Canonsburg, Pennsylvania, 15317`,
+        contact: `<li><b>Phone:</b> 724-655-4071</li>
+               <li><b>Fax:</b> 724-941-8662</li>
+               <li><b>Email:</b> <a href="mailto:info@nbsscientific.com">info@nbsscientific.com</a></li>
+               <li><b>Website:</b> <a href="https://www.novabiostorage.com/">www.novabiostorage.com</a></li>`,
+        website: ``,
+        longitude: -80.1669816,
+        latitude: 40.254573, }, */
+  
+      {
+        name: `Nano Life Quest`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/nanolifequest-logo-new.png`,
+        coverage: [`Malaysia`],
+        coverageFlags: `<img src=${flags.malaysia} />`,
+        address: `No. 2A, Jalan Sepadu 25/123A, al Park, Axis Industrial Park, 40400 Shah Alam, Selangor Darul Ehsan, Malaysia`,
+        contact: `<li><b>Phone:</b> +603 5525 2608</li>
+                   <li><b>Fax:</b> +603 5525 2609</li>
+                   <li><b>Email:</b> <a href="mailto:info@nanolifequest.com">info@nanolifequest.com</a></li>
+                   <li><b>Website:</b> <a href="https://www.nanolifequest.com">www.nanolifequest.com</a></li>`,
+        website: `https://www.nanolifequest.com`,
+        longitude: 101.46909,
+        latitude: 3.11073,
+        continent: ["Asia"],
+      },
+  
+      /* {
+        name: `Intelli Laboratories Trading LLC`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/intellilab-logo.png`,
+        coverage: `Bahrain, Egypt, Iraq, Jordan, Libya, Morocco, Oman, Pakistan, Saudi Arabia, Sudan, and United Arab Emirates`,
+        coverageFlags: `<img src=${flags.bahrain} /><img src=${flags.egypt} /><img src=${flags.iraq} /><img src=${flags.jordan} /><img src=${flags.libya} /><img src=${flags.morocco} /><img src=${flags.oman} /><img src=${flags.pakistan} /><img src=${flags.saudiarabia} /><img src=${flags.sudan} /><img src=${flags.uae} />`,
+        address: `<br><b>Office Address: </b>: Office 417 DBCS Bldg., Al Garhoud, Dubai  UAE<br><b>Store Address: </b>26th St., Al Qusais Industrial Area 3, PO. Box. 239775, Dubai - UAE`,
+        contact: `<li><b>Phone:</b> +971 (0) 4 548 0211</li>
+           <li><b>Email:</b> <a href="mailto:groupemail@intellilab.me">groupemail@intellilab.me</a></li>
+           <li><b>Website:</b> <a href="https://www.intellilab.me/">www.intellilab.me</a></li>`,
+        website: ``,
+        longitude: 55.39478465374514,
+        latitude: 25.294460089228405,
+        continent: "Africa, Asia",
+      }, */
+  
+      {
+        name: `Nordic Biosite AB`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/nbs-logo-2025.png`,
+        coverage: [`Denmark`,`Finland`,`Norway`,`Sweden`],
+        coverageFlags: `<img src=${flags.denmark} alt="" /><img src=${flags.finland} /><img src=${flags.norway} alt="" /><img src=${flags.sweden} alt="" />`,
+        address: `Propellervägen 4A, S-183 62 Täby, Sweden`,
+        contact: `<li><b>Phone:</b> 0854443340</li>
+           <li><b>Email:</b> <a href="mailto:info@nordicbiosite.com">info@nordicbiosite.com</a></li>
+           <li><b>Website:</b> <a href="https://www.nordicbiosite.com" target="_blank">www.nordicbiosite.com</a></li>`,
+        website: `https://www.nordicbiosite.com`,
+        longitude: 18.07783,
+        latitude: 59.55137,
+        continent: ["Europe"],
+      },
+  
+      {
+        name: `Norgen Biotek Corp.`,
+        logo: `/themes/custom/jango/logo.svg`,
+        coverage: [`Canada`, `United States`],
+        coverageFlags: `<img src=${flags.canada} alt="" /><img src=${flags.usa} alt="" />`,
+        address: `3430 Schmon Parkway, Thorold, Ontario, Canada, L2V 4Y6`,
+        contact: `<li><b>Toll-Free (North America):</b> 1 866 667 4362</li>
+           <li><b>Phone:</b> +1 905 227 8848</li>
+           <li><b>Fax:</b> +1 905 227 1061</li>
+           <li><b>Email:</b> <a href="mailto:order@norgenbiotek.com">orders@norgenbiotek.com</a></li>
+           <li><b>Website:</b> <a href="https://norgenbiotek.com" target="_blank">www.norgenbiotek.com</a></li>`,
+        website: `https://norgenbiotek.com`,
+        longitude: -79.2379805,
+        latitude: 43.1134182,
+        continent: ["North America"],
+      },
+  
+      /*  {
+         name: `Pars Gene Pazhoh Iranian`,
+         logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/PGP_en.jpg`,
+         coverage: `Iran`,
+         coverageFlags: `<img src=${flags.iran} />`,
+         address: `Unit # 7, No 39, East Armaghan, Jordan, Tehran`,
+         contact: `<li><b>Phone:</b> +982126231456, +982126231458</li>
+            <li><b>Email:</b> <a href="mailto:info@parsgenelab.com">info@parsgenelab.com</a></li>
+            <li><b>Website:</b> <a href="https://www.parsgenelab.com">www.parsgenelab.com</a></li>`,
+         website: ``,
+         longitude: 51.42151,
+         latitude: 35.69439,
+         continent: "Asia",
+       }, */
+  
+      {
+        name: `PGP Life Scientific`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/PGP.png`,
+        coverage: [`Iraq`,`Pakistan`],
+        coverageFlags: `<img src=${flags.iraq} /><img src=${flags.pakistan} />`,
+        website: `https://www.pgplifescientific.com`,
+      },
+
+      {
+        name: `Proteigene`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/logo-proteigene.png`,
+        coverage: [`France`],
+        coverageFlags: `<img src=${flags.france} />`,
+        address: `7 rue Leo Lagrange 27950 Saint-Marcel France`,
+        contact: `<li><b>Phone:</b> +33 232 644 545</li>
+          <li><b>Email:</b> <a href="mailto:info@proteigene.com">info@proteigene.com</a></li>
+          <li><b>Website:</b> <a href="https://proteigene.com/">https://proteigene.com/</a></li>`,
+        website: `https://proteigene.com/`,
+        longitude: 1.449111140711144,
+        latitude: 49.10396811604304,
+        continent: ["Europe"],
+      },
+
+      /* {
+        name: `PSV Agencies Prime Life sciences`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/psv.jpg`,
+        coverage: [`India`],
+        coverageFlags: `<img src=${flags.india} />`,
+        website: ``,
+      }, */
+  
+      /* {
+        name: `PT Sciencewerke`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/logoPT_science-work.jpg`,
+        coverage: [`Indonesia`],
+        coverageFlags: `<img src=${flags.indonesia} />`,
+        address: `Jl. Palmerah Barat 25 Jakarta Barat 11480`,
+        contact: `<li><b>Phone:</b> +62 21 53667591</li>
+           <li><b>Fax:</b> +62 21 54844232</li>
+           <li><b>WhatsApp:</b> +62 855 1288801</li>
+           <li><b>Email:</b> <a href="mailto:enquiry@sciencewerke.com">enquiry@sciencewerke.com</a></li>
+           <li><b>Website:</b> <a href="https://www.sciencewerke.com/id">www.sciencewerke.com/id</a></li>`,
+        website: `https://www.sciencewerke.com/id`,
+        longitude: 106.78388,
+        latitude: -6.20645,
+        continent: ["Asia"],
+      }, */
+  
+      /* {
+        name: `Reddint Scientific Ventures`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/reddint-logo.jpg`,
+        coverage: `Ghana and Nigeria`,
+        coverageFlags: `<img src=${flags.ghana} alt="" /><img src=${flags.nigeria} alt="" />`,
+        address: `2, Oremejila Street, Off Baale Road, Ajuwon, Via Ishaga, Lagos, Nigeria`,
+        contact: `<li><b>Phone:</b> 2348 034 155 602</li>
+           <li><b>Email:</b> <a href="mailto:info@reddintscientific.com">info@reddintscientific.com</a><br><a href="mailto:reddintscientific@gmail.com">reddintscientific@gmail.com</a></li>
+           <li><b>Website:</b> <a href="https://reddintscientific.com" target="_blank">www.reddintscientific.com</a></li>`,
+        website: ``,
+        longitude: 3.32583,
+        latitude: 6.52667,
+        continent: "Africa",
+      }, */
+  
+      /* {
+        name: `S.I.A.L. SRL`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/SIAL_logo_small.jpg`,
+        coverage: [`Italy`],
+        coverageFlags: `<img src=${flags.italy} alt="" />`,
+        address: `Via Giovanni Devoti 14, 00167 Roma, Italy`,
+        contact: `<li><b>Phone:</b> +39 06/6625280</li>
+           <li><b>Fax:</b> +39 06/6628503</li>
+           <li><b>Email:</b> <a href="mailto:info@sialgroup.com">info@sialgroup.com</a></li>
+           <li><b>Website:</b> <a href="https://www.sialgroup.com" target="_blank">www.sialgroup.com</a></li>`,
+        website: `https://www.sialgroup.com`,
+        longitude: 12.4350911,
+        latitude: 41.8998679,
+        continent: ["Europe"],
+      }, */
+  
+      {
+        name: `Sanbio B.v.`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/sanbio-logo.png`,
+        coverage: [`Luxembourg`, `Netherlands`],
+        coverageFlags: `<img src=${flags.luxembourg} alt="" /><img src=${flags.netherlands} alt="" />`,
+        address: `Frontstraat 2c, 5405 PB UDEN, Netherlands`,
+        contact: `<li><b>Phone:</b> +31 (0)413 25 11 15</li>
+           <li><b>Fax:</b> +31 (0)413 26 66 05</li>
+           <li><b>Email:</b> <a href="mailto:support@sanbio.nl">support@sanbio.nl</a></li>
+           <li><b>Website:</b> <a href="https://www.sanbio.nl" target="_blank">www.sanbio.nl</a></li>`,
+        website: `https://www.sanbio.nl`,
+        longitude: 5.6482621,
+        latitude: 51.6486551,
+        continent: ["Europe"],
+      },
+
+      {
+        name: `Science Exchange`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/science-exchange-logo.svg`,
+        coverage: [`United States`, `Canada`],
+        coverageFlags: `<img src=${flags.usa} /><img src=${flags.canada} />`,
+        website: `https://www.scienceexchange.com`,
+      },
+  
+      {
+        name: `Sciencewerke Pte Ltd`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/logoPT_science-work.jpg`,
+        coverage: [`Singapore`,`Indonesia`,`Malaysia`,`Myanmar`,`Vietnam`],
+        coverageFlags: `<img src=${flags.singapore} alt="" /><img src=${flags.indonesia} alt="" /><img src=${flags.malaysia} alt="" /><img src=${flags.myanmar} alt="" /><img src=${flags.vietnam} alt="" />`,
+        address: `102E Pasir Panjang Road &num;08-03 Citilink Warehouse Complex S118529 Singapore`,
+        contact: `<li><b>Phone:</b> +65 6777 1045</li>
+           <li><b>Fax:</b> +65 6777 3054</li>
+           <li><b>Email:</b> <a href="mailto:enquiry@sciencewerke.com">enquiry@sciencewerke.com</a></li>
+           <li><b>Website:</b> <a href="https://www.sciencewerke.com" target="_blank">www.sciencewerke.com</a></li>`,
+        website: `https://www.sciencewerke.com`,
+        longitude: 103.78659,
+        latitude: 1.29604,
+        continent: ["Asia"],
+      },
+  
+      {
+        name: `Scientist.com`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/scientist-com-logo.png`,
+        coverage: [`Canada`, `United States`],
+        coverageFlags: `<img src=${flags.canada} alt="canada flag"/><img src=${flags.usa} alt="usa flag" />`,
+        address: `329 S Highway 101 Suite 230 Solana Beach CA 92075-1877`,
+        contact: `<li><b>Phone:</b> 877-644-3044</li>
+           <li><b>Email:</b> <a href="mailto:labsupplies@scientist.com">labsupplies@scientist.com</a></li>
+           <li><b>Website:</b> <a href="https://app.scientist.com" target="_blank">app.scientist.com</a></li>`,
+        website: `https://app.scientist.com`,
+        longitude: -117.27115,
+        latitude: 32.98789,
+        continent: ["North America"],
+      },
+  
+      /*  {
+         name: `Sociedad Rojas y Guerrero SA`,
+         logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/genesyscr-logo.png`,
+         coverage: `Costa Rica`,
+         coverageFlags: `<img src=${flags.costarica} alt="" />`,
+         address: `San José, Montes de Oca Barrio Dent, Condiminio Latitud Dent`,
+         contact: `<li><b>Phone:</b> 1 506 8862-5195, 1 506 8713-1729</li>
+            <li><b>Fax:</b> 2253 0440</li>
+            <li><b>Email:</b> <a href="mailto:ventas@genesyscostarica.com">ventas@genesyscostarica.com</a></li>
+            <li><b>Website:</b> <a href="https://www.genesyscostarica.com" target="_blank">www.genesyscostarica.com</a></li>`,
+         website: ``,
+         longitude: -84.05767870672693,
+         latitude: 9.935022630188442,
+         continent: "North America",
+       }, */
+  
+      /*  {
+         name: `Specialized Medical Solutions W.L.L.`,
+         logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/sms-logo.png`,
+         coverage: `Qatar`,
+         coverageFlags: `<img src=${flags.qatar} alt="" />`,
+         address: `Building No. 11, Zone 43, Street 64Al Mamoura - P.O. Box: 20387 Doha, Qatar`,
+         contact: `<li><b>Phone:</b> (974) 55146936</li>
+            <li><b>Fax:</b> (974) 44626761</li>
+            <li><b>Email:</b> <a href="mailto:pravin@smsqatar.org">pravin@smsqatar.org</a></li>
+            <li><b>Website:</b> <a href="https://www.smsqatar.org" target="_blank">www.smsqatar.org</a></li>`,
+         website: ``,
+         longitude: 51.52245,
+         latitude: 25.27932,
+         continent: "Asia",
+       }, */
+      {
+        name: `SIAL SRL`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/SIAL_logo_small.jpg`,
+        coverage: [`Italy`],
+        coverageFlags: `<img src=${flags.italy} />`,
+        website: `https://www.sialgroup.com`,
+      },
+
+      {
+        name: `Synbiota Scientific`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/Synbiota-Scientific.png`,
+        coverage: [`India`],
+        coverageFlags: `<img src=${flags.india} />`,
+        website: `https://www.synbiota.in`,
+      },
+
+      {
+        name: `TATAA Biocenter AB`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/tataabiocenter-logo.gif`,
+        coverage: [`Czech Republic`,`Estonia`,`Latvia`,`Lithuania`,`Slovakia`],
+        coverageFlags: `<img src=${flags.czechrepublic} alt="" /><img src=${flags.estonia} alt="" /><img src=${flags.latvia} alt="" /><img src=${flags.lithuania} alt="" /><img src=${flags.slovakia} alt="" />`,
+        address: `Odinsgatan 28, 411 03 Göteborg, Sweden`,
+        contact: `<li><b>Phone:</b> 46 (0)31 761 57 00, 46 73 411 08 87</li>
+           <li><b>Fax:</b> 46 (0)31-15 28 90</li>
+           <li><b>Email:</b> <a href="mailto:info@tataa.com">info@tataa.com</a></li>
+           <li><b>Website:</b> <a href="https://www.tataa.com" target="_blank">www.tataa.com</a></li>`,
+        website: `https://www.tataa.com`,
+        longitude: 11.99628,
+        latitude: 57.69589,
+        continent: ["Europe"],
+      },
+
+      {
+        name: `Theracues Innovations Private Limited`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/theracues_logo.svg`,
+        coverage: [`India`],
+        coverageFlags: `<img src=${flags.india} />`,
+        address: `B Block, No. 1436, 2nd Floor, Sahakar Nagar, Bengaluru, Karnataka 560092, India`,
+        contact: `<li><b>Phone:</b> +91 80 48661874</li>
+           <li><b>Email:</b> <a href="mailto:cues@theracues.com">cues@theracues.com</a></li>
+           <li><b>Website:</b> <a href="https://theracues.com/">https://theracues.com/</a></li>`,
+        website: `https://theracues.com/`,
+        longitude: 77.58056789753275,
+        latitude: 13.065827744811573,
+        continent: ["Asia"],
+      },
+
+      {
+        name: `Thomas Scientific`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/Thomas-Scientific.webp`,
+        coverage: [`United States`,`Canada`,`Argentina`,`Bolivia`,`Brazil`,`Chile`,`Colombia`,`Ecuador`,`Falkland Island`,`French Guiana`,`Guyana`,`Paraguay`,`Peru`,`South Georgia and the South Sandwich Islands`,`Suriname`,`Uruguay`,`Venezuela`,`Algeria`,`Angola`,`Benin`,`Botswana`,`Burkina Faso`,`Burundi`,`Cameroon`,`Cape Verde`,`Central African Republic`,`Chad`,`Comoros`,`Djibouti`,`DR Congo`,`Egypt`,`Equatorial Guinea`,`Eritrea`,`Eswatini`,`Ethiopia`,`Gabon`,`Gambia`,`Ghana`,`Guinea`,`Guinea-Bissau`,`Côte d'Ivoire (Ivory Coast)`,`Lesotho`,`Liberia`,`Libya`,`Madagascar`,`Malawi`,`Mali`,`Mauritania`,`Mauritius`,`Morocco`,`Mozambique`,`Namibia`,`Niger`,`Nigeria`,`Republic of the Congo`,`Rwanda`,`São Tomé and Príncipe`,`Senegal`,`Seychelles`,`Sierra Leone`,`Somalia`,`South Africa`,`South Sudan`,`Sudan`,`Tanzania`,`Togo`,`Tunisia`,`Western Sahara`,`Zambia`,`Zimbabwe`,`India`],
+        coverageFlags: `<img src=${flags.usa} /><img src=${flags.canada} /><img src=${flags.argentina} /><img src=${flags.bolivia} /><img src=${flags.brazil} /><img src=${flags.chile} /><img src=${flags.colombia} /><img src=${flags.ecuador} /><img src=${flags.falklandislands} /><img src=${flags.frenchguiana} /><img src=${flags.guyana} /><img src=${flags.paraguay} /><img src=${flags.peru} /><img src=${flags.southgeorgia} /><img src=${flags.suriname} /><img src=${flags.uruguay} /><img src=${flags.venezuela} /><img src=${flags.algeria} /><img src=${flags.angola} /><img src=${flags.benin} /><img src=${flags.botswana} /><img src=${flags.burkinafaso} /><img src=${flags.burundi} /><img src=${flags.cameroon} /><img src=${flags.capeverde} /><img src=${flags.centralafricanrepublic} /><img src=${flags.chad} /><img src=${flags.comoros} /><img src=${flags.djibouti} /><img src=${flags.democraticrepubliccongo} /><img src=${flags.egypt} /><img src=${flags.equatorialguinea} /><img src=${flags.eritrea} /><img src=${flags.eswatini} /><img src=${flags.ethiopia} /><img src=${flags.gabon} /><img src=${flags.gambia} /><img src=${flags.ghana} /><img src=${flags.guinea} /><img src=${flags.guineabissau} /><img src=${flags.cotedivoire} /><img src=${flags.lesotho} /><img src=${flags.liberia} /><img src=${flags.libya} /><img src=${flags.madagascar} /><img src=${flags.malawi} /><img src=${flags.mali} /><img src=${flags.mauritania} /><img src=${flags.mauritius} /><img src=${flags.morocco} /><img src=${flags.mozambique} /><img src=${flags.namibia} /><img src=${flags.niger} /><img src=${flags.nigeria} /><img src=${flags.republicofcongo} /><img src=${flags.rwanda} /><img src=${flags.saotomeprincipe} /><img src=${flags.senegal} /><img src=${flags.seychelles} /><img src=${flags.sierraleone} /><img src=${flags.somalia} /><img src=${flags.southafrica} /><img src=${flags.southsudan} /><img src=${flags.sudan} /><img src=${flags.tanzania} /><img src=${flags.togo} /><img src=${flags.tunisia} /><img src=${flags.westernsahara} /><img src=${flags.zambia} /><img src=${flags.zimbabwe} /><img src=${flags.india} />`,
+        website: `https://www.thomassci.com/`,
+      },
+  
+      /* {
+        name: `T&eacute;cnica del Plata Ltda.`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/TdP-logo.gif`,
+        coverage: `Uruguay`,
+        coverageFlags: `<img src=${flags.uruguay} />`,
+        address: `Durazno 1572 - Montevideo, Uruguay`,
+        contact: `<li><b>Phone:</b> (598) 2908 4866</li>
+              <li><b>Email:</b> <a href="mailto:info@tecnicadelplata.com.uy">info@tecnicadelplata.com.uy</a></li>
+              <li><b>Contact Form:</b> <a href="https://tecnicadelplata.com.uy/#contacto">https://tecnicadelplata.com.uy/#contacto</a></li>
+              <li><a href="www.tdp.uy">www.tdp.uy</a></li>`,
+        website: ``,
+        longitude: -56.18419,
+        latitude: -34.90984,
+        continent: "South America",
+      }, */
+  
+      {
+        name: `Uniscience Corporation`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/uniscience-logo-new.png`,
+        coverage: [`Brazil`],
+        coverageFlags: `<img src=${flags.brazil} alt="" />`,
+        address: `Av dos Rem&eacute;dios, 1077, CEP 06298-006, Osasco, SP, Brasil`,
+        contact: `<li><b>Phone:</b> (11) 3622-2320</li>
+           <li><b>Email:</b> <a href="mailto:info@uniscience.com.br">info@uniscience.com.br</a></li>
+           <li><b>Website:</b> <a href="https://www.uniscience.com.br" target="_blank">www.uniscience.com.br</a></li>`,
+        website: `https://www.uniscience.com.br`,
+        longitude: -46.77186,
+        latitude: -23.52119,
+        continent: ["South America"],
+      },
+
+      {
+        name: `VELD Ltd`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/Veld-logo.svg`,
+        coverage: [`Kazakhstan`],
+        coverageFlags: `<img src=${flags.kazakhstan} alt="" />`,
+        website: `https://www.veld.kz`,
+        continent: ["North America"],
+      },
+
+      {
+        name: `VWR International`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/avantor-vwr-logo.png`,
+        coverage: [`United States`],
+        coverageFlags: `<img src=${flags.usa} alt="" />`,
+        website: `https://us.vwr.com/`,
+        continent: ["North America"],
+      },
+
+      /* {
+        name: `Xavier Marin`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/Xavier-Marin.png`,
+        coverage: [`Ecuador`],
+        coverageFlags: `<img src=${flags.ecuador} alt="" />`,
+        website: ``,
+        contact: `<li><b>Phone:</b> 593 9 92917385</li>`,
+        continent: ["North America"],
+      }, */
+      
+      {
+        name: `Zageno Inc`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/zageno-logo.svg`,
+        coverage: [`Canada`, `United States`],
+        coverageFlags: `<img src=${flags.canada} alt="" /><img src=${flags.usa} alt="" />`,
+        contact: `<li><b>Phone:</b> +18574778479</li>
+           <li><b>Website:</b> <a href="https://go.zageno.com/">https://go.zageno.com/</a></li>`,
+        website: `https://go.zageno.com/`,
+        continent: ["North America"],
+      },
+
+  
+      /*  {
+         name: `Vishuo Biomedical (Thailand) Ltd.`,
+         logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/vishuo-logo.jpg`,
+         coverage: `Thailand`,
+         coverageFlags: `<img src=${flags.thailand} alt="" />`,
+         address: `17th Floor Alma Link Building, No. 25 Chitlom, Ploenchit, Lumphini, Pathumwan, Bangkok 10330, Thailand`,
+         contact: `<li><b>Phone:</b> +66 (0) 2681 9751</li>
+            <li><b>Email:</b> <a href="mailto:info.th@vishuo.com">info.th@vishuo.com</a></li>
+            <li><b>Website:</b> <a href="https://www.vishuothailand.com" target="_blank">www.vishuothailand.com</a></li>`,
+         website: ``,
+         longitude: 100.5167,
+         latitude: 13.7833,
+         continent: "Asia",
+       }, */
+  
+      /* {
+        name: `Vitech (Sh.p.k.) LLC`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/vitech-logo.png`,
+        coverage: `Republic of Kosovo`,
+        coverageFlags: `<img src=${flags.kosovo} alt="" />`,
+        address: `Rr. Vicianum nr. 210 Lagja Arbëri 3, 10000, Prishtinë Republic of Kosovo`,
+        contact: `<li><b>Phone:</b> 383 44 305 522</li>
+           <li><b>Email:</b> <a href="mailto:service@vitech.ks-com">service@vitech.ks-com</a><br><a href="mailto:products@vitech.ks-com">products@vitech.ks-com</a></li>
+           <li><b>Website:</b> <a href="https://www.vitech-ks.com" target="_blank">www.vitech-ks.com</a></li>`,
+        website: ``,
+        longitude: 21.1476698,
+        latitude: 42.6607492,
+        continent: "Europe",
+      }, */
+
+      {
+        name: `3GENES Distribution.`,
+        logo: `https://norgenbiotek.com/sites/default/files/distributors/logos/Logo-3GENES.jpg`,
+        coverage: [`Czech Republic`,`Hungary`,`Slovakia`],
+        coverageFlags: `<img src=${flags.czechrepublic} /><img src=${flags.hungary} /><img src=${flags.slovakia} />`,
+        address: `Verdunská 819/37, Bubeneč, 160 00 Prague`,
+        contact: `<li><b>Phone:</b> +420 739 256 251 </li>
+           <li><b>Email:</b> <a href="mailto:info@3genes.com">info@3genes.com</a></li>
+           <li><b>Website:</b> <a href="https://3genes.com/" target="_blank">https://3genes.com/</a></li>`,
+        website: `https://3genes.com/`,
+        longitude: 14.397020260409612,
+        latitude: 50.101536235040705,
+        continent: ["Europe"],
+      },
+  
+      //END LIST OF distributor INFO
+    ];
+
+    available_countries = [];
+  
+    distributors.forEach((distributor) => {
+      /* add countries to the available_countries array */
+      distributor.coverage.forEach(country => {
+        if(!available_countries.includes(country.trim())){
+          available_countries.push(country.trim());
+        }
+      });
+      let website_link = null;
+      if(distributor.website != undefined){
+        website_link = document.createElement("a");
+        website_link.target = "_blank";
+        website_link.href = distributor.website;
+      }
+
+      let distributorBlock = document.createElement("div");
+      distributorBlock.classList.add("dist-box");
+      block_to_append = distributorBlock;
+      if(website_link!=null) {
+        website_link.append(distributorBlock);
+        block_to_append = website_link;
+      }
+      
+      let info_div = document.createElement("div");
+      info_div.classList.add("info");
+      info_div.innerHTML += `<h3 class="name notranslate">${distributor.name}</h3>
+      <div class="countries">
+        ${distributor.coverage.join(', ')}
+      </div>
+      <div class="flags">
+        ${distributor.coverageFlags}
+      </div>`;
+      if(website_link==null && distributor.contact!= undefined && distributor.contact!=""){ // add contact info if they don't have a website
+        info_div.innerHTML += `
+        <ul class="contact">
+          ${distributor.contact}
+        </ul>`;
+      }
+      distributorBlock.append(info_div);
+      if (distributor.logo != ""){
+        let dist_img = document.createElement("img");
+        dist_img.src=distributor.logo;
+        distributorBlock.append(dist_img);
+      } 
+      document.querySelector("#distributor-results-wrapper").append(block_to_append);
+    });
+
+    /* sort countries alphabetically */
+    available_countries.sort();
+    select_country = document.querySelector('#select-country');
+    /* Fill country dropdown with all available countries */
+    available_countries.forEach(country => {
+      let option = document.createElement("option");
+      option.value = country;
+      option.innerText = country;
+      select_country.append(option);
+    });
+
+    function filterCountrySelect(){
+      let select_country = document.querySelector("#select-country");
+      
+      let dist_box = document.querySelectorAll("div.dist-box");
+      for (i = 0; i < dist_box.length; i++) {
+        if(select_country.value.toUpperCase() == "ALL"){
+          dist_box[i].style.display = "grid";
+          continue;
+        }
+        b = dist_box[i].querySelector(".countries");
+        txtValueb = b.textContent || b.innerText;
+        if (txtValueb.toUpperCase().indexOf(select_country.value.toUpperCase()) > -1){
+          dist_box[i].style.display = "grid";
+        } 
+        else {
+          dist_box[i].style.display = "none";
+        }
+      }
+
+    }
+  
+    function filterFunction() {
+      // Declare variables
+      var input, filter, ul, li, a, i, txtValue;
+      input = document.getElementById("filterSearch");
+      filter = input.value.toUpperCase();
+      const wrapper_div = document.getElementById("distributor-results-wrapper");
+      // ul = document.getElementById('dist-list');
+      // li = ul.querySelectorAll('.dist-box');
+      dist_box = wrapper_div.querySelectorAll("div.dist-box");
+  
+      // similar characters
+      const similar_chars = {
+        A: ["À", "Á", "Â", "Ã", "Ä", "Å"],
+        C: ["Ç"],
+        E: ["È", "É", "Ê", "Ë"],
+        I: ["Ì", "Í", "Î", "Ï", "ı"],
+        N: ["Ñ"],
+        O: ["Ò", "Ó", "Ô", "Õ", "Ö", "Ø"],
+        R: ["Ř"],
+        S: ["ß"],
+        U: ["Ù", "Ú", "Û", "Ü"],
+        Y: ["Ý"],
+      };
+  
+      //check if the input field is empty
+      /* if (filter.length >= 1) { */
+        //hide search warning
+        /* document.querySelector('#searchWarning').style.display = "none"; */
+        // Loop through all list items, and hide those who don't match the search query
+        for (i = 0; i < dist_box.length; i++) {
+          a = dist_box[i].querySelector(".name");
+          b = dist_box[i].querySelector(".countries");
+          // c = li[i].querySelector('.address');
+          txtValuea = a.textContent || a.innerText;
+          txtValueb = b.textContent || b.innerText;
+          // txtValuec = c.textContent || c.innerText;
+          //loop through characters of the filter search term
+          let filter_copy = "";
+          let similar_display = false;
+          for (let j = 0; j < filter.length; j++) {
+            if (similar_display) {
+              break;
+            }
+            //if one of the characters matches a letter in the similar_chars object, replace the character with each of its similar characters and check if that version of the filter exists
+            if (similar_chars[filter[j]]) {
+              for (let k = 0; k < similar_chars[filter[j]].length; k++) {
+                console.log(k);
+                filter_copy = filter;
+                filter_copy =
+                  filter.substring(0, j) +
+                  similar_chars[filter[j]][k] +
+                  filter.substring(j + 1);
+                if (
+                  txtValuea.toUpperCase().indexOf(filter_copy) > -1 ||
+                  txtValueb.toUpperCase().indexOf(filter_copy) > -1
+                ) {
+                  similar_display = true;
+                  break;
+                }
+              }
+            }
+          }
+          if (similar_display) {
+            dist_box[i].style.display = "grid";
+          } else if (
+            txtValuea.toUpperCase().indexOf(filter) > -1 ||
+            txtValueb.toUpperCase().indexOf(filter) > -1
+          ) {
+            dist_box[i].style.display = "grid";
+          } else {
+            dist_box[i].style.display = "none";
+          }
+        }
+      /* } else {
+        //if input is too short, hide ALL blocks
+        for (i = 0; i < li.length; i++) {
+          li[i].parentNode.style.display = "none";
+        }
+        //and show search warning
+        // document.querySelector('#searchWarning').style.display = "";
+      } */
+    }
+  </script>
+  

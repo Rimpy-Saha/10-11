@@ -1,0 +1,120 @@
+
+
+{# Render form buttons #}
+<button class="form-button" data-target-form="account-issues">Account Issues</button>
+<button class="form-button" data-target-form="business-opportunities">Business Opportunities</button>
+<button class="form-button" data-target-form="conference-inquiries">Conference Inquiries</button>
+<button class="form-button" data-target-form="file-complaint">File Complaint</button>
+<button class="form-button" data-target-form="web-invoice">Invoice</button>
+<button class="form-button" data-target-form="job-application">Job Application</button>
+<button class="form-button" data-target-form="newsletter">Newsletter</button>
+<button class="form-button" data-target-form="order-status">Order Status</button>
+<button class="form-button" data-target-form="product-issues">Product Issues</button>
+<button class="form-button" data-target-form="public-relations">Public Relations</button>
+<button class="form-button" data-target-form="web-return">Web Return</button>
+<button class="form-button" data-target-form="service-consultation">Service Consultation</button>
+<button class="form-button" data-target-form="service-issues">Service Issues</button>
+<button class="form-button" data-target-form="sponsorship-inquiries">Sponsorship Inquiries</button>
+<button class="form-button" data-target-form="technical-support">Technical Support</button>
+<button class="form-button" data-target-form="website-issues">Website Issues</button>
+
+<article{{ attributes }}>
+
+
+{# Render forms within hidden containers #}
+<div id="form-display-area" class="hidden"> {# Render forms within hidden containers #}
+    <div class="form-container hidden" id="account-issues-container">
+        {{ account_issues }}
+    </div>
+
+    <div class="form-container hidden" id="business-opportunities-container">
+        {{ business_opportunities }}
+    </div>
+
+    <div class="form-container hidden" id="conference-inquiries-container">
+        {{ conference_inquiries }}
+    </div>
+
+    <div class="form-container hidden" id="file-complaint-container">
+        {{ file_complaint }}
+    </div>
+
+    <div class="form-container hidden" id="web-invoice-container">
+        {{ web_invoice }}
+    </div>
+
+    <div class="form-container hidden" id="job-application-container">
+        {{ job_application }}
+    </div>
+
+    <div class="form-container hidden" id="newsletter-container">
+        {{ newsletter_subscription }}
+    </div> 
+
+    <div class="form-container hidden" id="order-status-container">
+        {{ order_status }}
+    </div>
+
+    <div class="form-container hidden" id="product-issues-container">
+        {{ product_issues }}
+    </div>
+
+    <div class="form-container hidden" id="public-relations-container">
+        {{ public_relations }}
+    </div>
+
+    <div class="form-container hidden" id="web-return-container">
+        {{ web_return }}
+    </div>
+
+    <div class="form-container hidden" id="service-consultation-container">
+        {{ service_consultation }}
+    </div>
+
+    <div class="form-container hidden" id="service-issues-container">
+        {{ service_issues }}
+    </div>
+
+    <div class="form-container hidden" id="sponsorship-inquiries-container">
+        {{ sponsorship_inquiries }}
+    </div>
+
+    <div class="form-container hidden" id="technical-support-container">
+        {{ technical_support }}
+    </div>
+
+    <div class="form-container hidden" id="website-issues-container">
+        {{ website_issues }}
+    </div>
+
+
+</div>
+
+
+  {% if not page %}
+    <h2{{ title_attributes }}>
+      <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+    </h2>
+  {% endif %}
+  {{ title_suffix }}
+
+  {% if display_submitted %}
+    <footer>
+      {{ author_picture }}
+      <div{{ author_attributes }}>
+        {% trans %}Submitted by {{ author_name }} on {{ date }}{% endtrans %}
+        {{ metadata }}
+      </div>
+    </footer>
+  {% endif %}
+
+  <div{{ content_attributes }}>
+    {{ content }}
+  </div>
+
+{{ attach_library('nor_forms/form_toggle') }}
+
+</article>
+
+
+

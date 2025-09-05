@@ -1,0 +1,1091 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a node.
+ *
+ * Available variables:
+ * - node: The node entity with limited access to object properties and methods.
+ *   Only method names starting with "get", "has", or "is" and a few common
+ *   methods such as "id", "label", and "bundle" are available. For example:
+ *   - node.getCreatedTime() will return the node creation timestamp.
+ *   - node.hasField('field_example') returns TRUE if the node bundle includes
+ *     field_example. (This does not indicate the presence of a value in this
+ *     field.)
+ *   - node.isPublished() will return whether the node is published or not.
+ *   Calling other methods, such as node.delete(), will result in an exception.
+ *   See \Drupal\node\Entity\Node for a full list of public properties and
+ *   methods for the node object.
+ * - label: (optional) The title of the node.
+ * - content: All node items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - author_picture: The node author user entity, rendered using the "compact"
+ *   view mode.
+ * - metadata: Metadata for this node.
+ * - date: (optional) Themed creation date field.
+ * - author_name: (optional) Themed author name field.
+ * - url: Direct URL of the current node.
+ * - display_submitted: Whether submission information should be displayed.
+ * - attributes: HTML attributes for the containing element.
+ *   The attributes.class element may contain one or more of the following
+ *   classes:
+ *   - node: The current template type (also known as a "theming hook").
+ *   - node--type-[type]: The current node type. For example, if the node is an
+ *     "Article" it would result in "node--type-article". Note that the machine
+ *     name will often be in a short form of the human readable label.
+ *   - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+ *     teaser would result in: "node--view-mode-teaser", and
+ *     full: "node--view-mode-full".
+ *   The following are controlled through the node publishing options.
+ *   - node--promoted: Appears on nodes promoted to the front page.
+ *   - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+ *     teaser listings.
+ *   - node--unpublished: Appears on unpublished nodes visible only to site
+ *     admins.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main
+ *   content tag that appears in the template.
+ * - author_attributes: Same as attributes, except applied to the author of
+ *   the node tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ * - view_mode: View mode; for example, "teaser" or "full".
+ * - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+ * - page: Flag for the full page state. Will be true if view_mode is 'full'.
+ * - readmore: Flag for more state. Will be true if the teaser content of the
+ *   node cannot hold the main body content.
+ * - logged_in: Flag for authenticated user status. Will be true when the
+ *   current user is a logged-in member.
+ * - is_admin: Flag for admin user status. Will be true when the current user
+ *   is an administrator.
+ *
+ * @see template_preprocess_node()
+ *
+ * @ingroup themeable
+ */
+#}
+<article{{ attributes }}>
+
+  {{ title_prefix }}
+  {% if label and not page %}
+    <h2{{ title_attributes }}>
+      <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+    </h2>
+  {% endif %}
+  {{ title_suffix }}
+
+  {% if display_submitted %}
+    <footer>
+      {{ author_picture }}
+      <div{{ author_attributes }}>
+        {% trans %}Submitted by {{ author_name }} on {{ date }}{% endtrans %}
+        {{ metadata }}
+      </div>
+    </footer>
+  {% endif %}
+
+  <div{{ content_attributes }}>
+    {{ content.body }}
+  </div>
+
+</article>
+
+<style> 
+html {
+  scroll-behavior: smooth;
+} 
+#accept{
+   scroll-margin-top: 175px;
+}
+    #section-main-content .container {
+        width: 100% !important;
+    }
+/* Page Specific For Category Pages */
+    .region-pagetitle,
+    .region-breadcrumb {
+        display: none;
+    }
+    .img-header,
+    .sticky-submenu,
+    .sticky-submenu.isSticky {
+        margin: 0 -15px;
+        width: calc(100% + 30px);
+    }
+    .titleOnly{
+      padding:120px 50px;
+    }
+    .img-header {
+        background-image: url(/sites/default/files/images/grant_research/Hexagon_background.jpg);
+    }
+    .section1:before {
+        content: "\e912";
+        font-family: 'NorgenSet3' !important;
+    }
+    .section2:before {
+        content: "\e90c";
+        font-family: 'Norgen' !important;
+    }
+    .mob-hex .image-box {
+    	padding: 0;
+    }
+    @media (min-width: 768px){
+        .vd-wrapper {
+            width: 750px;
+        }
+    }
+    @media (min-width: 992px){
+        .vd-wrapper {
+            width: 970px;
+        }
+    }
+    @media (min-width: 1200px){
+        .vd-wrapper {
+            width: 1170px;
+        }
+    }
+
+.data-container{
+    position: absolute;
+    width: calc(100% - 2rem);
+    bottom: -17rem;
+    background-color: rgba(0,0,0,.75);
+    /*max-width: 1280px;*/
+    max-width:700px;
+    margin: auto;
+    padding: 1em;
+    text-align:left;
+    box-shadow: 0 0 5px 0;
+   opacity:0.8;
+}
+
+.inner_content_content_type{
+   color:white;
+   font-weight:600 !important;
+   font-size:18px !important;
+   padding-bottom:0.2% !important;
+}
+
+.inner_content_release_date_and_last_updated_date{
+   color:white;
+}
+
+.inner_content_title{
+   color:white;
+   font-size: max(1vw, 30px) !important;
+   font-weight:600 !important;
+}
+
+.data-container .btn-exo{
+    color: #fff !important;
+    border-radius: 20px;
+    font-size: 18px !important;
+    transform: scale(1);
+    padding: 10px 20px;
+    height: max-content;
+    margin: 15px 10px 10px 0;
+   float:left;
+}
+.fa-download{
+   padding-right:10px;
+}
+@media only screen and (max-width: 600px) {
+
+.data-container{
+    bottom: -2rem;
+}
+}
+
+@media only screen and (max-width: 392px) {
+
+.data-container{
+    bottom: -2rem;
+}
+.inner_content_title{
+   font-size:22px !important;
+}
+.inner_content_content_type{
+   font-size:15px;
+}
+.data-container .btn-exo{
+    font-size: 10px !important;
+}
+}
+
+@media only screen and (max-width: 302px) {
+
+.data-container{
+    bottom: -2rem;
+}
+.inner_content_title{
+   font-size:18px !important;
+}
+.inner_content_content_type{
+   font-size:12px;
+}
+
+.data-container .btn-exo{
+    font-size: 7px !important;
+}
+}
+
+@media only screen and (max-width: 279px) {
+
+.data-container{
+    bottom: -2rem;
+}
+.inner_content_title{
+   font-size:15px !important;
+}
+
+.inner_content_content_type{
+   font-size:10px;
+}
+
+.data-container .btn-exo{
+    font-size: 5px !important;
+}
+}
+
+@media only screen and (min-width: 5000px) {
+.inner_content_title{
+   font-size: max(0vw, 30px) !important;
+}
+}
+
+.img-header.darken::before {
+    backdrop-filter: blur(3px);
+}
+.grant-sec{
+  width: 100%; 
+  margin:3% 0%;
+}
+.grant-sec-reqs{
+  width: 100%;
+  /*margin:3% auto;*/
+  padding: 3% 5% 3% 0.25%;
+  background-image: url(/sites/default/files/images/grant_research/grant-requirements-banner.jpg);
+}
+.grant-sec-limitations{
+   width: 75%;
+  margin:0% auto 10%;
+}
+.grant-sec-inner{
+  background: #00489714;
+  padding: 2%;
+    margin: 2% 0;
+}
+.grant-sec-list{
+  margin: 0 0 5% 0.5%;
+  list-style: none;
+}
+.node-unpublished { background: transparent; }
+.sec-title-div{
+  display: flex;
+  align-items: baseline;
+}
+.sec-title-div > img{
+  width: 70px;
+  margin-right: 1%;
+
+}
+.form-inside{
+    width: 45%;
+    margin: 2% auto;
+    padding: 3%;
+    text-align: center;
+    display: none;
+    position: absolute;
+    top: 10%;
+    background: white;
+    left: 25%;
+    right: 25%;
+    filter: drop-shadow(0px 0px 3px gray);
+    z-index: 2;
+
+}
+.form-inside > .close{
+      font-size: 45px;
+    position: absolute;
+    top: 0;
+    right: 3%;
+}
+.form-btns{
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    }
+      .guest-btn{
+    font-size: 18px;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    padding: 20px;
+    overflow-x: auto;
+    margin: 1%;
+    background-color: #f9f9f9;
+    }
+     .log-btn{
+    font-size: 18px;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    padding: 20px;
+    overflow-x: auto;
+    margin: 1%;
+    background-color: #f9f9f9;
+    }
+    .form-btn:hover{
+        background-color: #E5ECF4;
+        border: 2px solid #004897;
+    }
+    .main-app-sec{
+      position: relative;
+    }
+    .fa-check{
+      margin-right: 1%;
+    }
+     #app_overlay {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 2;
+    cursor: pointer;
+  }
+  .grant-sec > p{
+    font-size: 17px;
+  }
+  .grant-sec-inner > p{
+    font-size: 17px;
+  }
+  .grant-sec-list > li{
+    font-size: 17px;
+
+  }
+  .contact-experts-grid {
+display: grid;
+grid-column-gap: 30px;
+grid-template-columns: 1fr 1fr;
+margin: 2%;
+}
+    @media only screen and (max-width: 680px) {
+        
+       .contact-experts-grid{
+            grid-template-columns: 1fr;
+        }
+    }
+    /*.limitations-app{
+          background: #BE1E2D;
+    padding: 1%;
+    color: white;
+    }*/
+    .grant-sec > h2{
+      font-weight: 700;
+    }
+    .grant-sec-limitations > h2{
+      font-weight: 700;
+    }
+    .sec-title-div > h2{
+      font-weight: 700;
+    }
+    .darken::before{
+              backdrop-filter: blur(0px) !important;
+    background: rgb(255 255 255 / 75%) !important;
+    }
+    .img-header h2{
+        font-weight: 800;
+        font-size: 65px;
+       /* width: 45%;*/
+        text-align: left;
+        line-height: 1.25;
+        margin-left: 5%;
+            color: #004897;
+    text-shadow: none;
+    }
+     .img-header hr{
+   
+    border-top: 5px solid #004897;
+    margin-left: 5%;
+    width: 95%;
+    }
+    .img-header h1{
+      text-align: left;
+      margin-left: 5%;
+      color: #004897;
+      font-size: 50px;
+      text-shadow: none;
+      /*width: 45%;*/
+    }
+    .main-app-sec p{
+      font-family: 'Montserrat';
+      margin-bottom: 3%;
+      font-size: 17px;
+    }
+    .main-app-sec li{
+      font-family: 'Montserrat';
+      margin-bottom: 1%;
+    }
+    .main-app-sec h2{
+      font-family: 'Montserrat';
+      margin-bottom: 3%;
+      font-size: 35px;
+      font-weight: 800;
+      color: #004897;
+      margin-top: 0;
+      
+    }
+    .logo-div > img{
+      width: 15%;
+      margin: 1%;
+    }
+    .logo-div{
+      display: flex;
+      width: 45%;
+         align-items: center;
+    justify-content: flex-end;
+    }
+    .logo-div-2 > img{
+      width: 15%;
+      margin: 1%;
+    }
+    .logo-div-2{
+      display: flex;
+      width: 45%;
+         align-items: center;
+   /* justify-content: flex-end;*/
+    }
+    .app-nav{
+      display: flex;
+      justify-content: space-between;
+    align-items: center;
+    
+        padding: 1% 5%;
+    box-shadow: 0 -1px 49px 0 rgb(0 0 0 / 8%), 0 13px 15px 0 rgb(0 0 0 / 5%);
+    }
+    .app-nav > .btn {
+          width: 225px;
+    padding: 0.75%;
+    font-family: 'Montserrat';
+    font-weight: 700;
+    font-size: 24px;
+    }
+    .grant-sec .btn{
+       width: 225px;
+    padding: 1.5%;
+    font-family: 'Montserrat';
+    font-weight: 700;
+    font-size: 24px;
+    }
+    .gradient-rectangle {
+    /*position: absolute;
+    transform: translateY(calc(100px - 1.5em));*/
+    width: 100%;
+    height: 3em;
+
+    background-image: linear-gradient(90deg, #004897, #EC1D25, #0f6B7A);
+}
+    .blue-rectangle {
+    /*position: absolute;
+    transform: translateY(calc(100px - 1.5em));*/
+    width: 100%;
+    height: 0.5em;
+    background-image: linear-gradient(90deg, #004897, #004897, #004897);
+}
+ .grant-sec-list-elig {
+   list-style: none;
+   counter-reset: item;
+  /* margin: 0 0 3% 3%;*/
+ }
+ .grant-sec-list-elig > li {
+   counter-increment: item;
+   margin-bottom: 5px;
+   list-style: none;
+   font-family: 'Montserrat';
+    margin-bottom: 0.5%;
+    font-size: 17px;
+ }
+ .grant-sec-list-elig > li:before {
+   margin-right: 10px;
+   content: counter(item);
+   background: #0f6B7A;
+   border-radius: 100%;
+   color: white;
+   width: 40px;
+    height: 40px;
+   text-align: center;
+   display: inline-block;
+   font-size: 28px;
+       font-weight: 800;
+ }
+.arrowpoints{
+  margin-left: 4.5%;
+}
+ .arrowpoints > li{
+     list-style-type: none;
+  position: relative;
+  padding-left: 15px;
+  font-size: 17px;
+ }
+
+ .arrowpoints > li:before{
+       content: "\25BA \0020";
+    font-size: 15px;
+    position: absolute;
+    top: 1px;
+    left: -10px;
+    color: #004897;
+ }
+ .panel-body{
+  font-size: 17px;
+  font-family: 'Montserrat';
+ }
+ .app-img{
+  background-image: url(/sites/default/files/images/grant_research/norgen-lab-technician.jpg);
+  background-repeat: no-repeat;
+    background-size: cover;
+    background-position: right;
+}
+.first-app-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 10px;
+  padding-left: 5%;
+  padding-right: 0.10%;
+}
+.img-title-header{
+      display: flex;
+    flex-direction: column-reverse;
+}
+.whole-img-title{
+ /* display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 50px;
+      align-items: center;
+ justify-items: center;*/
+     /* background: #ffffff3d;
+    backdrop-filter: blur(7px);*/
+    width: 60%;
+}
+/*.img-title-logos img{
+  width: 50%;
+}*/
+/*.img-title-logos{
+      background: #ffffffc4;
+    padding: 2%;
+        width: 450px;
+        height: 450px;
+    border-radius: 50%;
+    display: grid;
+        grid-template-rows: 0fr 0fr 0fr 0fr;
+    justify-items: center;
+        align-content: center;
+
+}*/
+
+
+#logo2{
+  width: 120%;
+  max-width: 120%;
+}
+.image-header-logo-inside{
+    display: grid;
+        grid-template-columns: 1fr 0fr 1fr;
+    align-items: center;
+    grid-gap: 15px;
+}
+.image-header-logo{
+      text-align: left;
+      width: 70%;
+
+}
+    .row-grid-reqs{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: 20px;
+      align-items: center;
+          margin: auto;
+    width: 90%;
+    }
+     .row-grid-reqs > div > img{
+      width: -webkit-fill-available;
+    }
+ @media only screen and (max-width: 800px) {
+ 
+  .img-title-header{
+    width: 95%;
+  }
+  .whole-img-title{
+        grid-template-rows: 1fr 0fr;
+    grid-template-columns: 1fr;
+        justify-items: baseline;
+
+
+  }
+  .logo-div-2{
+    width: 100%;
+  }
+.image-header-logo{
+      margin-left: 6%;
+      
+}
+}
+
+
+  @media only screen and (min-width:996px){
+    .app-text{
+      margin-bottom:-24px;
+    }
+  }
+
+ @media only screen and (max-width: 996px) {
+  .first-app-grid{
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr;
+  padding-left: 3%;
+  padding-right: 3%;
+}
+    .row-grid-reqs{
+      display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr;
+      grid-gap: 20px;
+      align-items: center;
+    }
+    .row-grid-reqs > div > img{
+      width: -webkit-fill-available;
+    }
+
+    
+
+}
+@media only screen and (max-width: 500px) {
+  .logo-div{
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+  .app-nav{
+    flex-direction: column-reverse;
+  }
+  .logo-div-2 > img{
+    width: 30%;
+  }
+}
+
+@media only screen and (max-width: 373px) {
+  .img-title-logos{
+        width: 350px;
+    height: 350px;
+    margin-left: 0;
+  }
+
+}
+
+@media only screen and (max-width: 309px) {
+  .img-header h1{
+    font-size: 50px;
+    width: auto;
+  }
+  .img-header h2{
+    font-size: 40px;
+  }
+}
+@media only screen and (max-width: 283px) {
+ 
+}
+@media only screen and (max-width: 215px) {
+
+}
+@media only screen and (max-width: 247px) {
+  .img-header h1{
+    font-size: 40px;
+    width: auto;
+  }
+  .img-header h2{
+    font-size: 40px;
+  }
+}
+ @media only screen and (max-width: 911px) and (max-height: 721px){
+ 
+}
+ @media only screen and (max-width: 445px) and (max-height: 721px){
+  .img-header h1{
+    font-size: 40px;
+    width: auto;
+  }
+  .img-header h2{
+    font-size: 30px;
+  }
+ 
+}
+ @media only screen and (max-width: 301px) and (max-height: 721px){
+ 
+}
+ @media only screen and (max-width: 280px) and (max-height: 721px){
+  .img-header h1{
+    font-size: 30px;
+    width: auto;
+  }
+  .img-header h2{
+    font-size: 20px;
+  }
+}
+
+.img-header p {
+    width: auto;
+    max-width: initial;
+    min-width: initial;
+    }
+
+#part{
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        width: 727px;
+}
+
+/* new styles */
+.eligibility-app hr {
+  width: 30%;
+  border-top: 5px solid #0f6B7A;
+}
+
+.btn-primary  {
+    background-color: #004897;
+    border-color: #004897;
+    border-radius: 30px;
+  }
+
+.btn-primary:hover{
+  opacity: 0.7;
+}
+
+
+</style>
+ <div id="app_overlay" onclick="closebox();"></div>
+<!-- Header -->
+<!-- <section class="img-header darken titleOnly" style="z-index: 1;">
+  <div class="whole-img-title">
+  <div class="img-title-header">
+    <h1 style="color: #004897;">Norgen & Illumina | Sequence to Discover Research Grant</h1>
+    <hr>
+    <h2>Call for Proposals</h2>
+  </div>
+  <div class="image-header-logo">
+    <p style="margin: 0;text-shadow: none;font-size: 16px; color: #123a96;">Brought to you by</p>
+    <div class="image-header-logo-inside">
+    <img src="https://norgenbiotek.com/sites/default/files/images/grant_research/norgen-logo.png" alt="Norgen Biotek">
+    <p style="font-size: 24px;text-shadow: none;color: #124a96; font-weight: 500;">&</p>
+    <img src="/sites/default/files/images/grant_research/512px-Illumina-logo.svg.png" id="logo2" alt="Illumina">
+  </div>
+  </div>
+</div>
+</section> -->
+<section class="img-header darken titleOnly" style="z-index: 1;">
+  <img src="https://norgenbiotek.com/sites/default/files/images/grant_research/banner_part.png" id="part">
+  <div class="whole-img-title">
+    <div class="img-title-header">
+      <!--<button class="center btn btn-primary " onclick="open_popup();" style="font-size:24px;font-weight:700;margin-left:5%;padding:12px 36px;display:block;">Apply Now</button>-->
+      <h1 style="color: #004897;"><span style="font-weight: 500;">Norgen & Illumina |</span> Sequence to Discover Research Grant</h1>
+      <hr>
+      <h2>Get A $20,000 Research Grant</h2>
+    </div>
+  </div>
+</section>
+
+<div class="gradient-rectangle"></div>
+<section class="main-app-sec">
+  <!-- <section class="app-nav">
+    <button class="center btn btn-primary " onclick="open_popup();">Apply Now</button>
+    <div class="logo-div">
+      <p style="margin-bottom: 0;">Next Generation Sequencing | Designed to Discover</p>
+      
+    </div>
+  </section> -->
+  
+<!--accepting applications-->
+<section class="accepting-app grant-sec" id="accept">
+
+  <div class="first-app-grid">
+    <div class="app-text">
+      <h2 style="color: red;">Applications are now closed - Thank you for your submission.</h2>
+      <!-- <p style="color: red;"><strong>Applications are now closed - Thank you for your submission.</strong></p> -->
+      <p>With a commitment to providing innovative solutions that inspire new discoveries, the
+        Sequence to Discover Research Grant brought to you by Norgen Biotek Corp. and Illumina, is an opportunity for Canadian researchers who reside in Canada to receive funding to aid in project expansion and continue contributing to the scientific community. Three grants, each worth $20,000, will be provided to three recipients.</p>
+      <p><strong>The grants will be supported by both Norgen Biotek Corp. and Illumina Canada as follows:</strong></p>
+       <ul class="grant-sec-list  rnapoints">
+    <li>Norgen products, with a list price valued at <strong>$10,000</strong>, that include your choice of:
+      <ul class="arrowpoints" style="margin-top: 1%;">
+      <li>Sample collection and preservation devices</li>
+      <li>RNA purification and DNA isolation kits</li>
+      <!-- <li>NGS services</li> -->
+    </ul>
+    </li>
+    <li>Illumina sequencing kits with a list price of <strong>$10,000</strong></li>
+    <li>Associated costs with Norgen extraction, library preparation and sequencing services</li>
+    <li>Up to <strong> 3 recipients </strong>will be awarded and will receive the support as indicated above</li>
+
+  </ul>
+  <!--<button class="center btn btn-primary " onclick="open_popup();" style="display:inline-block;margin-right:24px;margin-bottom:24px;">Apply Now</button>-->
+  <a href="https://norgenbiotek.com/sequencetodiscover/rules-and-regulations" class="btn btn-primary" style="display:inline-block;border:1px solid #0f6b7a;background-color:#0f6b7a;color:white;font-weight:700;width:auto;padding:12px 36px;margin-bottom:24px;" target="_blank">View Terms and Conditions</a>
+    </div>
+    <div class="app-img">
+    </div>
+  </div>
+<!--   <div class="row">
+    <div class="col-lg-6">
+      <h2>Accepting Applications</h2>
+      <p style="color: red;"><strong>Applications will open March 1st, 2023 and close April 15th, 2023.</strong></p>
+      <p>With a commitment to providing innovative solutions that inspire new discoveries, the
+        Community Grant for Researchers brought to you by Norgen Biotek Corp. and Illumina, is an
+        opportunity for Canadian researchers to receive funding to aid in project expansion and
+        continue contributing to the scientific community. Three grants, each worth $20,000, will be
+          provided to three recipients.</p>
+      <p><strong>The grants will be supported by both Norgen Biotek Corp. and Illumina Canada as follows:</strong></p>
+       <ul class="grant-sec-list  rnapoints">
+    <li>Norgen products, with a list price valued at <strong>$10,000</strong>, that include your choice of:
+      <ul class="arrowpoints" style="margin-top: 1%;">
+      <li>Sample collection and preservation devices</li>
+      <li>RNA purification and DNA isolation kits</li>
+      <li>NGS services</li>
+    </ul>
+    </li>
+    <li>Illumina sequencing kits with a list price of $10,000</li>
+    <li>Up to <strong> 3 recipients </strong>will be awarded and will receive the support as indicated above</li>
+
+  </ul>
+  <button class="center btn btn-primary " onclick="open_popup();" style="font-size: 20px;">Apply Now</button>
+    </div>
+    <div class="col-lg-6">
+      <img src="/sites/default/files/images/grant_research/norgen-lab-technician.jpg">
+    </div>
+  </div> -->
+  <!-- <h2>Now Accepting Applications</h2>
+  <p><strong>Applications will open March 1st, 2023 and close April 15th, 2023.</strong></p>
+  <p>With a commitment to providing innovative solutions that inspire new discoveries, the
+      Community Grant for Researchers brought you by Norgen Biotek and Illumina, is an opportunity
+      for Canadian researchers to receive funding to aid in project expansion and continue
+      contributing to the scientific community. Three grants, each worth $20,000, will be provided to
+      three recipients.</p>
+  <div class="grant-sec-inner">
+  <p><strong>The grants will be supported by both Norgen Biotek Corp. and Illumina Canada as follows:</strong></p>
+  <ul class="grant-sec-list  rnapoints">
+    <li>Norgen products, with a list price valued at $10,000, that include:
+      <ul style="margin-top: 1%;"><li>Sample collection and preservation devices.</li>
+      <li>RNA purification and DNA isolation kits.</li>
+      <li>NGS services</li></ul>
+    </li>
+    <li>Illumina sequencing kits with a list price of $10,000.</li>
+    <li>Up to 3 recipients will be awarded and will receive the support as indicated above.</li>
+
+  </ul>
+</div> -->
+  
+</section>
+<div class="blue-rectangle"></div>
+
+<!--requirements-->
+<section class="requirements-app grant-sec-reqs">
+<h2 style="width: 90%;margin: auto;">Requirements</h2>
+  <div class="row-grid-reqs">
+
+    <div>
+      
+      <ul class="grant-sec-list rnapoints">
+    <li style="list-style: none;">The utilization of Next Generation Sequencing in one of the following applications:
+      <ul style="margin-left: 5%;margin-top: 1%;" class="arrowpoints"><li>Cell-Free RNA/Cell-Free DNA</li>
+      <li>Plasma/Serum</li>
+      <li>Whole Blood</li>
+      <li>Exosomes</li>
+      <li>Urine</li>
+      <li>Stool</li>
+      <li>Saliva</li>
+      <li>Metagenomics</li>
+    </ul>
+    </li>
+    <li style="list-style: none;">A letter of support from the principal investigator/home institute</li>
+    <li style="list-style: none;">Completion of <u><a href="https://norgenbiotek.com/sequencetodiscover/register" target="_blank" style="font-weight: 400;">online application form</a></u></li>
+
+  </ul>
+    </div>
+    <div>
+      
+  <div class="panel-body" style="padding:0;">
+   <!--  <table class="table table-bordered table-list table-striped"> -->
+    <table class="table table-bordered table-list table-striped">
+      <thead>
+        <tr>
+          <th colspan="2">What you will need to prepare before accessing the Online Application Form</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Personal Contact Information</td>
+          <td>Please ensure that this information is accurate and up to
+date.</td>
+        </tr>
+        <tr>
+          <td>Project Duration</td>
+          <td>The length of time anticipated to complete the project.</td>
+        </tr>
+        <tr>
+          <td>Aim and Significance</td>
+          <td>Outline the aim in which you would like to accomplish and why the
+project is significant.</td>
+        </tr>
+        <tr>
+          <td>Project Summary</td>
+          <td>No more than 300 words. Include an introduction and outline how the
+grant will be used to support a new project.</td>
+        </tr>
+        <tr>
+          <td>CV</td>
+          <td>Upload your <i>Curriculum Vitae</i>.</td>
+        </tr>
+        <tr>
+          <td>Letter of Support</td>
+          <td>A letter of support from the principal investigator/home institute to
+acknowledge responsibility for any costs not outlined in the grant program inclusions.</td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- </table> -->
+  </div>
+    </div>
+  </div>
+  
+
+</section>
+<div class="blue-rectangle"></div>
+<!--Applicant Eligibility-->
+<section class="eligibility-app grant-sec" style="padding: 0 5%;">
+  
+ <h2 style="margin-bottom: 2%;">Eligibility</h2>
+ 
+
+<p style="margin-bottom: 1%;">In order to be eligible for the application,<strong> recipients must reside in Canada</strong> and <strong> hold a post within a Canadian research institution, university, organization or company.</strong><br>
+ Eligible researchers may work in one of the following categories:</p>
+<hr align="left">
+<ol class="grant-sec-list-elig" style="list-style: unset;">
+  <li>Post-secondary institutions/research institutes</li>
+  <li>Federal government agencies or department laboratories</li>
+  <li>Industry and commercial enterprises</li>
+
+</ol>
+<hr  align="left" >
+
+<p><strong>Once eligibility is confirmed</strong>, submissions will be evaluated based on the researcher's excellence
+as addressed in the application and the merit of the included proposal. The selection process
+will be completed on or before <strong> July 15, 2023.</strong></p>
+
+</section>
+
+
+<!--Limitations-->
+
+<section class=" grant-sec" style="padding: 0 5%;">
+  
+  <!-- <img src="/sites/default/files/images/grant_research/error.png"> -->
+<h2 style="margin-bottom: 2%;">Limitations</h2>
+
+<p>Sequencing must be performed on the <strong> Illumina MiSeq</strong> or the <strong>Illumina NextSeq 500/550</strong>
+platforms at <strong>Norgen Biotek's laboratory in Thorold, ON.</strong></p>
+<div class="logo-div-2">
+    <p style="margin-bottom: 0;">Brought to you by</p>
+    <img src="https://norgenbiotek.com/sites/default/files/norgen-logo.png" alt="Norgen Biotek">
+    
+    <p style="margin-bottom: 0;">&</p>
+    <img src="/sites/default/files/images/grant_research/227px-Illumina_logo.svg.png" alt="Illumina">
+  </div>
+  <!-- <p>Sequencing must be performed on the Illumina MiSeq or the Illumina NextSeq 500/550
+platforms at Norgen Biotek's laboratory in Thorold, ON.</p> -->
+
+</section>
+
+<!-- Questions -->
+<section class="grant-sec" style="padding: 0 5%;">
+  
+  <!-- <img src="/sites/default/files/images/grant_research/error.png"> -->
+<h2 style="margin-bottom: 2%;">Questions?</h2>
+<a href="https://norgenbiotek.com/contact" class="btn btn-primary" style="font-weight:700;width:auto;padding:12px 36px;margin-bottom:24px;" target="_blank">Contact Us</a>
+</section>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+
+function closebox(){
+  document.querySelector(".form-inside").style.display = "none";
+  document.querySelector("#app_overlay").style.display = "none";
+
+}
+function open_popup(){
+
+}
+$(document).ready(function(){
+  // Add smooth scrolling to all links
+  $(".sticky-submenu a").on('click', function(event) {
+
+    // Make sure this.hash has a value before overriding default behavior
+    if (this.hash !== "") {
+      // Prevent default anchor click behavior
+      event.preventDefault();
+
+      // Store hash
+      var hash = this.hash;
+
+      // Using jQuery's animate() method to add smooth page scroll
+      // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+      $('html, body').animate({
+        scrollTop: $('[name="' + $.attr(this, 'href').substr(1) + '"]').offset().top
+      }, 800, function(){
+
+        // Add hash (#) to URL when done scrolling (default click behavior)
+        window.location.hash = hash;
+      });
+    } // End if
+  });
+});
+    $(document).ready(function(){
+        //Apply the sticky styles
+        var observer = new IntersectionObserver(function(entries) {
+            // no intersection 
+            if (entries[0].intersectionRatio === 0)
+                document.querySelector(".sticky-submenu").classList.add("isSticky");
+            // fully intersects 
+            else if (entries[0].intersectionRatio === 1)
+                document.querySelector(".sticky-submenu").classList.remove("isSticky");
+        }, {
+            threshold: [0, 1]
+        });
+        observer.observe(document.querySelector(".img-header"));
+    });
+
+    $('.video-js').on('click', function() {
+        $('#video-overlay, .img-header video').addClass('active');
+    }).on("keydown",function(e){
+        var code = e.which;
+        if((code == 13) || (code == 32)) {
+            $(this).click();
+        }
+    });
+    $('#video-overlay').on('click', function() {
+        $(this).removeClass('active');
+        $('.img-header video').removeClass('active');
+    });
+    $(window).on("keydown",function(e){
+        var code = e.which;
+        if((code == 27)) {
+            $('#video-overlay').click();
+        }
+    });
+</script>

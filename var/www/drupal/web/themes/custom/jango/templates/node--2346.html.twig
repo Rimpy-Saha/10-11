@@ -1,0 +1,323 @@
+{#
+/**
+* @file
+* Default theme implementation to display a node.
+*
+* Available variables:
+* - node: The node entity with limited access to object properties and methods.
+* Only method names starting with "get", "has", or "is" and a few common
+* methods such as "id", "label", and "bundle" are available. For example:
+* - node.getCreatedTime() will return the node creation timestamp.
+* - node.hasField('field_example') returns TRUE if the node bundle includes
+* field_example. (This does not indicate the presence of a value in this
+* field.)
+* - node.isPublished() will return whether the node is published or not.
+* Calling other methods, such as node.delete(), will result in an exception.
+* See \Drupal\node\Entity\Node for a full list of public properties and
+* methods for the node object.
+* - label: (optional) The title of the node.
+* - content: All node items. Use {{ content }} to print them all,
+* or print a subset such as {{ content.field_example }}. Use
+* {{ content|without('field_example') }} to temporarily suppress the printing
+* of a given child element.
+* - author_picture: The node author user entity, rendered using the "compact"
+* view mode.
+* - metadata: Metadata for this node.
+* - date: (optional) Themed creation date field.
+* - author_name: (optional) Themed author name field.
+* - url: Direct URL of the current node.
+* - display_submitted: Whether submission information should be displayed.
+* - attributes: HTML attributes for the containing element.
+* The attributes.class element may contain one or more of the following
+* classes:
+* - node: The current template type (also known as a "theming hook").
+* - node--type-[type]: The current node type. For example, if the node is an
+* "Article" it would result in "node--type-article". Note that the machine
+* name will often be in a short form of the human readable label.
+* - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+* teaser would result in: "node--view-mode-teaser", and
+* full: "node--view-mode-full".
+* The following are controlled through the node publishing options.
+* - node--promoted: Appears on nodes promoted to the front page.
+* - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+* teaser listings.
+* - node--unpublished: Appears on unpublished nodes visible only to site
+* admins.
+* - title_attributes: Same as attributes, except applied to the main title
+* tag that appears in the template.
+* - content_attributes: Same as attributes, except applied to the main
+* content tag that appears in the template.
+* - author_attributes: Same as attributes, except applied to the author of
+* the node tag that appears in the template.
+* - title_prefix: Additional output populated by modules, intended to be
+* displayed in front of the main title tag that appears in the template.
+* - title_suffix: Additional output populated by modules, intended to be
+* displayed after the main title tag that appears in the template.
+* - view_mode: View mode; for example, "teaser" or "full".
+* - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+* - page: Flag for the full page state. Will be true if view_mode is 'full'.
+* - readmore: Flag for more state. Will be true if the teaser content of the
+* node cannot hold the main body content.
+* - logged_in: Flag for authenticated user status. Will be true when the
+* current user is a logged-in member.
+* - is_admin: Flag for admin user status. Will be true when the current user
+* is an administrator.
+*
+* @see template_preprocess_node()
+*
+* @ingroup themeable
+*/
+#}
+<article{{ attributes }}>
+
+  {{ title_prefix }}
+  {% if label and not page %}
+  <h2{{ title_attributes }}>
+    <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+    </h2>
+    {% endif %}
+    {{ title_suffix }}
+
+    {% if display_submitted %}
+    <footer>
+      {{ author_picture }}
+      <div{{ author_attributes }}>
+        {% trans %}Submitted by {{ author_name }} on {{ date }}{% endtrans %}
+        {{ metadata }}
+        </div>
+    </footer>
+    {% endif %}
+
+    <div{{ content_attributes }}>
+      {{ content.body }}
+      </div>
+      </article>
+
+      <style>
+        .my_top_message,
+        .sample-form-container {
+          margin-top: 20px;
+        }
+
+        legend {
+          margin-bottom: none;
+          font-size: 17px;
+          line-height: inherit;
+          border: none;
+          color: black;
+        }
+
+        iframe svg {
+          text-align: center;
+        }
+
+        iframe.svg_animation {
+          border: none;
+          width: 100%;
+        }
+
+         /* Product Selection Table */
+        .samples-wrapper{
+          margin:10px 0;
+          max-height:400px;
+          overflow: auto;
+        }
+        .form-item-samples-search .c-quick-search{
+          border:none;
+        }
+        .form-item-samples-search .c-quick-search input[type="search"]{
+          border-radius:12px;
+        }
+        .js-form-type-search .form-control{
+          height:46px;
+        }
+        .form-item-samples-search .c-quick-search.has-feedback input.form-control{
+          padding-right:16px;
+        }
+        .form-item-samples-search .c-quick-search input[type=search]::-webkit-search-cancel-button {
+          height: 1em;
+          width: 1em;
+          border-radius: 50em;
+          background: url(https://web.archive.org/web/20231202211135im_/https://pro.fontawesome.com/releases/v5.10.0/svgs/regular/times.svg) no-repeat 50% 50%;
+          background-size: contain;
+        }
+
+        .samples-list-fieldset > .fieldset-wrapper{
+          border: 1px solid #eeeeee;
+          padding:10px;
+        }
+        .samples-list-fieldset > legend{
+          margin-bottom:5px;
+        }
+        .samples-wrapper > table.table{
+          margin-bottom:0px;
+        }
+
+        .samples-wrapper table tbody tr:has(input:checked){
+          background-color:var(--norgen-grey-light);
+        }
+
+        fieldset.customer-information > .fieldset-wrapper,
+        fieldset.customer-application-information > .fieldset-wrapper,
+        fieldset.shipping-information > .fieldset-wrapper, 
+        fieldset.billing-information > .fieldset-wrapper{
+          display:grid;
+          grid-template-columns: 1fr 1fr;
+          grid-column-gap:20px;
+        }
+        fieldset.customer-information > .fieldset-wrapper > div:last-child,
+        fieldset.customer-information > .fieldset-wrapper > div:nth-last-child(2),
+        fieldset.customer-application-information > .fieldset-wrapper > div:last-child,
+        fieldset.billing-information > .fieldset-wrapper > div:first-child{
+          grid-column: 1 / 3;
+        }
+        @media only screen and (max-width:600px){
+          fieldset.customer-information > .fieldset-wrapper,
+          fieldset.customer-application-information > .fieldset-wrapper,
+          fieldset.shipping-information > .fieldset-wrapper, 
+          fieldset.billing-information > .fieldset-wrapper{
+            grid-template-columns: 1fr;
+          }
+          fieldset.customer-information > .fieldset-wrapper > div:last-child,
+          fieldset.customer-information > .fieldset-wrapper > div:nth-last-child(2),
+          fieldset.customer-application-information > .fieldset-wrapper > div:last-child,
+          fieldset.billing-information > .fieldset-wrapper > div:first-child{
+            grid-column: 1 / 2;
+          }
+        }
+
+        /* Progress Bar */
+        .currentPage, .progressLevel{
+          display:inline-block;
+          vertical-align:middle;
+        }
+        .progress{
+          display:inline-block;
+          width:50%;
+          min-width:250px;
+          max-width:600px;
+          vertical-align:middle;
+          margin:0 15px;
+          margin-bottom:0px;
+        }
+        .progress-bar{
+          border-radius:4px;
+          background-color:var(--norgen-primary-blue);
+
+        }
+        .sample-request-form .progress-bar[aria-valuenow="1"]{
+          width:33%;
+        }
+        .sample-request-form .progress-bar[aria-valuenow="2"]{
+          width:67%;
+        }
+        .sample-request-form .progress-bar[aria-valuenow="3"]{
+          width:100%;
+        }
+        .form-item-hr-separator > hr {
+          border-top: 2px solid;
+          margin-top: 40px;
+          margin-bottom: 40px;
+        }
+
+        /* general form */
+        #block-jango-content{
+          background-color:var(--norgen-grey-light);
+        }
+        form.sample-request-form{
+          background-color: white;
+          padding: 24px;
+          box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
+          border-radius: 12px;
+        }
+        #step1 .sample-step-button-container{
+          justify-content:end;
+        }
+        .form-item-disclaimer > .form-msg{
+          border: 1px solid #eeeeee;
+          padding: 10px;
+        }
+        /* Sticky Product Selection Table Head */
+        .samples-list-fieldset table.table {
+          border-collapse: separate;
+          border-top:none;
+        }
+        .samples-list-fieldset table > thead{
+          position:sticky;
+          top:0;
+          background-color:#ffffff;
+          z-index:1;
+        }
+        .samples-list-fieldset table.table > thead > tr > th,
+        .samples-list-fieldset table.table > thead:first-child > tr:first-child > th  {
+          border-bottom:2px solid #eeeeee;
+          border-top:2px solid #eeeeee;
+        }
+        .samples-list-fieldset table.table > tbody > tr:first-child > td{
+          border-top:none;
+        }
+
+        #step4 table a{
+          color:#5c6873;
+        }
+        #step4 table a > p{
+          border: 1px solid #aaaaaa;
+          border-radius: 100%;
+          width: 2em;
+          height: 2em;
+          line-height: 2em;
+          margin: 0.25em;
+        }
+      </style>
+
+
+      <div class="container">
+        {{ sample_request }}
+      </div>
+
+      <script>
+        function filterSamples(){
+          // Declare variables
+          var input, filter, ul, li, a, i, txtValue;
+          input = document.getElementsByClassName('filter-samples-search')[0];
+          filter = input.value.toUpperCase();
+          table_body = document.querySelector(".samples-wrapper table tbody");
+          tr = table_body.getElementsByTagName('tr');
+
+          // Loop through all list items, and hide those who don't match the search query
+          for (i = 0; i < tr.length; i++) {
+            sku = tr[i].getElementsByTagName("td")[1]; // skip [0] which is the checkbox
+            title = tr[i].getElementsByTagName("td")[2];
+            size = tr[i].getElementsByTagName("td")[3];
+
+            sku_text = sku.textContent || sku.innerText;
+            title_text = title.textContent || title.innerText;
+            size_text = size.textContent || size.innerText;
+
+            if (
+              sku_text.toUpperCase().indexOf(filter) > -1 || 
+              title_text.toUpperCase().indexOf(filter) > -1 || 
+              size_text.toUpperCase().indexOf(filter) > -1) {
+              tr[i].style.display = "";
+            } else {
+              tr[i].style.display = "none";
+            }
+          }
+        }  
+
+        // select product from URL parameters
+        window.addEventListener('load', function(){
+          const queryString = window.location.search;
+          const urlParams = new URLSearchParams(queryString);
+          const url_sku = urlParams.get('sku');
+          console.log(url_sku);
+          // select checkbox
+          matching_sku_checkbox = document.querySelector('.samples-wrapper table tbody tr input[value="'+url_sku+'"]');
+          if(matching_sku_checkbox) {
+            /* var event = new Event('change'); */
+            matching_sku_checkbox.click();
+            /* matching_sku_checkbox.dispatchEvent(event); */
+          }
+        })
+
+      </script>

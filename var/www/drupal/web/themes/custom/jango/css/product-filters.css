@@ -1,0 +1,559 @@
+/* Smart Save */
+.smart-save{
+    position: absolute;
+    left: -100px;
+    top: 25px;
+    transform: rotate(-45deg);
+    transform-origin:center;
+    width: 300px;
+}
+.smart-save > a{
+    width: 100%;
+    text-align: center;
+}
+
+/* New Wishlist */
+.image-wish-list-wrapper{
+    position:relative;
+}
+.flag-wish-list{
+    position:absolute;
+    top:5px;
+    right:5px;
+    z-index:2;
+    line-height:1;
+    padding:0px;
+    background-color:#ffffff80;
+    border-radius:100%;
+    width:45px;
+    height:45px;
+  }
+  .flag-wish-list:hover{
+    box-shadow:0px 2px 4px 0px #ddd;
+  }
+  .flag-wish-list a{
+    padding: 10px;
+    display:block;
+    line-height:1;
+  }
+  .flag-wish-list a:hover{
+    text-decoration: none;
+  }
+  .js-flag-message{
+    position:absolute;
+    top:100%;
+    right:0;
+    color:#5c6873;
+  }
+  .flag-wish-list.action-flag a:after,
+  .flag-wish-list.action-unflag a:after{
+    content: "\f004";
+    font-family: "Font Awesome 5 Free";
+    color: var(--norgen-primary-blue);
+    font-size:2.5rem;
+  }
+  .flag-wish-list.action-flag a:after {
+    font-weight: normal;
+  }
+  
+  .flag-wish-list.action-unflag a:after, .flag-wish-list.action-flag a:hover:after{
+    font-weight: 900;
+  }
+  
+  /* End New Wishlist */
+
+  /* Smart Save */
+  .smart-save{
+    position: absolute;
+    left: -100px;
+    top: 25px;
+    transform: rotate(-45deg);
+    transform-origin:center;
+    width: 300px;
+  }
+  .smart-save > a{
+    width: 100%;
+    text-align: center;
+  }
+  /* End Smart Save */
+    .views-exposed-form .bef-exposed-form .form{
+        width:fit-content;
+    }
+    .js-form-wrapper .form-wrapper{
+        width:fit-content;
+    }
+    .webform-container-inline div{
+        display: block !important;
+    }
+    .filter {
+        display: grid;
+        padding: 20px 0px;
+        grid-template-areas:
+            "header views-view-responsive-grid"
+            "views-exposed-form views-view-responsive-grid"
+            "views-exposed-form pagers";
+        gap: 10px;
+        grid-column-gap: 40px;
+        grid-template-columns: 300px 1fr;
+        grid-template-rows: min-content 1fr min-content;
+        /* justify-content: space-evenly; */
+    }
+    .filter.wish-list {
+        grid-template-areas:
+            "views-view-responsive-grid views-view-responsive-grid"
+            "views-view-responsive-grid views-view-responsive-grid"
+            "pagers";
+        grid-template-columns: 1fr;
+        grid-column-gap: 0px;
+    }
+    .filter > form .form-group.js-form-type-radio > .form-group.has-feedback{
+        display: inline;
+    }
+    .filter > form .form-group.js-form-type-radio > label {
+        color:inherit;
+    }
+    .views-exposed-form
+    {
+        grid-area: views-exposed-form;
+        /* background-color: #dddddd78; */
+        max-width: 300px;
+        height: fit-content;
+    }
+    .filterable-products-grid-wrapper{
+        grid-area: views-view-responsive-grid;
+    }
+    .views-view-responsive-grid {
+        background-color: #fff;
+        row-gap: 40px;
+    }
+    .filter.wish-list .views-view-responsive-grid{
+        grid-template-columns:1fr 1fr 1fr 1fr;
+    }
+    .views-view-responsive-grid__item{
+        /* border: 1px solid var(--commerce-color--border); */
+        /* border-radius:12px; */
+        /* padding: 10px; */
+        display: flex;
+    }
+    .views-field .field-content ul.c-tags li img {
+        padding: 12px 0;
+        border-bottom: 0.5px solid #be1e2d;
+        display: inline-block;
+        max-width: 100%;
+        width: -webkit-fill-available !important;
+        height:auto;
+    }
+    .c-theme-ul-bg>li{
+        background: white !important;
+    }
+    .title-filter-2{
+    padding:10px 0;
+    }
+    .view-title-rimpy{
+        font-size: large;
+        font-weight: 600;
+        color:#004897!important;
+        
+    }
+    .view-title-rimpy>a{
+        color:#004897!important;
+        
+    }
+    .view-sku-filter{
+        font-size: medium;
+        font-weight: 100;
+        padding:3px 0;
+        color:#004897!important;
+    }
+    .view-format-filter{
+        font-size: medium;
+        font-weight: 100;
+        padding:3px 0;
+        color:#004897!important;
+    }
+    .view-size-filter{
+        font-size: medium;
+        font-weight: 100;
+        padding:3px 0;
+        color:#004897!important;
+    }
+    .view-price-filter{
+        font-size: 16px;
+        font-weight: 600;
+        padding:3px 0;
+    }
+    .views-field-price__number{
+        margin: 10px 0 !important;
+        /* text-align:center!important; */
+    }
+    .views-field-nothing-1{
+        margin-bottom:10px;
+    }
+    .view-body-filter{
+        font-size: small;
+        font-weight: 100;
+        padding:10px 0;
+    }
+
+
+    .pagers {
+        grid-area: pagers;    
+    }
+    .pagers {
+        /* display: flex; */
+        /* justify-content: center; */
+        /* align-items: center; */
+        padding: 10px;
+        border-radius: 5px; /* Rounded corners for a professional look */
+    }
+
+    .pager__items {
+        /* display: flex; */
+        list-style: none; /* Remove bullet points */
+        padding: 0;
+        margin: 0;
+        /* flex-wrap: wrap; */
+    }
+    .pager__items li{
+        margin-left:0px;
+        font-weight:inherit;
+        font-size:inherit;
+    }
+
+    .pager__item {
+        margin: 0 5px; /* Space between pager items */
+    }
+
+    .pager__item a {
+        display: inline-block;
+        padding: 8px 12px;
+        color: #fff; /* White text color */
+        text-decoration: none; /* Remove underline from links */
+        border-radius: 3px;
+        background: white;
+        color: black;
+        border: none !important;
+        font-weight: 400;
+        font-size: 17px;
+    }
+
+    .pager__item a:hover,
+    .pager__item.is-active a {
+        background-color: white;
+        border-bottom: 1px solid !important;
+        border-radius: 0;
+    }
+    .pager__item--first a,
+    .pager__item--previous a,
+    .pager__item--next a,
+    .pager__item--last a {
+        font-weight: bold; /* Bold text for navigation arrows */
+    }
+
+    .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0;
+    }
+
+    
+    #edit-format--3>.form-checkboxes>.form-item>.c-checkbox>label,#edit-price-number-wrapper--6>.fieldset-wrapper>.form-item>label,#edit-field-size-for-views-value--3 label{
+        
+        font-weight: 100;
+        font-size:14px;
+    }
+    .form-group .js-form-item .form-item .js-form-type-textfield .form-item-combine .js-form-item-combine label{ 
+        font-weight: 600;
+        font-size:16px !important;
+
+    }
+    .filterable-add-to-cart a{
+        background-color: #004897;
+        border-color: #004897;
+        opacity: 1;
+        color: #fff;
+        cursor: pointer;
+        border-radius: 4px;        
+        font-weight: 600;
+        text-align: center;
+        touch-action: manipulation;        
+        white-space: nowrap;
+        width: 100%;
+        width: -webkit-fill-available;
+        display: block;
+        padding: 10px;
+        line-height:1;
+        white-space: normal;
+    }
+
+    #edit-combine--3--description{
+        font-weight: 600;
+        font-size: 12px;
+        color: #003a79;
+    }
+    legend{
+
+        font-size: 16px !important;
+        font-weight: 600;
+    }
+    .form-control.input-lg{
+        font-size: 12px;
+    }
+    
+    .views-exposed-form>.js-form-item-combine>label{
+        font-weight: 600;
+        font-size: 16px !important;
+        display: block;
+        width: 100%;
+        padding: 0;
+        margin-bottom: 20px;
+        line-height: inherit;
+        color: #34495e;
+        border: 0;
+        border-bottom: 1px solid #e5e5e5;
+    }
+    #edit-format--3>a
+    {
+        font-weight: 100;
+        font-size: 14px;
+    }
+
+    form[data-drupal-selector^="views-exposed-form-ajax-filterable-products"] label{
+        font-size:14px;
+    }
+    form[data-drupal-selector^="views-exposed-form-ajax-filterable-products"] legend{
+       background: gray;
+       color: white;
+       border-radius: 20px;
+       padding: 5px 20px;
+       display:none;
+
+    }
+    
+    fieldset[data-drupal-selector^="edit-price-number-wrapper"] .fieldset-wrapper{
+        display: flex !important;
+        gap: 10px;
+    }
+     fieldset[data-drupal-selector^="edit-price-number-wrapper"] .fieldset-wrapper .form-item-price__number-min{
+        width:150px;
+    }
+     fieldset[data-drupal-selector^="edit-price-number-wrapper"] .fieldset-wrapper .form-item-price__number-max{
+        width:150px;
+    }
+    span.summary::before{
+        content: '\e114';
+    }
+    span.summary{
+        position: relative;
+        top: 1px;
+        display: inline-block;
+        font-family: 'Glyphicons Halflings';
+        font-style: normal;
+        font-weight: 400;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased; 
+        font-size: 12px;
+        bottom:-5px;
+        padding-left: 20px;
+        float:right;
+    }
+    form[data-drupal-selector^="views-exposed-form-ajax-filterable-products"] details{
+        border-top: 1px solid #ededed;
+        padding: 0 0;
+        margin-top:0;
+        font-size:16px;
+        letter-spacing: 0.5px;
+    }
+    form[data-drupal-selector^="views-exposed-form-ajax-filterable-products"] > details > summary{
+        padding:15px 0px;
+    }
+    form[data-drupal-selector^="views-exposed-form-ajax-filterable-products"] > details.no-children{
+        display:none;
+    }
+
+    form[data-drupal-selector^="views-exposed-form-ajax-filterable-products"] .form-checkboxes{
+        padding:5px 0;
+    }
+    header:has(.filter-title){
+        grid-area:header;
+        margin-bottom: 10px;
+    }
+    .filter-title{
+        margin:0;
+        font-size: 18px;
+    }
+    .views-view-responsive-grid.views-view-responsive-grid--horizontal .views-field-nothing .field-content{
+        font-size: 14px;
+    }
+    .views-view-responsive-grid.views-view-responsive-grid--horizontal .views-view-responsive-grid__item-inner{
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        justify-content: space-between;
+        max-width: 100%;
+    }
+
+    .views-field.views-field-title{
+        flex-grow:1;
+    }
+    .views-field.views-field-nothing{
+        flex-grow:1;
+    }
+    /* .views-field.views-field-commerce-price{
+
+    } */
+    .views-field.views-field-field-product-summary-line{
+        font-size: 14px;
+        flex-grow:4;
+    }
+    /* .views-field.views-field-commerce-add-to-cart-link{
+
+    } */
+    .form-item-field-ce-marked-value.form-disabled{
+        display:none;
+    }
+
+    .filter-btn-mobile{
+        background: white;
+        border: none;
+        display: none;
+    }
+    .filter-btn-mobile img{
+        width:25px;
+        margin-right: 5px;
+    }
+    .title_close{
+        flex-direction: row-reverse;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #e9e9e9;
+        margin-bottom: 20px;
+        display: none;
+    }
+    @media only screen and (min-width: 992px) {
+        form[data-drupal-selector^="views-exposed-form-ajax-filterable-products"]{
+            display: block !important;
+        }
+        #overlay{
+            display: none !important;
+        }
+    }
+    @media only screen and (max-width: 992px) {
+        .filter {
+            grid-template-areas: "header"
+                                 "views-exposed-form"
+                                 "views-view-responsive-grid"
+                                 "pagers";
+            gap: 10px;
+            grid-template-columns: 1fr;
+            grid-template-rows: min-content 1fr min-content;
+        }
+        .filter-title{
+            display: none;
+        }
+        .views-view-responsive-grid {
+            padding: 0;
+        }
+        form[data-drupal-selector^="views-exposed-form-ajax-filterable-products"] details{
+            padding: 20px 0;
+            border-top: none;
+        }
+        .views-exposed-form {
+            max-width:300px;
+        }
+        form[data-drupal-selector^="views-exposed-form-ajax-filterable-products"]{
+            background: white;
+            position: fixed;
+            right: -300px;
+            padding: 20px;
+            height: auto;
+            top: 0;
+            bottom: 0;
+            visibility:hidden;
+            z-index: 999999;
+            margin:0;
+        }
+        form[data-drupal-selector^="views-exposed-form-ajax-filterable-products"].slideout{
+            right:0px;
+            visibility:visible;
+            /* animation: slideout 0.35s ease-in-out; */
+            transition: right 0.35s ease-in-out 0s, visibility 0.35s; 
+        }
+        form[data-drupal-selector^="views-exposed-form-ajax-filterable-products"].slidein{
+            right:-300px;
+            visibility: hidden;
+            /* animation: slidein 0.35s ease-in-out; */
+            transition: right 0.35s ease-in-out 0s, visibility 0.35s;
+        }
+        .title_close{
+            display: block;
+        }
+        .filter-btn-mobile{
+            display: block;
+        }
+        form[data-drupal-selector^="views-exposed-form-ajax-filterable-products"] div[data-drupal-selector^="edit-actions"]{
+            position: relative;  
+        }
+    }
+    #overlay {
+        position: fixed;
+        display: none;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 99999;
+        cursor: pointer;
+    }
+    .close img{
+        width: 20px;
+    }
+
+    form[data-drupal-selector^="views-exposed-form-ajax-filterable-products"] div[data-drupal-selector^="edit-actions"]{
+        width: -webkit-fill-available;
+    }
+    form[data-drupal-selector^="views-exposed-form-ajax-filterable-products"] div[data-drupal-selector^="edit-actions"] input{
+        width: -webkit-fill-available;
+        background: white;
+        color: #004893 !important;
+    }
+    @media only screen and (max-width: 991px){
+        .filter.wish-list .views-view-responsive-grid{
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+    }
+    @media only screen and (max-width: 761px) {
+        .views-view-responsive-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+    @media only screen and (max-width: 450px) {
+        .views-view-responsive-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    @keyframes slideout{
+        0%{
+            transform: translateX(100%); 
+        }
+        100%{
+            transform: translateX(0%);
+        }
+    }
+    @keyframes slidein{
+        0%{
+            left: auto; 
+        }
+        100%{
+            left: 100%;
+            visibility: hidden;
+        }
+    }

@@ -1,0 +1,442 @@
+{#
+/**
+* @file
+* Default theme implementation to display a node.
+*
+* Available variables:
+* - node: The node entity with limited access to object properties and methods.
+* Only method names starting with "get", "has", or "is" and a few common
+* methods such as "id", "label", and "bundle" are available. For example:
+* - node.getCreatedTime() will return the node creation timestamp.
+* - node.hasField('field_example') returns TRUE if the node bundle includes
+* field_example. (This does not indicate the presence of a value in this
+* field.)
+* - node.isPublished() will return whether the node is published or not.
+* Calling other methods, such as node.delete(), will result in an exception.
+* See \Drupal\node\Entity\Node for a full list of public properties and
+* methods for the node object.
+* - label: (optional) The title of the node.
+* - content: All node items. Use {{ content }} to print them all,
+* or print a subset such as {{ content.field_example }}. Use
+* {{ content|without('field_example') }} to temporarily suppress the printing
+* of a given child element.
+* - author_picture: The node author user entity, rendered using the "compact"
+* view mode.
+* - metadata: Metadata for this node.
+* - date: (optional) Themed creation date field.
+* - author_name: (optional) Themed author name field.
+* - url: Direct URL of the current node.
+* - display_submitted: Whether submission information should be displayed.
+* - attributes: HTML attributes for the containing element.
+* The attributes.class element may contain one or more of the following
+* classes:
+* - node: The current template type (also known as a "theming hook").
+* - node--type-[type]: The current node type. For example, if the node is an
+* "Article" it would result in "node--type-article". Note that the machine
+* name will often be in a short form of the human readable label.
+* - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+* teaser would result in: "node--view-mode-teaser", and
+* full: "node--view-mode-full".
+* The following are controlled through the node publishing options.
+* - node--promoted: Appears on nodes promoted to the front page.
+* - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+* teaser listings.
+* - node--unpublished: Appears on unpublished nodes visible only to site
+* admins.
+* - title_attributes: Same as attributes, except applied to the main title
+* tag that appears in the template.
+* - content_attributes: Same as attributes, except applied to the main
+* content tag that appears in the template.
+* - author_attributes: Same as attributes, except applied to the author of
+* the node tag that appears in the template.
+* - title_prefix: Additional output populated by modules, intended to be
+* displayed in front of the main title tag that appears in the template.
+* - title_suffix: Additional output populated by modules, intended to be
+* displayed after the main title tag that appears in the template.
+* - view_mode: View mode; for example, "teaser" or "full".
+* - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+* - page: Flag for the full page state. Will be true if view_mode is 'full'.
+* - readmore: Flag for more state. Will be true if the teaser content of the
+* node cannot hold the main body content.
+* - logged_in: Flag for authenticated user status. Will be true when the
+* current user is a logged-in member.
+* - is_admin: Flag for admin user status. Will be true when the current user
+* is an administrator.
+*
+* @see template_preprocess_node()
+*
+* @ingroup themeable
+*/
+#}
+<article{{ attributes }}>
+
+  {{ title_prefix }}
+  {% if label and not page %}
+  <h2{{ title_attributes }}>
+    <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+    </h2>
+    {% endif %}
+    {{ title_suffix }}
+
+    {% if display_submitted %}
+    <footer>
+      {{ author_picture }}
+      <div{{ author_attributes }}>
+        {% trans %}Submitted by {{ author_name }} on {{ date }}{% endtrans %}
+        {{ metadata }}
+        </div>
+    </footer>
+    {% endif %}
+
+    <div{{ content_attributes }}>
+      {{ content.body }}
+      </div>
+
+      </article>
+
+      <!DOCTYPE html>
+      <html>
+
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>
+        </title>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          rel="stylesheet">
+
+        <!-- Google Tag Manager NEW -->
+        <script>(function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+              'gtm.start':
+                new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+              j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+          })(window, document, 'script', 'dataLayer', 'GTM-T42GZBX');</script>
+        <!-- End Google Tag Manager -->
+
+        <!-- Facebook Pixel Code -->
+        <script>
+          !function (f, b, e, v, n, t, s) {
+            if (f.fbq) return; n = f.fbq = function () {
+              n.callMethod ?
+                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+            n.queue = []; t = b.createElement(e); t.async = !0;
+            t.src = v; s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+          }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+          fbq('init', '2733787043387577');
+          fbq('track', 'PageView');
+        </script>
+        <noscript><img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=2733787043387577&ev=PageView&noscript=1" /></noscript>
+        <!-- End Facebook Pixel Code -->
+        <script
+          id="mcjs">!function (c, h, i, m, p) { m = c.createElement(h), p = c.getElementsByTagName(h)[0], m.async = 1, m.src = i, p.parentNode.insertBefore(m, p) }(document, "script", "https://chimpstatic.com/mcjs-connected/js/users/7559e0f5557dd3b9a17cb2acb/0eb0e617aedd606035576461e.js");</script>
+
+        <script
+          id="mcjs">!function (c, h, i, m, p) { m = c.createElement(h), p = c.getElementsByTagName(h)[0], m.async = 1, m.src = i, p.parentNode.insertBefore(m, p) }(document, "script", "https://chimpstatic.com/mcjs-connected/js/users/7559e0f5557dd3b9a17cb2acb/f68f2857d03747b105d45e4c0.js");</script>
+        <!-- Twitter universal website tag code -->
+        <script>
+          !function (e, t, n, s, u, a) {
+            e.twq || (s = e.twq = function () {
+              s.exe ? s.exe.apply(s, arguments) : s.queue.push(arguments);
+            }, s.version = '1.1', s.queue = [], u = t.createElement(n), u.async = !0, u.src = '//static.ads-twitter.com/uwt.js',
+              a = t.getElementsByTagName(n)[0], a.parentNode.insertBefore(u, a))
+          }(window, document, 'script');
+          // Insert Twitter Pixel ID and Standard Event data below
+          twq('init', 'o4hou');
+          twq('track', 'PageView');
+        </script>
+        <!-- End Twitter universal website tag code -->
+
+
+      </head>
+
+      <body>
+        <main class="covid-testing">
+
+          <!-- Symptom Check Start -->
+          <section class="testing-form">
+            <div class="loader" style="display: none;"></div>
+            <div class="symptom-check">
+              <h1>Donor Consent</h1>
+              <!-- <p style="margin-bottom: 30px; text-align: left;"><b>For SAME-DAY results, please make an appointment before 2:30 p.m. If your appointment is scheduled after 3:00 p.m., you will receive your results the following business day.</b></p> -->
+              <p style="margin-bottom: 30px; text-align: left;color:#be1e2d"><b>If a COVID-19 Test is required for a
+                  medical procedure, it is the Donor's responsibility to check with their healthcare provider to ensure
+                  the saliva sample is collected within the required timeline.</b></p>
+              <p style="margin-bottom: 30px; text-align: left;color:#be1e2d"><b>Each Donor must meet the below
+                  eligibility criteria to submit biological samples for testing at Norgen Biotek.</b></p>
+              <!--<label class="mleft" for="symptoms1">
+            <input type="checkbox" id="symptoms1" name="fever" value="1">
+            <div class="fake-check"><i class="fas fa-check" aria-hidden="true"></i></div>
+            <span>The Donor has <b>not</b> travelled outside of Canada in the last 14 days.</span>
+        </label>
+        <label class="mleft" for="symptoms2">
+            <input type="checkbox" id="symptoms2" name="cough" value="2">
+            <div class="fake-check"><i class="fas fa-check" aria-hidden="true"></i></div>
+            <span>The Donor has <b>not</b> been identified as a close contact of someone who has tested positive for or is being tested for COVID-19. A close contact is defined as someone who has provided care, lived with, or has otherwise had close, prolonged contact with a probable or confirmed case while the case was ill.</span>
+        </label>
+        <label class="mleft" for="symptoms3">
+            <input type="checkbox" id="symptoms3" name="breathing" value="3">
+            <div class="fake-check"><i class="fas fa-check" aria-hidden="true"></i></div>
+            <span>The Donor has <b>not</b> been informed that they have tested positive (+) for COVID-19 in the past.</span>
+        </label>
+        <label class="mleft" for="symptoms4">
+            <input type="checkbox" id="symptoms4" name="fatigue" value="4">
+            <div class="fake-check"><i class="fas fa-check" aria-hidden="true"></i></div>
+            <span>The Donor is <b>not</b> exhibiting any of the following symptoms related to SARS-CoV-2 (COVID-19) infection: Fever, Cough, Shortness of breath, Sore throat, Difficulty swallowing, Decrease or loss of sense of taste or smell, Chills, Headaches, Fatigue, Muscle aches, Nausea/vomiting, Diarrhea, Abdominal pain, Pink eye (conjunctivitis), Runny nose or nasal congestion</span>
+        </label>
+        <label class="mleft" for="symptoms5">
+            <input type="checkbox" id="symptoms5" name="aches" value="5">
+            <div class="fake-check"><i class="fas fa-check" aria-hidden="true"></i></div>
+            <span>The Donor has <b>not</b> been told to isolate by a doctor, health care provider, or public health unit.</span>
+        </label>
+        <label class="mleft" for="symptoms6">
+            <input type="checkbox" id="symptoms6" name="headache" value="6">
+            <div class="fake-check"><i class="fas fa-check" aria-hidden="true"></i></div>
+            <span>The Donor has <b>not</b> received a COVID Alert exposure notification on their cell phone in the past 14 days and has NOT gotten a negative test result.</span>
+        </label>
+        <label class="mleft" for="symptoms7">
+            <input type="checkbox" id="symptoms7" name="throat" value="7">
+            <div class="fake-check"><i class="fas fa-check" aria-hidden="true"></i></div>
+            <span>The Donor is <b>not</b> over the age of 70 and is NOT experiencing any of the following symptoms: delirium, unexplained or increased number of falls, acute functional decline, and/or worsening chronic conditions.</span>
+        </label>
+        <label class="mleft" for="location">
+            <input type="checkbox" id="location" name="location" value="locationPass">
+            <div class="fake-check"><i class="fas fa-check" aria-hidden="true"></i></div>
+            <span>The Donor <b>is</b> located in the province of Ontario, Canada.</span>
+        </label>-->
+              <ol align="left">
+                <li>I confirm that I am not currently eligible for Molecular Testing for COVID-19 with the Ministry of
+                  Health (i.e. testing covered by OHIP) according to the most recent Ministry of Health guidelines.</li>
+                <li>If this COVID-19 Diagnostic Test is being conducted as part of a program though my school, employer,
+                  health care professional or any other third party organization (pharmacy, clinic etc.), I hereby
+                  authorize Norgen Biotek to release my personal information, along with my COVID-19 test result, to the
+                  third party as listed above.</li>
+                <li>I understand that my personal information, along with my COVID-19 test result, will be reported to
+                  the Ontario Provincial Government via OLIS (Ontario Laboratory Information System) as well as the
+                  regional health authority.</li>
+                <li>I understand that if my test results are positive (+) for the SARS-CoV-2 virus, it is my
+                  responsibility to immediately self-isolate and follow the recommended provincial guidelines.</li>
+                <li>I understand that an individual must be trained to supervise the saliva collection by reading the
+                  instructions and watching the instructional video on proper saliva collection.</li>
+                <li>I understand that my saliva collection is to be performed by supervised self-collection.</li>
+                <li>I understand that I cannot receive a TravelSafe test unless I have my identity verified by my
+                  passport in-person at Norgen Biotek or in-person at the company providing this testing service.</li>
+                <li>I understand that Norgen Biotek or any other third party organization providing this test is not
+                  acting as my medical provider, and this COVID-19 test does not replace treatment by my medical
+                  provider. I assume full responsibility to take appropriate action with regards to my test results. I
+                  agree that I will seek medical advice, care, or treatment from my medical provider if I have questions
+                  or concerns, or if my condition worsens.</li>
+              </ol>
+              <hr>
+              <p>For more information about eligibility requirements please refer to the <a
+                  href="https://www.health.gov.on.ca/en/pro/programs/publichealth/coronavirus/docs/contact_mngmt/management_cases_contacts_omicron.pdf"
+                  target="_blank"> provided documentation from Ontario Ministry of Health</a> </p>
+              <hr>
+              <label class="mleft" for="agree" id="agreebox">
+                <input type="checkbox" id="agree" name="agree" value="agree">
+                <div class="fake-check"><i class="fas fa-check" aria-hidden="true"></i></div>
+                <!--<span>The Donor, Legal Guardian of the Donor(s), OR person purchasing the COVID-19 test on behalf of the Donor(s), confirm that these responses are true and, if untrue I/they will be responsible for any harm that may result.</span>-->
+                <span>Myself (Donor), Legal Guardian of Donor(s), OR person purchasing the COVID-19 test on behalf of
+                  the
+                  Donor(s)</b> agrees to have read and accept the terms and conditions as outlined above in this
+                  COVID-19
+                  DIAGNOSTIC TESTING AGREEMENT.</span>
+              </label>
+              <a class="btn btn-primary check-continue" href="javascript:void(0)">Continue</a>
+            </div>
+            <!-- Symptom Check End -->
+
+            <!-- Symptoms Experienced -->
+            <div class="failure">
+              <p>Unfortunately, you must contact your local health authorities for testing services. Norgen only offers
+                asymptomatic testing at this time.</p>
+            </div>
+
+            <!-- Symptoms Experienced -->
+            <div class="failure-location">
+              <p>Unfortunately, Norgen only offers asymptomatic testing for Ontario at this time. Please check back in a
+                few weeks as we expand our service.</p>
+            </div>
+
+            <!-- Symptoms Experienced -->
+            <!-- <div class="interim">
+        <h2>COVID-19 DIAGNOSTIC TESTING AGREEMENT</h2>
+
+        <div class="termsandconditions"> -->
+            <!--<p>The purpose of Norgen Biotek's COVID-19 Testing Service is to provide a SARS-CoV-2 detection service for individuals who do not meet the eligibility criteria outlined by their Regional COVID-19 Assessment Center.</p>-->
+
+            <!--<p><b>Eligibility Criteria for Norgen's COVID-19 Diagnostic Testing Service</b></p>
+            <p>Donors must meet each of the below eligibility criteria to submit biological samples for testing at Norgen Biotek.</p>
+            <ol>
+            <li>I have NOT travelled outside of Canada in the last 14 days.</li>
+            <li>I have NOT had close contact with a confirmed case of COVID-19.</li>
+            <li>I have NOT been informed that I am/have been COVID-19 positive.</li>
+            <li>I am NOT exhibiting any of the following symptoms related to SARS-CoV-2 (COVID-19) infection: Fever, Cough, Shortness of breath, Sore throat, Difficulty swallowing, Decrease or loss of sense of taste or smell, Chills, Headaches, Fatigue, Muscle aches, Nausea/vomiting, Diarrhea, Abdominal pain, Pink eye (conjunctivitis), Runny nose or nasal congestion</li>
+            <li>If this COVID-19 screening test is being conducted as part of a contract with my school/company/institution/health professional, I hereby authorize Norgen Biotek to release my personal information related to the results of the COVID-19 test to the establishment I am affiliated with.</li>
+            <li>I understand that if my test results are positive (+) for the SARS-CoV-2 virus, it is my responsibility to immediately self-isolate and follow the recommended provincial guidelines.</li>
+            <li>I understand that an individual must be trained to supervise the saliva collection by reading the instructions and watching the instructional video on proper saliva collection.</li>
+            <li>I understand that my saliva collection is to be performed by supervised self-collection.</li>
+            <li>I understand that if there is a positive test or potential positive test, the sample will be reported to the regional health authority.</li>
+            </ol>-->
+
+            <!--     <p><b>Terms and Conditions:</b></p>
+            <ol>
+            <li><b>Deliverables.</b>  Norgen will deliver the results of the service in a Final Report. The PDF copy of the Final Report
+            will be emailed to the Donor. Individual report of results to each donor emailed directly to the donor using the
+            email address provided on the Donor Information and Consent Card. Donors tested positive (+) for SARS-CoV-
+            2 must immediately self-isolate and follow the recommended provincial guidelines. Norgen is obliged under the
+            Government of Ontario to report all test results by means of uploading the result to the Ontario Laboratory
+            Information System (OLIS). All donors will have provided signed consent indicating their understanding that
+            their results will be shared with both the Donor and the Government of Ontario. Please refer to <b>Ownership</b>
+            (Section 7) for more information.</li>
+
+            <li><b>Turnaround/Deliverable Time.</b> Norgen will deliver the test results within 24-48 hours from receiving the
+            sample from the Donor. It is the responsibility of Norgen to complete the service within the turnaround time
+            provided unless Norgen is prevented by Excusable Delay (Section 12). If Norgen Biotek does not deliver the
+            COVID-19 Test results within the 48-hour turnaround time, for reasons outside of <b>Excusable Delay</b>, the Donor
+            is entitled to a 100% refund for the cost of the test. If a COVID-19 Test is required for a <b>MEDICAL</b> procedure,
+            it is the Donor's responsibility to check with their healthcare provider to ensure the saliva sample is collected
+            within the required timeline. If a COVID-19 Test is required for <b>TRAVEL</b> purposes, it is the Donor's
+            responsibility to check with their airline and/or destination country on the up-to-date travel rules and
+            requirements. It is the Donor's responsibility to schedule their appointment at Norgen Biotek within the
+            specified date range in which they must provide a negative PCR test to travel. Norgen Biotek cannot be held
+            responsible for any issues related to travel, including missed flights, refusal of entry into flights, layover
+            countries or destination countries or any other travel interruption.</li>
+
+            <li><b>Unused Samples.</b> Any unused samples (saliva or swabs, nucleic acids, etc.) will be destroyed 14 days after the
+            final report has been provided to the Donor.</li>
+
+            <li><b>Ownership.</b> Both Norgen Biotek and the Donor agree that information, data and results derived during the
+            performance of the work shall be owned by Norgen Biotek, the Donor, and the Government of Ontario via the
+            Ontario Laboratory Information System (OLIS). The OLIS is an information repository that gives authorized
+            health care providers access to lab test orders and results from hospitals, community labs and public health labs.
+            The OLIS standard ensures all information technology systems that retrieve lab data from OLIS can exchange
+            and understand the content through standardized HL7 messages and terminologies.</li>
+
+            <li><b>Ethical Issues and Consent Forms.</b> If any samples received at/by Norgen do not include the signed Donor
+            Information and Consent Card, the sample will not be processed. It is the responsibility of Norgen to notify the
+            Donor immediately if any samples are submitted without donor consent. Norgen will then be responsible for
+            delivering the results within 48 hours after receiving the signed consent.</li>
+
+            <li><b>Confidentiality.</b> Norgen shall take all reasonable precautions to maintain information, results and data derived
+            or created during the performance of the work confidential during and after the completion of the service.</li>
+
+            <li><b>Fees and Expenses.</b>  It is the responsibility for the donor to make payment in full for the service prior to
+            submitting their biological sample. If the donor requires a replacement collection device for whatever reason, it
+            is the responsibility of the donor to make payment in full and it is the responsibility of Norgen to then ship the
+            donor the replacement collection device.</li>
+
+            <li><b>Terms of Payment.</b> 100% upfront payment by credit card.</li>
+            
+            <li><b>Governing Law.</b> This COVID-19 DIAGNOSTIC TESTING AGREEMENT shall be governed by the laws of the Province of Ontario, Canada.</li>
+            
+            <li><b>Limitation of Liability.</b>  Under no circumstances shall Norgen be liable to the Donor for any consequential,
+            incidental, punitive, contingent, statutory or any other special damages (including loss of profits or loss of data)
+            arising out of or related to the COVID-19 DIAGNOSTIC TESTING AGREEMENT or the use of the
+            interpretation of the results.</li>
+
+            <li><b>Excusable Delay.</b> If Norgen Biotek is prevented from or delayed in performing any obligation under this
+            COVID-19 DIAGNOSTIC TESTING AGREEMENT, and such failure is due to events outside of reasonable
+            control (force majeure), the time for the performance of the obligation in question shall be extended for a period
+            equivalent to the total period the cause of the prevention or delay persists or remains in effect. Norgen Biotek
+            shall promptly give the Donor notification with details concerning the event or cause of force majeure and use
+            reasonable efforts to overcome the effect of force majeure and resume performance of its obligations as soon as
+            possible. If non-performance of any obligation affected by a force majeure continues for a period longer than
+            45 days, the party not claiming the benefit of force majeure may terminate this COVID-19 DIAGNOSTIC
+            TESTING AGREEMENT by notice in writing.</li>
+
+                <li><b>Terms and Termination.</b> Upon agreeing to the Terms and Conditions outlined in the COVID-19
+            DIAGNOSTIC TESTING AGREEMENT, they will come into force and effect for the duration of the testing
+            timeline. If sample quality issues arise, Norgen will notify the Donor immediately. Both parties will make
+            reasonable attempts to correct problems related to the samples, but Norgen reserves the right to terminate this
+            COVID-19 DIAGNOSTIC TESTING AGREEMENT due to sample quality issues. Norgen will ensure the
+            Donor understands the risks and costs associated with proceeding with poor quality samples. If the Donor
+            agrees to proceed, and samples were to fail, Norgen reserves the right to terminate the COVID-19
+            DIAGNOSTIC TESTING AGREEMENT.</li>
+                
+                <li style="display: none;">version 1.5</li
+            </ol>
+
+        </div> -->
+            <!-- <label class="mleft" for="terms" id="termsbox">
+            <input type="checkbox" id="terms" name="terms" value="terms agreed to">
+            <div class="fake-check"><i class="fas fa-check" aria-hidden="true"></i></div>
+            <span><b>Myself (Donor), Legal Guardian of Donor(s), OR person purchasing the COVID-19 test on behalf of the
+            Donor(s)</b> agrees to have read and accept the terms and conditions as outlined above in this COVID-19
+            DIAGNOSTIC TESTING AGREEMENT.</span>
+        </label>
+        <p class="warning">You must agree to the terms and conditions.</p>
+        <a class="btn btn-primary check-agreement" href="javascript:void(0)">Continue</a>
+        </div> -->
+          </section>
+          <!-- Contact Section Starts -->
+          <section class="contactrow text-center darkgradient">
+            <h2>Want to speak with an expert?</h2>
+            <p>Norgen's product experts are always ready to help you with any concerns you may have. Simply reach out
+              with a phone call or an email, and we'll be sure to get in touch as soon as possible!</p>
+            <div class="contact-grid">
+              <div class="contact-left">
+                <a href="https://norgenbiotek.com"><img
+                    src="https://norgenbiotek.com/sites/default/files/norgen-logo-footer.svg" /></a><br>
+                <a href="http://facebook.com/norgenbiotek" target="_blank"><i class="fab fa-facebook"></i></a>
+                <a href="http://twitter.com/norgenbiotek" target="_blank"><i class="fab fa-twitter"></i></a>
+                <a href="http://instagram.com/norgen.biotek" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.youtube.com/user/norgenbiotek" target="_blank"><i class="fab fa-youtube"></i></a>
+              </div>
+              <div class="contact-mid">
+                <img
+                  src="https://norgenbiotek.com/sites/default/files/images/campaigns/saliva-rna/ontario-made.png" /><br>
+                <a href="tel:1-888-977-4839">1-888 9 SPIT DX</a><br>
+                <a href="mailto:orders@norgenbiotek.com?subject=COVID-19 Testing Inquiry">orders@norgenbiotek.com</a>
+                <!--<br>Looking to travel? <a href="mailto:orders@norgenbiotek.com?subject=COVID-19 Travel Testing Inquiry">Inquire about COVID-19 testing for travel</a>-->
+              </div>
+              <div class="contact-right">
+                3430 Schmon Parkway<br>
+                Thorold, ON<br>
+                Canada, L2V 4Y6
+              </div>
+            </div>
+          </section>
+          <!-- Contact Section Ends -->
+        </main>
+        <script>
+          let checks = document.querySelectorAll('.symptom-check input[type="checkbox"');
+
+          document.querySelector('.check-continue').addEventListener('click', () => {
+            let success = 0;
+            for (let i = 0; i < checks.length; i++) {
+              if (!checks[i].checked) {
+                if (i === checks.length - 2) {
+                  jQuery('.symptom-check').fadeOut();
+                  jQuery('.failure-location').fadeIn();
+                  window.scrollTo(0, 0);
+                } else if (i === checks.length - 1) {
+                  document.querySelector('label#agreebox > span').style.color = '#be1e2d';
+                  document.querySelector('label#agreebox > span').style.fontWeight = 'bold';
+                } else {
+                  jQuery('.symptom-check').fadeOut();
+                  jQuery('.failure').fadeIn();
+                  window.scrollTo(0, 0);
+                }
+              } else {
+                success++;
+              }
+            }
+            if (success >= checks.length) {
+              jQuery('.symtpom-check').fadeOut();
+              window.location.href = "https://calendly.com/norgen-biotek/covid-19-travel-testing-appointment";
+              window.scrollTo(0, 0);
+            }
+          });
+        </script>
+      </body>
+
+      </html>

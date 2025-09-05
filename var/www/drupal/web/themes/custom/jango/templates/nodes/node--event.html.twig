@@ -1,0 +1,419 @@
+{#
+  /**
+  * @file
+  * Default theme implementation to display a node.
+  *
+  * Available variables:
+  * - node: The node entity with limited access to object properties and methods.
+  * Only method names starting with "get", "has", or "is" and a few common
+  * methods such as "id", "label", and "bundle" are available. For example:
+  * - node.getCreatedTime() will return the node creation timestamp.
+  * - node.hasField('field_example') returns TRUE if the node bundle includes
+  * field_example. (This does not indicate the presence of a value in this
+  * field.)
+  * - node.isPublished() will return whether the node is published or not.
+  * Calling other methods, such as node.delete(), will result in an exception.
+  * See \Drupal\node\Entity\Node for a full list of public properties and
+  * methods for the node object.
+  * - label: The title of the node.
+  * - content: All node items. Use {{ content }} to print them all,
+  * or print a subset such as {{ content.field_example }}. Use
+  * {{ content|without('field_example') }} to temporarily suppress the printing
+  * of a given child element.
+  * - author_picture: The node author user entity, rendered using the "compact"
+  * view mode.
+  * - metadata: Metadata for this node.
+  * - date: Themed creation date field.
+  * - author_name: Themed author name field.
+  * - url: Direct URL of the current node.
+  * - display_submitted: Whether submission information should be displayed.
+  * - attributes: HTML attributes for the containing element.
+  * The attributes.class element may contain one or more of the following
+  * classes:
+  * - node: The current template type (also known as a "theming hook").
+  * - node--type-[type]: The current node type. For example, if the node is an
+  * "Article" it would result in "node--type-article". Note that the machine
+  * name will often be in a short form of the human readable label.
+  * - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+  * teaser would result in: "node--view-mode-teaser", and
+  * full: "node--view-mode-full".
+  * The following are controlled through the node publishing options.
+  * - node--promoted: Appears on nodes promoted to the front page.
+  * - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+  * teaser listings.
+  * - node--unpublished: Appears on unpublished nodes visible only to site
+  * admins.
+  * - title_attributes: Same as attributes, except applied to the main title
+  * tag that appears in the template.
+  * - content_attributes: Same as attributes, except applied to the main
+  * content tag that appears in the template.
+  * - author_attributes: Same as attributes, except applied to the author of
+  * the node tag that appears in the template.
+  * - title_prefix: Additional output populated by modules, intended to be
+  * displayed in front of the main title tag that appears in the template.
+  * - title_suffix: Additional output populated by modules, intended to be
+  * displayed after the main title tag that appears in the template.
+  * - view_mode: View mode; for example, "teaser" or "full".
+  * - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+  * - page: Flag for the full page state. Will be true if view_mode is 'full'.
+  * - readmore: Flag for more state. Will be true if the teaser content of the
+  * node cannot hold the main body content.
+  * - logged_in: Flag for authenticated user status. Will be true when the
+  * current user is a logged-in member.
+  * - is_admin: Flag for admin user status. Will be true when the current user
+  * is an administrator.
+  *
+  * @see template_preprocess_node()
+  *
+  * @todo Remove the id attribute (or make it a class), because if that gets
+  * rendered twice on a page this is invalid CSS for example: two lists
+  * in different view modes.
+  *
+  * @ingroup themeable
+  */
+  #}
+  
+  
+  {# <article{{attributes}} itemscope itemtype="http://schema.org/Event">
+    <div class="events-row light-blue-bg">
+      <div class="row container">
+        <div class="col-md-12 events-column-info">
+          <div class="events-img">
+            
+
+            <div itemprop="name" style="visibility:hidden;opacity:0;height:0px;"> {{label}} </div>
+            <span class=" events-column-img" itemprop="image"><img style="" src="/sites/default/files/pioneer_0.jpg" alt=""
+              itemprop="name" title="">{{content.field_event_picture}}</span>
+
+          </div> #}
+          {# <div class="events-header">
+            <p>DNA and RNA studies</p>
+          </div>
+          <div class="events-description">
+            <p>The event will be focus on the usefulness of learning DNA and RNA</p>
+          </div> #}
+          {# <div class="events-info-item">
+            <span class="glyphicon glyphicon-list-alt"></span>
+            <strong>
+              Duration:
+            </strong>
+            <span itemprop="duration" content="P{{ node.field_number_of_days.value }}D">{{node.field_number_of_days.value}} {% if node.field_number_of_days.value > 1 %}days{% else %}day{% endif %}</span>
+          </div>
+          <div class="events-info-item">
+            <span class="glyphicon glyphicon-home"></span>
+            <strong>
+              Booth Number:
+            </strong>
+            <span>{{node.field_booth_number.value}}</span>
+          </div>
+          <div class="events-info-item">
+            <span class=" glyphicon glyphicon-link"></span>
+            <strong>
+              Website Link:
+            </strong>
+            <a href="{{node.field_website_link.value}}" itemprop="url">{{node.field_website_link.value}}</a>
+          </div>
+          <meta itemprop="startDate" content="{{node.field_event_date.0.value}}">
+          <meta itemprop="endDate" content="{{(node.field_event_date|last).end_value}}">
+          <div class="events-info-item event-info-item-time">
+            <span class="glyphicon glyphicon-time"></span>
+            <strong>
+              When:
+              {{ formatted_date_html|raw }}
+            </strong>
+          </div>
+          <div class="events-info-item event-info-item-location" itemprop="location" itemscope itemtype="http://schema.org/Place">
+            <span class="glyphicon glyphicon-map-marker"></span>
+            <strong>
+              Where:
+            </strong>
+            <span itemprop="name" content="node.field_event_location.value">
+              {{ node.field_event_location.value }}
+            </span>
+          </div>
+        </div> #}
+        {# <div class=" col-md-6 events-img">
+          <span class=" events-column-img" itemprop="image"><img style="" src="/sites/default/files/pioneer_0.jpg" alt=""
+              title="">{{content.field_event_picture}}</span>
+        </div> #}
+        {# {% if node.field_event_embedded_map.value is not empty %}
+        <div class="events-map">
+          <iframe src="{{node.field_event_embedded_map.value}}" width="100%" height="250" style="border:0;" allowfullscreen="true"
+            loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    </article> #}
+
+
+
+
+
+<style>
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    }
+
+    @keyframes fadeInRight {
+    from {
+      opacity: 0;
+      transform: translateX(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+
+
+  .event-card-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 30px 0px;
+    border-radius: 10px;
+    display: flex;
+    flex-wrap: nowrap; 
+    align-items: center; 
+    gap: 30px;
+    min-height: 500px;
+    animation: fadeInUp 0.6s ease-out both;
+  }
+
+  .event-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.4s ease, filter 0.4s ease;
+    animation: fadeInLeft 0.8s ease-out both;
+  }
+
+  .event-right {
+    flex: 1 1 45%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 16px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    animation: fadeInRight 0.8s ease-out both;
+  }
+
+  .event-title {
+    font-size: 35px;
+    color: #004893;
+    font-weight: 600;
+    margin-bottom: 10px;
+    margin-top: 30px;
+    text-align: center;
+  }
+
+  .event-image-logo {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .event-main-img {
+    width: 100%;
+    border-radius: 10px;
+    display: block;
+    height: 100%;
+    max-height: 500px;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+
+  .event-logo-overlay {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    max-width: 250px;
+    height: auto;
+  }
+
+  .event-detail {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 20px;
+  }
+
+  .event-detail i {
+    font-size: 22px;
+    color: #222;
+  }
+
+  .event-map iframe {
+    margin-top: 10px;
+    border-radius: 8px;
+  }
+
+  .event-button {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #003366;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    animation: fadeInUp 0.6s ease-out both;
+    animation-delay: 0.8s;
+  }
+  .field--name-field-event-logo img {
+    display: block;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 300px;
+    height: auto;
+    min-height: auto;
+    border-radius: 12px 0 0 12px;
+  }
+  .field--name-field-event-picture img{
+    border-radius: 10px;
+    height: 100%;
+    max-height:500px;
+    object-fit: cover;
+    transition: transform 0.4s ease, filter 0.4s ease;
+  }
+
+  .event-left:hover {
+    transform: scale(1.03);
+  }
+  .event-button i {
+    margin-right: 8px;
+  }
+
+  @media (max-width: 998px) {
+    .event-card-grid {
+      flex-direction: column;
+      padding: 20px;
+      gap: 20px;
+    }
+
+    .event-card-grid {
+      align-items: stretch;
+    }
+  }
+  @media (max-width: 768px) {
+    .event-card-grid {
+      flex-direction: column;
+      padding: 20px;
+      gap: 20px;
+    }
+
+    .event-left,
+    .event-right {
+      flex: 1 1 100%;
+      width: 100%;
+    }
+
+    .event-title {
+      font-size: 28px;
+      text-align: center;
+    }
+
+    .event-main-img {
+      max-height: 300px;
+    }
+
+    .event-detail {
+      font-size: 18px;
+    }
+
+    .event-logo-overlay {
+      max-width: 180px;
+      top: 10px;
+      left: 10px;
+    }
+
+    .event-button {
+      width: 100%;
+      text-align: center;
+    }
+
+    .field--name-field-event-logo img {
+      width: 30%;
+      top: 10px;
+      left: 10px;
+    }
+  }
+</style>
+
+  <h2 class="event-title">{{ label }}</h2>
+
+  <div class="event-card-grid container">
+  <div class="event-left">
+    <div class="event-image-logo">
+            <div itemprop="name" style="visibility:hidden;opacity:0;height:0px;"> {{label}} </div>
+            <span class=" events-column-img" itemprop="image">
+              {{content.field_event_picture}}
+            </span>      
+              
+        <img class = "event-logo" style = "max-width: 200px; max-height: 100px; width: auto; height: auto; object-fit: contain; display: block;"src="" > {{content.field_event_logo}}
+
+    </div>
+  </div>
+
+  <div class="event-right">
+
+    <div class="event-detail">
+      <img style="height: 30px; position: relative;" src="/sites/default/files/images/icons/calendar_747310.png" alt="Calander Icon" <a="" href="https://www.freepik.com/icon/calendar_747310#fromView=search&amp;page=1&amp;position=0&amp;uuid=95be5cb5-bd96-4e4c-ab50-ff5b50dc46cc" title="Calander icons created by Freepik - Freepik">
+      <span><strong>When:</strong> {{ node.field_event_date.0.value|date("D Y-m-d") }}</span>
+    </div>
+
+    <div class="event-detail">
+      <img style="height: 30px; position: relative;" src="/sites/default/files/images/icons/clock (1).png" alt="Calander Icon" <a="" href="https://www.flaticon.com/free-icons/clock" title="Calander icons created by dmitri13 - Flaticon">
+      <span itemprop="duration" content="P{{ node.field_number_of_days.value }}D"> <strong>Time: </strong> {{node.field_number_of_days.value}} {% if node.field_number_of_days.value > 1 %}days{% else %}day{% endif %}</span>
+
+    </div>
+
+    <div class="event-detail" style = "margin-left: 4px; gap: 15px;">
+      <img src="/sites/default/files/images/icons/gps_15949802.png" style="height: 30px; display: block;" alt="Location Icon" <a="" href="https://www.freepik.com/icon/gps_15949802#fromView=search&amp;page=1&amp;position=8&amp;uuid=d16c9e2c-c20e-4544-a2fc-2e1a88c35bff" title="GPS icons created by Ihdizein - Freepik">
+      <span><strong>Where:</strong> {{ node.field_event_location.value }}</span>
+    </div>
+
+    <div class="event-detail" style = "gap: 12px;">
+      <img style="height: 30px; position: relative;" src="/sites/default/files/images/icons/boss_6234526.png" alt="Calander Icon" <a="" href="https://www.freepik.com/icon/boss_6234526#fromView=search&page=1&position=11&uuid=b968da62-2a94-4f5b-8c23-9e05120b6c6b" title="Boss icons created by Freepik - Freepik">
+      <span><strong>Booth:</strong> {{ node.field_booth_number.value }}</span>
+    </div>
+
+    {% if node.field_event_map.value is not empty %}
+      <div class="event-map">
+        <iframe src="{{ node.field_event_map.value }}" width="100%" height="200" style="border:0;" allowfullscreen loading="lazy"></iframe>
+      </div>
+    {% endif %}
+
+    {% if node.field_website_link.value %}
+      <a href="{{ node.field_website_link.value }}" class="btn btn-primary" style = "width:250px;" target="_blank">
+        <i class="fas fa-external-link-alt"></i> View Event Website
+      </a>
+    {% endif %}
+  </div>
+</div>

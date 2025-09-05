@@ -1,0 +1,1592 @@
+<style>
+
+.node-unpublished{
+    background-color:#fff;
+}
+
+
+.literature-grid{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    grid-gap: 24px;
+    margin-bottom: 24px;
+    margin: 0% auto;
+    /*display: none;*/
+}
+.new-literature-grid{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    grid-gap: 24px;
+    margin-bottom: 24px;
+    padding: 4%;
+    
+}
+.literature-card{
+    display:flex;
+    flex-direction:column;
+    padding:1em;
+    background-color:#E5ECF4;
+    border-radius:12px;
+    justify-content: space-between;
+    /*grid-gap: 40px;*/
+}
+.literature-card .flex-row{
+    /*--old--display:flex;
+    flex-direction:row;
+    padding-bottom:1em;--end of old--*/
+
+    /*new*/
+    /*display: grid;
+    grid-template-columns: 1fr 1fr;*/
+    display: flex;
+}
+.img-container{
+    height:100%;
+    overflow:hidden;
+    margin:0 auto;
+    max-height:450px;
+    max-width: 175px;
+}
+.info-container{
+    flex-direction:column;
+    padding:0.5em 1em;
+}
+
+.literature-card h3{
+    font-weight:bold;
+    margin-top:0px;
+    font-size: 26px;
+}
+.btn-container{
+    flex-grow:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:end;
+}
+/* .btn-container button{
+    border-radius:50px;
+} */
+.toggleCat{
+    margin-top:40px;
+    border-bottom: 1px #80808026 solid;
+    padding-bottom: 3%;
+}
+.toggleCat:hover{
+    cursor:pointer;
+}
+.toggleCat:after{
+    content: '\f105';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: bold;
+    padding-left: 15px;
+}
+.toggleCat.active:after{
+    content: '\f107';
+}
+.horizontal-rule{
+    margin:5em 0;
+}
+
+@media only screen and (max-width:700px){
+    .literature-grid{
+        grid-template-columns: repeat(2,1fr);
+        grid-gap: 12px;
+        margin-bottom: 14px;
+    }
+}
+@media only screen and (max-width:400px){
+    .literature-grid{
+        grid-template-columns: repeat(1,1fr);
+    }
+}
+.main-div p{
+    font-size: 16px;
+    font-family: 'Montserrat';
+}
+.new-div{
+            background: #00489759;
+    width: 50%;
+    padding: 1.5% 3%;
+    /*margin: 1% 0;*/
+    color: white;
+    font-size: 20px;
+    box-shadow: 0 4px 40px 0 rgb(0 0 0 / 1%), 0 6px 20px 0 rgb(0 0 0 / 10%);
+}
+.new-div > p{
+    font-size: 20px;
+}
+.literature-card .btn-container{
+    margin: 2% 0;
+}
+
+/* Registration Form */
+#form-container{
+    width: 50%;
+    margin: auto;
+    background: white;
+    box-shadow: 0 4px 40px 0 rgb(0 0 0 / 9%), 0 6px 20px 0 rgb(0 0 0 / 17%);
+    padding: 4%;
+    display: none;
+    position: absolute;
+    left: 20%;
+    right: 20%;
+    top:5%;
+    z-index: 2;
+        position: fixed;
+    margin: 3%;
+    /* padding: 5%; */
+    top: 5%;
+    z-index: 2;
+    height: -webkit-fill-available;
+    overflow-y: scroll;
+}
+.main-div{
+    position: relative;
+}
+#form-container input{
+    padding: 8px;
+    border: 1px solid #c6c6c6;
+}
+#form-container input, #form-container select{
+    width: 100%;
+    height: 34px;
+    margin-bottom: 1em;
+}
+#form-container input[type="radio"]{
+    width:fit-content;
+    min-width:auto;
+    height:auto;
+}
+/*#form-container label, #form-container input {
+    border-radius: 36px;
+}*/
+#form-container button#submit, #form-container button#download {
+    border-radius: 36px;
+    color: #fff;
+    background: #004897;
+    padding: 10px 20px;
+    border: none;
+    transition: all 0.5s;
+}
+#form-container input:focus, #form-container select:focus, #form-container input:focus-visible, #form-container select:focus-visible {
+    box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%), 0 0 8px rgb(102 175 233 / 60%);
+    border: solid 1px #1A3C93 !important;
+    outline: none;
+}
+@media only screen and (max-width:600px){
+    #form-container .form-table{
+        width:auto;
+        width:fit-content;
+        min-width:230px;
+    }
+    #form-container input, #form-container select {
+        width:auto;
+        width:fit-content;
+        min-width: 230px;
+    }
+}
+  #overlay {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 2;
+    cursor: pointer;
+  }
+    #overlay2 {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 2;
+    cursor: pointer;
+  }
+  .animation-ctn{
+  text-align:center;
+  /*margin-top:5em;*/
+}
+
+/*form-request*/
+#form-container2{
+    width: 50%;
+    margin: auto;
+    background: white;
+    box-shadow: 0 4px 40px 0 rgb(0 0 0 / 9%), 0 6px 20px 0 rgb(0 0 0 / 17%);
+    padding: 4%;
+    display: none;
+    position: absolute;
+    left: 20% ;
+    right: 20%;
+    top:5%;
+    z-index: 2;
+        position: fixed;
+    margin: 3%;
+    /* padding: 5%; */
+    
+    top: 5%;
+    z-index: 2;
+    height: -webkit-fill-available;
+    overflow-y: scroll;
+}
+.main-div{
+    position: relative;
+}
+#form-container2 input{
+    padding: 8px;
+    border: 1px solid #c6c6c6;
+}
+#form-container2 input, #form-container2 select{
+    width: 100%;
+    height: 34px;
+    margin-bottom: 1em;
+}
+#form-container2 input[type="radio"]{
+    width:fit-content;
+    min-width:auto;
+    height:auto;
+}
+#form-container2 label, #form-container2 input {
+    border-radius: 36px;
+}
+#form-container2 button#submit, #form-container2 button#download {
+    border-radius: 36px;
+    color: #fff;
+    background: #004897;
+    padding: 10px 20px;
+    border: none;
+    transition: all 0.5s;
+}
+#form-container2 input:focus, #form-container2 select:focus, #form-container2 input:focus-visible, #form-container2 select:focus-visible {
+    box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%), 0 0 8px rgb(102 175 233 / 60%);
+    border: solid 1px #1A3C93 !important;
+    outline: none;
+}
+@media only screen and (max-width:600px){
+    #form-container2 .form-table{
+        width:auto;
+        width:fit-content;
+        min-width:230px;
+    }
+    #form-container2 input, #form-container2 select {
+        width:auto;
+        width:fit-content;
+        min-width: 230px;
+    }
+}
+  #overlay {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 2;
+    cursor: pointer;
+  }
+  .animation-ctn{
+  text-align:center;
+  /*margin-top:5em;*/
+}
+
+
+
+    @-webkit-keyframes checkmark {
+    0% {
+        stroke-dashoffset: 100px
+    }
+
+    100% {
+        stroke-dashoffset: 200px
+    }
+}
+
+@-ms-keyframes checkmark {
+    0% {
+        stroke-dashoffset: 100px
+    }
+
+    100% {
+        stroke-dashoffset: 200px
+    }
+}
+
+@keyframes checkmark {
+    0% {
+        stroke-dashoffset: 100px
+    }
+
+    100% {
+        stroke-dashoffset: 0px
+    }
+}
+
+@-webkit-keyframes checkmark-circle {
+    0% {
+        stroke-dashoffset: 480px
+   
+    }
+
+    100% {
+        stroke-dashoffset: 960px;
+      
+    }
+}
+
+@-ms-keyframes checkmark-circle {
+    0% {
+        stroke-dashoffset: 240px
+    }
+
+    100% {
+        stroke-dashoffset: 480px
+    }
+}
+
+@keyframes checkmark-circle {
+    0% {
+        stroke-dashoffset: 480px 
+    }
+
+    100% {
+        stroke-dashoffset: 960px
+    }
+}
+
+@keyframes colored-circle { 
+    0% {
+        opacity:0
+    }
+
+    100% {
+        opacity:100
+    }
+}
+
+/* other styles */
+/* .svg svg {
+    display: none
+}
+ */
+.inlinesvg .svg svg {
+    display: inline
+}
+
+/* .svg img {
+    display: none
+} */
+
+.icon--order-success svg polyline {
+    -webkit-animation: checkmark 0.25s ease-in-out 0.7s backwards;
+    animation: checkmark 0.25s ease-in-out 0.7s backwards
+}
+
+.icon--order-success svg circle {
+    -webkit-animation: checkmark-circle 0.6s ease-in-out backwards;
+    animation: checkmark-circle 0.6s ease-in-out backwards;
+}
+.icon--order-success svg circle#colored {
+    -webkit-animation: colored-circle 0.6s ease-in-out 0.7s backwards;
+    animation: colored-circle 0.6s ease-in-out 0.7s backwards;
+} 
+.survey-thankyou{
+            margin-top: 0;
+    margin-left: 30%;
+    margin-right: 30%; 
+    /* margin: 18%; */
+    background: white;
+    padding: 2%; 
+    width: 100%;
+    max-width: 800px;
+    margin: 5% auto;
+        text-align: center;
+        box-shadow: 0 4px 40px 0 rgb(0 0 0 / 4%), 0 6px 20px 0 rgb(0 0 0 / 5%);
+              position: fixed;
+    margin: 3%;
+    /* padding: 5%; */
+    left: 22%;
+    right: 22%;
+    top: 12%;
+    z-index: 12;
+
+        display: none;
+    }
+    .survey-thankyou > hr{
+            border-top: 9px solid #12508b;
+    width: 50%;
+    margin: auto;
+    }
+    .survey-thankyou-request{
+            margin-top: 0;
+    margin-left: 30%;
+    margin-right: 30%; 
+    /* margin: 18%; */
+    background: white;
+    padding: 2%; 
+    width: 100%;
+    max-width: 800px;
+    margin: 5% auto;
+        text-align: center;
+        box-shadow: 0 4px 40px 0 rgb(0 0 0 / 4%), 0 6px 20px 0 rgb(0 0 0 / 5%);
+              position: fixed;
+    margin: 3%;
+    /* padding: 5%; */
+    left: 22%;
+    right: 22%;
+    top: 12%;
+    z-index: 12;
+
+        display: none;
+    }
+    .survey-thankyou-request > hr{
+            border-top: 9px solid #12508b;
+    width: 50%;
+    margin: auto;
+    }
+    .image-logo > img{
+        width: 50%;
+    }
+    .link-btn{
+        display: none;
+    }
+    .basic-page-banner {
+    content: " ";
+    background-position: left;
+    height: 400px;
+    background-size: 130%;
+    background: linear-gradient(rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), url(/sites/default/files/catalogs_ebooks/literature_banner.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-bottom: 3px solid #004897;
+}
+.upper-title {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.gradient-rectangle {
+    position: absolute;
+    /*transform: translateY(calc(100px - 1.5em));*/
+    width: 100%;
+    height: 1.5em;
+    background-color: #126c7b;
+    
+}
+.category-div{
+
+    width: 80%;
+    margin: 5% auto;
+    text-align: center;
+}
+.category-div > h2{
+        color: #134a96;
+    font-weight: 700;
+    font-size: 42px;
+}
+.cat-grid{
+    display: flex;
+    /* grid-template-columns: 1fr 1fr 1fr; */
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+        margin: 3.5%;
+}
+.cat-grid p{
+        color: #134a96;
+    font-weight: 800;
+font-size: 23px;
+}
+.sec-div{
+    width: 75%;
+    margin: 7% auto;
+    /*text-align: center;*/
+}
+.hor-line { 
+    background:#fff; 
+    padding:0 10px; 
+}
+.cat-divs > h3{
+    border-bottom: 5px solid #134a96;
+    line-height: 0.1em;
+    text-align: left;
+    font-weight: 700;
+    color: #134a96;
+    font-size: 33px;
+}
+.recommended-div{
+        display: flex;
+    /* grid-template-columns: 1fr 1fr; */
+    justify-items: end;
+    align-items: start;
+    width: 85%;
+    margin: 5%auto;
+    justify-content: center;
+    gap: 50px;
+}
+.recommended-div h3{
+        font-size: 36px;
+    font-weight: 800;
+    color: #004897;
+
+}
+.recommended-div p {
+        font-size: 23px;
+    width: 73%;
+}
+.recommended-div img{
+    width: 40%;
+}
+.recommended-div > div{
+        text-align: left;
+        display: grid;
+        grid-gap: 30px;
+            justify-items: start;
+            padding-left: 7%;
+}
+.catalogue-grid{
+        display: grid;
+    grid-template-columns: 2fr 3fr;
+    grid-gap: 200px;
+    margin-bottom: 24px;
+    margin: 1% auto;
+
+}
+.catalogue-2{
+    background-color: aliceblue;
+       /* padding: 4%;*/
+    border-radius: 17px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    display: grid;
+    grid-template-columns: 40% 1fr;
+}
+.catalogue-2 > ul{
+    list-style: none;
+}
+.catalogue-2 >img{
+    position: absolute;
+    left: -21%;
+    width: 70%;
+        bottom: -13%;
+}
+.info-container > p{
+	font-size: 16px;
+    line-height: 1.4;
+}
+.free-masterclass{
+	background-color: aliceblue;
+}
+.masterclass-inside{
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-gap: 175px;
+}
+.logo-div{
+	    display: flex;
+    align-items: center;
+    width: 50%;
+    gap: 20px;
+        margin: 5% 0;
+}
+#logo1{
+	width: 175px;
+}
+.masterclass-inside h3{
+	color: #004897;
+    font-weight: 700;
+    font-size:35px;
+}
+.masterclass-inside p {
+	font-size: 22px;
+}
+.masterclass-inside button{
+	margin: 5% 0;
+}
+/*.masterclass-inside > div{
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    align-items: center;
+    justify-items: start;
+}*/
+#masterclass-first{
+     display: grid;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    align-items: center;
+    justify-items: start;
+}
+.masterclass-inside div{
+	    margin: 5% 0;
+}
+#rna-book{
+	position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    box-shadow: 0 4px 40px 0 rgb(0 0 0 / 9%), 0 6px 20px 0 rgb(0 0 0 / 17%);
+}
+.text-div a{
+        color: black;
+    font-weight: 500;
+}
+
+
+    .red-diamond {
+      width: 0;
+      height: 0;
+      border: 50px solid transparent;
+      border-bottom-color: red;
+      position: relative;
+      top: -50px;
+    }
+    .red-diamond:after {
+      content: '';
+      position: absolute;
+      left: -50px;
+      top: 50px;
+      width: 0;
+      height: 0;
+      border: 50px solid transparent;
+      border-top-color: red;
+    }
+    #new{
+        position: absolute;
+    left: 10%;
+    width: 8%;
+    }
+    .page-btn{
+            font-size: 17px;
+    
+    margin-right: 15px;
+        border-color: #be1e2d !important;
+        background-color: #be1e2d !important;
+        width: 100%;
+    }
+    .page-btn:hover{
+        background-color: #be1e2d8c;
+        border-color: #be1e2d8c;
+    }
+    .link-btn{
+        border-color: #004897;
+        background-color: #004897;
+    }
+    #liquid-booklet{
+       padding: 0 3%;
+    }
+    .flex-row a{
+        font-size: 17px;
+    }
+    .btn-padding{ 
+        padding: 10px;
+        margin-top: 5%;
+    }
+    .key-text ul li {
+    font-size: 16px;
+    line-height: 1.5;
+    text-indent: -1.78em;
+    margin-left: 2.5em;
+    margin-bottom: 6px;
+}
+.key-text{
+    width: 83%;
+    margin:auto !important;
+}
+ .request-hidden{
+        display: none;
+        font-size: 17px !important;
+    width: auto !important;
+    font-weight: 700 !important;
+    }
+
+    @media only screen and (min-width:2500px){
+        .catalogue-2 >img {
+            position:initial;
+        }
+        .catalogue-2{
+            grid-template-columns: 1fr 0fr 1fr;
+        }
+    }
+@media only screen and (max-width:1400px){
+    .catalogue-2{
+        grid-template-columns: auto;
+    }
+    .catalogue-2 >img {
+        left: 9%;
+        top: -28%;
+    }
+    .catalogue-grid{
+        grid-gap:50px;
+        min-height:500px;
+    }
+}
+
+@media only screen and (max-width:800px){
+        .text-div {
+    /* width: 1200px; */
+    position: absolute !important;
+    /* bottom: 5%; */
+    /* left: 10%; */
+    display: flex;
+    flex-direction: column-reverse;
+    z-index: 10 !important;
+        background: #f0f8ff00;
+    padding: 7%;
+    width: 100%;
+
+    backdrop-filter: blur(11px);
+    left: 0;
+    bottom: 0;
+
+}
+
+.text-div > p {
+    line-height: 1;
+    overflow-wrap: break-word;
+}
+.img-header{
+        padding-left: 0;
+}
+}
+@media only screen and (max-width:800px){
+.cat-grid{
+    flex-direction: column;
+    }
+
+    .recommended-div{
+        flex-direction: column;
+        position: relative;
+    }
+    #new {
+    right: 0;
+    left: auto;
+    width: 22%;
+    top: 0;
+        }
+    .recommended-div > div {
+        padding-left: 0; 
+    }
+    .literature-grid{
+        grid-template-columns: auto;
+    width: 75%;
+    }
+    .catalogue-grid{
+        grid-template-columns: auto;
+    width: 75%;
+    grid-gap: 50px;
+    }
+    .catalogue-2{
+        padding: 4%;
+    }
+    .masterclass-inside{
+        grid-template-columns: auto;
+        grid-gap: 0;
+    }
+    .masterclass-inside div {
+    margin-bottom: 0;
+}
+#rna-book{
+    position: relative;
+    margin-bottom: 8%;
+}
+}
+@media only screen and (max-width:1100px){
+    .catalogue-2{
+        grid-template-rows: max-content 1fr;
+    }
+    .catalogue-2 > img{
+        position:initial;
+    }
+}
+@media only screen and (max-width:1100px) and (max-height: 721px){
+
+.cat-grid{
+    flex-direction: column;
+    }
+
+    .recommended-div{
+        flex-direction: column;
+        position: relative;
+    }
+    #new {
+    right: 0;
+    left: auto;
+    width: 22%;
+    top: 0;
+        }
+    .recommended-div > div {
+        padding-left: 0; 
+    }
+    .literature-grid{
+        grid-template-columns: auto;
+    width: 75%;
+    }
+    .catalogue-grid{
+        grid-template-columns: auto;
+    width: 75%;
+    grid-gap: 50px;
+    }
+    .catalogue-2{
+        padding: 4%;
+    }
+    .masterclass-inside{
+        grid-template-columns: auto;
+        grid-gap: 0;
+    }
+    .masterclass-inside div {
+    margin-bottom: 0;
+}
+#rna-book{
+    position: relative;
+}
+}
+@media only screen and (max-width:480px){
+.cat-divs > h3 {
+    border: none;
+    line-height: inherit;
+}
+.hor-line{
+    padding:0;
+}
+.sec-div {
+    width: 100%;
+    
+    padding: 4%;
+}
+.recommended-div img {
+    width: 100%;
+}
+#new{
+    position: relative;
+    width: 60%;
+    margin: auto;
+}
+.literature-grid{
+        width: 100%;
+    }
+}
+@media only screen and (max-width:991px){
+.catalogue-2 >img {
+    width: 83%;
+}
+    }
+@media only screen and (max-width:1100px){
+
+  .catalogue-grid{
+        grid-template-columns: auto;
+    width: 50%;
+    grid-gap: 50px;
+    }
+     .catalogue-2{
+        padding: 4%;
+    }
+    .catalogue-2 >img {
+    
+    width: 76%;
+    
+}
+    }
+@media only screen and (max-width:921px){
+
+  .catalogue-grid{
+        grid-template-columns: auto;
+    width: 75%;
+    grid-gap: 50px;
+    }
+    }
+@media only screen and (max-width:700px){
+
+  .catalogue-2{
+        grid-template-columns: auto;
+        grid-template-rows: auto auto;
+
+    }
+        .catalogue-2 >img {
+    
+        width: 100%;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    position: relative;
+    
+}
+    }
+ @media only screen and (max-width:300px){
+
+  .catalogue-grid{
+        width: 100%;
+    }
+       
+    }
+    @media only screen and (max-width:350px){
+
+  .literature-card .flex-row {
+    display: flex;
+    flex-direction: column;
+}
+    }
+    @media only screen and (max-width:1000px){
+        #form-container{
+            width: 60%;
+            left: 20%;
+            right: 20%;
+        }
+        #form-container-2{
+            width: 60%;
+            left: 20%;
+            right: 20%;
+        }
+    }
+     @media only screen and (max-width:700px){
+        #form-container{
+            width: 70%;
+            left: 15%;
+            right: 15%;
+        }
+        #form-container-2{
+            width: 70%;
+            left: 15%;
+            right: 15%;
+        }
+    }
+     @media only screen and (max-width:400px){
+        #form-container{
+            width: 70%;
+            left: 15%;
+            right: 15%;
+        }
+        #form-container-2{
+            width: 90%;
+            left: 3%;
+            right: 5%;
+        }
+    }
+   
+   .form-item-type{
+    display:none;
+   }
+   .form-item-type-name{
+    display:none;
+   }
+   .form-item-type-link{
+   display:none;
+   }
+
+   /* Side Nav */
+  .side-nav-reading {
+    position: fixed;
+    left: 0px;
+    top: calc(50% + 45px);
+    z-index: 1;
+    transform: translateY(-50%);
+    width: calc(14% + 30px);
+    max-width: 215px;
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .side-nav-reading li {
+    position: relative;
+    transform: translate3d(-100%, 0px, 0px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease-in-out 0s;
+  }
+
+  .side-nav-reading a {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.6;
+    color: #746d6d;
+    border-bottom: none;
+    padding-left: 36px;
+    margin-bottom: 30px;
+    transition-timing-function: ease-in-out;
+  }
+
+  .side-nav-reading li::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 10px;
+    left: -20px;
+    width: 50px;
+    height: 1px;
+    background: #746d6d;
+  }
+
+  .side-nav-reading li.active {
+    color: #004897;
+    transform: translateX(20px) !important;
+  }
+
+  .side-nav-reading li.active a {
+    color: #004897;
+  }
+
+  .side-nav-reading li.active::before {
+    background: #004897;
+  }
+
+  .side-nav-reading.is-visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .side-nav-reading.is-visible li {
+    opacity: 1;
+    visibility: visible;
+    transform: translate3d(0px, 0px, 0px);
+    margin-bottom: 8%;
+  }
+
+</style>
+
+<section class="campaign-nav-sticky">
+  <div>
+  <ul class="side-nav-reading">
+    <li class="catalogue"><a href="#catalogue">Complete Catalogue</a></li>
+    <li class="most_downloaded"><a href="#most_downloaded">Scientist's Most Downloaded</a></li>
+    <li class="technical_guide"><a href="#technical_guide">Technical Guides</a></li>
+    <li class="product_guide"><a href="#product_guide">Product Guides</a></li>
+    <li class="appnotes"><a href="#appnote">Select Application Notes</a></li>
+  </ul>
+  </div>
+</section>
+
+<section class="basic-page-banner">
+
+    <div class=" container" style="height: 100%;">
+    <div class=" row " style="height:100%;">
+
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 upper-title">
+        <div class="c-left c-title">
+          <h1 class="c-left c-font  header-text">E-books & Technical Guides</h1>
+          <div class=""></div>
+            <p class="c-left c-font-uppercase header-text">Your central resource for accessing a diverse range of technical guides and e-books.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    
+</section>
+<!--<div class="gradient-rectangle"></div>-->
+
+<!--<div class="category-div">
+    <h2>Explore Our Catalogue, E-Books and Technical Guides</h2>
+    <div class="cat-grid">
+        <div>
+            <img src="/sites/default/files/catalogs_ebooks/first.png" alt="Innovative Solutions">
+            <p>Innovative Solutions</p>
+        </div>
+        <div>
+            <img src="/sites/default/files/catalogs_ebooks/second.png" alt="Useful Tips">
+            <p>Useful Tips</p>
+        </div>
+        <div>
+            <img src="/sites/default/files/catalogs_ebooks/third.png" alt="Concise and Information">
+            <p>Concise & Informative</p>
+        </div>
+    </div>
+</div>-->
+
+<!--<div class="sec-div cat-divs">
+    <h3><span class="hor-line">Recommended E-Book</span></h3>
+    <div class="recommended-div">
+        <img src="/sites/default/files/catalogs_ebooks/new-sing.svg" id="new" alt="new ebook">
+        <img src="/sites/default/files/catalogs_ebooks/recommended-liquid.png" id="liquid-booklet" alt="Liquid Biopsy Solutions for Early Cancer Detection and NIPT">
+        <div>
+            <h3>Liquid Biopsy Solutions for Early Cancer Detection and NIPT</h3>
+            <p>This e-book offers valuable insights into liquid biopsy solutions for early cancer detection and Non-invasive Prenatal Testing (NIPT).</p>
+             <div class="flex-row" style="display: flex;align-items: baseline;">
+            <div class="btn-container btn-padding">
+                <button class="btn btn-primary page-btn" onclick="show_form('technical guide','LiquidBiopsySolutionsforEarlyCancerDetectionandNIPT','/sites/default/files/catalogs_ebooks/Liquid-Biopsy-Solutions-Early-Cancer-Detection-NIPT-3.0-web.pdf')" id="liquid-btn">Access Now</button>
+                <a href="/sites/default/files/catalogs_ebooks/Liquid-Biopsy-Solutions-Early-Cancer-Detection-NIPT-3.0-web.pdf" download="Liquid Biopsy Solutions for Early Cancer Detection and NIPT-technical guide" class="btn btn-primary link-btn" target="_blank" id="liquid-link">Download Again</a>
+            </div>
+            
+        </div>
+        </div>
+    </div>
+
+</div>-->
+
+<div class="sec-div cat-divs section" id="catalogue">
+    <div class="bounceInUp c-content-title-1 c-title home-heading-padding wow" style="visibility: visible; animation-name: bounceInUp;">
+        <h2 class="c-center c-font">Complete Catalogue</h2>
+        <div class="c-line-center c-bg-blue"></div>
+      </div>
+        <div class="catalogue-grid">
+          <div class="literature-card">
+            <div class="flex-row">
+                <div class="img-container"><img src="/sites/default/files/catalogs_ebooks/catalogue-cover.PNG" alt="catalogue" title="Norgen Catalogue"></div>
+                <div class="info-container">
+                    <h3>Norgen's Catalogue</h3>
+                    <p>Our catalogue highlights important information about Norgen's products and includes detailed technical data.</p>
+                </div>
+            </div>
+            <div class="flex-row btn-padding" style="align-items: center;gap: 10px;">
+           <div class="btn-container">
+                <button class="btn btn-primary page-btn" onclick="show_form('catalogue','Product/Services','/sites/default/files/catalogs_ebooks/Norgen_Catalog_2023_1.0-compressed.pdf')" id="productservices-btn">Access Now</button>
+                <a href="/sites/default/files/catalogs_ebooks/Norgen_Catalog_2023_1.0-compressed.pdf" download="Product/Services-catalogue" class="btn btn-primary link-btn" target="_blank" id="ProductServices-link">Download Again</a>
+            </div>
+            
+        </div>
+        </div>
+
+        <div class="catalogue-2">
+            <img src="/sites/default/files/catalogs_ebooks/book-open.png">
+            <div></div>
+            <div class="rnapoints key-text">
+            <ul>
+                <li style="margin-bottom: 6%;"><span>Detailed technical data for all Norgen's products</span></li>
+                <li style="margin-bottom: 6%;"><span>Extensive information about services, including Next Generation Sequencing and Advanced Bioinformatics Analysis</span></li>
+                <li><span>Our commitment to providing laboratories with best-in-class solutions that inspire new discoveries</span></li>
+            </ul>
+        </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="sec-div cat-divs section" id="most_downloaded">
+    <div class="bounceInUp c-content-title-1 c-title home-heading-padding wow" style="visibility: visible; animation-name: bounceInUp;">
+        <h2 class="c-center c-font">Scientist's Most Downloaded</h2>
+        <div class="c-line-center c-bg-blue"></div>
+      </div>
+    
+        <div class="literature-grid">
+        <div class="literature-card">
+            <div class="flex-row">
+                <div class="img-container"><img src="/sites/default/files/catalogs_ebooks/rna_ebook_cover.jpg" alt="DNA booklet cover" title="Norgen DNA booklet Cover"></div>
+                <div class="info-container">
+                    <h3>RNA Purification</h3>
+                    <p>Solutions for total RNA, cell-Free RNA, RNA clean-up and concentration.</p>
+                </div>
+            </div>
+            <div class="flex-row btn-padding" style="align-items: center;gap: 10px;">
+            <div class="btn-container">
+                <a href="/sites/default/files/catalogs_ebooks/Rna_ebook.pdf" download="RNA Purification" class="btn btn-primary " target="_blank" id="dna-link">Download Now</a>
+            </div>
+            
+        </div>
+        </div>
+          <div class="literature-card">
+            <div class="flex-row">
+                <div class="img-container"><img src="/sites/default/files/catalogs_ebooks/stool_ebook_cover.jpg" alt="RNA booklet cover" title="Norgen RNA booklet Cover"></div>
+                <div class="info-container">
+                    <h3>Stool</h3>
+                    <p>Solutions for preservation, isolation and downstream applications.</p>
+                </div>
+            </div>
+            <div class="flex-row btn-padding" style="align-items: center;gap: 10px;">
+            <div class="btn-container">
+                <a href="/sites/default/files/catalogs_ebooks/Stool_ebook.pdf" download="Stool" class="btn btn-primary " target="_blank" id="rna-link">Download Now</a>
+            </div>
+            
+        </div>
+        </div>
+          <div class="literature-card">
+            <div class="flex-row">
+                <div class="img-container"><img src="/sites/default/files/images/webp/Liquid-Biopsy-Solutions-Early-Cancer-Detection-NIPT-cover.webp" alt="DNA booklet cover" title="Norgen DNA booklet Cover" alt="Liquid Biopsy Solutions for Early Cancer Detection and NIPT"></div>
+                <div class="info-container">
+                    <h3>Liquid Biopsy</h3>
+                    <p>This e-book offers valuable insights into liquid biopsy <strong>solutions</strong> for <strong>early cancer detection</strong> and <strong>non-invasive prenatal testing (NIPT)</strong>.</p>
+                </div>
+            </div>
+            <div class="flex-row btn-padding" style="align-items: center;gap: 10px;">
+            <div class="btn-container">
+                <button class="btn btn-primary page-btn" onclick="show_form('technical guide','LiquidBiopsySolutionsforEarlyCancerDetectionandNIPT','/sites/default/files/catalogs_ebooks/Liquid-Biopsy-Solutions-Early-Cancer-Detection-NIPT-3.0-web.pdf')" id="liquid-btn">Access Now</button>
+                <a href="/sites/default/files/catalogs_ebooks/Liquid-Biopsy-Solutions-Early-Cancer-Detection-NIPT-3.0-web.pdf" download="Liquid Biopsy Solutions for Early Cancer Detection and NIPT-technical guide" class="btn btn-primary link-btn" target="_blank" id="liquid-link">Download Again</a>
+            </div>
+            
+        </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<div class="sec-div cat-divs section" id="technical_guide">
+    <div class="bounceInUp c-content-title-1 c-title home-heading-padding wow" style="visibility: visible; animation-name: bounceInUp;">
+        <h2 class="c-center c-font">Technical Guides</h2>
+        <div class="c-line-center c-bg-blue"></div>
+      </div>
+    <div class="literature-grid">
+        <div class="literature-card">
+            <div class="flex-row">
+                <div class="img-container"><img src="/sites/default/files/images/webp/Liquid-Biopsy-Solutions-Early-Cancer-Detection-NIPT-cover.webp" alt="DNA booklet cover" title="Norgen DNA booklet Cover" alt="Liquid Biopsy Solutions for Early Cancer Detection and NIPT"></div>
+                <div class="info-container">
+                    <h3>Liquid Biopsy</h3>
+                    <p>This e-book offers valuable insights into liquid biopsy <strong>solutions</strong> for <strong>early cancer detection</strong> and <strong>non-invasive prenatal testing (NIPT)</strong>.</p>
+                </div>
+            </div>
+            <div class="flex-row btn-padding" style="align-items: center;gap: 10px;">
+            <div class="btn-container">
+                <button class="btn btn-primary page-btn" onclick="show_form('technical guide','LiquidBiopsySolutionsforEarlyCancerDetectionandNIPT','/sites/default/files/catalogs_ebooks/Liquid-Biopsy-Solutions-Early-Cancer-Detection-NIPT-3.0-web.pdf')" id="liquid-btn2">Access Now</button>
+                <a href="/sites/default/files/catalogs_ebooks/Liquid-Biopsy-Solutions-Early-Cancer-Detection-NIPT-3.0-web.pdf" download="Liquid Biopsy Solutions for Early Cancer Detection and NIPT-technical guide" class="btn btn-primary link-btn" target="_blank" id="liquid-link2">Download Again</a>
+            </div>
+            
+        </div>
+        </div>
+        
+
+        <div class="literature-card">
+            <div class="flex-row">
+                <div class="img-container"><img src="/sites/default/files/catalogs_ebooks/stool_technical_guide.jpg" alt="exosome booklet cover" title="Norgen exosome booklet Cover"></div>
+                <div class="info-container">
+                    <h3>Extracting Biological Insights from Stool</h3>
+                    <p>Tips and tricks for isolating high yield and quality DNA, RNA, miRNA and EVs from fecal samples.</p>
+                </div>
+            </div>
+            <div class="flex-row btn-padding" style="align-items: center;gap: 10px;">
+            <div class="btn-container">
+                <button class="btn btn-primary page-btn" onclick="show_form('technical guide','Stool','/sites/default/files/catalogs_ebooks/stool_technical_guide.pdf')" id="stool-btn">Access now</button>
+                <a href="/sites/default/files/catalogs_ebooks/stool_technical_guide.pdf" download="Stool Technical Guide" class="btn btn-primary link-btn" target="_blank" id="stool-link">Download Again</a>
+            </div>
+            
+        </div>
+        </div>
+ 
+    </div>
+</div>
+
+<div class="sec-div cat-divs section" id="product_guide">
+    <div class="bounceInUp c-content-title-1 c-title home-heading-padding wow" style="visibility: visible; animation-name: bounceInUp;">
+        <h2 class="c-center c-font">Product Guides</h2>
+        <div class="c-line-center c-bg-blue"></div>
+      </div>
+    <div class="literature-grid">
+        <div class="literature-card">
+            <div class="flex-row">
+                <div class="img-container"><img src="/sites/default/files/catalogs_ebooks/saliva_ebook_cover.jpg" alt="DNA booklet cover" title="Norgen DNA booklet Cover"></div>
+                <div class="info-container">
+                    <h3>Saliva</h3>
+                    <p>Solutions for preservation, isolation and downstream applications.</p>
+                </div>
+            </div>
+            <div class="flex-row btn-padding" style="align-items: center;gap: 10px;">
+            <div class="btn-container">
+                <a href="/sites/default/files/catalogs_ebooks/Saliva_ebook.pdf" download="Saliva" class="btn btn-primary " target="_blank" id="dna-link2">Download Now</a>
+            </div>
+            
+        </div>
+        </div>
+          <div class="literature-card">
+            <div class="flex-row">
+                <div class="img-container"><img src="/sites/default/files/catalogs_ebooks/stool_ebook_cover.jpg" alt="RNA booklet cover" title="Norgen RNA booklet Cover"></div>
+                <div class="info-container">
+                    <h3>Stool</h3>
+                    <p>Solutions for preservation, isolation and downstream applications.</p>
+                </div>
+            </div>
+            <div class="flex-row btn-padding" style="align-items: center;gap: 10px;">
+            <div class="btn-container">
+                <a href="/sites/default/files/catalogs_ebooks/Stool_ebook.pdf" download="Stool" class="btn btn-primary " target="_blank" id="rna-link2">Download Now</a>
+            </div>
+           
+        </div>
+        </div>
+          <div class="literature-card">
+            <div class="flex-row">
+                <div class="img-container"><img src="/sites/default/files/catalogs_ebooks/rna_ebook_cover.jpg" alt="exosome booklet cover" title="Norgen exosome booklet Cover"></div>
+                <div class="info-container">
+                    <h3>RNA Purification</h3>
+                    <p>Solutions for total RNA, cell-Free RNA & RNA clean-up and concentration.</p>
+                </div>
+            </div>
+            <div class="flex-row btn-padding" style="align-items: center;gap: 10px;">
+            <div class="btn-container">
+                <a href="/sites/default/files/catalogs_ebooks/Rna_ebook.pdf" download="RNA Purification" class="btn btn-primary " target="_blank" id="exosome-link3">Download Now</a>
+            </div>
+            
+        </div>
+        </div>
+
+        <div class="literature-card">
+            <div class="flex-row">
+                <div class="img-container"><img src="/sites/default/files/catalogs_ebooks/exosome-booklet-cover.jpg" alt="exosome booklet cover" title="Norgen exosome booklet Cover"></div>
+                <div class="info-container">
+                    <h3>Exosomes</h3>
+                    <p>Solutions for cell-Free DNA, total genomic DNA, plasmid DNA, endotoxin removal and DNA clean-up & concentration.</p>
+                </div>
+            </div>
+            <div class="flex-row btn-padding" style="align-items: center;gap: 10px;">
+            <div class="btn-container">
+                <a href="/sites/default/files/catalogs_ebooks/Exosomes_booklet.pdf" download="Exosomes" class="btn btn-primary" target="_blank" id="exosome-link2">Download Now</a>
+            </div>
+            
+        </div>
+        </div>
+    </div>
+</div>
+
+
+<!--other between div-->
+<div class="sec-div cat-divs section" id="appnotes">
+    <div class="bounceInUp c-content-title-1 c-title home-heading-padding wow" style="visibility: visible; animation-name: bounceInUp;">
+        <h2 class="c-center c-font">Select Application Notes</h2>
+        <div class="c-line-center c-bg-blue"></div>
+      </div>
+    
+    <div class="literature-grid">
+
+        <div class="literature-card">
+            <div class="flex-row">
+                <div class="img-container"><img src="/sites/default/files/catalogs_ebooks/app_note_105_cover.PNG" alt="Long Term Stability of DNA Stored in Norgen’s Saliva DNA Preservative" title="Norgen RNA booklet Cover"></div>
+                <div class="info-container">
+                    <h3>Application Note 105</h3>
+                    <p>Automation of Norgen's pathogen/viral nucleic acid isolation kit to detect viruses and pathogens in clinical samples and a variety of bodily fluids and transport media</p>
+                </div>
+            </div>
+            <div class="flex-row btn-padding" style="align-items: center;gap: 10px;">
+            <div class="btn-container">
+                <a href="/sites/default/files/catalogs_ebooks/App-Note-105.pdf" download="Application Note 105" class="btn btn-primary" target="_blank" id="a24-link">Download Now</a>
+            </div>
+            
+        </div>
+        </div>
+
+        
+
+        <div class="literature-card">
+            <div class="flex-row">
+                <div class="img-container"><img src="/sites/default/files/catalogs_ebooks/app_note_104_cover.PNG" alt="Efficient Restriction Enzyme Digestion of Saliva DNA isolated using Norgen’s Saliva DNA Collection, Preservation and Isolation Kit" title="Norgen DNA booklet Cover"></div>
+                <div class="info-container">
+                    <h3>Application Note 104</h3>
+                    <p>Norgen's improved soil DNA isolation plus kit prodcues yields and quality comparable with a top competitor</p>
+                </div>
+            </div>
+            <div class="flex-row btn-padding" style="align-items: center;gap: 10px;">
+            <div class="btn-container">
+                <a href="/sites/default/files/catalogs_ebooks/App-Note-104.pdf" download="Application Note 104" class="btn btn-primary" target="_blank" id="a23-link">Download Now</a>
+            </div>
+            
+        </div>
+        </div>
+
+        
+        <div class="literature-card">
+            <div class="flex-row">
+                <div class="img-container"><img src="/sites/default/files/catalogs_ebooks/app5.jpg" alt="Sensitivity and Specif icity of Norgen’s HLVd TaqMan RT-PCR Kit" title="Norgen exosome booklet Cover"></div>
+                <div class="info-container">
+                    <h3>Application Note 103</h3>
+                    <p>Sensitivity and specificity of Norgen’s HLVd TaqMan RT-PCR kit</p>
+                </div>
+            </div>
+            <div class="flex-row btn-padding" style="align-items: center;gap: 10px;">
+            <div class="btn-container">
+                <a href="/sites/default/files/catalogs_ebooks/App-Note-103-HLVd-1.0.pdf" download="Application Note 103" class="btn btn-primary" target="_blank" id="a103-link">Download Now</a>
+            </div>
+        </div>
+        </div>
+        
+
+    </div>
+    <div style="text-align:center;margin:20px auto;">
+    <a href="https://norgenbiotek.com/resources/knowledge-hub/application-notes" class="btn btn-primary" target="_blank">
+         Explore All Application Notes</a>
+    </div>
+</div>
+
+
+
+
+
+<div id="overlay" onclick="closebox();"></div>
+
+<div class="main-div container">
+      
+
+  
+    <div id="form-container">
+        <a class="close" href="#" onclick="closebox();return false;" style="font-size:70px;">&times;</a>
+            {{ catalogue_lead_capture }}
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+
+    document.addEventListener("DOMContentLoaded", function(){
+     const catalogs = ["LiquidBiopsySolutionsforEarlyCancerDetectionandNIPT", "Product/Services", "Stool"];
+        
+        if(getCookie(catalogs[0]) != null){
+            console.log("first_check");
+            document.getElementById("liquid-btn").style.display = "none";
+            document.getElementById("liquid-link").style.display = "block";
+            document.getElementById("liquid-btn2").style.display = "none";
+            document.getElementById("liquid-link2").style.display = "block";
+            // document.getElementById("liquid-btn2").style.display = "none";
+            // document.getElementById("liquid-link2").style.display = "block";
+        }
+        if(getCookie(catalogs[1]) != null){
+            console.log("second_check");
+            document.getElementById("productservices-btn").style.display = "none";
+            document.getElementById("ProductServices-link").style.display = "block";
+        }
+        if(getCookie(catalogs[2]) != null){
+            console.log("third_check");
+            document.getElementById("stool-btn").style.display = "none";
+            document.getElementById("stool-link").style.display = "block";
+        }    
+    });
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+
+    function show_form(elem1, elem2, elem3){
+        document.getElementById("form-container").style.display = "block";
+
+        document.getElementById("edit-type").value = elem1;
+        document.getElementById("edit-type-name").value = elem2;
+        document.getElementById("edit-type-link").value = elem3;
+        document.getElementById("overlay").style.display = "block";
+
+        var hiding = document.getElementsByClassName("hide-on-submit");
+        for(var i = 0; i < hiding.length; i++){
+            hiding[i].style.display = "display";
+        }
+    }
+ 
+   const myForm = document.getElementById('catalogue-lead-capture');
+
+// Add a listener to the submit event
+myForm.addEventListener('submit', function (e) {
+    const errors = [];
+    
+    // Check inputs...
+
+    if(errors.length) {
+         e.preventDefault(); // The browser will not make the HTTP POST request
+         alert("sfs");
+         return;
+    }
+    else{
+        console.log("tttttttttt");
+    }
+});
+    function hiding(){
+            console.log("hidingggggg");
+        var hiding = document.getElementsByClassName("hide-on-submit");
+        for(var i = 0; i < hiding.length; i++){
+            hiding[i].style.display = "none";
+        }
+    }
+    function closebox(){
+
+        // document.getElementById("form-container").style.display = "none";
+        //document.getElementById("edit-type").value = "";
+        //document.getElementById("edit-type-name").value = "";
+        document.getElementById("overlay").style.display = "none";
+        if(document.getElementById("form-container").style.display == "block"){
+            document.getElementById("form-container").style.display = "none";
+        }
+
+        location.reload();
+        
+
+    }
+
+        
+  $('.toggleCat').on('click', function() {
+      $(this).toggleClass('active');
+      let list = $(this).next('.literature-grid');
+      if(list.is(':visible')) {
+        list.slideUp();
+      } else {
+        list.slideDown({
+          start: function() {
+            $(this).css('display', 'grid');
+          }
+        })
+      }
+  });
+
+
+const sections = document.querySelectorAll(".section");
+/* console.log(sections); */
+const navLi = document.querySelectorAll(".side-nav-reading li");
+/* console.log(navLi); */
+window.onscroll = () => {
+  var current = "";
+
+  sections.forEach((section) => {
+    const sectionTop = section.offsetTop;
+    if (pageYOffset >= sectionTop - 60) {
+      current = section.getAttribute("id"); }
+  });
+  /* console.log(current); */
+
+  navLi.forEach((li) => {
+    /* console.log(li); */
+    li.classList.remove("active");
+    if (li.classList.contains(current)) {
+      li.classList.add("active");
+    }
+  });
+};
+
+      let processScroll = () => {
+    let docElem = document.documentElement,
+      docBody = document.body,
+      scrollTop = docElem["scrollTop"] || docBody["scrollTop"],
+      scrollBottom =
+        (docElem["scrollHeight"] || docBody["scrollHeight"]) -
+        window.innerHeight /* docElem.scrollHeight */ -
+        800 /* subtract 800 for the approximate height of the footer and copyright sections */,
+      scrollPercent = (scrollTop / scrollBottom) * 100 + "%";
+
+    
+    var y = window.scrollY;
+    var side_nav_classlist =
+      document.querySelector(".side-nav-reading").classList;
+    
+
+    if (y >= 500) {
+      side_nav_classlist.add("is-visible");
+    } else if (y < 500) {
+      side_nav_classlist.remove("is-visible");
+      // document.getElementById("back-progress-bar").style.opacity = "0";
+    }
+
+    var x = 0;
+   
+
+    var body_offset;
+    if (window.innerWidth <= 1280 && window.innerHeight >= 720) {
+      body_offset = 0.7 * document.body.offsetHeight;
+    } else body_offset = document.body.offsetHeight;
+    if (window.innerHeight + window.scrollY >= body_offset - 800) {
+      /* subtract 800 for the approximate height of the footer and copyright sections */
+      side_nav_classlist.remove("is-visible");
+    }
+    // always hide the side nav bar if it will overlap with the blog's content (when window width is less than 1380px).
+    x = window.innerWidth;
+    if (x < 1280) {
+      side_nav_classlist.remove("is-visible");
+    }
+  };11
+  window.addEventListener("scroll", processScroll);
+</script>
+

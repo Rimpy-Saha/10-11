@@ -1,0 +1,225 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a node.
+ *
+ * Available variables:
+ * - node: The node entity with limited access to object properties and methods.
+ *   Only method names starting with "get", "has", or "is" and a few common
+ *   methods such as "id", "label", and "bundle" are available. For example:
+ *   - node.getCreatedTime() will return the node creation timestamp.
+ *   - node.hasField('field_example') returns TRUE if the node bundle includes
+ *     field_example. (This does not indicate the presence of a value in this
+ *     field.)
+ *   - node.isPublished() will return whether the node is published or not.
+ *   Calling other methods, such as node.delete(), will result in an exception.
+ *   See \Drupal\node\Entity\Node for a full list of public properties and
+ *   methods for the node object.
+ * - label: (optional) The title of the node.
+ * - content: All node items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - author_picture: The node author user entity, rendered using the "compact"
+ *   view mode.
+ * - metadata: Metadata for this node.
+ * - date: (optional) Themed creation date field.
+ * - author_name: (optional) Themed author name field.
+ * - url: Direct URL of the current node.
+ * - display_submitted: Whether submission information should be displayed.
+ * - attributes: HTML attributes for the containing element.
+ *   The attributes.class element may contain one or more of the following
+ *   classes:
+ *   - node: The current template type (also known as a "theming hook").
+ *   - node--type-[type]: The current node type. For example, if the node is an
+ *     "Article" it would result in "node--type-article". Note that the machine
+ *     name will often be in a short form of the human readable label.
+ *   - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+ *     teaser would result in: "node--view-mode-teaser", and
+ *     full: "node--view-mode-full".
+ *   The following are controlled through the node publishing options.
+ *   - node--promoted: Appears on nodes promoted to the front page.
+ *   - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+ *     teaser listings.
+ *   - node--unpublished: Appears on unpublished nodes visible only to site
+ *     admins.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main
+ *   content tag that appears in the template.
+ * - author_attributes: Same as attributes, except applied to the author of
+ *   the node tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ * - view_mode: View mode; for example, "teaser" or "full".
+ * - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+ * - page: Flag for the full page state. Will be true if view_mode is 'full'.
+ * - readmore: Flag for more state. Will be true if the teaser content of the
+ *   node cannot hold the main body content.
+ * - logged_in: Flag for authenticated user status. Will be true when the
+ *   current user is a logged-in member.
+ * - is_admin: Flag for admin user status. Will be true when the current user
+ *   is an administrator.
+ *
+ * @see template_preprocess_node()
+ *
+ * @ingroup themeable
+ */
+#}
+<style>
+  .milestones.table{
+    width: auto;
+  }
+  .milestones.table td:first-child, .milestones.table th:first-child{
+    padding-right: 42px;
+  }
+  #referral-info h1{
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+  }
+  #referral-info h2{
+    font-size: 28px;
+    font-weight: bold;
+  }
+  #referral-info .sub-section{
+    padding: 40px 0px;
+  }
+  .how-to-save{
+    list-style-type: none;
+    position: relative;
+  }
+  .how-to-save > li{
+    margin:28px 0px;
+  }
+  .how-to-save > li > .number{
+    border-radius:100%;
+    width: 50px;
+    height: 50px;
+    color:#004896;
+    border:2px solid #004896;
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    margin-right:10px;
+    position: absolute;
+    left: 0px;
+    font-weight: bold;
+    font-size: 28px;
+  }
+  .how-to-save > li > .number.money{
+    color:green;
+    border-color:green;
+  }
+  .how-to-save .list-content{
+    display: inline-block;
+    min-height: 45px;
+    margin-top: 14px;
+    margin-left: 28px;
+  }
+  @media only screen and (min-width:768px){
+    ol.how-to-save .row > img{
+      max-width: 450px;
+    }
+  }
+</style>
+
+<div class="container">
+  <section id="referral-info">
+
+    <div class="sub-section">
+      <h1>Norgen's New Referral Program</h1>
+      <p style="text-align:center;font-size:40px;" align="center">Refer Friends. Earn Points. Save Money.</p>
+      <img style="max-width:900px;width:100%;display:block;margin:auto;" src="/sites/default/files/images/campaigns/referral-program-2024/colleagues2.png">
+      <hr>
+    </div>
+
+    <div class="sub-section">
+      <h2>Saving is as Easy as 1-2-3</h2>
+      <ol class="how-to-save">
+        <li><span class="number">1</span>
+          <div class="list-content"><a href="https://norgenbiotek.com/user/login">Register/Sign in</a> to your Norgen account</div>
+        </li>
+        <li><span class="number">2</span>
+          <div class="list-content">
+            Navigate to the Referral & Points tab on your Account dashboard<br/>
+            <div class="row" style="width:100%;">
+              <img style="margin:10px auto;" src="/sites/default/files/images/campaigns/referral-program-2024/click-account.png" class="col-lg-6 col-md-6 col-sm-12">
+              <img style="margin:10px auto;" src="/sites/default/files/images/campaigns/referral-program-2024/click-referral-tab.png" class="col-lg-6 col-md-6 col-sm-12">
+            </div>
+          </div>
+          
+        </li>
+        <li><span class="number">3</span>
+          <div class="list-content">
+            Send your unique referral link to friends and colleagues. Earn points when they create an account and make their first purchase
+            <div class="row" style="width:100%;">
+              <img src="/sites/default/files/images/campaigns/referral-program-2024/referral-link.png" class="col-lg-12 col-md-12 col-sm-12">
+            </div>
+          </div>
+        </li>
+        <li><span class="number money">$</span>
+          <div class="list-content">
+            Use your points to save on your next order!
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div class="sub-section">
+      <h2>What are the Savings?</h2>
+      <p>
+        For every successful referral:
+        <ul>
+          <li>You will receive <strong>15,000 points + 10%</strong> of your friend's first order value as points.</li>
+          <li>Your friend will receive <strong>5,000 points + 10%</strong> welcome bonus off their first order.</li>
+        </ul>
+        <br/>
+      </p>
+      <p>Points can be redeemed during online checkout for a dollar value discount.</p>
+      <p>The more people you refer, the more you save with milestone bonuses outlined below!</p>
+      <table class="table table-striped milestones">
+        <thead>
+          <tr>
+            <th>Milestone</th>
+            <th>You Receive</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>5th Referral</td>
+            <td>5,000 bonus points</td>
+          </tr>
+          <tr>
+            <td>10th Referral</td>
+            <td>10,000 bonus points</td>
+          </tr>
+          <tr>
+            <td>20th Referral</td>
+            <td>20,000 bonus points</td>
+          </tr>
+          <tr>
+            <td>30th Referral</td>
+            <td>30,000 bonus points</td>
+          </tr>
+          <tr>
+            <td>40th Referral</td>
+            <td>40,000 bonus points</td>
+          </tr>
+          <tr>
+            <td>50th Referral</td>
+            <td>50,000 bonus points</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="font-size:10px;">
+        *Please note that for a referral to be "successful" the referred individual must complete the account sign up process by activating their account. 
+        Rewards will only be issued once the referred individual has placed their first order. 1,000 points = $1 in savings. Maximum of 200,000 points redeemable per order. 
+        No further milestone bonuses past the 50th referral. 10% welcome bonus off first order is only available with coupon code received in account activation welcome email. 
+        Points can be redeemed only through the website's checkout. Points cannot be redeemed through phone, email, or other ordering methods.
+      </p>
+    </div>
+  </section>
+</div>

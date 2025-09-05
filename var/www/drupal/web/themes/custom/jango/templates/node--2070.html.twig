@@ -1,0 +1,681 @@
+{#
+  /**
+  * @file
+  * Default theme implementation to display a node.
+  *
+  * Available variables:
+  * - node: The node entity with limited access to object properties and methods.
+  * Only method names starting with "get", "has", or "is" and a few common
+  * methods such as "id", "label", and "bundle" are available. For example:
+  * - node.getCreatedTime() will return the node creation timestamp.
+  * - node.hasField('field_example') returns TRUE if the node bundle includes
+  * field_example. (This does not indicate the presence of a value in this
+  * field.)
+  * - node.isPublished() will return whether the node is published or not.
+  * Calling other methods, such as node.delete(), will result in an exception.
+  * See \Drupal\node\Entity\Node for a full list of public properties and
+  * methods for the node object.
+  * - label: (optional) The title of the node.
+  * - content: All node items. Use {{ content }} to print them all,
+  * or print a subset such as {{ content.field_example }}. Use
+  * {{ content|without('field_example') }} to temporarily suppress the printing
+  * of a given child element.
+  * - author_picture: The node author user entity, rendered using the "compact"
+  * view mode.
+  * - metadata: Metadata for this node.
+  * - date: (optional) Themed creation date field.
+  * - author_name: (optional) Themed author name field.
+  * - url: Direct URL of the current node.
+  * - display_submitted: Whether submission information should be displayed.
+  * - attributes: HTML attributes for the containing element.
+  * The attributes.class element may contain one or more of the following
+  * classes:
+  * - node: The current template type (also known as a "theming hook").
+  * - node--type-[type]: The current node type. For example, if the node is an
+  * "Article" it would result in "node--type-article". Note that the machine
+  * name will often be in a short form of the human readable label.
+  * - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+  * teaser would result in: "node--view-mode-teaser", and
+  * full: "node--view-mode-full".
+  * The following are controlled through the node publishing options.
+  * - node--promoted: Appears on nodes promoted to the front page.
+  * - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+  * teaser listings.
+  * - node--unpublished: Appears on unpublished nodes visible only to site
+  * admins.
+  * - title_attributes: Same as attributes, except applied to the main title
+  * tag that appears in the template.
+  * - content_attributes: Same as attributes, except applied to the main
+  * content tag that appears in the template.
+  * - author_attributes: Same as attributes, except applied to the author of
+  * the node tag that appears in the template.
+  * - title_prefix: Additional output populated by modules, intended to be
+  * displayed in front of the main title tag that appears in the template.
+  * - title_suffix: Additional output populated by modules, intended to be
+  * displayed after the main title tag that appears in the template.
+  * - view_mode: View mode; for example, "teaser" or "full".
+  * - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+  * - page: Flag for the full page state. Will be true if view_mode is 'full'.
+  * - readmore: Flag for more state. Will be true if the teaser content of the
+  * node cannot hold the main body content.
+  * - logged_in: Flag for authenticated user status. Will be true when the
+  * current user is a logged-in member.
+  * - is_admin: Flag for admin user status. Will be true when the current user
+  * is an administrator.
+  *
+  * @see template_preprocess_node()
+  *
+  * @ingroup themeable
+  */
+  #}
+
+
+ <h2> Join Us for Upcoming Events!</h2>
+  <article{{ attributes }}>
+  
+    {{ title_prefix }}
+    {% if label and not page %}
+    <h2{{ title_attributes }}>
+      <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+      </h2>
+      {% endif %}
+      {{ title_suffix }}
+  
+      {% if display_submitted %}
+      <footer>
+        {{ author_picture }}
+        <div{{ author_attributes }}>
+          {% trans %}Submitted by {{ author_name }} on {{ date }}{% endtrans %}
+          {{ metadata }}
+          </div>
+      </footer>
+      {% endif %}
+      {{ custom_breadcrumb|raw }}
+      <div{{ content_attributes }}>
+        {{ content }}
+        </div>
+  
+        </article>
+        <style>
+          #section-main-content>.container:first-child {
+            width: 100% !important;
+          }
+  
+          #block-views-calendar-block-1 {
+            display: none;
+          }
+  
+          #block-dexp-twitter-dexp-twitter-block-1.testimonial-twitter .dexp-twitter {
+            display: none;
+          }
+  
+          .view-header {
+            background-color: #124f8a;
+            border-color: #0a3a6c;
+          }
+  
+          .pager li>a {
+            background-color: #204262;
+            color: white !important;
+          }
+  
+          .region.region-pagetitle,
+          .region.region-breadcrumb {
+            display: none;
+          }
+  
+          li.event {
+            list-style: none;
+          }
+  
+          .event-container {
+            display: flex;
+            justify-content: space-between;
+          }
+  
+          .event div.event-container {
+            margin: 20px 0px;
+          }
+  
+          .event-info {
+            display: grid;
+            grid-row-gap: 1em;
+          }
+  
+          .event-info>element {
+            text-align: left;
+          }
+  
+          .event-info h3 {
+            margin: 0;
+          }
+  
+          .event-info a.btn {
+            width: fit-content;
+          }
+  
+          .event-info a.calendar-link {
+            margin-left: 1em;
+          }
+  
+          .event-info i {
+            margin-right: 1em;
+          }
+  
+          .event-info .event-website a {
+            word-break: break-all;
+          }
+  
+          .event-booth,
+          .event-location,
+          .event-website {
+            margin: 0;
+          }
+  
+          .event button {
+            color: #004897;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            border: none;
+            background: none;
+          }
+  
+          .event button:hover {
+            color: #000;
+          }
+  
+          .event hr {
+            margin-top: 20px;
+            border-top: 1px solid #cdcdcd;
+          }
+  
+          .sort-by-date {
+            position: relative;
+            list-style: none;
+            width: 150px;
+            margin-bottom: 20px;
+            display: inline-block;
+            z-index: 10;
+            top: 0px;
+          }
+  
+          .sort-by-date li button {
+            padding: 0px 10px;
+          }
+  
+          .sort-by-dropdown {
+            display: none;
+            list-style: none;
+            margin-left: 0;
+            position: absolute;
+            width: 100%;
+          }
+  
+          .sort-by-dropdown.active {
+            display: block;
+          }
+  
+          .sort-by-dropdown li {
+            text-align: left;
+          }
+  
+          .sort-by-date li {
+            float: none;
+            padding-left: 0;
+            padding-right: 0;
+          }
+  
+          .sort button {
+            width: 100%;
+          }
+  
+          .display-active.dropdown-button {
+            background: #004897;
+            color: #fff;
+            text-align: left;
+            border: none;
+            height: 34px;
+          }
+  
+          .dropdown-button {
+            text-align: left;
+            background: #fff;
+            color: #000;
+            border: 1px solid #000;
+            height: 34px;
+          }
+  
+          button.display-active {
+            width: 100%;
+          }
+  
+          .sort.active {
+            display: list-item;
+          }
+  
+          h5.headerStyle {
+            display: inline-block;
+            margin: 0px 20px;
+            margin-right: 10px;
+            margin-bottom: 15px;
+            margin-top: 10px;
+          }
+  
+          div.selectorsFlex {
+            display: flex;
+            position: absolute;
+            left: 0;
+            right: 0;
+            margin: 20px auto;
+            width: fit-content;
+          }
+  
+          .eventsContainer {
+            margin-top: 100px;
+          }
+  
+          .overlay {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 10000;
+            visibility: hidden;
+            opacity: 0;
+            margin: 0px 0px;
+            transition: opacity 500ms, visibility linear 500ms;
+          }
+  
+          .popup {
+            background: #fff;
+            border-radius: 5px;
+            margin: auto;
+            height: 70vh;
+            width: 40vw;
+            min-width: 250px;
+            max-width: 1100px;
+            min-height: 250px;
+            max-height: 1100px;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            visibility: hidden;
+            transition: visibility 500ms;
+          }
+  
+          .popup a:not(.btn):hover {
+            color: #004897;
+          }
+  
+          .overlay:target {
+            visibility: visible;
+            opacity: 1;
+          }
+  
+          .overlay:target .popup {
+            visibility: visible;
+            opacity: 1;
+            overflow: auto;
+          }
+  
+          .popup .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1;
+            border: none;
+            font-size: 2em;
+            width: 1em;
+            height: 1em;
+          }
+  
+          .popup .links-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            position: absolute;
+            margin: auto;
+            padding: calc(10px + 1vw);
+            text-align: center;
+          }
+  
+          .popup img {
+            height: 10vh;
+            display: flex;
+            margin: 2rem auto 0 auto;
+          }
+  
+          .popup i {
+            display: flex;
+          }
+  
+          .popup i:before {
+            font-size: 10vh;
+            margin: 2rem auto 0 auto;
+          }
+  
+          .img-header.darken::before {
+            background: rgb(0 72 151 / 46%);
+          }
+  
+          /* Media Queries */
+          @media only screen and (max-width:600px) {
+            h5.headerStyle {
+              margin: 0;
+            }
+  
+            div.selectorsFlex {
+              display: flex;
+              flex-direction: column;
+            }
+  
+            .eventsContainer {
+              margin-top: 300px;
+            }
+  
+            .event-img {
+              display: none;
+            }
+          }
+  
+          .events-header h2 {
+            font-size: 32px;
+            text-align: center;
+            margin-top: 3%;
+            margin-bottom: 3%;
+          }
+  
+          .events-content {
+            margin-bottom: 50px;
+            margin-top: 50px;
+          }
+  
+          .carousel {
+            position: relative;
+          }
+  
+          .carousel-indicators {
+            margin-bottom: -5%;
+          }
+  
+          @media screen and (min-width: 768px) {
+            .carousel-indicators {
+              bottom: 20px;
+            }
+          }
+  
+          .carousel-indicators {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            z-index: 15;
+            width: 60%;
+            margin-left: -30%;
+            padding-left: 0;
+            list-style: none;
+            text-align: center;
+          }
+  
+          .carousel-inner {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+          }
+  
+          .views-element-container {
+            margin: auto;
+          }
+  
+          .views-row:hover {
+            transform: scale(1.04);
+          }
+  
+          .views-row {
+            transition: 0.5s;
+          }
+
+  
+          /* @media only screen and (max-width: 900px) {
+            .view-content {
+              -ms-grid-columns: 1fr 24px 1fr;
+              -ms-grid-rows: 1fr (24px 1fr) [3];
+              grid-template-columns: repeat(1, 1fr) !important;
+            }
+          } */
+
+
+      .event-section .view-content {
+      display: -ms-grid;
+      display: grid;
+      grid-gap: 24px;
+      margin-bottom: 24px;
+      margin: auto;
+    }
+  
+    .event-section .views-row {
+      box-shadow: 0 4px 40px 0 rgba(0, 0, 0, 0.09),
+        0 6px 20px 0 rgba(0, 0, 0, 0.17);
+      
+    }
+  
+    .event-section .views-row .views-field-field-event-picture {
+      grid-row: 1 / span 3;
+      display: grid;
+      grid-column: 1;
+      text-align: start;
+      align-items: start;
+    }
+  
+    .event-section .views-row .views-field-title {
+      flex-direction: column;
+      display: flex;
+      grid-column: 2;
+     
+    }
+  
+    .event-section .views-row div img {
+      border-radius: 12px 0 0 12px;
+      height:235px;
+      min-height: 10vw;
+      object-fit: cover;
+      width: 100%;
+    }
+  
+    .event-section .views-field-field-event-date {
+      grid-column: 2;
+      display: flex;
+  
+      flex-direction: column;
+    }
+  
+    .event-section .views-field-field-event-location {
+       display: flex;
+       grid-column: 2;
+
+    }
+  
+    .event-section .views-field-title .field-content {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+
+
+    .views-field.views-field-field-booth-number{display: none;}
+    .event_cart {
+      border-radius: 12px;
+      display: grid;
+      grid-template-columns: 1.4fr 2fr;
+    }
+    .views-row{height: 100%;
+      width: 100%;}
+
+
+
+
+      .fields
+      {
+        border-radius: 0 12px 12px 0 ;
+        display: flex;
+        flex-direction: column;
+        background: #F7F9FD;
+      
+      }
+
+
+   
+
+a {
+  text-decoration: none !important;
+  
+}
+
+a:hover {
+  text-decoration: none !important;
+ 
+}
+
+
+.title_event {
+  align-items: stretch;
+  display: flex;
+  line-height: 2;
+font-size: 17px;
+font-weight: 600;
+position: relative;
+gap:20px;
+}
+.title_event a {position: relative;}
+
+
+.title_event::before { content: '';
+  display: block;
+  height: 2px; 
+  background-color: #C5C8D1;
+  width: 100%;
+  position: absolute;
+  left: 0;}
+
+
+.desc::before {
+    margin-top: -10px;
+    content: '';
+    display: block;
+    height: 2px; 
+    background-color: #C5C8D1;
+    width: 100%;
+    position: absolute;
+    left: 0;
+} 
+
+
+.location {
+  text-decoration: none;
+  color: #5c6873;
+  padding-left: 20px;
+  margin-bottom: 10px;
+}
+
+.desc {
+  flex-grow:1;
+  position: relative;
+  padding: 10px 20px 20px 20px;
+}
+
+ 
+.desc a {text-decoration: none;color: #5c6873;}
+
+.img_event
+{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px 0 0 12px;
+}
+p{line-height: 1.6 !important;font-size: 16px;}
+
+.event_cart .fields .title_event img {
+  
+  
+  border-radius: 12px;
+  width:120px; min-height: auto;max-height: auto;object-fit: contain;}
+
+
+@media (max-width: 1200px) {
+
+  .event_cart
+  {
+    display: block;
+  }
+
+ .event_cart .link .img_event img {
+   
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+ }
+.img_event{
+  border-radius: 12px 12px 0px 0px;
+}
+  }
+
+
+  .event_cart .link .img_event .logo img {
+    min-height: auto;
+    height: auto;
+    width: 200px;
+    max-width: 200px;
+    max-height: 100px;
+    width: auto;
+    height: auto;
+    display: block;
+}
+  .img_event .logo {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 300px; 
+    height: auto; 
+    min-height: auto;
+    object-fit: none;
+}
+
+.views-row{border-radius: 12px;}
+
+
+.logo{    border-radius: 12px;
+  padding: 5px;
+}
+
+.date{
+  margin-left: 20px;text-decoration: none;color: #5c6873;margin-top:10px;
+}
+.date > i{
+  margin-left:5px;
+}
+
+
+
+        </style>
+  
+        <!-- Header -->
+        <div class="events-content event-section">
+          <div>
+            {{ drupal_view('events', 'block_1')}}
+          </div>
+        </div>
+  
+
+        

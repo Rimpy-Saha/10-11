@@ -1,0 +1,1686 @@
+{# /** * @file * Default theme implementation to display a node. * * Available
+  variables: * - node: The node entity with limited access to object properties
+  and methods. * Only method names starting with "get", "has", or "is" and a few
+  common * methods such as "id", "label", and "bundle" are available. For example:
+  * - node.getCreatedTime() will return the node creation timestamp. * -
+  node.hasField('field_example') returns TRUE if the node bundle includes *
+  field_example. (This does not indicate the presence of a value in this * field.)
+  * - node.isPublished() will return whether the node is published or not. *
+  Calling other methods, such as node.delete(), will result in an exception. * See
+  \Drupal\node\Entity\Node for a full list of public properties and * methods for
+  the node object. * - label: The title of the node. * - content: All node items.
+  Use {{ content }} to print them all, * or print a subset such as
+  {{ content.field_example }}. Use * {{ content|without('field_example') }} to
+  temporarily suppress the printing * of a given child element. * -
+  author_picture: The node author user entity, rendered using the "compact" * view
+  mode. * - metadata: Metadata for this node. * - date: Themed creation date
+  field. * - author_name: Themed author name field. * - url: Direct URL of the
+  current node. * - display_submitted: Whether submission information should be
+  displayed. * - attributes: HTML attributes for the containing element. * The
+  attributes.class element may contain one or more of the following * classes: * -
+  node: The current template type (also known as a "theming hook"). * -
+  node--type-[type]: The current node type. For example, if the node is an *
+  "Article" it would result in "node--type-article". Note that the machine * name
+  will often be in a short form of the human readable label. * -
+  node--view-mode-[view_mode]: The View Mode of the node; for example, a * teaser
+  would result in: "node--view-mode-teaser", and * full: "node--view-mode-full". *
+  The following are controlled through the node publishing options. * -
+  node--promoted: Appears on nodes promoted to the front page. * - node--sticky:
+  Appears on nodes ordered above other non-sticky nodes in * teaser listings. * -
+  node--unpublished: Appears on unpublished nodes visible only to site * admins. *
+  - title_attributes: Same as attributes, except applied to the main title * tag
+  that appears in the template. * - content_attributes: Same as attributes, except
+  applied to the main * content tag that appears in the template. * -
+  author_attributes: Same as attributes, except applied to the author of * the
+  node tag that appears in the template. * - title_prefix: Additional output
+  populated by modules, intended to be * displayed in front of the main title tag
+  that appears in the template. * - title_suffix: Additional output populated by
+  modules, intended to be * displayed after the main title tag that appears in the
+  template. * - view_mode: View mode; for example, "teaser" or "full". * - teaser:
+  Flag for the teaser state. Will be true if view_mode is 'teaser'. * - page: Flag
+  for the full page state. Will be true if view_mode is 'full'. * - readmore: Flag
+  for more state. Will be true if the teaser content of the * node cannot hold the
+  main body content. * - logged_in: Flag for authenticated user status. Will be
+  true when the * current user is a logged-in member. * - is_admin: Flag for admin
+  user status. Will be true when the current user * is an administrator. * * @see
+  template_preprocess_node() * * @todo Remove the id attribute (or make it a
+  class), because if that gets * rendered twice on a page this is invalid CSS for
+  example: two lists * in different view modes. * * @ingroup themeable */ #} {%
+  set nd_classes = [ 'node', 'node-nd-blog', 'clearfix', ] %}
+  
+  <style>
+  
+   /*  aside{
+      background-color:var(--norgen-primary-blue-light);
+      border-radius:12px;
+      padding:20px;
+    } */
+  
+    .field--name-field-shown-title {
+      font-size: 45px;
+    }
+  
+    .field--name-body h2 {
+      font-size: 35px;
+      
+    }
+  
+    .field--name-body h3 {
+      font-size: 25px;
+    }
+  
+    .field--name-body img {
+      margin: 0 auto 20px;
+    }
+  
+    .collapsiblesection {
+      display: none;
+    }
+  
+    /* new styles */
+  
+    .node-nd-blog .field--name-body img {
+      display: block;
+      max-width: min(926px, 100%);
+      max-height: 700px;
+      margin: 0 auto 20px;
+    }
+    
+    .node-nd-blog .field--name-body figure > img{
+      margin-bottom:0px;
+    }
+  
+    .popular-blog-categories {
+      border-bottom: 2px solid #eee;
+      border-top: 2px solid #eee;
+      padding-top: 20px;
+      padding-bottom: 20px;
+      min-height: 260px;
+    }
+  
+    .views-row {
+      display: inline-block;
+      margin-left: 2px;
+    }
+  
+    .sidebar .views-element-container h2 {
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+  
+    .popular-blog-categories .views-field .field-content a {
+      font-size: 18px;
+      width: 10%;
+    }
+  
+    .c-content-recent-posts-1 .views-field-title {
+      font-size: 16px;
+      color: black;
+    }
+  
+    .c-content-recent-posts-1 .views-field-field-author,
+    .c-content-recent-posts-1 .views-field-field-sort-date {
+      font-size: 15px;
+    }
+  
+    .views-field-field-blog-image .field-content img {
+      max-width: 100px;
+      max-height: 100px;
+      background-size: cover;
+      background-position: center;
+      grid-area: b;
+    }
+  
+    .c-content-recent-posts-1 li {
+      display: grid;
+      grid-template:
+        "a b" auto
+        "c b" auto / 1fr 85px;
+      grid-column-gap: 1em;
+      row-gap: 0.5em;
+      border: none;
+      padding: 0;
+      margin-bottom: 14px;
+      border-bottom: 1px solid #d6d6d6;
+    }
+  
+    .views-field-field-sort-date {
+      text-align: right;
+    }
+  
+    blockquote {
+      border-left: 5px solid #7ccfca;
+    }
+  
+    blockquote {
+      padding: 10px 20px;
+      margin: 0 0 20px;
+      font-size: 17.5px;
+      border-left: 5px solid #eee;
+    }
+  
+    /* Popup */
+    .subscribe-CTA-box {
+      display: flex;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      height: 5%;
+      width: 100%;
+      text-align: left;
+    }
+  
+    .CTA-img {
+      position: absolute;
+      bottom: 0;
+      right: 60%;
+      height: 300px;
+    }
+  
+    .CTA-bg-shape {
+      position: absolute;
+      bottom: 0;
+      right: 51%;
+      height: 86%;
+    }
+  
+    .CTA-text-box {
+      display: grid;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 60%;
+      text-align: left;
+      background-color: #aee8f1;
+      height: 100%;
+      padding: 2em;
+    }
+  
+    .subscribe-popup1 {
+      position: relative;
+      margin: 20px 0; 
+      width: 100%; 
+      background: white;
+      {# box-shadow: rgb(7 30 87 / 15%) 0px 10px 15px; #}
+      padding: 20px;
+      text-align: left;
+  
+      z-index: 1000;
+      opacity: 1;
+      transition: opacity 0.6s ease 0s;
+      opacity: 0;
+      visibility: hidden;
+    }
+  
+    .subscribe-popup2 {
+      background: white;
+      box-shadow: rgb(7 30 87 / 15%) 0px 10px 15px;
+      padding: 25px;
+      text-align: left;
+  
+      z-index: 1000;
+      opacity: 1;
+      transition: opacity 0.6s ease 0s;
+      margin-bottom: 5%;
+    }
+  
+    .blog-content>.row {
+      width: 100%;
+    }
+
+    .blogHeadingAnchor{
+      position:relative;
+      top:-110px;
+    }
+  
+    .close {
+      
+      float: right;
+      font-size: 21px;
+      font-weight: 700;
+      line-height: 1;
+      color: #000;
+      text-shadow: 0 1px 0 #fff;
+      opacity: 0.2;
+      filter: alpha(opacity=20);
+    }
+  
+    .subscribe-popup1 {
+      background-repeat: no-repeat;
+      background-image: transparent;
+      background-size: 100% 6px, 6px 100%, 100% 6px, 6px 100%;
+      background-position: 0 0, 100% 0, 100% 100%, 0 100%;
+    }
+  
+    .subscribe-animation {
+      background-image: linear-gradient(to right,
+          #0f6b7a 20%,
+          #056a7a 40%,
+          #2978cf 50%,
+          #3874b5 55%,
+          #004897 70%,
+          #ec1d25 100%),
+        linear-gradient(to bottom,
+          #ec1d25 20%,
+          #004897 40%,
+          #3874b5 50%,
+          #2978cf 55%,
+          #056a7a 70%,
+          #0f6b7a 100%),
+        linear-gradient(to left,
+          #0f6b7a 20%,
+          #056a7a 40%,
+          #2978cf 50%,
+          #3874b5 55%,
+          #004897 70%,
+          #ec1d25 100%),
+        linear-gradient(to top,
+          #ec1d25 20%,
+          #004897 40%,
+          #3874b5 50%,
+          #2978cf 55%,
+          #056a7a 70%,
+          #0f6b7a 100%);
+      animation: bg 60s infinite cubic-bezier(0.19, 1, 0.22, 1);
+    }
+  
+    @keyframes bg {
+      0% {
+        background-size: 0 6px, 6px 0, 0 6px, 6px 0;
+      }
+  
+      1% {
+        background-size: 100% 6px, 6px 0, 0 6px, 6px 0;
+      }
+  
+      2% {
+        background-size: 100% 6px, 6px 100%, 0 6px, 6px 0;
+      }
+  
+      3% {
+        background-size: 100% 6px, 6px 100%, 100% 6px, 6px 0;
+      }
+  
+      4% {
+        background-size: 100% 6px, 6px 100%, 100% 6px, 6px 100%;
+      }
+    }
+  
+    @keyframes ring {
+      0% {
+        transform: rotate(0);
+      }
+  
+      1% {
+        transform: rotate(30deg);
+      }
+  
+      3% {
+        transform: rotate(-28deg);
+      }
+  
+      5% {
+        transform: rotate(34deg);
+      }
+  
+      7% {
+        transform: rotate(-32deg);
+      }
+  
+      9% {
+        transform: rotate(30deg);
+      }
+  
+      11% {
+        transform: rotate(-28deg);
+      }
+  
+      13% {
+        transform: rotate(26deg);
+      }
+  
+      15% {
+        transform: rotate(-24deg);
+      }
+  
+      17% {
+        transform: rotate(22deg);
+      }
+  
+      19% {
+        transform: rotate(-20deg);
+      }
+  
+      21% {
+        transform: rotate(18deg);
+      }
+  
+      23% {
+        transform: rotate(-16deg);
+      }
+  
+      25% {
+        transform: rotate(14deg);
+      }
+  
+      27% {
+        transform: rotate(-12deg);
+      }
+  
+      29% {
+        transform: rotate(10deg);
+      }
+  
+      31% {
+        transform: rotate(-8deg);
+      }
+  
+      33% {
+        transform: rotate(6deg);
+      }
+  
+      35% {
+        transform: rotate(-4deg);
+      }
+  
+      37% {
+        transform: rotate(2deg);
+      }
+  
+      39% {
+        transform: rotate(-1deg);
+      }
+  
+      41% {
+        transform: rotate(1deg);
+      }
+  
+      43% {
+        transform: rotate(0);
+      }
+  
+      100% {
+        transform: rotate(0);
+      }
+    }
+  
+    .bell {
+      color: linear-gradient(-90deg, #022954, #1e6ab0);
+      -webkit-animation: ring 4s 0.7s ease-in-out infinite;
+      -webkit-transform-origin: 50% 4px;
+      -moz-animation: ring 4s 0.7s ease-in-out infinite;
+      -moz-transform-origin: 50% 4px;
+      animation: ring 4s 0.7s ease-in-out infinite;
+      transform-origin: 50% 4px;
+      animation-delay: 6s;
+    }
+  
+  
+    @media only screen and (max-width: 1200px) {
+      .popular-blog-categories {
+        min-height: 400px;
+      }
+    }
+  
+    @media only screen and (max-width: 600px) {
+      .CTA-img {
+        display: none;
+      }
+  
+      .CTA-bg-shape {
+        display: none;
+      }
+  
+      .CTA-text-box {
+        width: 100%;
+      }
+  
+      .blog-image {
+        max-height: none;
+      }
+  
+      .subscribe-popup1 {
+        bottom: 20px;
+        left: auto;
+        right: 92px;
+        border-radius: 4px;
+        width: 360px;
+        padding: 35px;
+        display: none;
+      }
+  
+      .blog-content>.row {
+        margin-left: 0;
+        /*margin-right: 100px;*/
+      }
+  
+      .blog-share {
+        width: auto !important;
+      }
+  
+      .shareButton {
+        margin: 10px;
+      }
+  
+      iframe {
+        width: -webkit-fill-available;
+      }
+    }
+  
+    @media only screen and (max-width: 365px) {
+      .blog-share {
+        display: block !important;
+      }
+    }
+  
+    {# @media (min-width: 430px) {
+      .subscribe-popup1 {
+        bottom: 20px;
+        left: auto;
+        right: 92px;
+        border-radius: 4px;
+        width: 360px;
+        padding: 35px;
+      } #}
+  
+      .subscribe-popup2 {
+        bottom: 20px;
+        left: auto;
+        right: 92px;
+        border-radius: 4px;
+        width: 100%;
+        padding: 35px;
+      }
+    
+  
+    @media only screen and (min-width: 990px) {
+      .subscribe-popup2 {
+        display: none !important;
+      }
+    }
+  
+    @media only screen and (max-width: 990px) {
+      .subscribe-popup2 {
+        display: block;
+      }
+  
+      .popular-blog-categories {
+        min-width: 100px
+      }
+    }
+  
+    @media only screen and (max-height: 600px) {
+      .subscribe-popup1 {
+        bottom: 20px;
+        left: auto;
+        right: 92px;
+        border-radius: 4px;
+        width: 360px;
+        padding: 35px;
+        display: none;
+      }
+    }
+  
+    .btn-services {
+      border-color: #e19829;
+    }
+  
+    .btn-services {
+      background-color: #e19829;
+    }
+  
+    .letter-space {
+      letter-spacing: 12px;
+    }
+  
+    /* Side Nav */
+    .side-nav-reading {
+      position: fixed;
+      left: 0px;
+      top: calc(50% + 45px);
+      z-index: 1;
+      transform: translateY(-50%);
+      width: calc(14% + 30px);
+      max-width: 215px;
+      list-style: none;
+      padding: 0px;
+      margin: 0px;
+      opacity: 0;
+      visibility: hidden;
+      max-height: 80vh; 
+      overflow-y: auto;  
+      overflow-x:hidden;
+      scrollbar-width: thin; 
+    }
+  
+    .side-nav-reading li {
+      position: relative;
+      transform: translate3d(-100%, 0px, 0px);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease-in-out 0s;
+    }
+  
+    .side-nav-reading a {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.6;
+      color: #746d6d;
+      border-bottom: none;
+      padding-left: 36px;
+      margin-bottom: 30px;
+      transition-timing-function: ease-in-out;
+    }
+  
+    .side-nav-reading li::before {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 10px;
+      left: -20px;
+      width: 50px;
+      height: 1px;
+      background: #746d6d;
+    }
+  
+    .side-nav-reading li.active {
+        color: #004897;
+        padding-left: 17px; /* Instead of translateX() */
+        transition: padding-left 0.3s ease-in-out; /* Smooth transition */
+    }
+  
+    .side-nav-reading li.active a {
+      color: #004897;
+    }
+  
+    .side-nav-reading li.active::before {
+      background: #004897;
+    }
+  
+    .side-nav-reading.is-visible {
+      opacity: 1;
+      visibility: visible;
+    }
+  
+    .side-nav-reading.is-visible li {
+      opacity: 1;
+      visibility: visible;
+      transform: translate3d(0px, 0px, 0px);
+      margin-bottom: 8%;
+    }
+  
+    /* New Share Buttons */
+    .share-wrapper{
+      display:grid;
+      position:relative;
+      float: right;
+      z-index:3;
+    }
+    .share-toggle:hover, .share-option.share-link > a:hover{
+      cursor:pointer;
+    }
+    .share-options{
+      display:none;
+      position:absolute;
+      top:100%;
+      margin-left:0px;
+      padding-left:0px;
+      background-color: #fff;
+      border:1px solid #eee;
+      border-radius:4px;
+      width:fit-content;
+      min-width: 220px;
+      max-width: 300px;
+      font-size:14px;
+      box-shadow: 0px 3px 9px -5px rgba(0, 0, 0, 0.25);
+    }
+    .share-options.active{
+      display:block;
+      list-style-type: none;
+    }
+    .share-option.share-link{
+      border-bottom: 1px solid #eee;
+    }
+    .share-option > a{
+      padding:12px 12px;
+      display:block;
+    }
+    .share-option > a > i.fa, .share-option > a > i.fab, .share-option > a > i.fas, 
+    .share-option > a > svg{
+      margin-right:4px;
+    }
+    .share-option:hover{
+      background-color:var(--norgen-primary-blue-light);
+      color:#000;
+    }
+    .copied-message{
+      position:absolute;
+      visibility:hidden;
+      opacity:0;
+      top:0px;
+      left:0;
+      right:0;
+      margin:auto;
+      background-color:#eee;
+      width: fit-content;
+      min-width: 220px;
+      max-width: 300px;
+      padding: 12px 6px;
+    }
+    .copied-message:not(.active){
+      transition: opacity 0.15s linear 0s, visibility 0s linear 0.15s;
+    }
+    .copied-message.active{
+      visibility:visible;
+      opacity:1;
+      transition: opacity 0.15s linear 0s, visibility 0s linear 0s;
+    }
+  
+    .close-share-options{
+      position:absolute;
+      left:0;
+      right:0;
+      top:0;
+      bottom:0;
+      z-index:2;
+    }
+    .dialog-off-canvas-main-canvas{
+      position:relative;
+    }
+  
+    .field--name-field-blog-image{
+      max-height:400px;
+      overflow:hidden;
+    }
+    
+    @media only screen and (max-width: 991px){
+      .share-options{
+        right:0;
+      }
+    }
+    .field--name-field-subtitle-optional- {
+      
+      font-size: 27px;
+    }
+
+
+    .col-md-offset-1
+    {
+      margin-left:0px !important;
+
+    }
+    .subscribe-popup1{float:inline-end  !important;}
+
+.rss-button {
+  background-color: #ff6600;
+  color: white;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 6px 20px 4px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 5px;
+}
+
+.rss-button:hover {
+  background-color: #ff8533;
+}
+
+.rss-button i {
+  margin-right: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.rel_prod{
+  margin: 20px 0px;
+}
+
+.rel_prod .carousel .carousel-control.left, 
+.rel_prod .carousel .carousel-control.right{
+  background: none;
+  background: none;
+  height: fit-content;
+  margin: auto;
+  width: 50px;
+}
+.rel_prod .carousel .carousel-control.left{
+  left:-30px;
+}
+.rel_prod .carousel .carousel-control.right{
+  right:-30px;
+}
+
+.rel_prod .carousel .carousel-inner{
+  width:auto;
+}
+
+.rel_prod .carousel .item{
+  width:100%;
+}
+
+.rel_prod .carousel-track {
+display: flex !important;
+transition: transform 0.8s ease !important;
+}
+
+.rel_prod .carousel-item {
+  min-width: 33.33%;
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+.rel_prod .carousel-indicators {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  z-index: 15;
+  width: 60%;
+  margin-left: -30%;
+  padding-left: 0;
+  list-style: none;
+  text-align: center;
+}
+
+
+.rel_prod .carousel-indicators li {
+  background-color: #FFF;
+  background: #363636;
+  width: 16px;
+  height: 16px;
+  border-radius: 100%;
+  opacity: 0.5;
+}
+
+.field--name-field-commerce-product .carousel-indicators li.active {
+
+}
+
+.rel_prod .carousel-indicators .active {
+  border: solid #1A3C93 8px;
+  background-color: #FFF;
+  background: #1A3C93;
+  width: 16px;
+  height: 16px;
+  border-radius: 100%;
+  opacity: 0.5;
+}
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+button {
+  z-index:999;
+  background: #333;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.title_r{
+  font-size: font-size: 19px;
+  color: #3f444a;
+  transition: all 0.2s;
+  display: block;
+  padding: 30px 30px 25px 30px;
+  border-radius: 0;
+  box-shadow: none;
+  font-weight: 600;
+  background-color: var(--norgen-primary-blue-light);
+}
+
+
+.c-content-blog-post-1 .c-desc{
+  margin: 0px;
+}
+
+.hidden {
+  display: none;
+}
+
+.rel_prod .carousel-item span {
+  display: block; /* Makes the span take up the full width */
+  width: 100%; /* Ensures it stretches to the full width of the parent */
+  margin: 5px 0; /* Adds spacing between spans */
+  word-wrap: break-word; /* Ensures long text breaks to the next line if necessary */
+  text-align: left; /* Aligns text to the left */
+  font-size:14px;
+}
+.price {
+  display: block;
+  text-align: left;
+  font-weight: 600; /* Optional: make the price bold */
+  font-size: 14px; /* Optional: adjust font size */
+  color: #5c6873;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* //////////////////////////// */
+
+
+
+
+.cta-auto{
+
+  grid-template-columns: 1fr 2fr;
+  display: grid;
+  grid-template-areas:
+      "image title"
+      "button description";
+}
+.slider-caption{
+
+align-self: center;
+
+
+  grid-area: title;
+  padding: 0px;
+  margin-left: 10px !important;
+}
+.saliva-campaign p {
+
+line-height: 1.3;
+grid-area: description;
+}
+.field.field--name-field-cta-image.field--type-image.field--label-hidden.field__item{
+grid-area: image;
+}
+.field.field--name-field-cta-image.field--type-image.field--label-hidden.field__item img{
+  /* margin: 0px 0px !important; */
+}
+.btn.btn-services{
+width: 90%;
+grid-area: button;
+padding: 10px 20px;
+align-self: start;
+}
+
+
+/* Webinar side popup */
+#webinar-promo-card{
+  position: fixed;
+  right: -401px;
+  top: 25%;
+  /* max-width: calc(((100vw - 1170px) / 2) - 30px); */
+  width:401px;
+  max-width:calc(100vw - 34px);
+  z-index:3;
+  border: 2px solid #004897;
+  padding:10px;
+  background-image: url(/sites/default/files/images/webinar/liquid-biopsy-prostate-cancer-2025/bg.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  aspect-ratio:419 / 509;
+  transition:0.5s;
+}
+#webinar-promo-card.active{
+  right: -2px;
+  transition:0.5s;  
+  box-shadow: -2px 2px 10px 0px #838383;
+}
+#webinar-promo-card button{
+  position: absolute;
+  left: -32px;
+  width: 30px;
+  height: 30px;
+  top: 0px;
+  background-color: #5587c2;
+  padding: 0px 0px;
+  outline: 2px solid #004897;
+  box-shadow: -2px 2px 10px 0px #838383;
+}
+#webinar-promo-card button::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 30px;
+  display: block;
+  top: 0px;
+  right: -6px;
+  background-color: #5587c2;
+}
+#webinar-promo-card.active button i{
+  transition:0.5s;
+}
+#webinar-promo-card:not(.active) button i{
+  transform:rotate(180deg);
+  transition:0.5s;
+}
+#webinar-promo-card img{
+  position: absolute;
+  right: -10%;
+  bottom: 0px;
+  margin-bottom: 0px;
+  max-width: 70%;
+}
+#webinar-promo-card a:hover{
+  text-decoration:none;
+}
+#webinar-promo-card .text-content{
+  background-color:#0048978a;
+  color:white;
+  font-weight:600;
+  bottom:25%;
+  border-radius: 10px;
+  max-width: 200px;
+  font-size: 1.4rem;
+  padding:10px;
+}
+#webinar-promo-card h2 {
+  color:white;
+  font-size:4em;
+  line-height:0.8;
+  font-weight:700;
+}
+#webinar-promo-card h2 span{
+  font-size:0.65em;
+}
+#webinar-promo-card h2,
+#webinar-promo-card .text-content,
+#webinar-promo-card .btn-rna{
+  margin-bottom:20px;
+}
+#webinar-promo-card .text-content h3,
+#webinar-promo-card .text-content span,
+#webinar-promo-card .text-content time,
+#webinar-promo-card .text-content div{
+  color:white;
+  font-weight:600;
+  font-size: 1.4rem;
+}
+#webinar-promo-card .text-content hr{
+  border-color:white;
+}
+#webinar-promo-card .text-content .icon-text{
+  display:flex;
+  gap:5px;
+  margin-bottom: 10px;
+}
+/* end of webinar side popup */
+
+
+
+
+
+/* liquid-biopsy side popup */
+#liquid-biopsy-promo-card{
+  position: fixed;
+  right: -401px;
+  top: 25%;
+  /* max-width: calc(((100vw - 1170px) / 2) - 30px); */
+  width:401px;
+  max-width:calc(100vw - 34px);
+  z-index:3;
+  border: 2px solid #004897;
+  padding:10px;
+  background-image: url('/sites/default/files/images/Asset 28.png'), linear-gradient(to right,rgb(31, 64, 126) 50%, rgb(31, 64, 126) 60%);
+  background-size: cover, cover;
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  aspect-ratio:419 / 509;
+  transition:0.5s;
+}
+#liquid-biopsy-promo-card.active{
+  right: -2px;
+  transition:0.5s;  
+  box-shadow: -2px 2px 10px 0px #838383;
+}
+#liquid-biopsy-promo-card button{
+  position: absolute;
+  left: -32px;
+  width: 30px;
+  height: 30px;
+  top: 0px;
+  background-color: rgb(47 78 135);
+  padding: 0px 0px;
+  outline: 2px solid #004897;
+  box-shadow: -2px 2px 10px 0px #838383;
+}
+#liquid-biopsy-promo-card button::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 30px;
+  display: block;
+  top: 0px;
+  right: -6px;
+  background-color: rgb(47 78 135);
+}
+#liquid-biopsy-promo-card.active button i{
+  transition:0.5s;
+}
+#liquid-biopsy-promo-card:not(.active) button i{
+  transform:rotate(180deg);
+  transition:0.5s;
+}
+#liquid-biopsy-promo-card img{
+  position: absolute;
+  bottom: 0px;
+  margin-bottom: 0px;
+  max-width: 100%;
+}
+#liquid-biopsy-promo-card a:hover{
+  text-decoration:none;
+}
+#liquid-biopsy-promo-card .text-content{
+  background-color:#0048978a;
+  color:white;
+  font-weight:600;
+  bottom:25%;
+  border-radius: 10px;
+  max-width: 100%;
+  font-size: 1.4rem;
+  padding:10px;
+  backdrop-filter: blur(5px);
+}
+#liquid-biopsy-promo-card h2 {
+  color:white;
+  font-size:2.5em;
+  line-height:1.1;
+  font-weight:700;
+}
+#liquid-biopsy-promo-card h2 span{
+  font-size:0.65em;
+}
+#liquid-biopsy-promo-card h2,
+#liquid-biopsy-promo-card .text-content,
+#liquid-biopsy-promo-card .btn-rna{
+  margin-bottom:20px;
+}
+#liquid-biopsy-promo-card .text-content h3,
+#liquid-biopsy-promo-card .text-content span,
+#liquid-biopsy-promo-card .text-content time,
+#liquid-biopsy-promo-card .text-content div{
+  color:white;
+  font-size: 1.8rem;
+}
+#liquid-biopsy-promo-card .text-content hr{
+  border-color:white;
+}
+#liquid-biopsy-promo-card .text-content .icon-text{
+  display:flex;
+  gap:5px;
+  margin-bottom: 10px;
+}
+/* end of liquid-biopsy side popup */
+
+
+  </style>
+  <div class="nd-region" style= "padding:40px;">
+    <div class="container">
+      <div class="row">
+        <div id="content" style="padding-top: 60px;">
+          <div>
+            <div id="block-jango-sub-content">
+            <article class="contextual-region node node-nd-blog clearfix" itemscope itemtype="https://schema.org/Article"> <!-- Mod -->
+                <div class="c-content-blog-post-12-view">
+                  <div class="c-content-blog-post-1">
+                    <div class="field field--name-field-images field--type-image field--label-hidden field__items">
+                      <div class="field__item">
+                        <nav aria-label="skip to article headings">
+                          <ul class="side-nav-reading"></ul>
+                        </nav>
+                        <div class="c-media">
+                          {{ content.field_blog_image }}
+                        </div>
+                      </div>
+                    </div>
+                    <h1 class="c-title c-font-bold c-font-uppercase" itemprop="headline" > <!-- Mod -->
+                    <a href="{{ url }}"> <!-- Mod --> 
+                      {{ content.field_shown_title }}
+                      {{ content.field_subtitle_optional_ }}
+                      </a>
+                    </h1>
+  
+                    <div class="c-panel c-margin-b-30">
+  
+                      <div class="c-author">
+                        {{ "By " | t }}
+                        <span class="c-font-uppercase">
+                          {% if content.field_author %} {% set field_author %}
+                          {{ content.field_author }}
+                          {% endset %}
+                          {{ field_author }}
+                          {% else %}
+                          {# <a href="user/{{ node.getOwnerId() }}" itemprop="name" > #}
+                            {{ author_name }}
+                         {#  </a> #}
+                          {% endif %}
+                        </span>
+                      </div>
+                      <div class="c-date">
+                        {{ "on" | t }}
+                        <span class="c-font-uppercase" itemprop="datePublished" content="{{node.field_sort_date.date}}">
+                          {{ node.field_sort_date.value|date('d M Y')}}
+                        
+                      </div>
+                      <div class="share-wrapper">
+                         <button class="rss-button" onclick="window.location.href='/norblog.xml';">
+                           <i class="fas fa-rss" style="margin-right:5px;"></i>Norblog RSS
+                         </button>
+                        <button class="share-toggle btn btn-primary" onclick="toggleShareOptions()" title="Share" alt="Share"><i class="fa fa-share-alt" style="font-weight:900;"></i> Share</button>
+                        <ul class="share-options">
+                          <!-- Copy Link -->
+                          <li class="share-option share-link"><a aria-label="Copy Link" class="shareButton link" href="javascript:void" onclick="copyURL()"><i class="fa fa-link"></i> Copy Link</a><div class="copied-message"><i class="fa fa-check"></i> Link copied</div></li>
+                          <!-- Facebook -->
+                          <li class="share-option share-facebook"><a aria-label="Share on Facebook" class="shareButton facebook" href="https://www.facebook.com/sharer/sharer.php?u={{ drupal_url(url, {absolute:true}) }}" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u={{ drupal_url(url, {absolute:true}) }}', 'newwindow', 'width=400,height=500'); return false;"><i class="fab fa-facebook"></i> Share on Facebook</a></li>
+                          <!-- Twitter -->
+                          <li class="share-option share-twitter"><a aria-label="Share on Twitter" class="shareButton twitter" href="https://twitter.com/intent/tweet?url={{ drupal_url(url, {absolute:true}) }}&text=" onclick="window.open('https://twitter.com/intent/tweet?url={{ drupal_url(url, {absolute:true}) }}&text=', 'newwindow', 'width=550,height=285'); return false;"><svg viewBox="0 0 1200 1227" fill="none" xmlns="http://www.w3.org/2000/svg" style="max-width: 14px;max-height: 1.5em;height: 14px;" aria-labelledby="twitter-blog-title-share"><title id="twitter-blog-title-share" lang="en">X formerly known as Twitter</title><path d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z" fill="#337ab7"></path></svg> Share on Twitter</a></li>
+                          <!-- LinkedIn -->
+                          <li class="share-option share-linkedin"><a aria-label="Share on LinkedIn" class="shareButton linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url={{ drupal_url(url, {absolute:true}) }}&title=&summary=&source=" onclick="window.open('https://www.linkedin.com/shareArticle?mini=true&url={{ drupal_url(url, {absolute:true}) }}&title=&summary=&source=', 'newwindow', 'width=500,height=500'); return false;"><i class="fab fa-linkedin"></i> Share on LinkedIn</a></li>
+                          <!-- Instagram -->
+                          {# <li class="share-option share-instagram"><a aria-label="Share on Instagram" class="shareButton instagram" href="https://www.instagram.com/norgen.biotek" target="_blank"><i class="fab fa-instagram"></i> Share on Instagram</a></li> #}
+                       
+                          
+                        </ul>
+                                             </div>
+                      <!-- <div class="c-comments">
+                            {% if node.field_edit_date.value %}
+                            {{ 'Revised on'|t }}
+                            <span class="c-font-uppercase">
+                              {{ node.field_edit_date.value|date('d M Y') }}
+                              {{ node.field_edit_date.value|date('g:i A') }}
+                            </span>
+                            {% endif %}
+                          </div> -->
+                      {{ content.field_category }}
+                    </div>
+                  <div class="c-desc">
+    <div class="c-desc">
+    <div class="field field--name-body field--type-text-with-summary field--label-hidden field__item" itemprop="articleBody" itemscope>
+   {% if content.body[0]['#text'] is defined %}
+    {% set body_text = content.body[0]['#text'] %}
+    {% set paragraphs = body_text|split('</p>') %}
+    {% set inserted = false %}    
+    {% for paragraph in paragraphs %}
+        {% if paragraph|trim is not empty %}
+            {{ paragraph|raw }}</p>
+            
+            {% if not inserted and '<img' in paragraph %}
+                                {% if node.nid == 2197 %}
+                <div class="subscribe-popup1">
+                    <div class="saliva-campaign">
+                        <h2 style="color: #000; font-size: 23px; font-weight: 600; margin: 2% 0; text-align: center;">
+                            Soil Total RNA Purification Kit
+                        </h2>
+                        <img src="https://norgenbiotek.com/sites/default/files/styles/norproduct_imagekit/public/images/product_images/27750-Soil-Total-RNA-Purification-Kit-WEB_0.jpg" alt="Soil Total RNA Purification Kit" />
+                        <hr style="margin: 0px" />
+                        <p>
+                            For the rapid preparation of inhibitor-free total RNA from soil.
+                        </p>
+                        <hr style="margin-top: 0px; margin-bottom: 20px" />
+                        <div class="wrap">
+                            <a class="btn btn-services animated-button" style="width: fit-content; color: #000; height: fit-content;" href="https://norgenbiotek.com/product/soil-total-rna-purification-kit">Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                        {% elseif content.field_custom_cta.0 != null and content.field_custom_cta.0["#markup"] != "No" %}
+                                                                                                                                        <div class="subscribe-popup1">
+                                                                                                                                            <div class="saliva-campaign cta-auto">
+                                                                                                                                                {% if content.field_cta_heading is defined %}
+                                                                                                                                                <h4 style="color: #000; font-size: 23px; font-weight: 600; margin: 2% 0;" class="slider-caption">
+                                                                                                                                                    {{ content.field_cta_heading }}
+                                                                                                                                                </h4>
+                                                                                                                                                {% endif %}
+                                                                                                                                                {% if content.field_cta_image is defined %}
+                                                                                                                                                {{ content.field_cta_image }}
+                                                                                                                                                {% endif %}
+                                                                                                                                                <hr style="margin: 0" />
+                                                                                                                                                {% if content.field_cta_tagline is defined %}
+                                                                                                                                                <p style="font-weight: bold">
+                                                                                                                                                    {{ node.field_cta_tagline.value|raw }}
+                                                                                                                                                </p>
+                                                                                                                                                {% endif %}
+                                                                                                                                                {% if content.field_cta_button_link is defined %}
+                                                                                                                                                {% set link = content.field_cta_button_link %}
+                                                                                                                                                <a class="btn btn-services" href="{{ node.field_cta_button_link.value }}">Learn More</a>
+                                                                                                                                                {% endif %}
+                                                                                                                                            </div>
+                                                                                                                                        </div>
+                                                                                                                                        {% else %}
+
+
+                <aside class="subscribe-popup1">
+                  <div class="saliva-campaign">
+                      <span style="color: #000; font-size: 40px" class="letter-space">
+                          NORBLOG
+                      </span>
+                      <p style="font-weight: bold; font-size: 16px">
+                          Want to hear more from Norgen?
+                      </p>
+                      <p>
+                          Join over 10,000 scientists, bioinformaticians, and researchers who receive our exclusive deals, industry updates, and more, directly to their inbox.
+                      </p>
+                      <p>
+                          For a limited time, subscribe and <strong style="font-size:18px; text-decoration:underline;">SAVE 10%</strong> on your next purchase!
+                      </p>
+                      <a class="btn btn-services newsletter-signup-page" style="width: fit-content; color: #000; height: fit-content;" href="https://norgenbiotek.com/newsletter-subscribe">
+                          <p style="margin-bottom: 0">SIGN UP</p>
+                      </a>
+                  </div>
+                </aside>
+                {% endif %}
+                
+                {% set inserted = true %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+{% else %}
+<p>No content available.</p>
+{% endif %}
+</div>
+</div>
+
+                {% if node.field_references.value %}
+                  <hr>
+                  <div class="c-content-accordion-norgen c-accordion-norgen-primary-blue-light">
+                    <div class="panel-group" id="accordion-1" role="tablist">
+                      <div class="panel">
+                        <div class="panel-heading" role="tab" id="accordiontab">
+                          <h2 class="panel-title">
+                            <a class="c-font-bold c-font-19 collapsed" data-toggle="collapse"
+                              data-parent="#accordion-1" href="#references" aria-expanded="false"
+                              aria-controls="2595394">References <i class="fa fa-chevron-down"></i>
+                            </a>
+                          </h2>
+                        </div>
+                        <div id="references" class="panel-collapse collapse" role="tabpanel" aria-labelledby="accordiontab"
+                          aria-expanded="false" style="height: 0px;">
+                          <div class="panel-body">
+                            {{ content.field_references }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+                {% if node.field_related_products.value %}
+                  <div class="rel_prod">
+                    <div class="c-content-accordion-norgen c-accordion-norgen-primary-blue-light">
+                      <div class="panel-group" id="accordion-1" role="tablist">
+                        <div class="panel">
+                          <div class="panel-heading" role="tab" id="accordiontab">
+                            <h2 class="panel-title">
+                              <a class="c-font-bold c-font-19" data-toggle="collapse" data-parent="#accordion-1" href="#related-products" aria-expanded="true" aria-controls="2595394">Related Products <i class="fa fa-chevron-down"></i>
+                              </a>
+                            </h2>
+                          </div>
+                          <div id="related-products" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="accordiontab" aria-expanded="true" style="">
+                            <div class="panel-body">
+                              
+                              <div id="Carouselprod" class="carousel slide carousel-fade1 dexp_carousel" data-ride="carousel">
+                                <ol class="carousel-indicators">
+                                  {% for key, product in elements.field_related_products['#items'] %}
+                                  {% if ((loop.index0 == 0) or (loop.index0 % 2 == 0)) %}
+                                  <li data-target="#Carouselprod" data-slide-to='{{loop.index0 / 2}}' class={% if loop.first == true %}"active"{% endif %}></li>
+                                  {% endif %}
+                                  {% endfor %}
+                                </ol>
+                                <div class="carousel-inner prodBottom">
+                                  <!-- Carousel items -->
+                                  {% for key, product in elements.field_related_products['#items'] %}
+                                    {% if ((loop.index0 == 0) or (loop.index0 % 2 == 0)) %}  <!-- one carousel slide for every three products -->
+                                      <div class='item {% if loop.index0 == 0 %}active{% endif %}'>
+                                    {% endif %}
+                                        <div class="col-md-12 col-lg-6 prodRow">
+                                          <div class="carousel-item">
+                                            <a class="related-products-product-page related-products-product1" href="{{ elements.field_related_products[key]['#url'] }}">
+                                              <img src="{{ product.entity.field_product_image.entity.uri.value | image_style('large') }}" alt="{{ product.entity.get('title').value }}">
+                                            </a>
+                                            <span><a href="{{ elements.field_related_products[key]['#url'] }}">{{ elements.field_related_products[key]['#title'] }}</a></span>
+                                            <span>
+                                              SKU: {{ product.entity.get('sku').value }} 
+                                              {% if product.entity.get('attribute_format') and product.entity.get('attribute_format').entity and product.entity.get('attribute_format').entity.name and product.entity.get('attribute_format').entity.name.value %}
+                                                | {{ product.entity.get('attribute_format').entity.name.value }}
+                                              {% endif %}
+                                              {% if product.entity.get('attribute_size') is not null %}
+                                                | {{ product.entity.get('attribute_size').entity.name.value }}
+                                              {% endif %}
+                                            </span>
+                                          </div>
+                                        </div>
+                                    {% if ((loop.last == true) or (loop.index % 2 == 0)) %} <!-- close item div after every three products, or after all products looped --> 
+                                      </div>
+                                    {% endif %}
+                                  {% endfor %}
+                                </div>
+                                <a class="carousel-control left" data-target="#Carouselprod" role="button" data-slide="prev">
+                                  <span class="fa fa-2x fa-chevron-left" aria-hidden="true"></span>
+                                  <span class="sr-only">Next</span>
+                                </a>
+                                <a class="carousel-control right" data-target="#Carouselprod" role="button" data-slide="next">
+                                    <span class="fa fa-2x fa-chevron-right" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                              </div>
+                              
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>  
+                {% endif %}
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{# <div id="webinar-promo-card" class="active">
+  <button onclick="toggleWebinarPopup()"><i class="fa fa-chevron-right"></i></button>
+  <a href="/masterclass/webinars/transforming-cancer-care-cfdna-liquid-biopsy-prostate-cancer-perspective">
+    <h2 class="c-font-uppercase center">Webinar<br> <span>with Live Q&amp;A</span></h2>
+    <div class="text-content">
+      <h3>Transforming Cancer Care with cfDNA from Liquid Biopsy: A Prostate Cancer Perspective</h3>
+      <hr>
+      <div class="icon-text">
+        <i class="fa fa-calendar"></i>
+        <span>April 8, 2025</span>
+      </div>
+      <div class="icon-text">
+        <i class="fa fa-clock"></i>
+        <span><time datetime="2025-04-08T09:00:00+0400">9:00 AM EDT</time> &amp; <br><time datetime="2025-04-08T14:00:00+0400">2:00 PM EDT</time></span>
+      </div>
+      <div class="icon-text">
+        <i class="fa fa-bullhorn"></i>
+        <span>Lohit Khera, PhD &amp;<br>Maggie Xue, BSc</span>
+      </div>
+    </div>
+    <img src="/sites/default/files/images/webinar/liquid-biopsy-prostate-cancer-2025/speakers2-v2.png">
+    <div 
+      style="background-image: linear-gradient(transparent, white);
+      height: 100px;
+      position: absolute;
+      bottom: 0px;
+      left: 0;
+      width: 100%;">
+    </div>
+    <span class="btn btn-rna" style="position:relative;">Register Now</span>
+  </a>
+</div> #}
+
+{# <div id="liquid-biopsy-promo-card" class="active">
+  <button onclick="toggleliquidbiopsyPopup()"><i class="fa fa-chevron-right"></i></button>
+  <a href="/liquidbiopsy">
+    <h2 class="c-font-uppercase center">Liquid biopsy<br> <span>Promotion</span></h2>
+    <div class="text-content">
+      <h3><strong> Don't Miss Out:</strong> <strong>Spend over $1000</strong> on Liquid Biopsy Category Products <br>and <strong>Get Free Shipping!</strong></h3>
+      <hr>
+    </div>
+    <img src="/sites/default/files/images/AdobeStock_490486537_2cc_full computer.tif.png">
+    <div 
+      style="background-image: linear-gradient(transparent, white);
+      height: 100px;
+      position: absolute;
+      bottom: 0px;
+      left: 0;
+      width: 100%;">
+    </div>
+    <span class="btn btn-rna" style="position:relative;">View Details</span>
+  </a>
+</div> #}
+
+
+{# webinar popup script #}
+{#<script>
+  function toggleWebinarPopup(){
+    const webpopup = document.querySelector('#webinar-promo-card');
+    if(webpopup){
+      webpopup.classList.toggle('active');
+    }
+  }
+</script>  #}
+{# end of webinar popup script #}
+
+
+
+{# liquid-biopsy popup script #}
+<script>
+  function toggleliquidbiopsyPopup(){
+    const promopopup = document.querySelector('#liquid-biopsy-promo-card');
+    if(promopopup){
+      promopopup.classList.toggle('active');
+    }
+  }
+</script>  
+{# end of liquid-biopsy popup script #}
+
+{#<script>
+  (function() {
+    const matchPath = "pancreatic-cancer-causes-symptoms-and-effective-treatments";
+    const isMatch = window.location.href.includes(matchPath);
+
+    const style = document.createElement('style');
+    style.innerHTML = `
+      #webinar-promo-card { display: ${isMatch ? 'none' : 'block'} !important; }
+      #liquid-biopsy-promo-card { display: ${isMatch ? 'block' : 'none'} !important; }
+    `;
+    document.head.appendChild(style);
+  })();
+</script>#}
+
+  <script>
+  
+    window.addEventListener("load", function () {
+      const innerDiv = document
+        .querySelector(".c-desc")
+        .querySelector(".field--name-body");
+  
+      var h = innerDiv.getElementsByTagName("h2");
+      var l_item = document.getElementsByClassName("side-nav-reading")[0];
+  
+      for (var i = 0; i < h.length; i++) {
+        if (h[i].innerText != "References") {
+          var li = document.createElement("li");
+          var a = document.createElement("a");
+          li.setAttribute("class", "item");
+          a.setAttribute("href", "#heading" + (i + 1) + "");
+          li.setAttribute("onclick", "linkS(this)");
+          l_item.appendChild(li);
+          li.appendChild(a);
+          a.innerText = h[i].innerText;
+        }
+      }
+  
+      const navLi = document.querySelectorAll(".side-nav-reading li");
+      //get sidenav buttons
+      const buttons = document.querySelectorAll(".side-nav-reading li");
+  
+      if (buttons[0]) {
+        window.addEventListener("scroll", () => {
+          const innerDiv2 = document.querySelector(".field--name-body");
+  
+          var h2 = innerDiv.getElementsByTagName("h2");
+          var num_headings = h2.length;
+          //need to know if there is a References section PRIOR to adding or removing active. Check last h2 element to see if it's References
+          if (h2[h2.length - 1].innerText == "References") {
+            num_headings--; //remove last h2 tag (References)
+          }
+          for (var i = 0; i < num_headings; i++) {
+            const sectNum = i;
+            const offset =
+              h2[i].getBoundingClientRect().top - window.screen.height + 142; //subtract screen height to account for when it comes onto the screen
+            //if page top is reached by this section, change active side nav item
+            if (offset <= 0) {
+              if (check == false) {
+                for (var j = 0; j < num_headings; j++) {
+                  buttons[j].classList.remove("active");
+                }
+                buttons[sectNum].classList.add("active");
+              }
+            }
+            check = false;
+          }
+        });
+      }
+    });
+    var check = false;
+    function linkS(clicked_id) {
+      check = true;
+      const innerDiv2 = document.querySelector(".side-nav-reading");
+      var h2 = innerDiv2.getElementsByTagName("li");
+      for (var j = 0; j < h2.length; j++) {
+        h2[j].classList.remove("active");
+      }
+      clicked_id.classList.add("active");
+    }
+
+
+    function scrollToActive() {
+        const activeItem = document.querySelector(".side-nav-reading .active");
+        if (activeItem) {
+            activeItem.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+        }
+    }
+  window.addEventListener("scroll", scrollToActive);
+
+  </script>
+  <script>
+    var close = 0;
+  
+  function closebox() {
+  const popup = document.querySelector(".subscribe-popup1");
+  if (popup) {
+    popup.style.display = "none"; 
+  }
+}
+   
+    let processScroll = () => {
+      let docElem = document.documentElement,
+        docBody = document.body,
+        scrollTop = docElem["scrollTop"] || docBody["scrollTop"],
+        scrollBottom =
+          (docElem["scrollHeight"] || docBody["scrollHeight"]) -
+          window.innerHeight /* docElem.scrollHeight */ -
+          800 /* subtract 800 for the approximate height of the footer and copyright sections */,
+        scrollPercent = (scrollTop / scrollBottom) * 100 + "%";
+  
+      var y = window.scrollY;
+      var side_nav_classlist =
+        document.querySelector(".side-nav-reading").classList;
+      var subscribe_popup_style =
+        document.querySelector(".subscribe-popup1").style;
+  
+      if (y >= 500) {
+        side_nav_classlist.add("is-visible");
+      } else if (y < 500) {
+        side_nav_classlist.remove("is-visible");
+        // document.getElementById("back-progress-bar").style.opacity = "0";
+      }
+  
+      var x = 0;
+      if (y >= 500 && close == 0) {
+        //x = 0;
+        subscribe_popup_style.opacity = "1";
+        subscribe_popup_style.visibility = "visible";
+        // subscribe_popup_style.animationPlayState = "running";
+        document
+          .querySelector(".subscribe-popup1")
+          .classList.add("subscribe-animation");
+      } else {
+        {# subscribe_popup_style.opacity = "0"; #}
+        {# subscribe_popup_style.visibility = "hidden"; #}
+        document
+          .querySelector(".subscribe-popup1")
+          .classList.remove("subscribe-animation");
+      }
+  
+      var body_offset;
+      if (window.innerWidth <= 1280 && window.innerHeight >= 720) {
+        body_offset = 0.7 * document.body.offsetHeight;
+      } else body_offset = document.body.offsetHeight;
+      if (window.innerHeight + window.scrollY >= body_offset - 800) {
+        /* subtract 800 for the approximate height of the footer and copyright sections */
+        side_nav_classlist.remove("is-visible");
+        {# subscribe_popup_style.opacity = "0"; #}
+        {# subscribe_popup_style.visibility = "hidden"; #}
+      }
+      // always hide the side nav bar if it will overlap with the blog's content (when window width is less than 1380px).
+      x = window.innerWidth;
+      if (x < 1520) {
+        side_nav_classlist.remove("is-visible");
+      }
+    };
+    window.addEventListener("scroll", processScroll);
+  
+    
+    /* New Share Options */
+    function toggleShareOptions(){
+      let share_options = document.querySelector('.share-wrapper .share-options');
+      if(share_options) share_options.classList.toggle('active');
+      if(share_options.classList.contains('active')){ // if active, add the close background div
+        let main_canvas = document.querySelector('.dialog-off-canvas-main-canvas');
+        let hide_div = document.createElement('div');
+        hide_div.classList.add('close-share-options');
+        hide_div.setAttribute("onclick", "toggleShareOptions()");
+        main_canvas.appendChild(hide_div);
+      }
+      else{ // not active
+        let hide_div = document.querySelector('.close-share-options');
+        if(hide_div) hide_div.remove();
+      }
+    }
+  
+    function copyURL(){
+      let url = window.location.href;
+  
+      // Copy the text inside the text field
+      navigator.clipboard.writeText(window.location.href);
+  
+      // Alert the copied text
+      let copied_message = document.querySelector('.copied-message');
+      if(copied_message){
+        copied_message.classList.add('active');
+        setTimeout(() => {
+          remove_copied_message(copied_message);
+        }, "1000"); // remove the message automatically after 2 seconds of displaying it
+      }
+      /* alert("Copied the URL:" + window.location.href); */
+    }
+    function remove_copied_message(copied_message){
+      copied_message.classList.remove('active');
+    }
+
+  </script>

@@ -1,0 +1,354 @@
+{#
+  /**
+  * @file
+  * Default theme implementation to display a node.
+  *
+  * Available variables:
+  * - node: The node entity with limited access to object properties and methods.
+  * Only method names starting with "get", "has", or "is" and a few common
+  * methods such as "id", "label", and "bundle" are available. For example:
+  * - node.getCreatedTime() will return the node creation timestamp.
+  * - node.hasField('field_example') returns TRUE if the node bundle includes
+  * field_example. (This does not indicate the presence of a value in this
+  * field.)
+  * - node.isPublished() will return whether the node is published or not.
+  * Calling other methods, such as node.delete(), will result in an exception.
+  * See \Drupal\node\Entity\Node for a full list of public properties and
+  * methods for the node object.
+  * - label: (optional) The title of the node.
+  * - content: All node items. Use {{ content }} to print them all,
+  * or print a subset such as {{ content.field_example }}. Use
+  * {{ content|without('field_example') }} to temporarily suppress the printing
+  * of a given child element.
+  * - author_picture: The node author user entity, rendered using the "compact"
+  * view mode.
+  * - metadata: Metadata for this node.
+  * - date: (optional) Themed creation date field.
+  * - author_name: (optional) Themed author name field.
+  * - url: Direct URL of the current node.
+  * - display_submitted: Whether submission information should be displayed.
+  * - attributes: HTML attributes for the containing element.
+  * The attributes.class element may contain one or more of the following
+  * classes:
+  * - node: The current template type (also known as a "theming hook").
+  * - node--type-[type]: The current node type. For example, if the node is an
+  * "Article" it would result in "node--type-article". Note that the machine
+  * name will often be in a short form of the human readable label.
+  * - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+  * teaser would result in: "node--view-mode-teaser", and
+  * full: "node--view-mode-full".
+  * The following are controlled through the node publishing options.
+  * - node--promoted: Appears on nodes promoted to the front page.
+  * - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+  * teaser listings.
+  * - node--unpublished: Appears on unpublished nodes visible only to site
+  * admins.
+  * - title_attributes: Same as attributes, except applied to the main title
+  * tag that appears in the template.
+  * - content_attributes: Same as attributes, except applied to the main
+  * content tag that appears in the template.
+  * - author_attributes: Same as attributes, except applied to the author of
+  * the node tag that appears in the template.
+  * - title_prefix: Additional output populated by modules, intended to be
+  * displayed in front of the main title tag that appears in the template.
+  * - title_suffix: Additional output populated by modules, intended to be
+  * displayed after the main title tag that appears in the template.
+  * - view_mode: View mode; for example, "teaser" or "full".
+  * - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+  * - page: Flag for the full page state. Will be true if view_mode is 'full'.
+  * - readmore: Flag for more state. Will be true if the teaser content of the
+  * node cannot hold the main body content.
+  * - logged_in: Flag for authenticated user status. Will be true when the
+  * current user is a logged-in member.
+  * - is_admin: Flag for admin user status. Will be true when the current user
+  * is an administrator.
+  *
+  * @see template_preprocess_node()
+  *
+  * @ingroup themeable
+  */
+  #}
+  
+  <article{{ attributes }}>
+  
+    {{ title_prefix }}
+    {% if label and not page %}
+    <h2{{ title_attributes }}>
+      <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+      </h2>
+      {% endif %}
+      {{ title_suffix }}
+  
+      {% if display_submitted %}
+      <footer>
+        {{ author_picture }}
+        <div{{ author_attributes }}>
+          {% trans %}Submitted by {{ author_name }} on {{ date }}{% endtrans %}
+          {{ metadata }}
+          </div>
+      </footer>
+      {% endif %}
+      {{ custom_breadcrumb|raw }}
+      <div{{ content_attributes }}>
+        {{ content }}
+        </div>
+  
+        </article>
+  
+        <style>
+          .basic-page-banner h1 {
+            font-size: 54px
+          }
+  
+          .icon-publication {
+            background-image: url(/sites/default/files/images/resources/publication.svg);
+            display: inline-block;
+            width: 50px;
+            height: 64px;
+            background-size: cover;
+          }
+  
+          .icon-press-releases {
+            background-image: url(/sites/default/files/images/resources/press_release_icon.svg);
+            display: inline-block;
+            width: 50px;
+            height: 68px;
+            background-size: cover;
+          }
+  
+          .icon-catalogs {
+            background-image: url(/sites/default/files/images/resources/e-learning_icon.svg);
+            display: inline-block;
+            width: 69px;
+            height: 49px;
+            background-size: cover;
+          }
+  
+          .app-note-img {
+            width: 50%;
+            transform: translateX(800px) translateY(0);
+          }
+  
+          .upper-title {
+            top: 50%;
+            transform: translateY(35%);
+          }
+  
+          .c-font-right {
+            width: 400px;
+            position: absolute;
+            top: 57%;
+            transform: translateY(-50%);
+            left: 23%;
+            z-index: 100;
+          }
+  
+          .c-font-right>a:hover {
+            color: #0048D8
+          }
+  
+          @media only screen and (max-width: 1300px) {
+            .app-note-img {
+              display: none;
+            }
+  
+            .app-note-div {
+              height: 300px;
+            }
+  
+            .upper-title {
+              top: 50%;
+              transform: translateY(0);
+            }
+          }
+  
+          @media only screen and (max-width: 768px) {
+            .c-font-right {
+              left: 0;
+            }
+          }
+
+
+          /* .container.c-left.c-title{padding-left: 30px;} */
+
+        </style>
+  
+  
+        <div>
+          <div class="field field--name-body field--type-text-with-summary field--label-hidden field__item">
+            <div class="basic-page-banner"
+              style="background-image: url(/sites/default/files/images/resources/Rectangle88.png); background-position:right; height: 600px;">
+              <div class=" container  basic-page-banner-container" style="margin-top:0px;">
+                <div class=" row" style="height:100%;">
+                  <img src="/sites/default/files/images/resources/resources.png"
+                    style="position: absolute;right: 0;height: 600px; max-width: max-content ;">
+                  <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 upper-title">
+                    <div class="container c-left c-title">
+                      <h1 class="c-left c-font ">Resources for Your Exploration!</h1>
+                      <div class=""></div>
+                      <p class="c-left c-font-uppercase">Explore our detailed Application Note library for practical
+                        guidance,
+                        stay informed through our Blog on latest trends, and watch how-to videos for efficient product
+                        usage.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="c-content-box c-size-md">
+              <div class=" container  ">
+                <div class=" row flex-container-row">
+                  <div class="bounceInLeft col-xs-12 col-sm-12 col-md-6 col-lg-6 wow"
+                    style="visibility: visible; animation-name: bounceInLeft;">
+                    <span class="bounceInLeft wow" style="visibility: visible; animation-name: bounceInLeft;">
+                      <img src="/sites/default/files/images/resources/Tutorial.jpg" alt="" title="">
+                    </span>
+                  </div>
+                  <div class="bounceInRight col-xs-12 col-sm-12 col-md-6 col-lg-6 wow col-bg-img-text"
+                    style="visibility: visible; animation-name: bounceInRight;">
+                    <div>
+                      <p class="caption">WEB TUTORIALS</p>
+                      <h2>How-to Videos</h2>
+                      <p>Immerse yourself in our collection of how-to videos offering step-by-step demonstrations for
+                        efficient
+                        product usage and experimental procedures. </p>
+                      <a href="/resources/knowledge-hub/video-hub">Watch now > </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            <div class="app-note-div"
+              style="background: url(/sites/default/files/images/resources/Rectangle20.png);position:relative;">
+              <div class=" container">
+                <div>
+                  <div class="c-font-right">
+                    <p class="caption c-font-white">APP NOTES</p>
+                    <h2 class="c-font-white"> Application Note library</h2>
+                    <p class="c-font-white"> Delve into our detailed App note library offering practical guidance and case
+                      studies for various applications.</p>
+                    <a href="/resources/knowledge-hub/application-notes">Read Now > </a>
+                  </div>
+                  <img src="/sites/default/files/images/resources/new_appnote_post.png" class="app-note-img">
+                </div>
+              </div>
+            </div>
+            <div class="c-content-box c-size-md">
+              <div class=" container  ">
+                <div class=" row flex-container-row">
+                  <div class="bounceInLeft col-xs-12 col-sm-12 col-md-6 col-lg-6 wow"
+                    style="visibility: visible; animation-name: bounceInLeft;">
+                    <span class="bounceInLeft wow" style="visibility: visible; animation-name: bounceInLeft;">
+                      <img src="/sites/default/files/images/resources/rnaextraction.jpg" alt="" title="">
+                    </span>
+                  </div>
+                  <div class="bounceInUp col-xs-12 col-sm-12 col-md-6 col-lg-6 wow col-bg-img-text"
+                    style="visibility: visible; animation-name: bounceInUp;">
+                    <div>
+                      <p class="caption">BLOGS</p>
+                      <h2><a href="/norblog">NorBlog</a>,<a href="/resources/blog-articles/publication-highlights"> Publication Summaries</a>, and <a href="/stories"> Customer Success Stories</a></h2>
+                      <p>Explore the latest trends, research breakthroughs, and industry insights in the fields of sample
+                        preparation, nucleic acid purification, and molecular diagnostics, offering valuable perspectives
+                        for
+                        researchers and professionals alike.</p>
+                      <!-- <a href="/content/blogs-landing-page">View Articles > </a> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="c-content-box c-size-md">
+              <div class=" container  ">
+                <div class="c-content-title-1 c-title c-center">
+                  <p class="caption">KNOWLEDGE HUB</p>
+                  <h2 class="c-font-norgen-blue">Explore Our Patents, Press Releases, Complete Workflows</h2>
+                  <div class="c-line-center c-bg-norgen-blue"></div>
+                </div>
+                <div class=" col-md-4 col-sm-6">
+                  <div class="c-content-feature-2 c-option-2">
+                    <div class="c-icon-wrapper">
+                      <a href="/patents">
+                        <div class="icon-font c-theme-font icon-publication"></div>
+                      </a>
+                    </div>
+                    <a href="/patents">
+                      <h3 class="c-font-uppercase c-title">Patents</h3>
+                    </a>
+                    <p>Search through a complete list containing all of Norgen Biotek's patents, both granted and pending.
+                    </p>
+                  </div>
+                </div>
+                <div class=" col-md-4 col-sm-6">
+                  <div class="c-content-feature-2 c-option-2">
+                    <div class="c-icon-wrapper">
+                      <a href="/resources/press-releases">
+                        <div class="icon-font c-theme-font icon-press-releases"></div>
+                      </a>
+                    </div>
+                    <a href="/resources/press-releases">
+                      <h3 class="c-font-uppercase c-title">Press Releases</h3>
+                    </a>
+                    <p>Norgen Biotek's press releases provide timely updates on the company's latest innovations,
+                      partnerships,
+                      and milestones, offering a comprehensive overview of its contributions to the fields of sample
+                      preparation, nucleic acid purification, and molecular diagnostics. </p>
+                  </div>
+                </div>
+                <div class=" col-md-4 col-sm-6">
+                  <div class="c-content-feature-2 c-option-2">
+                    <div class="c-icon-wrapper">
+                      <a href="/resources/complete-workflows">
+                        <div class="icon-font c-theme-font icon-catalogs"></div>
+                      </a>
+                    </div>
+                    <a href="/resources/complete-workflows">
+                      <h3 class="c-font-uppercase c-title">Complete Workflows</h3>
+                    </a>
+                    <p>Explore Norgen's unique product lines for sample collection and preservation based on your
+                      laboratory workflow and sample type. Learn how each analyte is preserved, and read supporting
+                      resources.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style="background: #004897;color:white;padding: 0% 0;">
+              <div class=" container  ">
+                <div class=" row flex-container-row">
+                  <div class=" col-xs-12 col-sm-12 col-md-3 col-lg-3" style="filter: opacity(0.2);">
+                    <span>
+                      <img style="" src="/sites/default/files/images/resources/Group74.png" alt="" title=""
+                        style="filter: opacity(0.2);">
+                    </span>
+                  </div>
+                  <div class=" col-xs-12 col-sm-12 col-md-5 col-lg-5">
+                    <h2 class="c-left c-font " style="color: white;font-size: 30px;"> Find a Distributor Near you!</h2>
+                    <p style="line-height: 1.15;">Discover Norgen Biotek's cutting-edge products through our trusted
+                      network of
+                      distributors worldwide. Our carefully selected partners ensure that you have easy access to our
+                      innovative
+                      solutions for sample preparation, nucleic acid purification, and advanced molecular diagnostics.
+                    </p>
+                  </div>
+                  <div class=" col-xs-12 col-sm-12 col-md-3 col-lg-3" style="margin-bottom:10px;">
+                    <a class=" btn  btn-default" href="/resources/distributors" role="button">Explore More</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="c-content-box c-size-md">
+          <div class="container c-content-box c-size-md">
+            <div class="bounceInUp c-content-title-1 c-title home-heading-padding wow"
+              style="visibility: visible; animation-name: bounceInUp">
+              <h2 class="c-center c-font">Recent Blogs</h2>
+              <div class="c-line-center c-bg-blue"></div>
+              <p class="c-center c-font-uppercase"></p>
+            </div>
+            <div class="bounceInRight wow" style="visibility: visible; animation-name: bounceInRight">
+              {{ drupal_view('blog', 'block_3')}}
+            </div>
+          </div>
+        </div>

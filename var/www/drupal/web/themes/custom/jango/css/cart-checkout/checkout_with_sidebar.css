@@ -1,0 +1,23 @@
+
+<style>
+
+
+
+/* titles from checkout page  */
+
+.layout-checkout-form {gap:40px !important; }
+.your_cart {
+    text-transform: none !important;
+    font-size:24px !important;
+    font-weight:700 !important;
+}
+.your_cart2 {
+    text-transform: none !important;
+    font-size:24px;
+    font-weight:700 !important;
+    margin-bottom:-20px !important;
+}
+
+.layout-region.billing-information.your_cart2{margin-top: 30px !important;}
+.your_cart2 { margin-top:60px;}
+</style>

@@ -1,0 +1,1092 @@
+{#
+/**
+* @file
+* Default theme implementation to display a node.
+*
+* Available variables:
+* - node: The node entity with limited access to object properties and methods.
+* Only method names starting with "get", "has", or "is" and a few common
+* methods such as "id", "label", and "bundle" are available. For example:
+* - node.getCreatedTime() will return the node creation timestamp.
+* - node.hasField('field_example') returns TRUE if the node bundle includes
+* field_example. (This does not indicate the presence of a value in this
+* field.)
+* - node.isPublished() will return whether the node is published or not.
+* Calling other methods, such as node.delete(), will result in an exception.
+* See \Drupal\node\Entity\Node for a full list of public properties and
+* methods for the node object.
+* - label: (optional) The title of the node.
+* - content: All node items. Use {{ content }} to print them all,
+* or print a subset such as {{ content.field_example }}. Use
+* {{ content|without('field_example') }} to temporarily suppress the printing
+* of a given child element.
+* - author_picture: The node author user entity, rendered using the "compact"
+* view mode.
+* - metadata: Metadata for this node.
+* - date: (optional) Themed creation date field.
+* - author_name: (optional) Themed author name field.
+* - url: Direct URL of the current node.
+* - display_submitted: Whether submission information should be displayed.
+* - attributes: HTML attributes for the containing element.
+* The attributes.class element may contain one or more of the following
+* classes:
+* - node: The current template type (also known as a "theming hook").
+* - node--type-[type]: The current node type. For example, if the node is an
+* "Article" it would result in "node--type-article". Note that the machine
+* name will often be in a short form of the human readable label.
+* - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+* teaser would result in: "node--view-mode-teaser", and
+* full: "node--view-mode-full".
+* The following are controlled through the node publishing options.
+* - node--promoted: Appears on nodes promoted to the front page.
+* - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+* teaser listings.
+* - node--unpublished: Appears on unpublished nodes visible only to site
+* admins.
+* - title_attributes: Same as attributes, except applied to the main title
+* tag that appears in the template.
+* - content_attributes: Same as attributes, except applied to the main
+* content tag that appears in the template.
+* - author_attributes: Same as attributes, except applied to the author of
+* the node tag that appears in the template.
+* - title_prefix: Additional output populated by modules, intended to be
+* displayed in front of the main title tag that appears in the template.
+* - title_suffix: Additional output populated by modules, intended to be
+* displayed after the main title tag that appears in the template.
+* - view_mode: View mode; for example, "teaser" or "full".
+* - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+* - page: Flag for the full page state. Will be true if view_mode is 'full'.
+* - readmore: Flag for more state. Will be true if the teaser content of the
+* node cannot hold the main body content.
+* - logged_in: Flag for authenticated user status. Will be true when the
+* current user is a logged-in member.
+* - is_admin: Flag for admin user status. Will be true when the current user
+* is an administrator.
+*
+* @see template_preprocess_node()
+*
+* @ingroup themeable
+*/
+#}
+
+
+<style>
+  /*@media screen and (min-color-index:0) and(-webkit-min-device-pixel-ratio:0) 
+{ @media {
+    .contact-header-text {
+    display: -webkit-inline-flex;
+display: -ms-inline-flexbox;
+display: inline-flex;
+    width: 62%;
+
+}
+}}*/
+  .contact-header {
+
+    /*uncommenthisbackground-image: url(/sites/default/files/images/contact/contact-banner.jpg);*/
+    min-height: 350px;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  .contact-header-text {
+    background: white;
+    border-top-right-radius: 45px;
+    border-bottom-right-radius: 45px;
+    width: 52%;
+    height: 350px;
+    padding: 8%;
+    display: table-cell;
+    vertical-align: middle;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8%;
+    display: inline-flex;
+    /*uncomment this width: 55%;*/
+    width: 100%;
+    align-items: center;
+
+
+  }
+
+  .contact-header-text h1 {
+    font-size: 75px;
+    font-weight: 700;
+    margin: 0 0 2% 0;
+  }
+
+  .contact-header-text p {
+    font-size: 18px;
+    color: #004897;
+    margin-bottom: 0;
+  }
+
+  .contact-header-heading {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .contact-header-heading>img {
+    width: 100px;
+  }
+
+  .links-div {
+    width: 80%;
+    margin: 5% auto;
+    scroll-margin-top: 150px;
+  }
+
+  .links-div>h1 {
+    text-align: center;
+  }
+
+  .links-div > div {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    gap: 20px;
+    justify-content: center;
+    margin: 20px auto;
+  }
+
+  .links-div ul {
+    list-style: none;
+    padding-left:0px;
+  }
+
+  .links-div ul li:first-child {
+    font-weight: 700;
+  }
+
+  .links-div ul li,
+  .form-links a,
+  .links a {
+    color: #004897;
+    margin-bottom: 3%;
+    font-size: 16px;
+    padding: 4px;
+    text-wrap: nowrap;
+    width: fit-content;
+    white-space:normal;
+  }
+
+  .links-div ul li:not(:first-of-type):hover {
+    cursor: pointer;
+    background: #004897;
+    color: white;
+    padding: 4px;
+  }
+
+  .links-div ul li:hover>a {
+    color: white;
+  }
+
+  .links-div ul li a:hover {
+    color: white;
+  }
+
+  .links-div ul li a {
+    font-weight: 400;
+  }
+
+  .links-div hr {
+    margin-top: 0;
+  }
+  .links-div>h1 {
+    font-weight: 700;
+    color: #004897;
+  }
+
+  .contact-info {
+    padding: 2% 0 3% 0;
+    background: aliceblue;
+  }
+
+  .contact-info>div {
+    width: 60%;
+    margin: auto;
+  }
+
+  .all-three-div {
+    display: grid;
+    grid-template-areas: "firstone secondone"
+      "thirdone thirdone";
+    grid-gap: 10px;
+  }
+
+  #first {
+    grid-area: firstone;
+  }
+
+  #second {
+    grid-area: secondone;
+  }
+
+  #third {
+    grid-area: thirdone;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+
+  .contact-info-div {
+    background: white;
+    border-radius: 4px;
+    padding: 3%;
+  }
+
+  .contact-info h2 {
+    font-size: 35px;
+    font-weight: 400;
+  }
+
+  #first>div,
+  #second>div {
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  #third>div:first-child {
+    text-align: center;
+    width: 50%;
+  }
+
+  #third>div>div {
+    display: flex;
+    gap: 6%;
+    justify-content: center;
+  }
+
+  .map-div {
+    width: 50%;
+    height: 250px;
+  }
+
+  .map-div>iframe {
+    border-radius: 20px;
+  }
+
+  .contact-info-div>i {
+    margin: 4% auto;
+    width: 100%;
+    text-align: center;
+    font-size: 2em;
+    color: #004897;
+  }
+
+  .contact-info-div .glyphicon {
+
+    font-size: 2em;
+    color: #004897;
+  }
+
+  .distributor-text>div {
+    width: 30%;
+    margin: 5% auto;
+    text-align: center;
+  }
+
+  .clicked,
+  .clicked a {
+    background: #004897;
+    color: white !important;
+  }
+
+  /*.glyphicon-map-marker{
+    font-size: 2em;
+}*/
+  /*.form-section{
+    display: none;
+}*/
+  .form-section input[type=text],
+  .form-section input[type=email],
+  .form-section select {
+    width: 100%;
+    border: 1px solid #c6c6c6;
+    padding: 0.5%;
+    background: transparent !important;
+    background: #fff;
+    border-color: #c6c6c6;
+    border-width: 1 px;
+    border-radius: 36px;
+    padding: 8px;
+    color: #c6c6c6;
+  }
+
+  #OrderStatus,
+  #invoice,
+  #returnexchange,
+  #techsupport,
+  #filecomplaint,
+  #productissues,
+  #serviceissues,
+  #websiteproblems,
+  #accountissues,
+  #publicrelations,
+  #conferences,
+  #businessrelatonshipsopportunities,
+  #sponsorship,
+  #HelpOrder {
+    margin: auto;
+  }
+
+  .formall label {
+    margin: 0px 5px;
+    color: #004897;
+    font-size: 14px;
+    font-weight: 600;
+    width: 100%;
+    margin-left: auto;
+    text-align: left;
+  }
+
+  .submit_form {
+    background: #004897;
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    border-radius: 30px;
+    margin: 10% auto;
+    display: block;
+  }
+
+  .Email_submission {
+    display: none;
+    width: 60%;
+    margin: 5% auto;
+    text-align: center;
+    scroll-margin-top: 150px;
+  }
+
+  .formall h1 {
+    text-align: center;
+  }
+
+  .formall>div {
+    text-align: center;
+  }
+
+  @media screen and (max-width:1440px){
+    .links-div > div {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+      justify-content: center;
+    }
+  }
+
+  /*uncomment this@media only screen and (max-width: 1194px){
+  .contact-header-text {
+    width: 55%;  
+  }
+}*/
+  @media only screen and (max-width: 1063px) and (max-height: 720px) {
+    .links-div>div {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+  }
+
+  @media only screen and (max-width: 998px) {
+
+    .all-three-div{
+      grid-template-areas:
+        "firstone firstone"
+        "secondone secondone"
+        "thirdone thirdone";
+    }
+    /*uncomment this.contact-header-text {
+    width: 60%;  
+  }*/
+    .contact-header {
+      background-position: bottom;
+    }
+
+    .links-div {
+      width: 95%;
+    }
+
+    .contact-info>div {
+      width: 90%;
+    }
+
+    .distributor-text>div {
+      width: 50%;
+    }
+
+    #OrderStatus,
+    #invoice,
+    #returnexchange,
+    #techsupport,
+    #filecomplaint,
+    #productissues,
+    #serviceissues,
+    #websiteproblems,
+    #accountissues,
+    #publicrelations,
+    #conferences,
+    #businessrelatonshipsopportunities,
+    #sponsorship {
+      width: 60%;
+    }
+  }
+
+  @media only screen and (max-width: 826px) {
+    .contact-header-text {
+      width: 100%;
+      border-radius: 0;
+      margin: auto;
+      text-align: center;
+    }
+
+    .contact-header {
+      background: none;
+    }
+
+    .contact-header-heading {
+      justify-content: center;
+    }
+
+  }
+
+  @media only screen and (max-width: 775px) {
+    .links-div>div {
+      grid-template-columns: 1fr;
+    }
+
+  }
+
+  @media only screen and (max-width: 481px) {
+    .contact-header-text {
+      width: 100%;
+    }
+
+    .contact-header-heading {
+      flex-direction: column-reverse;
+    }
+
+    .all-three-div {
+      grid-template-areas: "firstone"
+        "secondone"
+        "thirdone";
+    }
+
+    .contact-info {
+      padding: 2% 0 10% 0;
+    }
+
+    .distributor-text>div {
+      width: 90%;
+    }
+
+    #third {
+      flex-direction: column;
+    }
+
+    .map-div {
+      width: 100%;
+    }
+
+    #OrderStatus,
+    #invoice,
+    #returnexchange,
+    #techsupport,
+    #filecomplaint,
+    #productissues,
+    #serviceissues,
+    #websiteproblems,
+    #accountissues,
+    #publicrelations,
+    #conferences,
+    #businessrelatonshipsopportunities,
+    #sponsorship {
+      width: 90%;
+    }
+  }
+
+  @media only screen and (max-width: 375px) {
+    #OrderStatus,
+    #invoice,
+    #returnexchange,
+    #techsupport,
+    #filecomplaint,
+    #productissues,
+    #serviceissues,
+    #websiteproblems,
+    #accountissues,
+    #publicrelations,
+    #conferences,
+    #businessrelatonshipsopportunities,
+    #sponsorship {
+      width: 90%;
+    }
+  }
+
+  /*@media only screen and (max-width: 1608px) and (max-height: 721px){
+    .contact-header-text {
+    width: 60%;
+}
+.contact-header {
+
+    background-position: bottom;
+}
+}*/
+  @media only screen and (max-width: 1155px) and (max-height: 721px) {
+    .contact-header-text {
+      width: 10 0%;
+      border-radius: 0;
+      margin: auto;
+      text-align: center;
+
+    }
+
+    .contact-header {
+      background: none;
+    }
+
+    .contact-header-heading {
+      justify-content: center;
+    }
+  }
+
+  /*@media only screen and (max-width: 950px) and (max-height: 721px){
+    .contact-header-text {
+    padding: 15%; 
+    
+  }
+  
+}*/
+  @media only screen and (max-width: 847px) and (max-height: 721px) {
+    .contact-header-text {
+      width: 100%;
+    }
+
+    .contact-header-heading {
+      flex-direction: column-reverse;
+    }
+  }
+
+  .formall {
+    scroll-margin-top: 150px;
+  }
+  .formall .form-group{
+    margin-bottom:30px;
+  }
+
+  .dropzone:hover {
+    cursor: pointer;
+  }
+
+  .dropzone i {
+    font-size: 2em;
+    color: #004897;
+  }
+
+  .dropzone .upload-btn {
+    color: #004897;
+    font-weight: bold;
+  }
+
+  #popupApplication form.no-drag-drop #resume-dropzone,
+  #popupApplication form.no-drag-drop #resume-dropzone {
+    background-color: #fff;
+    border: none;
+  }
+
+  #popupApplication form.no-drag-drop #resume-dropzone .drag-and-drop-text,
+  #popupApplication form.no-drag-drop #resume-dropzone .drag-and-drop-text {
+    display: none;
+  }
+
+  #resume-dropzone,
+  #cover-letter-dropzone {
+    border: 1px solid #c6c6c6;
+    ;
+    border-radius: 5px;
+    /*background-color: #e6e6e6e6;*/
+    text-align: center;
+    margin-bottom: 1em;
+    padding: calc(0px + 1vh);
+    justify-content: center;
+  }
+
+  #resume-dropzone.dragOver,
+  #cover-letter-dropzone.dragOver,
+  #resume-dropzone:focus-within,
+  #cover-letter-dropzone:focus-within {
+    border: 2px dashed #004897;
+    background-color: #e8f9fc;
+  }
+
+  #resume-dropzone input#resume,
+  #cover-letter-dropzone input#cover-letter {
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    position: absolute;
+    margin: auto;
+  }
+
+  .new_message {
+    color: #004897;
+  }
+
+  .new_message:hover {
+    cursor: pointer;
+    color: black;
+  }
+
+  textarea {
+    border: 1px solid #c6c6c6;
+    width: 100%;
+  }
+
+  input[type="file" i]::-webkit-file-upload-button {
+    border-radius: 50px;
+    padding: 10px 20px;
+    border: 1px solid gray;
+  }
+
+  .order-card {
+    background: #f8f7f7;
+    padding: 10%;
+    text-align: left;
+
+  }
+
+  .order-card-div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5%;
+    margin: 5% 0px;
+  }
+
+  .order-card-heading {
+    display: flex;
+    gap: 2%;
+    align-items: center;
+  }
+
+  .order-card-text {
+    margin: 5% 0;
+  }
+
+  .form-tel {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    box-shadow: none;
+    outline: none;
+    font-weight: 300;
+    background: white;
+    border: 1px solid #d0d7de;
+    height: 46px;
+    padding: 10px 16px;
+    width: 100%;
+  }
+
+  .form-container.formall a.anchorTag {
+    position: relative;
+    top: -100px;
+  }
+
+  /* new styles */
+  .animation {
+    text-align: center;
+  }
+</style>
+
+<section class="contact-header">
+  <div class="contact-header-text">
+    <hr style="width: 70%;margin: 2% auto;">
+    <div class="contact-header-heading">
+      <h1><span style="color:#004897;">Contact</span><span style="color: #0f6b7a;"> Norgen</span></h1>
+      <img src="/sites/default/files/images/contact/contact-icon.png">
+    </div>
+    <p><strong>Thank you for choosing Norgen Biotek.</strong></p>
+    <hr style="width: 70%;margin: 2% auto;">
+    <!-- <p>Whether you're at home or at the lab we are here for you.</p> -->
+  </div>
+</section>
+{# Render forms within hidden containers #}
+
+
+<section class="links-div">
+  <h1>How can we help?</h1>
+  <div>
+    <ul>
+      <li>Orders</li>
+      <hr>
+    <li class="form-links" data-target-form="help-with-orders"><a href="#help-with-orders" 
+        class="help-with-orders">Help With Orders</a></li>
+      <li class="links"><a href="/cart" target="_blank">Request a Quote <i class="fas fa-external-link-alt"></i></a>
+      </li>
+      <!--<li class="links"><a href="/request-sample" target="_blank">Request a Free Sample <i
+            class="fas fa-external-link-alt"></i></a></li>-->
+      <li class="form-links" data-target-form="order-status"><a href="#order-status"
+          class="order-status">
+          Order Status
+        </a></li>
+      <li class="form-links" data-target-form="web-invoice"><a href="#web-invoice"
+          class="web-invoice">
+          Invoice
+        </a></li>
+      <li class="form-links" data-target-form="web-return"><a href="#web-return"
+          class="web-return">
+          Returns
+        </a></li>
+    </ul>
+    <ul>
+      <li>Products</li>
+      <hr>
+      <li class="form-links" data-target-form="technical-support"><a href="#technical-support"
+          class="technical-support">
+          Technical Support
+        </a></li>
+      <li class="form-links" data-target-form="product-issues"><a href="#product-issues"
+          class="product-issues">
+          Product Issues
+        </a></li>
+      <li class="form-links" data-target-form="file-complaint"><a href="#file-complaint"
+          class="file-complaint">
+          File a Complaint
+        </a></li>
+    </ul>
+    <ul>
+      <li>Services</li>
+      <hr>
+      <li class="links"><a href="/content/service-consultation-request" target="_blank">Services Consultation <i
+            class="fas fa-external-link-alt"></i></a>
+      </li>
+      <li class="form-links" data-target-form="service-issues"><a href="#service-issues"
+          class="service-issues">
+          Services Issues
+        </a></li>
+    </ul>
+    <ul>
+      <li>Business Operations</li>
+      <hr>
+      <li class="form-links" data-target-form="public-relations"><a href="#public-relations"
+          class="public-relations">
+          Public Relations
+        </a></li>
+      <li class="form-links" data-target-form="conference-inquiries"><a
+          href="#conference-inquiries" class="conference-inquiries">
+          Conference Inquiries
+        </a></li>
+      <li class="form-links" data-target-form="business-opportunities"><a
+          href="#business-opportunities" class="business-opportunities">
+          Business Opportunities
+        </a>
+      </li>
+      <li class="form-links" data-target-form="become-distributor"><a href="#become-distributor"
+          class="become-distributor">
+          Become a Distributor
+        </a>
+      </li>
+      <li class="form-links" data-target-form="sponsorship-inquiries"><a
+          href="#sponsorship-inquiries" class="sponsorship-inquiries">
+          Sponsorships
+        </a></li>
+      <li class="links"><a href="/careers" target="_blank">Careers <i class="fas fa-external-link-alt"></i></a></li>
+    </ul>
+    <ul>
+      <li>Account & Website</li>
+      <hr>
+      <li class="links"><a href="/user/password" target="_blank">Password Reset <i
+            class="fas fa-external-link-alt"></i></a></li>
+      <li class="form-links" data-target-form="website-issues"><a href="#website-issues"
+          class="website-issues">
+          Website Issues
+        </a></li>
+      <li class="form-links" data-target-form="account-issues"><a href="#account-issues"
+          class="account-issues">
+          Account Issues
+        </a></li>
+    </ul>
+  </div>  </div>
+
+</section>
+<div id="form-display-area" class="container"> {# Render forms within hidden containers #}
+  <div class="form-container hidden formall" id="account-issues-container">
+    <a name="account-issues" class="anchorTag"></a>
+    {{ account_issues }}
+  </div>
+
+  <div class="form-container hidden formall" id="business-opportunities-container">
+    <a name="business-opportunities" class="anchorTag"></a>
+    {{ business_opportunities }}
+  </div>
+
+  <div class="form-container hidden formall" id="become-distributor-container">
+    <a name="become-distributor" class="anchorTag"></a>
+    {{ contact_distributor }}
+  </div>
+
+  <div class="form-container hidden formall" id="conference-inquiries-container">
+    <a name="conference-inquiries" class="anchorTag"></a>
+    {{ conference_inquiries }}
+  </div>
+
+  <div class="form-container hidden formall" id="file-complaint-container">
+    <a name="file-complaint" class="anchorTag"></a>
+    {{ file_complaint }}
+  </div>
+
+  <div class="form-container hidden formall" id="web-invoice-container">
+    <a name="web-invoice" class="anchorTag"></a>
+    {{ web_invoice }}
+  </div>
+
+  <div class="form-container hidden formall" id="job-application-container">
+    {{ job_application }}
+  </div>
+
+  <div class="form-container hidden formall" id="newsletter-container">
+    {{ newsletter_subscription }}
+  </div>
+
+  <div class="form-container hidden formall" id="order-status-container">
+    <a name="order-status" class="anchorTag"></a>
+    {{ order_status }}
+  </div>
+
+  <div class="form-container hidden formall" id="product-issues-container">
+    <a name="product-issues" class="anchorTag"></a>
+    {{ product_issues }}
+  </div>
+
+  <div class="form-container hidden formall" id="public-relations-container">
+    <a name="public-relations" class="anchorTag"></a>
+    {{ public_relations }}
+  </div>
+
+  <div class="form-container hidden formall" id="web-return-container">
+    <a name="web-return" class="anchorTag"></a>
+    {{ web_return }}
+  </div>
+
+  <div class="form-container hidden formall" id="service-consultation-container">
+    {{ service_consultation }}
+  </div>
+
+  <div class="form-container hidden formall" id="service-issues-container">
+    <a name="service-issues" class="anchorTag"></a>
+    {{ service_issues }}
+  </div>
+
+  <div class="form-container hidden formall" id="sponsorship-inquiries-container">
+    <a name="sponsorship-inquiries" class="anchorTag"></a>
+    {{ sponsorship_inquiries }}
+  </div>
+
+  <div class="form-container hidden formall" id="technical-support-container">
+    <a name="technical-support" class="anchorTag"></a>
+    {{ technical_support }}
+  </div>
+
+  <div class="form-container hidden formall" id="website-issues-container">
+    <a name="website-issues" class="anchorTag"></a>
+    {{ website_issues }}
+  </div>
+
+  <div id="HelpOrder" class="form-container hidden formall">
+    <a name="help-with-orders" class="anchorTag"></a>
+    <h1>Help With Your Order</h1>
+    <hr style="margin: 5% 0;">
+    <div class="order-card-div">
+      <div class="order-card">
+        <div class="order-card-heading">
+          <img src="/sites/default/files/images/contact/support.png">
+          <h4>Customer Service Team</h4>
+        </div>
+        <div class="order-card-text">
+          <p>To check on an existing order or submit an order</p>
+          <p><strong>Tel:</strong> 1-866-NORGENB</p>
+          <p><strong>Fax:</strong> +1 905 227 1061</p>
+          <p>Office hours — weekdays 9 a.m. - 5:30 p.m. (EST)</p>
+          <!-- <p>Outside of our working hours, you can leave recorded messages for our immediate attention the following work day</p> -->
+          <p><strong>How to order:</strong> orders@norgenbiotek.com</p>
+          <!-- <p><strong>Customer Care:</strong></p> -->
+          <p><strong>Online:</strong><br><a href="/products">https://norgenbiotek.com/products</a><br><a
+              href="/services">https://norgenbiotek.com/services</a></p>
+          <p>We will get back to you as soon as possible. </p>
+        </div>
+      </div>
+
+      <div class="order-card">
+        <div class="order-card-heading">
+          <img src="/sites/default/files/images/contact/customer-support.png">
+          <h4>Technical Service Team</h4>
+        </div>
+        <div class="order-card-text">
+          <p>For technical questions about any of our products</p>
+          <p><strong>Main number:</strong> +1 905 227 8848</p>
+          <p><strong>Email:</strong> support@norgenbiotek.com</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="contact-info">
+  <div>
+    <h2 style="text-align: center;">Contact Us</h2>
+    <div class="all-three-div">
+      <div class="contact-info-div" id="first">
+        <i class="fa fa-phone fa-4x"></i>
+        <div>
+
+          <div>
+            <p>Phone:</p>
+            <p>Toll-Free North America:</p>
+          </div>
+          <div>
+            <p>(905) 227-8848</p>
+            <p>1-866-667-4362</p>
+          </div>
+        </div>
+      </div>
+      <div class="contact-info-div" id="second">
+        <i class="fas fa-envelope fa-4x"></i>
+        <div>
+
+          <div>
+            <p>Inquiries:</p>
+            <p>Ordering:</p>
+          </div>
+          <div>
+            <p><a href="mailto:someone@example.com">info@norgenbiotek.com</a></p>
+            <p><a href="mailto:someone@example.com">orders@norgenbiotek.com</a></p>
+          </div>
+        </div>
+      </div>
+      <div class="contact-info-div" id="third">
+        <div>
+          <span class="glyphicon glyphicon-map-marker"></span>
+          <p>Norgen Biotek Corp</p>
+          <p>3430 Schmon Parkway</p>
+          <p>Thorold, Ontario</p>
+          <p>L2V4Y6, Canada</p>
+          <div>
+            <p>Monday - Friday</p>
+            <p>08:30 - 17:00 EST</p>
+          </div>
+        </div>
+        <div class="map-div">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2912.576310060432!2d-79.24016918451967!3d43.113418179143395!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89d34fc9683a5fe7%3A0x5c5ef00f443220e7!2sNorgen%20Biotek%20Corp.!5e0!3m2!1sen!2sca!4v1576515231839!5m2!1sen!2sca"
+            width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<section class="distributor-text">
+  <div>
+    <p style="margin-bottom: 7%;">For a list of our distributors, <a href="/resources/distributors"
+        target="_blank">please click here</a>. Contact us
+      if you require information regarding our accessible customer service plan.</p>
+
+    <p style="text-align: center;">CONNECT WITH US:</p>
+    <div style="text-align: center;">
+      <a href="http://facebook.com/norgenbiotek" target="_blank"><img
+          src="/sites/default/files/images/contact/facebook.png"></a>
+      <a href="http://twitter.com/norgenbiotek" target="_blank"><img
+          src="/sites/default/files/images/contact/twitter.png"></a>
+      <a href="http://instagram.com/norgen.biotek/" target="_blank"><img
+          src="/sites/default/files/images/contact/instagram.png"></a>
+      <a href="https://www.youtube.com/user/norgenbiotek" target="_blank"><img
+          src="/sites/default/files/images/contact/youtube.png"></a>
+      <a href="https://www.linkedin.com/company/norgenbiotek/" target="_blank"><img
+          src="/sites/default/files/images/contact/linkedin.png"></a>
+    </div>
+  </div>
+</section>
+{# <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+  // Handle traditional click file upload
+  var inputs = document.querySelectorAll('.dropzone input[type="file"]');
+  Array.prototype.forEach.call(inputs, function (input) {
+    var dropzone = input.parentElement;
+    var label = dropzone.querySelector('.upload-p'),
+      labelVal = label.innerHTML;
+
+    input.addEventListener('change', function (e) {
+      if (e.target.value.length == 0) {
+        return; // if file upload was cancelled then don't continue 
+      }
+      var fileName = '';
+      fileName = e.target.value.split("\\").pop();
+
+      if (fileName) {
+        label.innerHTML = fileName + " (" + Math.round(input.files[0].size / 1024) + " KB)";
+      }
+      else {
+        label.innerHTML = labelVal;
+      }
+      if (input.files[0]) {
+        var size = input.files[0].size;
+        var validated = true;
+        // Validate file size
+        if (size / 1024 > 1000) {
+          document.querySelector('button#submit').disabled = true;
+          document.querySelector('button#submit').classList.add("disabled");
+          label.innerHTML += "<span class='required'> File too large!</span>";
+          validated = false;
+        }
+
+        var fileExt = input.files[0].name.slice((input.files[0].name.lastIndexOf(".") - 1 >>> 0) + 2);
+        if (fileExt != "pdf" && fileExt != "png" && fileExt != "jpeg") {
+          document.querySelector('button#submit').disabled = true;
+          document.querySelector('button#submit').classList.add("disabled");
+          label.innerHTML += "<span class='required'> File must be .pdf, .doc or .docx file type!</span>";
+          validated = false;
+        }
+
+      }
+    });
+  });
+
+  function new_message() {
+    var links = document.getElementsByClassName("links");
+    for (var j = 0; j < links.length; j++) {
+      if (links[j].classList.contains("clicked")) {
+        links[j].classList.remove("clicked");
+      }
+    }
+
+    /* document.getElementsByClassName("Email_submission")[0].style.display = "none"; */
+    var linksdiv = document.getElementsByClassName("links-div");
+    linksdiv[0].scrollIntoView({ block: 'start', behavior: 'smooth' });
+
+  }
+  
+
+  function open_form_tab(elem, elem1) {
+    // hide all visible forms
+    //let all_forms = document.querySelectorAll('.form-container.formall:not(.hidden)');
+    //for (let i = 0; i < all_forms.length; i++) {
+      //all_forms[i].classList.add('hidden');
+    //}
+    //let clicked_link = document.querySelector('.links-div ul li.clicked');
+    //if (clicked_link) clicked_link.classList.remove('clicked');
+    // show selected form
+    //elem1.classList.add('clicked');
+    //element = document.getElementById(elem);
+    //if (element.classList.contains('hidden')) {
+      //element.classList.remove('hidden');
+    //}
+  }
+</script>
+<script>
+  function openFormByAnchor() {
+    const url = new URL(window.location.href);
+
+    const anchor = url.hash.slice(1);
+    const formName = anchor.replace(/-container$/, "");
+
+    const formId = `${formName}-container`;
+
+    open_form_tab(formId, this);
+  }
+
+  openFormByAnchor(); // call on page load/reload
+</script> #}

@@ -1,0 +1,1190 @@
+{#
+/**
+* @file
+* Default theme implementation to display a node.
+*
+* Available variables:
+* - node: The node entity with limited access to object properties and methods.
+* Only method names starting with "get", "has", or "is" and a few common
+* methods such as "id", "label", and "bundle" are available. For example:
+* - node.getCreatedTime() will return the node creation timestamp.
+* - node.hasField('field_example') returns TRUE if the node bundle includes
+* field_example. (This does not indicate the presence of a value in this
+* field.)
+* - node.isPublished() will return whether the node is published or not.
+* Calling other methods, such as node.delete(), will result in an exception.
+* See \Drupal\node\Entity\Node for a full list of public properties and
+* methods for the node object.
+* - label: (optional) The title of the node.
+* - content: All node items. Use {{ content }} to print them all,
+* or print a subset such as {{ content.field_example }}. Use
+* {{ content|without('field_example') }} to temporarily suppress the printing
+* of a given child element.
+* - author_picture: The node author user entity, rendered using the "compact"
+* view mode.
+* - metadata: Metadata for this node.
+* - date: (optional) Themed creation date field.
+* - author_name: (optional) Themed author name field.
+* - url: Direct URL of the current node.
+* - display_submitted: Whether submission information should be displayed.
+* - attributes: HTML attributes for the containing element.
+* The attributes.class element may contain one or more of the following
+* classes:
+* - node: The current template type (also known as a "theming hook").
+* - node--type-[type]: The current node type. For example, if the node is an
+* "Article" it would result in "node--type-article". Note that the machine
+* name will often be in a short form of the human readable label.
+* - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+* teaser would result in: "node--view-mode-teaser", and
+* full: "node--view-mode-full".
+* The following are controlled through the node publishing options.
+* - node--promoted: Appears on nodes promoted to the front page.
+* - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+* teaser listings.
+* - node--unpublished: Appears on unpublished nodes visible only to site
+* admins.
+* - title_attributes: Same as attributes, except applied to the main title
+* tag that appears in the template.
+* - content_attributes: Same as attributes, except applied to the main
+* content tag that appears in the template.
+* - author_attributes: Same as attributes, except applied to the author of
+* the node tag that appears in the template.
+* - title_prefix: Additional output populated by modules, intended to be
+* displayed in front of the main title tag that appears in the template.
+* - title_suffix: Additional output populated by modules, intended to be
+* displayed after the main title tag that appears in the template.
+* - view_mode: View mode; for example, "teaser" or "full".
+* - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+* - page: Flag for the full page state. Will be true if view_mode is 'full'.
+* - readmore: Flag for more state. Will be true if the teaser content of the
+* node cannot hold the main body content.
+* - logged_in: Flag for authenticated user status. Will be true when the
+* current user is a logged-in member.
+* - is_admin: Flag for admin user status. Will be true when the current user
+* is an administrator.
+*
+* @see template_preprocess_node()
+*
+* @ingroup themeable
+*/
+#}
+
+
+
+      <style>
+        #section-main-content .container {
+          width: 100% !important;
+        }
+
+        /* Page Specific For Category Pages */
+        .region-pagetitle,
+        .region-breadcrumb {
+          display: none;
+        }
+
+        .img-header {
+          margin: 0 -15px;
+          width: calc(100% + 30px);
+        }
+
+        .img-header {
+          background-image: url('/sites/default/files/Promotions_Page/test1.jpg');
+          overflow: hidden;
+          position: relative;
+        }
+        .prod-cat {
+          display: -ms-grid;
+          -ms-grid-rows: 200px max-content max-content max-content;
+          display: grid;
+          grid-template-rows: 200px max-content max-content max-content;
+          /* box-shadow: 0 4px 40px 0 rgba(0, 0, 0, 0.09), 0 6px 20px 0 rgba(0, 0, 0, 0.17); */
+          border: 1px solid #d0d7de;
+          border-radius: 12px;
+          overflow: hidden;
+          transition: 0.5s;
+        }
+
+        .prod-cat:nth-child(1),
+        .prod-cat:nth-child(2),
+        .prod-cat:nth-child(3),
+        .prod-cat:nth-child(4) {
+          -ms-grid-row: 1;
+        }
+
+        .prod-cat:nth-child(5),
+        .prod-cat:nth-child(6),
+        .prod-cat:nth-child(7),
+        .prod-cat:nth-child(8) {
+          -ms-grid-row: 3;
+        }
+
+        .prod-cat:nth-child(9),
+        .prod-cat:nth-child(10),
+        .prod-cat:nth-child(11),
+        .prod-cat:nth-child(12) {
+          -ms-grid-row: 5;
+        }
+
+        .prod-cat:nth-child(13) {
+          -ms-grid-row: 7;
+        }
+
+        .prod-cat:nth-child(1),
+        .prod-cat:nth-child(5),
+        .prod-cat:nth-child(9),
+        .prod-cat:nth-child(13) {
+          -ms-grid-column: 1;
+        }
+
+        .prod-cat:nth-child(2),
+        .prod-cat:nth-child(6),
+        .prod-cat:nth-child(10) {
+          -ms-grid-column: 3;
+        }
+
+        .prod-cat:nth-child(3),
+        .prod-cat:nth-child(7),
+        .prod-cat:nth-child(11) {
+          -ms-grid-column: 5;
+        }
+
+        .prod-cat:nth-child(4),
+        .prod-cat:nth-child(8),
+        .prod-cat:nth-child(12) {
+          -ms-grid-column: 7;
+        }
+
+        .prod-cat:hover {
+          transform: scale(1.04);
+        }
+
+        .prod-cat>a {
+          width: 100%;
+          display: block;
+          font-weight: bold;
+        }
+
+        .prod-cat>a:first-child {
+          height: 200px;
+          -ms-grid-row: 1;
+        }
+
+        .prod-cat>a:first-child img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        .prod-cat>a :first-child{
+          height: 100%;
+          overflow: hidden;
+        }
+
+        .prod-cat>a:nth-child(2) {
+          padding: 15px;
+          -ms-grid-row: 2;
+          font-size: 18px;
+        }
+
+        .prod-cat-desc {
+          margin: 0 15px 20px;
+          -ms-grid-row: 3;
+          font-size: 16px;
+        }
+
+        .prod-cat>a:last-child {
+          max-width: calc(100% - 30px);
+          max-width: max-content;
+          margin: 0 15px 15px;
+          -ms-grid-row: 4;
+        }
+
+        @media only screen and (max-width: 1200px) {
+
+          /* .prod-cat-list {
+		-ms-grid-columns: 1fr (24px 1fr)[2];
+		-ms-grid-rows: 1fr (24px 1fr)[4];
+	    grid-template-columns: repeat(3, 1fr);
+	} */
+          .prod-cat:nth-child(1),
+          .prod-cat:nth-child(2),
+          .prod-cat:nth-child(3) {
+            -ms-grid-row: 1;
+          }
+
+          .prod-cat:nth-child(4),
+          .prod-cat:nth-child(5),
+          .prod-cat:nth-child(6) {
+            -ms-grid-row: 3;
+          }
+
+          .prod-cat:nth-child(7),
+          .prod-cat:nth-child(8),
+          .prod-cat:nth-child(9) {
+            -ms-grid-row: 5;
+          }
+
+          .prod-cat:nth-child(10),
+          .prod-cat:nth-child(11),
+          .prod-cat:nth-child(12) {
+            -ms-grid-row: 7;
+          }
+
+          .prod-cat:nth-child(13) {
+            -ms-grid-row: 9;
+          }
+
+          .prod-cat:nth-child(1),
+          .prod-cat:nth-child(4),
+          .prod-cat:nth-child(7),
+          .prod-cat:nth-child(10),
+          .prod-cat:nth-child(13) {
+            -ms-grid-column: 1;
+          }
+
+          .prod-cat:nth-child(2),
+          .prod-cat:nth-child(5),
+          .prod-cat:nth-child(8),
+          .prod-cat:nth-child(11) {
+            -ms-grid-column: 3;
+          }
+
+          .prod-cat:nth-child(3),
+          .prod-cat:nth-child(6),
+          .prod-cat:nth-child(9),
+          .prod-cat:nth-child(12) {
+            -ms-grid-column: 5;
+          }
+        }
+
+        @media only screen and (max-width: 850px) {
+
+          /* .prod-cat-list {
+		-ms-grid-columns: 1fr 24px 1fr;
+		-ms-grid-rows: 1fr (24px 1fr)[6];
+	    grid-template-columns: repeat(2, 1fr);
+	} */
+          .prod-cat:nth-child(1),
+          .prod-cat:nth-child(2) {
+            -ms-grid-row: 1;
+          }
+
+          /* .prod-cat:nth-child(3),
+	.prod-cat:nth-child(4), {
+	     -ms-grid-row: 3;
+	} */
+          .prod-cat:nth-child(5),
+          .prod-cat:nth-child(6) {
+            -ms-grid-row: 5;
+          }
+
+          .prod-cat:nth-child(7),
+          .prod-cat:nth-child(8) {
+            -ms-grid-row: 7;
+          }
+
+          .prod-cat:nth-child(9),
+          .prod-cat:nth-child(10) {
+            -ms-grid-row: 9;
+          }
+
+          .prod-cat:nth-child(11),
+          .prod-cat:nth-child(12) {
+            -ms-grid-row: 11;
+          }
+
+          .prod-cat:nth-child(13) {
+            -ms-grid-row: 13;
+          }
+
+          .prod-cat:nth-child(1),
+          .prod-cat:nth-child(3),
+          .prod-cat:nth-child(5),
+          .prod-cat:nth-child(7),
+          .prod-cat:nth-child(9),
+          .prod-cat:nth-child(11),
+          .prod-cat:nth-child(13) {
+            -ms-grid-column: 1;
+          }
+
+          .prod-cat:nth-child(2),
+          .prod-cat:nth-child(4),
+          .prod-cat:nth-child(6),
+          .prod-cat:nth-child(8),
+          .prod-cat:nth-child(10),
+          .prod-cat:nth-child(12) {
+            -ms-grid-column: 3;
+          }
+        }
+
+        @media only screen and (max-width:720px) {
+          .person {
+            display: none;
+          }
+        }
+
+        @media only screen and (max-width: 500px) {
+          .prod-cat-list {
+            display: block
+          }
+
+          .prod-cat:not(:last-child) {
+            margin-bottom: 24px;
+          }
+        }
+
+        .subhead {
+          padding: 0px 70px;
+          text-align: center;
+        }
+
+        /* nav menu */
+        .cfcamp-submenu {
+          z-index: 2;
+          padding: 0 0.5em 1em;
+          box-sizing: border-box;
+          background: #004897;
+          margin-top: -1px;
+          font-weight: 700;
+          letter-spacing: 0.5px;
+          display: flex;
+          justify-content: space-around;
+          flex-wrap: wrap;
+          grid-column-gap: 10px;
+          transition-duration: 0.5s;
+          text-align: center;
+        }
+
+        .cfcamp-subitem a {
+          display: block;
+          width: 100%;
+          font-size: 18px;
+          color: #fff;
+          margin-top: 20px;
+        }
+
+        .cfcamp-subitem a:not(:last-child) {
+          margin-bottom: 10px;
+        }
+
+        .cfcamp-submenu a:hover {
+          opacity: 1;
+          color: #fff;
+        }
+
+        .cfcamp-submenu.isSticky {
+          grid-row-gap: 0;
+          grid-template: max-content / repeat(4, 1fr);
+          align-items: center;
+        }
+
+        .cfcamp-submenu.isSticky h2.pro-title {
+          font-size: 16px;
+          margin: 10px 0;
+          width: auto;
+        }
+
+        .isSticky {
+          position: sticky;
+          top: 75px;
+        }
+
+        .isSticky .cfcamp-subitem h3 {
+          display: inline-block;
+          font-size: 16px;
+          padding-right: 15px;
+        }
+
+        .isSticky .cfcamp-submenuitem a {
+          border-radius: 0 20px 20px 0;
+          display: inline-block;
+          font-size: 0;
+          margin: 0;
+          padding: 8px 20px;
+          width: auto;
+        }
+
+        a.anchor-tag {
+          position: relative;
+          display: inline-block;
+          top: -225px;
+        }
+
+        #section-main-content>.container {
+          padding: 0;
+          width: auto;
+        }
+
+
+        .person {
+          position: absolute;
+          margin: auto;
+          height: 105%;
+          max-height: 600px;
+        }
+
+        .nikola {
+          left: 1em;
+          bottom: 0%;
+          transform: rotate(0deg);
+          transition: all 1s ease-in-out;
+        }
+
+        .nikola.fly-in {
+          bottom: -100%;
+          left: -10em;
+          transform: rotate(-25deg);
+          transition: all 1s ease-in-out;
+        }
+
+        .aleja-pedro {
+          right: 1em;
+          bottom: 0%;
+          transform: rotate(0deg);
+          transition: all 1s ease-in-out;
+        }
+
+        .aleja-pedro.fly-in {
+          bottom: -100%;
+          right: -10em;
+          transform: rotate(25deg);
+          transition: all 1s ease-in-out;
+        }
+
+        .copytip {
+          position: relative;
+        }
+
+        .copytip .copytiptext {
+          visibility: hidden;
+          background-color: #555;
+          color: #fff;
+          text-align: center;
+          border-radius: 6px;
+          padding: 10px;
+          position: absolute;
+          z-index: 1;
+          bottom: 110%;
+          left: 75px;
+          margin-left: -75px;
+          opacity: 0;
+          transition: all 0.3s;
+        }
+
+        .copytip .copytiptext::after {
+          content: "";
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          margin-left: -5px;
+          border-width: 5px;
+          border-style: solid;
+          border-color: #555 transparent transparent transparent;
+        }
+
+        .copytip:hover .copytiptext {
+          visibility: visible;
+          opacity: 1;
+          transition: all 0.3s;
+        }
+
+        .data-container {
+          position: relative;
+          width: calc(100% - 2rem);
+          bottom: -17rem;
+          background-color: rgba(0, 0, 0, .75);
+          /*max-width: 1280px;*/
+          max-width: 700px;
+          margin: auto;
+          padding: 1em;
+          text-align: left;
+          box-shadow: 0 0 5px 0;
+          opacity: 0.8;
+        }
+
+        .inner_content_content_type {
+          color: white;
+          font-weight: 600 !important;
+          font-size: 18px !important;
+          padding-bottom: 0.2% !important;
+        }
+
+        .inner_content_release_date_and_last_updated_date {
+          color: white;
+        }
+
+        .inner_content_title {
+          color: white;
+          font-size: max(1vw, 30px) !important;
+          font-weight: 600 !important;
+        }
+
+        .data-container .btn-exo {
+          color: #fff !important;
+          border-radius: 20px;
+          font-size: 18px !important;
+          transform: scale(1);
+          padding: 10px 20px;
+          height: max-content;
+          margin: 15px 10px 10px 0;
+          float: left;
+        }
+
+        .fa-download {
+          padding-right: 10px;
+        }
+
+        @media only screen and (max-width: 600px) {
+
+          .data-container {
+            bottom: -2rem;
+          }
+        }
+
+        @media only screen and (max-width: 392px) {
+
+          .data-container {
+            bottom: -2rem;
+          }
+
+          .inner_content_title {
+            font-size: 22px !important;
+          }
+
+          .inner_content_content_type {
+            font-size: 15px;
+          }
+
+          .data-container .btn-exo {
+            font-size: 10px !important;
+          }
+        }
+
+        @media only screen and (max-width: 302px) {
+
+          .data-container {
+            bottom: -2rem;
+          }
+
+          .inner_content_title {
+            font-size: 18px !important;
+          }
+
+          .inner_content_content_type {
+            font-size: 12px;
+          }
+
+          .data-container .btn-exo {
+            font-size: 7px !important;
+          }
+        }
+
+        @media only screen and (max-width: 279px) {
+
+          .data-container {
+            bottom: -2rem;
+          }
+
+          .inner_content_title {
+            font-size: 15px !important;
+          }
+
+          .inner_content_content_type {
+            font-size: 10px;
+          }
+
+          .data-container .btn-exo {
+            font-size: 5px !important;
+          }
+        }
+
+        @media only screen and (min-width: 5000px) {
+          .inner_content_title {
+            font-size: max(0vw, 30px) !important;
+          }
+        }
+
+        .img-header.darken::before {
+          backdrop-filter: blur(3px);
+        }
+
+        .form_section {
+          width: 40%;
+          margin: auto;
+          position: absolute;
+          left: 30%;
+          display: none;
+          bottom: -30%;
+        }
+
+        .black_f_form input {
+          padding: 8px;
+          border: 1px solid #c6c6c6;
+          border-radius: 20px;
+          width: -webkit-fill-available;
+        }
+
+        .black_f_form select {
+          border: 1px solid #c6c6c6;
+          padding: 8px;
+          /*border-radius: 20px;*/
+          width: -webkit-fill-available;
+        }
+
+        .black_f_form label {
+          padding-top: 8px;
+        }
+
+        .form-grid {
+          /*display: grid;
+  grid-template-columns: 1fr 1fr;*/
+          /*filter: drop-shadow(-13px 13px 0px #004897);*/
+          box-shadow: 0 0px 20px 0 rgb(155 150 150), 0 13px 11px 0 rgb(42 42 42 / 17%);
+        }
+
+        button#submit,
+        button#download {
+          color: #fff;
+          background: #004897;
+          padding: 10px 20px;
+          border: none;
+          transition: all 0.5s;
+        }
+
+        .center-div {
+          margin: auto;
+          width: fit-content;
+        }
+
+        .form-pic {
+          background-image: url(/sites/default/files/black-friday-sale-2022/fomr_pic.jpg);
+          background-size: cover;
+        }
+
+        /*svg {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    }*/
+
+        .thankyou-screen {
+          background-color: white;
+          display: none;
+          WIDTH: 40%;
+          MARGIN: AUTO;
+
+          box-shadow: 0 0px 9px 0 black, 0 0px 0px 0 rgb(0 0 0 / 17%);
+          PADDING: 2%;
+          /*display:block;*/
+          /*border: solid 1px gray;*/
+          position: absolute;
+          left: 30%;
+        }
+
+        /*  .form_section{
+
+  display:none;
+
+}*/
+        .animation-ctn {
+          text-align: center;
+          margin-top: 5em;
+        }
+
+        @-webkit-keyframes checkmark {
+          0% {
+            stroke-dashoffset: 100px
+          }
+
+          100% {
+            stroke-dashoffset: 200px
+          }
+        }
+
+        @-ms-keyframes checkmark {
+          0% {
+            stroke-dashoffset: 100px
+          }
+
+          100% {
+            stroke-dashoffset: 200px
+          }
+        }
+
+        @keyframes checkmark {
+          0% {
+            stroke-dashoffset: 100px
+          }
+
+          100% {
+            stroke-dashoffset: 0px
+          }
+        }
+
+        @-webkit-keyframes checkmark-circle {
+          0% {
+            stroke-dashoffset: 480px
+          }
+
+          100% {
+            stroke-dashoffset: 960px;
+
+          }
+        }
+
+        @-ms-keyframes checkmark-circle {
+          0% {
+            stroke-dashoffset: 240px
+          }
+
+          100% {
+            stroke-dashoffset: 480px
+          }
+        }
+
+        @keyframes checkmark-circle {
+          0% {
+            stroke-dashoffset: 480px
+          }
+
+          100% {
+            stroke-dashoffset: 960px
+          }
+        }
+
+        @keyframes colored-circle {
+          0% {
+            opacity: 0
+          }
+
+          100% {
+            opacity: 100
+          }
+        }
+
+        /* other styles */
+        /* .svg svg {
+    display: none
+}
+ */
+        .inlinesvg .svg svg {
+          display: inline
+        }
+
+        /* .svg img {
+    display: none
+} */
+
+        .icon--order-success svg polyline {
+          -webkit-animation: checkmark 0.25s ease-in-out 0.7s backwards;
+          animation: checkmark 0.25s ease-in-out 0.7s backwards
+        }
+
+        .icon--order-success svg circle {
+          -webkit-animation: checkmark-circle 0.6s ease-in-out backwards;
+          animation: checkmark-circle 0.6s ease-in-out backwards;
+        }
+
+        .icon--order-success svg circle#colored {
+          -webkit-animation: colored-circle 0.6s ease-in-out 0.7s backwards;
+          animation: colored-circle 0.6s ease-in-out 0.7s backwards;
+        }
+
+        .form-close {
+          position: absolute;
+          right: 14px;
+          top: 10px;
+          font-size: 40px;
+        }
+
+        /* new styles */
+
+        .img-header h1 {
+          font-size: 90px;
+        }
+
+        .btn-primary:hover {
+          background-color: #3276b1;
+          border-color: #285e8e;
+        }
+
+        .btn-primary {
+          background-color: #004897;
+          border-color: #004897;
+          padding: 14px
+        }
+
+        .prod-cat-list {
+          display: -ms-grid;
+          -ms-grid-columns: 1fr (24px 1fr)[2];
+          -ms-grid-rows: 1fr (24px 1fr)[4];
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          grid-gap: 24px;
+          grid-template-rows: auto;
+        }
+        .prod-cat-list.container:before, .prod-cat-list.container:after {
+          content: " ";
+          display: none;
+        }
+
+        .subhead {
+          padding: 0px 70px;
+          text-align: center;
+          margin-top: 60px;
+          font-size: 36px;
+        }
+
+        .home-page-banner {
+          background-image: url('/sites/default/files/images/campaigns/smart-save-2024/smart-save.jpg');
+          background-repeat: no-repeat;
+          width: 100%;
+          background-position: right;
+          background-size: cover;
+          background-color: #ffffff;
+          border-bottom: 3px solid #004897;
+        }
+
+        @media only screen and (max-width:1800px) {
+          .home-page-banner {
+            background-image: url('/sites/default/files/images/campaigns/smart-save-2024/smart-save.jpg');
+          }
+        }
+
+        @media only screen and (max-width: 1200px) {
+          .prod-cat-list {
+            -ms-grid-columns: 1fr (24px 1fr)[2];
+            -ms-grid-rows: 1fr (24px 1fr)[4];
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+
+        @media only screen and (max-width:991px) {
+          .home-page-banner {
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('/sites/default/files/images/campaigns/smart-save-2024/smart-save.jpg');
+          }
+
+          .home-page-banner .norgen-default-btn {
+            font-size: 1em;
+          }
+
+          .home-page-banner h1 {
+            font-size: 24px;
+          }
+        }
+
+        @media only screen and (max-width: 850px) {
+          .prod-cat-list {
+            -ms-grid-columns: 1fr 24px 1fr;
+            -ms-grid-rows: 1fr (24px 1fr)[6];
+            grid-template-columns: repeat(1, 1fr);
+          }
+        }
+        @media only screen and (max-width: 700px) {
+          .prod-cat-list {
+            display: block;
+          }
+
+          .prod-cat:not(:last-child) {
+            margin-bottom: 24px;
+          }
+        }
+
+
+      </style>
+
+
+      <!-- Header -->
+      <!--<section class="img-header titleOnly">
+        <h1 style="text-shadow:none;color:#fff;">Discounts</h1>
+        <img class="person nikola fly-in" src="/sites/default/files/Promotions_Page/NIKOLA-smaller.png" alt="">
+        <img class="person aleja-pedro fly-in" src="/sites/default/files/Promotions_Page/alejandra-pedro-smaller.png"
+          alt="">
+        </div>
+      </section>-->
+      {# <h1 class="subhead">Promotions</h1> #}
+      <div class="home-page-banner">
+        <div class="container home-container" style="height: 600px">
+          <div class="row" style="height: 100%">
+            <div class="col-md-6" style="top: 50%; transform: translateY(-50%)">
+              <div class="c-title">
+                <h1 class="c-left c-font" style="font-size:65px;line-height:1.1;color:#be1e2d;font-weight:700;">PROMOTIONS</h1>
+                <span style="color:#be1e2d;font-size:28px;line-height:1.1"><b>Save on Select Products</b></span>
+                {# <p class="c-left mt-20" style="color:#124A92;font-size:18px;line-height:1.1;margin-top:10px;">
+                  <b>*On purchases of Stool Collection & Preservation Devices and Stool Nucleic Acid isolation kits.</b>
+                </p> #}
+              </div>
+              <!--<a class="btn btn-primary mt-20" style="
+                  padding: 10px 50px;
+                  visibility: visible;
+                  animation-delay: 0s;
+                  animation-name: fadeIn;
+                  margin-right:10px;
+                  margin-bottom:10px;
+                  background-color:#be1e2d;
+                  border-color:#be1e2d;
+                " data-wow-delay="0.00s" href="#smart-save-prod" role="button">View Products</a>-->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="anchorSection container" id="limited-time-offers">
+
+        <div class="c-content-title-1 c-title">
+          <h2 class="c-center c-font">Limited-Time Offers</h2>
+        </div>
+
+        <div class="prod-cat-list">
+
+          {# <div class="prod-cat">
+            <a href="https://norgenbiotek.com/promotions/rna-promotion">
+              <div style="padding:14px; background-image:linear-gradient(to right, #141010e0 100%, rgba(255, 0, 0, 0) 100%), url(https://norgenbiotek.com/sites/default/files/images/home/2025-RNA_Campaign_Web_Banner_PR.png);background-repeat: no-repeat;background-size: cover;">
+                <p class="c-left c-font" style="font-size:40px;line-height:1.1;color:white;font-weight:700;">RNA Promotion</p>
+              </div>
+            <a href="https://norgenbiotek.com/promotions/rna-promotion">Save Now</a>
+            <div class="prod-cat-desc">Buy 2 RNA Products, Get 50% off the 3rd. Buy 4, Get the 5th free.</div>
+            <a href="https://norgenbiotek.com/promotions/rna-promotion" class="btn btn-primary">View Details</a>
+          </div> #}
+
+          {# Microbiome Promo #}
+          {# <div class="prod-cat">
+            <a href="/promotions/save-microbiome-products#products-section">
+              <div style="padding:14px; background-position-y: center;background-image: linear-gradient(#ffffffab, #ffffff30),url('https://norgenbiotek.com/sites/default/files/images/campaigns/microbiome2025/bacteria-top-left.webp'), url('https://norgenbiotek.com/sites/default/files/images/campaigns/microbiome2025/bacteria-top-right.webp'), url('https://norgenbiotek.com/sites/default/files/images/campaigns/microbiome2025/bacteria-bottom-right.webp'), radial-gradient(white 60%, #d1e6ff 160%);background-position: center, top -180px left -140px, top -150px right -100px, bottom 100px right -120px, center;background-repeat: no-repeat;background-size: cover, auto, auto, auto, contain;">
+                <p class="c-left c-font" style="font-size:40px;line-height:1.1;font-weight:700;">Save on Microbiome Products</p>
+              </div>
+            </a>
+            <div class="prod-cat-desc" style="margin-top:15px;">Save up to 20%, plus a bonus opportunity to save 15%!</div>
+            <a href="/promotions/save-microbiome-products#products-section" class="btn btn-primary">View Eligible Products</a>
+          </div> #}
+
+
+          {# Magbead Promo 2025 #}
+          {# <div class="prod-cat">
+            <a href="/services/magnetic-bead-automation">
+              <div style="padding:14px; background-position-y: center;background-image: linear-gradient(#ffffffa1, #ffffffa1), url('/sites/default/files/promotions/magbead-2025/dropper.png');background-position: center, center;background-repeat: no-repeat;background-size: cover;">
+                <p class="c-left c-font" style="font-size:40px;line-height:1.1;font-weight:700;">20% Off Magnetic Bead Kits</p>
+              </div>
+            </a>
+            <div class="prod-cat-desc" style="margin-top:15px;">Visit the promotion page for a full list of eligible products!</div>
+            <a href="/promotions/magnetic-bead-automation" class="btn btn-primary">View Promotion Page</a>
+          </div> #}
+
+          {# Back to Class #}
+          <div class="prod-cat">
+            <a href="/promotions/backtoschool">
+              <div style="padding:14px; background-position-y: center;background-image: linear-gradient(#ffffffa1, #ffffffa1), url('/sites/default/files/images/Student Background.png');background-position: center, center;background-repeat: no-repeat;background-size: cover;">
+                <p class="c-left c-font" style="font-size:40px;line-height:1.1;font-weight:700;">Back to Class Savings</p>
+              </div>
+            </a>
+            <div class="prod-cat-desc" style="margin-top:15px;"><b>Save 20%</b> on DNA, RNA, Exosome, NGS and Multi-analyte kits!</div>
+            <a href="/promotions/backtoschool" class="btn btn-primary">View Eligible Products</a>
+          </div>
+
+          {# NGS Promo #}
+          <div class="prod-cat">
+            <a href="/services/next-generation-sequencing">
+              <div style="padding:14px; background-position-y: center;background-image: linear-gradient(#ffffffa1, #ffffffa1), url('https://norgenbiotek.com/sites/default/files/images/Asset 4.png');background-position: center, center;background-repeat: no-repeat;background-size: cover;">
+                <p class="c-left c-font" style="font-size:40px;line-height:1.1;font-weight:700;">Save on Sequencing Services</p>
+              </div>
+            </a>
+            <div class="prod-cat-desc" style="margin-top:15px;"><b>Free</b> 6 sample pilot trials for RNA and Small RNA sequencing on applicable projects!</div>
+            <a href="/services/next-generation-sequencing" class="btn btn-primary">Explore Services</a>
+          </div>
+
+          {# Magbead Promo #}
+          <div class="prod-cat">
+            <a href="https://norgenbiotek.com/product/total-rna-purification-kits?v=1931">
+              <div style="padding:14px; background-position-y: center;background-image:linear-gradient(to right, #141010e0 100%, rgba(255, 0, 0, 0) 100%), url(/sites/default/files/styles/norproduct_imagekit/public/images/product_images/75400-1.jpg);background-repeat: no-repeat;background-size: cover;">
+                {# <span style="color:#124A92;font-size:18px;line-height:1.1"><b>Cells</b></span> #}
+                <p class="c-left c-font" style="font-size:40px;line-height:1.1;color:white;font-weight:700;">Bundle &amp; Save!</p>
+              </div>
+              </a>
+            <div class="prod-cat-desc" style="margin-top:15px;">Bundle a Total RNA Magnetic Bead Purification Kit with DNase and receive the DNase for a special low price!</div>
+            <a href="https://norgenbiotek.com/product/total-rna-purification-kits?v=1931" class="btn btn-primary">View Product Page for Details</a>
+          </div>
+
+          <!--<div class="prod-cat">
+            <a href="/promotions/cells_tissues">
+              <div style="padding:14px; background-image:linear-gradient(to right, #1410107d 100%, rgba(255, 0, 0, 0) 100%), url(https://norgenbiotek.com/sites/default/files/images/tissue-campaign/2024-10-01-October-Tissue_Web%20Banner_V2_PR.jpg);background-repeat: no-repeat;background-size: cover;">
+                <p class="c-left c-font" style="font-size:40px;line-height:1.1;color:white;font-weight:700;">Cells and Tissues Products</p>
+              </div>
+            <a href="/promotions/cells_tissues">Save Now</a>
+            <div class="prod-cat-desc">15% off and free products with eligible orders.</div>
+            <a href="/promotions/cells_tissues" class="btn btn-primary">View Details</a>
+          </div>-->
+
+
+
+          {#<div class="prod-cat">
+            <a href="/promotions/one-health">
+              <div style="padding:14px; background-image:linear-gradient(to right, rgb(72 121 177 / 70%) 100%, rgba(255, 0, 0, 0) 100%), url(/sites/default/files/images/microorganisms/banner.png);background-repeat: no-repeat;background-size: cover;">
+               
+                <p class="c-left c-font" style="font-size:40px;line-height:1.1;color:white;font-weight:700;">Environmental/Microbial Products</p>
+              </div>
+            <a href="/promotions/one-health">Free Shipping+</a>
+            <div class="prod-cat-desc">On select products for environmental and microbial samples.</div>
+            <a href="/promotions/one-health" class="btn btn-primary">View Details</a>
+          </div>
+
+          <div class="prod-cat">
+            <a href="/promotions/exosomes">
+              <div style="padding:14px; background-image: linear-gradient(to right, rgb(72 121 177) 10%, rgba(255, 0, 0, 0) 80%), url(https://norgenbiotek.com/sites/default/files/images/exosome%20campaign/banner.jpg);background-repeat: no-repeat;background-size: cover;">
+                
+                <p class="c-left c-font" style="font-size:40px;line-height:1.1;color:white;font-weight:700;">Exosome Products</p>
+              </div>
+            <a href="/promotions/exosomes">Up To 20% Off*</a>
+            <div class="prod-cat-desc">On all exosome purification and exosomal RNA isolation kits.</div>
+            <a href="/promotions/exosomes" class="btn btn-primary">View Details</a>
+          </div>#}
+  
+          {# <div class="prod-cat">
+            <a href="/promotions/stool-promotion">
+              <div style="padding:14px;background-image: linear-gradient(to right, rgba(252, 176, 23, 0.9), rgba(252, 176, 23, 0.9)), url('/sites/default/files/images/stool-campaign/2024-04-01-Stool_Campaign_Banner_BG.jpg');/* background-position:right; */background-repeat: no-repeat;background-size: cover;">
+                <p class="c-left c-font" style="font-size:40px;line-height:1.1;color:white;font-weight:700;">Stool Products</p>
+              </div>
+            <a href="/promotions/stool-promotion">Free Shipping and More!</a>
+            <div class="prod-cat-desc">On purchases of stool collection and preservation devices, and stool nucleic acid isolation kits.</div>
+            <a href="/promotions/stool-promotion" class="btn btn-primary">View Details</a>
+          </div> #}
+        </div>
+
+      </section>
+
+      <style>
+        .c-content-accordion-norgen.c-accordion-norgen-primary-blue-light .panel>.panel-heading>.panel-title>a.collapsed {
+          background-color: var(--norgen-primary-blue-light);
+        }
+        .c-content-accordion-norgen .panel>.panel-heading>.panel-title>a {
+          transition: all 0.2s;
+          display: block;
+          padding: 30px 30px 25px 30px;
+          border-radius: 0;
+          box-shadow: none;
+        }
+        .c-content-accordion-norgen .c-content-title-1{
+          margin-top: 56px;
+          margin-bottom:20px;
+        }
+        .c-title > h3{
+          display:inline-block;
+          margin-bottom:0px;
+        }
+        .c-content-title-1 h2 {
+          font-size: 42px;
+        }
+      </style>
+      
+
+      {{ content }}
+
+
+
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script>
+
+        function closebox() {
+          document.querySelector('.form_section').style.display = "none";
+        }
+        function close_thankyou() {
+          document.querySelector('.thankyou-screen').style.display = "none";
+        }
+        function open_form() {
+          document.querySelector('.form_section').style.display = "block";
+        }
+        function success_in() {
+          document.querySelector('.form_section').style.display = "none";
+          document.querySelector('.thankyou-screen').style.display = "block";
+          document.getElementById("deals2").scrollIntoView(true);
+        }
+
+        $(document).ready(function () {
+          // Add smooth scrolling to all links
+          $(".cfcamp-submenu a").on('click', function (event) {
+
+            // Make sure this.hash has a value before overriding default behavior
+            if (this.hash !== "") {
+              // Prevent default anchor click behavior
+              event.preventDefault();
+
+              // Store hash
+              var hash = this.hash;
+
+              // Using jQuery's animate() method to add smooth page scroll
+              // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+              $('html, body').animate({
+                scrollTop: $('[name="' + $.attr(this, 'href').substr(1) + '"]').offset().top
+              }, 800, function () {
+
+                // Add hash (#) to URL when done scrolling (default click behavior)
+                window.location.hash = hash;
+              });
+            } // End if
+          });
+        });
+
+        //Get UTM Parameters
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        if (urlParams.has('utm_source')) {
+          let utm_source = document.querySelector('input#utm_source');
+          if (utm_source) {
+            utm_source.value = urlParams.get('utm_source');
+          }
+        }
+        if (urlParams.has('utm_medium')) {
+          let utm_medium = document.querySelector('input#utm_medium');
+          if (utm_medium) {
+            utm_medium.value = urlParams.get('utm_medium');
+          }
+        }
+        if (urlParams.has('utm_campaign')) {
+          let utm_campaign = document.querySelector('input#utm_campaign');
+          if (utm_campaign) {
+            utm_campaign.value = urlParams.get('utm_campaign');
+          }
+        }
+        if (urlParams.has('utm_term')) {
+          let utm_term = document.querySelector('input#utm_term');
+          if (utm_term) {
+            utm_term.value = urlParams.get('utm_term');
+          }
+        }
+        if (urlParams.has('utm_content')) {
+          let utm_content = document.querySelector('input#utm_content');
+          if (utm_content) {
+            utm_content.value = urlParams.get('utm_content');
+          }
+        }
+
+      function searchFilterCatC(){
+          // Declare variables
+          var input, filter, tables, txtValue;
+          input = document.getElementById('myInput');
+          filter = input.value.toUpperCase();
+          tables = document.querySelectorAll('.campaign-cat-c table');
+          // Loop through all tables, and hide those who don't match the search query
+          for (i = 0; i < tables.length; i++) {
+              // get all rows that arent the first in the table (which are the table column labels)
+              table_rows = tables[i].querySelectorAll('tr:not(:first-child)');
+              every_row_hidden = true;
+              for(k = 0; k < table_rows.length; k++){
+                  // check first 2 columns (sku and title)
+                  td1 = table_rows[k].querySelector('td:first-child');
+                  td2 = table_rows[k].querySelector('td:nth-child(2)');
+                  td1txtValue = td1.textContent.trim() || td1.innerText.trim();
+                  td2txtValue = td2.textContent.trim() || td2.innerText.trim();
+                  if (td1txtValue.toUpperCase().indexOf(filter) > -1 || td2txtValue.toUpperCase().indexOf(filter) > -1) {
+                      table_rows[k].style.display = "";
+                      every_row_hidden = false;
+                  } 
+                  else {
+                      table_rows[k].style.display = "none";
+                  }
+              }
+              if(!every_row_hidden){ // if every row in the table is hidden, hide the entire table
+                  tables[i].parentElement.parentElement.style.display = "";
+              }
+              else tables[i].parentElement.parentElement.style.display = "none";
+          }
+      }
+    
+    </script>

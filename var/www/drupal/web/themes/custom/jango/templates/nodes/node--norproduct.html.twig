@@ -1,0 +1,340 @@
+{#
+/**
+* @file
+* Default theme implementation to display a node.
+*
+* Available variables:
+* - node: The node entity with limited access to object properties and methods.
+* Only method names starting with "get", "has", or "is" and a few common
+* methods such as "id", "label", and "bundle" are available. For example:
+* - node.getCreatedTime() will return the node creation timestamp.
+* - node.hasField('field_example') returns TRUE if the node bundle includes
+* field_example. (This does not indicate the presence of a value in this
+* field.)
+* - node.isPublished() will return whether the node is published or not.
+* Calling other methods, such as node.delete(), will result in an exception.
+* See \Drupal\node\Entity\Node for a full list of public properties and
+* methods for the node object.
+* - label: The title of the node.
+* - content: All node items. Use {{ content }} to print them all,
+* or print a subset such as {{ content.field_example }}. Use
+* {{ content|without('field_example') }} to temporarily suppress the printing
+* of a given child element.
+* - author_picture: The node author user entity, rendered using the "compact"
+* view mode.
+* - metadata: Metadata for this node.
+* - date: Themed creation date field.
+* - author_name: Themed author name field.
+* - url: Direct URL of the current node.
+* - display_submitted: Whether submission information should be displayed.
+* - attributes: HTML attributes for the containing element.
+* The attributes.class element may contain one or more of the following
+* classes:
+* - node: The current template type (also known as a "theming hook").
+* - node--type-[type]: The current node type. For example, if the node is an
+* "Article" it would result in "node--type-article". Note that the machine
+* name will often be in a short form of the human readable label.
+* - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+* teaser would result in: "node--view-mode-teaser", and
+* full: "node--view-mode-full".
+* The following are controlled through the node publishing options.
+* - node--promoted: Appears on nodes promoted to the front page.
+* - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+* teaser listings.
+* - node--unpublished: Appears on unpublished nodes visible only to site
+* admins.
+* - title_attributes: Same as attributes, except applied to the main title
+* tag that appears in the template.
+* - content_attributes: Same as attributes, except applied to the main
+* content tag that appears in the template.
+* - author_attributes: Same as attributes, except applied to the author of
+* the node tag that appears in the template.
+* - title_prefix: Additional output populated by modules, intended to be
+* displayed in front of the main title tag that appears in the template.
+* - title_suffix: Additional output populated by modules, intended to be
+* displayed after the main title tag that appears in the template.
+* - view_mode: View mode; for example, "teaser" or "full".
+* - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+* - page: Flag for the full page state. Will be true if view_mode is 'full'.
+* - readmore: Flag for more state. Will be true if the teaser content of the
+* node cannot hold the main body content.
+* - logged_in: Flag for authenticated user status. Will be true when the
+* current user is a logged-in member.
+* - is_admin: Flag for admin user status. Will be true when the current user
+* is an administrator.
+*
+* @see template_preprocess_node()
+*
+* @todo Remove the id attribute (or make it a class), because if that gets
+* rendered twice on a page this is invalid CSS for example: two lists
+* in different view modes.
+*
+* @ingroup themeable
+*/
+#}
+
+
+{# <script src="https://cdn.bioz.com/assets/bioz-w-api-6.0.min.js"></script>
+<!-- BIOZ start -->
+<link rel="stylesheet" href="https://cdn.bioz.com/assets/font-awesome-reg.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.bioz.com/assets/tooltipster.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.bioz.com/assets/tooltipster-theme2.css" />
+<script src="https://cdn.bioz.com/assets/bioz-w-api-2.5.min.js"></script>
+<link rel="stylesheet" href="https://cdn.bioz.com/assets/v_widget-2.5.css">
+<script src="https://cdn.bioz.com/assets/v_widget-2.5.norgen_biotek.js"></script>
+<script type="text/javascript" src="https://cdn.bioz.com/assets/tooltipster.js"></script>
+<script>
+  var _type = "commercial";
+  var _company = "865";
+  var _vendor = "Norgen Biotek";
+  var _vendor_partner_color = "#004897";
+  var _form_url = "https://back-badge-8.bioz.com";
+  var _key = "";
+  var _form_mobile = false;
+  
+<!-- BIOZ end -->
+</script> #}
+<article{{ attributes }}>
+
+  {{ title_prefix }}
+  {% if not page %}
+  <h2{{ title_attributes }}>
+    <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+    </h2>
+    {% endif %}
+    {{ title_suffix }}
+
+    <div class="product-page-content">
+      {{ content.field_commerce_product }}
+    </div>
+    </article>
+
+    {# script for figure carousel #}
+    <script>
+      // enable keyboard accessibility for product image carousel
+      let carousel_indicators = document.querySelectorAll('#norproduct-imagekit-carousel ol.carousel-indicators li');
+      for (let i = 0; i < carousel_indicators.length; i++) {
+        carousel_indicators[i].addEventListener('keyup', function (e) {
+          if (e.keyCode == 13) {
+            carousel_indicators[i].click();
+          }
+        });
+      }
+
+
+      //new figure carousel script
+      let carousel_images = document.querySelectorAll('#norproduct-image-description-carousel .norproduct-carousel-btn-wrapper')
+      let carousel_images_mob = document.querySelectorAll('#norproduct-image-specification-carousel-mobile .norproduct-carousel-btn-wrapper');
+
+      var desk_id = '#norproduct-image-description-carousel';
+      var mob_id = '#norproduct-image-specification-carousel-mobile';
+
+      let carousel_slide_num = document.querySelector('#carousel-slide-number');
+      let carousel_expanded_carousel = document.querySelector('#close-expanded-carousel');
+      let carousel_slide_num_mob = document.querySelector('#carousel-slide-number-mob');
+      let carousel_expanded_carousel_mob = document.querySelector('#close-expanded-carousel-mob');
+
+      //add event listeners to all the figure images, and the close buttons for both desktop and mobile carousels
+      if (carousel_slide_num) carousel_slide_num.addEventListener('click', (event) => toggleCarousel(event, desk_id));
+      if (carousel_expanded_carousel) carousel_expanded_carousel.addEventListener('click', (event) => toggleCarousel(event, desk_id));
+      if (carousel_slide_num_mob) carousel_slide_num_mob.addEventListener('click', (event) => toggleCarousel(event, mob_id));
+      if (carousel_expanded_carousel_mob) carousel_expanded_carousel_mob.addEventListener('click', (event) => toggleCarousel(event, mob_id));
+
+      for (let i = 0; i < carousel_images.length; i++) {
+        carousel_images[i].addEventListener('click', (event) => toggleCarousel(event, desk_id));
+        carousel_images[i].addEventListener('keyup', function (event) {
+          if (event.keycode === 13) {
+            toggleCarousel(event, desk_id);
+          }
+        });
+      }
+      //mob
+      for (let i = 0; i < carousel_images_mob.length; i++) {
+        carousel_images_mob[i].addEventListener('click', (event) => toggleCarousel(event, mob_id));
+        carousel_images_mob[i].addEventListener('keyup', function (event) {
+          if (event.keycode === 13) {
+            toggleCarousel(event, mob_id);
+          }
+        });
+      }
+
+      // initalize first 4 figure indicators to display:block
+      let block_array = [0, 1, 2, 3];
+      displayIndicators(block_array, true);
+
+      function toggleCarousel(event, carousel_id) { //if it's opened, close it, and vice versa
+        let carousel = document.querySelector('' + carousel_id + '');
+        if (carousel.classList.contains('fullscreen')) {
+          carousel.classList.remove('fullscreen');
+          document.querySelector('html').style.removeProperty('overflow');
+        }
+        else {
+          carousel.classList.add('fullscreen');
+          document.querySelector('html').style.overflow = "hidden";
+        }
+      }
+
+      let preview_images = document.querySelectorAll('#norproduct-image-description-carousel .carousel-indicators li button');
+
+      var figure_number = document.querySelector('#carousel-slide-number');
+      let figure_number_mob = document.querySelector('#carousel-slide-number-mob');
+      var total_num_figs = preview_images.length;
+      if (figure_number) figure_number.innerText = "Figure 1 / " + preview_images.length; //initialize figure number indicator
+      if (figure_number_mob) figure_number_mob.innerText = "Figure 1 / " + preview_images.length; //initialize figure number indicator (mobile)
+
+
+      for (let i = 0; i < preview_images.length; i++) {
+        preview_images[i].addEventListener('click', (event) => indicatorClick(event, desk_id));
+      }
+      let carousel_controls = document.querySelectorAll('#norproduct-image-description-carousel .carousel-control');
+      for (let i = 0; i < carousel_controls.length; i++) {
+        carousel_controls[i].addEventListener('click', (event) => controlClick(event, desk_id));
+      }
+      //mobile 
+      let mob_preview_images = document.querySelectorAll('#norproduct-image-specification-carousel-mobile .carousel-indicators li button');
+      for (let i = 0; i < mob_preview_images.length; i++) {
+        mob_preview_images[i].addEventListener('click', (event) => indicatorClick(event, mob_id));
+      }
+      let mob_carousel_controls = document.querySelectorAll('#norproduct-image-specification-carousel-mobile .carousel-control');
+      for (let i = 0; i < mob_carousel_controls.length; i++) {
+        mob_carousel_controls[i].addEventListener('click', (event) => controlClick(event, mob_id));
+      }
+
+      function controlClick(event, carousel_id) {
+        let data_value;
+        if (document.querySelector('' + carousel_id + ' .carousel-indicators li.active')) {
+          data_value = document.querySelector('' + carousel_id + ' .carousel-indicators li.active').getAttribute('data-slide-to');
+        }
+        if (event.target.classList.contains('left') || event.target.classList.contains('fa-chevron-left')) { //left click
+          if (data_value != 0) {
+            data_value--;
+          }
+          moveIndicators(parseInt(data_value), carousel_id);
+        }
+        else { //right click
+          let total_li = document.querySelectorAll('' + carousel_id + ' .carousel-indicators li').length;
+          if (data_value != (total_li - 1)) {
+            data_value++;
+            moveIndicators(parseInt(data_value), carousel_id);
+          }
+        }
+        if (!isNaN(data_value)) {
+          if (carousel_id == '#norproduct-image-description-carousel') { //desktop
+            figure_number.innerText = "Figure " + (+data_value + 1) + " / " + preview_images.length;
+          }
+          else { //mobile
+            figure_number_mob.innerText = "Figure " + (+data_value + 1) + " / " + preview_images.length;
+          }
+        }
+      }
+      function indicatorClick(event, carousel_id) {
+        let data_value;
+        if (event.target.nodeName == "IMG") { //if you clicked on the img tag within the li, get the li so we can get the data-slide-to value
+          data_value = event.target.parentElement.parentElement.getAttribute('data-slide-to');
+        }
+        else if (event.target.nodeName == "BUTTON") { //if you clicked on the button tag within the li, get the li so we can get the data-slide-to value
+          data_value = event.target.parentElement.getAttribute('data-slide-to');
+        }
+        else {
+          data_value = event.target.getAttribute('data-slide-to');
+        };
+        if (!isNaN(data_value)) {
+          if (carousel_id == '#norproduct-image-description-carousel') { //desktop
+            figure_number.innerText = "Figure " + (+data_value + 1) + " / " + preview_images.length;
+          }
+          else { //mobile
+            figure_number_mob.innerText = "Figure " + (+data_value + 1) + " / " + preview_images.length;
+          }
+        }
+        moveIndicators(parseInt(data_value), carousel_id);
+      }
+      function moveIndicators(data_value, carousel_id) {
+        var value;
+        let total = document.querySelectorAll('' + carousel_id + ' .carousel-indicators li').length;
+
+        if (data_value < 3) { //first 3 indicators
+          value = 25;
+          if (!isNaN(data_value)) {
+            let block_array = [0, 1, 2, 3, 4];
+            let none_array = [];
+            for (let i = 0; i < total; i++) {
+              if (!block_array.includes(i)) {
+                none_array.push(i);
+              }
+            }
+            displayIndicators(block_array, true);
+            displayIndicators(none_array, false);
+          }
+        }
+        else if (data_value == 3) { //4th indicator (first one clicked that will move them)
+          value = -25;
+
+          if (!isNaN(data_value)) {
+            let block_array = [1, 2, 3, 4, 5];
+            let none_array = [];
+            for (let i = 0; i < total; i++) {
+              if (!block_array.includes(i)) {
+                none_array.push(i);
+              }
+            }
+            displayIndicators(block_array, true);
+            displayIndicators(none_array, false);
+          }
+        }
+        else if (data_value > (total - 3)) { //last 3 indicators
+          value = -75;
+          if (!isNaN(data_value)) {
+            let block_array = [total - 4, total - 3, total - 2, total - 1, total];
+            let none_array = [];
+            for (let i = 0; i < total; i++) {
+              if (!block_array.includes(i)) {
+                none_array.push(i);
+              }
+            }
+            displayIndicators(block_array, true);
+            displayIndicators(none_array, false);
+          }
+        }
+        else { //everything in between
+          value = -25;
+          if (!isNaN(data_value)) {
+            let block_array = [data_value - 2, data_value - 1, data_value, data_value + 1, data_value + 2];
+            let none_array = [];
+            for (let i = 0; i < total; i++) {
+              if (!block_array.includes(i)) {
+                none_array.push(i);
+              }
+            }
+            displayIndicators(block_array, true);
+            displayIndicators(none_array, false);
+          }
+
+        }
+        document.querySelector('' + carousel_id + ' .carousel-indicators').style.transform = "translateX(" + value + "px)";
+      }
+
+      function displayIndicators(data_values, display) {
+        //display is boolean. True = set display to block. False = set display to none
+        var queryString = "";
+        for (let i = 0; i < data_values.length; i++) {
+          if (i == data_values.length - 1) {
+            queryString += ".carousel-indicators.norproduct li[data-slide-to='" + data_values[i] + "']";
+          }
+          else {
+            queryString += ".carousel-indicators.norproduct li[data-slide-to='" + data_values[i] + "'], ";
+          }
+        }
+        if (queryString != "") {
+          let indicators = document.querySelectorAll('' + queryString + '');
+
+          let display_type = "none";
+          if (display) {
+            display_type = "block";
+          }
+
+          for (let i = 0; i < indicators.length; i++) {
+            indicators[i].style.display = display_type;
+          }
+        }
+      }
+    </script>

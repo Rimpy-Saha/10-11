@@ -1,0 +1,912 @@
+{% set currentPath = path('<current>') %}
+  {% set hideCartButtonPaths = ['/order_information', '/checkout', '/review', '/cart'] %}
+  {% set hideCartButton = false %}
+  {# for user15 popup #}
+  {% set showpopup = false %}
+  {% for pathPart in hideCartButtonPaths %}
+      {% if pathPart in currentPath %}
+          {% if logged_in == false %}
+              {% set showpopup = true %}
+          {% endif %}
+          {% set hideCartButton = true %}
+          {% set cart_block = false %}
+      {% endif %}
+  {% endfor %}
+  <style>
+      .register-pop {
+          position: fixed;
+          width: 250px;
+          background: #004893;
+          color: white;
+          border-radius: 12px;
+          padding: 10px 15px 10px;
+          right: 30px;
+          z-index: 1;
+          top: 30%;
+          text-align: center;
+          display:none;
+      }
+      .register-pop img {
+          width: 50px;
+      }
+      .register-pop p {
+          text-align: left;
+      }
+      .blue-outline{
+        border: 1px solid white;
+      background: #004893;
+  }
+      @media (max-width: 450px) {
+          .register-pop{
+              bottom: 15%;
+              top: auto;
+              right: 5px;
+          }
+      }
+      @media (max-width: 260px) {
+          .register-pop{
+              right: 5px;
+              left:5px;
+              width: -webkit-fill-available;
+          }
+      }
+  </style>
+  
+  {% if showpopup == true %}
+  
+      <div class="register-pop">
+          <p class="close"  onclick="close_registerpopup();return false;" style="font-size:30px;color:white;">x</p>
+          <img src="/sites/default/files/images/product_category/add-friend.png">
+          <p>Register today to receive an exclusive <strong><u>15% off*</u></strong> on your first order.</p>
+          <a href="https://norgenbiotek.com/user/login"><div class="btn blue-outline c-btn-border-2x">Sign Up Now</div></a>
+      </div>
+  <script>
+      function close_registerpopup(){
+          document.getElementsByClassName("register-pop")[0].style.display = "none";
+          if(Drupal.eu_cookie_compliance.hasAgreed()) setCookie('registerpopup','yes',1);
+          }
+  
+          function setCookie(name,value,days) {
+            var expires = "";
+            if (days) {
+              var date = new Date();
+              date.setTime(date.getTime() + (days*24*60*60*1000));
+              expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "")  + expires + "; path=y";
+          }
+  
+          function getCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for(var i=0;i < ca.length;i++) {
+                var c = ca[i];
+                while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+            }
+            return null;
+          }
+          document.addEventListener("DOMContentLoaded", function(event) {
+          // Your code to run since DOM is loaded and ready
+            var y = window.location.href;
+            var x = getCookie('registerpopup');
+            console.log(x);
+            if(x != 'yes'){
+              document.getElementsByClassName("register-pop")[0].style.display = "block";
+            }
+          });
+  </script>
+  {% endif %}
+  <header class="c-layout-header c-layout-header-4 c-layout-header-light-mobile c-layout-header-default-mobile  {{ add_class and not restricted_country ? 'body-desktop-cart-sidebar' : '' }}" data-minimize-offset="80">
+      <input type="hidden" id="body-classes" value="c-layout-header-mobile-fixed c-layout-header-topbar c-layout-header-topbar-collapse c-header-not-fixed"/>
+          <div class="c-topbar c-topbar-topbar-dark">
+              <div class="container">
+                  <!-- BEGIN: INLINE NAV -->
+                  <nav class="c-top-menu c-pull-left">
+                      <ul class="social-list c-icons c-theme-ul">
+                          <li class="content-social">
+                              <a target="_blank" data-placement="auto" data-toggle="tooltip" title="" href="https://facebook.com/norgenbiotek" class="dtooltip social-icon fbclick" data-original-title="Facebook" aria-label="Facebook"><span><i class="fa-facebook fab" alt="Facebook"></i></span></a>
+                          </li>
+                          <li class="content-social">
+                              <a target="_blank" data-placement="auto" data-toggle="tooltip" title="" href="https://twitter.com/norgenbiotek" class="dtooltip social-icon twclick" data-original-title="Twitter" aria-label="Twitter">
+                                  <span>
+                                      <svg style="max-width: 15px; max-height: 15px; position: relative; top: 1px;" width="1200" height="1227" viewBox="0 0 1200 1227" fill="var(--norgen-primary-blue)" xmlns="https://www.w3.org/2000/svg" aria-labelledby="twitter-footer-title">
+                                          <title id="twitter-footer-title" lang="en">
+                                          X formerly known as Twitter
+                                          </title>
+                                          <path d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z">
+                                          </path>
+                                      </svg>
+                                  </span>
+                              </a>
+                          </li>
+                          <li class="content-social">
+                              <a target="_blank" data-placement="auto" data-toggle="tooltip" title="" href="https://instagram.com/norgen.biotek" class="dtooltip social-icon igclick" data-original-title="Instagram" aria-label="Instagram"><span><i class=" fa-instagram fab" alt="Instagram"></i></span></a>
+                          </li>
+                          <li class="content-social">
+                              <a target="_blank" data-placement="auto" data-toggle="tooltip" title="" href="https://www.youtube.com/@norgenbiotek?sub_confirmation=1" class="dtooltip social-icon ytclick" data-original-title="Youtube" aria-label="YouTube"><span><i class=" fa-youtube fab" alt="YouTube"></i></span></a>
+                          </li>
+                          <li class="content-social">
+                              <a target="_blank" data-placement="auto" data-toggle="tooltip" title="" href="https://www.linkedin.com/company/norgenbiotek/" class="dtooltip social-icon liclick" data-original-title="LinkedIn" aria-label="LinkedIn"><span><i class="fa-linkedin fab" alt="LinkedIn"></i></span></a>
+                          </li>
+                      </ul>
+                  </nav> 
+                  <!-- END: INLINE NAV -->
+  
+                  <!-- BEGIN: INLINE NAV -->
+                  <nav class="c-top-menu c-pull-right">
+                      <ul class="c-links c-theme-ul">
+                            {% if (('distributor' in user.account.roles) or ('administrator' in user.account.roles) or (user.id == 1)) %}
+                                <li><a href="/distributors/distributor-resources">Distributor Portal</a></li>
+                                <li class="c-divider">|</li>
+                            {% endif %}
+                            <li class="last"><a href="/content/norgenius">Product Selection Tool</a></li>
+                            <li class="c-divider">|</li>
+                            <li><a href="/contact">Contact</a></li>
+                            <li class="c-divider">|</li>
+                            <li class="last"><a href="/express-order">Express Order</a></li>
+                            <li class="c-divider">|</li>
+                            <li class="last"><a href="/request-quote">Request Quote</a></li>
+                      </ul>
+                      <ul class="c-ext c-theme-ul">
+                        <li class="c-lang dropdown c-last notranslate">
+                            <a href="#">en</a>
+                            <!-- Language list menu -->
+                            <ul class="language-switcher-language-url dropdown-menu pull-right">
+                                <li hreflang="en" data-drupal-link-system-path="node/117" class="en is-active"><a href="/" class="language-link is-active" hreflang="en" data-drupal-link-system-path="node/117">English</a></li>
+                                <li hreflang="fr" class="fr"><a href="/fr" class="language-link" hreflang="fr">Fran&ccedil;ais</a></li>
+                                <li hreflang="es" class="es"><a href="/es" class="language-link" hreflang="es">Spanish</a></li>
+                                <li hreflang="cn" class="es"><a href="/cn" class="language-link" hreflang="cn">Chinese</a></li>
+                            </ul>
+                        </li>
+                        {# <li class="c-lang dropdown c-last notranslate">
+                            <a href="#">English</a>
+                            <!-- Language list menu -->
+                            <ul class="language-switcher-language-url dropdown-menu pull-right">
+                                <li hreflang="en" data-drupal-link-system-path="node/117" class="en is-active"><a href="{% if app.request.pathinfo %} app.request.pathinfo {% else %}/{% endif %}?locale=en-US" class="language-link is-active" hreflang="en" data-drupal-link-system-path="node/117">English</a></li>
+                                <li hreflang="fr" class="fr"><a href="{% if app.request.pathinfo %} app.request.pathinfo {% else %}/{% endif %}?locale=fr-CA" class="language-link" hreflang="fr">Fran&ccedil;ais (French)</a></li>
+                                <li hreflang="es" class="es"><a href="{% if app.request.pathinfo %} app.request.pathinfo {% else %}/{% endif %}?locale=es-MX" class="language-link" hreflang="es">Espa&ntilde;ol (Spanish)</a></li>
+                                <li hreflang="de" class="de"><a href="{% if app.request.pathinfo %} app.request.pathinfo {% else %}/{% endif %}?locale=de" class="language-link" hreflang="de">Deutsch (German)</a></li>
+                                <li hreflang="pt" class="pt"><a href="{% if app.request.pathinfo %} app.request.pathinfo {% else %}/{% endif %}?locale=pt-PT" class="language-link" hreflang="pt">Portugu&ecirc;s (Portuguese)</a></li>
+                                <li hreflang="ja" class="ja"><a href="{% if app.request.pathinfo %} app.request.pathinfo {% else %}/{% endif %}?locale=ja" class="language-link" hreflang="ja">日本語 (Japanese)</a></li>
+                                <li hreflang="cn" class="cn"><a href="{% if app.request.pathinfo %} app.request.pathinfo {% else %}/{% endif %}?locale=zh-CN" class="language-link" hreflang="cn">中文 (Chinese)</a></li>
+                            </ul>
+                        </li>
+                        <script>
+                            if(window.location.pathname !== "{{app.request.pathinfo}}"){ // set link with javascript if app.request.pathinfo fails. path('<current>') does not get alias so it can show shorturls like node/2503
+                                const links = document.getElementsByClassName('language-link');
+                                Array.from(links).forEach(link => {
+                                    switch(link.getAttribute('hreflang')){
+                                        case "en":
+                                            link.href = window.location.pathname + '?locale=en-US';
+                                            break;
+                                        case "fr":
+                                            link.href = window.location.pathname + '?locale=fr-CA';
+                                            break;
+                                        case "es":
+                                            link.href = window.location.pathname + '?locale=es-MX';
+                                            break;
+                                        case "de":
+                                            link.href = window.location.pathname + '?locale=de';
+                                            break;
+                                        case "pt":
+                                            link.href = window.location.pathname + '?locale=pt-PT';
+                                            break;
+                                        case "ja":
+                                            link.href = window.location.pathname + '?locale=ja';
+                                            break;
+                                        case "cn":
+                                            link.href = window.location.pathname + '?locale=zh-CN';
+                                            break;
+                                    }
+                                });
+                                
+                            }
+                            function switchPosition(language_switcher_dropdowns, hreflang){
+                                for(i=1; i<language_switcher_dropdowns.length; i++){
+                                    if(language_switcher_dropdowns[i].getAttribute('hreflang') == hreflang){
+                                        language_switcher_dropdowns[i].parentNode.insertBefore(language_switcher_dropdowns[i], language_switcher_dropdowns[0]);
+                                    } 
+                                }
+                            }
+
+                            document.addEventListener('DOMContentLoaded', function(){
+                                language_switcher_dropdowns = document.querySelectorAll(".language-switcher-language-url > li");
+                                language_selector = document.querySelector(".c-lang.dropdown > a");
+                                const urlParams = new URLSearchParams(window.location.search);
+                                const locale = urlParams.get('locale');
+                                switch(locale){
+                                    case "en-US":
+                                        language_selector.innerText = "English";
+                                        if(language_switcher_dropdowns[0].hreflang != "en") switchPosition(language_switcher_dropdowns, "en");
+                                        break;
+                                    case "fr-CA":
+                                        language_selector.innerHTML= "Fran&ccedil;ais (French)";
+                                        if(language_switcher_dropdowns[0].hreflang != "fr") switchPosition(language_switcher_dropdowns, "fr");
+                                        break;
+                                    case "es-MX":
+                                        language_selector.innerHTML = "Espa&ntilde;ol (Spanish)";
+                                        if(language_switcher_dropdowns[0].hreflang != "es") switchPosition(language_switcher_dropdowns, "es");
+                                        break;
+                                    case "de":
+                                        language_selector.innerText = "Deutsch (German)";
+                                        if(language_switcher_dropdowns[0].hreflang != "de") switchPosition(language_switcher_dropdowns, "de");
+                                        break;
+                                    case "pt-PT":
+                                        language_selector.innerHTML = "Portugu&ecirc;s (Portuguese)";
+                                        if(language_switcher_dropdowns[0].hreflang != "pt") switchPosition(language_switcher_dropdowns, "pt");
+                                        break;
+                                    case "ja":
+                                        language_selector.innerText = "日本語 (Japanese)";
+                                        if(language_switcher_dropdowns[0].hreflang != "ja") switchPosition(language_switcher_dropdowns, "ja");
+                                        break;
+                                    case "zh-CN":
+                                        language_selector.innerText = "中文 (Chinese)";
+                                        if(language_switcher_dropdowns[0].hreflang != "cn") switchPosition(language_switcher_dropdowns, "cn");
+                                        break;
+                                }
+                            });
+                        </script> #}
+                          <!--<li>|</li>
+                          <li class="c-lang dropdown c-last" style="margin-left:0;">
+                              <a href="#">USD</a>
+                              <ul class="language-switcher-language-url dropdown-menu pull-right">
+                                  <li data-drupal-link-system-path="node/117" class="en is-active"><a href="" class="language-link is-active" data-drupal-link-system-path="node/117">USD</a></li>
+                              </ul>
+                          </li>-->
+                      </ul>
+                      
+                  </nav>
+                  <!-- END: INLINE NAV -->
+              </div>
+          </div>
+  
+      <div class="c-navbar">
+          <div class="container">
+              <!-- BEGIN: BRAND -->
+              <div class="c-navbar-wrapper clearfix">
+                  <div class="c-brand c-pull-left">
+                        <a href="{{ url('<front>') }}" class="c-logo" aria-label="Home">
+                        <img src="{{ logo_path }}" alt= "Norgen Biotek Logo" class="c-desktop-logo" width="125">
+                        <img src="{{ logo_path }}" alt= "Norgen Biotek Logo" class="c-desktop-logo-inverse" width="125">
+                        <img src="{{ logo_path }}" alt= "Norgen Biotek Logo" class="c-mobile-logo" width="100">
+                        </a>
+                        <button class="c-hor-nav-toggler" type="button" data-target=".c-mega-menu" aria-label="menu">
+                        <span class="c-line"></span>
+                        <span class="c-line"></span>
+                        <span class="c-line"></span>
+                        </button>
+                        {# <button class="c-topbar-toggler" type="button">
+                        <i class="fa fa-ellipsis-v"></i>
+                        </button> #}
+                        {# Get the current path #}
+                        {% set currentPath = path('<current>') %}
+                        {# <script>var id = {{ currentPath | json_encode | raw}};</script> #}
+                        {# List of paths where the form should not be displayed #}
+                        {% set excludedPaths = ['/search'] %}
+            
+                        {% if currentPath not in excludedPaths %}
+                        <button class="c-search-toggler" type="button" aria-label="Search">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        {% endif %}
+                        {% if not hideCartButton %}
+                            {% if not restricted_country %}
+                            <button class="c-cart-toggler" type="button">
+                                <i class="icon-handbag"></i>
+                                <span class="c-cart-number c-theme-bg">{{ cart_count }}</span>
+                            </button>
+                            {% else %}
+                            <a href="/resources/distributors" class="c-btn-icon c-cart-toggler">
+                                <i class="icon-handbag c-cart-icon"></i>
+                            </a>
+                            {% endif %}
+                        {% endif %}
+                  </div>
+                  {# {% if (search_block != FALSE) %}
+                      {{ search_block }}
+                  {% endif %} #}
+          
+                  
+                  {# Check if the current path is not in the excluded paths list #}
+                  {% if currentPath not in excludedPaths %}        
+                  <form class="search-block-form form notranslate" data-drupal-selector="search-block-form-8" action="/search" method="get" id="search-block-form--8" accept-charset="UTF-8" data-once="form-updated" data-drupal-form-fields="edit-keys--8">
+                      <div class="form-group js-form-item form-item js-form-type-search form-item-keys js-form-item-keys form-no-label">
+                          <label for="edit-keys--8" class="visually-hidden">Search</label>
+                          <div class="form-group has-feedback c-quick-search">
+                              <input title="Enter the terms you wish to search for." data-drupal-selector="edit-keys" class="input-lg form-control c-square c-theme form-search" placeholder="Search Norgen products" type="search" id="edit-keys--8" name="search" value="" size="15" maxlength="128">
+                              <button id="cust_search_submit_3" class="search search-button-advance" type="submit" aria-label="Search"><i class="fas fa-search"></i></button>        
+                          </div>
+                          <a class="search-bar-close fa fa-times" href="#" onclick="close_search_bar();return false;"></a>
+                      </div>
+                      <div data-drupal-selector="edit-actions" class="form-actions js-form-wrapper form-wrapper" id="edit-actions--8">
+                      <div class="form-group has-feedback">
+                          <input data-drupal-selector="edit-submit" class="btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button js-form-submit form-submit" type="submit" id="edit-submit--8" value="Search">
+                      </div>
+                      </div>
+          
+                  </form>
+                  {% endif %}
+          
+          
+                  <!-- Dropdown menu toggle on mobile: c-toggler class can be applied to the link arrow or link itself depending on toggle mode -->
+                  <nav class="c-mega-menu c-pull-right c-mega-menu-light c-mega-menu-light-mobile c-mega-menu-onepage c-fonts-uppercase c-fonts-bold"
+                      data-onepage-animation-speed="700">
+                      <!-- Main Menu -->
+                      <ul class="nav navbar-nav c-theme-nav">
+                          {{ menu }} <!-- Menu Start -->
+                          <!-- Get menu items -->
+                          {% set items = simplify_menu('main') %}
+                          <!-- Iterate menu tree -->
+                          {% for menu_item in items.menu_tree %}
+                              {# {% if (menu_item.text == 'Distributor Portal' and (('distributor' in user.account.roles) or ('administrator' in user.account.roles) or (user.id == 1))) or menu_item.text != 'Distributor Portal' %} #}
+                              <li class="{{ item_class }} navigation__item tbm-item level-1 tbm-justify tbm-item--has-dropdown">
+                                  <button type="button" role="button" id="nav-button-{{loop.index0}}" class="tbm-link level-1 tbm-toggle c-link c-toggler main-nav-button" onclick=menu_toggle(event)>{{ menu_item.text }}<i class="fa fa-chevron-down"></i></button>
+                                  {% if 'submenu' in menu_item|keys  %}
+                                  <div class="dropdown-menu c-menu-type-mega c-menu-type-fullwidth">
+                                      {% for submenu_item in menu_item.submenu %}
+                                          <div class="mega-column">
+                                              <ul class="dropdown-menu c-menu-type-inline" role="list">
+                                                  <li class="{{ item_class }} tbm-column">
+                                                        <a href="{{ submenu_item.url }}" class="{{ link_class }} tbm-link level-1 c-link"><h3>{{ submenu_item.text }}</h3></a>
+                                                        {% if 'submenu' in submenu_item|keys  %}
+                                                            {% for sub_submenu_item in submenu_item.submenu %}
+                                                                <li class="{{ item_class }} tbm-column">
+                                                                    {% set extra_classes = '' %} 
+                                                                    <a href="{{ sub_submenu_item.url }}" class="{{ link_class }} tbm-link level-1 {{extra_classes}}">
+                                                                        {% if sub_submenu_item.text == 'Promotions' or sub_submenu_item.text == 'New Products' %} 
+                                                                            {% if sub_submenu_item.text == 'Promotions' %}    
+                                                                                {% set extra_classes = 'c-font-red c-font-bold' %}
+                                                                            {% else %} {% set extra_classes = 'c-font-bold' %}
+                                                                            {% endif %}
+                                                                            <h3 class="{{extra_classes}}">{{ sub_submenu_item.text }}</h3>
+                                                                        {% else %}
+                                                                            {{ sub_submenu_item.text }}
+                                                                        {% endif %}         
+                                                                    </a>
+                                                                </li>
+                                                            {% endfor %}
+                                                            {% if menu_item.text == 'Products' and loop.index0 == 0 %} {# First column of Products menu #}
+                                                                    <li class="tbm-column span12 col-md-12 special">
+                                                                    <a href="/services/contract-manufacturing-oem" style="border-radius: 10px;margin-left: 10px;"><h3 class="question" style="margin:5px 0px;"><b>Need Customization?</b></h3><span class="oem" style="color:var(--norgen-primary-blue);">OEM &amp; Contract Manufacturing Services</span></a>
+                                                                </li>
+                                                            {% endif %}
+                                                        {% endif %}
+                                                  </li>
+                                              </ul>
+                                          </div>
+                                      {% endfor %}
+                                  </div>
+                                  {% endif %}
+                              </li>
+                              {# {% endif %} #}
+                          {% endfor %}
+                          <!-- Menu End -->
+                          {% if currentPath not in excludedPaths %}
+                          <li class="c-search-toggler-wrapper">
+                              <a href="#" class="c-btn-icon c-search-toggler">
+                                  <i class="fa fa-search"></i>
+                              </a>
+                          </li>
+                          {% endif %}
+  
+                            <li class="c-cart-toggler-wrapper">
+                              {% if not hideCartButton and not restricted_country %}
+                              <a href="javascript:void(0)" class="c-btn-icon c-cart-toggler">
+                                  <i class="icon-handbag c-cart-icon"></i>
+                                  <span class="c-cart-number c-theme-bg">{{ cart_count }}</span>
+                              </a>
+                              {% elseif not hideCartButton and restricted_country %}
+                              <a href="/resources/distributors" class="c-btn-icon c-cart-toggler">
+                                  <i class="icon-handbag c-cart-icon"></i>
+                              </a>
+                              {% endif %}
+                              <!-- cart_block -->
+                              {% if cart_block != FALSE and not restricted_country %}
+                              {# Retrieve existing classes #}
+                              {% set existing_classes =  attributes.addClass('c-cart-menu', 'desktop') %}
+  
+                              <div id = 'cart-sidebar-desktop-header' class="{{ existing_classes.class }}{{ add_class ? ' desktop-cart-sidebar' : '' }}">
+                              {# <div{{ attributes.addClass('c-cart-menu').addClass('desktop') }}> #}
+                                  <div class="c-cart-menu-title">
+                                      <p class="c-cart-menu-float-l c-font-sbold">{{ count_text }}</p>
+                                      <p class="c-cart-menu-float-r c-theme-font c-font-sbold">{{ cart_total_price }}</p>
+                                  </div>
+                                  <div style="display:flex;    align-items: center;">
+                                      <div style="padding: 0 10px;">                                       
+                                          <h2 style="font-weight:600;width:max-content;">YOUR CART, {{ cart_count }} item(s)</h2>
+                                        
+                                      </div>
+                                      <div style="width:100%;text-align: right;">
+                                          <button style="border-radius:4px;border-width:0!important;color:#7F8C97;background-color: transparent;font-size:40px" id="close-cart-desktop" onclick='closecart(this)'>&times;</button>
+                                      </div>
+                                  
+                                  </div>
+  
+                                  <div style="display:flex;justify-content: space-between;padding:10px 10px;">
+                                      <p style="letter-spacing:1px;font-size:12px;">PRODUCT</p>
+                                      <!--<p style="letter-spacing:1px;font-size:12px;">TOTAL</p>-->
+                                  </div>
+                                  <hr style="width:90%;margin:auto auto 10px;">
+                                      {# {{ cart_block }} #}
+                                      {{ nor_forms_module_cart_view }}
+                              
+  
+                              </div>
+                              {% endif %}
+                            </li>
+  
+                          <li>
+                          {% if 'authenticated' in user.account.roles %}
+                              {% set user_menu_title = 'Account' %}
+                          {% else %}
+                              {% set user_menu_title = 'Sign In' %}
+                          {% endif %}
+                          <a href="{{ url('user.page') }}"
+                              class="c-btn-border-opacity-04 c-btn btn-no-focus c-btn-header btn btn-sm c-btn-border-1x c-btn-dark c-btn-circle c-btn-uppercase c-btn-sbold">
+                              <i class="icon-user"></i> {{ user_menu_title|t }}
+                          </a>
+                          </li>
+                      </ul>
+                  </nav>
+                  {# {% if cart_block != FALSE %}
+                  {% set attributes = attributes.addClass('mobile').removeClass('desktop') %}
+                  <div{{ attributes }}>
+                      <div class="c-cart-menu-title">
+                          <p class="c-cart-menu-float-l c-font-sbold">{{ count_text }}</p>
+                          <p class="c-cart-menu-float-r c-theme-font c-font-sbold">{{ cart_total_price }}</p>
+                      </div>
+                      {{ cart_block }}
+                  </div>
+                  {% set attributes = attributes.removeClass('mobile') %}
+              {% endif %} #}
+              
+              {% set attributes = attributes.removeClass('desktop').removeClass('mobile') %}
+              </div>
+          </div>
+      </div>
+  </header>
+  {% if not is_front %}
+  {# <div style="padding-top: 15px; padding-bottom: 15px; background-color: var(--norgen-primary-blue-light);">
+    <div class="center">
+        <div class="c-shop-banner-3 c-center">
+        <a href="/promotions/saliva">
+            <h3 class="c-title c-font-20">
+                Preserve, Capture, Discover. Receive Free Shipping+ When You Purchase Eligible Saliva Products. <span class="c-font-uppercase c-font-bold">See Promo</span>
+            </h3>
+        </a>
+        </div>
+    </div>
+  </div> #}
+    <div style="padding-top: 15px; padding-bottom: 15px; background-color: var(--norgen-primary-blue-light);">
+        <div id="promotion-carousel" class="carousel slide" data-ride="carousel" data-wrap="true" data-interval="10000">
+            <div class="carousel-inner-wrapper">
+                <div class="carousel-inner">
+                    {# <div class="item active">
+                        <div class="item-wrapper">
+                            <div class="c-shop-banner-3 c-center">
+                                <a href="/masterclass/webinars/transforming-cancer-care-cfdna-liquid-biopsy-prostate-cancer-perspective" class="c-title c-font-20">
+                                    <b>FREE WEBINAR</b> -  Liquid Biopsy for Prostate Cancer! <span class="c-font-uppercase c-font-bold">Details &amp; Register</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div> #}
+                    {# <div class="item active">
+                        <div class="item-wrapper">
+                            <div class="c-shop-banner-3 c-center">
+                                <a href="/promotions/save-microbiome-products#products-section" class="c-title c-font-20">
+                                    For a Limited Time: Save on Microbiome Kits! <span class="c-font-uppercase c-font-bold">View Products</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div> #}
+                    {# <div class="item active">
+                        <div class="item-wrapper">
+                            <div class="c-shop-banner-3 c-center">
+                                <a href="/promotions/magnetic-bead-automation" class="c-title c-font-20">
+                                    <b>20% Off</b> Eligible Magnetic Bead Kits! <span class="c-font-uppercase c-font-bold">View Products</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div> #}
+                    <div class="item active">
+                        <div class="item-wrapper">
+                            <div class="c-shop-banner-3 c-center">
+                                <a href="/promotions/backtoschool" class="c-title c-font-20">
+                                    <b>Save 20%</b> on DNA, RNA, Exosome, NGS and Multi-analyte kits! <span class="c-font-uppercase c-font-bold">Learn More</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-wrapper">
+                            <div class="c-shop-banner-3 c-center">
+                                <a href="/services/next-generation-sequencing" class="c-title c-font-20">
+                                    Applicable Sequencing Projects Can Get <b>6 FREE</b> Sample Pilot Trials! <span class="c-font-uppercase c-font-bold">Learn More</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-wrapper">
+                            <div class="c-shop-banner-3 c-center">
+                                <a href="/product/total-rna-purification-kits?v=1931" class="c-title c-font-20">
+                                    New Total RNA Magnetic Bead Purification Kits. Save when you bundle with DNase! <span class="c-font-uppercase c-font-bold">View Products</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                   {#  <div class="item">
+                        <div class="item-wrapper">
+                            <div class="c-shop-banner-3 c-center">
+                                <a href="https://norgenbiotek.com/promotions/rna-promotion" class="c-title c-font-20">
+                                    Buy 2 RNA Products, Get 50% off the 3rd. Buy 4, Get the 5th free. <span class="c-font-uppercase c-font-bold">View Products</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div> #}
+
+                </div>
+            </div>
+
+            <a class="carousel-control left" href="#promotion-carousel" role="button" data-slide="prev">
+                <span class="fa fa-2x fa-chevron-left" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control right" href="#promotion-carousel" role="button" data-slide="next">
+                <span class="fa fa-2x fa-chevron-right" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
+  {% endif %}
+  <script id = 'search_header'>
+      var prd_name_nu = {{search_block | json_encode | raw}};
+      //console.log(prd_name_nu);
+      search_auto(document.getElementById("edit-keys--8"), prd_name_nu);
+      //search_auto(document.getElementById("cust_search_input_3"), prd_name_nu);
+      var search_submit = document.querySelector("#edit-submit--8");
+      var search_inpt;
+  
+      function search_auto(inp, original_arr) 
+      {
+          var up_down_current=-1;
+          // var search_submit;
+          
+          switch (inp.id){
+              case "edit-keys--8":
+                  search_inpt = document.getElementById("edit-keys--8");
+                  search_submit = document.getElementById("edit-submit--8");
+                  break;
+              /* case "cust_search_input_3":
+                  search_inpt = document.getElementById("cust_search_input_3");
+                  search_submit = document.getElementById("cust_search_submit_3");
+                  break;*/
+          }
+          inp.addEventListener("input", events);
+          inp.addEventListener("click", events);
+          inp.addEventListener("onchange", events);
+  
+          inp.addEventListener("keydown", function(e) {
+              var drop_down_check = document.getElementById(inp.id + "_dropdown");
+          
+              if (drop_down_check) 
+              {
+                  drop_down_check = drop_down_check.getElementsByTagName("div");
+              }
+              if (e.keyCode == 40) 
+              {
+                  up_down_current++;
+                  focused(drop_down_check);
+                  if (!checkInView(drop_down_check[up_down_current],document.getElementById(inp.id + "_dropdown"))) 
+                  {
+                      drop_down_check[up_down_current].scrollIntoView({
+                          block: 'end'
+                      });
+                  }
+              } 
+              else if (e.keyCode == 38)             
+              {
+                  up_down_current--;
+                  if (!checkInView(drop_down_check[up_down_current],document.getElementById(inp.id + "_dropdown"))) 
+                  {
+                      drop_down_check[up_down_current].scrollIntoView({
+                          block: 'end'
+                      });
+                  }
+                  focused(drop_down_check);
+              } 
+  
+              if (up_down_current > -1) 
+              {
+                  inp.value = (drop_down_check[up_down_current].getElementsByTagName("input"))[0].value;
+              }
+          });
+  
+          function events() {
+              var  i, val = this.value;
+              var passed_id = inp.id+"_dropdown";
+              if(document.getElementById(passed_id))
+              {
+                  document.getElementById(passed_id).remove();
+              }
+              if (!val) {
+                  return false;
+              }
+              up_down_current = -1;
+              {# var overlay_search = document.getElementById("overlay-search");
+                  overlay_search.style.display = "block"; #}
+              var dropdown = "<div id='"+inp.id+"_dropdown' class='dropdown_list_el'></div>";
+              var id_parent = document.getElementById(inp.id).parentNode;
+              id_parent.insertAdjacentHTML('beforeend',dropdown);
+              var tab = 1;
+              var arr = [];
+              for(i = 0 ; i <original_arr.length;i++)
+              {
+                  arr[i] =  new Array(2 ).fill("");
+                  arr[i][0]=original_arr[i][0];
+                  arr[i][1]=original_arr[i][1];
+                  arr[i][2]=0;
+              }
+              var string2 = (val.trim()).toLowerCase();
+              var string2_parts = string2.split(" "); 
+              for (i = 0; i < arr.length; i++) {
+                  var string1 = arr[i][0].toLowerCase();
+              var max_array = string1.split(" ");
+              var similarity_loop, a;
+              arr[i][2] = 0;
+              for(a = 0 ; a<string2_parts.length ; a++)   
+              { 
+                  var similarity = 0;
+                  for(similarity_loop=0;similarity_loop<max_array.length;similarity_loop++)
+                  { 
+                      var similarity_check = jaro_similarity(max_array[similarity_loop], string2_parts[a]);
+                      if(similarity<similarity_check)
+                      {
+                          similarity = similarity_check;
+                      }
+                  }
+                  arr[i][2] += similarity;
+              }
+              // arr[i][1] = similarity;
+              }
+              arr.sort(function(a,b) {
+              return b[2]-a[2]
+              });
+              for (i = 0; i < arr.length; i++) 
+              {
+                  if (arr[i][2] > (0.70))
+                  {     
+  
+                      var valstart = arr[i][0].toLowerCase().indexOf(val.toLowerCase());
+                      var len = val.length;
+                      var id_string = '"'+inp.id+'"';
+                      var dropdown_data ="<a href="+arr[i][1]+"><div onclick='drop_click(this,"+id_string+")'>"+ arr[i][0].substring(0, valstart) + arr[i][0].substring(valstart, (valstart + len))+ arr[i][0]
+                          .substring((valstart + len), arr[i][0].length)+"<input tabIndex='" + 0 + "' type='hidden' value='" + arr[i][0] + "'> </div></a>";
+  
+                      var id_drop = document.getElementById((inp.id+"_dropdown"));
+                      id_drop.insertAdjacentHTML('beforeend',dropdown_data);
+                      
+                  } 
+              }
+          }
+      
+          function focused(drop_data) {
+              if (!drop_data) return false;
+              for (var i = 0; i < drop_data.length; i++) {
+                  drop_data[i].classList.remove("dropdown_el_active");
+              }
+              if (up_down_current >= drop_data.length) up_down_current = 0;
+              if (up_down_current < 0) up_down_current = (drop_data.length - 1);
+              drop_data[up_down_current].classList.add("dropdown_el_active");
+          }
+      }
+  
+      function drop_click(elm,inpt)
+      {
+          var inp =  document.getElementById(inpt);
+          inp.value = elm.getElementsByTagName("input")[0].value;
+          search_inpt.focus();
+          search_submit.click();
+      }
+  
+      function jaro_similarity(s1, s2) 
+      {
+          var m = 0;
+          if (s1.length === 0 || s2.length === 0) {
+              return 0;
+          }
+  
+          if (s1 === s2 || s1.includes(s2)) {
+              return 1;
+          }
+  
+          var range = (Math.floor(Math.max(s1.length, s2.length) / 2)) - 1,
+              s1Matches = new Array(s1.length),
+              s2Matches = new Array(s2.length);
+  
+          for (i = 0; i < s1.length; i++) {
+              var low = (i >= range) ? i - range : 0,
+                  high = (i + range <= s2.length) ? (i + range) : (s2.length - 1);
+  
+              for (j = low; j <= high; j++) {
+                  if (s1Matches[i] !== true && s2Matches[j] !== true && s1[i] === s2[j]) {
+                      ++m;
+                      s1Matches[i] = s2Matches[j] = true;
+                      break;
+                  }
+              }
+          }
+  
+          if (m === 0) {
+              return 0;
+          }
+  
+          var k = n_trans = 0;
+  
+          for (i = 0; i < s1.length; i++) {
+              if (s1Matches[i] === true) {
+                  for (j = k; j < s2.length; j++) {
+                      if (s2Matches[j] === true) {
+                          k = j + 1;
+                          break;
+                      }
+                  }
+  
+                  if (s1[i] !== s2[j]) {
+                      ++n_trans;
+                  }
+              }
+          }
+  
+          var weight = (m / s1.length + m / s2.length + (m - (n_trans / 2)) / m) / 3,
+              l = 0,
+              p = 0.1;
+  
+          if (weight > 0.7) {
+              while (s1[l] === s2[l] && l < 4) {
+                  ++l;
+              }
+  
+              weight = weight + l * p * (1 - weight);
+          }
+  
+          return weight;
+      }
+          
+      
+  
+  
+  
+      function checkInView(elem, container) 
+      {
+          var contHeight = $(container).height();
+          var contTop = $(container).scrollTop();
+          var contBottom = contTop + contHeight;
+          if($(elem).offset() && $(container).offset().top)
+          {
+              var elemTop = $(elem).offset().top - $(container).offset().top;
+              var elemBottom = elemTop + $(elem).height();
+              var isTotal = (elemTop >= 0 && elemBottom <= contHeight);
+              return isTotal;
+          }
+          return true;
+          
+      }
+      function close_search_bar(){
+          $('body').removeClass('c-layout-quick-search-shown');
+      }
+      {% if not restricted_country %}
+      function closecart(e) {
+          // e.preventDefault(); // Uncomment if needed
+      
+          //console.log('Function triggered.');
+      
+          // Select the cart menu element
+          const cartMenu = document.querySelector('.c-cart-menu.desktop:not(.mobile)');
+          if (cartMenu) {
+              cartMenu.classList.remove('desktop-cart-sidebar');
+          } 
+          else {
+              //console.log('Cart menu element not found.');
+          }
+      
+          // Select the off-canvas main canvas element
+          const mainCanvas = document.querySelector(".dialog-off-canvas-main-canvas");
+          if (mainCanvas) {
+              //console.log('Main canvas element founddrfgthdfrgth:', mainCanvas.style);
+             // mainCanvas.style = "margin-right:0!important";
+              // document.getElementsByClassName("dialog-off-canvas-main-canvas")[0].style.marginRight = "390px"; 
+              //document.getElementsByClassName("c-navbar-wrapper clearfix")[0].style.marginRight = "0px";
+              document.querySelector('.dialog-off-canvas-main-canvas').classList.remove('body-desktop-cart-sidebar');
+              document.querySelector('header').classList.remove('body-desktop-cart-sidebar');
+              
+              //console.log('Margin reset.', mainCanvas.classList);
+          } else {
+              //console.log('Main canvas element not found.', mainCanvas.style);
+          }
+  
+          document.cookie = "user_choice_for_cart=closed; path=/";
+      }
+      {% endif %}
+      
+      function menu_toggle(event){
+          event.preventDefault();
+          clicked_element = event.currentTarget;
+          clicked_hide_div = false;
+          
+          if(clicked_element.classList.contains('close-toggle-nav-menu')) { // get the actual menu button, if the clicked element was the hide div
+              clicked_hide_div = true;
+              clicked_element = document.querySelector('.nav.navbar-nav .tbm-toggle#'+clicked_element.getAttribute("assoc_id"));
+          }
+          const active_buttons = document.querySelectorAll('.nav.navbar-nav .tbm-toggle.active');
+          active_buttons.forEach(element => { // remove active class from any active menu items
+              if(element!==clicked_element) {
+                  element.classList.remove('active');
+                  element.setAttribute("aria-pressed", false);
+              }
+          });
+         
+          clicked_element.classList.toggle('active'); // toggle active class on the clicked menu item
+          
+          if(clicked_element.classList.contains('active')){ // button has been activated, create hide div
+              clicked_element.setAttribute("aria-pressed", true);
+              toggle_nav = document.querySelector('.close-toggle-nav-menu');
+              if(!toggle_nav){
+                  let header = document.querySelector('header');
+                  let hide_div = document.createElement('div');
+                  hide_div.classList.add('close-toggle-nav-menu');
+                  hide_div.setAttribute("assoc_id", clicked_element.id);
+                  hide_div.setAttribute("onclick", "menu_toggle(event)"); 
+                  header.after(hide_div);
+              }
+              else{
+                  toggle_nav.setAttribute("assoc_id", clicked_element.id);
+              }
+          }
+          else{ // not active, remove all rendered hide divs
+              clicked_element.setAttribute("aria-pressed", false);
+              let hide_div = document.querySelectorAll('.close-toggle-nav-menu');
+              if(hide_div){
+                  hide_div.forEach(element => {
+                      element.remove();
+                  });
+              } 
+          }
+      }
+  
+      $("a").filter('[role="button"]').on('keydown', function(e) {
+          if (e.which === 32) {
+              e.preventDefault();
+              menu_toggle(e);
+          }
+      });
+  
+  
+  
+      document.addEventListener('DOMContentLoaded', function () {
+      const cartToggler = document.querySelector('.c-cart-toggler');
+      function updateCartBehavior() {
+          if (window.innerWidth <= 1200) { 
+              cartToggler.onclick = function () {
+                  window.location.href = '/cart'; 
+              };
+          } else {       
+              cartToggler.onclick = null; 
+          }
+      } 
+      updateCartBehavior();
+      window.addEventListener('resize', updateCartBehavior);
+  });
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  </script>

@@ -1,0 +1,272 @@
+{# drupal #}
+{# <div class="content">{{ content }}</div>
+{# Rest of your node template code #}
+{# <script>console.log({{ _context | json_encode | raw}});</script> #}
+{# <script>console.log({{ _context['all_info'] | json_encode | raw}});</script>
+<script>var rimpy = {{ _context['all_info'] | json_encode | raw}};</script> #}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<link rel="stylesheet" type="text/css" href="/themes/custom/jango/css/search_use.css">
+
+<body>
+    <div id="overlay" onclick="close_nav()"></div>
+    <!--new search-->
+    <br>
+    <br>
+    <br>
+    <div style="position: relative;">
+    	    <form method="GET" action="" id="form_mob">
+            <div class="mob_new_search">
+
+                <div class="mob_new_search_bar container notranslate" style="padding:4px;position: relative;width:100%;">
+                    <input class="bor search-input search-b"
+                        style="background:none;border:none;margin: 0px;height: 100%;" autocomplete="off" id="mob_search"
+                        type="text" name="search" placeholder="Product Name"
+                        value="{{ search_value }}">
+
+                </div>
+                <button id="sub2" type="submit" class="search search-button-advance" value="submit"
+                    style="border-radius: 0px 9px 9px 0px;border-radius: 50px;font-size: 30px;"><i class="fa fa-magnifying-glass"></i></button>
+
+                <div style="border-right: 1px solid #ddd"></div>
+                 <a href="#" onclick="open_filters();{return false;}" style="padding:4px;">
+                    <div class="search search-button-advance"
+                        style="border-radius:0px;border-top-right-radius: 10px;border-bottom-right-radius: 10px;">
+                        <i class="fa fa-filter" id="mob-filters-icon" style="color: var(--norgen-primary-blue);font-size: 30px;display: flex;"></i>
+                    </div>
+                </a> 
+
+            </div>
+            <div class="tags">
+                <span>
+                    <p style="font-size: 20px;font-weight: 800;color: #144a95;">Use Type</p>
+                    <p id="use_type_tag"></p><a class="close" id="use_tag" href="#" 
+                        onclick="closebox(this);return false;"
+                        style="font-size:43px;position: absolute;top: -2px;right: 5px;padding:1%;">×</a>
+                </span>
+                <span>
+                    <p style="font-size: 20px;font-weight: 800;color: #144a95;pad">Category</p>
+                    <p id="cat_tag"></p><a class="close" id="cat_tag" href="#" 
+                        onclick="closebox(this);return false;"
+                        style="font-size:43px;position: absolute;top: -2px;right: 5px;padding:1%;">×</a>
+                </span>
+                <span>
+                    <p style="font-size: 20px;font-weight: 800;color: #144a95;">Sample Type</p>
+                    <p id="sample_tag"></p><a class="close" id="sample_tag" href="#"
+                        onclick="closebox(this);return false;"
+                        style="font-size:43px;position: absolute;top: -2px;right: 5px;padding: 1%;">×</a>
+                </span>
+                <span>
+                    <p style="font-size: 20px;font-weight: 800;color: #144a95;">Quantity</p>
+                    <p id="minma_tag"></p><a id="minma_tag" class="close" href="#"
+                        onclick="closebox(this);return false;"
+                        style="font-size:43px;position: absolute;top: -2px;right: 5px;padding: 1%;">×</a>
+                </span>
+            </div>
+            <!-- </form> -->
+            <div class="mob_search">
+                <div class="main_s">
+   		            <div class="right_advanced" id="form_elem">
+                        <div class="advanced_s"
+                            style="padding: 4px;margin: auto;">
+                            <div class="mob_advanced">
+                                <div class="search-element item1">
+                                    <label class="search-label">Category</label>
+                                    <div class="radio-cat-toolbar" id="mob_cat-toolbar" name="cat-toolbar"></div>
+                                </div>
+                                <div class="search-element item2">
+                                    <label class="search-label">Sample Type</label>
+                                    <select class="search-input"
+                                        style="width:auto;padding: 4%;border-bottom-style: solid;color: gray;"
+                                        name="sample_opt" id="mob_sample_opt" onchange="filter_sample_type(this)">
+                                        <option value="-1" selected>Select a Sample type</option>
+                                    </select>
+                                </div>
+                                <div class="search-element item3">
+                                    <label class="search-label">Use type</label>
+                                    <div class="radio-toolbar">
+                                        <input type="radio" onclick="select_use(this)" id="mob_type1" name="use_type"
+                                            value="0">
+                                        <label style="grid-template-rows: 195px 35px !important;" for="mob_type1"><img
+                                                src="/sites/default/files/images/search/research.svg"
+                                                style="width: 65%;margin: auto;">Research</label><br>
+                                        <input type="radio" onclick="select_use(this)" id="mob_type2" name="use_type"
+                                            value="1">
+                                        <label style="grid-template-rows: 195px 35px !important;" for="mob_type2"><img
+                                                src="/sites/default/files/images/search/diagnostic.svg"
+                                                style="width: 65%;margin: auto;">Diagnostic</label><br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="bottom: 0;width: inherit;padding: 4px;">
+                    <button type="button" class="search search-button-advance" style="display:inline;margin:0 20px;"
+                        onclick="reset_button()">Reset Filters</button>
+                    <input id="mob_sub" type="submit" class="search search-button-advance"
+                        style="display:inline;float: right;margin:0 20px;">
+                </div>
+            </div>
+        </form>
+        <form method="GET" id="form_desk" action="" style="margin: auto;justify-content: center;align-items: center;">
+            <div class="desktop_new_search">  
+                <div class="new_search container notranslate">
+                    <div class="new_search_bar" style="padding: 0 10px 0 10px;position: relative;width: 100%" onclick="select_input()">
+                        <input class="bor search-input search-b typing"
+                            style="background:none;border:none;margin: 0px;height:100%;" autocomplete="off" tabindex="0" id="search"
+                            type="text" name="search" tabindex="0" placeholder="Product Name"
+                            value="{{ search_value }}">
+                    </div>
+                    <div class="new_btn" onFocus="leave_nav(3)" style="padding: 0.2% 0% 0.2% 0%;">
+                        <button id="sub" class="search search-button-advance"  onclick="button_sub(this)" value="submit" style="border-radius:10px;border-top-left-radius:0;border-bottom-left-radius: 0;align-items: baseline;"><i class="fa fa-magnifying-glass"></i></button>
+                    </div>
+                </div>
+                <div class="search_outer_div_outside container mt-20" style="display: flex;border: 1px solid #dddddd;border-radius:4px;position:relative;">
+                    <div class="new_search_filters" style="border-radius: 4px;" id="filters_section">    
+                        <div class="filter new_category" style="position: relative;" id="dvii">
+                            <div onclick="open_nav(0) " onmouseover="hover_nav(0)" onmouseleave="leave_nav(0)">
+                                <p class="first-p">Category</p>
+                                <p class="second-p" id="second-p-cat">
+                                    {% if category_val is empty %}
+                                        Choose
+                                    {% else %}
+                                        {{ category_val }}
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="new_div new_category_new_div">
+                                <h5>Search By Category</h5>
+                                <div class="radio-cat-toolbar" id="cat-toolbar" name="cat-toolbar"></div>
+                            </div>
+                        </div>
+                        <div class="border" style="border-right: solid 1px;border-radius: 4px;height: 39px;padding: 0;"></div>
+                        <div class="filter new_sample" style="position: relative;">
+                            <div onclick="open_nav(1)" onmouseover="hover_nav(1)"  onmouseleave="leave_nav(1)">
+                                <p class="first-p">Sample/Analyte</p>
+                                <p class="second-p" id="second-p-sample">
+                                    {% if sample_type is empty or sample_type < 0 %}
+                                        Choose
+                                    {% else  %}       
+                                    {{ sample_type }}
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class='new_div new_sample_new_div'>
+                                <h5>Search By Sample/Analyte</h5>
+                                <select class="search-input"
+                                    style="width:auto;padding: 4%;border-bottom-style: solid;color: gray;appearance:auto;" name="sample_opt"
+                                    id="sample_opt" onchange="filter_sample_type(this)">
+                                    <option value="-1" selected>Select a type <i class="n3icon-bioinformatics" style="font-size: 110px;color: #8f8f8f;"></i></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="border" style="border-right: solid 1px;border-radius: 0px;height: 39px;padding: 0;"></div>
+                        <div class="filter new_usetype" style="position:relative;">
+                            <div onclick="open_nav(2)" onmouseover="hover_nav(2)" onmouseleave="leave_nav(2)">
+                                <p class="first-p">Intended Use</p>
+                                <p class="second-p" id="second-p-use">
+                                    {% if res_dia_type_val is empty %}
+                                        Choose
+                                    {% elseif res_dia_type_val == '0' %}
+                                        Research
+                                    {% else %}
+                                        Diagnostic
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="new_div new_usetype_new_div">
+                                <h5>Search By Category</h5>
+                                <div class="radio-toolbar">
+                                    <input onclick="select_use(this)" tabindex="-1" type="radio" id="type1" name="use_type" value="0">
+                                    <label for="type1" tabindex="0" class="btn"><img src="/sites/default/files/images/search/research.svg"
+                                            style="width: 60%;margin: auto;">Research</label><br>
+                                    <input onclick="select_use(this)" tabindex="-1" type="radio" id="type2" name="use_type" value="1">
+                                    <label for="type2" tabindex="0" class="btn"><img src="/sites/default/files/images/search/diagnostic.svg"
+                                            style="width: 60%;margin: auto;">Diagnostic</label><br>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="new_btn" onFocus="leave_nav(3)" style="padding:4px;display:flex;">
+                        <button id="sub" class="btn btn-primary"  onclick="button_sub(this)" value="submit" style="align-items: baseline;color:white;">Search</button>
+                        <button type="button" class="btn" href="#" id="reset" tabindex="0" onclick="reset_button();" style="color:#000">Reset</button>
+                    </div>
+                </div>
+
+                <hr>
+                <br>
+            
+                <div class="search_outer_div">
+                   
+                    <div id="display" class="left_results">
+                        <h3 class="result_heading" style="display: none;">Search Results</h3>
+                        <div style="display: flex;color: #808080cc;">
+                            <div id="totalResults"></div>
+                            <div style="padding-left: 5px;" id="totalpages"></div>
+                        </div>
+                        <div class="app-loader">
+                            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                    viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+                            <style type="text/css">
+                                .st0{fill:#E6E6E6;}
+                                .st1{fill:#FFFFFF;}
+                                .st2{fill:#CCCCCC;}
+                            </style>
+                            <g>
+                            <path class="st0" d="M315.5,192.7H190.3c-11.9,0-21.6-9.7-21.6-21.6v0c0-11.9,9.7-21.6,21.6-21.6h125.2c11.9,0,21.6,9.7,21.6,21.6
+                                        v0C337.1,183.1,327.4,192.7,315.5,192.7z"/>
+                            <rect x="195.9" y="191.9" class="st0" width="117.2" height="43.2"/>
+                            <path class="st0" d="M418.9,493.5h-332c-11.1,0-18.3-12.1-13.3-22.2l113.7-228.9c2.2-4.5,6.7-7.3,11.5-7.3h110.7
+                                        c5.2,0,9.9,3,12.2,7.8l110.5,228.3C437.4,481.5,430.1,493.5,418.9,493.5z"/>
+                            </g>
+                            <polygon id="path3728" class="st1" points="369.3,434.2 135.7,434.2 161.3,383.4 347,383.4 "/>
+                            <ellipse id="path3859" class="st0" cx="156.7" cy="96.6" rx="28.9" ry="29.6"/>
+                            <ellipse id="path3857" class="st0" cx="274.1" cy="60.1" rx="42.5" ry="43.6"/>
+                            <ellipse id="path3855" class="st2" cx="351.6" cy="101.3" rx="25.1" ry="25.7"/>
+                            </svg>
+
+                        </div>
+                        <ul id="display_result" style="display: inline-block;list-style: none;">
+                        </ul>
+                        <div id="paginate_buttons"></div>
+                    </div>
+                    <div class="promotions">
+                        <div class="card">
+                            <div class="card-img">
+                                <img src="/sites/default/files/images/search/tag.svg">
+                                </div>
+                                <div class="card-title">
+                                    <h1>Promotions</h1>
+                                </div>
+                                <div class="card-desc">
+                                    <p>Explore Norgen’s latest promotions</p>
+                                    <a href="https://norgenbiotek.com/smart-save" class="btn btn-primary feature-btn"
+                                        role="button" style="width: -webkit-fill-available;background-color: #144a95;color: white;">Learn More</a>
+                                </div>
+                            </div>
+                        <div class="card" style="margin-top: 5%">
+                            <div class="card-img">
+                                <!--  <img src="/sites/default/files/images/search/services.svg"> -->
+                                <i class="n3icon-bioinformatics" style="font-size: 110px;color: #8f8f8f;"></i>
+                            </div>
+                            <div class="card-title">
+                                <h1>Services</h1>
+                            </div>
+                            <div class="card-desc">
+                                <p>Discover Norgen’s service offerings</p>
+                                <a href="https://norgenbiotek.com/services" class="btn btn-primary feature-btn"
+                                        role="button" style="width: -webkit-fill-available;background-color: #144a95;color: white;">Learn More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+ 
+</body>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+{% include '@jango/templates/includes/search.html.twig' %}
+	

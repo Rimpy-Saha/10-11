@@ -1,0 +1,79 @@
+{#
+/**
+ * @file
+ * Theme override for a field.
+ *
+ * To override output, copy the "field.html.twig" from the templates directory
+ * to your theme's directory and customize it, just like customizing other
+ * Drupal templates such as page.html.twig or node.html.twig.
+ *
+ * Instead of overriding the theming for all fields, you can also just override
+ * theming for a subset of fields using
+ * @link themeable Theme hook suggestions. @endlink For example,
+ * here are some theme hook suggestions that can be used for a field_foo field
+ * on an article node type:
+ * - field--node--field-foo--article.html.twig
+ * - field--node--field-foo.html.twig
+ * - field--node--article.html.twig
+ * - field--field-foo.html.twig
+ * - field--text-with-summary.html.twig
+ * - field.html.twig
+ *
+ * Available variables:
+ * - attributes: HTML attributes for the containing element.
+ * - label_hidden: Whether to show the field label or not.
+ * - title_attributes: HTML attributes for the title.
+ * - label: The label for the field.
+ * - multiple: TRUE if a field can contain multiple items.
+ * - items: List of all the field items. Each item contains:
+ *   - attributes: List of HTML attributes for each item.
+ *   - content: The field item's content.
+ * - entity_type: The entity type to which the field belongs.
+ * - field_name: The name of the field.
+ * - field_type: The type of the field.
+ * - label_display: The display settings for the label.
+ *
+ * @see template_preprocess_field()
+ */
+#}
+{%
+  set classes = [
+    'field',
+    'field--name-' ~ field_name|clean_class,
+    'field--type-' ~ field_type|clean_class,
+    'field--label-' ~ label_display,
+  ]
+%}
+{%
+  set title_classes = [
+    'field__label',
+    label_display == 'visually_hidden' ? 'visually-hidden',
+  ]
+%}
+<a id="related-services" class="anchor-link"></a>
+<section id="related-services-section" class="menu-section">
+  <h2>Related Services</h2>
+  <div class="row">
+    {% for item in items %}
+      {% if item.content["#plain_text"] == 'ngs' %}
+        <div class="reffect col-md-4 col-sm-12">
+          <div class="rinfo">
+            <h4><a href="/services/next-generation-sequencing" target="_blank">NGS</a></h4>
+          </div>
+          <div class="rimg">
+            <a href="/services/next-generation-sequencing" class="related-services-product-page ngs" target="_blank" aria-label="NGS"> <i class="iconex-rna-seq fa-8x ico-rengs" aria-hidden="true"></i></a>
+          </div>
+        </div>  
+      {% elseif item.content["#plain_text"] == 'plant' %}
+        <img src="/sites/default/files/images/services-btn-ngs.png" alt="NGS Service" >
+      {% elseif item.content["#plain_text"] == 'rna' %}
+      <div class="reffect col-md-4 col-sm-12">
+          <div class="rinfo"><h4><a href="/services/rna-isolation-service" target="_blank"> RNA Isolation</a></h4></div>
+          <div class="rimg">
+              <a href="/services/rna-isolation-service" class="related-services-product-page rna-isolation" target="_blank" aria-label="NGS">  <i class="iconex-rna fa-8x ico-rerna" aria-hidden="true"></i></a>
+          </div>
+      </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>

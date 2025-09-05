@@ -1,0 +1,796 @@
+{#
+/**
+* @file
+* Default theme implementation to display a node.
+*
+* Available variables:
+* - node: The node entity with limited access to object properties and methods.
+* Only method names starting with "get", "has", or "is" and a few common
+* methods such as "id", "label", and "bundle" are available. For example:
+* - node.getCreatedTime() will return the node creation timestamp.
+* - node.hasField('field_example') returns TRUE if the node bundle includes
+* field_example. (This does not indicate the presence of a value in this
+* field.)
+* - node.isPublished() will return whether the node is published or not.
+* Calling other methods, such as node.delete(), will result in an exception.
+* See \Drupal\node\Entity\Node for a full list of public properties and
+* methods for the node object.
+* - label: The title of the node.
+* - content: All node items. Use {{ content }} to print them all,
+* or print a subset such as {{ content.field_example }}. Use
+* {{ content|without('field_example') }} to temporarily suppress the printing
+* of a given child element.
+* - author_picture: The node author user entity, rendered using the "compact"
+* view mode.
+* - metadata: Metadata for this node.
+* - date: Themed creation date field.
+* - author_name: Themed author name field.
+* - url: Direct URL of the current node.
+* - display_submitted: Whether submission information should be displayed.
+* - attributes: HTML attributes for the containing element.
+* The attributes.class element may contain one or more of the following
+* classes:
+* - node: The current template type (also known as a "theming hook").
+* - node--type-[type]: The current node type. For example, if the node is an
+* "Article" it would result in "node--type-article". Note that the machine
+* name will often be in a short form of the human readable label.
+* - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+* teaser would result in: "node--view-mode-teaser", and
+* full: "node--view-mode-full".
+* The following are controlled through the node publishing options.
+* - node--promoted: Appears on nodes promoted to the front page.
+* - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+* teaser listings.
+* - node--unpublished: Appears on unpublished nodes visible only to site
+* admins.
+* - title_attributes: Same as attributes, except applied to the main title
+* tag that appears in the template.
+* - content_attributes: Same as attributes, except applied to the main
+* content tag that appears in the template.
+* - author_attributes: Same as attributes, except applied to the author of
+* the node tag that appears in the template.
+* - title_prefix: Additional output populated by modules, intended to be
+* displayed in front of the main title tag that appears in the template.
+* - title_suffix: Additional output populated by modules, intended to be
+* displayed after the main title tag that appears in the template.
+* - view_mode: View mode; for example, "teaser" or "full".
+* - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+* - page: Flag for the full page state. Will be true if view_mode is 'full'.
+* - readmore: Flag for more state. Will be true if the teaser content of the
+* node cannot hold the main body content.
+* - logged_in: Flag for authenticated user status. Will be true when the
+* current user is a logged-in member.
+* - is_admin: Flag for admin user status. Will be true when the current user
+* is an administrator.
+*
+* @see template_preprocess_node()
+*
+* @todo Remove the id attribute (or make it a class), because if that gets
+* rendered twice on a page this is invalid CSS for example: two lists
+* in different view modes.
+*
+* @ingroup themeable
+*/
+#}
+{# <article{{ attributes }}>
+
+  {{ title_prefix }}
+  {% if not page %}
+  <h2{{ title_attributes }}>
+    <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+    </h2>
+    {% endif %}
+    {{ title_suffix }}
+
+    {% if display_submitted %}
+    <footer>
+      {{ author_picture }}
+      <div{{ author_attributes }}>
+        {% trans %}Submitted by {{ author_name }} on {{ date }}{% endtrans %}
+        {{ metadata }}
+        </div>
+    </footer>
+    {% endif %}
+
+    <div{{ content_attributes }}>
+      {{ content }}
+      </div>
+
+      </article>
+      #}
+
+      <style>
+        .field {
+          margin: 25px auto;
+        }
+
+        .field .field-label {
+          font-size: 14px;
+        }
+
+        .field.field-label-inline {
+          display: flex;
+          align-items: end;
+          margin: 12.5px 0;
+        }
+
+        .field.field-label-inline .field-items {
+          margin-bottom: 12px;
+        }
+
+        div#application {
+          padding: 2em;
+          width: fit-content;
+          margin: auto;
+        }
+
+        .animation-ctn {
+          text-align: center;
+        }
+
+        /* Popup Application */
+        .overlay {
+          position: fixed;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.7);
+          visibility: hidden;
+          opacity: 0;
+          z-index: 10000;
+          transition: opacity 500ms, visibility 500ms;
+        }
+
+        .overlay:target {
+          visibility: visible;
+          opacity: 1;
+        }
+
+        .popup {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          padding: calc(10px + 1vw);
+          background: #fff;
+          border-radius: 5px;
+          margin: auto;
+          height: 95vh;
+          width: 95vw;
+          max-width: 1100px;
+          max-height: 1100px;
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          visibility: hidden;
+          transition: visibility 500ms;
+        }
+
+        .overlay:target .popup {
+          visibility: visible;
+          opacity: 1;
+          overflow: auto;
+        }
+
+        .popup .close-btn {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          z-index: 1;
+          border: none;
+          font-size: 2em;
+          width: 1em;
+          height: 1em;
+        }
+
+        div.form-table label,
+        div.form-table input {
+          border-radius: 36px;
+          text-align: left;
+        }
+
+        div.form-table input#resume,
+        div.form-table input#cover-letter {
+          border-radius: 0;
+          border: none;
+        }
+
+        div.form-table input,
+        div.form-table select,
+        .div.form-table label {
+          width: 100%;
+          height: 34px;
+          margin-bottom: 1em;
+        }
+
+        div.form-table input {
+          padding: 8px;
+          border: 1px solid #c6c6c6;
+        }
+
+        div.form-table input::placeholder {
+          color: #999;
+        }
+
+        div.form-table input:focus,
+        div.form-table select:focus,
+        div.form-table input:focus-visible,
+        div.form-table select:focus-visible {
+          box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%), 0 0 8px rgb(102 175 233 / 60%);
+          border: solid 1px #1A3C93 !important;
+          outline: none;
+        }
+
+        .dropzone:hover {
+          cursor: pointer;
+        }
+
+        .dropzone i {
+          font-size: 2em;
+          color: #004897;
+        }
+
+        .dropzone .upload-btn {
+          color: #004897;
+          font-weight: bold;
+        }
+
+        #popupApplication form.no-drag-drop #resume-dropzone,
+        #popupApplication form.no-drag-drop #resume-dropzone {
+          background-color: #fff;
+          border: none;
+        }
+
+        #popupApplication form.no-drag-drop #resume-dropzone .drag-and-drop-text,
+        #popupApplication form.no-drag-drop #resume-dropzone .drag-and-drop-text {
+          display: none;
+        }
+
+        #resume-dropzone,
+        #cover-letter-dropzone {
+          border: 1px solid #c6c6c6;
+          border-radius: 5px;
+          background-color: #fff;
+          text-align: center;
+          margin-bottom: 1em;
+          padding: calc(10px + 1vh);
+          justify-content: center;
+        }
+
+        #resume-dropzone.dragOver,
+        #cover-letter-dropzone.dragOver,
+        #resume-dropzone:focus-within,
+        #cover-letter-dropzone:focus-within {
+          border: 2px dashed #004897;
+          background-color: #e8f9fc;
+        }
+
+        #resume-dropzone input#resume,
+        #cover-letter-dropzone input#cover-letter {
+          opacity: 0;
+          width: 1px;
+          height: 1px;
+          position: absolute;
+          margin: auto;
+        }
+
+        #popupApplication form button#submit {
+          width: fit-content;
+          margin: calc(10px + 1vh) auto;
+          padding: 10px 20px;
+          background-color: #004897;
+          color: #fff;
+          opacity: 1;
+          border: none;
+        }
+
+        #popupApplication form button#submit.disabled {
+          opacity: 0.5;
+        }
+
+        p.required.bold {
+          color: #be1e2d;
+          font-weight: bold;
+        }
+
+
+        /* CHECKMARK ANIMATION */
+        @-webkit-keyframes checkmark {
+          0% {
+            stroke-dashoffset: 100px
+          }
+
+          100% {
+            stroke-dashoffset: 200px
+          }
+        }
+
+        @-ms-keyframes checkmark {
+          0% {
+            stroke-dashoffset: 100px
+          }
+
+          100% {
+            stroke-dashoffset: 200px
+          }
+        }
+
+        @keyframes checkmark {
+          0% {
+            stroke-dashoffset: 100px
+          }
+
+          100% {
+            stroke-dashoffset: 0px
+          }
+        }
+
+        @-webkit-keyframes checkmark-circle {
+          0% {
+            stroke-dashoffset: 480px
+          }
+
+          100% {
+            stroke-dashoffset: 960px;
+
+          }
+        }
+
+        @-ms-keyframes checkmark-circle {
+          0% {
+            stroke-dashoffset: 240px
+          }
+
+          100% {
+            stroke-dashoffset: 480px
+          }
+        }
+
+        @keyframes checkmark-circle {
+          0% {
+            stroke-dashoffset: 480px
+          }
+
+          100% {
+            stroke-dashoffset: 960px
+          }
+        }
+
+        @keyframes colored-circle {
+          0% {
+            opacity: 0
+          }
+
+          100% {
+            opacity: 100
+          }
+        }
+
+        .icon--order-success svg polyline {
+          -webkit-animation: checkmark 0.25s ease-in-out 0.7s backwards;
+          animation: checkmark 0.25s ease-in-out 0.7s backwards
+        }
+
+        .icon--order-success svg circle {
+          -webkit-animation: checkmark-circle 0.6s ease-in-out backwards;
+          animation: checkmark-circle 0.6s ease-in-out backwards;
+        }
+
+        .icon--order-success svg circle#colored {
+          -webkit-animation: colored-circle 0.6s ease-in-out 0.7s backwards;
+          animation: colored-circle 0.6s ease-in-out 0.7s backwards;
+        }
+
+        /*new styles */
+        .job-title {
+          font-size: 40px;
+        }
+
+        .field__label:after {
+          content: ":";
+        }
+
+        .field__label {
+          margin-right: 5px;
+        }
+
+        .job-application__node-form{
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          grid-column-gap: 28px;
+        }
+        .job-application__node-form .form-item-job-email + div, .job-application__node-form .form-item-job-email + div + div{
+          grid-column: 1 / 3;
+        }
+
+        form fieldset[data-drupal-selector='edit-google-recaptcha']{
+          grid-column: 1 / 3;
+        }
+        @media only screen and (max-width:768px) {
+          .row.overview>div:nth-child(2) div {
+            float: left;
+          }
+        }
+        @media only screen and (max-width:560px){
+          .job-application__node-form{
+            display:block;
+          }
+        }
+      </style>
+      <div>
+        <div class="job-title">
+          {{ node.title.value }}
+        </div>
+        {% if content.field_salary is defined %}
+        <div class="row overview">
+          <div class="col-sm-6 col-xs-12">{{ content.field_salary|raw }}</div>
+        </div>
+        {% endif %}
+        {% if content.field_department is defined or content.field_post_date is defined %}
+        <div class="row overview">
+          {% if content.field_department is defined %}
+          <div class="col-sm-6 col-xs-12">{{ content.field_department|raw }}</div>
+          {% endif %}
+          {% if content.field_post_date is defined %}
+          <div class="col-sm-6 col-xs-12">{{ content.field_post_date|raw }}</div>
+          {% endif %}
+        </div>
+        {% endif %}
+        {% if content.field_department is defined or content.field_post_date is defined %}
+        <div class="row overview">
+          {% if content.field_job_location is defined %}
+          <div class="col-sm-6 col-xs-12">
+            <div class="field field--name-field-location field--type-select field--label-inline">
+              <div class="field__label">Location</div>
+              {{ content.field_job_location[0]['#plain_text'] }}{% if content.field_environment is defined and content.field_environment[0] %} ({{content.field_environment[0]['#markup']}}){% endif %}
+            </div>
+          </div>
+          {% endif %}
+          {% if content.field_job_type is defined %}
+
+          <div class="col-sm-6 col-xs-12">{{ content.field_job_type|raw }}</div>
+          {% endif %}
+        </div>
+        {% endif %}
+        {% if content.field_department is defined or content.field_post_date is defined %}
+        <div class="row overview">
+          {% if content.field_schedule is defined %}
+          <div class="col-sm-6 col-xs-12">{{ content.field_schedule|raw }}</div>
+          {% endif %}
+          {% if content.field_duration is defined and content.field_duration[0] %}
+          <div class="col-sm-6 col-xs-12">{{ content.field_duration|raw }}</div>
+          {% endif %}
+        </div>
+        {% endif %}
+
+        <hr class="col-xs-12 blog-divider">
+
+        <div class="field">
+          <h2>About Norgen</h2>
+          <p>
+            Norgen Biotek is a leading international biotechnology company focusing on sample preparation for research
+            and diagnostic applications.
+            Established in the Niagara Region of Ontario in 1998, Norgen manufactures and sells products world-wide, as
+            well as provides R&D and diagnostic services to the scientific community.
+            Norgen Biotek Corp. is committed to creating customized research experiences for our clients by providing
+            innovative solutions that inspire new discoveries.
+            By ensuring the highest quality products and services, from sample collection and preservation to extraction
+            and detection,
+            our team of experts and global partners can support the scientific community every step of the way.
+          </p>
+        </div>
+
+        {% if content['field_about_position'] is defined and content['field_about_position'][0] %}
+        <h2>About the Position</h2>
+        {{ content['field_about_position']|raw }}
+        {% endif %}
+
+        {% if content['field_duties'] is defined and content['field_duties'][0] %}
+        <h2>Duties and Responsibilities</h2>
+        {{ content['field_duties']|raw }}
+        {% endif %}
+
+        {% if content['field_qualifications'] is defined and content['field_qualifications'][0] %}
+        <h2>Skills and Qualifications</h2>
+        {{ content['field_qualifications']|raw }}
+        {% endif %}
+
+        {% if content['field_benefits'] is defined and content['field_benefits'][0] %}
+        <h2>Benefits</h2>
+        {{ content['field_benefits']|raw }}
+        {% endif %}
+        <div class="field">
+          <p>
+            Norgen Biotek is committed to ensuring accessible services and communications to individuals with
+            disabilities.
+            Accommodations are available on request for candidates taking part in all aspects of the selection process.
+            If you require reasonable accommodation in completing this application, interviewing, completing any
+            pre-employment testing, or otherwise participating in the employee selection process,
+            please direct your inquiries to <a href="mailto:hr@norgenbiotek.com">hr@norgenbiotek.com</a>.
+          </p>
+        </div>
+
+        <div class="field">
+          <p>Norgen Biotek thanks all applicants; however, only those selected for an interview will be contacted.</p>
+        </div>
+      </div>
+      {# Form #}
+      <h2 style="background-color:#004897;color:#fff;font-weight:bold;padding:1em;margin-bottom:0px;text-align:center;">
+        Apply to Job</h2>
+      <div id="popupApplication"> <!-- class="overlay" -->
+        <div style="padding: calc(10px + 1vw);margin:auto;background-color:#E5ECF4;">
+          <!-- <a class="close-btn" href="#application" onclick="enableScrolling()">x</a> -->
+          {# <form action="" method="post" enctype="multipart/form-data" style="max-width:700px;margin:auto;">
+            <div class="form-table">
+              <div class="col-lg-12 col-md-12 col-sm-12" style="padding-left:0px;padding-right:0px;">
+                <div class="row">
+                  <div class="col-lg-6 col-md-6 col-sm-12">
+                    <label for="fname">First Name<span class="required-asterisk">*</span></label>
+                    <input type="text" id="fname" name="fname" placeholder="First Name (required)" required
+                      value="{{ logged_in ? user_first_name : ''}}">
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-12">
+                    <label for="fname">Last Name<span class="required-asterisk">*</span></label>
+                    <input type="text" id="lname" name="lname" placeholder="Last Name (required)" required
+                      value="{{ logged_in ? user_last_name : ''}}">
+                  </div>
+                </div>
+              </div>
+              <label for="email">Email<span class="required-asterisk">*</span></label>
+              <input type="email" id="email" name="email" placeholder="Email (required)" required
+                value="{{ logged_in ? user.account.name : '' }}">
+              <label for="tel-primary">Primary Phone<span class="required-asterisk">*</span></label>
+              <input type="tel" id="tel-primary" name="tel-primary" placeholder="Primary Phone (required)" required>
+              <label for="tel-secondary">Secondary Phone</label>
+              <input type="tel" id="tel-secondary" name="tel-secondary" placeholder="Secondary Phone (optional)">
+              <p>Please submit your resume and/or cover letter as a PDF, DOC or DOCX file. Please ensure your files are
+                less than 1000 KB.</p>
+              <label for="resume">Resume<span class="required-asterisk">*</span></label>
+              <div id="resume-dropzone" class="resume-upload dropzone" ondrop="dropHandler(event, this)"
+                ondragover="dragOverHandler(event, this)" ondragleave="dragLeaveHandler(event, this)">
+                <p><i class="fa fa-file-arrow-up"></i></p>
+                <p class="upload-p"><span class="upload-btn">Upload resume</span><span class="drag-and-drop-text"> or
+                    drag and drop file here (required)</span></p>
+                <input type="file" id="resume" name="resume" class="file_input" accept=".pdf, .doc, .docx" required>
+              </div>
+              <label for="cover-letter">Cover Letter</label>
+              <div id="cover-letter-dropzone" class="cover-letter-upload dropzone" ondrop="dropHandler(event, this)"
+                ondragover="dragOverHandler(event, this)" ondragleave="dragLeaveHandler(event, this)">
+                <p><i class="fa fa-file-arrow-up"></i></p>
+                <p class="upload-p"><span class="upload-btn">Upload cover letter</span><span class="drag-and-drop-text">
+                    or drag and drop file here (optional)</span></p>
+                <input type="file" id="cover-letter" name="cover-letter" class="file_input" accept=".pdf, .doc, .docx">
+              </div>
+
+              <div style="display:flex;">
+                <button class="btn btn-primary" type="submit" id="submit" name="submit">Submit Application</button>
+              </div>
+
+            </div>
+          </form> #}
+          {{ job_application_node_form }}
+        </div>
+      </div>
+
+      <div id="success" class="overlay">
+        <div class="popup">
+          <a class="close-btn" href="#application" onclick="enableScrolling()">x</a>
+          <h2 style="text-align:center;">Application submitted succesfully</h2>
+          <div class='animation-ctn'>
+            <div class='icon icon--order-success svg'>
+              <svg xmlns='http://www.w3.org/2000/svg' width='154px' height='154px'>
+                <g fill='none' stroke='#12508b' stroke-width='2'>
+                  <circle cx='77' cy='77' r='72' style='stroke-dasharray:480px, 480px; stroke-dashoffset: 960px;'>
+                  </circle>
+                  <circle id='colored' fill='#12508b' cx='77' cy='77' r='72'
+                    style='stroke-dasharray:480px, 480px; stroke-dashoffset: 960px;'></circle>
+                  <polyline class='st0' stroke='#fff' stroke-width='10' points='43.5,77.8 63.7,97.9 112.2,49.4'
+                    style='stroke-dasharray:100px, 100px; stroke-dashoffset: 200px;fill:none;stroke: white;stroke-width:10;' />
+                </g>
+              </svg>
+            </div>
+          </div>
+          <h2 style="text-align:center;">Thank you!</h2>
+          <p style="font-size: 18px;text-align: center;">While we are always thrilled to receive new applicants, only
+            the most suited applications will be selected for candidacy.</p>
+        </div>
+      </div>
+
+      <div id="failure" class="overlay">
+        <div class="popup">
+          <a class="close-btn" href="#application" onclick="enableScrolling()">x</a>
+          <p style="text-align:center;"><i style="color:#BE1E2D; font-size:10em;" class="fa fa-exclamation-circle"></i>
+          </p>
+          <p style="text-align:center;">There was an error submitting your application.</p>
+          <p id="failure-message" style="text-align:center;">Please ensure that you are uploading files as pdf, doc, or
+            docx file types only. Maximumum upload size per file is 1000 KB.</p>
+          <div class="how-to-apply" style="width:fit-content; margin:auto;">
+            <a class="btn btn-primary" href="#popupApplication">Apply Again</a>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        /* window.addEventListener("load", function(){
+            if(window.location.href.includes("#popupApplication") || window.location.href.includes("#success") || window.location.href.includes("#failure")){
+                document.querySelector('html').style.overflow="hidden";
+            }
+        }) */
+
+        document.addEventListener('mousedown', (e) => {
+          targetEntity = document.querySelector('#popupApplication.overlay');
+          targetEntity2 = document.querySelector('#success.overlay');
+          targetEntity3 = document.querySelector('#failure.overlay');
+          if (e.target == targetEntity || e.target == targetEntity2 || e.target == targetEntity3) { //click outside the popup (click the overlay)
+            window.location.href = "";
+            document.querySelector('html').style.overflow = "auto";
+          }
+        });
+
+        function enableScrolling() {
+          document.querySelector('html').style.overflow = "auto";
+        }
+
+        /*  document.querySelector('#application').addEventListener('click', (e)=>{
+             document.querySelector('html').style.overflow="hidden";
+         }) */
+        var isAdvancedUpload = function () {
+          var div = document.createElement('div');
+          return (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div)) && 'FormData' in window && 'FileReader' in window;
+        }();
+        if (!isAdvancedUpload) {
+          document.querySelector('#popupApplication form').classList.add('no-drag-drop');
+        }
+
+        var counter = 0;
+        // Handle drag-and-drop file upload //
+        function dragOverHandler(e, dropzone) {
+          // Prevent default behavior (Prevent file from being opened)
+          e.preventDefault();
+          //add hover class
+          dropzone.classList.add('dragOver');
+        }
+        function dragLeaveHandler(e, dropzone) {
+          e.preventDefault();
+          //remove hover class
+          if (dropzone.classList.contains('dragOver')) {
+            dropzone.classList.remove('dragOver');
+          }
+        }
+        function dropHandler(e, dropzone) {
+          // Prevent default behavior (Prevent file from being opened)
+          e.preventDefault();
+
+          // Use DataTransfer interface to access the file
+          uploadFiles(e.dataTransfer.files, dropzone);
+        }
+        function uploadFiles(files, dropzone) {
+          let input = dropzone.querySelector('input[type="file"]');
+          let p = dropzone.querySelector('.upload-p');
+          if (files.length > 0) {
+            p.innerHTML = files[0].name + " (" + Math.round(files[0].size / 1024) + " KB)"; //only 1 file allowed
+            input.files = files;
+            //remove hover class
+            if (dropzone.classList.contains('dragOver')) {
+              dropzone.classList.remove('dragOver');
+            }
+          }
+          var validated = true;
+          // Validate file size
+          //handle if file size is too large (don't even let them submit because with very large files this causes severely slow page loads because form must upload the file to our tmp folder)
+          if (files[0].size / 1024 > 1000) {
+            document.querySelector('button#submit').disabled = true;
+            document.querySelector('button#submit').classList.add("disabled");
+            p.innerHTML += "<p class='required bold'>ERROR: File too large!</p>";
+            validated = false;
+          }
+          // If the file is the right size:
+          // Validate file extension
+          // and handle the case where file is wrong file type (don't let them submit)
+          var fileExt = files[0].name.substring((files[0].name).lastIndexOf(".") + 1);
+          if (fileExt != "pdf" && fileExt != "doc" && fileExt != "docx") {
+            document.querySelector('button#submit').disabled = true;
+            document.querySelector('button#submit').classList.add("disabled");
+            p.innerHTML += "<p class='required bold'>ERROR: File must be .pdf, .doc or .docx file type!</p>";
+            validated = false;
+          }
+          if (validated) {
+            //otherwise, if both file size and type are correct, check the warnings on the other file input before enabling the submit
+            if (document.querySelector('button#submit').classList.contains("disabled")) {
+              checkWarnings(dropzone);
+            }
+          }
+
+        }
+
+        // Handle traditional click file upload
+        var inputs = document.querySelectorAll('.dropzone input[type="file"]');
+        Array.prototype.forEach.call(inputs, function (input) {
+          var dropzone = input.parentElement;
+          var label = dropzone.querySelector('.upload-p'),
+            labelVal = label.innerHTML;
+
+          input.addEventListener('change', function (e) {
+            if (e.target.value.length == 0) {
+              return; // if file upload was cancelled then don't continue 
+            }
+            var fileName = '';
+            fileName = e.target.value.split("\\").pop();
+
+            if (fileName) {
+              label.innerHTML = fileName + " (" + Math.round(input.files[0].size / 1024) + " KB)";
+            }
+            else {
+              label.innerHTML = labelVal;
+            }
+            if (input.files[0]) {
+              var size = input.files[0].size;
+              var validated = true;
+              // Validate file size
+              if (size / 1024 > 1000) {
+                document.querySelector('button#submit').disabled = true;
+                document.querySelector('button#submit').classList.add("disabled");
+                label.innerHTML += "<p class='required bold'>ERROR: File too large!</p>";
+                validated = false;
+              }
+              // Validate file extension
+              // handle if file is wrong file type (don't let them submit)
+              var fileExt = input.files[0].name.substring(input.files[0].name.lastIndexOf(".") + 1);
+              if (fileExt != "pdf" && fileExt != "doc" && fileExt != "docx") {
+                document.querySelector('button#submit').disabled = true;
+                document.querySelector('button#submit').classList.add("disabled");
+                label.innerHTML += "<p class='required bold'>ERROR: File must be .pdf, .doc or .docx file type!</p>";
+                validated = false;
+              }
+              if (validated) {
+                //otherwise, if both file size and type are correct, check the warnings on the other file input before enabling the submit
+                if (document.querySelector('button#submit').classList.contains("disabled")) {
+                  checkWarnings(dropzone);
+                }
+              }
+            }
+          });
+        });
+
+        function checkWarnings(dropzone) {
+          if (dropzone.id == "cover-letter-dropzone") {
+            var resume_p = document.querySelector("#resume-dropzone .upload-p");
+            if (!resume_p.querySelector("span.required")) { // if there is not a warning in the other file upload box, remove the disabled
+              document.querySelector('button#submit').disabled = false;
+              document.querySelector('button#submit').classList.remove("disabled");
+            }
+          }
+          else { //dropzone.id=="resume-dropzone"
+            var cover_p = document.querySelector("#cover-letter-dropzone .upload-p");
+            if (!cover_p.querySelector("span.required")) { // if there is not a warning in the other file upload box, remove the disabled
+              document.querySelector('button#submit').disabled = false;
+              document.querySelector('button#submit').classList.remove("disabled");
+            }
+          }
+        }
+
+
+        document.querySelector('#resume-dropzone').addEventListener("click", function () {
+          document.querySelector('#resume-dropzone input#resume').click();
+        });
+
+        document.querySelector('#cover-letter-dropzone').addEventListener("click", function () {
+          document.querySelector('#cover-letter-dropzone input#cover-letter').click();
+        });
+
+
+        function applicationSuccess() {
+          window.location.href = '#success';
+          document.querySelector('html').style.overflow = "hidden";
+        }
+        function applicationFailure(string) {
+          document.querySelector('#failure #failure-message').innerText = string;
+          window.location.href = '#failure';
+          document.querySelector('html').style.overflow = "hidden";
+        }
+
+      </script>

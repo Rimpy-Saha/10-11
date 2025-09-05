@@ -1,0 +1,776 @@
+{#
+  /**
+  * @file
+  * Default theme implementation to display a node.
+  *
+  * Available variables:
+  * - node: The node entity with limited access to object properties and methods.
+  * Only method names starting with "get", "has", or "is" and a few common
+  * methods such as "id", "label", and "bundle" are available. For example:
+  * - node.getCreatedTime() will return the node creation timestamp.
+  * - node.hasField('field_example') returns TRUE if the node bundle includes
+  * field_example. (This does not indicate the presence of a value in this
+  * field.)
+  * - node.isPublished() will return whether the node is published or not.
+  * Calling other methods, such as node.delete(), will result in an exception.
+  * See \Drupal\node\Entity\Node for a full list of public properties and
+  * methods for the node object.
+  * - label: The title of the node.
+  * - content: All node items. Use {{ content }} to print them all,
+  * or print a subset such as {{ content.field_example }}. Use
+  * {{ content|without('field_example') }} to temporarily suppress the printing
+  * of a given child element.
+  * - author_picture: The node author user entity, rendered using the "compact"
+  * view mode.
+  * - metadata: Metadata for this node.
+  * - date: Themed creation date field.
+  * - author_name: Themed author name field.
+  * - url: Direct URL of the current node.
+  * - display_submitted: Whether submission information should be displayed.
+  * - attributes: HTML attributes for the containing element.
+  * The attributes.class element may contain one or more of the following
+  * classes:
+  * - node: The current template type (also known as a "theming hook").
+  * - node--type-[type]: The current node type. For example, if the node is an
+  * "Article" it would result in "node--type-article". Note that the machine
+  * name will often be in a short form of the human readable label.
+  * - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+  * teaser would result in: "node--view-mode-teaser", and
+  * full: "node--view-mode-full".
+  * The following are controlled through the node publishing options.
+  * - node--promoted: Appears on nodes promoted to the front page.
+  * - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+  * teaser listings.
+  * - node--unpublished: Appears on unpublished nodes visible only to site
+  * admins.
+  * - title_attributes: Same as attributes, except applied to the main title
+  * tag that appears in the template.
+  * - content_attributes: Same as attributes, except applied to the main
+  * content tag that appears in the template.
+  * - author_attributes: Same as attributes, except applied to the author of
+  * the node tag that appears in the template.
+  * - title_prefix: Additional output populated by modules, intended to be
+  * displayed in front of the main title tag that appears in the template.
+  * - title_suffix: Additional output populated by modules, intended to be
+  * displayed after the main title tag that appears in the template.
+  * - view_mode: View mode; for example, "teaser" or "full".
+  * - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+  * - page: Flag for the full page state. Will be true if view_mode is 'full'.
+  * - readmore: Flag for more state. Will be true if the teaser content of the
+  * node cannot hold the main body content.
+  * - logged_in: Flag for authenticated user status. Will be true when the
+  * current user is a logged-in member.
+  * - is_admin: Flag for admin user status. Will be true when the current user
+  * is an administrator.
+  *
+  * @see template_preprocess_node()
+  *
+  * @todo Remove the id attribute (or make it a class), because if that gets
+  * rendered twice on a page this is invalid CSS for example: two lists
+  * in different view modes.
+  *
+  * @ingroup themeable
+  */
+  #}
+        <style>
+          /* Set the full page width  */
+          #section-page-title {
+            display: none;
+          }
+  
+          #section-main-content>.container {
+            width: 100%;
+            padding: 0;
+          }
+  
+          .dexp_tab_wrapper .tab-content {
+            padding: 36px;
+          }
+  
+          .bs-example .nav.nav-tabs li:hover a {
+            background-color: #E5ECF4;
+            border-bottom: 6px solid #004897;
+          }
+  
+          .bs-example .nav.nav-tabs li.active a {
+            border-bottom: 6px solid #004897;
+          }
+  
+          .norproduct .nav.nav-tabs {
+            width: auto;
+            font-size: inherit;
+            margin-left: 0px;
+            padding: 5px;
+            border: 0;
+            background: url(http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png) no-repeat right;
+            appearance: none;
+            padding-right: 1em;
+          }
+  
+          .norproduct .nav.nav-tabs:hover {
+            cursor: pointer;
+          }
+  
+          #block-system-main .container {
+            margin-left: 215px;
+          }
+  
+          /* left aside nav menu */
+          #left-nav-menu {
+            /* position:absolute; */
+            left: 0;
+            width: 200px;
+            height: 100%;
+            background-color: #e6e6e6;
+          }
+  
+          #left-nav-menu ul {
+            padding: 2em 0em;
+            margin-left:0px;
+          }
+  
+          #left-nav-menu li {
+            padding: 0em;
+            float: none;
+            list-style: none;
+          }
+  
+          #left-nav-menu li button.active {
+            background-color: #fff;
+          }
+  
+          #left-nav-menu button {
+            width: 100%;
+            height: 100%;
+            padding: 1em;
+            background-color: #e6e6e6;
+            border: none;
+            text-align: left;
+          }
+  
+          #left-nav-menu button:hover {
+            background-color: #fff;
+          }
+  
+          .tab-pane iframe {
+            max-width: 100%;
+          }
+  
+          /* right aside content */
+          #right-aside {
+            /* position:absolute; */
+            right: 0;
+            width: 400px;
+            height: 100%;
+            background-color: #e6e6e6;
+          }
+  
+          .right-box {
+            padding: 0.5em 1em;
+          }
+  
+          #instagram-content iframe {
+            width: 100%;
+            height: 400px;
+          }
+  
+          #instagram-content iframe html {
+            overflow-y: scroll;
+          }
+  
+          #instagram-content iframe body {
+            overflow: hidden;
+          }
+  
+  
+  
+          .grid-box {
+            display: grid;
+            grid-template-columns: 200px 1fr 400px;
+            grid-column-gap: 2em;
+          }
+  
+  
+          .mob-tabs {
+            list-style-type: none;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0px;
+          }
+  
+          .mob-tabs li {
+            border-top-right-radius: 12px;
+            border-top-left-radius: 12px;
+            padding-left: 0px;
+            padding-right: 0px;
+          }
+  
+          .mob-tabs li button {
+            background: none;
+            border: none;
+            padding: 0.5em 1em;
+            border-top-right-radius: 12px;
+            border-top-left-radius: 12px;
+          }
+  
+          .mob-tabs li:hover {
+            background-color: #e6e6e6;
+          }
+  
+          .mob-tabs li.active button {
+            background-color: #e6e6e6;
+          }
+  
+          .mob-tabbed-content {
+            background-color: #e6e6e6;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            overflow-x: auto;
+          }
+  
+          .mob-tabbed-content div.mob-content-div {
+            display: none;
+            height: 500px;
+          }
+  
+          .mob-tabbed-content div.mob-content-div.active {
+            display: block;
+          }
+  
+          .mob-tabbed-content div.mob-content-div.active[tab="social_media_mob"] {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-column-gap: 1em;
+            min-width: calc(600px + 6em);
+          }
+  
+          .mob-content-div {
+            padding: 1em;
+          }
+  
+          #instagram-content-mob,
+          #twitter-content-mob {
+            margin: 0 0.5em;
+            min-width: 300px;
+          }
+  
+          #instagram-content iframe,
+          #instagram-content-mob iframe {
+            min-width: auto !important;
+            height: calc(500px - 2em);
+          }
+  
+          #mob-tab-folder {
+            display: none;
+          }
+  
+          #logo-content ul li,
+          #logo-content ul li a {
+            padding-left: 0px;
+          }
+  
+          .mob-tabbed-content .item-list ul li.views-row,
+          .mob-tabbed-content .mob-content-div a.btn-primary {
+            font-size: 18px;
+          }
+  
+          .tab-pane {
+            word-break: break-word;
+          }
+  
+          .field-name-field-announcements- ol.announcements>li {
+            border-bottom: 1px solid #eee;
+            padding: 2em 0;
+          }
+  
+          @media only screen and (max-width:1100px) {
+  
+            #left-nav-menu,
+            #right-aside {
+              display: none;
+            }
+  
+            .grid-box {
+              display: block;
+            }
+  
+            #mob-tab-folder {
+              display: block;
+            }
+          }
+  
+          @media only screen and (max-width:767px) {
+            #section-main-content>.container {
+              width: 100%;
+              padding-left: 25px;
+              padding-right: 25px;
+            }
+          }
+  
+          @media only screen and (max-width:400px) {
+  
+            /* calendar prev/next buttons */
+            .view .date-nav-wrapper .date-nav {
+              padding-bottom: 1.5em;
+            }
+  
+            #block-views-calendar-block-3.block-views .view.view-calendar .date-nav-wrapper .pager {
+              margin: 1em 0;
+            }
+  
+            #block-views-calendar-block-3.block-views .view.view-calendar .date-nav-wrapper .date-prev,
+            #block-views-calendar-block-3.block-views .view.view-calendar .date-nav-wrapper .date-next {
+              top: auto;
+              margin: 0px;
+              bottom: 0.5em;
+            }
+  
+            #block-views-calendar-block-3.block-views .view.view-calendar .date-nav-wrapper .date-prev a,
+            #block-views-calendar-block-3.block-views .view.view-calendar .date-nav-wrapper .date-next a {
+              margin-left: 0px;
+              margin-right: 0px;
+            }
+  
+            /* --------------------------- */
+          }
+  
+          @media only screen and (min-width:768px) {
+            #section-main-content>.container {
+              width: 750px;
+              padding-left: 15px;
+              padding-right: 15px;
+            }
+          }
+  
+          @media only screen and (min-width:992px) {
+            #section-main-content>.container {
+              width: 970px;
+              padding-left: 15px;
+              padding-right: 15px;
+            }
+          }
+  
+          @media only screen and (min-width:1101px) {
+            #section-main-content>.container {
+              width: 100%;
+              padding: 0;
+            }
+          }
+  
+          #email-btn {
+            display: none;
+          }
+  
+          /* new styles */
+          .region>h1>strong{
+            font-size: 36px;
+          }
+        </style>
+  
+        <div class="grid-box notranslate">
+  
+          <!-- Left Nav Menu -->
+          <div id="left-nav-menu">
+            <ul>
+              <li><button value="item_0" class="active">Announcements</button></li>
+              <li><button value="item_9" class="">App Notes</button></li>
+              <li><button value="item_3" class="">Booklets</button></li>
+              {# <li><button value="item_12" class="">Calendar</button></li> #}
+              <li><button value="item_10" class="">Promotion Campaign</button></li>
+              <li><button value="item_2" class="">Flyers</button></li>
+              {# <li><button value="item_1" class="">General Info</button></li> #}
+              <li><button value="item_7" class="">Infographics</button></li>
+              <li><button value="item_1">Social Media</button></li>
+              <li><button value="item_4" class="">Photos</button></li>
+              <li><button value="item_5" class="">Posters & Backdrops</button></li>
+              <li><button value="item_8" class="">Product Protocols</button></li>
+              <li><button value="item_13" class="">Recently Updated Materials</button></li>
+              <li><button value="item_14" class="">Conferences</button></li>
+              <li><button value="item_11" class="">Training Material</button></li>
+              <li><button value="item_6" class="">Videos</button></li>
+            </ul>
+          </div>
+  
+          <!-- Opening Message -->
+          <div class="row">
+            <div class="region row" style="padding:0px 36px;">
+              <h1><strong>Distributor Portal</strong></h1>
+              {# <p>Welcome back,
+                {% if app.user and app.user.username %}
+                    {% set first_name = '' %}
+                    {% set first_name_query = drupal_view_result('field_data_field_first_name', 'block_1') %}
+                    {% if first_name_query %}
+                        {% set first_name = first_name_query[0].field_first_name_value %}
+                    {% endif %}
+                    {{ first_name ? first_name : app.user.username }}
+                {% endif %}
+                .
+            </p>
+            {% if content.field_opening_message is not empty %}
+                {{ content.field_opening_message|raw }}
+            {% endif %} 
+            <div class="node-updated-text">Last updated {{ node.changed|date('F j, Y') }}.</div>
+            </div> #}
+            <div id="mob-tab-folder">
+              <ul class="mob-tabs">
+                <li class="active"><button tab="social_media_mob">Social Media</button></li>
+                <li class=""><button tab="conferences_mob">Conferences</button></li>
+                <li class=""><button tab="logo_mob">Norgen Logo</button></li>
+              </ul>
+              <div class="mob-tabbed-content">
+                <div class="mob-content-div active" tab="social_media_mob">
+                  <div id="twitter-content-mob">
+                    <a class="twitter-timeline" data-height="475" data-theme="light" href="https://twitter.com/NorgenBiotek?ref_src=twsrc%5Etfw">Tweets by NorgenBiotek</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                  </div>
+                  <div id="instagram-content-mob">
+                    <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/p/C8crOU-xjJF/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"><div style="padding:16px;"> <a href="https://www.instagram.com/p/C8crOU-xjJF/?utm_source=ig_embed&amp;utm_campaign=loading" style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank"> <div style=" display: flex; flex-direction: row; align-items: center;"> <div style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;"></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;"></div></div></div><div style="padding: 19% 0;"></div> <div style="display:block; height:50px; margin:0 auto 12px; width:50px;"><svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-511.000000, -20.000000)" fill="#000000"><g><path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369 C570.966,59.17 571,58.147 571,50 C571,41.851 570.966,40.831 570.82,37.631"></path></g></g></g></svg></div><div style="padding-top: 8px;"> <div style=" color:#3897f0; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:550; line-height:18px;">View this post on Instagram</div></div><div style="padding: 12.5% 0;"></div> <div style="display: flex; flex-direction: row; margin-bottom: 14px; align-items: center;"><div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(0px) translateY(7px);"></div> <div style="background-color: #F4F4F4; height: 12.5px; transform: rotate(-45deg) translateX(3px) translateY(1px); width: 12.5px; flex-grow: 0; margin-right: 14px; margin-left: 2px;"></div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(9px) translateY(-18px);"></div></div><div style="margin-left: 8px;"> <div style=" background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 20px; width: 20px;"></div> <div style=" width: 0; height: 0; border-top: 2px solid transparent; border-left: 6px solid #f4f4f4; border-bottom: 2px solid transparent; transform: translateX(16px) translateY(-4px) rotate(30deg)"></div></div><div style="margin-left: auto;"> <div style=" width: 0px; border-top: 8px solid #F4F4F4; border-right: 8px solid transparent; transform: translateY(16px);"></div> <div style=" background-color: #F4F4F4; flex-grow: 0; height: 12px; width: 16px; transform: translateY(-4px);"></div> <div style=" width: 0; height: 0; border-top: 8px solid #F4F4F4; border-left: 8px solid transparent; transform: translateY(-4px) translateX(8px);"></div></div></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center; margin-bottom: 24px;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 224px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 144px;"></div></div></a><p style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;"><a href="https://www.instagram.com/p/C8crOU-xjJF/?utm_source=ig_embed&amp;utm_campaign=loading" style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none;" target="_blank">A post shared by Norgen Biotek | Biotechnology (@norgen.biotek)</a></p></div></blockquote> <script async src="//www.instagram.com/embed.js"></script>
+                  </div>
+                </div>
+                <div class="mob-content-div" tab="conferences_mob">
+                  <div>
+                  <p>test</p>
+                    <div><a title="View all events" href="/events" role="button" class="btn btn-primary btn-sm">See all
+                        events <i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a></div>
+                  </div>
+                </div>
+                <div class="mob-content-div" tab="logo_mob">
+                  <ul class="nav nav-pills nav-stacked">
+                    <li><a href="/sites/default/files/distributor-portal/2024/Norgen-Logo.eps" download
+                        style="color:#004897;font-size:18px;"><span style="color:#128f45;"><i
+                            class="fa fa-download"></i></span> Norgen Logo (EPS)</a></li>
+                    <li><a href="/sites/default/files/distributor-portal/2024/Norgen-Logo.png" download
+                        style="color:#004897;font-size:18px;"><span style="color:#128f45;"><i
+                            class="fa fa-download"></i></span> Norgen Logo (PNG)</a></li>
+                    <li><a href="/sites/default/files/distributor-portal/2024/Norgen-Logo.jpg" download
+                      style="color:#004897;font-size:18px;"><span style="color:#128f45;"><i
+                          class="fa fa-download"></i></span> Norgen Logo (JPG)</a></li>
+                    <li><a href="/sites/default/files/distributor-portal/2024/Norgen-Logo.svg" download
+                        style="color:#004897;font-size:18px;"><span style="color:#128f45;"><i
+                            class="fa fa-download"></i></span> Norgen Logo (SVG)</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <!-- Content -->
+            <div class="region" style="max-width:1100px;">
+              <div id="node-{{ node.nid.value }}" class="norproduct {{classes}} clearfix">
+                <div class="row">
+                  <div class="">
+                    <div class="field-item even" property="content:encoded">
+                      <div class="bs-example bs-example-tabs">
+                        <div class="tab-content" id="myTabContent">
+                          <div id="dexp_tab_wrapper_599687653" class="dexp_tab_wrapper default clearfix">
+                            <h2 style="padding:0px 36px;">
+                              <select id="dist_content_select" class="nav nav-tabs">
+                                <option value="item_0" selected="selected">Announcements</option>
+                                <option value="item_9">App Notes</option>
+                                <option value="item_3">Booklets</option>
+                                {# <option value="item_12">Calendar</option> #}
+                                <option value="item_10">Promotion Campaign</option>
+                                <option value="item_2">Flyers</option>
+                                {# <option value="item_1">General Info</option> #}
+                                <option value="item_7">Infographics</option>
+                                <option value="item_1">Social Media</option>
+                                <option value="item_4">Photos</option>
+                                <option value="item_5">Posters & Backdrops</option>
+                                <option value="item_8">Product Protocols</option>
+                                <option value="item_13">Recently Updated Material</option>
+                                <option value="item_14">Conferences </option>
+                                <option value="item_11">Training Material</option>
+                                <option value="item_6">Videos</option>     
+                              </select>
+                            </h2>
+                            <div class="tab-content">
+                              <div id="item_0" class="tab-pane active">
+                                  {% if content['field_announcements_'] is not empty %}
+                                      {{ content['field_announcements_']|raw }}
+                                  {% endif %}
+                                  {% if mail == 'sabah.butt@norgenbiotek.com' or mail == 'liam.howes@norgenbiotek.com' %}
+                                  {{ distributor_portal_email_notification }}
+                                  {% endif %}
+                              </div>
+                              {# <div id="item_1" class="tab-pane">
+                                  {% if content['field_general_info'] is not empty %}
+                                      {{ content['field_general_info']|raw }}
+                                  {% endif %}
+                              </div> #}
+
+                              <div id="item_1" class="tab-pane">
+                                  {% if content['field_social_media'] is not empty %}
+                                      {{ content['field_social_media']|raw }}
+                                  {% endif %}
+                              </div>
+                              
+                              <div id="item_2" class="tab-pane">
+                                  {% if content['field_flyers'] is not empty %}
+                                      {{ content['field_flyers']|raw }}
+                                  {% endif %}
+                              </div>
+                              
+                              <div id="item_3" class="tab-pane">
+                                  {% if content['field_booklets'] is not empty %}
+                                      {{ content['field_booklets']|raw }}
+                                  {% endif %}
+                              </div>
+                              
+                              <div id="item_4" class="tab-pane">
+                                  {% if content['field_photos'] is not empty %}
+                                      {{ content['field_photos']|raw }}
+                                  {% endif %}
+                              </div>
+                              <div id="item_5" class="tab-pane">
+                                {% if content['field_posters'] is not empty %}
+                                {{ content['field_posters']|raw }}
+                                {% endif %}
+                              </div>
+                              <div id="item_6" class="tab-pane">
+                                {% if content['field_videos'] is not empty %}
+                                {{ content['field_videos']|raw }}
+                                {% endif %}
+                              </div>
+                              <div id="item_7" class="tab-pane">
+                                {% if content['field_infographics'] is not empty %}
+                                {{ content['field_infographics']|raw }}
+                                {% endif %}
+                              </div>
+                              <div id="item_8" class="tab-pane">
+                                {% if content['field_product_protocols'] is not empty %}
+                                {{ content['field_product_protocols']|raw }}
+                                {% endif %}
+                              </div>
+                              <div id="item_9" class="tab-pane">
+                                {% if content['field_application_notes'] is not empty %}
+                                {{ content['field_application_notes']|raw }}
+                                {% endif %}
+                              </div>
+                              <div id="item_10" class="tab-pane">
+                                {% if content['field_promotion_campaign'] is not empty %}
+                                {{ content['field_promotion_campaign']|raw }}
+                                {% endif %}
+                              </div>
+                              <div id="item_11" class="tab-pane">
+                                {% if content['field_training_material'] is not empty %}
+                                {{ content['field_training_material']|raw }}
+                                {% endif %}
+                              </div>
+  
+                              {# Calendar #}
+                              {# <div id="item_12" class="tab-pane">
+                                {% set distributor_calendar = drupal_block('distributor_calendar') %}
+                                {{ distributor_calendar }}
+                              </div>  #}
+                              <div id="item_13" class="tab-pane">
+                                  {% if content['field_recently_updated_materials'] is not empty %}
+                                      {{ content['field_recently_updated_materials']|raw }}
+                                  {% endif %}
+                              </div>
+
+                               <div id="item_14" class="tab-pane">
+                                {% if content['field_conferences'] is not empty %}
+                                {{ content['field_conferences']|raw }}
+                                {% endif %}
+                              </div>
+
+                          </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+  
+            <!-- Right Aside Content -->
+            <div id="right-aside" class="right-box">
+              <div id="twitter-content" class="right-box">
+                  <a class="twitter-timeline" data-height="400" data-theme="light" href="https://twitter.com/NorgenBiotek?ref_src=twsrc%5Etfw">Tweets by NorgenBiotek</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                </div>
+              <div id="instagram-content" class="right-box">
+                <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/p/C8crOU-xjJF/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"><div style="padding:16px;"> <a href="https://www.instagram.com/p/C8crOU-xjJF/?utm_source=ig_embed&amp;utm_campaign=loading" style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank"> <div style=" display: flex; flex-direction: row; align-items: center;"> <div style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;"></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;"></div></div></div><div style="padding: 19% 0;"></div> <div style="display:block; height:50px; margin:0 auto 12px; width:50px;"><svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-511.000000, -20.000000)" fill="#000000"><g><path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369 C570.966,59.17 571,58.147 571,50 C571,41.851 570.966,40.831 570.82,37.631"></path></g></g></g></svg></div><div style="padding-top: 8px;"> <div style=" color:#3897f0; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:550; line-height:18px;">View this post on Instagram</div></div><div style="padding: 12.5% 0;"></div> <div style="display: flex; flex-direction: row; margin-bottom: 14px; align-items: center;"><div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(0px) translateY(7px);"></div> <div style="background-color: #F4F4F4; height: 12.5px; transform: rotate(-45deg) translateX(3px) translateY(1px); width: 12.5px; flex-grow: 0; margin-right: 14px; margin-left: 2px;"></div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(9px) translateY(-18px);"></div></div><div style="margin-left: 8px;"> <div style=" background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 20px; width: 20px;"></div> <div style=" width: 0; height: 0; border-top: 2px solid transparent; border-left: 6px solid #f4f4f4; border-bottom: 2px solid transparent; transform: translateX(16px) translateY(-4px) rotate(30deg)"></div></div><div style="margin-left: auto;"> <div style=" width: 0px; border-top: 8px solid #F4F4F4; border-right: 8px solid transparent; transform: translateY(16px);"></div> <div style=" background-color: #F4F4F4; flex-grow: 0; height: 12px; width: 16px; transform: translateY(-4px);"></div> <div style=" width: 0; height: 0; border-top: 8px solid #F4F4F4; border-left: 8px solid transparent; transform: translateY(-4px) translateX(8px);"></div></div></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center; margin-bottom: 24px;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 224px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 144px;"></div></div></a><p style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;"><a href="https://www.instagram.com/p/C8crOU-xjJF/?utm_source=ig_embed&amp;utm_campaign=loading" style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none;" target="_blank">A post shared by Norgen Biotek | Biotechnology (@norgen.biotek)</a></p></div></blockquote> <script async src="//www.instagram.com/embed.js"></script>
+                <h3>Upcoming Conferences</h3>
+
+
+                <div>
+                <div class="dist view-content views-row field-content views-field-title">
+                    {{drupal_view('events', 'block_3')}}
+                </div>
+            </div>
+            
+            <style>
+            .view-content {
+                display: block;
+            }
+            
+            .dist {
+                display: block;
+            }
+            
+            .views-row img {
+                display: none !important;
+            }
+            
+            .views-row {
+                background-color: white;
+                display: block;
+                box-shadow: none;
+                border-radius: 12px 12px 0 0;
+                margin-bottom: 1px; 
+               
+               
+            }
+            
+            .field-content {
+                font-weight: 500 !important;
+                text-align: left !important;
+            }
+            
+            .views-field-title {
+              padding-top: 10px;
+              padding-left: 15px;
+              text-align: left !important;
+                
+            }
+            
+            
+            .views-row:not(:last-child) {
+                border-bottom: 1px solid #ccc;
+                margin-bottom: 10px;
+            }
+            </style>
+           
+            </style>
+                <div>
+                  <div><a title="View all events" href="/events" role="button" class="btn btn-primary btn-sm">See all
+                      events <i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a></div>
+                </div>
+              </div>
+              <div id="logo-content" class="right-box">
+                <h3>Norgen Logo</h3>
+                <ul class="nav nav-pills nav-stacked" style="flex-grow:1;">
+                  <li><a href="/sites/default/files/distributor-portal/2024/Norgen-Logo.eps" download
+                      style="color:#004897;"><span style="color:#128f45;"><i class="fa fa-download"></i></span> Norgen
+                      Logo (EPS)</a></li>
+                  <li><a href="/sites/default/files/distributor-portal/2024/Norgen-Logo.png" download
+                      style="color:#004897;"><span style="color:#128f45;"><i class="fa fa-download"></i></span> Norgen
+                      Logo (PNG)</a></li>
+                  <li><a href="/sites/default/files/distributor-portal/2024/Norgen-Logo.jpg" download
+                    style="color:#004897;"><span style="color:#128f45;"><i class="fa fa-download"></i></span> Norgen
+                      Logo (JPG)</a></li>
+                  <li><a href="/sites/default/files/distributor-portal/2024/Norgen-Logo.svg" download
+                      style="color:#004897;"><span style="color:#128f45;"><i class="fa fa-download"></i></span> Norgen
+                      Logo (SVG)</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <script>
+  
+            function show_email_btn() {
+              document.getElementById("email-btn").style.display = "block";
+            }
+            // MAIN NAV TABS
+            var select_list = document.getElementById('dist_content_select');
+            var left_nav_btns = document.querySelectorAll('#left-nav-menu button');
+  
+            select_list.addEventListener('change', function () {
+              document.querySelector('#left-nav-menu button.active').classList.remove('active');
+              document.querySelector('#left-nav-menu button[value=' + select_list.value + ']').classList.add('active');
+              var value = select_list.value;
+              var tab_content_active = document.querySelector('.tab-content .active');
+              tab_content_active.classList.remove('active');
+              document.querySelector('.tab-content #' + value + '').classList.add('active');
+            });
+  
+            for (let i = 0; i < left_nav_btns.length; i++) {
+              left_nav_btns[i].addEventListener('click', function () {
+                var value = left_nav_btns[i].getAttribute('value');
+                select_list.value = value;
+                var tab_content_active = document.querySelector('.tab-content .active');
+                tab_content_active.classList.remove('active');
+                document.querySelector('.tab-content #' + value + '').classList.add('active');
+  
+                var left_nav_active = document.querySelector('#left-nav-menu button.active').classList.remove('active');
+                document.querySelector('#left-nav-menu button[value=' + value + ']').classList.add('active');
+              });
+            }
+            //
+  
+            // MOBILE TABS
+            var mob_tabs = document.querySelectorAll('.mob-tabs li button')
+            for (let i = 0; i < mob_tabs.length; i++) {
+              mob_tabs[i].addEventListener('click', function () {
+                var tab = mob_tabs[i].getAttribute('tab');
+                // activate clicked tab
+                document.querySelector('.mob-tabs .active').classList.remove('active');
+                mob_tabs[i].parentElement.classList.add('active');
+                // activate associated content section
+                document.querySelector('.mob-tabbed-content .active').classList.remove('active');
+                document.querySelector('.mob-tabbed-content div[tab=' + tab + ']').classList.add('active');
+  
+              })
+            }
+          </script>
+  
+          {# Logic to fetch emails #}
+  {# {% set blogs = [] %}
+  {% set distributor = user.username if user is defined %}
+  {% if distributor %}
+      {% set date = "now" | date("Y-m-d H:i:s") %}
+      {% set distributors = db_query("SELECT username, access_date FROM {distributor_portal_accesses} WHERE username = :username", {':username': distributor}) %}
+      {% set add = true %}
+      {% for d in distributors %}
+          {% set time = "now" | date("U") %}
+          {% set recorded_time = d.access_date|date("U") %}
+          {% set var = time - recorded_time %}
+          {% if var < 3601 %}
+              {% set add = false %}
+              {% break %}
+          {% endif %}
+      {% endfor %}
+      {% if add %}
+          {% set insert = db_insert('distributor_portal_accesses').fields({'username': distributor, 'access_date': date}).execute() %}
+      {% endif %}
+  {% endif %} #}
+  
+  {# Logic to filter emails #}
+  {% set bls = [] %}
+  {% for b in blogs %}
+      {% if b.mail not in ['rimpy.saha@norgenbio.com', 'test@norgenbiotek.com', 'tha@norgenbiotek.com', 'moemen@norgenbiotek.com', 'ben.milnes@norgenbiotek.com', 'regan.bak@norgenbiotek.com', 'mha@norgenbiote.com', 'pandora.huang@norgenbio.com', 'dawn.eggleton.norgenbio.com', 'haylee.spiller@norgenbio.com', 'pedro.menezes@norgenbiotek.com', 'alex.white@norgenbiotek.com', 'sohaib.siddiqui@norgenbiotek.com', 'lea.milkin@norgenbiotek.com', 'seema.shamim@norgenbiotek.com', 'nikola.breberina@norgenbiotek.com', 'patricia.barbalho@norgenbiotek.com', 'norelle.cardy@norgenbiotek.com', 'Samirkumar.patel@norgenbiotek.com', 'juan.gijzelaar@norgenbiotek.com', 'felipe.reis@norgenbiotek.com', 'weini.lei@norgenbiotek.com', 'pablo.cepeda@norgenbiotek.com', 'morgan.buchan@norgenbiotek.com', 'irene.brundula@norgebiotek.com'] %}
+          {% set bls = bls|merge([b.mail]) %}
+      {% endif %}
+  {% endfor %}
+  
+  {# Send emails #}
+  {% if bls is not empty %}
+      {# Loop through batches of recipients #}
+      {% set arr = [10,10,10,10,10,10,10,10,10,10,10,10,10,10, 10, 10, 10, 10, 10, 10] %}
+      {% set result_arr = [] %}
+      {% for k, v in arr %}
+          {% set result_arr = result_arr|merge([bls|slice(0, v)]) %}
+          {% set bls = bls|slice(v) %}
+      {% endfor %}
+  
+      {# Loop through each batch #}
+      {% for arr2 in result_arr %}
+          {# Loop through emails in batch #}
+          {% for value in arr2 %}
+              {# Compose email content #}
+              {% set output = "<p>Hello,</p><p>Norgen Biotek Corp. has updated the distributor portal with an important announcement.</p><p>Please <a href='https://norgenbiotek.com/user/?redirect=%2F'>login</a> to the distributor portal to access the latest information.</p><p>If you have any questions, please do not hesitate to contact us.</p><br><p>Best Regards,</p><p>Norgen Biotek Corp.</p>" %}
+              {% set module = 'smtp' %}
+              {% set key = 'Distributor New Announcement' %}
+              {% set to = value %}
+              {% set from = 'noreply@norgenbiotek.com' %}
+              {% set language = app.request.locale %}
+              {% set subject = 'Norgen Biotek: New Announcement on Distributor Portal' %}
+              {% set send = false %}
+              
+              {# Send email #}
+              {# (Code for sending email not directly translatable to Twig, this part may need to be handled outside Twig) #}
+          {% endfor %}
+      {% endfor %}
+  {% endif %}
+  

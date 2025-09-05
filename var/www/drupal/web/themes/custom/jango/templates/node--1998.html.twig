@@ -1,0 +1,1863 @@
+{#
+/**
+* @file
+* Default theme implementation to display a node.
+*
+* Available variables:
+* - node: The node entity with limited access to object properties and methods.
+* Only method names starting with "get", "has", or "is" and a few common
+* methods such as "id", "label", and "bundle" are available. For example:
+* - node.getCreatedTime() will return the node creation timestamp.
+* - node.hasField('field_example') returns TRUE if the node bundle includes
+* field_example. (This does not indicate the presence of a value in this
+* field.)
+* - node.isPublished() will return whether the node is published or not.
+* Calling other methods, such as node.delete(), will result in an exception.
+* See \Drupal\node\Entity\Node for a full list of public properties and
+* methods for the node object.
+* - label: (optional) The title of the node.
+* - content: All node items. Use {{ content }} to print them all,
+* or print a subset such as {{ content.field_example }}. Use
+* {{ content|without('field_example') }} to temporarily suppress the printing
+* of a given child element.
+* - author_picture: The node author user entity, rendered using the "compact"
+* view mode.
+* - metadata: Metadata for this node.
+* - date: (optional) Themed creation date field.
+* - author_name: (optional) Themed author name field.
+* - url: Direct URL of the current node.
+* - display_submitted: Whether submission information should be displayed.
+* - attributes: HTML attributes for the containing element.
+* The attributes.class element may contain one or more of the following
+* classes:
+* - node: The current template type (also known as a "theming hook").
+* - node--type-[type]: The current node type. For example, if the node is an
+* "Article" it would result in "node--type-article". Note that the machine
+* name will often be in a short form of the human readable label.
+* - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+* teaser would result in: "node--view-mode-teaser", and
+* full: "node--view-mode-full".
+* The following are controlled through the node publishing options.
+* - node--promoted: Appears on nodes promoted to the front page.
+* - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+* teaser listings.
+* - node--unpublished: Appears on unpublished nodes visible only to site
+* admins.
+* - title_attributes: Same as attributes, except applied to the main title
+* tag that appears in the template.
+* - content_attributes: Same as attributes, except applied to the main
+* content tag that appears in the template.
+* - author_attributes: Same as attributes, except applied to the author of
+* the node tag that appears in the template.
+* - title_prefix: Additional output populated by modules, intended to be
+* displayed in front of the main title tag that appears in the template.
+* - title_suffix: Additional output populated by modules, intended to be
+* displayed after the main title tag that appears in the template.
+* - view_mode: View mode; for example, "teaser" or "full".
+* - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+* - page: Flag for the full page state. Will be true if view_mode is 'full'.
+* - readmore: Flag for more state. Will be true if the teaser content of the
+* node cannot hold the main body content.
+* - logged_in: Flag for authenticated user status. Will be true when the
+* current user is a logged-in member.
+* - is_admin: Flag for admin user status. Will be true when the current user
+* is an administrator.
+*
+* @see template_preprocess_node()
+*
+* @ingroup themeable
+*/
+#}
+<article{{ attributes }}>
+
+  {{ title_prefix }}
+  {% if label and not page %}
+  <h2{{ title_attributes }}>
+    <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+    </h2>
+    {% endif %}
+    {{ title_suffix }}
+
+    {% if display_submitted %}
+    <footer>
+      {{ author_picture }}
+      <div{{ author_attributes }}>
+        {% trans %}Submitted by {{ author_name }} on {{ date }}{% endtrans %}
+        {{ metadata }}
+        </div>
+    </footer>
+    {% endif %}
+
+    <div{{ content_attributes }}>
+      {{ content.body }}
+      </div>
+
+      </article>
+
+
+
+      <style>
+        #section-main-content .container {
+          width: 100% !important;
+        }
+
+        .img-left {
+          float: left;
+          max-height: 500px;
+          margin-left: 0;
+        }
+
+        .img-right {
+          float: right;
+          max-height: 500px;
+          margin-right: 0;
+        }
+
+        .text {
+          line-height: 2;
+          text-align: left;
+        }
+
+        .careers-btn {
+          display: inline-block;
+          background: #004897;
+          border-radius: 100px;
+          padding: 1em 2em;
+          font-size: 1.2em;
+          box-shadow: 0px 1px 2px 1px #888;
+          font-family: 'Montserrat', 'Ubuntu', sans-serif;
+          margin-bottom: 15px;
+          text-rendering: optimizelegibility;
+          line-height: 1.5;
+        }
+
+        .careers-btn:hover {
+          transform: scale(1.05);
+        }
+
+        a.careers-btn,
+        a.careers-btn:hover {
+          color: #fff;
+          font-weight: 400;
+        }
+
+        .career-center {
+          width: fit-content;
+          margin: 0 auto;
+          padding: 4em;
+          text-align: center;
+        }
+
+        .glassdoor i {
+          font-size: 5em;
+        }
+
+        .glassdoor a {
+          display: block;
+        }
+
+        .principles-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          grid-template-rows: repeat(1, 1fr);
+          grid-gap: 24px;
+        }
+
+        .principles-grid img {
+          height: 100px;
+          width: 100px;
+          margin: auto;
+          margin-top: 20px;
+          margin-bottom: 0;
+        }
+
+        .principles-grid div {
+          display: flex;
+          flex-direction: column;
+          justify-content: end;
+        }
+
+        .principles-grid div h3 {
+          margin: 0;
+          flex-grow: 1;
+        }
+
+        /*********** Careers ***********/
+        ul.jobs {
+          list-style: none;
+          margin: auto;
+        }
+
+        ul.jobs li.job {
+          text-align: left;
+        }
+
+        li.job .job-info {
+          box-shadow: 0px 5px 10px -5px #888;
+          border-radius: 25px;
+          background: #fff;
+          padding: 25px;
+          margin: 25px 0px;
+          transition: transform 0.5s;
+          max-width: 1100px;
+        }
+
+        li.job .job-info:hover {
+          transform: scale(1.05);
+        }
+
+        li.job .job-info .job-title {
+          color: #004897;
+        }
+
+        li.job .job-info i {
+          margin-right: 0.5em;
+        }
+
+        li.job .job-info .job-department {
+          margin-right: 2em;
+        }
+
+        .job-info .about-position {
+          margin-top: 10px;
+        }
+
+        /* Jobs Block */
+        #block-views-careers-block {
+          padding: 0px 0px 3em 0px;
+        }
+
+        #block-views-careers-block .view-careers .view-content {
+          display: grid;
+        }
+
+        #block-views-careers-block .view-careers .view-content .views-row {
+          box-shadow: 0px 5px 10px -5px #888;
+          border-radius: 25px;
+          background: #fff;
+          padding: 25px;
+          margin: 25px auto;
+          transition: transform 0.5s;
+          max-width: 900px;
+        }
+
+        #block-views-careers-block .view-careers .view-content .views-row:hover {
+          transform: scale(1.05);
+        }
+
+        #block-views-careers-block .view-careers .view-content .views-row .views-field-title .job-title {
+          color: #004897;
+        }
+
+        #block-views-careers-block .view-careers .view-content .views-row .views-field-field-department {
+          margin-right: 2em;
+        }
+
+        .views-field-field-job-city,
+        .views-field-field-job-city .job-location,
+        .views-field-field-department,
+        .views-field-field-department .job-department {
+          display: inline;
+        }
+
+        .views-field .field-content i {
+          margin-right: 0.5em;
+        }
+
+        .views-field-field-about-position {
+          margin-top: 10px;
+        }
+
+        /*******************************/
+
+        .grid-2 {
+          display: grid;
+          grid-row-gap: 3em;
+          grid-template-columns: repeat(2, 1fr);
+          grid-template-rows: repeat(1, 1fr);
+        }
+
+        .grid-3 {
+          display: grid;
+          grid-row-gap: 3em;
+          grid-template-columns: repeat(3, 1fr);
+          grid-template-rows: repeat(1, 1fr);
+          grid-column-gap: 10%;
+          max-width: 80%;
+          margin: auto;
+        }
+
+        .grid-3 div {
+          color: #2D3237;
+          font-family: 'Montserrat', 'Ubuntu', sans-serif;
+          font-weight: 400;
+          margin-bottom: 15px;
+          text-rendering: optimizelegibility;
+          line-height: 1.5;
+          font-size: 1.3em;
+        }
+
+        .grid-3 .awards-box {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+        }
+
+        .grid-3 .awards-box img {
+          max-height: 200px;
+          max-width: 200px;
+          margin: auto;
+        }
+
+        .flex {
+          display: flex;
+        }
+
+        .extra-margin {
+          margin: 5em;
+        }
+
+        .careers-page .carousel-inner {
+          height: auto;
+          width: calc(80vw + 40px);
+          max-width: 1120px;
+          padding-bottom: 35px;
+          display: grid;
+          grid-auto-flow: column;
+
+          --image-width: 175px;
+          --image-margin-top: 10px;
+
+          --name-and-position-height: 100px;
+          --name-and-position-width: 650px;
+
+          --carousel-quote-height: 200px;
+          --carousel-quote-width: 500px;
+          --carousel-quote-margin-top: 20px;
+
+        }
+
+        .careers-page .carousel-inner>.item div span,
+        .careers-page .carousel-inner>.item div h3 {
+          text-align: left;
+        }
+
+        .careers-page .carousel-inner>.item>div {
+          display: grid;
+          grid-template:
+            "d a" 3em
+            "d c" 5em
+            "d b";
+          height: 100%;
+          column-gap: 50px;
+          padding: 50px;
+          background: #fff;
+          border-radius: 25px;
+          border: none;
+          box-shadow: 0px 5px 10px -5px #888;
+          width: 80vw;
+          max-width: 1080px;
+          margin: 0px 20px;
+        }
+
+        /* .careers-page .desktop-testimonials .carousel-inner > .item{
+        visibility: hidden;
+        display: block;
+    }
+    .careers-page .desktop-testimonials .carousel-inner > .active{
+        visibility: visible;
+    } */
+        .careers-page .carousel-inner .item .name {
+          grid-area: a;
+          font-size: 2em;
+          font-weight: bold;
+        }
+
+        .careers-page .carousel-inner .item div h3.position {
+          margin-top: 0px;
+          grid-area: c;
+        }
+
+        .careers-page .carousel-inner .item div div p {
+          margin: auto;
+          text-align: left;
+          grid-area: b;
+        }
+
+        .careers-page .carousel-inner>.item>div>div.img {
+          height: 100%;
+          animation: none;
+          margin: auto;
+          width: auto;
+          grid-area: d;
+        }
+
+        .careers-page .carousel-inner>.item>div>div.img img {
+          max-height: 100%;
+          border-radius: 25px;
+        }
+
+        .careers.carousel-control .gly icon-chevron-right {
+          right: 45%;
+        }
+
+        .careers.carousel-control.right {
+          height: 100%;
+          width: 100px;
+          right: -100px;
+          left: auto;
+          top: 0;
+          position: absolute;
+          border-radius: 0;
+          background-image: none;
+          background: none;
+        }
+
+        .careers.carousel-control.left {
+          height: 100%;
+          width: 100px;
+          left: -100px;
+          right: auto;
+          top: 0;
+          position: absolute;
+          border-radius: 0;
+          background-image: none;
+          background: none;
+        }
+
+        .careers.carousel-control span {
+          top: 50%;
+          position: absolute;
+          width: 40px;
+        }
+
+        .carousel-indicators.careers li,
+        .carousel-indicators .active {
+          border-radius: 0;
+          width: 50px;
+        }
+
+        .apply-btn {
+          display: inline-block;
+          background: #004897;
+          border-radius: 20px;
+          padding: 0.5em 1em;
+          vertical-align: top;
+          box-shadow: 0px 1px 2px 1px #888;
+          font-family: 'Montserrat', 'Ubuntu', sans-serif;
+          text-rendering: optimizelegibility;
+          line-height: 1.5;
+          width: fit-content;
+          margin: auto;
+        }
+
+        .apply-btn:hover {
+          transform: scale(1.05);
+        }
+
+        a.apply-btn,
+        a.apply-btn:hover {
+          color: white;
+          font-weight: 400;
+        }
+
+        .white-bg {
+          background: #fff;
+        }
+
+        .grey-bg {
+          background: #f8f8f8;
+        }
+
+        .green-bg {
+          /*background: #e8f9fc;*/
+          background: #c8d6e37a;
+        }
+
+        .ceo-msg {
+          padding: 5em;
+          padding-right: 0;
+          height: fit-content;
+          margin: auto 0;
+          max-width: 1100px;
+        }
+
+        .ceo-img {
+          max-height: 500px;
+          margin: 0 5em;
+        }
+
+        #section-page-title {
+          display: none;
+        }
+
+        .life-text {
+          padding: 3em;
+          padding-top: 0;
+          min-height: 370px;
+        }
+
+        .region-content .col-xs-12,
+        .col-md-12,
+        .col-lg-12 {
+          position: relative;
+          min-height: 1px;
+          padding-left: 0px;
+          padding-right: 0px;
+        }
+
+        .life-row {
+          display: flex;
+          flex-wrap: wrap;
+        }
+
+        .life-column {
+          flex: 50%;
+          padding: 0 5px;
+        }
+
+        .life-column img {
+          width: 100%;
+          margin-top: 10px;
+        }
+
+        .img-header {
+          background-image: url("https://norgenbiotek.com/sites/default/files/images/careers/Business Photoshoot-53.jpg");
+          margin: 0 -15px;
+          width: calc(100% + 30px);
+          background-position-y: center;
+          z-index: 0;
+        }
+
+        .covid-banner.carousel.slide {
+          z-index: 1;
+        }
+
+        .benefits-list li:before {
+          content: '\f14a';
+          font-family: 'fa-awsome';
+          float: left;
+          margin-left: -1.5em;
+          color: #be1e2d;
+        }
+
+        .benefits-list li {
+          list-style: none;
+          line-height: 3em;
+        }
+
+        div.benefits-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          grid-gap: 20px;
+        }
+
+        .mobile {
+          display: none;
+        }
+
+        .desktop-testimonials #carouselExampleIndicators.careers-page {
+          height: 500px
+        }
+
+        p.required.bold {
+          color: #be1e2d;
+          font-weight: bold;
+        }
+
+        @media only screen and (max-width:800px) {
+          .desktop-testimonials #carouselExampleIndicators.careers-page {
+            height: 550px
+          }
+        }
+
+        @media only screen and (max-width:700px) {
+          .careers-page .carousel-inner .item {
+            display: block;
+          }
+
+          .mobile {
+            display: block;
+          }
+
+          .mobile-parent {
+            display: flex;
+            overflow-x: auto;
+          }
+
+          .carousel-inner.mobile.testimonials {
+            display: flex;
+            align-items: center;
+            overflow: auto;
+
+            height: auto;
+            margin: auto;
+
+            --image-height: 175px;
+            --image-width: 175px;
+            --image-margin-top: 10px;
+
+            --name-and-position-height: 50px;
+            --name-and-position-width: 280px;
+
+            --carousel-quote-height: 100px;
+            --carousel-quote-width: 200px;
+            --carousel-quote-margin-top: 20px;
+          }
+
+          .carousel-inner.mobile.life-pics {
+            display: flex;
+            align-items: center;
+            overflow: auto;
+            margin: auto;
+            margin-bottom: 10px;
+          }
+
+          .carousel-inner.mobile.life-pics>.item>img {
+            height: auto;
+            animation: none;
+          }
+
+          .desktop-testimonials,
+          .desktop-life-pics {
+            display: none;
+          }
+
+          #carouselIndicators {
+            display: none;
+          }
+
+          .career-center {
+            padding: 4em 1em;
+          }
+
+          .img-left,
+          .img-right {
+            float: none;
+            margin: 0;
+          }
+
+          .extra-margin {
+            margin: 0;
+          }
+
+          .grid-2,
+          .grid-3 {
+            grid-template-columns: repeat(1, 1fr);
+            padding: 0;
+          }
+
+          .grid {
+            grid-template-columns: 1fr;
+            padding: 0;
+            grid-row-gap: 0;
+          }
+
+          .principles-grid {
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(1, 1fr);
+          }
+
+          .principles-grid img {
+            padding: 10px;
+          }
+
+          .life-text {
+            padding-top: 3em;
+          }
+
+          .ceo-msg {
+            padding: 0;
+          }
+
+          .ceo-img {
+            margin: 0;
+          }
+
+          .career-center .carousel-inner.mobile .item {
+            width: 70vw;
+            min-width: 70vw;
+            display: block;
+            margin: 10px 5px;
+          }
+
+          .career-center .carousel-inner.mobile.testimonials .item {
+            width: 70vw;
+            min-width: 70vw;
+            padding: 20px;
+            height: 50vh;
+            overflow-y: auto;
+            background: #fff;
+            border-radius: 25px;
+            border: none;
+            box-shadow: 0px 5px 10px -5px #888;
+            margin: 10px 5px;
+          }
+
+          .career-center .carousel-inner.mobile .item .name {
+            font-size: 2em;
+            font-weight: bold;
+          }
+
+          .career-center .carousel-inner.mobile .item h3.position {
+            margin-top: 0px;
+          }
+
+          .career-center .carousel-inner.mobile p {
+            margin-top: var(--carousel-quote-margin-top);
+            text-align: left;
+            width: auto;
+            margin: 10px;
+          }
+
+          .career-center .carousel-inner.mobile.testimonials>.item>img {
+            height: var(--image-width);
+            animation: none;
+            max-width: var(--image-width);
+            margin: auto;
+            margin-bottom: 15px;
+            width: auto;
+            clip-path: circle(50% at 50% 50%);
+            -webkit-clip-path: circle(50% at 50% 50%);
+          }
+
+          div.benefits-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-gap: 20px;
+          }
+
+          .glassdoor i {
+            font-size: 2em;
+          }
+
+          .anchor-tag {
+            top: -50px;
+          }
+
+          .carousel {
+            padding: 0px 25px;
+          }
+
+          .jobs> :nth-child(3n) {
+            margin-bottom: 50px;
+          }
+
+          .life-column {
+            flex: 100%;
+            padding: 0 0;
+          }
+        }
+
+        .generic-job-application {
+          margin: auto;
+          background-color: white;
+          background-image: linear-gradient(to right, white, #e3effa, white);
+          padding: 5%;
+
+        }
+
+        .generic-job-application-text {
+          width: 66.66666667%;
+          max-width: 900px;
+          margin: auto;
+        }
+
+        .generic-job-application-inside {
+          width: 66.66666667%;
+          max-width: 900px;
+          margin: 3% auto;
+          background: white;
+          padding: 5%;
+          border: #c4d3e1 1px solid;
+          border-radius: 16px;
+          border-bottom: #c4d3e1 1px solid;
+          background-image: linear-gradient(to right, #fafcff, white, #fafdff);
+        }
+
+        .generic-form {
+          margin-top: 5%;
+        }
+
+        .generic-form input {
+          margin-bottom: 1em;
+        }
+
+        .dropzone:hover {
+          cursor: pointer;
+        }
+
+        .dropzone i {
+          font-size: 2em;
+          color: #004897;
+        }
+
+        .dropzone .upload-btn {
+          color: #004897;
+          font-weight: bold;
+        }
+
+        #popupApplication form.no-drag-drop #resume-dropzone,
+        #popupApplication form.no-drag-drop #resume-dropzone {
+          background-color: #fff;
+          border: none;
+        }
+
+        #popupApplication form.no-drag-drop #resume-dropzone .drag-and-drop-text,
+        #popupApplication form.no-drag-drop #resume-dropzone .drag-and-drop-text {
+          display: none;
+        }
+
+        #resume-dropzone,
+        #cover-letter-dropzone {
+          border: 1px solid #c6c6c6;
+          ;
+          border-radius: 5px;
+          /*background-color: #e6e6e6e6;*/
+          text-align: center;
+          margin-bottom: 1em;
+          padding: calc(10px + 1vh);
+          justify-content: center;
+        }
+
+        #resume-dropzone.dragOver,
+        #cover-letter-dropzone.dragOver,
+        #resume-dropzone:focus-within,
+        #cover-letter-dropzone:focus-within {
+          border: 2px dashed #004897;
+          background-color: #e8f9fc;
+        }
+
+        #resume-dropzone input#resume,
+        #cover-letter-dropzone input#cover-letter {
+          opacity: 0;
+          width: 1px;
+          height: 1px;
+          position: absolute;
+          margin: auto;
+        }
+
+        .thankyou-screen {
+          display: none;
+        }
+
+        .animation-ctn {
+          text-align: center;
+          margin-top: 5em;
+        }
+
+        @-webkit-keyframes checkmark {
+          0% {
+            stroke-dashoffset: 100px
+          }
+
+          100% {
+            stroke-dashoffset: 200px
+          }
+        }
+
+        @-ms-keyframes checkmark {
+          0% {
+            stroke-dashoffset: 100px
+          }
+
+          100% {
+            stroke-dashoffset: 200px
+          }
+        }
+
+        @keyframes checkmark {
+          0% {
+            stroke-dashoffset: 100px
+          }
+
+          100% {
+            stroke-dashoffset: 0px
+          }
+        }
+
+        @-webkit-keyframes checkmark-circle {
+          0% {
+            stroke-dashoffset: 480px
+          }
+
+          100% {
+            stroke-dashoffset: 960px;
+
+          }
+        }
+
+        @-ms-keyframes checkmark-circle {
+          0% {
+            stroke-dashoffset: 240px
+          }
+
+          100% {
+            stroke-dashoffset: 480px
+          }
+        }
+
+        @keyframes checkmark-circle {
+          0% {
+            stroke-dashoffset: 480px
+          }
+
+          100% {
+            stroke-dashoffset: 960px
+          }
+        }
+
+        @keyframes colored-circle {
+          0% {
+            opacity: 0
+          }
+
+          100% {
+            opacity: 100
+          }
+        }
+
+        .inlinesvg .svg svg {
+          display: inline
+        }
+
+        .icon--order-success svg polyline {
+          -webkit-animation: checkmark 0.25s ease-in-out 0.7s backwards;
+          animation: checkmark 0.25s ease-in-out 0.7s backwards
+        }
+
+        .icon--order-success svg circle {
+          -webkit-animation: checkmark-circle 0.6s ease-in-out backwards;
+          animation: checkmark-circle 0.6s ease-in-out backwards;
+        }
+
+        .icon--order-success svg circle#colored {
+          -webkit-animation: colored-circle 0.6s ease-in-out 0.7s backwards;
+          animation: colored-circle 0.6s ease-in-out 0.7s backwards;
+        }
+
+
+        @media screen and (max-width:600px) {
+          .generic-job-application-inside {
+            width: 100%;
+            max-width: 100%;
+          }
+        }
+
+        /* new styles */
+        .form-item label {
+          font-size: 16px;
+          font-weight: 600;
+        }
+
+        .form-item-job-fname {
+          margin-right: 10px;
+        }
+        .form-item-job-fname,
+        .form-item-job-lname {
+          width: calc(50% - 5px);
+          float: left;
+        }
+
+        .btn {
+          padding: 12px 20px;
+          border-radius: 12px;
+          white-space: normal;
+          color: white;
+        }
+
+        .has-feedback {
+          text-align: center
+        }
+      </style>
+
+      <section class="img-header darken titleOnly">
+
+        <h1>Careers</h1>
+        <h2
+          style="color: #fff;font-weight: 300;text-shadow: 0 6px 6px #000, 0 0 6px #000;width: 100%;max-width: none;font-size: max(2vw,24px);">
+          Your Future Starts Here</h2>
+      </section>
+      {% include '@jango/templates/includes/page/section-main-content.html.twig' %}
+      <div class="generic-job-application" id="positions">
+        <div class="generic-job-application-text">
+          <h2 style="text-align: center;">Norgen is always looking for positive, hard working, and talented individuals
+            to join our growing team!</h2>
+          <div>
+            {{ drupal_view('job', 'block_1')}}
+          </div>
+        </div>
+        <div class="generic-job-application-text">
+          <p style="font-size: 14pt;">If you are eager to put your talent to practice and you didn't see a good match in
+            our open positions above, please submit your resume and cover letter below. We are always looking for
+            talents in various areas, such as <strong>Lab Technician, Bioinformatics, E-Marketing, E-commerce,
+              Automation Engineers, Accounting, Information Technology </strong> and more.</p>
+        </div>
+        <div class="generic-job-application-inside">
+          <h4 style="text-align: center;">Job Application</h4>
+          <hr style="width: 50%;margin: auto;">
+          {{ job_application }}
+          <p style="margin-top:1em;">
+            Norgen Biotek is committed to ensuring accessible services and communications to individuals with
+            disabilities.
+            Accommodations are available on request for candidates taking part in all aspects of the selection process.
+            If you require reasonable accommodation in completing this application, interviewing, completing any
+            pre-employment testing, or otherwise participating in the employee selection process,
+            please direct your inquiries to <a href="mailto:hr@norgenbiotek.com">hr@norgenbiotek.com</a>.
+          </p>
+        </div>
+      </div>
+
+      <section class='thankyou-screen'
+        style='background-image: linear-gradient(to right, white,#e3effa,white);padding: 4%;' id="deals2" name="deals2">
+        <h2 style="text-align: center;">Application Submitted Successfully!</h2>
+        <div class='animation-ctn'>
+          <div class='icon icon--order-success svg'>
+            <svg xmlns='http://www.w3.org/2000/svg' width='154px' height='154px'>
+              <g fill='none' stroke='#12508b' stroke-width='2'>
+                <circle cx='77' cy='77' r='72' style='stroke-dasharray:480px, 480px; stroke-dashoffset: 960px;'>
+                </circle>
+                <circle id='colored' fill='#12508b' cx='77' cy='77' r='72'
+                  style='stroke-dasharray:480px, 480px; stroke-dashoffset: 960px;'></circle>
+                <polyline class='st0' stroke='#fff' stroke-width='10' points='43.5,77.8 63.7,97.9 112.2,49.4'
+                  style='stroke-dasharray:100px, 100px; stroke-dashoffset: 200px;fill:none;stroke: white;stroke-width:10;' />
+              </g>
+            </svg>
+          </div>
+        </div>
+        <h2 style='text-align: center;'>Thank you!</h2>
+        <p style='font-size: 18px;text-align: center;'>While we are always thrilled to receive new applicants, only the
+          most suited applications will be selected for candidacy.</p>
+      </section>
+      <div class="white-bg">
+        <div class="career-center">
+          <h2>Principles</h2>
+          <div class="principles-grid career-center">
+            <div>
+              <h3>Teamwork and Collaboration</h3>
+              <img
+                src="https://norgenbiotek.com/sites/default/files/images/new-careers/icons/teamwork-collaboration-icon.svg">
+            </div>
+            <div>
+              <h3>Positivity - Glass Half-Full Mindset</h3>
+              <img src="https://norgenbiotek.com/sites/default/files/images/new-careers/icons/positivity-icon.svg">
+            </div>
+            <div>
+              <h3>Diversity - We Learn from Each Other</h3>
+              <img src="https://norgenbiotek.com/sites/default/files/images/new-careers/icons/diversity-icon.svg">
+            </div>
+
+            <div>
+              <h3>Room to Grow - Grow with Norgen!</h3>
+              <img src="https://norgenbiotek.com/sites/default/files/images/new-careers/icons/room-to-grow-icon.svg">
+            </div>
+            <div>
+              <h3>Always Improving and Innovating</h3>
+              <img
+                src="https://norgenbiotek.com/sites/default/files/images/new-careers/icons/improving-innovating-icon.svg">
+            </div>
+            <div>
+              <h3>Respect for Our Peers</h3>
+              <img src="https://norgenbiotek.com/sites/default/files/images/new-careers/icons/respect-icon.svg">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="green-bg">
+        <div class="career-center">
+          <h2>Benefits</h2>
+          <div class="career-center benefits-grid">
+            <div>
+              <img src="https://norgenbiotek.com/sites/default/files/images/new-careers/norgen-merchandise-web.jpg"
+                srcset="https://norgenbiotek.com/sites/default/files/images/new-careers/norgen-merchandise-web.jpg 700w"
+                style="max-height:380px;">
+            </div>
+            <div class="text" style="padding:0px 24px;">
+              <ul class="benefits-list">
+                <li>Paid Vacation Days, Sick Days, and Group Benefits (Dental, Optometry, Health & Wellness, and More!)
+                </li>
+                <li>Group RSP</li>
+                <li>Holiday Spirit Days (Dress Up for Halloween, Catered Christmas Lunch, etc.)</li>
+                <li>Staff Appreciation Catered Lunches</li>
+                <li>Team Building Activities (Bowling, Paintball, etc.)</li>
+                <li>Free Norgen Merch (Toques, Sweaters, T-Shirts, Water Bottles, etc.)</li>
+                <li>Positive, Growth Environment</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--<div class="white-bg">
+        <div class="career-center desktop-life-pics">
+          <h2>Life at Norgen</h2>
+          <div class="career-center" style="width:auto;">
+            <div id="carouselIndicators" class="carousel slide" data-ride="carousel" data-interval="false">
+              <a class="left careers carousel-control" href="#carouselIndicators" role="button" data-slide="prev"
+                style="margin-top:0; border: none;">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+              </a>
+              <a class="right careers carousel-control" href="#carouselIndicators" role="button" data-slide="next"
+                style="margin-top:0; border: none;">
+                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+              </a>
+              <div class="carousel-inner">
+                <div class="item active">
+                  <img style="max-width: 2000px;"
+                    src="/sites/default/files/images/new-careers/norgen_life/clean-room-full.jpg"
+                    srcset="/sites/default/files/images/new-careers/norgen_life/clean-room-full.jpg 2250w, /sites/default/files/images/new-careers/norgen_life/clean-room-half.jpg 1125w, /sites/default/files/images/new-careers/norgen_life/clean-room-quarter.jpg 563w"
+                    title="Norgen clean room" alt="Norgen clean room" class="loaded-img">
+                </div>
+
+                <div class="item">
+                  <img style="max-width: 2000px;"
+                    src="/sites/default/files/images/new-careers/norgen_life/norgen-earth-day-full.jpg"
+                    srcset="/sites/default/files/images/new-careers/norgen_life/norgen-earth-day-full.jpg 2250w, /sites/default/files/images/new-careers/norgen_life/norgen-earth-day-half.jpg 1125w, /sites/default/files/images/new-careers/norgen_life/norgen-earth-day-quarter.jpg 563w"
+                    title="Norgen helping clean up on Earth Day 2022" alt="Norgen helping clean up on Earth Day 2022"
+                    class="loaded-img">
+                </div>
+
+                <div class="item">
+                  <img style="max-width: 2000px;"
+                    src="/sites/default/files/images/new-careers/norgen_life/scientists-laughing-full.jpg"
+                    srcset="/sites/default/files/images/new-careers/norgen_life/scientists-laughing-full.jpg 2250w, /sites/default/files/images/new-careers/norgen_life/scientists-laughing-half.jpg 1125w, /sites/default/files/images/new-careers/norgen_life/scientists-laughing-quarter.jpg 563w"
+                    title="Scientists laughing together" alt="Scientists laughing together" class="loaded-img">
+                </div>
+
+                <div class="item">
+                  <img style="max-width: 2000px;"
+                    src="/sites/default/files/images/new-careers/norgen_life/regan-full.jpg"
+                    srcset="/sites/default/files/images/new-careers/norgen_life/regan-full.jpg 2250w, /sites/default/files/images/new-careers/norgen_life/regan-half.jpg 1125w, /sites/default/files/images/new-careers/norgen_life/regan-quarter.jpg 563w"
+                    title="Norgen at the Niagara Falls Grow-Up Conference"
+                    alt="Norgen at the Niagara Falls Grow-Up Conference" class="loaded-img">
+                </div>
+
+                <div class="item">
+                  <img style="max-width: 2000px;"
+                    src="/sites/default/files/images/new-careers/norgen_life/honey-full.jpg"
+                    srcset="/sites/default/files/images/new-careers/norgen_life/honey-full.jpg 2250w, /sites/default/files/images/new-careers/norgen_life/honey-half.jpg 1125w, /sites/default/files/images/new-careers/norgen_life/honey-quarter.jpg 563w"
+                    title="Employee christmas gifts" alt="Employee christmas gifts" class="loaded-img">
+                </div>
+
+                <div class="item">
+                  <img style="max-width: 2000px;"
+                    src="/sites/default/files/images/new-careers/norgen_life/hamilton-full.jpg"
+                    srcset="/sites/default/files/images/new-careers/norgen_life/hamilton-full.jpg 2250w, /sites/default/files/images/new-careers/norgen_life/hamilton-half.jpg 1125w, /sites/default/files/images/new-careers/norgen_life/hamilton-quarter.jpg 563w"
+                    title="Hamilton Vantage automation machine" alt="Hamilton Vantage automation machine"
+                    class="loaded-img">
+                </div>
+
+                <div class="item">
+                  <img style="max-width: 2000px;"
+                    src="/sites/default/files/images/new-careers/norgen_life/iso-lab-full.jpg"
+                    srcset="/sites/default/files/images/new-careers/norgen_life/iso-lab-full.jpg 2250w, /sites/default/files/images/new-careers/norgen_life/iso-lab-half.jpg 1125w, /sites/default/files/images/new-careers/norgen_life/iso-lab-quarter.jpg 563w"
+                    title="Norgen isolation laboratory" alt="Norgen isolation laboratory" class="loaded-img">
+                </div>
+
+                <div class="item">
+                  <img style="max-width: 2000px;"
+                    src="/sites/default/files/images/new-careers/norgen_life/erhan-full.jpg"
+                    srcset="/sites/default/files/images/new-careers/norgen_life/erhan-full.jpg 2030w, /sites/default/files/images/new-careers/norgen_life/erhan-half.jpg 1015w, /sites/default/files/images/new-careers/norgen_life/erhan-quarter.jpg 508w"
+                    title="Tube filling and labelling machine" alt="Tube filling and labelling machine"
+                    class="loaded-img">
+                </div>
+
+                <div class="item">
+                  <img style="max-width: 2000px;"
+                    src="/sites/default/files/images/new-careers/norgen_life/halloween-full.jpg"
+                    srcset="/sites/default/files/images/new-careers/norgen_life/halloween-full.jpg 2250w, /sites/default/files/images/new-careers/norgen_life/halloween-half.jpg 1125w, /sites/default/files/images/new-careers/norgen_life/halloween-quarter.jpg 563w"
+                    title="Halloween 2021" alt="Halloween 2021" class="loaded-img">
+                </div>
+                <div class="item">
+                  <img style="max-width: 2000px;"
+                    src="/sites/default/files/images/new-careers/norgen_life/xmas-2021-full.jpg"
+                    srcset="/sites/default/files/images/new-careers/norgen_life/xmas-2021-full.jpg 2250w, /sites/default/files/images/new-careers/norgen_life/xmas-2021-half.jpg 1125w, /sites/default/files/images/new-careers/norgen_life/xmas-2021-quarter.jpg 563w"
+                    title="Norgen's Christmas party at White Oaks" alt="Norgen's Christmas party at White Oaks"
+                    class="loaded-img">
+                </div>
+                <div class="item">
+                  <img style="max-width: 2000px;"
+                    src="/sites/default/files/images/new-careers/norgen_life/norgen-swag-full.jpg"
+                    srcset="/sites/default/files/images/new-careers/norgen_life/norgen-swag-full.jpg 2250w, /sites/default/files/images/new-careers/norgen_life/norgen-swag-half.jpg 1125w, /sites/default/files/images/new-careers/norgen_life/norgen-swag-quarter.jpg 563w"
+                    title="New Norgen employee merchandise" alt="New Norgen employee merchandise" class="loaded-img">
+                </div>
+                <div class="item">
+                  <img style="max-width: 2000px;"
+                    src="/sites/default/files/images/new-careers/norgen_life/pam-farewell1-full.jpg"
+                    srcset="/sites/default/files/images/new-careers/norgen_life/pam-farewell1-full.jpg 2250w, /sites/default/files/images/new-careers/norgen_life/pam-farewell1-half.jpg 1125w, /sites/default/files/images/new-careers/norgen_life/pam-farewell1-quarter.jpg 563w"
+                    title="Beloved employee send off" alt="Beloved employee send off" class="loaded-img">
+                </div>
+                <div class="item">
+                  <img style="max-width: 2000px;"
+                    src="/sites/default/files/images/new-careers/norgen_life/sales-workshop-full.jpg"
+                    srcset="/sites/default/files/images/new-careers/norgen_life/sales-workshop-full.jpg 2250w, /sites/default/files/images/new-careers/norgen_life/sales-workshop-half.jpg 1125w, /sites/default/files/images/new-careers/norgen_life/sales-workshop-quarter.jpg 563w"
+                    title="Sales team workshop" alt="Sales team workshop" class="loaded-img">
+                </div>
+                <div class="item">
+                  <img style="max-width: 2000px;"
+                    src="/sites/default/files/images/new-careers/norgen_life/com-care-full.jpg"
+                    srcset="/sites/default/files/images/new-careers/norgen_life/com-care-full.jpg 2250w, /sites/default/files/images/new-careers/norgen_life/com-care-half.jpg 1125w, /sites/default/files/images/new-careers/norgen_life/com-care-quarter.jpg 563w"
+                    title="Community Care food drive 2021" alt="Community Care food drive 2021" class="loaded-img">
+                </div>
+                <div class="item">
+                  <img style="max-width:2000px;"
+                    src="/sites/default/files/images/new-careers/norgen_life/catered-lunch-full.jpg"
+                    srcset="/sites/default/files/images/new-careers/norgen_life/catered-lunch-full.jpg 2250w, /sites/default/files/images/new-careers/norgen_life/catered-lunch-half.jpg 1125w, /sites/default/files/images/new-careers/norgen_life/catered-lunch-quarter.jpg 563w"
+                    title="Norgen catered lunch" alt="Norgen catered lunch" class="loaded-img">
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="career-center mobile">
+          <h2>Life at Norgen</h2>
+        </div>
+        <div class="career-center mobile" style="width: auto;">
+          <div class="mobile-parent">
+            <div class="carousel-inner mobile life-pics">
+              <div class="item active">
+                <img src="/sites/default/files/images/new-careers/norgen_life/clean-room-full.jpg"
+                  srcset="/sites/default/files/images/new-careers/norgen_life/clean-room-full.jpg 2250w, /sites/default/files/images/new-careers/norgen_life/clean-room-half.jpg 1125w, /sites/default/files/images/new-careers/norgen_life/clean-room-quarter.jpg 563w"
+                  title="Norgen clean room" alt="Norgen clean room" class="loaded-img">
+              </div>
+
+              <div class="item">
+                <img src="/sites/default/files/images/new-careers/norgen_life/norgen-earth-day-full.jpg"
+                  srcset="/sites/default/files/images/new-careers/norgen_life/norgen-earth-day-full.jpg 2250w, /sites/default/files/images/new-careers/norgen_life/norgen-earth-day-half.jpg 1125w, /sites/default/files/images/new-careers/norgen_life/norgen-earth-day-quarter.jpg 563w"
+                  title="Norgen helping clean up on Earth Day 2022" alt="Norgen helping clean up on Earth Day 2022"
+                  class="loaded-img">
+              </div>
+
+              <div class="item">
+                <img src="/sites/default/files/images/new-careers/norgen_life/scientists-laughing-full.jpg"
+                  srcset="/sites/default/files/images/new-careers/norgen_life/scientists-laughing-full.jpg 2250w, /sites/default/files/images/new-careers/norgen_life/scientists-laughing-half.jpg 1125w, /sites/default/files/images/new-careers/norgen_life/scientists-laughing-quarter.jpg 563w"
+                  title="Scientists laughing together" alt="Scientists laughing together" class="loaded-img">
+              </div>
+
+              <div class="item">
+                <img src="/sites/default/files/images/new-careers/norgen_life/regan-full.jpg"
+                  srcset="/sites/default/files/images/new-careers/norgen_life/regan-full.jpg 2250w, /sites/default/files/images/new-careers/norgen_life/regan-half.jpg 1125w, /sites/default/files/images/new-careers/norgen_life/regan-quarter.jpg 563w"
+                  title="Norgen at the Niagara Falls Grow-Up Conference"
+                  alt="Norgen at the Niagara Falls Grow-Up Conference" class="loaded-img">
+              </div>
+
+              <div class="item">
+                <img src="/sites/default/files/images/new-careers/norgen_life/honey-full.jpg"
+                  srcset="/sites/default/files/images/new-careers/norgen_life/honey-full.jpg 2250w, /sites/default/files/images/new-careers/norgen_life/honey-half.jpg 1125w, /sites/default/files/images/new-careers/norgen_life/honey-quarter.jpg 563w"
+                  title="Employee christmas gifts" alt="Employee christmas gifts" class="loaded-img">
+              </div>
+
+              <div class="item">
+                <img src="/sites/default/files/images/new-careers/norgen_life/hamilton-full.jpg"
+                  srcset="/sites/default/files/images/new-careers/norgen_life/hamilton-full.jpg 2250w, /sites/default/files/images/new-careers/norgen_life/hamilton-half.jpg 1125w, /sites/default/files/images/new-careers/norgen_life/hamilton-quarter.jpg 563w"
+                  title="Hamilton Vantage automation machine" alt="Hamilton Vantage automation machine"
+                  class="loaded-img">
+              </div>
+
+              <div class="item">
+                <img src="/sites/default/files/images/new-careers/norgen_life/iso-lab-full.jpg"
+                  srcset="/sites/default/files/images/new-careers/norgen_life/iso-lab-full.jpg 2250w, /sites/default/files/images/new-careers/norgen_life/iso-lab-half.jpg 1125w, /sites/default/files/images/new-careers/norgen_life/iso-lab-quarter.jpg 563w"
+                  title="Norgen isolation laboratory" alt="Norgen isolation laboratory" class="loaded-img">
+              </div>
+
+              <div class="item">
+                <img src="/sites/default/files/images/new-careers/norgen_life/erhan-full.jpg"
+                  srcset="/sites/default/files/images/new-careers/norgen_life/erhan-full.jpg 2030w, /sites/default/files/images/new-careers/norgen_life/erhan-half.jpg 1015w, /sites/default/files/images/new-careers/norgen_life/erhan-quarter.jpg 508w"
+                  title="Tube filling and labelling machine" alt="Tube filling and labelling machine"
+                  class="loaded-img">
+              </div>
+
+              <div class="item">
+                <img src="/sites/default/files/images/new-careers/norgen_life/halloween-full.jpg"
+                  srcset="/sites/default/files/images/new-careers/norgen_life/halloween-full.jpg 2250w, /sites/default/files/images/new-careers/norgen_life/halloween-half.jpg 1125w, /sites/default/files/images/new-careers/norgen_life/halloween-quarter.jpg 563w"
+                  title="Halloween 2021" alt="Halloween 2021" class="loaded-img">
+              </div>
+              <div class="item">
+                <img src="/sites/default/files/images/new-careers/norgen_life/xmas-2021-full.jpg"
+                  srcset="/sites/default/files/images/new-careers/norgen_life/xmas-2021-full.jpg 2250w, /sites/default/files/images/new-careers/norgen_life/xmas-2021-half.jpg 1125w, /sites/default/files/images/new-careers/norgen_life/xmas-2021-quarter.jpg 563w"
+                  title="Norgen's Christmas party at White Oaks" alt="Norgen's Christmas party at White Oaks"
+                  class="loaded-img">
+              </div>
+              <div class="item">
+                <img src="/sites/default/files/images/new-careers/norgen_life/norgen-swag-full.jpg"
+                  srcset="/sites/default/files/images/new-careers/norgen_life/norgen-swag-full.jpg 2250w, /sites/default/files/images/new-careers/norgen_life/norgen-swag-half.jpg 1125w, /sites/default/files/images/new-careers/norgen_life/norgen-swag-quarter.jpg 563w"
+                  title="New Norgen employee merchandise" alt="New Norgen employee merchandise" class="loaded-img">
+              </div>
+              <div class="item">
+                <img src="/sites/default/files/images/new-careers/norgen_life/pam-farewell1-full.jpg"
+                  srcset="/sites/default/files/images/new-careers/norgen_life/pam-farewell1-full.jpg 2250w, /sites/default/files/images/new-careers/norgen_life/pam-farewell1-half.jpg 1125w, /sites/default/files/images/new-careers/norgen_life/pam-farewell1-quarter.jpg 563w"
+                  title="Beloved employee send off" alt="Beloved employee send off" class="loaded-img">
+              </div>
+              <div class="item">
+                <img src="/sites/default/files/images/new-careers/norgen_life/sales-workshop-full.jpg"
+                  srcset="/sites/default/files/images/new-careers/norgen_life/sales-workshop-full.jpg 2250w, /sites/default/files/images/new-careers/norgen_life/sales-workshop-half.jpg 1125w, /sites/default/files/images/new-careers/norgen_life/sales-workshop-quarter.jpg 563w"
+                  title="Sales team workshop" alt="Sales team workshop" class="loaded-img">
+              </div>
+              <div class="item">
+                <img src="/sites/default/files/images/new-careers/norgen_life/com-care-full.jpg"
+                  srcset="/sites/default/files/images/new-careers/norgen_life/com-care-full.jpg 2250w, /sites/default/files/images/new-careers/norgen_life/com-care-half.jpg 1125w, /sites/default/files/images/new-careers/norgen_life/com-care-quarter.jpg 563w"
+                  title="Community Care food drive 2021" alt="Community Care food drive 2021" class="loaded-img">
+              </div>
+              <div class="item">
+                <img src="/sites/default/files/images/new-careers/norgen_life/catered-lunch-full.jpg"
+                  srcset="/sites/default/files/images/new-careers/norgen_life/catered-lunch-full.jpg 2250w, /sites/default/files/images/new-careers/norgen_life/catered-lunch-half.jpg 1125w, /sites/default/files/images/new-careers/norgen_life/catered-lunch-quarter.jpg 563w"
+                  title="Norgen catered lunch" alt="Norgen catered lunch" class="loaded-img">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>-->
+
+      <!--<div class="green-bg">
+        <div class="career-center desktop-testimonials">
+          <h2>What Our Team Says</h2>
+          <div class="career-center">
+            <div id="carouselExampleIndicators" class="carousel slide careers-page" data-ride="carousel"
+              data-interval="false">
+              <a class="left careers carousel-control" href="#carouselExampleIndicators" role="button"
+                data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+              </a>
+              <a class="right careers carousel-control" href="#carouselExampleIndicators" role="button"
+                data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+              </a>
+              <div class="carousel-inner">-->
+
+      <!--  <div class="item active">
+                        <span class="name">Rucha Patel</span>
+                        <h3 class="position">Regulatory Manager</h3>
+                        <img src="/sites/default/files/images/new-careers/fake-people/third-eye.jpg">
+                        <p class="carousel-quote">"I started as a Regulatory Affairs Coordinator at Norgen Biotek Corp. in August 2020 and today, after one and a half years of joining, I am handling a whole department and contributing to developing the quality system every day. I love how much recognition I have received in the short amount of time I have worked with the company. My favorite things about working at Norgen are the remarkable opportunity the company has given me for advancement and an open-communication work culture that doesn't seem like a typical corporate workplace."</p>
+                    </div> -->
+
+      <!--<div class="item">
+                        <div>
+                            <div class="img"><img src="/sites/default/files/images/new-careers/real-people/jason-lrg.jpg" srcset="/sites/default/files/images/new-careers/real-people/jason-lrg.jpg 350w, /sites/default/files/images/new-careers/real-people/jason-med.jpg 175w"></div>
+                            <span class="name">Jason Perez</span>
+                            <h3 class="position">Product Sales Specialist</h3>
+                            <div><p class="carousel-quote">"I've witnessed the prioritization to support our customers in academia, industry, and healthcare. Norgen provides me with a chance to help researchers and diagnosticians with solutions, to keep them moving forward. Within and beyond my role in Sales & Marketing, I've had the space to grow with challenges from management. This professional growth that I've experienced has been within a great work environment - with people that care about Norgen and each other, with the Norgen family."</p></div>    
+                        </div>
+                    </div>-->
+
+      <!--<div class="item active">
+                  <div>
+                    <div class="img"><img src="/sites/default/files/images/new-careers/real-people/michelle2-lrg.jpg"
+                        srcset="/sites/default/files/images/new-careers/real-people/michelle2-lrg.jpg 350w, /sites/default/files/images/new-careers/real-people/michelle2-med.jpg 175w">
+                    </div>
+                    <span class="name">Michelle Stopher</span>
+                    <h3 class="position">NGS Key Account Manager</h3>
+                    <div>
+                      <p class="carousel-quote">"I have been with Norgen nearly 5 years and it's been an incredible
+                        journey so far. What makes Norgen special to me is that I get to work with an incredibly
+                        intelligent and kind team of people on a daily basis. I also love getting to work with clients
+                        who are conducting fascinating research and having the opportunity to constantly learn from
+                        their work. Norgen provides a great environment to help you grow your professional career, while
+                        allowing your creativity to shine."</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="item">
+                  <div>
+                    <div class="img"><img src="/sites/default/files/images/new-careers/real-people/felipe-lrg.jpg"
+                        srcset="/sites/default/files/images/new-careers/real-people/felipe-lrg.jpg 350w, /sites/default/files/images/new-careers/real-people/felipe-med.jpg 175w">
+                    </div>
+                    <span class="name">Felipe Reis</span>
+                    <h3 class="position">Social Media Marketing Coordinator</h3>
+                    <div>
+                      <p class="carousel-quote">"I feel part of something much bigger working at Norgen Biotek. I
+                        started helping in manufacturing during the pandemic and immediately felt welcomed by the entire
+                        company. A few months later, I received another opportunity to work in the Marketing department
+                        within a fantastic company that makes me feel empowered to share my knowledge. I am very
+                        grateful to all the colleagues who contribute to my experience to be spectacular and motivate me
+                        to go beyond. There is no other place I would rather be."</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="item">
+                  <div>
+                    <div class="img"><img src="/sites/default/files/images/new-careers/real-people/indira-lrg.jpg"
+                        srcset="/sites/default/files/images/new-careers/real-people/indira-lrg.jpg 350w, /sites/default/files/images/new-careers/real-people/indira-med.jpg 175w">
+                    </div>
+                    <span class="name">Indira Castillo</span>
+                    <h3 class="position">Lab Technician</h3>
+                    <div>
+                      <p class="carousel-quote">"I work as a lab technician helping with the MDx production and
+                        research. The lab is equipped with high technology instruments, and we have the necessary tools
+                        to produce high quality products as well as high quality services. I work with a team of very
+                        professional people with whom I have a great relationship with. I am grateful for the
+                        opportunity to be part of the lab team at Norgen, and overall it has been a great experience
+                        where I continue to learn and grow professionally."</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="item">
+                  <div>
+                    <div class="img"><img src="/sites/default/files/images/new-careers/real-people/ben-lrg.jpg"
+                        srcset="/sites/default/files/images/new-careers/real-people/ben-lrg.jpg 350w, /sites/default/files/images/new-careers/real-people/ben-med.jpg 175w">
+                    </div>
+                    <span class="name">Ben Milnes</span>
+                    <h3 class="position">Digital Marketing Manager</h3>
+                    <div>
+                      <p class="carousel-quote">"I will always be grateful for the opportunities Norgen has provided me.
+                        During my 5 years at Norgen, I have gained confidence, expanded my knowledge and have had the
+                        opportunity to help guide the next generation of Norgen's Marketing Team towards success. Norgen
+                        is a great place to learn, take on exciting new challenges and develop lasting friendships with
+                        people from all over the world."</p>
+                    </div>
+                  </div>
+                </div>-->
+
+      <!--<div class="item">
+                        <div class="img"><img src="/sites/default/files/images/new-careers/real-people/ben-lrg.jpg" srcset="/sites/default/files/images/new-careers/real-people/ben-lrg.jpg 350w, /sites/default/files/images/new-careers/real-people/ben-med.jpg 175w"></div>
+                        <span class="name">Samirkumar Patel</span>
+                        <h3 class="position">Life Science Product Specialist</h3>
+                        <div><p class="carousel-quote">"Norgen is a company that recognizes my hidden skills and provides the opportunity to work in different areas. The supportive and encouraging management team is a source of my energy and I am glad that I am part of such a dedicated scientific organization."</p></div>
+                    </div>-->
+
+      <!--<div class="item">
+                        <div>
+                            <div class="img"><img src="/sites/default/files/images/new-careers/real-people/crystal-lrg.jpg" srcset="/sites/default/files/images/new-careers/real-people/crystal-lrg.jpg 350w, /sites/default/files/images/new-careers/real-people/crystal-med.jpg 175w"></div>
+                            <span class="name">Crystal Ayers</span>
+                            <h3 class="position">Accountant</h3>
+                            <div><p class="carousel-quote">"I have been employed at Norgen Biotek for 3 years in the accounting department. Having no experience in the science industry, I was very nervous about leaving my previous job for this one but I am so glad I did! The team here at Norgen welcomed me from day one and made me feel like family. The atmosphere here is different from anything I have ever experienced. I have been given the tools to learn, grow and contribute to different aspects of the business, which I find incredibly rewarding. I feel truly valued for my efforts and am extremely proud to work for this company."</p></div>
+                        </div>
+                    </div>-->
+      <!--</div>
+
+            </div>
+
+          </div>
+        </div>
+        <div class="career-center mobile">
+          <h2>What Our Team Says</h2>
+        </div>
+        <div class="career-center mobile" style="width: auto;">
+          <div class="mobile-parent">
+            <div class="carousel-inner mobile testimonials">-->
+
+      <!-- <div class="item active">
+                    <span class="name">Rucha Patel</span>
+                    <h3 class="position">Regulatory Manager</h3>
+                    <img src="/sites/default/files/images/new-careers/fake-people/third-eye.jpg">
+                    <p class="carousel-quote">"I started as a Regulatory Affairs Coordinator at Norgen Biotek Corp. in August 2020 and today, after one and a half years of joining, I am handling a whole department and contributing to developing the quality system every day. I love how much recognition I have received in the short amount of time I have worked with the company. My favorite things about working at Norgen are the remarkable opportunity the company has given me for advancement and an open-communication work culture that doesn't seem like a typical corporate workplace."</p>
+                </div> -->
+
+      <!--<div class="item active">
+                    <span class="name">Jason Perez</span>
+                    <h3 class="position">Product Sales Specialist</h3>
+                    <img src="/sites/default/files/images/new-careers/real-people/jason-lrg.jpg" srcset="/sites/default/files/images/new-careers/real-people/jason-lrg.jpg 350w, /sites/default/files/images/new-careers/real-people/jason-med.jpg 175w">
+                    <p class="carousel-quote">"I've witnessed the prioritization to support our customers in academia, industry, and healthcare. Norgen provides me with a chance to help researchers and diagnosticians with solutions, to keep them moving forward. Within and beyond my role in Sales & Marketing, I've had the space to grow with challenges from management. This professional growth that I've experienced has been within a great work environment - with people that care about Norgen and each other, with the Norgen family."</p>
+                </div>-->
+
+      <!--<div class="item">
+                <span class="name">Michelee Stopher</span>
+                <h3 class="position">NGS Key Account Manager</h3>
+                <img src="/sites/default/files/images/new-careers/real-people/michelle-lrg.jpg"
+                  srcset="/sites/default/files/images/new-careers/real-people/michelle-lrg.jpg 350w, /sites/default/files/images/new-careers/real-people/michelle-med.jpg 175w">
+                <p class="carousel-quote">"I have been with Norgen nearly 5 years and it's been an incredible journey so
+                  far. What makes Norgen special to me is that I get to work with an incredibly intelligent and kind
+                  team of people on a daily basis. I also love getting to work with clients who are conducting
+                  fascinating research and having the opportunity to constantly learn from their work. Norgen provides a
+                  great environment to help you grow your professional career, while allowing your creativity to shine."
+                </p>
+              </div>
+
+              <div class="item">
+                <span class="name">Felipe Reis</span>
+                <h3 class="position">Social Media Marketing Coordinator</h3>
+                <img src="/sites/default/files/images/new-careers/real-people/felipe-lrg.jpg"
+                  srcset="/sites/default/files/images/new-careers/real-people/felipe-lrg.jpg 350w, /sites/default/files/images/new-careers/real-people/felipe-med.jpg 175w">
+                <p class="carousel-quote">"I feel part of something much bigger working at Norgen Biotek. I started
+                  helping in manufacturing during the pandemic and immediately felt welcomed by the entire company. A
+                  few months later, I received another opportunity to work in the Marketing department within a
+                  fantastic company that makes me feel empowered to share my knowledge. I am very grateful to all the
+                  colleagues who contribute to my experience to be spectacular and motivate me to go beyond. There is no
+                  other place I would rather be."</p>
+              </div>
+
+              <div class="item">
+                <span class="name">Indira Castillo</span>
+                <h3 class="position">Lab Technician</h3>
+                <img src="/sites/default/files/images/new-careers/real-people/indira-lrg.jpg"
+                  srcset="/sites/default/files/images/new-careers/real-people/indira-lrg.jpg 350w, /sites/default/files/images/new-careers/real-people/indira-med.jpg 175w">
+                <p class="carousel-quote">"I work as a lab technician helping with the MDx production and research. The
+                  lab is equipped with high technology instruments, and we have the necessary tools to produce high
+                  quality products as well as high quality services. I work with a team of very professional people with
+                  whom I have a great relationship with. I am grateful for the opportunity to be part of the lab team at
+                  Norgen, and overall it has been a great experience where I continue to learn and grow professionally."
+                </p>
+              </div>-->
+
+      <!--<div class="item">
+                    <span class="name">Claudia Melanson</span>
+                    <h3 class="position">Manufacturing Supervisor & Head of Inventory/Receiving</h3>
+                    <img src="/sites/default/files/images/new-careers/real-people/claudia-lrg.jpg" srcset="/sites/default/files/images/new-careers/real-people/claudia-lrg.jpg 350w, /sites/default/files/images/new-careers/real-people/claudia-med.jpg 175w">
+                    <p class="carousel-quote">"I started during The beginning of Covid. I'm not sure if everyone remembers what it was like in the beginning but it was scary. Not knowing what we are up against exactly sort of created a boundary between you and a stranger. Starting at Norgen I was in the clean rooms helping produce tubes for one of our orders. I am a very shy person and it's very hard to get out of a shell that you put yourself into and the pandemic didn't help with that. As I worked and worked I noticed that the people I was working with were so friendly and helpful and just generally amazing people. I got to know so many of them during that time, I've laughed and cried happily with many people at Norgen. Some people come and go but the experiences I've shared and the knowledge I've gained is superior to any other workplace I've had."</p>
+                </div>-->
+
+      <!--<div class="item">
+                <span class="name">Ben Milnes</span>
+                <h3 class="position">Digital Marketing Manager</h3>
+                <img src="/sites/default/files/images/new-careers/real-people/ben-lrg.jpg"
+                  srcset="/sites/default/files/images/new-careers/real-people/ben-lrg.jpg 350w, /sites/default/files/images/new-careers/real-people/ben-med.jpg 175w">
+                <p class="carousel-quote">"I will always be grateful for the opportunities Norgen has provided me.
+                  During my 5 years at Norgen, I have gained confidence, expanded my knowledge and have had the
+                  opportunity to help guide the next generation of Norgen's Marketing Team towards success. Norgen is a
+                  great place to learn, take on exciting new challenges and develop lasting friendships with people from
+                  all over the world."</p>
+              </div>-->
+
+      <!--    <div class="item">
+                    <span class="name">Samirkumar Patel</span>
+                    <h3 class="position">Regulatory</h3>
+                    <img src="/sites/default/files/images/new-careers/fake-people/third-eye.jpg">
+                    <p class="carousel-quote">"Norgen is a company that recognizes my hidden skills and provides the opportunity to work in different areas. The supportive and encouraging management team is a source of my energy and I am glad that I am part of such a dedicated scientific organization."</p>
+                </div> -->
+
+      <!--<div class="item">
+                    <span class="name">Crystal Ayers</span>
+                    <h3 class="position">Accountant</h3>
+                    <img src="/sites/default/files/images/new-careers/real-people/crystal-lrg.jpg" srcset="/sites/default/files/images/new-careers/real-people/crystal-lrg.jpg 350w, /sites/default/files/images/new-careers/real-people/crystal-med.jpg 175w">
+                    <p class="carousel-quote">"I have been employed at Norgen Biotek for 3 years in the accounting department. Having no experience in the science industry, I was very nervous about leaving my previous job for this one but I am so glad I did! The team here at Norgen welcomed me from day one and made me feel like family. The atmosphere here is different from anything I have ever experienced. I have been given the tools to learn, grow and contribute to different aspects of the business, which I find incredibly rewarding. I feel truly valued for my efforts and am extremely proud to work for this company."</p>
+                </div>-->
+      <!--</div>
+          </div>
+        </div>-->
+      <!-- <div class="career-center">
+        <div class="career-center glassdoor" style="padding-top:0px;">
+            <i class="glyphicon glyphicon-star"></i><i class="glyphicon glyphicon-star"></i><i class="glyphicon glyphicon-star"></i><i class="glyphicon glyphicon-star"></i><i class="glyphicon glyphicon-star-empty"></i>
+            <a href="https://www.glassdoor.ca/Reviews/Norgen-Biotek-Corp-Reviews-E1803550.htm">Read more on Glassdoor</a>
+        </div>
+    </div> -->
+      <!--</div>-->
+
+      <!--<div class="white-bg">
+        <hr style="width:60%;margin:auto; padding:0;" class="career-center">
+        <div class="career-center">
+          <h2>Achievements</h2>
+          <div class="grid-3 career-center">
+            <div class="awards-box">
+              <div>Brock Co-Op Employer of the Year 2021</div>
+              <img src="/sites/default/files/images/new-careers/brock-employer.jpg">
+            </div>
+            <div class="awards-box">
+              <div>Ontario Together Fund Recipient 2021</div>
+              <img src="/sites/default/files/images/new-careers/trillium-ontario-logo.png">
+            </div>
+            <div class="awards-box">
+              <div>Greater Niagara Innovative Leaders Award 2021</div>
+              <img src="/sites/default/files/images/new-careers/innovative-leader.jpg">
+            </div>
+          </div>
+        </div>
+      </div>-->
+
+      <div class="white-bg">
+        <div class="career-center">
+          <h2>A Message From Our CEO</h2>
+          <div class="career-center grid-2" style="overflow: hidden; padding: 4em 15%">
+            <div class="text ceo-msg">
+              Norgen is always interested in hearing from talented, dedicated, and forward-thinking individuals to
+              contribute to the company's growth.
+              Individuals with experience and skills in sample preparation, marketing, sales, regulatory and diagnostics
+              could be a great asset to our company.
+              If you think that you have something to offer, please submit your resume and cover letter to <a
+                href="mailto:hr@norgenbiotek.com">hr@norgenbiotek.com</a>
+              and include the position in which you are applying for in the subject line.</br>
+              <span style="font-weight:bold; display:block; width:100%; text-align:right;">- Dr. Yousef Haj-Ahmad,
+                Founder and CEO</span>
+            </div>
+            <div><img src="/sites/default/files/images/CEO-Dr-Haj-portrait.jpg"
+                srcset="/sites/default/files/images/CEO-Dr-Haj-portrait.jpg 1125w, /sites/default/files/images/CEO-Dr-Haj-portrait-small.jpg 375w"
+                alt="Our CEO, Dr.Haj-Ahmad" class="ceo-img"></div>
+          </div>
+          <div>
+            <a class="careers-btn" href="#positions">Apply Now</a>
+          </div>
+        </div>
+      </div>
+
+      <!--------------------------------------------------------------------------****---------------------------------------------------------------------------------->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script>
+        const isNumericInput = (event) => {
+          const key = event.keyCode;
+          return ((key >= 48 && key <= 57) || // Allow number line
+            (key >= 96 && key <= 105) // Allow number pad
+          );
+        };
+
+        const isModifierKey = (event) => {
+          const key = event.keyCode;
+          return (event.shiftKey === true || key === 35 || key === 36) || // Allow Shift, Home, End
+            (key === 8 || key === 9 || key === 13 || key === 46) || // Allow Backspace, Tab, Enter, Delete
+            (key > 36 && key < 41) || // Allow left, up, right, down
+            (
+              // Allow Ctrl/Command + A,C,V,X,Z
+              (event.ctrlKey === true || event.metaKey === true) &&
+              (key === 65 || key === 67 || key === 86 || key === 88 || key === 90)
+            )
+        };
+
+        const enforceFormat = (event) => {
+          // Input must be of a valid number format or a modifier key, and not longer than ten digits
+          if (!isNumericInput(event) && !isModifierKey(event)) {
+            event.preventDefault();
+          }
+        };
+
+        const formatToPhone = (event) => {
+          if (isModifierKey(event)) { return; }
+
+          const input = event.target.value.replace(/\D/g, '').substring(0, 10); // First ten digits of input only
+          const areaCode = input.substring(0, 3);
+          const middle = input.substring(3, 6);
+          const last = input.substring(6, 10);
+
+          if (input.length > 6) { event.target.value = `(${areaCode}) ${middle} - ${last}`; }
+          else if (input.length > 3) { event.target.value = `(${areaCode}) ${middle}`; }
+          else if (input.length > 0) { event.target.value = `(${areaCode}`; }
+        };
+
+        const inputElement = document.getElementById('phoneNumber');
+        inputElement.addEventListener('keydown', enforceFormat);
+        inputElement.addEventListener('keyup', formatToPhone);
+        var isAdvancedUpload = function () {
+          var div = document.createElement('div');
+          return (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div)) && 'FormData' in window && 'FileReader' in window;
+        }();
+        if (!isAdvancedUpload) {
+          document.querySelector('#popupApplication form').classList.add('no-drag-drop');
+        }
+
+        var counter = 0;
+        // Handle drag-and-drop file upload //
+        function dragOverHandler(e, dropzone) {
+          // Prevent default behavior (Prevent file from being opened)
+          e.preventDefault();
+          //add hover class
+          dropzone.classList.add('dragOver');
+        }
+        function dragLeaveHandler(e, dropzone) {
+          e.preventDefault();
+          //remove hover class
+          if (dropzone.classList.contains('dragOver')) {
+            dropzone.classList.remove('dragOver');
+          }
+        }
+        function dropHandler(e, dropzone) {
+          // Prevent default behavior (Prevent file from being opened)
+          e.preventDefault();
+
+          // Use DataTransfer interface to access the file
+          uploadFiles(e.dataTransfer.files, dropzone);
+        }
+        function uploadFiles(files, dropzone) {
+          let input = dropzone.querySelector('input[type="file"]');
+          let p = dropzone.querySelector('.upload-p');
+          if (files.length > 0) {
+            p.innerHTML = files[0].name + " (" + Math.round(files[0].size / 1024) + " KB)"; //only 1 file allowed
+            input.files = files;
+            //remove hover class
+            if (dropzone.classList.contains('dragOver')) {
+              dropzone.classList.remove('dragOver');
+            }
+          }
+          var validated = true;
+          // Validate file size
+          //handle if file size is too large (don't even let them submit because with very large files this causes severely slow page loads because form must upload the file to our tmp folder)
+          if (files[0].size / 1024 > 1000) {
+            document.querySelector('button#submit').disabled = true;
+            document.querySelector('button#submit').classList.add("disabled");
+            p.innerHTML += "<p class='required bold'>ERROR: File too large!</p>";
+            validated = false;
+          }
+          // If the file is the right size:
+          // Validate file extension
+          // and handle the case where file is wrong file type (don't let them submit)
+          var fileExt = files[0].name.substring((files[0].name).lastIndexOf(".") + 1);
+          if (fileExt != "pdf" && fileExt != "doc" && fileExt != "docx") {
+            document.querySelector('button#submit').disabled = true;
+            document.querySelector('button#submit').classList.add("disabled");
+            p.innerHTML += "<p class='required bold'>ERROR: File must be .pdf, .doc or .docx file type!</p>";
+            validated = false;
+          }
+          if (validated) {
+            //otherwise, if both file size and type are correct, check the warnings on the other file input before enabling the submit
+            if (document.querySelector('button#submit').classList.contains("disabled")) {
+              checkWarnings(dropzone);
+            }
+          }
+
+        }
+
+        // Handle traditional click file upload
+        var inputs = document.querySelectorAll('.dropzone input[type="file"]');
+        Array.prototype.forEach.call(inputs, function (input) {
+          var dropzone = input.parentElement;
+          var label = dropzone.querySelector('.upload-p'),
+            labelVal = label.innerHTML;
+
+          input.addEventListener('change', function (e) {
+            if (e.target.value.length == 0) {
+              return; // if file upload was cancelled then don't continue 
+            }
+            var fileName = '';
+            fileName = e.target.value.split("\\").pop();
+
+            if (fileName) {
+              label.innerHTML = fileName + " (" + Math.round(input.files[0].size / 1024) + " KB)";
+            }
+            else {
+              label.innerHTML = labelVal;
+            }
+            if (input.files[0]) {
+              var size = input.files[0].size;
+              var validated = true;
+              // Validate file size
+              if (size / 1024 > 1000) {
+                document.querySelector('button#submit').disabled = true;
+                document.querySelector('button#submit').classList.add("disabled");
+                label.innerHTML += "<p class='required bold'>ERROR: File too large!</p>";
+                validated = false;
+              }
+              // Validate file extension
+              // handle if file is wrong file type (don't let them submit)
+              var fileExt = input.files[0].name.substring(input.files[0].name.lastIndexOf(".") + 1);
+              if (fileExt != "pdf" && fileExt != "doc" && fileExt != "docx") {
+                document.querySelector('button#submit').disabled = true;
+                document.querySelector('button#submit').classList.add("disabled");
+                label.innerHTML += "<p class='required bold'>ERRO: File must be .pdf, .doc or .docx file type!</p>";
+                validated = false;
+              }
+              if (validated) {
+                //otherwise, if both file size and type are correct, check the warnings on the other file input before enabling the submit
+                if (document.querySelector('button#submit').classList.contains("disabled")) {
+                  checkWarnings(dropzone);
+                }
+              }
+            }
+          });
+        });
+
+        function checkWarnings(dropzone) {
+          if (dropzone.id == "cover-letter-dropzone") {
+            var resume_p = document.querySelector("#resume-dropzone .upload-p");
+            if (!resume_p.querySelector("span.required")) { // if there is not a warning in the other file upload box, remove the disabled
+              document.querySelector('button#submit').disabled = false;
+              document.querySelector('button#submit').classList.remove("disabled");
+            }
+          }
+          else { //dropzone.id=="resume-dropzone"
+            var cover_p = document.querySelector("#cover-letter-dropzone .upload-p");
+            if (!cover_p.querySelector("span.required")) { // if there is not a warning in the other file upload box, remove the disabled
+              document.querySelector('button#submit').disabled = false;
+              document.querySelector('button#submit').classList.remove("disabled");
+            }
+          }
+        }
+
+
+        document.querySelector('#resume-dropzone').addEventListener("click", function () {
+          document.querySelector('#resume-dropzone input#resume').click();
+        });
+
+        document.querySelector('#cover-letter-dropzone').addEventListener("click", function () {
+          document.querySelector('#cover-letter-dropzone input#cover-letter').click();
+        });
+        function applicationSuccess() {
+          document.querySelector(".generic-job-application-inside").style.display = "none";
+
+          document.querySelector(".thankyou-screen").style.display = "block";
+          document.getElementById("deals2").scrollIntoView(true);
+          window.location.href = '#applied';
+          // document.querySelector('html').style.overflow="hidden";
+        }
+        function applicationFailure(string) {
+          document.querySelector('#failure #failure-message').innerText = string;
+          window.location.href = '#failure';
+          document.querySelector('html').style.overflow = "hidden";
+        }
+        /* window.addEventListener('load', function(){
+            let placeholders = document.querySelectorAll('.life-row img.placeholder-img');
+            placeholders.forEach(element => {
+                element.style.display = 'none';
+            });
+            let images = document.querySelectorAll('.life-row img.loaded-img');
+            images.forEach(element => {
+                element.style.display = 'block';
+            });
+        }); */
+
+
+        /* window.addEventListener('load', adjustHeight);
+        window.addEventListener('resize', adjustHeight);
+        window.addEventListener('orientationchange', adjustHeight);
+        
+        function adjustHeight(){
+            var cards_div = document.querySelector('.desktop-testimonials #carouselExampleIndicators.careers-page');
+            let vw = 0.01 * screen.width;
+            let newHeight = (800 * (10 / (0.80*vw))) + 40; // 800px * the inverse of the card width (80vw) + 40 px for margin
+            cards_div.style.height = newHeight;
+        } */
+
+
+        $(document).ready(function () {
+          // Add smooth scrolling to all links
+          $("a.careers-btn").on('click', function (event) {
+
+            // Make sure this.hash has a value before overriding default behavior
+            if (this.hash !== "" && this.hash != "#carouselExampleIndicators") {
+              // Prevent default anchor click behavior
+              event.preventDefault();
+
+              // Store hash
+              var hash = this.hash;
+
+              // Using jQuery's animate() method to add smooth page scroll
+              // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+              $('html, body').animate({
+                scrollTop: $(hash).offset().top
+              }, 800, function () {
+
+                // Add hash (#) to URL when done scrolling (default click behavior)
+                window.location.hash = hash;
+              });
+            } // End if
+          });
+          $(".category-select a").on('click', function (event) {
+
+            // Make sure this.hash has a value before overriding default behavior
+            if (this.hash !== "" && this.hash != "#carouselExampleIndicators") {
+              // Prevent default anchor click behavior
+              event.preventDefault();
+
+              // Store hash
+              var hash = this.hash;
+
+              // Using jQuery's animate() method to add smooth page scroll
+              // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+              $('html, body').animate({
+                scrollTop: $(hash).offset().top
+              }, 800, function () {
+
+                // Add hash (#) to URL when done scrolling (default click behavior)
+                window.location.hash = hash;
+              });
+            } // End if
+          });
+        });
+
+
+      </script>

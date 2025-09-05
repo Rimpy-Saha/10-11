@@ -1,0 +1,439 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a node.
+ *
+ * Available variables:
+ * - node: The node entity with limited access to object properties and methods.
+ *   Only method names starting with "get", "has", or "is" and a few common
+ *   methods such as "id", "label", and "bundle" are available. For example:
+ *   - node.getCreatedTime() will return the node creation timestamp.
+ *   - node.hasField('field_example') returns TRUE if the node bundle includes
+ *     field_example. (This does not indicate the presence of a value in this
+ *     field.)
+ *   - node.isPublished() will return whether the node is published or not.
+ *   Calling other methods, such as node.delete(), will result in an exception.
+ *   See \Drupal\node\Entity\Node for a full list of public properties and
+ *   methods for the node object.
+ * - label: (optional) The title of the node.
+ * - content: All node items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - author_picture: The node author user entity, rendered using the "compact"
+ *   view mode.
+ * - metadata: Metadata for this node.
+ * - date: (optional) Themed creation date field.
+ * - author_name: (optional) Themed author name field.
+ * - url: Direct URL of the current node.
+ * - display_submitted: Whether submission information should be displayed.
+ * - attributes: HTML attributes for the containing element.
+ *   The attributes.class element may contain one or more of the following
+ *   classes:
+ *   - node: The current template type (also known as a "theming hook").
+ *   - node--type-[type]: The current node type. For example, if the node is an
+ *     "Article" it would result in "node--type-article". Note that the machine
+ *     name will often be in a short form of the human readable label.
+ *   - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+ *     teaser would result in: "node--view-mode-teaser", and
+ *     full: "node--view-mode-full".
+ *   The following are controlled through the node publishing options.
+ *   - node--promoted: Appears on nodes promoted to the front page.
+ *   - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+ *     teaser listings.
+ *   - node--unpublished: Appears on unpublished nodes visible only to site
+ *     admins.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main
+ *   content tag that appears in the template.
+ * - author_attributes: Same as attributes, except applied to the author of
+ *   the node tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ * - view_mode: View mode; for example, "teaser" or "full".
+ * - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+ * - page: Flag for the full page state. Will be true if view_mode is 'full'.
+ * - readmore: Flag for more state. Will be true if the teaser content of the
+ *   node cannot hold the main body content.
+ * - logged_in: Flag for authenticated user status. Will be true when the
+ *   current user is a logged-in member.
+ * - is_admin: Flag for admin user status. Will be true when the current user
+ *   is an administrator.
+ *
+ * @see template_preprocess_node()
+ *
+ * @ingroup themeable
+ */
+#}
+<article{{ attributes }}>
+
+  {{ title_prefix }}
+  {% if label and not page %}
+    <h2{{ title_attributes }}>
+      <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+    </h2>
+  {% endif %}
+  {{ title_suffix }}
+
+  {% if display_submitted %}
+    <footer>
+      {{ author_picture }}
+      <div{{ author_attributes }}>
+        {% trans %}Submitted by {{ author_name }} on {{ date }}{% endtrans %}
+        {{ metadata }}
+      </div>
+    </footer>
+  {% endif %}
+
+  <div{{ content_attributes }}>
+    {{ content.body }}
+  </div>
+
+</article>
+
+
+<style>
+    .question-section{
+        min-height:400px;
+        margin-top:30vh;
+    }
+    #question1.question-section{
+        margin-top:5em;
+    }
+    .questions-div{
+        display: grid;
+        grid-template-columns: 1fr;
+        max-width: 600px;
+        margin: auto;
+        gap: 1em;
+        text-align: center;
+        margin-top:5em;
+    }
+    .questions-div input{
+        position: absolute;
+        opacity:0;
+        pointer-events:none;
+    }
+    .questions-div label, input[type="submit"]{
+        background-color:#004897;
+        border-radius:12px;
+        color:#fff;
+        padding:1em;
+        cursor: pointer;
+        border:2px solid #004897;
+        font-size:18px;
+        font-weight:normal;
+    }
+    .questions-div label{
+        text-align:left;
+        padding-left:4.5em;
+        position:relative;
+    }
+    label .mc-letter{
+        margin-right:1em;
+        font-weight:normal;
+        border-radius: 100%;
+        border: 1px solid white;
+        padding: 0.5em;
+        width: 2.5em;
+        height: 2.5em;
+        display: inline-block;
+        position:absolute;
+        left:1em;
+        top:0.5em;
+        margin:auto;
+        display:flex;
+        justify-content:center;
+    }
+    .questions-div label[selected]{
+        background-color:#fff;
+        color:#000;
+    }
+    .question-section label:not(label[selected]):hover, input[type="submit"]:hover{
+        background-color:#E5ECF4;
+        color:#000;
+    }
+    input[type="submit"]:disabled{
+        background-color:#e3e3e3;
+        border:none;
+        color:#acacac;
+        cursor:default;
+    }
+    #quiz-form fieldset[disabled] label{
+        background-color:#e3e3e3;
+        border:none;
+        color:#acacac;
+    }
+    #quiz-form fieldset[disabled] .question-section label:not(label[selected]):hover .mc-letter, #quiz-form fieldset[disabled] .question-section .questions-div label .mc-letter{
+        border:1px solid #acacac;
+    }
+    #quiz-form fieldset[disabled] .question-section label:hover, #quiz-form fieldset[disabled] .question-section label:not(label[selected]):hover{
+        background-color:#e3e3e3;
+        border:none;
+        color:#acacac;
+        cursor:default;
+    }
+    .question-section label:not(label[selected]):hover .mc-letter, .questions-div label[selected] .mc-letter{
+        border:1px solid black;
+    }
+
+    /* login form */
+    #login-container{
+        width: 100%;
+        max-width:800px;
+        background: white;
+        padding: 5%;
+        margin: 20px auto 150px;
+    }
+    #login-form input{
+        width: 100%;
+        height: 4%;
+        margin-bottom: 8%;
+        vertical-align: middle;
+        min-width: 50px;
+        width: 100%;
+        min-height: 36px;
+        background-color: #fff;
+        border: #a9a9a969;
+        border-style: solid;
+        border-width: thin;
+        border-radius: 20px;
+        max-height: 60px;
+        padding: 2%;
+    }
+    #login-form input:focus{
+        border: solid 1px #1A3C93 !important;
+    }
+    #login-form input[type=submit]{
+        background-color: #004897;
+        border-color: #004897;
+        opacity: 1;
+        color: #fff;
+        width: 100%;
+        max-width:300px;
+        display: block;
+        margin: auto;
+    }
+    #login-form div{
+        margin:1em 0;
+    }
+    .attempts-remaining{
+        font-weight:bold;
+        font-size:18px;
+    }
+    .no-attempts-remaining{
+        color:#EC1D25;
+        font-weight:bold;
+        font-size:18px;
+    }
+
+    /* Submission Results screen  */
+    #submission-results{
+        background-color:#fff;
+        position:relative;
+        padding:50px 0;
+    }
+    #submissions-results #questions-highest_score{
+        max-width:600px;
+        margin:auto;
+    }
+    #quiz-results-submit{
+        position:absolute;
+        top:0;
+        right:20px;
+        font-size:40px;
+        border:none;
+        background-color:transparent;
+    }
+    #quiz-results-submit:hover{
+        cursor:pointer;
+    }
+    .response-container{
+        margin-right:10em;
+        display:grid;
+        grid-template-columns:1fr 200px;
+        padding:1em;
+    }
+    .response-correctness{
+        line-height: 1.8;
+    }
+    .incorrect-container{
+        background-color:#ec1d252e;
+    }
+    .correct-container{
+        background-color:#62ad2a2e;
+    }
+    .incorrect{
+        color:#EC1D25;
+    } 
+    .correct{
+        color:#62AD2A;
+    }
+    .incorrect i, .correct i{
+        margin-right:10px;
+    }
+    .average-orange{
+        color:#e2790e;
+    }
+
+
+    @media only screen and (max-width:600px){
+        .response-container, .questions-div{
+            grid-template-columns:1fr;
+            margin-right:0px;
+        }
+         #distributor-info{
+            grid-template-columns: auto !important;
+        }        
+    }
+      .thankyou-screen{
+        display:none;
+            background: white;
+    width: 50%;
+    margin: 5% auto;
+    box-shadow: 0 4px 40px 0 rgb(0 0 0 / 9%), 0 6px 20px 0 rgb(0 0 0 / 17%);
+    padding: 2%;
+    }
+    .image-logo{
+        width: 40%;
+        margin: auto;
+    }
+    .animation-ctn{
+    text-align:center;
+    margin-top:5em;
+    }
+
+    @-webkit-keyframes checkmark {
+    0% {
+        stroke-dashoffset: 100px
+    }
+
+    100% {
+        stroke-dashoffset: 200px
+    }
+}
+
+@-ms-keyframes checkmark {
+    0% {
+        stroke-dashoffset: 100px
+    }
+
+    100% {
+        stroke-dashoffset: 200px
+    }
+}
+
+@keyframes checkmark {
+    0% {
+        stroke-dashoffset: 100px
+    }
+
+    100% {
+        stroke-dashoffset: 0px
+    }
+}
+
+@-webkit-keyframes checkmark-circle {
+    0% {
+        stroke-dashoffset: 480px
+   
+    }
+
+    100% {
+        stroke-dashoffset: 960px;
+      
+    }
+}
+
+@-ms-keyframes checkmark-circle {
+    0% {
+        stroke-dashoffset: 240px
+    }
+
+    100% {
+        stroke-dashoffset: 480px
+    }
+}
+
+@keyframes checkmark-circle {
+    0% {
+        stroke-dashoffset: 480px 
+    }
+
+    100% {
+        stroke-dashoffset: 960px
+    }
+}
+
+@keyframes colored-circle { 
+    0% {
+        opacity:0
+    }
+
+    100% {
+        opacity:100
+    }
+}
+
+.inlinesvg .svg svg {
+    display: inline
+}
+
+.icon--order-success svg polyline {
+    -webkit-animation: checkmark 0.25s ease-in-out 0.7s backwards;
+    animation: checkmark 0.25s ease-in-out 0.7s backwards
+}
+
+.icon--order-success svg circle {
+    -webkit-animation: checkmark-circle 0.6s ease-in-out backwards;
+    animation: checkmark-circle 0.6s ease-in-out backwards;
+}
+.icon--order-success svg circle#colored {
+    -webkit-animation: colored-circle 0.6s ease-in-out 0.7s backwards;
+    animation: colored-circle 0.6s ease-in-out 0.7s backwards;
+} 
+
+/* new styles */
+#login-container h1 {
+  font-size: 50px;
+}
+
+.form-required{
+  color: red;
+}
+</style>
+
+<div class="container" id="login-container">
+    <h1 style="font-weight:bold;">Urine Collection, Preservation & Isolation</h1>
+    <p>Please enter your information here</p>
+    <form action="" method="post" id="login-form">
+        <div>
+            <label for="fname">First Name <span class="form-required" title="This field is required.">*</span></label>
+            <input type="text" id="fname" name="fname" placeholder="First Name (Required)" required>
+        </div>
+        <div>
+            <label for="lname">Last Name <span class="form-required" title="This field is required.">*</span></label>
+            <input type="text" id="lname" name="lname" placeholder="Last Name (Required)" required>
+        </div>
+        <div>
+            <label for="email">Email <span class="form-required" title="This field is required.">*</span></label>
+            <input type="email" id="email" name="email" placeholder="Email (Required)" required>
+        </div> 
+        <div>
+            <label for="company">Company <span class="form-required" title="This field is required.">*</span></label>
+            <input type="text" id="company" name="company" placeholder="Company Name (Required)" required>
+        </div> 
+        <input type="submit" id="submit" name="submit" value="Submit">
+    </form>
+    </div>
+
+<script>
+    function success_in(){
+        document.querySelector('#login-container').style.display="none";
+        document.querySelector('.thankyou-screen').style.display="block";
+    }
+   </script>
+

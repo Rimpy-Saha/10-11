@@ -1,0 +1,42 @@
+.views-exposed-form[data-drupal-selector="views-exposed-form-publications-or-citations-all-results"]{
+    display:flex;
+    justify-content:end;
+    gap:10px;
+}
+.form-item-combine.form-item .form-group, .form-item-combine.form-item input{
+    height:100%;
+}
+.form-item-combine.form-item input{
+    font-size:17px;
+    padding:5px 10px;
+}
+.form-item-combine.form-item > label{
+    display:none;
+}
+.form-item-sort-bef-combine.form-item{
+    position: relative;
+}
+.form-item-sort-bef-combine.form-item > label{
+    position: absolute;
+    top: 5px;
+    left: 20px;
+    font-size: 12px;
+    color: inherit;
+    font-weight:bold;
+}
+.form-item-sort-bef-combine.form-item > select.form-control.input-lg{
+    padding-top:22px;
+    height:auto;
+}
+
+.database-page-files fieldset > legend, .database-page-figures fieldset > legend{
+    border-bottom:none!important;
+    display: none;
+}
+.publications .views-exposed-form{
+    margin-top:10px;
+}
+
+.views-exposed-form[data-drupal-selector="views-exposed-form-publications-or-citations-all-results"] .form-item-sort-bef-combine label{
+    display:flex;
+}

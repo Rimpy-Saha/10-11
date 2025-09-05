@@ -1,0 +1,415 @@
+
+<header class="c-layout-header c-layout-header-4 c-layout-header-dark-mobile" data-minimize-offset="80">
+  <input type="hidden" id="body-classes" value="c-layout-header-mobile-fixed c-layout-header-topbar c-layout-header-topbar-collapse c-header-not-fixed"/>
+    <div class="c-topbar c-topbar-topbar-dark">
+      <div class="container">
+        <!-- BEGIN: INLINE NAV -->
+          <nav class="c-top-menu c-pull-left">
+            <ul class="c-icons c-theme-ul">
+                   <li><a href="https://dribbble.com" target="_blank"><i class="icon-social-dribbble"></i></a></li>
+                   <li><a href="https://facebook.com" target="_blank"><i class="icon-social-facebook"></i></a></li>
+                   <li><a href="https://www.twitter.com" target="_blank"><i class="icon-social-twitter"></i></a></li>
+            </ul>
+          </nav> 
+        <!-- END: INLINE NAV -->
+
+        <!-- BEGIN: INLINE NAV -->
+        <nav class="c-top-menu c-pull-right">
+          <ul class="c-links c-theme-ul">
+                   <li><a href="/">Help</a></li>
+                   <li class="c-divider">|</li>
+                   <li><a href="/">Contact</a></li>
+                   <li class="c-divider">|</li>
+                   <li class="last"><a href="/">FAQ</a></li>
+          </ul>
+          <ul class="c-ext c-theme-ul">
+                <li class="c-lang dropdown c-last">
+                  <a href="#">en</a>
+                  <!-- Language list menu -->
+                  <ul class="language-switcher-language-url dropdown-menu pull-right"><li hreflang="en" data-drupal-link-system-path="node/117" class="en is-active"><a href="/about-us-1" class="language-link is-active" hreflang="en" data-drupal-link-system-path="node/117">English</a></li>
+                  
+                  <li hreflang="fr" class="fr"><a href="/fr/about-us-1" class="language-link" hreflang="fr">French</a></li>
+
+                  <li hreflang="de" data-drupal-link-system-path="node/117" class="de"><a href="/de/about-us-1" class="language-link" hreflang="de" data-drupal-link-system-path="node/117">German</a></li><li hreflang="ar" data-drupal-link-system-path="node/117" class="ar"><a href="/ar/about-us-1" class="language-link" hreflang="ar" data-drupal-link-system-path="node/117">Arabic</a></li></ul>
+                </li>
+              </ul> 
+            
+        </nav>
+        <!-- END: INLINE NAV -->
+      </div>
+    </div>
+
+  <div class="c-navbar">
+    <div class="container">
+      <!-- BEGIN: BRAND -->
+      <div class="c-navbar-wrapper clearfix">
+        <div class="c-brand c-pull-left">
+          <a href="{{ url('<front>') }}" class="c-logo">
+            <img src="{{ logo_path }}" alt="{{ site_name }}" class="c-desktop-logo" width="150">
+            <img src="{{ logo_path }}" alt="{{ site_name }}" class="c-desktop-logo-inverse" width="150">
+            <img src="{{ logo_path }}" alt="{{ site_name }}" class="c-mobile-logo" width="150">
+          </a>
+          <button class="c-hor-nav-toggler" type="button" data-target=".c-mega-menu">
+            <span class="c-line"></span>
+            <span class="c-line"></span>
+            <span class="c-line"></span>
+          </button>
+          <button class="c-topbar-toggler" type="button">
+            <i class="fa fa-ellipsis-v"></i>
+          </button>
+          {# Get the current path #}
+          {% set currentPath = path('<current>') %}
+          {# <script>var id = {{ currentPath | json_encode | raw}};</script> #}
+          {# List of paths where the form should not be displayed #}
+          {% set excludedPaths = ['/content/search-bar'] %}
+
+          {% if currentPath not in excludedPaths %}
+            <button class="c-search-toggler" type="button">
+              <i class="fa fa-search"></i>
+            </button>
+            {% endif %}
+            <button class="c-cart-toggler" type="button">
+              <i class="icon-handbag"></i>
+              <span class="c-cart-number c-theme-bg">{{ cart_count }}</span>
+            </button>
+        </div>
+        {# {% if (search_block != FALSE) %}
+          {{ search_block }}
+        {% endif %} #}
+
+        
+        {# Check if the current path is not in the excluded paths list #}
+        {% if currentPath not in excludedPaths %}        
+        <form class="search-block-form form" data-drupal-selector="search-block-form-8" action="/content/search-bar" method="get" id="search-block-form--8" accept-charset="UTF-8" data-once="form-updated" data-drupal-form-fields="edit-keys--8">
+          <div class="form-group js-form-item form-item js-form-type-search form-item-keys js-form-item-keys form-no-label">
+              <label for="edit-keys--8" class="visually-hidden">Search</label>
+              <div class="form-group has-feedback c-quick-search">
+                <input title="Enter the terms you wish to search for." data-drupal-selector="edit-keys" class="input-lg form-control c-square c-theme form-search" placeholder="Search Catalogue..." type="search" id="edit-keys--8" name="search" value="" size="15" maxlength="128">
+                <button id="cust_search_submit_3" class="search search-button-advance" type="submit" style="display:inline;background: #004897;color: white;" aria-label="Search"><i class="fas fa-search"></i></button>
+                <a class="search-bar-close" href="#" onclick="close_search_bar();return false;" style="font-size:36px;"> x</a>
+
+              </div>
+
+          </div>
+          <div class="overlay-search-for-menu" onclick="close_search_bar();"></div>
+          <div data-drupal-selector="edit-actions" class="form-actions js-form-wrapper form-wrapper" id="edit-actions--8">
+            <div class="form-group has-feedback">
+              <input data-drupal-selector="edit-submit" class="btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button js-form-submit form-submit" type="submit" id="edit-submit--8" value="Search">
+            </div>
+          </div>
+
+        </form>
+        {% endif %}
+
+
+        <!-- Dropdown menu toggle on mobile: c-toggler class can be applied to the link arrow or link itself depending on toggle mode -->
+        <nav class="c-mega-menu c-pull-right c-mega-menu-{{ bg_color }} c-mega-menu-dark-mobile c-mega-menu-onepage c-fonts-uppercase c-fonts-bold"
+          data-onepage-animation-speed="700">
+          <!-- Main Menu -->
+          <ul class="nav navbar-nav c-theme-nav">
+            {{ menu }} <!-- Menu Start
+            // Get menu items
+            {% set items = simplify_menu('main') %}
+            // Iterate menu tree
+            <ul>
+              {% for menu_item in items.menu_tree %}
+                <li class="{{ item_class }} navigation__item">
+                  <a href="{{ menu_item.url }}" class="{{ link_class }}">{{ menu_item.text }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+             Menu End -->
+             {% if currentPath not in excludedPaths %}
+              <li class="c-search-toggler-wrapper">
+                <a href="#" class="c-btn-icon c-search-toggler">
+                  <i class="fa fa-search"></i>
+                </a>
+              </li>
+              {% endif %}
+
+              <li class="c-cart-toggler-wrapper">
+                <a href="{{ url('commerce_cart.page') }}" class="c-btn-icon c-cart-toggler">
+                  <i class="icon-handbag c-cart-icon"></i>
+                  <span class="c-cart-number c-theme-bg">{{ cart_count }}</span>
+                </a>
+              </li>
+
+              <li>
+                {% if is_authenticated %}
+                  {% set user_menu_title = 'Account' %}
+                {% else %}
+                  {% set user_menu_title = 'Sign In' %}
+                {% endif %}
+                <a href="{{ url('user.page') }}"
+                   class="c-btn-border-opacity-04 c-btn btn-no-focus c-btn-header btn btn-sm c-btn-border-1x c-btn-dark c-btn-circle c-btn-uppercase c-btn-sbold">
+                  <i class="icon-user"></i> {{ user_menu_title|t }}
+                </a>
+              </li>
+
+          </ul>
+        </nav>
+      </div>
+      <!-- cart_block -->
+      {% if cart_block != FALSE %}
+        <div{{ attributes.addClass(['c-cart-menu']) }}>
+          <div class="c-cart-menu-title">
+            <p class="c-cart-menu-float-l c-font-sbold">{{ count_text }}</p>
+            <p class="c-cart-menu-float-r c-theme-font c-font-sbold">{{ cart_total_price }}</p>
+          </div>
+	  {{ cart_block }}
+        </div>
+      {% endif %}
+
+    </div>
+  </div>
+</header>
+<script id = 'search_header'>
+
+    {
+    var prd_name_nu = {{search_block | json_encode | raw}};
+    search_auto(document.getElementById("edit-keys--8"), prd_name_nu);
+    //search_auto(document.getElementById("cust_search_input_3"), prd_name_nu);
+    }
+    var search_submit = document.querySelector("#edit-submit--8");
+    var search_inpt;
+    function search_auto(inp, original_arr) 
+    {
+        var up_down_current=-1;
+        // var search_submit;
+        
+        switch (inp.id){
+            case "edit-keys--8":
+                search_inpt = document.getElementById("edit-keys--8");
+                search_submit = document.getElementById("edit-submit--8");
+                break;
+           /* case "cust_search_input_3":
+                search_inpt = document.getElementById("cust_search_input_3");
+                search_submit = document.getElementById("cust_search_submit_3");
+                break;*/
+        }
+        inp.addEventListener("input", events);
+        inp.addEventListener("click", events);
+        inp.addEventListener("onchange", events);
+
+        inp.addEventListener("keydown", function(e) {
+            var drop_down_check = document.getElementById(inp.id + "_dropdown");
+        
+            if (drop_down_check) 
+            {
+                drop_down_check = drop_down_check.getElementsByTagName("div");
+            }
+            if (e.keyCode == 40) 
+            {
+                up_down_current++;
+                focused(drop_down_check);
+                if (!checkInView(drop_down_check[up_down_current],document.getElementById(inp.id + "_dropdown"))) 
+                {
+                    drop_down_check[up_down_current].scrollIntoView({
+                        block: 'end'
+                    });
+                }
+            } 
+            else if (e.keyCode == 38)             
+            {
+                up_down_current--;
+                if (!checkInView(drop_down_check[up_down_current],document.getElementById(inp.id + "_dropdown"))) 
+                {
+                    drop_down_check[up_down_current].scrollIntoView({
+                        block: 'end'
+                    });
+                }
+                focused(drop_down_check);
+            } 
+
+            if (up_down_current > -1) 
+            {
+                inp.value = (drop_down_check[up_down_current].getElementsByTagName("input"))[0].value;
+            }
+        });
+
+        function events() {
+            var  i, val = this.value;
+            var passed_id = inp.id+"_dropdown";
+            if(document.getElementById(passed_id))
+            {
+                document.getElementById(passed_id).remove();
+            }
+            if (!val) {
+                return false;
+            }
+            up_down_current = -1;
+            {# var overlay_search = document.getElementById("overlay-search");
+			      overlay_search.style.display = "block"; #}
+            var dropdown = "<div id='"+inp.id+"_dropdown' class='dropdown_list_el'></div>";
+            var id_parent = document.getElementById(inp.id).parentNode;
+            id_parent.insertAdjacentHTML('beforeend',dropdown);
+            var tab = 1;
+            var arr = [];
+            for(i = 0 ; i <original_arr.length;i++)
+            {
+                arr[i] =  new Array(2 ).fill("");
+                arr[i][0]=original_arr[i][0];
+                arr[i][1]=original_arr[i][1];
+                arr[i][2]=0;
+            }
+            var string2 = (val.trim()).toLowerCase();
+            var string2_parts = string2.split(" "); 
+            for (i = 0; i < arr.length; i++) {
+                var string1 = arr[i][0].toLowerCase();
+            var max_array = string1.split(" ");
+            var similarity_loop, a;
+            arr[i][2] = 0;
+            for(a = 0 ; a<string2_parts.length ; a++)   
+            { 
+                var similarity = 0;
+                for(similarity_loop=0;similarity_loop<max_array.length;similarity_loop++)
+                { 
+                    var similarity_check = jaro_similarity(max_array[similarity_loop], string2_parts[a]);
+                    if(similarity<similarity_check)
+                    {
+                        similarity = similarity_check;
+                    }
+                }
+                arr[i][2] += similarity;
+            }
+            // arr[i][1] = similarity;
+            }
+            arr.sort(function(a,b) {
+            return b[2]-a[2]
+            });
+            for (i = 0; i < arr.length; i++) 
+            {
+                if (arr[i][2] > (0.70))
+                {     
+
+                    var valstart = arr[i][0].toLowerCase().indexOf(val.toLowerCase());
+                    var len = val.length;
+                    var id_string = '"'+inp.id+'"';
+                    var dropdown_data ="<a href="+arr[i][1]+"><div onclick='drop_click(this,"+id_string+")'>"+ arr[i][0].substring(0, valstart) + arr[i][0].substring(valstart, (valstart + len))+ arr[i][0]
+                        .substring((valstart + len), arr[i][0].length)+"<input tabIndex='" + 0 + "' type='hidden' value='" + arr[i][0] + "'> </div></a>";
+
+                    var id_drop = document.getElementById((inp.id+"_dropdown"));
+                    id_drop.insertAdjacentHTML('beforeend',dropdown_data);
+                    
+                } 
+            }
+        }
+      
+        function focused(drop_data) {
+            if (!drop_data) return false;
+            for (var i = 0; i < drop_data.length; i++) {
+                drop_data[i].classList.remove("dropdown_el_active");
+            }
+            if (up_down_current >= drop_data.length) up_down_current = 0;
+            if (up_down_current < 0) up_down_current = (drop_data.length - 1);
+            drop_data[up_down_current].classList.add("dropdown_el_active");
+        }
+    }
+
+    function drop_click(elm,inpt)
+    {
+        var inp =  document.getElementById(inpt);
+        inp.value = elm.getElementsByTagName("input")[0].value;
+        search_inpt.focus();
+        search_submit.click();
+    }
+
+    function jaro_similarity(s1, s2) 
+    {
+        var m = 0;
+        if (s1.length === 0 || s2.length === 0) {
+            return 0;
+        }
+
+        if (s1 === s2 || s1.includes(s2)) {
+            return 1;
+        }
+
+        var range = (Math.floor(Math.max(s1.length, s2.length) / 2)) - 1,
+            s1Matches = new Array(s1.length),
+            s2Matches = new Array(s2.length);
+
+        for (i = 0; i < s1.length; i++) {
+            var low = (i >= range) ? i - range : 0,
+                high = (i + range <= s2.length) ? (i + range) : (s2.length - 1);
+
+            for (j = low; j <= high; j++) {
+                if (s1Matches[i] !== true && s2Matches[j] !== true && s1[i] === s2[j]) {
+                    ++m;
+                    s1Matches[i] = s2Matches[j] = true;
+                    break;
+                }
+            }
+        }
+
+        if (m === 0) {
+            return 0;
+        }
+
+        var k = n_trans = 0;
+
+        for (i = 0; i < s1.length; i++) {
+            if (s1Matches[i] === true) {
+                for (j = k; j < s2.length; j++) {
+                    if (s2Matches[j] === true) {
+                        k = j + 1;
+                        break;
+                    }
+                }
+
+                if (s1[i] !== s2[j]) {
+                    ++n_trans;
+                }
+            }
+        }
+
+        var weight = (m / s1.length + m / s2.length + (m - (n_trans / 2)) / m) / 3,
+            l = 0,
+            p = 0.1;
+
+        if (weight > 0.7) {
+            while (s1[l] === s2[l] && l < 4) {
+                ++l;
+            }
+
+            weight = weight + l * p * (1 - weight);
+        }
+
+        return weight;
+    }
+        
+      
+
+
+
+    function checkInView(elem, container) 
+    {
+        var contHeight = $(container).height();
+        var contTop = $(container).scrollTop();
+        var contBottom = contTop + contHeight;
+        if($(elem).offset() && $(container).offset().top)
+        {
+            var elemTop = $(elem).offset().top - $(container).offset().top;
+            var elemBottom = elemTop + $(elem).height();
+            var isTotal = (elemTop >= 0 && elemBottom <= contHeight);
+            return isTotal;
+        }
+        return true;
+        
+    }
+    function close_search_bar(){
+        var searchbar = document.getElementsByClassName("c-quick-search")[0];
+        var megamenu = document.getElementsByClassName("c-mega-menu")[0];
+        var searchblock = document.getElementsByClassName("search-block-form")[0];
+        searchblock.classList.remove("search-block-form-opened");
+        var brandlogo = document.getElementsByClassName("c-brand")[0];
+        var navbar = document.getElementsByClassName("c-navbar")[0];
+        var overlaysearch = document.getElementsByClassName("overlay-search-for-menu")[0];
+        searchbar.style.display = "none";
+        megamenu.style.display = "block";
+        brandlogo.style.display = "block";
+        navbar.classList.remove("search-open-in-nav-bar");
+        overlaysearch.style.display = "none";
+        searchbar.classList.remove("search-bar-with-overlay");
+    }
+</script>

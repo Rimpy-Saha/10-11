@@ -1,0 +1,3178 @@
+<style>
+<style>
+  .collection_firstchoice > div{
+    padding: 5%;
+    display: none;
+  }
+ .collection_firstchoice > div > a{
+    display: block;
+    text-align: center;
+  }
+  .extraction_firstchoice > div{
+    padding: 5%;
+    display: none;
+  }
+
+  .extraction_firstchoice > div > a{
+    display: block;
+    text-align: center;
+  }
+
+  .multianalyte_firstchoice > div{
+    padding: 5%;
+    display: none;
+  }
+    .multianalyte_firstchoice > div > a{
+    display: block;
+    text-align: center;
+  }
+
+  .q_single > div{
+    padding: 5%;
+    display: none;
+  }
+
+   .q_single > div > a{
+    display: block;
+    text-align: center;
+  }
+ 
+
+  .workflow-results{
+    display: flex;
+    gap: 150px;
+    width: -webkit-fill-available;
+    margin: 5%;
+    justify-content: center;
+    position: relative;
+
+  }
+  .workflow-results >div{
+    display: none;
+    width: 500px;
+  }
+  .workflow-results > div > h1{
+    text-align: center;
+    margin-bottom: 0;
+  }
+  .workflow-results > div > h2{
+    text-align: center;
+    background: #00489712;
+    margin-top: 0;
+    padding: 1% 0;
+    font-size: 27px
+  }
+  .workflow-results > div > h1 > span{
+    font-weight: 700;
+    font-size: 70px !important;
+  }
+  .samplecollection, .extraction, .multianalyte, .qpcr{
+    border: 1px solid gray;
+    
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    align-items: center;
+    display: none;
+    width: 100%;
+    padding: 4% 0;
+  }
+ 
+#workflow-selector-form{
+  display: flex;
+  gap:20px;
+  
+}
+.form-sec{
+  width: 80%;
+  margin: 5% auto;
+}
+#workflow-selector-form div{
+  width: 100%;
+}
+select{
+  width: 100%;
+  border: 1px solid #c6c6c6;
+  height: 34px;
+}
+button#submit {
+    border-radius: 36px;
+    color: #fff;
+    background: #004897;
+    padding: 10px 20px;
+    border: none;
+    transition: all 0.5s;
+    /*float: right;*/
+    margin-top: 3%;
+}
+.card-heading{
+    text-align: center;
+}
+.card-heading h2{
+  background: #0066cc;
+  padding: 1%;
+  color: white;
+}
+
+#each-title{
+      display: flex;
+    align-items: center;
+    gap:20px;
+    margin: 4% auto;
+}
+#each-title p{
+  font-size: 20px;
+    text-align: left;
+    line-height: 1.4;
+        width: -webkit-fill-available;
+}
+.prod-each{
+  text-align: center;
+}
+#title-num{
+      background: #004897;
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    color: white;
+    display: inline-block;
+    font-weight: bold;
+    line-height: 55px;
+    margin-right: 5px;
+    font-size: 40px;
+    text-align: center;
+    width: 70px;
+}
+#title{
+    color: #004897;
+    font-weight: 700;
+    font-size: 18px;
+    padding: 2% 3% 2% 0;
+    border-right: 4px solid #004897;
+    text-align: right;
+}
+.prod-each > img{
+  width: 300px;
+}
+#commerce{
+  display: flex;
+  gap:20px;
+  align-items: center;
+      justify-content: center;
+      margin: 4% auto;
+}
+#sample_counter, #extraction_counter, #multi_counter, #pcr_counter{
+  font-size: 20px;
+    width: fit-content;
+    margin: 3% auto;
+    /*background: #ffff0026;*/
+    padding: 0;
+    line-height: 1;
+    font-weight: 700;
+}
+.orp{
+      font-size: 22px;
+    width: fit-content;
+    margin: auto;
+    color: #80808082;
+}
+#nav-links{
+  background-color: aliceblue;
+  padding: 1%;
+  display: none;
+  width: 100%;
+  margin: 10% 0 0;
+}
+#nav-linksp{
+      display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+.stepdiv{
+      background: #004897;
+        padding: 0.5% 2%;
+    font-size: 19px;
+    border-radius: 67px;
+    color: white;
+        text-align: center;
+            width: 300px;
+}
+.stepdiv > a{
+  color: white;
+}
+.stepdiv > a > p{
+  margin-bottom: 0;
+}
+/*@media only screen and (max-width: 915px) {
+    .collection_firstchoice, .extraction_firstchoice, .multianalyte_firstchoice, .q_single{
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+  }*/
+
+
+@media only screen and (max-width: 1200px) {
+  .workflow-results{
+    flex-direction: column;
+  }
+.collection_firstchoice, .extraction_firstchoice, .multianalyte_firstchoice, .q_single{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+  .collection_firstchoice > div {
+    padding: 3%;
+  }
+  .prod-each > img {
+    width: 200px;
+  }
+
+  #nav-links{
+    display:block;
+  }
+  .workflow-results > div{
+    width: auto;
+  }
+  }
+
+  @media only screen and (max-width: 1450px) and (max-height: 721px){
+  .collection_firstchoice, .extraction_firstchoice, .multianalyte_firstchoice, .q_single{
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+  }
+
+
+  
+   @media only screen and (max-width: 860px) {
+    .collection_firstchoice, .extraction_firstchoice, .multianalyte_firstchoice, .q_single{
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+    #workflow-selector-form{
+      flex-direction: column;
+    }
+    #nav-links{
+      margin: 25% 0 0;
+      padding: 5%;
+    }
+    .stepdiv{
+      padding: 2.5% 4%;
+    }
+     #nav-linksp{
+      flex-direction: column;
+    }
+    .stepdiv{
+      text-align: center;
+      width: -webkit-fill-available;
+    }
+  }
+
+ 
+.header.container {
+    background-image: url(https://norgenbiotek.com/sites/default/files/cat-banner.jpg);
+    background-size: cover;
+    background-position-x: left;
+    background-position: top;
+    margin-left: -15px;
+    margin-right: -15px;
+    width: auto !important;
+}
+hr.header-separator {
+    border-top: 0px;
+    margin-left: -15px;
+    margin-right: -15px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    height: 24px;
+    background: linear-gradient(90deg, #ec1d25,#004897,#0f6b7a);
+}
+@media (min-width: 768px){
+  .vd-wrapper {
+    width: 750px;
+}
+}
+@media (min-width: 992px){
+.vd-wrapper {
+    width: 970px;
+}
+}
+
+@media (min-width: 1200px){
+  .vd-wrapper {
+    width: 1170px;
+}
+}
+
+
+
+.flex {
+    display: flex;
+}
+.flex-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    flex: 1;
+    margin-left: -15px;
+    margin-right: -15px;
+    margin-top: max(10vh, 1em);
+    margin-bottom: 20px;
+}
+.flex-col h1{
+  font-weight: bold;
+}
+
+.info_form{
+  width: 25%;
+    margin: auto;
+    background: aliceblue;
+    position: absolute;
+    /*top: 5%;*/
+    padding: 3%;
+    box-shadow: 0 4px 40px 0 rgb(0 0 0 / 9%), 0 6px 20px 0 rgb(0 0 0 / 17%);
+    text-align: center;
+}
+#info_form input{
+      border-radius: 20px;
+    border: #8080808c 1px solid;
+    padding: 1%;
+        width: -webkit-fill-available;
+}
+#info_form label{
+     margin-top: 1%;
+}
+#info_form #submit{
+      margin-top: 7%;
+    background: #004795;
+    color: white;
+    padding: 2% 9%;
+    width: auto;
+}
+#buttons-div{
+  display: none;
+  gap:20px;    
+  justify-content: center;
+}
+.form-submit {
+    border-radius: 12px !important;
+    width: max-content;
+    padding: 10px 30px;
+}
+.step_info{
+  display: none;
+}
+.step{
+  display: none;
+  width: 65%;
+  margin:auto;
+}
+.available_option{
+  display: flex;
+  align-items: baseline;
+  gap:1%;
+}
+.available_option > h3{
+  font-weight: 700;
+  margin: 0;
+}
+.available_number{
+  font-size: 40px;
+    color: red;
+    font-weight: 700;
+}
+
+.step_heading h2{
+  color: white;
+  margin:0;
+}
+.num_div{
+          background: #004897;
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    color: white;
+    display: inline-block;
+    font-weight: bold;
+    line-height: 70px;
+    margin-right: 5px;
+    font-size: 55px;
+    text-align: center;
+    width: 70px;
+}
+/*.product_info{
+  display: flex;
+  align-items: center;
+}*/
+.product_item{
+      display: flex;
+    align-items: flex-start;
+    margin:3% 0;
+    align-items: center;
+    gap:5%;
+    /*display: none;*/
+    justify-content: center;
+}
+.product_item > img{
+      width: 50px;
+    position: relative;
+    left: 25%;
+    margin: 3%;
+}
+.product_info > img{
+  width: 250px;
+}
+.seperator{
+  width: 70%;
+  margin: auto;
+}
+.cart_info{
+     /* display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 2%;*/
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-direction: column-reverse;
+    justify-content: flex-start;
+}
+.product_item{
+  /*display: none;*/
+}
+.more_less_btn{
+  text-align: center;
+  margin: 1% 0;
+}
+/*.more{
+      border-color: gray;
+    background: transparent;
+    color: #004897;
+    font-size: 17px;
+    font-weight: 800;
+    border-width: medium;
+    width: 200px;
+}*/
+.more > img{
+  width: 30px;
+  margin: 0 4%;
+}
+.less{
+   border-color: gray;
+    background: transparent;
+    color: #004897;
+    font-size: 17px;
+    font-weight: 800;
+    border-width: medium;
+    width: 200px;
+}
+.less > img{
+  width: 30px;
+  margin: 0 4%;
+}
+.morethanone{
+  display: none;
+}
+.product_text > p{
+  color: #004897;
+  font-weight: 600;
+}
+.circle{
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+/*  padding: 16.25%;
+  background: url("/sites/default/files/images/norgenius/double-border.svg");*/
+}
+.circle > img{
+  width: 140px;
+/*  border-radius: 50%;
+    border: 1px solid black;*/
+}
+.dotted-line > img{
+  width: 100px;
+}
+.flowchart{
+      display: flex;
+    width: 70%;
+    margin: auto;
+    align-items: center;
+    justify-content: space-between;
+}
+.box{
+  width: max-content;
+    height: auto;
+    border: 1px solid black;
+    padding: 5% 10%;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.box > p{
+  margin-bottom: 0;
+}
+.greencheck{
+      margin: 0px 5px 0 0;
+      display: none;
+}
+.box:hover{
+  cursor: pointer;
+}
+.each-item{
+      display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.workflow-buttons{
+  
+    width: 70%;
+    margin: 4% auto;
+    display: flex;
+        align-items: baseline;
+    justify-content: center;
+    gap:1%;
+}
+.workflow-buttons > button{
+  width: auto;
+}
+.workflow-buttons > button > img{
+      width: 30px;
+    margin: 0% 3%;
+}
+.category_question, .organism_question, .pathogen_question, .sample_question{
+  width: 70%;
+    margin: auto;
+    text-align: center;
+    left: 0%;
+    transition: all 1s;
+    position: relative;
+}
+.question > img{
+  width: 200px;
+}
+.question > select{
+  width: 40%;
+}
+.question-button{
+  text-align: right;
+  margin-top: 10%;
+  margin-bottom: 5%;
+/*  display: flex;
+    justify-content: space-between;
+    flex-direction: row-reverse;*/
+    align-items: center;
+        display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: baseline;
+}
+.question-button > button{
+  border:none;
+  background: none;
+}
+.backbtn{
+  border:none;
+  background: none;
+}
+.nextbtn{
+  text-align: right;
+}
+.nextbtn:disabled,
+.nextbtn[disabled]{
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+button > img{
+  width: 80px;
+}
+.question{
+  display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+.questionaire{
+  height: 700px;
+    overflow: hidden;
+    /* margin: 5%; */
+    /* border: solid 1px black; */
+    text-align: center;
+    scroll-behavior: ;
+    background-color: white;
+    display: grid;
+    grid-template-columns: repeat(7, 100%);
+}
+.submitbtn{
+  /*display: none;*/
+  background: #f1cb59 !important;
+    border-radius: 40px;
+    padding: 0% 3%;
+    color: white;
+    font-weight: 600;
+    font-size: 20px;
+}
+.submitbtn:disabled,
+.submitbtn[disabled]{
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.submitbtn > img{
+  width: 50px;
+}
+.deletebtn{
+  position: absolute;
+    top: -17px;
+    right: -16px;
+    display: none;
+    pointer-events: auto;
+}
+#analyte_hidden{
+  display: none;
+}
+.backbtn{
+  display: none;
+}
+.heading-top{
+  width: 70%;
+  margin: 5% auto;
+}
+.heading-top > h1{
+  margin: 0;
+  font-weight: 700;
+  color: #004897;
+}
+.heading-top > h3{
+  margin: 0;
+  line-height: 0.5;
+
+}
+svg {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    /*fill: white;*/
+    /* pointer-events: none; */
+    filter: drop-shadow(0px 1px 3px black);
+    /* filter: drop-shadow(2px 4px 6px black); */
+}
+.test{
+  filter: none !important;
+  position: absolute;
+  bottom:40px;
+  z-index: -10;
+}
+.active-circle{
+  animation: scaleAnimation 1s linear forwards;
+}
+.active {
+    animation: firstAnimation 5s linear forwards;
+}
+.active1{
+  animation: comingin 2s ease-in-out,
+             comingout 1s ease-in-out 2s;
+  /*animation: firstAnimation 4s linear forwards;*/
+
+}
+.active1_generating{
+  animation: generate 5s ease-in-out;
+  /*animation-delay: 10s;*/
+  /*animation: firstAnimation 4s linear forwards;*/
+
+}
+@keyframes generate{
+  0%{
+    stroke-dashoffset: 1000;
+  }
+  100%{
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes generate_text{
+  0%{
+    opacity: 1;
+  }
+  20%{
+    fill: #004897;
+  }
+  40%{
+    fill: #662D91;
+  }
+  60%{
+    fill: #EC1D25;
+  }
+  80%{
+    fill: #0f6B7A;
+  }
+  100%{
+    fill: #004897;
+   opacity: 1;
+  }
+}
+.active3{
+  /*stroke:white !important;*/
+  stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+  animation: comingin 3s linear forwards 2s,
+             comingout 3s linear forwards 3s;
+}
+.active4{
+  animation: comingin 2s linear forwards 3s;
+}
+.active5{
+  animation: comingin 2s linear forwards 3s;
+}
+.active6{
+  animation: comingin 2s linear forwards 3s;
+}
+.active7{
+  animation: comingin 2s linear forwards 3s;
+}
+.active8{
+  animation: comingin 2s linear forwards 3s;
+}
+.active9{
+  animation: comingin 2s linear forwards 3s;
+}
+.active10{
+  animation: comingin 2s linear forwards 3s;
+}
+.active11{
+  animation: comingin_fill 2s linear forwards 3s;
+}
+.active12{
+  animation: comingin 2s linear forwards 3s;
+}
+.active13{
+  animation: comingin 2s linear forwards 3s;
+}
+.active14{
+  animation: comingin 2s linear forwards 3s;
+}
+.active15{
+  animation: comingin 2s linear forwards 3s;
+}
+.active16{
+  animation: comingin 2s linear forwards 3s;
+}
+.activated{
+  animation: filled 2s linear forwards;
+}
+.text-initialize{
+	animation:disappear 0.2s linear forwards;
+	animation-delay: 2s;
+}
+.text-generating{
+  animation:generate_text 5s linear;
+  /*animation-delay: 2s;*/
+}
+@keyframes disappear{
+	100%{
+		display: none;
+	}
+}
+@keyframes buttons{
+  0%{
+    transform: scale(1);
+    opacity: 1;
+  }
+  100%{
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+@keyframes filled{
+  100%{
+        stroke-dashoffset: 0;
+        fill:#00BF30;
+  }
+}
+@keyframes comingin_fill{
+  100%{
+        stroke-dashoffset: 0;
+        fill:#808080;
+
+       /* stroke:  #8080804f;*/
+  }
+}
+@keyframes comingin{
+  100%{
+        stroke-dashoffset: 0;
+        fill:white;
+
+       /* stroke:  #8080804f;*/
+  }
+}
+@keyframes colorme{
+  0%{
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+  }
+  100%{
+    stroke-dasharray: 0;
+    stroke-dashoffset: 0;
+    /*stroke: green;*/
+  }
+}
+@keyframes colorme_fill{
+  0%{
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+  }
+  100%{
+    stroke-dasharray: 0;
+    stroke-dashoffset: 0;
+    fill:url(#Step_4:_Sample_Type_00000045579000185955044170000000304850895410102404_);
+    /*stroke: green;*/
+  }
+}
+@keyframes comingout{
+  0%{
+     stroke-dasharray: 0;
+    stroke-dashoffset: 0;
+        /*stroke: url(#SVGID_0000007…_);*/
+  }
+  100%{
+         stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    stroke:white;
+  }
+}
+
+
+@keyframes firstAnimation{
+
+  100%{
+        stroke-dashoffset: 0;
+        fill:white;
+  }
+ 
+}
+@keyframes scaleAnimation{
+  100%{
+    transform:scale(1.2);
+  }
+}
+
+.reset-btn{
+  background: none;
+  border:none;
+  color: #004897;
+
+}
+.workflow-div{
+  box-shadow: 0 4px 40px 0 rgb(0 0 0 / 9%), 0 6px 20px 0 rgb(0 0 0 / 17%);
+    width: 70%;
+    margin: 5% auto;
+    border-radius: 30px;
+    position: relative;
+    height: 675px;
+}
+
+.workflow-img{
+  width: 20%;
+    margin: auto;
+    padding: 3%;
+}
+.workflow-question{
+    overflow: hidden;
+    /* margin: 5%; */
+    /* border: solid 1px black; */
+    text-align: center;
+    scroll-behavior: ;
+    background-color: white;
+    display: grid;
+    grid-template-columns: repeat(7, 100%);
+    /*height: 200px;*/
+}
+.category-question, .organism-question, .pathogen-question, .sample-question{
+  /*position: absolute;*/
+    width: 80%;
+    margin: 1% auto;
+    left: 0;
+    right: 0;
+    text-align: center;
+    position: relative;
+    transition: all 2s;
+    transition-delay: 1s;
+    height: 350px;
+}
+.question-img{
+  width: 125px;
+}
+.workflow-start > img{
+  width: 10%;
+  margin: auto;
+}
+.workflow-start{
+  text-align: center;
+  animation: slideup 0.5s linear;
+  animation-delay: 3.5s;
+  padding: 3% 0 0 0;
+}
+.workflow-start > h2{
+  color: #004897;
+  font-weight: 800;
+
+}
+.workflow-slide{display: none;animation: slidedown 0.5s linear forwards;padding-top:50px;}
+
+
+@keyframes slideup{
+  100%{
+    opacity: 0;
+  }
+}
+@keyframes slidedown{
+  0%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
+}
+/* The typing effect */
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+/* The typewriter cursor effect */
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: orange; }
+}
+.options{
+  margin: 4% 0;
+      margin: 4% 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1%;
+    align-items: center;
+    justify-content: center;
+}
+polygon{
+  fill:none;
+}
+.powered{
+  text-align: center;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+.text-svg{
+  stroke: black;
+    stroke-dashoffset: 249;
+    stroke-dasharray: 634;
+    font-size: 50px;
+    font-family: 'Montserrat';
+    margin-left: -24px;
+    transform: translateX(900px);
+    transform: translateY(226px) translateX(905px);
+    animation: text 500ms linear forwards;
+    animation-delay: 2s;
+
+}
+@keyframes text{
+  100%{
+    opacity: 0;
+  }
+}
+#category. #organism, #pathogen, #sample{
+	display: flex;
+    gap: 2%;
+}
+#category input[type="radio"], #organism input[type="radio"], 
+#pathogen input[type="radio"], #sample input[type="radio"] {
+  opacity: 0;
+  position: fixed;
+  width: 0;
+}
+#category label, #organism label,
+#pathogen label, #sample label {
+    display: inline-block;
+    background-color: #ddd;
+    padding: 10px 20px;
+    font-family: sans-serif, Arial;
+    font-size: 16px;
+    border: 2px solid #444;
+    border-radius: 4px;
+}
+#category label:hover, #organism label:hover,
+#pathogen label:hover, #sample label:hover{
+  background-color: #dfd;
+}
+#category input[type="radio"]:focus + label, #organism input[type="radio"]:focus + label,
+#pathogen input[type="radio"]:focus + label, #sample input[type="radio"]:focus + label {
+    border: 2px dashed #444;
+}
+#category input[type="radio"]:checked + label, #organism input[type="radio"]:checked + label,
+#pathogen input[type="radio"]:checked + label, #sample input[type="radio"]:checked + label {
+    background-color:#bfb;
+    border-color: #4c4;
+}
+.box-div{
+	background: red;
+	width: 50px;
+	height: 50px;
+	position: absolute;
+	bottom: 150px;
+	left: 190px;
+}
+.box-text{
+	opacity: 0;
+}
+.generate-svg{
+    position: absolute;
+    width: 14%;
+    top: 36%;
+    bottom: 36%;
+    left: 45%;
+    right: 45%;
+    filter: none !important;
+    z-index: -1;
+}
+.generating-text{
+  opacity: 0;
+}
+.opac_disappear{
+    animation: div_disappear 2s linear forwards;
+    animation-delay: 4s;
+}
+@keyframes div_disappear{
+  95%{
+    opacity: 0;
+  }
+  100%{
+    display: none;
+  }
+}
+
+
+
+.workflow-end > img{
+  width: 100px;
+  margin: auto;
+}
+.workflow-end{
+  text-align: center;
+  /*animation: slideup 0.5s linear;
+  animation-delay: 3.5s;*/
+  padding: 3% 0 0 0;
+  display: none;
+}
+.results-div{
+  box-shadow: 0 4px 40px 0 rgb(0 0 0 / 9%), 0 6px 20px 0 rgb(0 0 0 / 17%);
+    width: 70%;
+    margin: 5% auto;
+    border-radius: 30px;
+    position: relative;
+    height: 950px;
+    padding: 1%;
+    display: none;
+}
+.showdiv{
+  display: block;
+}
+.results-div > h2{
+    color:#004897;
+    font-weight: 700;
+    text-align: center;
+
+}
+.all_steps{
+  display: grid;
+  grid-gap: 10px;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+}
+.each_step{
+  border-radius: 20px;
+  border:1px solid #c5c2c2;
+  height: auto;
+  /*overflow: hidden;*/
+  text-align: center;
+  padding: 5% 5% 0% 5%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.each_step h4{
+  margin: 0;
+}
+.step_count{
+  font-weight: 700;
+}
+.view_btn{
+    /*position: absolute;
+    bottom: 0;*/
+    width: 100%;
+    /*left: 0;*/
+    background: white;
+    border: none;
+    border-top: 1px solid  #c5c2c2;
+    padding: 4% 0;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+
+}
+.view_btn > img{
+  width: 15px;
+}
+.drawer{
+  display: none;
+  position: absolute;
+  top: 500px;
+  left: 0;
+  background: white;
+  box-shadow: inset 0px 2px 5px 0px rgb(0 0 0 / 20%);
+  width: 100%;
+  border:1px solid #c5c2c2;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  box-shadow: inset 0 -8px 4px 4px rgb(255,255,255), inset 0 2px 4px 0px #d9d6d6;
+  z-index: 1;
+      overflow-y: scroll;
+    height: 298px;
+}
+.drawer > .product_item > .product_info  > form{
+  display: none;
+}
+.drawer > .product_item > .product_info > .cart_info{
+  display: none;
+}
+.drawer > .product_item > .product_info > .product_text > h4 > a{
+  font-size: 14px;
+  font-weight: 400;
+  color: black;
+}
+.drawer > .product_item > .product_info > .product_text > p{
+  display: none;
+}
+.drawer > .product_item > .product_info > .product_text > .inside_type{
+  display: block;
+}
+.drawer > .view_btn{
+  
+  box-shadow: 0px -2px 4px #d9d6d6;
+      bottom: -2px;
+    position: sticky;
+}
+.form-table > form >  input {
+    padding: 8px;
+    border: 1px solid #c6c6c6;
+    border-radius: 20px;
+}
+.form-table > form > input{
+    width: 100%;
+   /* height: 34px;*/
+    margin-bottom: 1em;
+    padding: 10px 30px;
+}
+.form-table > form > label{
+  width: 100%;
+    height: 34px;
+    margin-bottom: 0em;
+}
+.form-table{
+  text-align: center;
+  display: none;
+}
+.no_pathogen_form{
+  position: absolute;
+  top: 25%;
+  left: 5%;
+  right: 5%;
+}
+#test-iframe{
+  display: none;
+}
+#test-iframe2{
+  display: none;
+}
+#test-iframe3{
+  display: none;
+}
+.mail-sent{
+  display: none;
+}
+#save_workflow{
+  display: none;
+      background: #004897;
+    position: absolute;
+    top: 25%;
+    width: 50%;
+    left: 25%;
+    right: 25%;
+    padding: 3%;
+    text-align: center;
+        color: white;
+    font-size: 24px;
+}
+#enter{
+  display: none;
+}
+.step_info_link{
+  display: none;
+}
+#save_workflow > #submits{
+    background: white;
+    border-radius: 32px;
+    padding: 10px 25px;
+    color: black;
+}
+#save_workflow > input{
+  border-radius: 20px;
+    border: gray 1px solid;
+}
+#save_workflow > h3{
+  color: white;
+}
+.workflowcart{
+ /* display: none;*/
+    text-align: center;
+    margin: 4%;
+}
+.powered_result{
+  text-align: center;
+  padding: 2% 0;
+}
+.result_p{
+  text-align: center;
+
+}
+
+.choices_made > p{
+      background: aliceblue;
+    padding: 1%;
+}
+.choices_made {
+    display: flex;
+    justify-content: center;
+    gap: 1%;
+}
+#page-heading{
+  width: 70%;
+    margin: 5% auto;
+    text-align: center;
+}
+#page-heading h1{
+  font-weight: 600;
+  margin: 0;
+  
+}
+#page-heading h2{
+  font-weight: 500;
+    color: #004897;
+    margin: 0;
+    
+}
+#page-heading h3{
+      text-align: center;
+    letter-spacing: 2px;
+}
+.dropdown{
+      width: 70%;
+    margin: 1% auto;
+    background: aliceblue;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2%;
+    padding: 1%;
+    border-radius: 35px;
+}
+.dropdown:hover{
+  cursor: pointer;
+}
+.dropdown > h2{
+  margin: 0;
+}
+.dropdown >h2 >  span{
+  font-size: 18px;
+    color: green;
+}
+.dropdown img{
+  width: 30px;
+}
+.inside_type.blue-btn{
+  background: #004897;
+    color: white;
+    padding: 3px 30px;
+    border-radius: 20px; 
+}
+.inside_type.red-btn2{
+  background: #BE1E2D;
+    color: white;
+    padding: 3px 30px;
+    border-radius: 20px; 
+}
+.inside_type.purple-btn{
+  background: #662D91;
+    color: white;
+    padding: 3px 30px;
+    border-radius: 20px; 
+}
+.product_info {
+    display: grid;
+    justify-items: center;
+    grid-template-rows: 100px 175px 100px;
+    align-items: stretch;
+}
+.product_text {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+.product_info > form {
+    align-items: end;
+    display: flex;
+    justify-content: center;
+}
+.cart_info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-direction: column-reverse;
+    justify-content: flex-start;
+}
+.autorows {
+    grid-template-rows: auto;
+}
+::-webkit-scrollbar {
+  width: 4px;
+
+}
+::-webkit-scrollbar-track-piece:end {
+    background: transparent;
+    //margin-bottom: 500px; 
+}
+
+::-webkit-scrollbar-track-piece:start {
+    background: transparent;
+    margin-top: 0px;
+}
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+  margin-bottom: 80px; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+#overlay, #overlay-email,#overlay-save, #overlay-cart, #overlay-help, #overlay-popup_for_individual {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /*background-color: rgba(0,0,0,0.5);*/
+    z-index: 2;
+    cursor: pointer;
+    max-height:max-content;
+}
+.cart_confirmation{
+  /*display: none;*/
+      background: white;
+    position: fixed;
+    top: 20%;
+    width: 35%;
+    left: 32%;
+    right: 35%;
+    padding: 1%;
+    text-align: center;
+        /*color: white;*/
+   /* font-size: 24px;*/
+    box-shadow: 0 4px 40px 0 rgb(0 0 0 / 9%), 0 6px 20px 0 rgb(0 0 0 / 17%);
+    display: none;
+    z-index: 4;
+}
+.cart_confirmation > div{
+  padding: 1%;
+}
+#cart{
+  margin: auto;
+}
+.popup_for_individual{
+  /*display: none;*/
+      background: white;
+    position: fixed;
+    top: 20%;
+    width: 35%;
+    left: 32%;
+    right: 35%;
+    padding: 1%;
+    text-align: center;
+        /*color: white;*/
+   /* font-size: 24px;*/
+    box-shadow: 0 4px 40px 0 rgb(0 0 0 / 9%), 0 6px 20px 0 rgb(0 0 0 / 17%);
+    display: none;
+    z-index: 4;
+}
+.popup_for_individual > div{
+  padding: 1%;
+}
+#cart2{
+  margin: auto;
+}
+</style>
+</style>
+
+<section class="all-results">
+  <div id="page-heading">
+    <img src="/sites/default/files/images/norgenius/norgenius_icon.svg" style="width: 50px;">
+    <h1>NorGenius</h1>
+    <h2>DIAGNOSTIC WORKFLOW ASSISTANT SAVED RESULTS</h2>
+    <hr>
+    <h3>Hi {{user_first_name}} {{user_last_name}}, We have all your workflows saved</h3>
+    <h4><strong>Total workflows saved: </strong><span id="total_wf"></span></h4>
+  </div>
+</section>
+<div class="form-table">
+<img src="/sites/default/files/images/norgenius/pathogen.svg" class="question-img">
+<p> We have recieved your email request for the pathogen, we will get back to you as soon as possible</p>
+<!--<h4 id="pathogen_q">Tell Us About Your Pathogen that you were looking for</h4>-->
+
+<iframe name="content" style="" id="test-iframe">
+</iframe>
+
+
+<!--<div class="mail-sent">
+ <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+  <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+  <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+</svg>
+    <h4>We have forwarded your request to R&D, for more assistance please contact <a href="mailto:support@norgenbiotek.com">support@norgenbiotek.com</a></h4>
+</div>-->
+{{norgenius_pathogen}}
+</div>
+
+<div class="cart_confirmation">
+  <a class="close" href="#" onclick="close_cart_confirmation();return false;" style="font-size:70px;">×</a>
+  <div>
+  <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
+
+    <dotlottie-player src="https://lottie.host/cdbd9dfc-640b-4659-a8ff-32e1e2292c41/ycIbcVDjXd.json" background="transparent" speed="1" style="width: 250px; height: 250px;" id="cart"></dotlottie-player>
+
+  <h3>Your workflow has been added to the cart.</h3>
+  <p>Thank you for using NorGenius.</p>
+  <!-- <button class="just-text-btn" onclick="close_cart_confirmation();">Close</button> -->
+  <div class="powered_form">
+    <p><strong>Powered by  <img src="/sites/default/files/images/norgenius/norgenius_icon.svg" style="width: 50px;">  NorGenius</strong></p>
+  </div>
+ </div>
+</div>
+
+<div class="popup_for_individual">
+<a class="close" href="#" onclick="close_popup_for_individual();return false;" style="font-size:70px;">×</a>
+<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+<dotlottie-player src="https://lottie.host/cdbd9dfc-640b-4659-a8ff-32e1e2292c41/ycIbcVDjXd.json" background="transparent" speed="1" style="width: 250px; height: 250px;" id="cart2"></dotlottie-player>
+<p>The product is added to the cart</p>
+<p id="pname"></p>
+<div class="powered_form">
+    <p><strong>Powered by  <img src="/sites/default/files/images/norgenius/norgenius_icon.svg" style="width: 50px;">  NorGenius</strong></p>
+  </div>
+</div>
+
+<div id="overlay-cart" onclick="close_cart_confirmation()"></div>
+<div id="overlay-popup_for_individual" onclick="close_popup_for_individual()"></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+var products = {{prods|json_encode()|raw}};
+
+function slidedown(elem){
+  if(!elem.nextElementSibling.classList.contains("showdiv")){
+    elem.nextElementSibling.classList.add("showdiv");
+    var img = elem.getElementsByTagName("img");
+    img[0].src="/sites/default/files/images/norgenius/arrow-up.png";
+  }
+  else{
+    elem.nextElementSibling.classList.remove("showdiv");
+    var img = elem.getElementsByTagName("img");
+    img[0].src="/sites/default/files/images/norgenius/arrow-down.png";
+  }
+    
+}
+
+var question = localStorage.getItem('question');
+let choices = [];
+if(question == 1){
+  
+
+var num_of_results = 0;
+  var num_counter = 0;
+	//let choices = [];
+  	
+  	var pathogens = {{pathogens|json_encode()|raw}};
+    
+    console.log(pathogens);
+
+    var category = {{categories|json_encode()|raw}};
+    
+    console.log(category);
+
+    var organism = {{organisms|json_encode()|raw}};
+    
+    console.log(organism);
+
+    var sample = {{samples|json_encode()|raw}};
+   
+    console.log(sample);
+    let headings_title = ['Category', 'Organism' ,'Pathogen','Analyte','Sample']
+    var all = pathogens.concat(organism);
+    all = all.concat(category);
+    all = all.concat(sample);
+    console.log(all);
+
+    var products = {{prods|json_encode()|raw}};
+    
+    console.log(products);
+	
+	var urls = {{urls|json_encode()|raw}};
+
+    console.log(urls);
+  	
+  	
+  	var choices2 = {{saves|json_encode()|raw}};
+
+  	console.log("-----choices2-------");
+ 	console.log(choices2);
+
+
+  	for(var i = 0; i < choices2.length;i++){
+  		for(var j = 0; j < choices2[i].length-1; j++){
+  			choices[j] = choices2[i][j];
+  			console.log("-----choices-------");
+  			console.log(choices);
+
+  		}
+      document.getElementById("total_wf").innerHTML = choices2.length;
+      var dropdown = document.createElement('div');
+      dropdown.setAttribute("class",'dropdown');
+      dropdown.setAttribute("onclick","slidedown(this)")
+      var dropdownh = document.createElement('h2');
+      dropdownh.innerHTML = "<strong>Workflow: </strong>" + choices2[i][6] + " <span>(Saved on: " + choices2[i][5] + ")</span>";
+      var dropdownimg = document.createElement('img');
+      dropdownimg.setAttribute("src",'/sites/default/files/images/norgenius/arrow-down.png');
+      dropdown.appendChild(dropdownh);
+      dropdown.appendChild(dropdownimg);
+
+
+  		var results_div = document.createElement('div');
+  			results_div.setAttribute("class",'results-div');
+  			var results_heading = document.createElement('h2');
+  			results_heading.innerHTML = choices2[i][6];
+  			results_div.appendChild(results_heading);
+        var result_p = document.createElement('p');
+        result_p.setAttribute("class",'result_p');
+        result_p.innerHTML = "<strong>This workflow was generated on:</strong> " + choices2[i][5];
+        results_div.appendChild(result_p);
+  			var choices_made = document.createElement('div');
+        choices_made.setAttribute("class",'choices_made')
+
+  			for(var k = 0 ; k < choices.length; k++){
+  				console.log(choices[k]);
+          if(k != 3){
+            choice = document.createElement('p');
+          for(var p = 0; p < all.length; p++){
+            if(all[p][3] == choices[k]){
+              choice.innerHTML = "<strong>" + headings_title[k] + ":</strong> " + all[p][2];
+                // var choices_title = document.createElement('p');
+                // choices_title.innerHTML = headings_title[k];
+            }
+            else if(choices[k] == "unavailable"){
+              choice.innerHTML = "<strong>" + headings_title[k] + ":</strong> unavailable";
+            }
+
+          }
+          // choices_made.appendChild(choices_title);
+          if(choice.innerHTML != ""){
+             choices_made.appendChild(choice);
+          }
+         
+          }
+  				
+  			}
+  			results_div.appendChild(choices_made);
+        document.getElementsByClassName("all-results")[0].appendChild(dropdown);
+  			document.getElementsByClassName("all-results")[0].appendChild(results_div);
+
+
+
+  			
+  			var products = {{prods|json_encode()|raw}};
+  			
+  			var results = {{res|json_encode()|raw}};
+  			console.log("-------results-----");
+  			console.log(results);
+ 			display_results();
+  		
+  	}
+  	
+  }
+  else if (question == 2){
+var num_of_results = 0;
+  var num_counter = 0;
+  //let choices = [];
+    
+    
+
+
+    var organism = {{nopathogen_organisms|json_encode()|raw}};
+    
+    console.log(organism);
+
+    var sample = {{nopathogen_samples|json_encode()|raw}};
+
+    var analyte = {{nopathogen_analytes|json_encode()|raw}};
+   
+    console.log(sample);
+    let headings_title = ['Organism' ,'Analyte','Sample']
+    var all = organism.concat(sample);
+    all = all.concat(analyte);
+    console.log(all);
+
+    var products = {{prods|json_encode()|raw}};
+    
+    console.log(products);
+  
+  var urls = {{urls|json_encode()|raw}};
+
+    console.log(urls);
+    
+    
+    var choices2 = {{saves|json_encode()|raw}};
+
+    console.log("-----choices2-------");
+  console.log(choices2);
+
+
+    for(var i = 0; i < choices2.length;i++){
+      for(var j = 0; j < choices2[i].length-1; j++){
+        choices[j] = choices2[i][j];
+        console.log("-----choices-------");
+        console.log(choices);
+
+      }
+      document.getElementById("total_wf").innerHTML = choices2.length;
+      var dropdown = document.createElement('div');
+      dropdown.setAttribute("class",'dropdown');
+      dropdown.setAttribute("onclick","slidedown(this)")
+      var dropdownh = document.createElement('h2');
+      dropdownh.innerHTML = "<strong>Workflow: </strong>" + choices2[i][6] + " <span>(Saved on: " + choices2[i][5] + ")</span>";
+      var dropdownimg = document.createElement('img');
+      dropdownimg.setAttribute("src",'/sites/default/files/images/norgenius/arrow-down.png');
+      dropdown.appendChild(dropdownh);
+      dropdown.appendChild(dropdownimg);
+
+
+      var results_div = document.createElement('div');
+        results_div.setAttribute("class",'results-div');
+        var results_heading = document.createElement('h2');
+        results_heading.innerHTML = choices2[i][6];
+        results_div.appendChild(results_heading);
+        var result_p = document.createElement('p');
+        result_p.setAttribute("class",'result_p');
+        result_p.innerHTML = "<strong>This workflow was generated on:</strong> " + choices2[i][5];
+        results_div.appendChild(result_p);
+        var choices_made = document.createElement('div');
+        choices_made.setAttribute("class",'choices_made')
+
+        for(var k = 0 ; k < choices.length; k++){
+          console.log(choices[k]);
+          if(k != 3){
+            choice = document.createElement('p');
+          for(var p = 0; p < all.length; p++){
+            if(all[p][3] == choices[k]){
+              choice.innerHTML = "<strong>" + headings_title[k] + ":</strong> " + all[p][2];
+                // var choices_title = document.createElement('p');
+                // choices_title.innerHTML = headings_title[k];
+            }
+            else if(choices[k] == "unavailable"){
+              choice.innerHTML = "<strong>" + headings_title[k] + ":</strong> unavailable";
+            }
+
+          }
+          // choices_made.appendChild(choices_title);
+          if(choice.innerHTML != ""){
+             choices_made.appendChild(choice);
+          }
+         
+          }
+          
+        }
+        results_div.appendChild(choices_made);
+        document.getElementsByClassName("all-results")[0].appendChild(dropdown);
+        document.getElementsByClassName("all-results")[0].appendChild(results_div);
+
+
+
+        
+        var products = {{prods|json_encode()|raw}};
+        
+        var results = {{np_res|json_encode()|raw}};
+        console.log("-------results-----");
+        console.log(results);
+      np_display_results();
+      
+    }
+
+
+  }	
+
+
+ //takes the code from the db table and find it the big all products db table
+  function np_display_results(){
+    
+    let results_array = [];
+    var data = {{np_data|json_encode()|raw}};
+    console.log(data);
+    var cleanArray = choices.filter(function () { return true });
+
+    console.log(cleanArray);
+
+    console.log(choices);
+    for(var i = 0; i < data.length; i++){
+      var count = 0;
+      //finding the results in data table
+      for(var j = 0; j < choices.length; j++){
+        if(data[i][j] == choices[j] || choices[j] == "unavailable"){
+          count++;
+        }
+      }
+      console.log(count);
+      //if all choices are matched in data table
+      if(count == 3){
+        var code = data[i][3];
+        for(var p = 0; p < results.length; p++){
+          let results_entry = [];
+          var resulted_code = results[p][1];
+          // console.log("2." + resulted_code);
+          var code_array = resulted_code.split(" ");
+          // console.log("3" + code_array);
+          for(var q = 0; q < code_array.length; q++){
+            // console.log("4. " + code_array[q]);
+            // console.log("5. " + code);
+            
+            if(code_array[q] == code){
+              
+              results_entry.push(results[p][0]);
+              results_entry.push(results[p][2]);
+              results_entry.push(results[p][3]);
+              var val = results_entry[2];
+              // results_array[val].push(results_entry);
+              results_array.push(results_entry);
+            }
+            
+            
+          }
+        }
+      }
+    }
+    console.log("----results_array-----");
+    console.log(results_array);
+    helper1(results_array);
+  
+  }
+
+
+
+  
+  //takes the code from the db table and find it the big all products db table
+  function display_results(){
+    
+    let results_array = [];
+    var data = {{data|json_encode()|raw}};
+    
+    for(var i = 0; i < data.length; i++){
+      var count = 0;
+      //finding the results in data table
+      for(var j = 0; j < choices.length; j++){
+        if(data[i][j] == choices[j] || choices[j] == "unavailable"){
+          count++;
+        }
+      }
+      //if all choices are matched in data table
+      if(count == 5){
+        var code = data[i][5];
+        for(var p = 0; p < results.length; p++){
+          let results_entry = [];
+          var resulted_code = results[p][1];
+          // console.log("2." + resulted_code);
+          var code_array = resulted_code.split(" ");
+          // console.log("3" + code_array);
+          for(var q = 0; q < code_array.length; q++){
+            // console.log("4. " + code_array[q]);
+            // console.log("5. " + code);
+            
+            if(code_array[q] == code){
+              
+              results_entry.push(results[p][0]);
+              results_entry.push(results[p][2]);
+              results_entry.push(results[p][3]);
+              var val = results_entry[2];
+              // results_array[val].push(results_entry);
+              results_array.push(results_entry);
+            }
+            
+            
+          }
+        }
+      }
+    }
+    console.log("----results_array-----");
+    console.log(results_array);
+    helper1(results_array);
+  
+  }
+  let res = [];
+
+  
+
+  //get all the results that we need
+  function helper1(elem){
+    console.log("botrrrr");
+    console.log(elem);
+  let step1 = [];
+  let step2 = [];
+  let step3 = [];
+  let step4 = [];
+  let s_entry = [];
+  let res = [];
+  var counter1 = 0;
+  var counter2 = 0;
+  var counter3 = 0;
+  var counter4 = 0;
+    for(var i =0; i < elem.length;i++){
+      var val = elem[i][2];
+      if(val == 1){
+        console.log("val is 1");
+        counter1++;
+        step1[0] = counter1;
+        console.log(step1[0]);
+        if(step1.includes(elem[i][0]) == false){
+          step1.push(elem[i][0]);
+        }
+        
+      }
+      else if(val == 2){
+        counter2++;
+        step2[0] = counter2;
+        if(step2.includes(elem[i][0]) == false){
+          step2.push(elem[i][0]);
+        }
+      }
+       //for pcr
+      else if(val == 4){
+          if(choices[2] == "unavailable"){
+          step4[0] = "unavailable";
+        }
+        else{
+          counter4++;
+          step4[0] = counter4;
+          if(step4.includes(elem[i][0]) == false){
+            step4.push(elem[i][0]);
+          }
+        }
+         
+        
+      }
+        else if(val == 3){
+        counter3++;
+          step3[0] = counter3;
+          if(step3.includes(elem[i][0]) == false){
+            step3.push(elem[i][0]);
+          }
+        
+      }
+    }
+
+    res.push(step1);
+    res.push(step2);
+    res.push(step3);
+    res.push(step4);
+    console.log("0000000000");
+    console.log(res);
+    // getnum_opt(res);
+    // getnum_circle(res);
+    makeboxes(res);
+    getproductinfo(res);
+    
+    
+  }
+  
+  function makeboxes(elem){
+
+    let headings = ['Collection & Preservation', 'Isolation & Purification' ,'MultiAnalyte','qPCR & RT-qPCR']
+    console.log("-----element-------");
+    console.log(elem);
+    var main_div = document.getElementsByClassName("results-div");
+    var all_steps = document.createElement('div');
+    all_steps.setAttribute("class", 'all_steps');
+
+    var count = 0;
+    var heading_count = 0;
+    for(var i = 0; i < elem.length; i++){
+      console.log(elem[i][0]);
+       if(elem[i] != ""){
+          count ++;
+          heading_count = i;
+          var each_step = document.createElement('div');
+          each_step.setAttribute("class", 'each_step');
+
+          var step_div = document.createElement('div');
+          step_div.setAttribute("class",'step_div')
+          var step_count = document.createElement('h4');
+          step_count.setAttribute("class","step_count");
+          step_count.innerHTML = "Step " + count;
+
+          step_div.appendChild(step_count);
+          // each_step.appendChild(step_count);
+
+          var step_heading = document.createElement('h4');
+          step_heading.setAttribute("class",'step_heading');
+          step_heading.innerHTML = headings[heading_count];
+          step_div.appendChild(step_heading);
+          // each_step.appendChild(step_heading);
+
+          var hor = document.createElement('hr');
+          // each_step.appendChild(hor);
+          step_div.appendChild(hor);
+
+          each_step.appendChild(step_div);
+          if(elem[i][0] == "unavailable"){
+            var no_pathogen_form = document.createElement("div");
+            no_pathogen_form.setAttribute("class",'no_pathogen_form');
+
+            var form_div = document.getElementsByClassName("form-table");
+            console.log(form_div);
+            var clone = form_div[0].cloneNode(true);
+            clone.style.display = "block";
+            no_pathogen_form.appendChild(clone);
+            
+
+            // var writeup = document.createElement("button");
+            // writeup.setAttribute("class",'no_pathogen');
+            // writeup.innerHTML = "yes";
+            each_step.appendChild(no_pathogen_form);
+            all_steps.appendChild(each_step);
+          }
+
+          var extra_div = document.createElement('div');
+          extra_div.setAttribute("class",'drawer');
+
+          for(var j = 0; j < elem[i].length-1; j++){
+            var item_div = document.createElement('div');
+            item_div.setAttribute("class", 'product_item');
+            
+            if(j == 0){
+              step_div.appendChild(item_div);
+            }
+            else{
+              // if(i != 3 && choices.includes("unavailable")==false){
+                item_div.setAttribute("onclick",'showthis(this)');
+              extra_div.appendChild(item_div);
+              // }
+              
+              
+            }
+            
+            
+          }
+          var view_btn = document.createElement('button');
+              view_btn.setAttribute("class",'view_btn');
+              view_btn.setAttribute('onclick','less(this)');
+              view_btn.innerHTML = "Hide Options<br><img src='/sites/default/files/images/norgenius/arrow-up.png'>";
+          extra_div.appendChild(view_btn);
+          each_step.appendChild(extra_div);
+
+
+          var product_length = each_step.getElementsByClassName("product_item");
+          console.log(product_length);
+          if(product_length.length > 1){
+            var view_btn = document.createElement('button');
+            view_btn.setAttribute("class",'view_btn');
+            view_btn.setAttribute('onclick','more(this)');
+             for(var q = 1; q < elem[i].length; q++){
+              console.log("broooooooooooooooooo" + elem[i][q]);
+              var check = elem[i][q];
+              if(check.includes("Dx")){
+                view_btn.innerHTML = "View more Options <br>(Diagnostic Kit Available) <img src='/sites/default/files/images/norgenius/arrow-down.png'>";
+              }
+              else{
+                view_btn.innerHTML = "View more Options <br><img src='/sites/default/files/images/norgenius/arrow-down.png'>";
+              }
+            }
+            each_step.appendChild(view_btn);
+          }
+
+          all_steps.appendChild(each_step);
+
+
+       }
+
+    }
+    console.log(num_of_results);
+     main_div[num_of_results].appendChild(all_steps);
+     var workflowcart = document.createElement('div');
+     workflowcart.setAttribute("class",'workflowcart');
+     var wc_btn = document.createElement('button');
+     wc_btn.setAttribute("class",'btn btn-primary');
+     wc_btn.setAttribute("onclick",'add_workflow()');
+     wc_btn.innerHTML = "Add Workflow to Cart";
+
+     var powered_result = document.createElement('div');
+     powered_result.setAttribute("class",'powered_result');
+
+     var powered_p = document.createElement('p');
+     powered_p.innerHTML = "Powered by <img src='/sites/default/files/images/norgenius/norgenius_icon.svg' style='width: 50px;'>  Norgenius";
+
+     powered_result.appendChild(powered_p);
+     workflowcart.appendChild(wc_btn);
+     workflowcart.appendChild(powered_result);
+     main_div[num_of_results].appendChild(workflowcart);
+     num_of_results++;
+  }
+
+
+  //informgation for the products that we need
+  function getproductinfo(elem){
+    let wf_results = [];
+    for(var i = 0; i < elem.length; i++){
+      for(var j = 1; j < elem[i].length;j++){
+      var x = elem[i][j];
+      
+      var prod_array = x.split(" ");
+      
+      for(var l = 0; l < prod_array.length; l++){
+        let result_temp = [];
+        for(var k = 0; k < products.length; k++){
+          if(prod_array[l] == products[k][3]){
+            //result_temp.push(products[k][0]);
+            result_temp.push(products[k][1]);
+            //result_temp.push(products[k][2]);
+            result_temp.push(products[k][3]);
+            //result_temp.push(products[k][4]);
+            result_temp.push(products[k][5]);
+            //result_temp.push(products[k][6]);
+            result_temp.push(products[k][7]);
+            result_temp.push(products[k][8]);
+            result_temp.push(products[k][9]);
+            result_temp.push(products[k][10]);
+            // result_temp.push()
+            if(wf_results.includes(result_temp) == false){
+              wf_results.push(result_temp);
+            }
+            
+          }
+        }
+      }
+      }
+    }
+    display_result_helper(wf_results, elem);
+    console.log("------wf_results-----");
+    console.log(wf_results);
+    console.log(elem);
+  }
+
+  
+//results array contains the kits that needs to show in the result
+function display_result_helper(elem1, elem2){
+
+  var testingdiv = document.getElementsByClassName("product_item");
+  
+  console.log("--------testingdiv--------");
+  console.log(testingdiv);
+  var step = document.getElementsByClassName("step");
+
+  for(var i = 0; i < elem2.length; i++){
+    for(var j = 1; j < elem2[i].length; j++){
+      var parent = testingdiv[num_counter];
+      console.log(parent);
+      var num_opt = elem2[i].length;
+      var x = elem2[i][j];
+      var entry_a = x.split(" ");
+      if(entry_a.length > 1){
+
+
+          var product_info = document.createElement('div');
+        product_info.setAttribute("class",'product_info');
+        var product_text = document.createElement('div');
+        product_text.setAttribute("class",'product_text');
+        var title = document.createElement('h4');
+        var img = document.createElement('img');
+        for(var ctitle = 0; ctitle < elem1.length; ctitle++){
+          if(entry_a[0] == elem1[ctitle][1]){
+               url = "https://norgenbiotek.com/" + elem1[ctitle][6];
+            console.log("5555555");
+            console.log(elem1[ctitle][4]);
+          
+            title.innerHTML = "<a href='" + url + "'>"+elem1[ctitle][4]+"</a>";
+            var src = elem1[ctitle][5].replace("public://","/sites/default/files/");
+            img.setAttribute('src',src);
+
+             if(i == 1 && elem1[ctitle][4].includes("DNA")){
+              var inside_type = document.createElement('p');
+              inside_type.setAttribute("class",'inside_type');
+            inside_type.innerHTML = "DNA";
+            inside_type.classList.add("blue-btn");
+            product_text.appendChild(inside_type);
+          }
+          else if(i == 1 && elem1[ctitle][4].includes("RNA")){
+            var inside_type = document.createElement('p');
+              inside_type.setAttribute("class",'inside_type');
+            inside_type.innerHTML = "RNA";
+            inside_type.classList.add("red-btn2");
+            product_text.appendChild(inside_type);
+          }
+          else if(i == 1 && elem1[ctitle][4].includes("Nucleic Acid")){
+            var inside_type = document.createElement('p');
+              inside_type.setAttribute("class",'inside_type');
+            inside_type.innerHTML = "Multi-Analyte";
+            inside_type.classList.add("purple-btn");
+            product_text.appendChild(inside_type);
+          }
+
+             
+          }
+        }
+        var sku = document.createElement('p');
+        //create a selector
+        var select = document.createElement('select');
+        select.setAttribute("onchange" , 'change_select(this)');
+        var selected_opt = false;
+
+        var cart_info = document.createElement("div");
+        cart_info.setAttribute("class",'cart_info');
+        // parent.appendChild(select);
+
+        // Use createElement to add an option:
+        for(var p = 0; p < entry_a.length;p++){
+          if(p > 0){
+            sku.innerHTML = sku.innerHTML + ", " + entry_a[p]; 
+          }
+          else{
+            sku.innerHTML = "Cat. " + entry_a[p];
+          }
+          for(var q = 0; q < elem1.length;q++){
+            if(entry_a[p] == elem1[q][1]){
+               option = document.createElement('option');
+
+              option.value = elem1[q][3] + "-" + elem1[q][2];
+              option.text = elem1[q][3] + " - " + elem1[q][2];
+              option.setAttribute("cart",elem1[q][0]);
+              if(selected_opt == false){
+                option.setAttribute("selected",'');
+                selected_opt = true;
+              }
+              
+              select.appendChild(option);
+
+              var block = '<form onclick="add_to_cart_2(this)" action="" method="post" id="add-to-cart-variation-'+elem1[q][0]+'" class="full-width-btn col-sm-12 home-bestsellers-btn-div morethanone" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-'+elem1[q][0]+'" siq_id="autopick_738" btnvalue="'+elem1[q][0]+'"><input type="hidden" id="variation_id" name="variation_id" value="'+elem1[q][0]+'"><input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-'+elem1[q][0]+'" name="op" value="Add to cart"></form>';
+              cart_info.insertAdjacentHTML('beforeend',block);
+            }
+          }
+        }
+        
+        product_text.appendChild(title);
+        product_text.appendChild(sku);
+        
+        if(select.length > 0){
+        cart_info.appendChild(select);
+        }
+        
+
+        //cart_info.appendChild(select);
+        
+        
+        product_info.appendChild(product_text);
+        product_info.appendChild(img);
+        //product_info.appendChild(cart_info);
+        //parent.appendChild(product_info);
+        if(select.length > 0){
+      product_info.appendChild(cart_info);
+        }
+        if(select.length > 0){
+        parent.appendChild(product_info);
+        }
+
+        num_counter++;
+        // }
+        
+        
+      }
+      else{
+         
+         var product_info = document.createElement('div');
+         product_info.setAttribute("class",'product_info');
+          var product_text = document.createElement('div');
+        product_text.setAttribute("class",'product_text');
+         var title = document.createElement('h4');
+         var img = document.createElement('img');
+         // var url = document.createElement('a');
+         var url;
+        for(var ctitle = 0; ctitle < elem1.length; ctitle++){
+          if(entry_a[0] == elem1[ctitle][1]){
+             url = "https://norgenbiotek.com/" + elem1[ctitle][6];
+           console.log("5555555");
+            console.log(elem1[ctitle][4]);
+           
+            title.innerHTML = "<a href='" + url + "'>"+elem1[ctitle][4]+"</a>";
+            var src = elem1[ctitle][5].replace("public://","/sites/default/files/");
+            img.setAttribute('src',src);
+                var block = '<form onclick="add_to_cart_2(this)" action="" method="post" id="add-to-cart-variation-'+elem1[ctitle][0]+'" class="full-width-btn col-sm-12 home-bestsellers-btn-div thiskit" data-once="form-updated" data-drupal-form-fields="variation_id,edit-submit-'+elem1[ctitle][0]+'" siq_id="autopick_738" btnvalue="'+elem1[ctitle][0]+'"><input type="hidden" id="variation_id" name="variation_id" value="'+elem1[ctitle][0]+'" btnvalue="'+elem1[ctitle][0]+'"><input class="btn-primary button--add-to-cart btn-medium btn btn-mod c-btn c-theme-btn c-font-bold c-font-uppercase c-font-white button button--primary js-form-submit form-submit c-btn-border-2x full-width-btn row" data-drupal-selector="edit-submit" type="submit" id="edit-submit-'+elem1[ctitle][0]+'" name="op" value="Add to cart"></form>';
+                if(i == 1 && elem1[ctitle][4].includes("DNA")){
+              var inside_type = document.createElement('p');
+              inside_type.setAttribute("class",'inside_type');
+            inside_type.innerHTML = "DNA";
+            inside_type.classList.add("blue-btn");
+            product_text.appendChild(inside_type);
+          }
+          else if(i == 1 && elem1[ctitle][4].includes("RNA")){
+            var inside_type = document.createElement('p');
+              inside_type.setAttribute("class",'inside_type');
+            inside_type.innerHTML = "RNA";
+            inside_type.classList.add("red-btn2");
+            product_text.appendChild(inside_type);
+          }
+          else if(i == 1 && elem1[ctitle][4].includes("Nucleic Acid")){
+            var inside_type = document.createElement('p');
+              inside_type.setAttribute("class",'inside_type');
+            inside_type.innerHTML = "Multi-Analyte";
+            inside_type.classList.add("purple-btn");
+            product_text.appendChild(inside_type);
+          }
+
+          }
+        }
+
+        var sku = document.createElement('p');
+        sku.innerHTML = "Cat. " + elem2[i][j];
+        if(title.innerHTML == ""){
+          product_info.classList.add("autorows");
+              if(sku.innerHTML == "Cat. RU46110"){
+                title.innerHTML = "Clamshell Individual Sputum DNA Collection and Preservation Device - Tube Format";
+              }
+              else if(sku.innerHTML == "Cat. notavailable"){
+                title.innerHTML = "EDTA Tubes - Biobasic";
+              }
+              var helptext = document.createElement('p');
+              helptext.innerHTML = "Sorry for the inconviniece. This product is not currently sold at Norgen Biotek<br><br>";
+              product_text.appendChild(helptext);
+              img.setAttribute('src',"/sites/default/files/images/norgenius/unavailable.png");
+              img.style.width = "100px";
+              block = "";
+            }
+        product_text.appendChild(title);
+        product_text.appendChild(sku);
+        product_info.appendChild(product_text);
+        product_info.appendChild(img);
+        
+        product_info.insertAdjacentHTML('beforeend',block);
+        
+         parent.appendChild(product_info);
+         num_counter++;
+        
+      
+
+        
+         
+        
+          
+      }
+    }
+    console.log(num_counter);
+  }
+  showless_opt();
+  // if(elem2[3].length > 0){
+  //    multi_switch();
+  // }
+ 
+  cart_info_btn();
+  // show_one_product();
+}
+
+
+function more(elem){
+    elem.classList.add("more");
+    var parent = elem.parentElement;
+    var drawer = parent.getElementsByClassName("drawer");
+    drawer[0].style.display = "block";
+    // elem.style.display = "none";
+}
+function less(elem){
+  var parent = elem.parentElement;
+  parent.style.display = "none";
+  var grand = parent.parentElement;
+  var more = grand.getElementsByClassName("more");
+  more[0].style.display = "block";
+}
+function showthis(elem){
+  var parent = elem.parentElement; //drawer
+  var grand = parent.parentElement; //each_step
+
+  var product_item = grand.getElementsByClassName("product_item");
+  var temp = elem.innerHTML;
+  elem.innerHTML = product_item[0].innerHTML;
+  product_item[0].innerHTML = temp;
+
+
+}
+
+function cart_info_btn(){
+  var cart_info = document.getElementsByClassName("cart_info");
+  for(var i = 0; i < cart_info.length;i++){
+    var select_field = cart_info[i].getElementsByTagName("select");
+    
+    var selected_opt = select_field[0].options[select_field[0].selectedIndex].getAttribute("cart");
+    console.log("?????????");
+    console.log(selected_opt);
+    var btn = cart_info[i].getElementsByClassName("morethanone");
+    for(var j = 0; j < btn.length; j++){   
+      var helper = btn[j].getElementsByTagName("input");
+      var selected_btn = helper[0].value;
+      console.log(selected_btn);
+      if(selected_btn == selected_opt){
+        btn[j].style.display = "block";
+        btn[j].classList.add("thiskit");
+      }
+    }
+  }
+}
+function change_select(elem){
+ console.log(elem);
+  var parent = elem.parentElement;
+  console.log(parent);
+
+  var cart = elem.options[elem.selectedIndex].getAttribute("cart");
+    console.log(cart);
+  var btn = parent.getElementsByClassName("morethanone");
+  for(var i = 0; i < btn.length; i++){
+    btn[i].style.display = "none";
+    btn[i].classList.remove("thiskit");
+    var btnvalue = btn[i].getAttribute("btnvalue");
+    if(btnvalue == cart){
+      btn[i].style.display = "block";
+      btn[i].classList.add("thiskit");
+    }
+  }
+}
+
+function showless_opt(){
+  var step = document.getElementsByClassName("step");
+  var product_item = document.getElementsByClassName("product_item");
+  var btn = "false";
+  for(var i = 0; i < step.length; i++){
+    var product = step[i].getElementsByClassName("product_item");
+    console.log("1." + product.length);
+    if(product.length > 0){
+       product[0].style.display = "flex";
+    if(product.length > 1){
+    console.log(btn);
+     show_btn(step[i]);
+     btn = "true";
+    }
+    }
+   
+  }
+ 
+}
+function showmore_opt(elem){
+  var step = elem.parentElement.parentElement;
+  if(elem.classList.contains("more")){
+    var product = step.getElementsByClassName("product_item");
+    for(var i = 0; i < product.length;i++){
+      product[i].style.display = "flex";
+    }
+    elem.innerHTML = "<img src='/sites/default/files/images/norgenius/minus.png'>Show Less";
+    elem.classList.remove("more");
+    elem.classList.add("less");
+  }
+  else{
+    var product = step.getElementsByClassName("product_item");
+    for(var i = 0; i < product.length;i++){
+      product[i].style.display = "none";
+    }
+      product[0].style.display = "flex";
+      elem.innerHTML = "<img src='/sites/default/files/images/norgenius/more.png'>Show More";
+      elem.classList.remove("less");
+      elem.classList.add("more");
+  }
+    
+
+}
+function display_results_helper(){
+
+  let finalresults = [];
+  for(var i = 0; i < results_array.length;i++){
+    var val = results_array[i][2];
+    console.log("10. " + val);
+    console.log()
+    finalresults[val] = (results_array[i]);
+    
+  }
+  console.log("------");
+  console.log(finalresults)
+  //now figuring out which choice it is
+  for(var p = 0; p < step1.length; p++){
+
+  }
+}
+
+
+
+let alreadyselected = [];
+let mainarray = [];
+
+function filtering(elem){
+  elem.style.borderColor = "black";
+  updateURL();
+  var allselect = document.getElementsByClassName("select_option");
+  let available = [];
+ 
+  var not_available;
+  for(var i = 0; i< allselect.length; i++){
+    if(allselect[i].id != elem.id){
+      not_available = allselect[i];
+      for(var j = 0; j < not_available.length; j++){
+        if(alreadyselected.length == 0 ){
+          not_available[j].disabled = true;
+        }
+      }
+    }
+  }
+  if(!alreadyselected.includes(elem.id)){
+
+    alreadyselected.push(elem.id);
+  }
+  else{
+    alreadyselected = [];
+    alreadyselected.push(elem.id);
+  }
+  for(var j = 0; j< allselect.length; j++){
+    if(!(alreadyselected.includes(allselect[j].id)))
+    {
+      
+      allselect[j].value = '';
+
+      
+      var x = allselect[j]; //list of all the options we need to go through
+      for(var k =1; k < x.length; k++){
+        x[k].disabled = true;
+        var count = 0;
+        for(var l = 0; l < alreadyselected.length; l++){
+          var b = document.getElementById(alreadyselected[l]);
+          var values = x[k].getAttribute(alreadyselected[l]).split(' ');
+          for(var m = 0; m<values.length; m++){
+            if(values[m] == b.value){
+              count++;
+            }
+          }
+        }
+        if(count == alreadyselected.length){
+          available.push(x[k]);
+          x[k].disabled = false;
+        }
+      }
+    }
+  }
+
+  mainarray.push(available);
+}
+
+function submitting(){
+checkreq();
+
+if(reqcount == 5){
+const element = document.querySelectorAll(".orp");
+  for(var i = 0; i < element.length; i++){
+    element[i].remove();
+  }
+
+  const element2 = document.querySelectorAll(".stepdiv");
+  for(var i = 0; i < element2.length; i++){
+    element2[i].remove();
+  }
+  stepcounter =  0;
+
+document.getElementById("dynamic").innerHTML = "3";
+  var sample_first = document.getElementsByClassName("collection_firstchoice")[0];
+  var sample_all1 = sample_first.querySelectorAll(":scope > div");
+   sample_first.parentElement.style.display="none";
+  sample_first.parentElement.parentElement.style.display = "none";
+
+  var extraction_first = document.getElementsByClassName("extraction_firstchoice")[0];
+  var extraction_all1 = extraction_first.querySelectorAll(":scope > div");
+   extraction_first.parentElement.style.display="none";
+  extraction_first.parentElement.parentElement.style.display = "none";
+
+   for(var i = 0; i < sample_all1.length; i++){
+    sample_all1[i].style.display = "none";
+   }
+
+   for(var i = 0; i < extraction_all1.length; i++){
+    extraction_all1[i].style.display = "none";
+   }
+
+
+  
+  
+
+  // var m_first = document.getElementsByClassName("multianalyte_firstchoice")[0];
+  // var m_all1 = m_first.querySelectorAll(":scope > div");
+  // m_first.parentElement.style.display="none";
+  // m_first.parentElement.parentElement.style.display = "none";
+  // for(var i = 0; i < m_all1.length; i++){
+  //   m_all1[i].style.display = "none";
+  //  }
+
+  var q_first = document.getElementsByClassName("q_single")[0];
+  var qs_all1 = q_first.querySelectorAll(":scope > div");
+
+  q_first.parentElement.style.display="none";
+  q_first.parentElement.parentElement.style.display = "none";
+
+  for(var i = 0; i < qs_all1.length; i++){
+    qs_all1[i].style.display = "none";
+   }
+
+
+
+  
+  var category = document.getElementById("category");
+  var c_option = category.options[category.selectedIndex];
+  
+  var organism = document.getElementById("organism");
+  var o_option = organism.options[organism.selectedIndex];
+  var pathogen = document.getElementById("pathogen");
+  var p_option = pathogen.options[pathogen.selectedIndex];
+  var analyte = document.getElementById("analyte");
+  var a_option = analyte.options[analyte.selectedIndex];
+  var sample = document.getElementById("sample");
+  var s_option = sample.options[sample.selectedIndex];
+
+  var a = c_option.getAttribute('order');
+  var b = o_option.getAttribute('order');
+  var c = p_option.getAttribute('order');
+  var d = a_option.getAttribute('order');
+  var e = s_option.getAttribute('order');
+
+  let conc = a + b + c + d + e;
+  
+
+  
+  var sample_first = document.getElementsByClassName("collection_firstchoice")[0];
+  var sample_all1 = sample_first.querySelectorAll(":scope > div");
+ 
+  var sample_counter = document.getElementById("sample_counter");
+
+
+  // var sample_second = document.getElementsByClassName("collection_secondchoice")[0];
+  // var sample_all2 = sample_second.querySelectorAll(":scope > div");
+  // var sample_third = document.getElementsByClassName("collection_thirdchoice")[0];
+  // var sample_all3 = sample_third.querySelectorAll(":scope > div");
+
+  var extraction_first = document.getElementsByClassName("extraction_firstchoice")[0];
+  var extraction_all1 = extraction_first.querySelectorAll(":scope > div");
+  var extraction_counter = document.getElementById("extraction_counter");
+  
+  // var extraction_second = document.getElementsByClassName("extraction_secondchoice")[0];
+  // var extraction_all2 = extraction_second.querySelectorAll(":scope > div");
+  // var extraction_third = document.getElementsByClassName("extraction_thirdchoice")[0];
+  // var extraction_all3 = extraction_third.querySelectorAll(":scope > div");
+
+  // var m_first = document.getElementsByClassName("multianalyte_firstchoice")[0];
+  // console.log("fffubefiuebfiwe", m_first);
+  // var m_all1 = m_first.querySelectorAll(":scope > div");
+  // var multi_counter = document.getElementById("multi_counter");
+
+  var q_first = document.getElementsByClassName("q_single")[0];
+  
+  var qs_all1 = q_first.querySelectorAll(":scope > div");
+  var pcr_counter = document.getElementById("pcr_counter");
+
+  // var q_second = document.getElementsByClassName("q_multiple")[0];
+  // var qm_all1 = q_second.querySelectorAll(":scope > div");
+
+  finding(sample_all1, conc, sample_first, 0, sample_counter);
+  // finding(sample_all2, conc, sample_second, 2);
+  // finding(sample_all3, conc, sample_third, 3);
+  finding(extraction_all1, conc, extraction_first, 0, extraction_counter);
+  // finding(extraction_all2, conc, extraction_second, 2);
+  // finding(extraction_all3, conc, extraction_third, 3);
+  // finding(m_all1, conc, m_first , 0, multi_counter);
+  finding(qs_all1, conc, q_first, 0, pcr_counter);
+  // finding(qm_all1, conc, q_second.parentElement, 2);
+  
+
+  
+}
+
+
+}
+var stepcounter = 0;
+
+function finding(elem, conc, parent, counter, div2){
+  document.getElementById("buttons-div").style.display="flex";
+  var stepboolean = false;
+ 
+  for(var i = 0; i < elem.length; i++){
+    var x = elem[i].getAttribute('order').split(' ');
+    for(var j = 0; j < x.length; j++){
+      if(x[j] == conc){ 
+        stepboolean = true;
+        
+        
+
+
+        // if(div2.id == "multi_counter"){
+        //   document.getElementById("dynamic").innerHTML = "4";
+        // }
+        parent.parentElement.style.display="block";
+        parent.parentElement.parentElement.style.display = "block";
+        elem[i].style.display = "block";
+        
+        const para = document.createElement("p");
+        para.setAttribute("class","orp");
+        para.innerText = "OR";
+        elem[i].insertAdjacentElement("afterend", para);
+
+        
+        
+
+        counter++;
+        if(div2.id != "pcr_counter"){
+            elem[i].querySelector(".prod-each").querySelector("#title-num").innerHTML = counter;
+        }
+      
+        
+      }
+    }
+  }
+   div2.innerHTML = "Available Options: <span style='color:red;'>#" + counter + "</span>";
+  var a = document.querySelectorAll(".orp");
+  
+  if(a[a.length-1] != null){
+      a[a.length-1].style.display = "none";
+  }
+
+
+  if(stepboolean == true){
+    stepcounter++;
+    var x = parent.parentElement;
+    
+    var heading = x.querySelector(".card-heading").querySelector("h2").innerText;
+    
+
+    const pdiv = document.createElement("div");
+    pdiv.setAttribute("class","stepdiv");
+    const divp = document.createElement("p");
+    divp.innerText = "Step " + stepcounter + ": " + heading;
+
+    const ap = document.createElement("a");
+    ap.setAttribute("href", "#" +parent.parentElement.id);
+
+    ap.appendChild(divp);
+    pdiv.appendChild(ap);
+
+    document.getElementById("nav-linksp").appendChild(pdiv);
+  }
+
+}
+
+function open_options(){
+
+}
+
+function updateURL(){
+
+  // URL
+  let url = new URL(window.location);
+  let searchParams = url.searchParams;
+
+  let category_check = document.getElementById("category").value;
+  searchParams.delete('category');
+  searchParams.append('category',category_check);
+
+  let organism_check = document.getElementById("organism").value;
+  searchParams.delete('organism');
+  searchParams.append('organism',organism_check);
+
+  let pathogen_check = document.getElementById("pathogen").value;
+  searchParams.delete('pathogen');
+  searchParams.append('pathogen',pathogen_check);
+
+    let analyte_check = document.getElementById("analyte").value;
+    searchParams.delete('analyte');
+    searchParams.append('analyte',analyte_check);
+
+    let sample_check = document.getElementById("sample").value;
+    searchParams.delete('sample');
+    searchParams.append('sample',sample_check);
+
+  window.history.replaceState(null,null,url);
+
+
+}
+window.addEventListener("load", (event) => {
+   const queryString = window.location.search;
+
+if (queryString != "") {
+const urlParams = new URLSearchParams(queryString);
+
+const category = urlParams.get('category')
+document.getElementById("category").value = category;
+const organism = urlParams.get('organism')
+document.getElementById("organism").value = organism;
+const pathogen = urlParams.get('pathogen')
+document.getElementById("pathogen").value = pathogen;
+const analyte = urlParams.get('analyte')
+document.getElementById("analyte").value = analyte;
+const sample = urlParams.get('sample')
+document.getElementById("sample").value = sample;
+
+submitting();
+}
+});
+var reqcount = 0;
+function checkreq(){
+
+reqcount = 0;
+  var x = document.querySelectorAll(".select_option");
+  for(var i = 0; i < x.length; i++){
+    if(x[i].value == ""){
+      x[i].style.borderColor = "red";
+    }
+    else{
+      reqcount++;
+    }
+  }
+  
+}
+
+function open_form(){
+  document.getElementsByClassName("info_form")[0].style.display = "block";
+}
+
+
+
+function reset(){
+   var allselect = document.getElementsByClassName("select_option");
+   for(var i = 0; i < allselect.length; i++){
+    allselect[i].value = "";
+
+   }
+   updateURL();
+   location.reload();
+
+}
+ const variationMap = {}; // Keeps count of variations per product_id
+const products_array = [];     // Final array
+function addProduct(product_id, variation_id) {
+  if (!variationMap[product_id]) {
+    variationMap[product_id] = [variation_id];
+  } else {
+    variationMap[product_id].push(variation_id);
+  }
+
+  const variations = variationMap[product_id];
+
+  // Remove any existing entry for this product
+  const index = products.findIndex(item => 
+    (typeof item === 'number' && item === product_id) || 
+    (item.product_id === product_id)
+  );
+  if (index !== -1) {
+    products_array.splice(index, 1); // Remove the old entry
+  }
+
+  // Push based on variation count
+  if (variations.length === 1) {
+    products_array.push(product_id); // Just push ID
+  } else {
+    variations.forEach(variation_id => {
+      products_array.push({ product_id, variation_id }); // Push full objects
+    });
+  }
+}
+var btn_value1, btn_value2, btn_value3;
+async function add_workflow(){
+
+  localStorage.setItem('page_refreshed', 'yes');
+  document.getElementsByClassName("cart_confirmation")[0].style.display = "block";
+  document.getElementById("overlay-cart").style.display = "block";
+  document.getElementById("cart").play();
+  var view_button = document.getElementsByClassName("view_btn");
+    for(var i = 0; i < view_button.length; i++){
+      view_button[i].style.zIndex = "1"; 
+    }
+  var results_div = document.getElementsByClassName("results-div");
+  var all_steps = results_div[0].getElementsByClassName("all_steps");
+  var each_step = all_steps[0].getElementsByClassName("each_step");
+  var step_div = each_step[0].getElementsByClassName("step_div");
+  // for(var i = 0; i < each_step.length;i++){
+
+    
+    if(step_div[0].getElementsByClassName("product_item").length > 0){
+      console.log("test");
+    var product_item = each_step[0].getElementsByClassName("product_item");
+    console.log(product_item[0].getElementsByClassName("cart_info").length);
+      if(product_item[0].getElementsByClassName("cart_info").length > 0){
+       var cart_info = product_item[0].getElementsByClassName("cart_info");
+
+       var form = cart_info[0].getElementsByClassName("thiskit");
+       //var span = form[0].getElementsByTagName("span");
+       var input = form[0].getElementsByTagName("input");
+
+       //input[1].click();
+       btn_value1 = input[0].value;
+    
+        const product_id_url = products.find(row => row[1] === btn_value1)?.[2];
+        console.log("this is the prod id /add-to-cart/"+product_id_url+"/"+ btn_value1);
+
+
+       console.log(btn_value1);
+         addProduct(btn_value1, 1);
+        console.log(products_array);
+        try {
+        const res = await fetch('/add-to-cart/'+product_id_url+'/'+ btn_value1, {
+          method: 'GET',
+          credentials: 'same-origin',
+        });
+
+        if (!res.ok) {
+          console.error('Failed to add product');
+        } else {
+          console.log('Added variation');
+        }
+      } catch (err) {
+        console.error('Error adding variation, err');
+      }
+        //const response = await fetch('/add-to-cart/'+btn_value1+'/1');
+        //const data = await response.json();
+        
+
+     }
+     else{
+      if(product_item[0].getElementsByTagName("form").length > 0){
+        var form = product_item[0].getElementsByClassName("thiskit");
+
+       // var form = cart_info[0].getElementsByTagName("form");
+       //var span = form[0].getElementsByTagName("span");
+       var input = form[0].getElementsByTagName("input");
+
+       //input[1].click();
+       btn_value1 = input[0].value;
+        const product_id_url = products.find(row => row[1] === btn_value1)?.[2];
+        console.log("this is the prod id /add-to-cart/"+product_id_url+"/"+ btn_value1);
+
+
+       console.log(btn_value1);
+         addProduct(btn_value1, 1);
+        console.log(products_array);
+        try {
+        const res = await fetch('/add-to-cart/'+product_id_url+'/'+ btn_value1, {
+          method: 'GET',
+          credentials: 'same-origin',
+        });
+
+        if (!res.ok) {
+          console.error('Failed to add product');
+        } else {
+          console.log('Added variation');
+        }
+      } catch (err) {
+        console.error('Error adding variation, err');
+      }
+
+      }
+     }
+   
+    }
+
+    var step_div2 = each_step[1].getElementsByClassName("step_div");
+    
+      if(step_div2[0].getElementsByClassName("product_item").length > 0){
+     console.log("test1");
+      var product_item = step_div2[0].getElementsByClassName("product_item");
+      if(product_item[0].getElementsByClassName("cart_info").length > 0){
+         var cart_info = product_item[0].getElementsByClassName("cart_info");
+      
+        var form = cart_info[0].getElementsByClassName("thiskit");
+        //var span = form[0].getElementsByTagName("span");
+        var input = form[0].getElementsByTagName("input");
+
+        //input[1].click();
+        btn_value2 = input[0].value;
+                const product_id_url = products.find(row => row[1] === btn_value2)?.[2];
+        console.log("this is the prod id /add-to-cart/"+product_id_url+"/"+ btn_value2);
+
+
+       console.log(btn_value2);
+         addProduct(btn_value2, 1);
+        console.log(products_array);
+        try {
+        const res = await fetch('/add-to-cart/'+product_id_url+'/'+ btn_value2, {
+          method: 'GET',
+          credentials: 'same-origin',
+        });
+
+        if (!res.ok) {
+          console.error('Failed to add product');
+        } else {
+          console.log('Added variation');
+        }
+      } catch (err) {
+        console.error('Error adding variation, err');
+      }
+      }
+      else{
+      if(product_item[0].getElementsByTagName("form").length > 0){
+        var form = product_item[0].getElementsByClassName("thiskit");
+
+       // var form = cart_info[0].getElementsByTagName("form");
+       //var span = form[0].getElementsByTagName("span");
+       var input = form[0].getElementsByTagName("input");
+
+       //input[1].click();
+       btn_value2 = input[0].value;
+                       const product_id_url = products.find(row => row[1] === btn_value2)?.[2];
+        console.log("this is the prod id /add-to-cart/"+product_id_url+"/"+ btn_value2);
+
+
+       console.log(btn_value2);
+         addProduct(btn_value2, 1);
+        console.log(products_array);
+        try {
+        const res = await fetch('/add-to-cart/'+product_id_url+'/'+ btn_value2, {
+          method: 'GET',
+          credentials: 'same-origin',
+        });
+
+        if (!res.ok) {
+          console.error('Failed to add product');
+        } else {
+          console.log('Added variation');
+        }
+      } catch (err) {
+        console.error('Error adding variation, err');
+      }
+      }
+     }
+     
+      }
+    
+    var step_div3 = each_step[2].getElementsByClassName("step_div");
+    
+      if(step_div3[0].getElementsByClassName("product_item").length > 0){
+        console.log("test3");
+      var product_item = step_div3[0].getElementsByClassName("product_item");
+      if(product_item[0].getElementsByClassName("cart_info").length > 0){
+        var cart_info = product_item[0].getElementsByClassName("cart_info");
+      
+        var form = cart_info[0].getElementsByClassName("thiskit");
+        //var span = form[0].getElementsByTagName("span");
+        var input = form[0].getElementsByTagName("input");
+
+        //input[1].click();
+        btn_value3 = input[0].value;
+                const product_id_url = products.find(row => row[1] === btn_value3)?.[2];
+        console.log("this is the prod id /add-to-cart/"+product_id_url+"/"+ btn_value3);
+
+
+       console.log(btn_value3);
+         addProduct(btn_value3, 1);
+        console.log(products_array);
+        try {
+        const res = await fetch('/add-to-cart/'+product_id_url+'/'+ btn_value3, {
+          method: 'GET',
+          credentials: 'same-origin',
+        });
+
+        if (!res.ok) {
+          console.error('Failed to add product');
+        } else {
+          console.log('Added variation');
+        }
+      } catch (err) {
+        console.error('Error adding variation, err');
+      }
+      }
+      else{
+      if(product_item[0].getElementsByTagName("form").length > 0){
+        var form = product_item[0].getElementsByClassName("thiskit");
+
+       // var form = cart_info[0].getElementsByTagName("form");
+       //var span = form[0].getElementsByTagName("span");
+       var input = form[0].getElementsByTagName("input");
+
+       //input[1].click();
+       btn_value3 = input[0].value;
+                       const product_id_url = products.find(row => row[1] === btn_value3)?.[2];
+        console.log("this is the prod id /add-to-cart/"+product_id_url+"/"+ btn_value3);
+
+
+       console.log(btn_value3);
+         addProduct(btn_value3, 1);
+        console.log(products_array);
+        try {
+        const res = await fetch('/add-to-cart/'+product_id_url+'/'+ btn_value3, {
+          method: 'GET',
+          credentials: 'same-origin',
+        });
+
+        if (!res.ok) {
+          console.error('Failed to add product');
+        } else {
+          console.log('Added variation');
+        }
+      } catch (err) {
+        console.error('Error adding variation, err');
+      }
+      }
+     }
+      
+      }
+     
+
+
+
+
+
+    // var step_div4 = each_step[3].getElementsByClassName("step_div");
+    // setTimeout(function(){ 
+    //   if(step_div4[0].getElementsByClassName("product_item").length > 0){
+       
+    //   var product_item = step_div4[0].getElementsByClassName("product_item");
+    //   if(product_item[0].getElementsByClassName("cart_info").length > 0){
+    //     var cart_info = product_item[0].getElementsByClassName("cart_info");
+      
+    //     var form = cart_info[0].getElementsByTagName("form");
+    //     var span = form[0].getElementsByTagName("span");
+    //     var input = span[0].getElementsByTagName("input");
+
+    //     input[0].click();
+    //   }
+    //   else{
+    //   if(product_item[0].getElementsByTagName("form").length > 0){
+    //     var form = product_item[0].getElementsByTagName("form");
+
+    //    var span = form[0].getElementsByTagName("span");
+    //    var input = span[0].getElementsByTagName("input");
+
+    //    input[0].click();
+    //   }
+    //  }
+      
+    //   }
+    //  }, 9000);
+  
+  // }
+  
+}
+function mail_sent_animation(elem){
+  var parent = elem.parentElement;
+  var grand = parent.parentElement;
+  parent.style.display = "none";
+
+  var sibling = parent.nextElementSibling;
+  sibling.style.display = "block";
+
+  
+  grand.getElementsByClassName("pathogen_q")[0].style.display = "none";
+  // document.getElementsByClassName("mail-sent")[0].style.display = "block";
+  // // document.getElementById("mail").play();
+  // // setTimeout(function(){ document.getElementById("mail").style.display = "none"; }, 2500);
+  // document.getElementById("no_pathogen_form_1").style.display = "none";
+  // document.getElementById("pathogen_q").style.display = "none";
+
+}
+
+
+function add_to_cart_2(elem) {
+    event.preventDefault(); // Stops form from submitting
+
+    // Run your custom function here
+    console.log(elem);
+    var x = elem.getAttribute("btnvalue");
+    myCustomFunction(x);
+  }
+
+  async function myCustomFunction(elem) {
+  popup_for_individual_kit();
+    console.log("Form was not submitted. Custom function executed instead.");
+    console.log(elem);
+      const product_id_url = products.find(row => row[1] === elem)?.[2];
+        console.log("this is the prod id /add-to-cart/"+product_id_url+"/"+ elem);
+
+
+       console.log(elem);
+         addProduct(elem, 1);
+        console.log(products_array);
+        try {
+        const res = await fetch('/add-to-cart/'+product_id_url+'/'+ elem, {
+          method: 'GET',
+          credentials: 'same-origin',
+        });
+
+        if (!res.ok) {
+          console.error('Failed to add product');
+        } else {
+          console.log('Added variation');
+        }
+      } catch (err) {
+        console.error('Error adding variation, err');
+      }
+        //const response = await fetch('/add-to-cart/'+btn_value1+'/1');
+        //const data = await response.json();
+        
+  }
+
+  function popup_for_individual_kit(){
+document.getElementsByClassName("popup_for_individual")[0].style.display = "block";
+  document.getElementById("overlay-popup_for_individual").style.display = "block";
+  document.getElementById("cart2").play();
+  var view_button = document.getElementsByClassName("view_btn");
+    for(var i = 0; i < view_button.length; i++){
+      view_button[i].style.zIndex = "1"; 
+    }
+  }
+  function close_popup_for_individual(){
+     document.getElementById("cart2").stop();
+    document.getElementsByClassName("popup_for_individual")[0].style.display = "none";
+  document.getElementById("overlay-popup_for_individual").style.display = "none";
+  var view_button = document.getElementsByClassName("view_btn");
+    for(var i = 0; i < view_button.length; i++){
+      view_button[i].style.zIndex = "3"; 
+    }
+  }
+   function close_cart_confirmation(){
+     document.getElementById("cart").stop();
+    document.getElementsByClassName("cart_confirmation")[0].style.display = "none";
+  document.getElementById("overlay-cart").style.display = "none";
+  var view_button = document.getElementsByClassName("view_btn");
+    for(var i = 0; i < view_button.length; i++){
+      view_button[i].style.zIndex = "3"; 
+    }
+  }
+</script>
