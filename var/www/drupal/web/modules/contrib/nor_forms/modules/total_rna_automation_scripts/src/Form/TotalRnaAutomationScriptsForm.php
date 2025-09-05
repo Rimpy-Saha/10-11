@@ -29,11 +29,6 @@ class TotalRnaAutomationScriptsForm extends FormBase
   {
     $form['#prefix'] = '<div id="total-rna-automation-scripts-container" class="total-rna-automation-scripts-container">';
 
-    $form['message'] = [
-      '#type' => 'markup',
-      '#markup' => '<div id="result-message" class="hidden"></div>',
-    ];
-
     $form['rna_fname'] = [
       '#type' => 'textfield',
       '#title' => $this->t('First Name'),
@@ -241,9 +236,6 @@ class TotalRnaAutomationScriptsForm extends FormBase
           case 'soil':
             $filename = 'https://norgenbiotek.com/sites/default/files/gated_content/Soil%20DNA%20Automation%20Scripts.zip';
             break;
-          case 'pathogen-viral':
-            $filename = 'https://norgenbiotek.com/sites/default/files/gated_content/Pathogen-Viral%20Nucleic%20Acid%20Automation%20Scripts.zip';
-            break;
         }
       }
 
@@ -295,9 +287,6 @@ class TotalRnaAutomationScriptsForm extends FormBase
         case 'soil':
           $file_label = 'Soil DNA';
           break;
-        case 'pathogen-viral':
-          $file_label = 'Pathogen/Viral Nucleic Acid';
-          break;
       }
     }
 
@@ -348,7 +337,7 @@ class TotalRnaAutomationScriptsForm extends FormBase
     } else {
       $subject = '[Automation Scripts Form] - New Submission - '.$file_label.' - ' . date("F j, Y, g:i a", $time);
        //$recipient_email = 'sowmya.movva@norgenbiotek.com';
-      $recipient_email = 'info@norgenbiotek.com, sabah.butt@norgenbiotek.com';// real addresses
+      $recipient_email = 'info@norgenbiotek.com, sebastian.szopa@norgenbiotek.com, sabah.butt@norgenbiotek.com';// real addresses
       //$recipient_email = 'liam.howes@norgenbiotek.com';
       //$recipient_email = 'huraira.khan@norgenbiotek.com';
 

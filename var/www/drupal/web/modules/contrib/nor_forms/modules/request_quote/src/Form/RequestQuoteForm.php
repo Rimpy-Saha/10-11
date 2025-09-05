@@ -772,7 +772,7 @@ class RequestQuoteForm extends FormBase{
       $Selector = '#request-quote-form-container';
       $response = new AjaxResponse();
       $response->addCommand(new ReplaceCommand(NULL, $form));
-      $response->addCommand(new AfterCommand($Selector, '<script>renderCaptcha("'.$Selector.'");</script>')); // need this to render the captcha whenever the user lands on step 3 (the page with captcha)
+      $response->addCommand(new AfterCommand($Selector, '<script>renderCaptcha();</script>')); // need this to render the captcha whenever the user lands on step 3 (the page with captcha)
       return $response;
     }
     return $form;

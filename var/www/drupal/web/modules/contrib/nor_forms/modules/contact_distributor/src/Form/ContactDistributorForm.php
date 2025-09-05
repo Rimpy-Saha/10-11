@@ -80,8 +80,7 @@ class ContactDistributorForm extends FormBase {
       '#upload_validators' => [
         'file_validate_extensions' => [' pdf'],
       ],
-      /* '#upload_location' => 'public://contact_distributor', */
-      '#upload_location' => 'temporary://contact_distributor',
+      '#upload_location' => 'public://contact_distributor',
       '#required' => TRUE,
     ];
 
@@ -120,7 +119,6 @@ class ContactDistributorForm extends FormBase {
 
     $first_name = $form_state->getValue('distributor_fname');
     $last_name = $form_state->getValue('distributor_lname');
-    $attachment = $form_state->getValue('distributor_attachment');
 
     if (empty($first_name) || strlen($first_name) < 2) {
       $form_state->setErrorByName('distributor_fname', $this->t('Please enter your first name.'));
@@ -134,33 +132,29 @@ class ContactDistributorForm extends FormBase {
       }
     }
   
-    if($attachment){
-      $form_state->set('file_id', $form_state->getValue('distributor_attachment')[0]); // save temp file fid
-    }
-
-    if ($first_name && $last_name && strlen($last_name) >= 6 && strpos($last_name, $first_name) !== false) {
-        // Add an error if last name contains first name for 6 or more characters
-        $form_state->setErrorByName('distributor_lname', $this->t('Last name should not contain first name for 6 or more characters.'));
-    }
-
-    if (isset($_POST['g-recaptcha-response']) && $_POST['g-recaptcha-response'] != '') {
-      $captcha_response = $_POST['g-recaptcha-response'];
-      $remote_ip = $_SERVER['REMOTE_ADDR'];
-  
-      $result = $this->verifyGoogleRecaptcha($captcha_response, $remote_ip);
-  
-      $data = json_decode($result, true);
-  
-      if (!$data['success']) {
-          $form_state->setErrorByName('google_recaptcha', t('Please complete the captcha to prove you are human'));
+      if ($first_name && $last_name && strlen($last_name) >= 6 && strpos($last_name, $first_name) !== false) {
+          // Add an error if last name contains first name for 6 or more characters
+          $form_state->setErrorByName('distributor_lname', $this->t('Last name should not contain first name for 6 or more characters.'));
       }
-    } else {
-        $form_state->setErrorByName('google_recaptcha', t('Please complete the reCAPTCHA verification.'));
+  
+      if (isset($_POST['g-recaptcha-response']) && $_POST['g-recaptcha-response'] != '') {
+        $captcha_response = $_POST['g-recaptcha-response'];
+        $remote_ip = $_SERVER['REMOTE_ADDR'];
+    
+        $result = $this->verifyGoogleRecaptcha($captcha_response, $remote_ip);
+    
+        $data = json_decode($result, true);
+    
+        if (!$data['success']) {
+            $form_state->setErrorByName('google_recaptcha', t('Please complete the captcha to prove you are human'));
+        }
+      } else {
+          $form_state->setErrorByName('google_recaptcha', t('Please complete the reCAPTCHA verification.'));
+      }
+      if (empty($_POST['g-recaptcha-response'])) {
+          $form_state->setErrorByName('google_recaptcha', t('Please complete the reCAPTCHA verification.'));
+      }
     }
-    if (empty($_POST['g-recaptcha-response'])) {
-        $form_state->setErrorByName('google_recaptcha', t('Please complete the reCAPTCHA verification.'));
-    }
-  }
     private function verifyGoogleRecaptcha($response, $remote_ip) {
       if (!function_exists('curl_init')) {
           die('CURL is not installed!');
@@ -215,7 +209,7 @@ class ContactDistributorForm extends FormBase {
 
     $moved_file = null;
     $email_dir_name = nor_forms_email_to_directory_name($email);
-    $fid = $form_state->get('file_id') ?? $form_state->getValue('distributor_attachment')[0];
+    $fid = $form_state->getValue('distributor_attachment')[0] ?? NULL;
     if($fid){
       $file = File::load($fid);
       $permanent_uri = 'private://distributor_applications/' .$email_dir_name . '/' . date('Y-m-d'); // uses email and date to store the files. E.g. liam.howes@norgenbiotek.com submitting on May 23 2025 saves to: private://distributor_applications/liam_howes_norgenbiotek_com_4901bb87/2025-05-23

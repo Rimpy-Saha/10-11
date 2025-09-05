@@ -1708,26 +1708,38 @@ function jango_theme(&$existing, $type, $theme, $path)
  */
 function jango_preprocess_user_login_form(&$variables)
 {
-    $variables['toggle_checkbox'] = \Drupal::service('renderer')
-        ->render($variables['form']['toggle_checkbox']);
-    $variables['rendered'] = \Drupal::service('renderer')
-        ->render($variables['form']);
+    if (isset($variables['form']['toggle_checkbox'])) {
+        $variables['toggle_checkbox'] = \Drupal::service('renderer')
+            ->render($variables['form']['toggle_checkbox']);
+    }
+    if (isset($variables['form'])) {
+        $variables['rendered'] = \Drupal::service('renderer')
+            ->render($variables['form']);
+    }
     $variables['url'] = $_SERVER['REQUEST_URI'];
 }
 function jango_preprocess_user_pass(&$variables)
 {
-    $variables['toggle_checkbox'] = \Drupal::service('renderer')
-        ->render($variables['form']['toggle_checkbox']);
-    $variables['rendered'] = \Drupal::service('renderer')
-        ->render($variables['form']);
+    if (isset($variables['form']['toggle_checkbox'])) {
+        $variables['toggle_checkbox'] = \Drupal::service('renderer')
+            ->render($variables['form']['toggle_checkbox']);
+    }
+    if (isset($variables['form'])) {
+        $variables['rendered'] = \Drupal::service('renderer')
+            ->render($variables['form']);
+    }
     $variables['url'] = $_SERVER['REQUEST_URI'];
 }
 function jango_preprocess_user_register_form(&$variables)
 {
-    $variables['toggle_checkbox'] = \Drupal::service('renderer')
-        ->render($variables['form']['toggle_checkbox']);
-    $variables['rendered'] = \Drupal::service('renderer')
-        ->render($variables['form']);
+    if (isset($variables['form']['toggle_checkbox'])) {
+        $variables['toggle_checkbox'] = \Drupal::service('renderer')
+            ->render($variables['form']['toggle_checkbox']);
+    }
+    if (isset($variables['form'])) {
+        $variables['rendered'] = \Drupal::service('renderer')
+            ->render($variables['form']);
+    }
     $variables['url'] = $_SERVER['REQUEST_URI'];
 }
 /**
@@ -1938,7 +1950,6 @@ function jango_js_alter(&$javascript, \Drupal\Core\Asset\AttachedAssetsInterface
 }
 
 
-
 /**
  * Implements hook_preprocess_HOOK() for views_view templates.
  */
@@ -1947,11 +1958,12 @@ function jango_preprocess_views_view(array &$variables) {
     // dump($variables['view']->id());
     // dump($variables['view']->current_display);
     // Check if the view is 'commerce_cart_form' and the display ID is 'block_2'.
-    if ($variables['view']->id() == 'commerce_cart_form') {
-        //   if($variables['view']->current_display == 'block_2')
-        //   {
-        //     $variables['#attached']['library'][] = 'jango/cart-sidebar';
-        //   }
+    if ($variables['view']->id() == 'commerce_cart_form') 
+    {
+    //   if($variables['view']->current_display == 'block_2')
+    //   {
+    //     $variables['#attached']['library'][] = 'jango/cart-sidebar';
+    //   }
       if($variables['view']->current_display == 'block_2')
       {
         $variables['#attached']['library'][] = 'jango/cart-sidebar-concise';

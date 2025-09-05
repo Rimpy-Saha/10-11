@@ -16,8 +16,8 @@
 use Drupal\Core\Form\FormStateInterface;
 
 // Including the file containing Main Build Rate function.
-module_load_include('inc', 'commerce_norelavon', 'lib/commerce_elavon_token_call_request');
-module_load_include('inc', 'commerce_norelavon', 'lib/commerce_elavon_helper_functions');
+\Drupal::moduleHandler()->loadInclude('commerce_norelavon', 'inc', 'lib/commerce_elavon_token_call_request');
+\Drupal::moduleHandler()->loadInclude('commerce_norelavon', 'inc', 'lib/commerce_elavon_helper_functions');
 
 function commerce_elavon_token_call_main($payment)
 {

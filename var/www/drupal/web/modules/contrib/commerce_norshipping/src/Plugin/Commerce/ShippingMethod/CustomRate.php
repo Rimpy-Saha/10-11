@@ -18,20 +18,28 @@ use Drupal\commerce_shipping\ShippingRate;
 use Drupal\commerce_shipping\ShippingService;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\state_machine\WorkflowManagerInterface;
+use Drupal\commerce_shipping\Attribute\CommerceShippingMethod;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\commerce_norshipping\Service\CommerceNorShippingMain;
+
 
 use Drupal\user\Entity\User;
 
 // Including the file containing Main Build Rate function.
-module_load_include('inc', 'commerce_norshipping', 'lib/commerce_norshipping_main');
+// module_load_include('inc', 'commerce_norshipping', 'lib/commerce_norshipping_main');
+
 
 /**
- * Provides the FlatRatePerItem shipping method.
+ * Provides the norgen shipment rate.
  *
  * @CommerceShippingMethod(
  *   id = "norgen_shipment_rate",
- *   label = @Translation("Norgen Biotek Shipment Rate"),
+ *   label = @Translation("Norgen Biotek Shipment Rate")
  * )
  */
+
+
 class CustomRate extends ShippingMethodBase
 {
     /**
@@ -48,12 +56,31 @@ class CustomRate extends ShippingMethodBase
      * @param \Drupal\state_machine\WorkflowManagerInterface $workflow_manager
      *   The workflow manager.
      */
-    public function __construct(array $configuration, $plugin_id, $plugin_definition, PackageTypeManagerInterface $package_type_manager, WorkflowManagerInterface $workflow_manager)
+    protected $mainService;
+
+
+    public function __construct(array $configuration, $plugin_id, $plugin_definition, PackageTypeManagerInterface $package_type_manager, WorkflowManagerInterface $workflow_manager, CommerceNorShippingMain $mainService) 
     {
         parent::__construct($configuration, $plugin_id, $plugin_definition, $package_type_manager, $workflow_manager);
 
         $this->services['default'] = new ShippingService('default', $this->configuration['rate_label']);
+        $this->mainService = $mainService;
     }
+
+    public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+        $configuration,
+        $plugin_id,
+        $plugin_definition,
+        // $container->get(PackageTypeManagerInterface::class),
+        // $container->get(WorkflowManagerInterface::class),
+        $container->get('plugin.manager.commerce_package_type'), // 
+        $container->get('plugin.manager.workflow'),  
+        $container->get('commerce_norshipping.main')
+    );
+}
+
+
 
     /**
      * {@inheritdoc}
@@ -255,7 +282,7 @@ class CustomRate extends ShippingMethodBase
              * Shipping Service || UPS Standard : Available only within Canada
              */
             // Invoke the commerce_norshipping_build_rates function.
-            $rate_calculated = commerce_norshipping_build_rates_main($shipment);
+            $rate_calculated = $this->mainService->commerce_norshipping_build_rates_main($shipment);
 
             // Check if there's an error thrown.
             $errorThrown = \Drupal::state()->get('shipping_error_thrown', FALSE);
@@ -333,7 +360,7 @@ class CustomRate extends ShippingMethodBase
 
             if ($dry_ice == 0) {
                 // Invoke the commerce_norshipping_build_rates function.
-                $rate_calculated_3_day_select = commerce_norshipping_build_rates_main($shipment);
+                $rate_calculated_3_day_select = $this->mainService->commerce_norshipping_build_rates_main($shipment);
 
                 // Check if there's an error thrown.
                 $errorThrown = \Drupal::state()->get('shipping_error_thrown', FALSE);
@@ -361,7 +388,7 @@ class CustomRate extends ShippingMethodBase
              * Shipping Service || UPS Express Saver: Available for any country other than Canada
              */
             // Invoke the commerce_norshipping_build_rates function.
-            $rate_calculated_express_saver = commerce_norshipping_build_rates_main($shipment);
+            $rate_calculated_express_saver = $this->mainService->commerce_norshipping_build_rates_main($shipment);
 
             // Check if there's an error thrown.
             $errorThrownAgain = \Drupal::state()->get('shipping_error_thrown', FALSE);
@@ -397,7 +424,7 @@ class CustomRate extends ShippingMethodBase
              * Shipping Service || UPS Express Saver : Available for any country other than Canada
              */
             // Invoke the commerce_norshipping_build_rates function.
-            $rate_calculated = commerce_norshipping_build_rates_main($shipment);
+            $rate_calculated = $this->mainService->commerce_norshipping_build_rates_main($shipment);
             // Check if there's an error thrown.
             $errorThrown = \Drupal::state()->get('shipping_error_thrown', FALSE);
 

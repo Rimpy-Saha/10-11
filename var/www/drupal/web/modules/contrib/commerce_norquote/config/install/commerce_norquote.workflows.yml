@@ -1,0 +1,27 @@
+order_custom:
+  id: order_custom
+  group: commerce_order
+  label: 'Custom Order Workflow'
+  states:
+    draft:
+      label: Draft
+    completed:
+      label: Completed
+    quote_requested:
+      label: Quote Requested
+    canceled:
+      label: Canceled
+  transitions:
+    place:
+      label: 'Place order'
+      from: [draft]
+      to: completed
+    request_quote:
+      label: 'Request quote'
+      from: [draft]
+      to: quote_requested
+    cancel:
+      label: 'Cancel order'
+      from: [draft]
+      to: canceled
+      

@@ -17,7 +17,7 @@
 use Drupal\commerce_order\Entity\Order;
 
 // Including the file containing the Helper function.
-module_load_include('inc', 'commerce_norelavon', 'lib/commerce_elavon_helper_functions');
+\Drupal::moduleHandler()->loadInclude('commerce_norelavon', 'inc', 'lib/commerce_elavon_helper_functions');
 
 $billing_data = commerce_elavon_get_billing_info($order);
 $shipping_data = commerce_norelavon_get_shipping_info($order);

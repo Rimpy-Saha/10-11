@@ -31,7 +31,7 @@ class NorErpApiController extends ControllerBase {
    $receivedToken = $_SERVER["HTTP_AUTHORIZATION"] ?? '';
 
     $database = \Drupal::database();
-    // if (!in_array($userIp, $allowedIps))  {
+    if (!in_array($userIp, $allowedIps))  {
         $url = \Drupal\Core\Url::fromRoute('<front>');
         // Get the URL string.
         $redirect_url = $url->toString();
@@ -41,7 +41,7 @@ class NorErpApiController extends ControllerBase {
         return;
       //header("HTTP/1.1 404 Not Authorized");
       //return new Response('Not Authorized', 404);
-    // }
+    }
 
     if ($receivedToken !== "Bearer " . $expectedpassword) 
     {

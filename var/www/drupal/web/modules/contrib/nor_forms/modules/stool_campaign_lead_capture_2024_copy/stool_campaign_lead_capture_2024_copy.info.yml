@@ -2,4 +2,4 @@ name: Stool Campaign Lead Capture 2024 COPY
 description: Custom module for lead capture form for the April 2024 Stool campaign ("Ready, Set, Scoop!").
 type: module
 package: Norgen Biotek
-core_version_requirement: ^8.7 || ^9 || ^10
+core_version_requirement: ^8.7 || ^9 || ^10 || ^11

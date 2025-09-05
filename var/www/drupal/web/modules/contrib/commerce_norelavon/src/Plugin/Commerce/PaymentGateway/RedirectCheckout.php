@@ -16,27 +16,28 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\commerce_order\Entity\OrderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\commerce_payment\Exception\DeclineException;
+use Drupal\commerce_payment\Attribute\CommercePaymentGateway;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 
-/**
- * Provides the Elavon offsite Checkout payment gateway.
- *
- * @CommercePaymentGateway(
- *   id = "elavon_redirect_checkout",
- *   label = @Translation("Elavon (Redirect to elavon)"),
- *   display_label = @Translation("Elavon Payment Gateway"),
- *   forms = {
- *     "offsite-payment" = "Drupal\commerce_norelavon\PluginForm\PaymentOffsiteIFrameForm",
- *   },
- *   modes= {
- *     "test" = "Test transactions with your account",
- *     "production" = "Live transactions in a production account"
- *   },
- *   payment_method_types = {"credit_card"},
- *   credit_card_types = {
- *     "amex", "dinersclub", "discover", "jcb", "maestro", "mastercard", "visa",
- *   },
- * )
- */
+#[CommercePaymentGateway(
+  id: "elavon_redirect_checkout",
+  label: new TranslatableMarkup("Elavon (Redirect to elavon)"),
+  display_label: new TranslatableMarkup("Elavon Payment Gateway"),
+  forms: [
+    'offsite-payment' => 'Drupal\commerce_norelavon\PluginForm\PaymentOffsiteIFrameForm',
+  ],
+  modes: [
+    'test' => 'Test transactions with your account',
+    'production' => 'Live transactions in a production account',
+  ],
+  payment_method_types: ['credit_card'],
+  credit_card_types: [
+    'amex', 'dinersclub', 'discover', 'jcb', 'maestro', 'mastercard', 'visa',
+  ],
+)]
+
+
+
 
 class RedirectCheckout extends OffsitePaymentGatewayBase
 {

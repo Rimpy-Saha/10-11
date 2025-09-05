@@ -21,7 +21,7 @@
  *   The payment token obtained from Elavon's API, or an empty string if the request fails.
  */
 
-module_load_include('inc', 'commerce_norelavon', 'lib/commerce_elavon_convert_country_code');
+\Drupal::moduleHandler()->loadInclude('commerce_norelavon', 'inc', 'lib/commerce_elavon_convert_country_code');
 
 function commerce_elavon_request_token($payment_method, $info = array(), $requestdata = array())
 {
@@ -72,6 +72,7 @@ function commerce_elavon_request_token($payment_method, $info = array(), $reques
     curl_setopt($ch, CURLOPT_VERBOSE, true);
 
     $result_token = curl_exec($ch);
+    //\Drupal::logger('commerce_elavon_request_token.inc')->error('CURL post: @post', ['@post' => $curlpost]);
 
     // Log any errors
     if ($error = curl_error($ch)) {
