@@ -1,7 +1,7 @@
 name: Norgen Migrate
 type: module
 description: Provides various Norgen-specific Migrate handlers.
-core_version_requirement: '>=9.3 || 10'
+core_version_requirement: '>=9.3 || 10 || ^11'
 package: Norgen Biotek
 dependencies:
   - drupal:migrate

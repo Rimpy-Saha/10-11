@@ -2,7 +2,7 @@ name: Jango
 type: theme
 description: 'Jango is Responsive Drupal 8 Theme.'
 base theme: stable
-core_version_requirement: ^9 || ^10
+core_version_requirement: ^9 || ^10 || ^11
 regions:
   header: Header
   highlighted: Highlighted

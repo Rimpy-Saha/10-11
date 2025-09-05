@@ -1,0 +1,3 @@
+services:
+  commerce_norshipping.main:
+    class: Drupal\commerce_norshipping\Service\CommerceNorShippingMain

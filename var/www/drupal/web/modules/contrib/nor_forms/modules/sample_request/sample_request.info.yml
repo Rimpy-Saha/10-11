@@ -1,5 +1,5 @@
 name: Sample Request Form
 description: Custom module for Sample Request Form
 type: module
-core_version_requirement: ^8.8 || ^9 || ^10
+core_version_requirement: ^8.8 || ^9 || ^10 || ^11
 package: Norgen Biotek

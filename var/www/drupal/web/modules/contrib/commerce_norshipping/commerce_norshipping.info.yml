@@ -2,7 +2,7 @@ name: Commerce Norgen Shipping
 type: module
 package: Norgen Biotek
 description: Integrates Norgen with Commerce Shipping Rates
-core_version_requirement: ^10
+core_version_requirement: ^10 || ^11
 dependencies:
   - commerce
   - commerce_shipping

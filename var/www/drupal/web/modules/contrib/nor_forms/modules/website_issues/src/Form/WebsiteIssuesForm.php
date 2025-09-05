@@ -97,7 +97,7 @@ class WebsiteIssuesForm extends FormBase
       '#upload_validators' => [
         'file_validate_extensions' => [' png jpeg jpg pdf'],
       ],
-      '#upload_location' => 'temporary://website_issues',
+      '#upload_location' => 'public://website_issues',
     ];
 
     $form['google_recaptcha'] = [
@@ -125,7 +125,6 @@ class WebsiteIssuesForm extends FormBase
 
     $first_name = $form_state->getValue('website_fname');
     $last_name = $form_state->getValue('website_lname');
-    $attachment = $form_state->getValue('website_attachment');
 
     if (empty($first_name) || strlen($first_name) < 2) {
       $form_state->setErrorByName('website_fname', $this->t('Please enter your first name.'));
@@ -142,9 +141,7 @@ class WebsiteIssuesForm extends FormBase
     if ($first_name && $last_name && strlen($last_name) >= 6 && strpos($last_name, $first_name) !== false) {
       $form_state->setErrorByName('website_lname', $this->t('Last name should not contain first name for 6 or more characters.'));
   }
-    if($attachment){
-      $form_state->set('file_id', $form_state->getValue('website_attachment')[0]); // save temp file fid
-    }
+
     if (isset($_POST['g-recaptcha-response']) && $_POST['g-recaptcha-response'] != '') {
       $captcha_response = $_POST['g-recaptcha-response'];
       $remote_ip = $_SERVER['REMOTE_ADDR'];
@@ -227,7 +224,7 @@ class WebsiteIssuesForm extends FormBase
 
     $moved_file = null;
     $email_dir_name = nor_forms_email_to_directory_name($email);
-    $fid = $form_state->get('file_id') ?? $form_state->getValue('website_attachment')[0];
+    $fid = $form_state->getValue('website_attachment')[0] ?? NULL;
     if($fid){
       $file = File::load($fid);
       $permanent_uri = 'private://website_issues/' .$email_dir_name . '/' . date('Y-m-d'); // uses email and date to store the files. E.g. liam.howes@norgenbiotek.com submitting on May 23 2025 saves to: private://account_issues/liam_howes_norgenbiotek_com_4901bb87/2025-05-23

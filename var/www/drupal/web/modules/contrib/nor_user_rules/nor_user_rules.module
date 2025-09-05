@@ -22,18 +22,18 @@ function nor_user_rules_form_user_login_form_alter(&$form, FormStateInterface $f
  */
 function nor_user_rules_login_validate_ip(array &$form, FormStateInterface $form_state) {
     // Define allowed IP addresses.
-    // $allowed_ips = ['68.71.17.146']; // Replace with your allowed IP addresses.
+    $allowed_ips = ['68.71.17.146','10.0.1.160','10.0.1.238']; // Replace with your allowed IP addresses.
   
-    // // Get the current user's IP.
-    // $current_ip = \Drupal::request()->getClientIp();
+    // Get the current user's IP.
+    $current_ip = \Drupal::request()->getClientIp();
   
-    // // Load the username entered by the user.
-    // $username = $form_state->getValue('name');
-    // $account = user_load_by_name($username);
+    // Load the username entered by the user.
+    $username = $form_state->getValue('name');
+    $account = user_load_by_name($username);
   
-    // if ($account->id() == 1) 
+    // if ($account->id() == 10672) 
     // {
-      return;
+    //   return;
     // }
   
   

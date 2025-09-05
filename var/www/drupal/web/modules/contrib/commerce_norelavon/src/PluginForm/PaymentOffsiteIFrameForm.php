@@ -18,7 +18,7 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
 
 // Including the file containing Main Build Rate function.
-module_load_include('inc', 'commerce_norelavon', 'lib/commerce_elavon_token_call_main');
+\Drupal::moduleHandler()->loadInclude('commerce_norelavon', 'inc', 'lib/commerce_elavon_token_call_main');
 
 class PaymentOffsiteIFrameForm extends BasePaymentOffsiteForm
 {

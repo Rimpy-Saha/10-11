@@ -29,7 +29,7 @@ class NorCitationController extends ControllerBase {
 
   public function citePage() {
     // Path to your CSV file
-    $csv_file = '/home/norgen/public_html/web/modules/contrib/nor_erp_api/publications_update.csv';
+    $csv_file = '/var/www/drupal/web/modules/contrib/nor_erp_api/publications_update.csv';
 
     // Open the CSV file.
     if (($handle = fopen($csv_file, "r")) !== FALSE) {

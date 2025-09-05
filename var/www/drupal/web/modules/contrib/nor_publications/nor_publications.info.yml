@@ -2,7 +2,7 @@ name: Norgen Publications
 type: module
 description: 'Defines the Norgen Publications entity and associated features.'
 package: Custom Entity Modules
-core_version_requirement: ^9.3 || ^10
+core_version_requirement: ^9.3 || ^10 || ^11
 configure: entity.nor_publications.collection
 dependencies:
   - entity:entity

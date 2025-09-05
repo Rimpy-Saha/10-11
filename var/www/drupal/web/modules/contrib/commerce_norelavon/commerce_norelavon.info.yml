@@ -2,7 +2,7 @@ name: Commerce Norgen Elavon
 type: module
 package: Norgen Biotek
 description: Integrate Norgen with Elavon Virtual Merchant for Drupal Commerce.
-core_version_requirement: ^10
+core_version_requirement: ^10 || ^11
 dependencies:
   - commerce
   - commerce_payment

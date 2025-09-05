@@ -2,4 +2,4 @@ name: Service Issues Form
 description: Custom module for service issues form.
 type: module
 package: Norgen Biotek
-core_version_requirement: ^8.7 || ^9 || ^10
+core_version_requirement: ^8.7 || ^9 || ^10 || ^11

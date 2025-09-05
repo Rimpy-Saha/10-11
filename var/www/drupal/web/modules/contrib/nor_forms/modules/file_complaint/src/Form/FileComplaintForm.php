@@ -112,7 +112,7 @@ class FileComplaintForm extends FormBase
       '#upload_validators' => [
         'file_validate_extensions' => [' png jpeg jpg pdf'],
       ],
-      '#upload_location' => 'temporary://file_complaint',
+      '#upload_location' => 'public://file_complaint',
     ];
 
 
@@ -142,7 +142,6 @@ class FileComplaintForm extends FormBase
 
     $first_name = $form_state->getValue('complaint_fname');
     $last_name = $form_state->getValue('complaint_lname');
-    $attachment = $form_state->getValue('complaint_attachment');
 
     if (empty($first_name) || strlen($first_name) < 2) {
       $form_state->setErrorByName('complaint_fname', $this->t('Please enter your first name.'));
@@ -161,10 +160,6 @@ class FileComplaintForm extends FormBase
         $form_state->setErrorByName('complaint_lname', $this->t('Last name should not contain first name for 6 or more characters.'));
     }
     
-    if($attachment){
-      $form_state->set('file_id', $form_state->getValue('complaint_attachment')[0]); // save temp file fid
-    }
-
     if (isset($_POST['g-recaptcha-response']) && $_POST['g-recaptcha-response'] != '') {
       $captcha_response = $_POST['g-recaptcha-response'];
       $remote_ip = $_SERVER['REMOTE_ADDR'];
@@ -241,12 +236,7 @@ class FileComplaintForm extends FormBase
       $email = 'NULL';
     }
 
-    $fid = $form_state->get('file_id') ?? $form_state->getValue('complaint_attachment')[0];
-    if($fid){
-      $file = File::load($fid);
-    }
-
-    /* $moved_file = null;
+    $moved_file = null;
     $email_dir_name = nor_forms_email_to_directory_name($email);
     $fid = $form_state->getValue('complaint_attachment')[0] ?? NULL;
     if($fid){
@@ -257,11 +247,11 @@ class FileComplaintForm extends FormBase
       $form_state->set('file_path', $file_path);
     }
     $new_fid = null;
-    if($moved_file) $new_fid = $moved_file->id() ?? null; */
+    if($moved_file) $new_fid = $moved_file->id() ?? null;
 
     $query = \Drupal::database()->insert('forms_to_zoho');
-    $query->fields(['created_on', 'first_name', 'last_name', 'country', 'email', 'record', 'timestamp', 'form_name', 'phone', 'company', 'notes', 'so_id', 'products']); //wrong syntax here breaks entire submit function 
-    $query->values([$date, $first_name, $last_name, $country_name, $email, '', time(), $form_name, $phone, $company, $message, $productnum, $sku]);
+    $query->fields(['created_on', 'first_name', 'last_name', 'country', 'email', 'record', 'timestamp', 'form_name', 'phone', 'company', 'notes', 'so_id', 'products', 'doc_fid']); //wrong syntax here breaks entire submit function 
+    $query->values([$date, $first_name, $last_name, $country_name, $email, '', time(), $form_name, $phone, $company, $message, $productnum, $sku, $new_fid]);
     $query->execute();
 
     try { //Zoho upsert
@@ -296,8 +286,8 @@ class FileComplaintForm extends FormBase
       $recipient_email = 'complaints@norgenbiotek.com,sebastian.szopa@norgenbiotek.com';// real addresses
       //$recipient_email = 'liam.howes@norgenbiotek.com';
       // $recipient_email = 'sowmya.movva@norgenbiotek.com';
-      if ($file) {
-        nor_forms_submit_attachment($output, $recipient_email, $file, $subject);
+      if ($moved_file) {
+        nor_forms_submit_attachment($output, $recipient_email, $moved_file, $subject);
       } else {
         nor_forms_email_redirect($output, $recipient_email, $subject);
       }
