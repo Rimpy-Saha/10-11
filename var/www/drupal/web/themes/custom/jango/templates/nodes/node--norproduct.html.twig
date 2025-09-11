@@ -187,11 +187,11 @@
         preview_images[i].addEventListener('click', (event) => indicatorClick(event, desk_id));
       }
       let carousel_controls_prev = document.querySelectorAll('#norproduct-image-description-carousel .carousel-control-prev');
-      for (let i = 0; i < carousel_controls_prev.length; i++) {
+      for (let i = 0; i < carousel_controls.length; i++) {
         carousel_controls_prev[i].addEventListener('click', (event) => controlClick(event, desk_id));
       }
       let carousel_controls_next = document.querySelectorAll('#norproduct-image-description-carousel .carousel-control-next');
-      for (let i = 0; i < carousel_controls_next.length; i++) {
+      for (let i = 0; i < carousel_controls.length; i++) {
         carousel_controls_next[i].addEventListener('click', (event) => controlClick(event, desk_id));
       }
       //mobile 

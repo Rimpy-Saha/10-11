@@ -37,7 +37,7 @@ class RequestSampleForm extends FormBase
       '#markup' => '<div id="result-message"></div>',
     ];
 
-    /* UTM Parameters */
+    // UTM Parameters
 
     $current_uri = \Drupal::request()->getRequestUri();
     $url_components = parse_url($current_uri);
@@ -47,7 +47,6 @@ class RequestSampleForm extends FormBase
     $form['utm_source'] = [
       '#type' => 'hidden',
       '#title' => $this->t('UTM Source'),
-
       '#value' => isset($params['utm_source'])?$params['utm_source']:null,
     ];
     $form['utm_medium'] = [
@@ -76,7 +75,7 @@ class RequestSampleForm extends FormBase
       '#value' => isset($params['utm_content'])?$params['utm_content']:null,
     ];
 
-    /* End of UTM Parameters */
+    // End of UTM Parameters 
 
     $samples = $this->getSamples();
 
@@ -111,9 +110,9 @@ class RequestSampleForm extends FormBase
               '#type' => 'container',
               '#prefix' => '<div id="step1">',
               '#suffix' => '</div>',
-              '#attributes' => array(
-                'class' => array('hidden'),
-              ),
+              '#attributes' => [
+                'class' => ['hidden'],
+              ],
             ];
           }
 
@@ -188,7 +187,7 @@ class RequestSampleForm extends FormBase
           };
 
           // set all the pre-selected samples as default values
-          $default_samples = array();
+          $default_samples = [];
           if(isset($form_state->getBuildInfo()['default_sample']) && is_array($form_state->getBuildInfo()['default_sample'])){
             foreach($form_state->getBuildInfo()['default_sample'] as $sku){
               $default_samples[$sku] = TRUE;
@@ -196,7 +195,6 @@ class RequestSampleForm extends FormBase
           }
 
           $form[$step]['samples-list-fieldset']['samples']['#default_value'] = $default_samples;
-          /* $form[$step]['samples-list-fieldset']['samples']['#default_value'] = array($form_state->getBuildInfo()['default_sample'][0] => TRUE); */
 
           $form[$step]['disclaimer'] = [
             '#type' => 'item',
@@ -222,9 +220,9 @@ class RequestSampleForm extends FormBase
               '#type' => 'container',
               '#prefix' => '<div id="step2">',
               '#suffix' => '</div>',
-              '#attributes' => array(
-                'class' => array('hidden'),
-              ),
+              '#attributes' => [
+                'class' => ['hidden'],
+              ],
             ];
           }
 
@@ -264,65 +262,44 @@ class RequestSampleForm extends FormBase
           ];
           $form[$step]['customer_information']['sample_fname'] = [
             '#type' => 'textfield',
-            /*'#title' => [
-              '#markup' => $this->t('First Name'),
-              '#suffix' => '<span class="form-required" title="This field is required.">*</span>',
-            ],*/
-            '#title' => 'First Name<span class="form-required" title="This field is required.">*</span>',
+            '#title' => 'First Name <span class="form-required" title="This field is required.">*</span>',
             '#placeholder' => 'First Name (Required)',
+            // '#required' => TRUE,
           ];
 
           $form[$step]['customer_information']['sample_lname'] = [
             '#type' => 'textfield',
-            /*'#title' => [
-              '#markup' => $this->t('Last Name'),
-              '#suffix' => '<span class="form-required" title="This field is required.">*</span>',
-            ],*/
-            '#title' => 'Last Name<span class="form-required" title="This field is required.">*</span>',
+            '#title' => 'Last Name <span class="form-required" title="This field is required.">*</span>',
             '#placeholder' => 'Last Name (Required)',
+            // '#required' => TRUE,
           ];
 
           $form[$step]['customer_information']['sample_email'] = [
             '#type' => 'email',
-            /*'#title' => [
-              '#markup' => $this->t('Email Address'),
-              '#suffix' => '<span class="form-required" title="This field is required.">*</span>',
-            ],*/
-            '#title' => 'Email Address<span class="form-required" title="This field is required.">*</span>',
+            '#title' => 'Email Address <span class="form-required" title="This field is required.">*</span>',
             '#placeholder' => 'Email Address (Required)',
-            /* '#required' => TRUE, */
+            // '#required' => TRUE,
           ];
 
           $form[$step]['customer_information']['sample_phone'] = [
             '#type' => 'tel',
-            /*'#title' => [
-              '#markup' => $this->t('Phone Number'),
-              '#suffix' => '<span class="form-required" title="This field is required.">*</span>',
-            ],*/
-            '#title' => 'Phone Number<span class="form-required" title="This field is required.">*</span>',
+            '#title' => 'Phone Number <span class="form-required" title="This field is required.">*</span>',
             '#placeholder' => 'Phone Number (Required)',
-            /* '#required' => TRUE, */
+            // '#required' => TRUE,
           ];
 
           $form[$step]['customer_information']['sample_company'] = [
             '#type' => 'textfield',
-            /*'#title' => [
-              '#markup' => $this->t('Company/ Institution'),
-              '#suffix' => '<span class="form-required" title="This field is required.">*</span>',
-            ],*/
-            '#title' => 'Company/ Institution<span class="form-required" title="This field is required.">*</span>',
+            '#title' => 'Company/ Institution <span class="form-required" title="This field is required.">*</span>',
             '#placeholder' => 'Company/ Institution (Required)',
-            /* '#required' => TRUE, */
+            // '#required' => TRUE,
           ];
 
           $form[$step]['customer_information']['job_title'] = [
             '#type' => 'textfield',
-            /*'#title' => [
-              '#markup' => $this->t('Job Title'),
-              '#suffix' => '<span class="form-required" title="This field is required.">*</span>',
-            ],*/
-            '#title' => 'Job Title<span class="form-required" title="This field is required.">*</span>',
+            '#title' => 'Job Title <span class="form-required" title="This field is required.">*</span>',
             '#placeholder' => 'Job Title (Required)',
+            //'#required' => TRUE,
           ];
 
           $form[$step]['customer_information']['sample_subscribe'] = [
@@ -346,9 +323,9 @@ class RequestSampleForm extends FormBase
               '#type' => 'container',
               '#prefix' => '<div id="step3">',
               '#suffix' => '</div>',
-              '#attributes' => array(
-                'class' => array('hidden'),
-              ),
+              '#attributes' => [
+                'class' => ['hidden'],
+              ],
             ];
           }
 
@@ -385,11 +362,7 @@ class RequestSampleForm extends FormBase
 
           $form[$step]['shipping']['street_address'] = [
             '#type' => 'textfield',
-            /*'#title' => [
-              '#markup' => $this->t('Street Address'),
-              '#suffix' => '<span class="form-required" title="This field is required.">*</span>',
-            ],*/
-            '#title' => 'Street Address<span class="form-required" title="This field is required.">*</span>',
+            '#title' => 'Street Address <span class="form-required" title="This field is required.">*</span>',
             '#placeholder' => 'Street Address (Required)',
           ];
 
@@ -400,31 +373,23 @@ class RequestSampleForm extends FormBase
 
           $form[$step]['shipping']['country'] = [
             '#type' => 'select',
-            /*'#title' => [
-              '#markup' => $this->t('Country'),
-              '#suffix' => '<span class="form-required" title="This field is required.">*</span>',
-            ],*/
-            '#title' => 'Country<span class="form-required" title="This field is required.">*</span>',
-            '#options' => array(
+            '#title' => 'Country <span class="form-required" title="This field is required.">*</span>',
+            '#options' => [
               'CA' => t('Canada'),
               'US' => t('United States'),
-            ),
+            ],
             '#default_value' => 'CA',
-            '#ajax' =>array(
+            '#ajax' =>[
               'callback' => '::ajax_country_shipping_update_callback',
               'wrapper' => 'shipping-fields',
-            ),
+            ],
           ];
 
           if($form_state->getValue('country') && $form_state->getValue('country') == 'CA'){
             $form[$step]['shipping']['state_province'] = [
               '#type' => 'select',
-              /*'#title' => [
-                '#markup' => $this->t('Province / Territory'),
-                '#suffix' => '<span class="form-required" title="This field is required.">*</span>',
-              ],*/
-              '#title' => 'Province / Territory<span class="form-required" title="This field is required.">*</span>',
-              '#options' => array(
+              '#title' => 'Province / Territory <span class="form-required" title="This field is required.">*</span>',
+              '#options' => [
                 'AB' => t('Alberta'),
                 'BC' => t('British Columbia'),
                 'MB' => t('Manitoba'),
@@ -438,19 +403,15 @@ class RequestSampleForm extends FormBase
                 'NT' => t('Northwest Territories'),
                 'NU' => t('Nunavut'),
                 'YT' => t('Yukon'),
-              ),
+              ],
               '#empty_option' => '- Please Select (required) -',
             ];
           }
           else if($form_state->getValue('country') && $form_state->getValue('country') == 'US'){
             $form[$step]['shipping']['state_province'] = [
               '#type' => 'select',
-              /*'#title' => [
-                '#markup' => $this->t('State'),
-                '#suffix' => '<span class="form-required" title="This field is required.">*</span>',
-              ],*/
-              '#title' => 'State<span class="form-required" title="This field is required.">*</span>',
-              '#options' => array(
+              '#title' => 'State <span class="form-required" title="This field is required.">*</span>',
+              '#options' => [
                 'AL' => t('Alabama'),
                 'AK' => t('Alaska'),
                 'AZ' => t('Arizona'),
@@ -502,39 +463,27 @@ class RequestSampleForm extends FormBase
                 'WV' => t('West Virginia'),
                 'WI' => t('Wisconsin'),
                 'WY' => t('Wyoming'),
-                '#empty_option' => '- Please Select (required) -',
-              ),
+              ],
+              '#empty_option' => '- Please Select (required) -',
             ];
           }
 
           $form[$step]['shipping']['city_town'] = [
             '#type' => 'textfield',
-            /*'#title' => [
-              '#markup' => $this->t('City / Town'),
-              '#suffix' => '<span class="form-required" title="This field is required.">*</span>',
-            ],*/
-            '#title' => 'City / Town<span class="form-required" title="This field is required.">*</span>',
+            '#title' => 'City / Town <span class="form-required" title="This field is required.">*</span>',
             '#placeholder' => 'City / Town (Required)',
           ];
           if($form_state->getValue('country') && $form_state->getValue('country') == 'US'){
             $form[$step]['shipping']['zip_code'] = [
               '#type' => 'textfield',
-              /*'#title' => [
-                '#markup' => $this->t('Zip Code'),
-                '#suffix' => '<span class="form-required" title="This field is required.">*</span>',
-              ],*/
-              '#title' => 'Zip Code<span class="form-required" title="This field is required.">*</span>',
+              '#title' => 'Zip Code <span class="form-required" title="This field is required.">*</span>',
               '#placeholder' => 'Zip Code (Required)',
             ];
           }
           else if($form_state->getValue('country') && $form_state->getValue('country') == 'CA'){
             $form[$step]['shipping']['zip_code'] = [
               '#type' => 'textfield',
-              /*'#title' => [
-                '#markup' => $this->t('Postal Code'),
-                '#suffix' => '<span class="form-required" title="This field is required.">*</span>',
-              ],*/
-              '#title' => 'Postal Code<span class="form-required" title="This field is required.">*</span>',
+              '#title' => 'Postal Code <span class="form-required" title="This field is required.">*</span>',
               '#placeholder' => 'Postal Code (Required)',
             ];
           }
@@ -553,14 +502,14 @@ class RequestSampleForm extends FormBase
           $form[$step]['billing']['billing_same_as_shipping'] = [
             '#type' => 'checkbox',
             '#title' => t('Billing address is the same as shipping address'),
-            '#attributes' => array(
-              'class' => array('billing-same-as-shipping'),
-            ),
+            '#attributes' => [
+              'class' => ['billing-same-as-shipping'],
+            ],
             '#default_value' => 1,
-            '#ajax' => array(
+            '#ajax' => [
               'callback' => '::ajax_country_billing_update_callback',
               'wrapper' => 'billing-fields',
-            ),
+            ],
           ];
 
           $form[$step]['billing']['billing-toggle-fields'] = [
@@ -577,11 +526,7 @@ class RequestSampleForm extends FormBase
           
             $form[$step]['billing']['billing-toggle-fields']['street_address_billing'] = [
               '#type' => 'textfield',
-              /*'#title' => [
-                '#markup' => $this->t('Street Address'),
-                '#suffix' => '<span class="form-required" title="This field is required.">*</span>',
-              ],*/
-              '#title' => 'Street Address<span class="form-required" title="This field is required.">*</span>',
+              '#title' => 'Street Address <span class="form-required" title="This field is required.">*</span>',
               '#placeholder' => 'Street Address (Required)',
             ];
   
@@ -592,32 +537,23 @@ class RequestSampleForm extends FormBase
   
             $form[$step]['billing']['billing-toggle-fields']['country_billing'] = [
               '#type' => 'select',
-              /*'#title' => [
-                '#markup' => $this->t('Country'),
-                '#suffix' => '<span class="form-required" title="This field is required.">*</span>',
-              ],*/
-              '#title' => 'Country<span class="form-required" title="This field is required.">*</span>',
-              '#options' => array(
+              '#title' => 'Country <span class="form-required" title="This field is required.">*</span>',
+              '#options' => [
                 'CA' => t('Canada'),
                 'US' => t('United States'),
-              ),
+              ],
               '#default_value' => 'CA',
-              '#ajax' =>array(
+              '#ajax' =>[
                 'callback' => '::ajax_country_billing_update_callback',
                 'wrapper' => 'billing-fields',
-              ),
-              //  '#required' => TRUE,
+              ],
             ];
   
             if($form_state->getValue('country_billing') && $form_state->getValue('country_billing') == 'CA'){
               $form[$step]['billing']['billing-toggle-fields']['state_province_billing'] = [
                 '#type' => 'select',
-                /*'#title' => [
-                  '#markup' => $this->t('Province / Territory'),
-                  '#suffix' => '<span class="form-required" title="This field is required.">*</span>',
-                ],*/
-                '#title' => 'Province / Territory<span class="form-required" title="This field is required.">*</span>',
-                '#options' => array(
+                '#title' => 'Province / Territory <span class="form-required" title="This field is required.">*</span>',
+                '#options' => [
                   'AB' => t('Alberta'),
                   'BC' => t('British Columbia'),
                   'MB' => t('Manitoba'),
@@ -631,19 +567,15 @@ class RequestSampleForm extends FormBase
                   'NT' => t('Northwest Territories'),
                   'NU' => t('Nunavut'),
                   'YT' => t('Yukon'),
-                ),
+              ],
                 '#empty_option' => '- Please Select (required) -',
               ];
             }
             else if($form_state->getValue('country_billing') && $form_state->getValue('country_billing') == 'US'){
               $form[$step]['billing']['billing-toggle-fields']['state_province_billing'] = [
                 '#type' => 'select',
-                /*'#title' => [
-                  '#markup' => $this->t('State'),
-                  '#suffix' => '<span class="form-required" title="This field is required.">*</span>',
-                ],*/
-                '#title' => 'State<span class="form-required" title="This field is required.">*</span>',
-                '#options' => array(
+                '#title' => 'State <span class="form-required" title="This field is required.">*</span>',
+                '#options' => [
                   'AL' => t('Alabama'),
                   'AK' => t('Alaska'),
                   'AZ' => t('Arizona'),
@@ -696,40 +628,31 @@ class RequestSampleForm extends FormBase
                   'WI' => t('Wisconsin'),
                   'WY' => t('Wyoming'),
                   '#empty_option' => '- Please Select (required) -',
-                ),
+                ],
               ];
             }
   
             $form[$step]['billing']['billing-toggle-fields']['city_town_billing'] = [
               '#type' => 'textfield',
-              /*'#title' => [
-                '#markup' => $this->t('City / Town'),
-                '#suffix' => '<span class="form-required" title="This field is required.">*</span>',
-              ],*/
-              '#title' => 'City / Town<span class="form-required" title="This field is required.">*</span>',
+              '#title' => 'City / Town <span class="form-required" title="This field is required.">*</span>',
               '#placeholder' => 'City / Town (Required)',
+              // '#required' => TRUE,
             ];
   
             if($form_state->getValue('country_billing') && $form_state->getValue('country_billing') == 'US'){
               $form[$step]['billing']['billing-toggle-fields']['zip_code_billing'] = [
                 '#type' => 'textfield',
-                /*'#title' => [
-                  '#markup' => $this->t('Zip Code'),
-                  '#suffix' => '<span class="form-required" title="This field is required.">*</span>',
-                ],*/
-                '#title' => 'Zip Code<span class="form-required" title="This field is required.">*</span>',
+                '#title' => 'Zip Code <span class="form-required" title="This field is required.">*</span>',
                 '#placeholder' => 'Zip Code (Required)',
+                // '#required' => TRUE,
               ];
             }
             else if($form_state->getValue('country_billing') && $form_state->getValue('country_billing') == 'CA'){
               $form[$step]['billing']['billing-toggle-fields']['zip_code_billing'] = [
                 '#type' => 'textfield',
-                /*'#title' => [
-                  '#markup' => $this->t('Postal Code'),
-                  '#suffix' => '<span class="form-required" title="This field is required.">*</span>',
-                ],*/
-                '#title' => 'Postal Code<span class="form-required" title="This field is required.">*</span>',
+                '#title' => 'Postal Code <span class="form-required" title="This field is required.">*</span>',
                 '#placeholder' => 'Postal Code (Required)',
+                // '#required' => TRUE,
               ];
             }
             
@@ -884,7 +807,7 @@ class RequestSampleForm extends FormBase
   }
 
   private function getSamples(){
-    $samples = array(
+    $samples = [
       '49540' => (object) [
         'sku' => '49540',
         'title' => 'Stool Total RNA Purification Kit',
@@ -980,7 +903,7 @@ class RequestSampleForm extends FormBase
         "title" => "Exosomal RNA Isolation Kit",
         "size" => "4 Preps",
       ],
-    );
+    ];
     //dump($samples[0]->title);
     return $samples;
   }

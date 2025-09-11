@@ -184,7 +184,7 @@ class CovidIndividualForm extends FormBase {
       '#button_type' => 'primary',
       '#ajax' => ['callback' => '::submitAjaxForm',
         'event' => 'click',
-        'method' => 'append', 'effect' => 'fade',]
+        ]
     ];
 
 

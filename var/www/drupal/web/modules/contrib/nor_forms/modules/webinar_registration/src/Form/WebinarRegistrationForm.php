@@ -126,10 +126,7 @@ class WebinarRegistrationForm extends FormBase
 
           $form[$step]['customer_information']['name'] = [
             '#type' => 'textfield',
-            '#title' => [
-              '#markup' => $this->t('Full Name'),
-              '#suffix' => '<span class="form-required" title="This field is required.">*</span>',
-            ],
+            '#title' => 'Full Name <span class="form-required" title="This field is required.">*</span>',
             '#default_value' => nor_forms_user_full_name(),
             /* '#required' => TRUE, */
           ];
@@ -137,38 +134,26 @@ class WebinarRegistrationForm extends FormBase
 
           $form[$step]['customer_information']['email'] = [
             '#type' => 'email',
-            '#title' => [
-              '#markup' => $this->t('Email'),
-              '#suffix' => '<span class="form-required" title="This field is required.">*</span>',
-            ],
+            '#title' => 'Email <span class="form-required" title="This field is required.">*</span>',
             '#default_value' => nor_forms_user_email(),
             /* '#required' => TRUE, */
           ];
       
           $form[$step]['customer_information']['company'] = [
             '#type' => 'textfield',
-            '#title' => [
-              '#markup' => $this->t('Company/Institution'),
-              '#suffix' => '<span class="form-required" title="This field is required.">*</span>',
-            ],
+            '#title' => 'Company/Institution <span class="form-required" title="This field is required.">*</span>',
             /* '#required' => TRUE, */
           ];
       
           $form[$step]['customer_information']['job'] = [
             '#type' => 'textfield',
-            '#title' => [
-              '#markup' => $this->t('Job Title'),
-              '#suffix' => '<span class="form-required" title="This field is required.">*</span>',
-            ],
+            '#title' => 'Job Title <span class="form-required" title="This field is required.">*</span>',
             /* '#required' => TRUE, */
           ];
       
           $form[$step]['customer_information']['country'] = [
             '#type' => 'select',
-            '#title' => [
-              '#markup' => $this->t('Country'),
-              '#suffix' => '<span class="form-required" title="This field is required.">*</span>',
-            ],
+            '#title' => 'Country <span class="form-required" title="This field is required.">*</span>',
             '#options' => getCountryOptions(),
             /* '#required' => TRUE, */
           ];
@@ -223,10 +208,7 @@ class WebinarRegistrationForm extends FormBase
       
           $form[$step]['other_information']['referral']['referral_select'] = [
             '#type' => 'select',
-            '#title' => [
-              '#markup' => $this->t('Where did you hear about us?'),
-              '#suffix' => '<span class="form-required" title="This field is required.">*</span>',
-            ],
+            '#title' => 'Where did you hear about us? <span class="form-required" title="This field is required.">*</span>',
             '#options' => array(
               'Online Search' => $this->t('Online Search'),
               'LinkedIn' => $this->t('LinkedIn'),
@@ -276,10 +258,7 @@ class WebinarRegistrationForm extends FormBase
       
           $form[$step]['other_information']['sample_type']['sample_type_select'] = [
             '#type' => 'select',
-            '#title' => [
-              '#markup' => $this->t('Which sample type best describes what you work with?'),
-              '#suffix' => '<span class="form-required" title="This field is required.">*</span>',
-            ],
+            '#title' => 'Which sample type best describes what you work with? <span class="form-required" title="This field is required.">*</span>',
             '#options' => array(
               'animal cells' => $this->t('animal cells'),
               'animal tissues' => $this->t('animal tissues'),

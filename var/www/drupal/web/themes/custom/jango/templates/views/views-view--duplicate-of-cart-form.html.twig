@@ -1,0 +1,18 @@
+{{ dump(rows) }}
+{{ dump(view.display_handler.display['display_options']['fields']['unit_price__number']) }}
+{{view.display_handler.display}}
+{{rows['footer']}}
+{# {{ dump(view.field['purchased_entity'].last_render) }}
+{{view.field['purchased_entity'].last_render}} #}
+{% for row in rows %}
+    {%
+      set row_classes = [
+        'row',
+        'c-cart-table-row',
+        default_row_class ? 'views-row',
+      ]
+    %}
+    <div{{ row.attributes.addClass(row_classes) }}>
+      {{ row.content }}
+    </div>
+{% endfor %}

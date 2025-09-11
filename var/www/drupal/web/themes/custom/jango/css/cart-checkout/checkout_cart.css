@@ -538,8 +538,8 @@ textarea[data-drupal-selector="edit-order-fieldscheckout-field-special-instructi
 [data-drupal-selector^="edit-payment-information-billing-information-address"] [class*="address-address-line2"] > label.visually-hidden{
   visibility: visible;
   display: block;
-  height: auto;
-  width: auto;
+  height: auto !important;
+  width: auto !important;
   position: relative !important;
 }
 

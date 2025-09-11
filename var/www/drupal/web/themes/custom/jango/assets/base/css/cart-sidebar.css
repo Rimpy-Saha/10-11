@@ -1,0 +1,123 @@
+#cart-sidebar-desktop-header .views-view-responsive-grid  {
+    grid-area: views-view-responsive-grid;
+    background-color: #ddd;
+    border-bottom: 10px solid #ddd;
+    border-top: 10px solid #ddd;
+    margin-bottom: 20px;
+    /* padding:20px; */
+    max-height: 564px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+/*scroll styling begin*/
+#cart-sidebar-desktop-header .views-view-responsive-grid {
+    /* padding:20px; */
+    max-height: 727px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+
+/* Webkit-based browsers */
+#cart-sidebar-desktop-header .views-view-responsive-grid::-webkit-scrollbar {
+    width: 10px; /* Adjust the width for thinness */
+}
+
+#cart-sidebar-desktop-header .views-view-responsive-grid::-webkit-scrollbar-thumb {
+    background-color: #4d5763; /* Scrollbar color */
+    border-radius: 14px; /* Optional: round the corners */
+}
+
+#cart-sidebar-desktop-header .views-view-responsive-grid::-webkit-scrollbar-track {
+    background-color: transparent; /* Track color */
+}
+/*scroll styling end*/
+
+#cart-sidebar-desktop-header .views-view-responsive-grid__item  {
+    padding: 0 10px;
+    margin: auto;
+    border: none;
+}
+/* #cart-sidebar-desktop-header #edit-actions div
+{
+  display:block!important;
+  text-align: center;
+} */
+
+form[data-drupal-selector^="views-form-commerce-cart-form-block-2-"]
+{
+    text-align: center;
+}
+
+#cart-sidebar-desktop-header #edit-actions div > input
+{
+    /* width: 100%; */
+}
+
+form[data-drupal-selector^="views-form-commerce-cart-form-block-2-"] input[data-drupal-selector="edit-submit"][value="Update cart"] {
+    display: none !important;
+  }
+
+
+  /* style for order total on every page*/
+
+/* Target elements within the form */
+form[data-drupal-selector^="views-form-commerce-cart-form-block-2-"] .line-item-summary {
+    /* Apply styling to make it match the desired structure */
+    /* margin: 0; 
+    padding: 0; 
+    display: flex;
+    flex-direction: column; */
+    text-align: center;
+    padding: 28px 0;
+    background: #fff;
+    color: black;
+}
+
+form[data-drupal-selector^="views-form-commerce-cart-form-block-2-"] .order-total-line {
+    display: flex;
+    justify-content: space-between;
+    /* margin-bottom: 10px;  Adjust spacing between rows */
+    padding: 10px 20px; /* Add some padding for visual separation */
+}
+
+form[data-drupal-selector^="views-form-commerce-cart-form-block-2-"] .order-total-line-label {
+    font-weight: bold; /* Style as desired */
+    color: #333; /* Adjust color if needed */
+    text-align: left;
+    flex: 1;
+}
+
+form[data-drupal-selector^="views-form-commerce-cart-form-block-2-"] .order-total-line-value {
+    font-weight: normal; /* Style as desired */
+    color: #555; /* Adjust color if needed */
+    text-align: right;
+    flex: 1;
+}
+
+/* Additional styling for specific elements */
+form[data-drupal-selector^="views-form-commerce-cart-form-block-2-"] .order-total-line__subtotal {
+    /* Style the subtotal line */
+}
+
+form[data-drupal-selector^="views-form-commerce-cart-form-block-2-"] .order-total-line__adjustment--shipping {
+    /* Style the shipping line */
+}
+
+form[data-drupal-selector^="views-form-commerce-cart-form-block-2-"] .order-total-line__adjustment--tax {
+    /* Style the tax line */
+}
+
+form[data-drupal-selector^="views-form-commerce-cart-form-block-2-"] .order-total-line__total {
+    /* Style the total line */
+    font-weight: bold;
+    border-top: 1px solid #ccc; /* Add a top border for emphasis */
+    padding-top: 10px; /* Add padding to separate from previous elements */
+    border-top: 2px solid #ddd;
+    padding-top: 20px;
+    margin-top: 10px;
+}
+
+
+/*end of order total style*/

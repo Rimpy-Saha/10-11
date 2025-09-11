@@ -1,0 +1,13 @@
+.views-exposed-form .bef-exposed-form .form{
+    width:fit-content;
+}
+.js-form-wrapper .form-wrapper{
+    width:fit-content;
+}
+.webform-container-inline div{
+    display: block !important;
+}
+.rimpy {
+    display: flex;
+    align-items: flex-start;
+}

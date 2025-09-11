@@ -1147,7 +1147,7 @@ function jango_preprocess_commerce_product(&$variables){
                     $form_state->addBuildInfo('args', array_values($args));
                     // add custom variable
                     $form_state->addBuildInfo('default_sample', $part_num_and_node_id[$nid]);
-                    $variables['request_sample_form'] = \Drupal::formBuilder()->buildForm($form_arg, $form_state);
+                    $variables['request_sample_form'] = '';//\Drupal::formBuilder()->buildForm($form_arg, $form_state);
                 }            
             }
 

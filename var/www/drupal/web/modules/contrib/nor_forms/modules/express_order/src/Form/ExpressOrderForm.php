@@ -36,7 +36,7 @@ class ExpressOrderForm extends FormBase {
       '#markup' => '<h2>Order by Product</h2><div class="field-labels flex"></div>',
     ];
 
-    $form['#prefix'] = '<div id="expressorder_form-container" class="expressorder_form-container col-sm-12 col-lg-6">';
+    $form['#prefix'] = '<div id="expressorder_form-container" class="expressorder_form-container">';
 
 
     // Gather the number of rows in the form already.
@@ -123,7 +123,7 @@ class ExpressOrderForm extends FormBase {
       '#button_type' => 'primary',
       '#ajax' => ['callback' => '::submitAjaxForm',
         'event' => 'click',
-        'method' => 'append', 'effect' => 'fade',]
+        ]
     ];
 
 

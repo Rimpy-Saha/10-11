@@ -191,8 +191,7 @@
   }
 
 
-  .sticky-top{
-    position:sticky;
+  .sticky{
     top:50px;
   }
 
@@ -234,7 +233,7 @@
     }
   }
   @media (max-width:991px){
-    .sticky-top{
+    .sticky{
       top:auto;
       position:static;
     }
@@ -250,16 +249,18 @@
     <h1>test2</h1>
     <div class="c-shop-product-details-2">
       <div class="row">
-        <div class="col-md-6 sticky-top">
-          <div id="mobile-title" class="c-content-title-1 mobile">
-            <h1 class="product-title c-font-uppercase c-font-bold">{{ product.title }}</h1>
-            <div class="c-line-left"></div>
+        <div class="col-lg-6">
+          <div class="sticky">
+            <div id="mobile-title" class="c-content-title-1 mobile">
+              <h1 class="product-title c-font-uppercase c-font-bold">{{ product.title }}</h1>
+              <div class="c-line-left"></div>
+            </div>
+            <div id="mobile-summary-line" class="field-name-field-product-summary-line mobile" style="clear:both;">{{ node.field_product_summary_line.0.value|raw }}<hr></div>
+            {{ product.variation_field_product_image }}
+            {{ node.field_testimonial.0.value|raw }}
           </div>
-          <div id="mobile-summary-line" class="field-name-field-product-summary-line mobile" style="clear:both;">{{ node.field_product_summary_line.0.value|raw }}<hr></div>
-          {{ product.variation_field_product_image }}
-          {{ node.field_testimonial.0.value|raw }}
         </div>
-        <div class="col-md-6">
+        <div class="col-lg-6">
           <div class="c-product-meta">
             <div id="desktop-title" class="c-content-title-1 desktop">
               <h3 class="c-font-uppercase c-font-bold">{{ product.title }}</h3>     
@@ -315,7 +316,7 @@
               {% endif %}
             </div>
 
-            <div class="product_variation_sku_wrapper"><div class="label">SKU</div>{{product.variation_sku}}</div>
+            <div class="product_variation_sku_wrapper"><div class="d-inline c-font-bold">SKU</div>{{product.variation_sku}}</div>
             
             {{ product.variations }}
 
@@ -337,7 +338,7 @@
   <!-- End Product Content -->
   <div class="c-shop-product-tab-1 pb-0">
     <div class="nav-justified  bootstrap-nav-wrapper">
-      <ul class="nav nav-justified  nav-tabs">
+      <ul class="nav nav-justified nav-tabs gap-4">
         {% if node.body.0.value|length > 0 %}
         <li class="nav_item " id="overview-nav"><a href="#overview">{{ 'Overview'|t }}</a></li>
         {% endif %}
