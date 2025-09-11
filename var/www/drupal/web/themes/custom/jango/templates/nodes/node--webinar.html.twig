@@ -664,7 +664,6 @@ content: "*";
         </div>
         {{ content.field_webinar_description }}
         {# <button class="btn btn-primary register-button" onclick="toggleWebinarRegistrationForm()">Register Now</button> #}
-        {{content.field_registration_link_1}}
     </div>
 
     
@@ -672,19 +671,26 @@ content: "*";
         {# {{content.field_webinar_card_tags}} #}
         <div class = "main-content">
             {# {{content.field_tags_webinar}} #}
-            <div class = "">
-                {{content.field_abstract}}
-                <div id = "speakers">
-                    <a></a>
-                </div>
-                {{content.field_about_the_speakers}}
-            </div>
-            {{content.field_key_points}}
+        <div class = "">
+        {{content.field_abstract}}
+        <div id = "speakers">
+            <a></a>
         </div>
-        {{content.field_speaker_headshot}}
+                {{content.field_about_the_speakers}}
     </div>
+    {{content.field_key_points}}
 
-    {# {{content.field_speakers}} #}
+
+    </div>
+    {{content.field_speaker_headshot}}
+
+
+
+
+
+    {{content.field_registration_link_1}}
+
+    {{content.field_speakers}}
 
     {% if content.field_faq['#items']|length > 0 %}
     <h2 style="font-size:18px;"><b>FAQs</b></h2>
@@ -695,7 +701,7 @@ content: "*";
                 <div class="panel" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
                     <div class="panel-heading" role="tab" id="accordiontab">
                     <h4 
-                        class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-toggle="collapse"
+                        class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-bs-toggle="collapse"
                         data-parent="#accordion-{{content.field_faq.0['#id']}}" href="#variation{{loop.parent.loop.index}}question{{loop.index}}" aria-expanded="false" aria-controls="9523657">
                         <span itemprop="name">{{ faq.value.question }}</span> <i class="fa fa-chevron-down"></i></a>
                     </h4>

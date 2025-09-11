@@ -63,7 +63,7 @@
   <script>
       function close_registerpopup(){
           document.getElementsByClassName("register-pop")[0].style.display = "none";
-          if(Drupal.eu_cookie_compliance.hasAgreed()) setCookie('registerpopup','yes',1);
+          setCookie('registerpopup','yes',1);
           }
   
           function setCookie(name,value,days) {
@@ -105,10 +105,10 @@
                   <nav class="c-top-menu c-pull-left">
                       <ul class="social-list c-icons c-theme-ul">
                           <li class="content-social">
-                              <a target="_blank" data-placement="auto" data-toggle="tooltip" title="" href="https://facebook.com/norgenbiotek" class="dtooltip social-icon fbclick" data-original-title="Facebook" aria-label="Facebook"><span><i class="fa-facebook fab" alt="Facebook"></i></span></a>
+                              <a target="_blank" data-placement="auto" data-bs-toggle="tooltip" title="" href="https://facebook.com/norgenbiotek" class="dtooltip social-icon fbclick" data-original-title="Facebook" aria-label="Facebook"><span><i class="fa-facebook fab" alt="Facebook"></i></span></a>
                           </li>
                           <li class="content-social">
-                              <a target="_blank" data-placement="auto" data-toggle="tooltip" title="" href="https://twitter.com/norgenbiotek" class="dtooltip social-icon twclick" data-original-title="Twitter" aria-label="Twitter">
+                              <a target="_blank" data-placement="auto" data-bs-toggle="tooltip" title="" href="https://twitter.com/norgenbiotek" class="dtooltip social-icon twclick" data-original-title="Twitter" aria-label="Twitter">
                                   <span>
                                       <svg style="max-width: 15px; max-height: 15px; position: relative; top: 1px;" width="1200" height="1227" viewBox="0 0 1200 1227" fill="var(--norgen-primary-blue)" xmlns="https://www.w3.org/2000/svg" aria-labelledby="twitter-footer-title">
                                           <title id="twitter-footer-title" lang="en">
@@ -121,13 +121,13 @@
                               </a>
                           </li>
                           <li class="content-social">
-                              <a target="_blank" data-placement="auto" data-toggle="tooltip" title="" href="https://instagram.com/norgen.biotek" class="dtooltip social-icon igclick" data-original-title="Instagram" aria-label="Instagram"><span><i class=" fa-instagram fab" alt="Instagram"></i></span></a>
+                              <a target="_blank" data-placement="auto" data-bs-toggle="tooltip" title="" href="https://instagram.com/norgen.biotek" class="dtooltip social-icon igclick" data-original-title="Instagram" aria-label="Instagram"><span><i class=" fa-instagram fab" alt="Instagram"></i></span></a>
                           </li>
                           <li class="content-social">
-                              <a target="_blank" data-placement="auto" data-toggle="tooltip" title="" href="https://www.youtube.com/@norgenbiotek?sub_confirmation=1" class="dtooltip social-icon ytclick" data-original-title="Youtube" aria-label="YouTube"><span><i class=" fa-youtube fab" alt="YouTube"></i></span></a>
+                              <a target="_blank" data-placement="auto" data-bs-toggle="tooltip" title="" href="https://www.youtube.com/@norgenbiotek?sub_confirmation=1" class="dtooltip social-icon ytclick" data-original-title="Youtube" aria-label="YouTube"><span><i class=" fa-youtube fab" alt="YouTube"></i></span></a>
                           </li>
                           <li class="content-social">
-                              <a target="_blank" data-placement="auto" data-toggle="tooltip" title="" href="https://www.linkedin.com/company/norgenbiotek/" class="dtooltip social-icon liclick" data-original-title="LinkedIn" aria-label="LinkedIn"><span><i class="fa-linkedin fab" alt="LinkedIn"></i></span></a>
+                              <a target="_blank" data-placement="auto" data-bs-toggle="tooltip" title="" href="https://www.linkedin.com/company/norgenbiotek/" class="dtooltip social-icon liclick" data-original-title="LinkedIn" aria-label="LinkedIn"><span><i class="fa-linkedin fab" alt="LinkedIn"></i></span></a>
                           </li>
                       </ul>
                   </nav> 
@@ -136,17 +136,15 @@
                   <!-- BEGIN: INLINE NAV -->
                   <nav class="c-top-menu c-pull-right">
                       <ul class="c-links c-theme-ul">
-                            {% if (('distributor' in user.account.roles) or ('administrator' in user.account.roles) or (user.id == 1)) %}
-                                <li><a href="/distributors/distributor-resources">Distributor Portal</a></li>
-                                <li class="c-divider">|</li>
-                            {% endif %}
-                            <li class="last"><a href="/content/norgenius">Product Selection Tool</a></li>
-                            <li class="c-divider">|</li>
-                            <li><a href="/contact">Contact</a></li>
-                            <li class="c-divider">|</li>
-                            <li class="last"><a href="/express-order">Express Order</a></li>
-                            <li class="c-divider">|</li>
-                            <li class="last"><a href="/request-quote">Request Quote</a></li>
+                          {% if (('distributor' in user.account.roles) or ('administrator' in user.account.roles) or (user.id == 1)) %}
+                              <li><a href="/distributors/distributor-resources">Distributor Portal</a></li>
+                              <li class="c-divider">|</li>
+                          {% endif %}
+                          <li><a href="/contact">Contact</a></li>
+                          <li class="c-divider">|</li>
+                          <li class="last"><a href="/express-order">Express Order</a></li>
+                          <li class="c-divider">|</li>
+                          <li class="last"><a href="/request-quote">Request Quote</a></li>
                       </ul>
                       <ul class="c-ext c-theme-ul">
                         <li class="c-lang dropdown c-last notranslate">
@@ -271,7 +269,7 @@
                         <img src="{{ logo_path }}" alt= "Norgen Biotek Logo" class="c-desktop-logo-inverse" width="125">
                         <img src="{{ logo_path }}" alt= "Norgen Biotek Logo" class="c-mobile-logo" width="100">
                         </a>
-                        <button class="c-hor-nav-toggler" type="button" data-target=".c-mega-menu" aria-label="menu">
+                        <button class="c-hor-nav-toggler" type="button" data-bs-target=".c-mega-menu" aria-label="menu">
                         <span class="c-line"></span>
                         <span class="c-line"></span>
                         <span class="c-line"></span>
@@ -330,7 +328,7 @@
           
           
                   <!-- Dropdown menu toggle on mobile: c-toggler class can be applied to the link arrow or link itself depending on toggle mode -->
-                  <nav class="c-mega-menu c-pull-right c-mega-menu-light c-mega-menu-light-mobile c-mega-menu-onepage c-fonts-uppercase c-fonts-bold"
+                  <nav class="navbar-expand c-mega-menu c-pull-right c-mega-menu-light c-mega-menu-light-mobile c-mega-menu-onepage c-fonts-uppercase c-fonts-bold"
                       data-onepage-animation-speed="700">
                       <!-- Main Menu -->
                       <ul class="nav navbar-nav c-theme-nav">
@@ -348,30 +346,25 @@
                                           <div class="mega-column">
                                               <ul class="dropdown-menu c-menu-type-inline" role="list">
                                                   <li class="{{ item_class }} tbm-column">
-                                                        <a href="{{ submenu_item.url }}" class="{{ link_class }} tbm-link level-1 c-link"><h3>{{ submenu_item.text }}</h3></a>
-                                                        {% if 'submenu' in submenu_item|keys  %}
-                                                            {% for sub_submenu_item in submenu_item.submenu %}
-                                                                <li class="{{ item_class }} tbm-column">
-                                                                    {% set extra_classes = '' %} 
-                                                                    <a href="{{ sub_submenu_item.url }}" class="{{ link_class }} tbm-link level-1 {{extra_classes}}">
-                                                                        {% if sub_submenu_item.text == 'Promotions' or sub_submenu_item.text == 'New Products' %} 
-                                                                            {% if sub_submenu_item.text == 'Promotions' %}    
-                                                                                {% set extra_classes = 'c-font-red c-font-bold' %}
-                                                                            {% else %} {% set extra_classes = 'c-font-bold' %}
-                                                                            {% endif %}
-                                                                            <h3 class="{{extra_classes}}">{{ sub_submenu_item.text }}</h3>
-                                                                        {% else %}
-                                                                            {{ sub_submenu_item.text }}
-                                                                        {% endif %}         
-                                                                    </a>
-                                                                </li>
-                                                            {% endfor %}
-                                                            {% if menu_item.text == 'Products' and loop.index0 == 0 %} {# First column of Products menu #}
-                                                                    <li class="tbm-column span12 col-md-12 special">
-                                                                    <a href="/services/contract-manufacturing-oem" style="border-radius: 10px;margin-left: 10px;"><h3 class="question" style="margin:5px 0px;"><b>Need Customization?</b></h3><span class="oem" style="color:var(--norgen-primary-blue);">OEM &amp; Contract Manufacturing Services</span></a>
-                                                                </li>
-                                                            {% endif %}
-                                                        {% endif %}
+                                                      <a href="{{ submenu_item.url }}" class="{{ link_class }} dropdown-item tbm-link level-1 c-link"><h3>{{ submenu_item.text }}</h3></a>
+                                                      {% if 'submenu' in submenu_item|keys  %}
+                                                          {% for sub_submenu_item in submenu_item.submenu %}
+                                                              <li class="{{ item_class }} tbm-column">
+                                                                  {% set extra_classes = '' %} 
+                                                                  <a href="{{ sub_submenu_item.url }}" class="{{ link_class }} dropdown-item tbm-link level-1 {{extra_classes}}">
+                                                                      {% if sub_submenu_item.text == 'Promotions' or sub_submenu_item.text == 'New Products' %} 
+                                                                          {% if sub_submenu_item.text == 'Promotions' %}    
+                                                                              {% set extra_classes = 'c-font-red c-font-bold' %}
+                                                                          {% else %} {% set extra_classes = 'c-font-bold' %}
+                                                                          {% endif %}
+                                                                          <h3 class="{{extra_classes}}">{{ sub_submenu_item.text }}</h3>
+                                                                      {% else %}
+                                                                          {{ sub_submenu_item.text }}
+                                                                      {% endif %}         
+                                                                  </a>
+                                                              </li>
+                                                          {% endfor %}
+                                                      {% endif %}
                                                   </li>
                                               </ul>
                                           </div>
@@ -482,7 +475,7 @@
         <div id="promotion-carousel" class="carousel slide" data-ride="carousel" data-wrap="true" data-interval="10000">
             <div class="carousel-inner-wrapper">
                 <div class="carousel-inner">
-                    {# <div class="item active">
+                    {# <div class="carousel-item active">
                         <div class="item-wrapper">
                             <div class="c-shop-banner-3 c-center">
                                 <a href="/masterclass/webinars/transforming-cancer-care-cfdna-liquid-biopsy-prostate-cancer-perspective" class="c-title c-font-20">
@@ -491,43 +484,7 @@
                             </div>
                         </div>
                     </div> #}
-                    {# <div class="item active">
-                        <div class="item-wrapper">
-                            <div class="c-shop-banner-3 c-center">
-                                <a href="/promotions/save-microbiome-products#products-section" class="c-title c-font-20">
-                                    For a Limited Time: Save on Microbiome Kits! <span class="c-font-uppercase c-font-bold">View Products</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div> #}
-                    {# <div class="item active">
-                        <div class="item-wrapper">
-                            <div class="c-shop-banner-3 c-center">
-                                <a href="/promotions/magnetic-bead-automation" class="c-title c-font-20">
-                                    <b>20% Off</b> Eligible Magnetic Bead Kits! <span class="c-font-uppercase c-font-bold">View Products</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div> #}
-                    <div class="item active">
-                        <div class="item-wrapper">
-                            <div class="c-shop-banner-3 c-center">
-                                <a href="/promotions/backtoschool" class="c-title c-font-20">
-                                    <b>Save 20%</b> on DNA, RNA, Exosome, NGS and Multi-analyte kits! <span class="c-font-uppercase c-font-bold">Learn More</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="item-wrapper">
-                            <div class="c-shop-banner-3 c-center">
-                                <a href="/services/next-generation-sequencing" class="c-title c-font-20">
-                                    Applicable Sequencing Projects Can Get <b>6 FREE</b> Sample Pilot Trials! <span class="c-font-uppercase c-font-bold">Learn More</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
+                    <div class="carousel-item active">
                         <div class="item-wrapper">
                             <div class="c-shop-banner-3 c-center">
                                 <a href="/product/total-rna-purification-kits?v=1931" class="c-title c-font-20">
@@ -538,7 +495,7 @@
                     </div>
                     
                     
-                   {#  <div class="item">
+                   {# #}  <div class="carousel-item">
                         <div class="item-wrapper">
                             <div class="c-shop-banner-3 c-center">
                                 <a href="https://norgenbiotek.com/promotions/rna-promotion" class="c-title c-font-20">
@@ -546,16 +503,16 @@
                                 </a>
                             </div>
                         </div>
-                    </div> #}
+                    </div>
 
                 </div>
             </div>
 
-            <a class="carousel-control left" href="#promotion-carousel" role="button" data-slide="prev">
+            <a class="carousel-control-prev" href="#promotion-carousel" role="button" data-bs-slide="prev">
                 <span class="fa fa-2x fa-chevron-left" aria-hidden="true"></span>
                 <span class="sr-only">Previous</span>
             </a>
-            <a class="carousel-control right" href="#promotion-carousel" role="button" data-slide="next">
+            <a class="carousel-control-next" href="#promotion-carousel" role="button" data-bs-slide="next">
                 <span class="fa fa-2x fa-chevron-right" aria-hidden="true"></span>
                 <span class="sr-only">Next</span>
             </a>

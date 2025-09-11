@@ -320,7 +320,7 @@ form.stool-campaign-lead-capture-2024 > .form-item-province-state{
     margin: auto;
     z-index: 1;
 }
-#norproduct-image-description-carousel .carousel-control.left, #norproduct-image-description-carousel-mobile .carousel-control.left {
+#norproduct-image-description-carousel .carousel-control-prev, #norproduct-image-description-carousel-mobile .carousel-control-prev {
     left: 0;
     border-top-left-radius: 32px;
     border-bottom-left-radius: 32px;
@@ -328,7 +328,7 @@ form.stool-campaign-lead-capture-2024 > .form-item-province-state{
     align-items: center;
     justify-content: center;
 }
-#norproduct-image-description-carousel .carousel-control, #norproduct-image-description-carousel-mobile .carousel-control {
+#norproduct-image-description-carousel .carousel-control-prev, #norproduct-image-description-carousel .carousel-control-next, #norproduct-image-description-carousel-mobile .carousel-control-prev, #norproduct-image-description-carousel-mobile .carousel-control-next {
     z-index: 50;
     background-image: none;
     background: none;
@@ -339,7 +339,7 @@ form.stool-campaign-lead-capture-2024 > .form-item-province-state{
     height: 100%;
     color: #000;
 }
-#norproduct-image-description-carousel .carousel-control.right, #norproduct-image-description-carousel-mobile .carousel-control.right {
+#norproduct-image-description-carousel .carousel-control-next, #norproduct-image-description-carousel-mobile .carousel-control-next {
     right: 0;
     border-top-right-radius: 32px;
     border-bottom-right-radius: 32px;
@@ -1870,8 +1870,8 @@ div .dot {
                       <div id="carousel-slide-number">Figure 1 / 2</div>
                       <button id="close-expanded-carousel" tab-index="0;" class="fa fa-times"></button>
 
-                      <a class="carousel-control left" href="#norproduct-image-description-carousel" role="button"
-                        data-slide="prev">
+                      <a class="carousel-control-prev" href="#norproduct-image-description-carousel" role="button"
+                        data-bs-slide="prev">
                         <span class="fa fa-2x fa-chevron-left" aria-hidden="true"></span>
                         <span class="sr-only">Previous</span>
                       </a>
@@ -1920,15 +1920,15 @@ div .dot {
                         <div class="carousel-indicators-wrapper">
                           <div class="blur-edges left"></div>
                           <ol class="carousel-indicators norproduct" style="transform: translateX(25px);">
-                            <li style="display: block;" data-target="#norproduct-image-description-carousel"
-                              data-slide-to="0" class="active" tab-index="0">
+                            <li style="display: block;" data-bs-target="#norproduct-image-description-carousel"
+                              data-bs-slide-to="0" class="active" tab-index="0">
                               <button style="background-color:transparent;border:none;" aria-label="Data Selector"><img
                                   src="/sites/default/files/images/saliva-campaign/fig1_1.png"
                                   alt="Figure 1. Effect of ambient temperature storage on cf-DNA (pDNA), exemplified by the short Alu (115bp) fragment, and genomic DNA (gDNA), exemplified by the large Alu (247 bp) fragment. "
                                   class="lazy"></button>
                             </li>
-                            <li style="display: block;" data-target="#norproduct-image-description-carousel"
-                              data-slide-to="1" class="">
+                            <li style="display: block;" data-bs-target="#norproduct-image-description-carousel"
+                              data-bs-slide-to="1" class="">
                               <button style="background-color:transparent;border:none;" aria-label="Data Selector"><img
                                   src="/sites/default/files/images/saliva-campaign/fig1_2.png"
                                   alt="Figure 2. No plasma volume loss after shipping/transportation."
@@ -1940,8 +1940,8 @@ div .dot {
                         </div>
                       </div>
 
-                      <a class="carousel-control right" href="#norproduct-image-description-carousel" role="button"
-                        data-slide="next">
+                      <a class="carousel-control-next" href="#norproduct-image-description-carousel" role="button"
+                        data-bs-slide="next">
                         <span class="fa fa-2x fa-chevron-right" aria-hidden="true"></span>
                         <span class="sr-only">Next</span>
                       </a>
@@ -1959,8 +1959,8 @@ div .dot {
                       <div id="carousel-slide-number-mob">Figure 1 / 2</div>
                       <button id="close-expanded-carousel-mob" tab-index="0;" class="fa fa-times"></button>
 
-                      <a class="carousel-control left" href="#norproduct-image-description-carousel-mobile" role="button"
-                        data-slide="prev">
+                      <a class="carousel-control-prev" href="#norproduct-image-description-carousel-mobile" role="button"
+                        data-bs-slide="prev">
                         <span class="fa fa-2x fa-chevron-left" aria-hidden="true"></span>
                         <span class="sr-only">Previous</span>
                       </a>
@@ -2025,22 +2025,22 @@ div .dot {
                         <div class="carousel-indicators-wrapper">
                           <div class="blur-edges left"></div>
                           <ol class="carousel-indicators norproduct" style="transform: translateX(25px);">
-                            <li style="display: block;" data-target="#norproduct-image-description-carousel-mobile"
-                              data-slide-to="0" class="active" tab-index="0">
+                            <li style="display: block;" data-bs-target="#norproduct-image-description-carousel-mobile"
+                              data-bs-slide-to="0" class="active" tab-index="0">
                               <button style="background-color:transparent;border:none;" aria-label="Data Selector"><img
                                   src="/sites/default/files/images/saliva-campaign/fig2_1.png"
                                   alt="Figure 1. Effect of ambient temperature storage on cf-DNA (pDNA), exemplified by the short Alu (115bp) fragment, and genomic DNA (gDNA), exemplified by the large Alu (247 bp) fragment. "
                                   class="lazy"></button>
                             </li>
-                            <li style="display: block;" data-target="#norproduct-image-description-carousel-mobile"
-                              data-slide-to="1" class="">
+                            <li style="display: block;" data-bs-target="#norproduct-image-description-carousel-mobile"
+                              data-bs-slide-to="1" class="">
                               <button style="background-color:transparent;border:none;" aria-label="Data Selector"><img
                                   src="/sites/default/files/images/saliva-campaign/fig2_2.png"
                                   alt="Figure 2. No plasma volume loss after shipping/transportation."
                                   class="lazy"></button>
                             </li>
-                            <li style="display: block;" data-target="#norproduct-image-description-carousel-mobile"
-                              data-slide-to="2" class="">
+                            <li style="display: block;" data-bs-target="#norproduct-image-description-carousel-mobile"
+                              data-bs-slide-to="2" class="">
                               <button style="background-color:transparent;border:none;" aria-label="Data Selector"><img
                                   src="/sites/default/files/images/saliva-campaign/fig3_2.png"
                                   alt="Figure 2. No plasma volume loss after shipping/transportation."
@@ -2052,8 +2052,8 @@ div .dot {
                         </div>
                       </div>
 
-                      <a class="carousel-control right" href="#norproduct-image-description-carousel-mobile" role="button"
-                        data-slide="next">
+                      <a class="carousel-control-next" href="#norproduct-image-description-carousel-mobile" role="button"
+                        data-bs-slide="next">
                         <span class="fa fa-2x fa-chevron-right" aria-hidden="true"></span>
                         <span class="sr-only">Next</span>
                       </a>
@@ -2427,25 +2427,34 @@ observer.observe(el);
     preview_images[i].addEventListener('click', (event) => indicatorClick(event, desk_id));
   }
 
-  let carousel_controls = document.querySelectorAll('#norproduct-image-description-carousel .carousel-control');
-  for (let i = 0; i < carousel_controls.length; i++) {
-    carousel_controls[i].addEventListener('click', (event) => controlClick(event, desk_id));
+  let carousel_controls_prev = document.querySelectorAll('#norproduct-image-description-carousel .carousel-control-prev');
+  for (let i = 0; i < carousel_controls_prev.length; i++) {
+    carousel_controls_prev[i].addEventListener('click', (event) => controlClick(event, desk_id));
   }
+  let carousel_controls_next = document.querySelectorAll('#norproduct-image-description-carousel .carousel-control-next');
+  for (let i = 0; i < carousel_controls_next.length; i++) {
+    carousel_controls_next[i].addEventListener('click', (event) => controlClick(event, desk_id));
+  }
+
   //mobile 
   let mob_preview_images = document.querySelectorAll('#norproduct-image-description-carousel-mobile .carousel-indicators li button');
   for (let i = 0; i < mob_preview_images.length; i++) {
     mob_preview_images[i].addEventListener('click', (event) => indicatorClick(event, mob_id));
     figure_number_mob.innerText = "Figure 1 / " + mob_preview_images.length;
   }
-  let mob_carousel_controls = document.querySelectorAll('#norproduct-image-description-carousel-mobile .carousel-control');
-  for (let i = 0; i < mob_carousel_controls.length; i++) {
-    mob_carousel_controls[i].addEventListener('click', (event) => controlClick(event, mob_id));
+  let mob_carousel_controls_prev = document.querySelectorAll('#norproduct-image-description-carousel-mobile .carousel-control-prev');
+  for (let i = 0; i < mob_carousel_controls_prev.length; i++) {
+    mob_carousel_controls_prev[i].addEventListener('click', (event) => controlClick(event, mob_id));
+  }
+  let mob_carousel_controls_next = document.querySelectorAll('#norproduct-image-description-carousel-mobile .carousel-control-next');
+  for (let i = 0; i < mob_carousel_controls_next.length; i++) {
+    mob_carousel_controls_next[i].addEventListener('click', (event) => controlClick(event, mob_id));
   }
 
   function controlClick(event, carousel_id) {
     let data_value;
     if (document.querySelector('' + carousel_id + ' .carousel-indicators li.active')) {
-      data_value = document.querySelector('' + carousel_id + ' .carousel-indicators li.active').getAttribute('data-slide-to');
+      data_value = document.querySelector('' + carousel_id + ' .carousel-indicators li.active').getAttribute('data-bs-slide-to');
     }
     if (event.target.classList.contains('left') || event.target.classList.contains('fa-chevron-left')) { //left click
       if (data_value != 0) {
@@ -2471,14 +2480,14 @@ observer.observe(el);
   }
   function indicatorClick(event, carousel_id) {
     let data_value;
-    if (event.target.nodeName == "IMG") { //if you clicked on the img tag within the li, get the li so we can get the data-slide-to value
-      data_value = event.target.parentElement.parentElement.getAttribute('data-slide-to');
+    if (event.target.nodeName == "IMG") { //if you clicked on the img tag within the li, get the li so we can get the data-bs-slide-to value
+      data_value = event.target.parentElement.parentElement.getAttribute('data-bs-slide-to');
     }
-    else if (event.target.nodeName == "BUTTON") { //if you clicked on the button tag within the li, get the li so we can get the data-slide-to value
-      data_value = event.target.parentElement.getAttribute('data-slide-to');
+    else if (event.target.nodeName == "BUTTON") { //if you clicked on the button tag within the li, get the li so we can get the data-bs-slide-to value
+      data_value = event.target.parentElement.getAttribute('data-bs-slide-to');
     }
     else {
-      data_value = event.target.getAttribute('data-slide-to');
+      data_value = event.target.getAttribute('data-bs-slide-to');
     };
     if (!isNaN(data_value)) {
       if (carousel_id == '#norproduct-image-description-carousel') { //desktop
@@ -2540,10 +2549,10 @@ observer.observe(el);
     var queryString = "";
     for (let i = 0; i < data_values.length; i++) {
       if (i == data_values.length - 1) {
-        queryString += ".carousel-indicators.norproduct li[data-slide-to='" + data_values[i] + "']";
+        queryString += ".carousel-indicators.norproduct li[data-bs-slide-to='" + data_values[i] + "']";
       }
       else {
-        queryString += ".carousel-indicators.norproduct li[data-slide-to='" + data_values[i] + "'], ";
+        queryString += ".carousel-indicators.norproduct li[data-bs-slide-to='" + data_values[i] + "'], ";
       }
     }
     let indicators = document.querySelectorAll('' + queryString + '');

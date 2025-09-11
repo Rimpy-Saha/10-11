@@ -192,24 +192,32 @@
 	for(let i=0; i<preview_images.length; i++){
 		preview_images[i].addEventListener('click', (event)=>indicatorClick(event, desk_id));
 	}
-	let carousel_controls = document.querySelectorAll('#norproduct-image-description-carousel .carousel-control');
-	for(let i=0; i<carousel_controls.length; i++){
-		carousel_controls[i].addEventListener('click', (event)=>controlClick(event, desk_id));
+	let carousel_controls_prev = document.querySelectorAll('#norproduct-image-description-carousel .carousel-control-prev');
+	for(let i=0; i<carousel_controls_prev.length; i++){
+		carousel_controls_prev[i].addEventListener('click', (event)=>controlClick(event, desk_id));
+	}
+	let carousel_controls_next = document.querySelectorAll('#norproduct-image-description-carousel .carousel-control-next');
+	for(let i=0; i<carousel_controls_next.length; i++){
+		carousel_controls_next[i].addEventListener('click', (event)=>controlClick(event, desk_id));
 	}
 	//mobile 
 	let mob_preview_images = document.querySelectorAll('#norproduct-image-specification-carousel-mobile .carousel-indicators li button');
 	for(let i=0; i<mob_preview_images.length; i++){
 		mob_preview_images[i].addEventListener('click', (event)=>indicatorClick(event, mob_id));
 	}
-	let mob_carousel_controls = document.querySelectorAll('#norproduct-image-specification-carousel-mobile .carousel-control');
-	for(let i=0; i<mob_carousel_controls.length; i++){
-		mob_carousel_controls[i].addEventListener('click', (event)=>controlClick(event, mob_id));
+	let mob_carousel_controls_prev = document.querySelectorAll('#norproduct-image-specification-carousel-mobile .carousel-control-prev');
+	for(let i=0; i<mob_carousel_controls_prev.length; i++){
+		mob_carousel_controls_prev[i].addEventListener('click', (event)=>controlClick(event, mob_id));
+	}
+	let mob_carousel_controls_next = document.querySelectorAll('#norproduct-image-specification-carousel-mobile .carousel-control-next');
+	for(let i=0; i<mob_carousel_controls_next.length; i++){
+		mob_carousel_controls_next[i].addEventListener('click', (event)=>controlClick(event, mob_id));
 	}
 	
 	function controlClick(event, carousel_id){
 		let data_value;
 		if(document.querySelector(''+carousel_id+' .carousel-indicators li.active')){
-			data_value = document.querySelector(''+carousel_id+' .carousel-indicators li.active').getAttribute('data-slide-to');
+			data_value = document.querySelector(''+carousel_id+' .carousel-indicators li.active').getAttribute('data-bs-slide-to');
 		}
 		if(event.target.classList.contains('left')||event.target.classList.contains('fa-chevron-left')){ //left click
 			if(data_value!=0){
@@ -235,14 +243,14 @@
 	}
 	function indicatorClick(event, carousel_id){
 		let data_value;
-		if(event.target.nodeName=="IMG"){ //if you clicked on the img tag within the li, get the li so we can get the data-slide-to value
-			data_value = event.target.parentElement.parentElement.getAttribute('data-slide-to');
+		if(event.target.nodeName=="IMG"){ //if you clicked on the img tag within the li, get the li so we can get the data-bs-slide-to value
+			data_value = event.target.parentElement.parentElement.getAttribute('data-bs-slide-to');
 		}
-		else if(event.target.nodeName=="BUTTON"){ //if you clicked on the button tag within the li, get the li so we can get the data-slide-to value
-			data_value = event.target.parentElement.getAttribute('data-slide-to');
+		else if(event.target.nodeName=="BUTTON"){ //if you clicked on the button tag within the li, get the li so we can get the data-bs-slide-to value
+			data_value = event.target.parentElement.getAttribute('data-bs-slide-to');
 		}
 		else{
-			data_value = event.target.getAttribute('data-slide-to');
+			data_value = event.target.getAttribute('data-bs-slide-to');
 		};
 		if(!isNaN(data_value)){
 			if(carousel_id=='#norproduct-image-description-carousel'){ //desktop
@@ -324,10 +332,10 @@
 		var queryString = "";
 		for(let i=0;i<data_values.length;i++){
 			if(i == data_values.length-1){
-				queryString += ".carousel-indicators.norproduct li[data-slide-to='"+data_values[i]+"']";
+				queryString += ".carousel-indicators.norproduct li[data-bs-slide-to='"+data_values[i]+"']";
 			}
 			else{
-				queryString += ".carousel-indicators.norproduct li[data-slide-to='"+data_values[i]+"'], ";
+				queryString += ".carousel-indicators.norproduct li[data-bs-slide-to='"+data_values[i]+"'], ";
 			}
 		}
 		if(queryString!=""){

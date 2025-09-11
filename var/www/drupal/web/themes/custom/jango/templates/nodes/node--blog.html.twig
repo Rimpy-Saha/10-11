@@ -752,18 +752,18 @@
   margin: 20px 0px;
 }
 
-.rel_prod .carousel .carousel-control.left, 
-.rel_prod .carousel .carousel-control.right{
+.rel_prod .carousel .carousel-control-prev, 
+.rel_prod .carousel .carousel-control-next{
   background: none;
   background: none;
   height: fit-content;
   margin: auto;
   width: 50px;
 }
-.rel_prod .carousel .carousel-control.left{
+.rel_prod .carousel .carousel-control-prev{
   left:-30px;
 }
-.rel_prod .carousel .carousel-control.right{
+.rel_prod .carousel .carousel-control-next{
   right:-30px;
 }
 
@@ -1317,7 +1317,7 @@ align-self: start;
                       <div class="panel">
                         <div class="panel-heading" role="tab" id="accordiontab">
                           <h2 class="panel-title">
-                            <a class="c-font-bold c-font-19 collapsed" data-toggle="collapse"
+                            <a class="c-font-bold c-font-19 collapsed" data-bs-toggle="collapse"
                               data-parent="#accordion-1" href="#references" aria-expanded="false"
                               aria-controls="2595394">References <i class="fa fa-chevron-down"></i>
                             </a>
@@ -1340,7 +1340,7 @@ align-self: start;
                         <div class="panel">
                           <div class="panel-heading" role="tab" id="accordiontab">
                             <h2 class="panel-title">
-                              <a class="c-font-bold c-font-19" data-toggle="collapse" data-parent="#accordion-1" href="#related-products" aria-expanded="true" aria-controls="2595394">Related Products <i class="fa fa-chevron-down"></i>
+                              <a class="c-font-bold c-font-19" data-bs-toggle="collapse" data-parent="#accordion-1" href="#related-products" aria-expanded="true" aria-controls="2595394">Related Products <i class="fa fa-chevron-down"></i>
                               </a>
                             </h2>
                           </div>
@@ -1351,7 +1351,7 @@ align-self: start;
                                 <ol class="carousel-indicators">
                                   {% for key, product in elements.field_related_products['#items'] %}
                                   {% if ((loop.index0 == 0) or (loop.index0 % 2 == 0)) %}
-                                  <li data-target="#Carouselprod" data-slide-to='{{loop.index0 / 2}}' class={% if loop.first == true %}"active"{% endif %}></li>
+                                  <li data-bs-target="#Carouselprod" data-bs-slide-to='{{loop.index0 / 2}}' class={% if loop.first == true %}"active"{% endif %}></li>
                                   {% endif %}
                                   {% endfor %}
                                 </ol>
@@ -1383,11 +1383,11 @@ align-self: start;
                                     {% endif %}
                                   {% endfor %}
                                 </div>
-                                <a class="carousel-control left" data-target="#Carouselprod" role="button" data-slide="prev">
+                                <a class="carousel-control-prev" data-bs-target="#Carouselprod" role="button" data-bs-slide="prev">
                                   <span class="fa fa-2x fa-chevron-left" aria-hidden="true"></span>
                                   <span class="sr-only">Next</span>
                                 </a>
-                                <a class="carousel-control right" data-target="#Carouselprod" role="button" data-slide="next">
+                                <a class="carousel-control-next" data-bs-target="#Carouselprod" role="button" data-bs-slide="next">
                                     <span class="fa fa-2x fa-chevron-right" aria-hidden="true"></span>
                                     <span class="sr-only">Next</span>
                                 </a>
@@ -1441,7 +1441,7 @@ align-self: start;
   </a>
 </div> #}
 
-{# <div id="liquid-biopsy-promo-card" class="active">
+<div id="liquid-biopsy-promo-card" class="active">
   <button onclick="toggleliquidbiopsyPopup()"><i class="fa fa-chevron-right"></i></button>
   <a href="/liquidbiopsy">
     <h2 class="c-font-uppercase center">Liquid biopsy<br> <span>Promotion</span></h2>
@@ -1460,7 +1460,7 @@ align-self: start;
     </div>
     <span class="btn btn-rna" style="position:relative;">View Details</span>
   </a>
-</div> #}
+</div>
 
 
 {# webinar popup script #}

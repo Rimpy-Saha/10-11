@@ -1708,26 +1708,38 @@ function jango_theme(&$existing, $type, $theme, $path)
  */
 function jango_preprocess_user_login_form(&$variables)
 {
-    $variables['toggle_checkbox'] = \Drupal::service('renderer')
-        ->render($variables['form']['toggle_checkbox']);
-    $variables['rendered'] = \Drupal::service('renderer')
-        ->render($variables['form']);
+    if (isset($variables['form']['toggle_checkbox'])) {
+        $variables['toggle_checkbox'] = \Drupal::service('renderer')
+            ->render($variables['form']['toggle_checkbox']);
+    }
+    if (isset($variables['form'])) {
+        $variables['rendered'] = \Drupal::service('renderer')
+            ->render($variables['form']);
+    }
     $variables['url'] = $_SERVER['REQUEST_URI'];
 }
 function jango_preprocess_user_pass(&$variables)
 {
-    $variables['toggle_checkbox'] = \Drupal::service('renderer')
-        ->render($variables['form']['toggle_checkbox']);
-    $variables['rendered'] = \Drupal::service('renderer')
-        ->render($variables['form']);
+    if (isset($variables['form']['toggle_checkbox'])) {
+        $variables['toggle_checkbox'] = \Drupal::service('renderer')
+            ->render($variables['form']['toggle_checkbox']);
+    }
+    if (isset($variables['form'])) {
+        $variables['rendered'] = \Drupal::service('renderer')
+            ->render($variables['form']);
+    }
     $variables['url'] = $_SERVER['REQUEST_URI'];
 }
 function jango_preprocess_user_register_form(&$variables)
 {
-    $variables['toggle_checkbox'] = \Drupal::service('renderer')
-        ->render($variables['form']['toggle_checkbox']);
-    $variables['rendered'] = \Drupal::service('renderer')
-        ->render($variables['form']);
+    if (isset($variables['form']['toggle_checkbox'])) {
+        $variables['toggle_checkbox'] = \Drupal::service('renderer')
+            ->render($variables['form']['toggle_checkbox']);
+    }
+    if (isset($variables['form'])) {
+        $variables['rendered'] = \Drupal::service('renderer')
+            ->render($variables['form']);
+    }
     $variables['url'] = $_SERVER['REQUEST_URI'];
 }
 /**

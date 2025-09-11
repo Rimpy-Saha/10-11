@@ -352,7 +352,7 @@
         {% endif %}
         <li class="nav_item" id="citations-nav"><a href="#citations">{{ 'Citations'|t }}</a></li>
         {# <li class="nav_item ">
-          <a href="#documentation" class = "review-toggler" id = "reviews" data-toggle="tab">{{ 'Reviews'|t }}</a>
+          <a href="#documentation" class = "review-toggler" id = "reviews" data-bs-toggle="tab">{{ 'Reviews'|t }}</a>
         </li> #}
       </ul>
 
@@ -382,7 +382,7 @@
               <div id="norproduct-image-description-carousel" class="carousel slide norproduct" data-ride="carousel" data-wrap="false" data-interval="false">
                 <div id="carousel-slide-number"></div>
                 <button id="close-expanded-carousel" tab-index=0 class="fa fa-times"></button>
-                <a class="carousel-control left" href="#norproduct-image-description-carousel" role="button" data-slide="prev">
+                <a class="carousel-control-prev" href="#norproduct-image-description-carousel" role="button" data-bs-slide="prev">
                   <span class="fa fa-2x fa-chevron-left" aria-hidden="true"></span>
                   <span class="sr-only">Previous</span>
                 </a>
@@ -409,7 +409,7 @@
                     <div class="blur-edges left"></div>
                     <ol class="carousel-indicators norproduct">
                       {% for fig_image in node.norproduct_image %}
-                      <li data-target="#norproduct-image-description-carousel" data-slide-to={{loop.index0}} {% if loop.index0 == 0 %} class="active" tab-index="0" {% endif %}>
+                      <li data-bs-target="#norproduct-image-description-carousel" data-bs-slide-to={{loop.index0}} {% if loop.index0 == 0 %} class="active" tab-index="0" {% endif %}>
                         <button style="background-color:transparent;border:none;" aria-label="Data Selector">
                           <img src={{ "#{file_url(fig_image.entity.fileuri)}" }} alt={{ "#{fig_image.value.alt}" }} loading="lazy" class="lazy">
                         </button>
@@ -420,7 +420,7 @@
                   </div>	
                 </div>
 
-                <a class="carousel-control right" href="#norproduct-image-description-carousel" role="button" data-slide="next">
+                <a class="carousel-control-next" href="#norproduct-image-description-carousel" role="button" data-bs-slide="next">
                   <span class="fa fa-2x fa-chevron-right" aria-hidden="true"></span>
                   <span class="sr-only">Next</span>
                 </a>		
@@ -444,7 +444,7 @@
                 {% if node.norproduct_protocol|length > 0 %}
                 <div class="panel">
                   <div class="panel-heading" role="tab" id="accordiontab">
-                    <h4 class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-toggle="collapse" data-parent="#accordion-1" href="#protocols" aria-expanded="false" aria-controls="2595394">PROTOCOLS <i class="fa fa-chevron-down"></i></a></h4>
+                    <h4 class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-bs-toggle="collapse" data-parent="#accordion-1" href="#protocols" aria-expanded="false" aria-controls="2595394">PROTOCOLS <i class="fa fa-chevron-down"></i></a></h4>
                   </div>
                   <div id="protocols" class="panel-collapse collapse" role="tabpanel" aria-labelledby="accordiontab" aria-expanded="false" style="height: 0px;">
                     <div class="panel-body c-font-18">
@@ -459,7 +459,7 @@
                 {% if node.norproduct_shortprotocol|length > 0 %}
                 <div class="panel">
                   <div class="panel-heading" role="tab" id="accordiontab">
-                    <h4 class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-toggle="collapse" data-parent="#accordion-1" href="#short-protocols" aria-expanded="false" aria-controls="9523657"><i class=""></i>SHORT PROTOCOLS <i class="fa fa-chevron-down"></i></a></h4>
+                    <h4 class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-bs-toggle="collapse" data-parent="#accordion-1" href="#short-protocols" aria-expanded="false" aria-controls="9523657"><i class=""></i>SHORT PROTOCOLS <i class="fa fa-chevron-down"></i></a></h4>
                   </div>
                   <div id="short-protocols" class="panel-collapse collapse" role="tabpanel" aria-labelledby="accordiontab" aria-expanded="false" style="height: 0px;">
                     <div class="panel-body c-font-18">
@@ -474,7 +474,7 @@
                 {% if node.norproduct_supplementaryprotocol|length > 0 %}
                 <div class="panel">
                   <div class="panel-heading" role="tab" id="accordiontab">
-                    <h4 class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-toggle="collapse" data-parent="#accordion-1" href="#supplementary-protocols" aria-expanded="false" aria-controls="824715"><i class=""></i>SUPPLEMENTARY PROTOCOLS <i class="fa fa-chevron-down"></i></a></h4>
+                    <h4 class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-bs-toggle="collapse" data-parent="#accordion-1" href="#supplementary-protocols" aria-expanded="false" aria-controls="824715"><i class=""></i>SUPPLEMENTARY PROTOCOLS <i class="fa fa-chevron-down"></i></a></h4>
                   </div>
                   <div id="supplementary-protocols" class="panel-collapse collapse" role="tabpanel" aria-labelledby="accordiontab" aria-expanded="false" style="height: 0px;">
                     <div class="panel-body c-font-18">
@@ -489,7 +489,7 @@
                 {% if node.norproduct_informationsheet|length > 0 %}
                 <div class="panel">
                   <div class="panel-heading" role="tab" id="accordiontab">
-                    <h4 class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-toggle="collapse" data-parent="#accordion-1" href="#product-information-sheets" aria-expanded="false" aria-controls="9523657"><i class=""></i>PRODUCT INFORMATION SHEETS <i class="fa fa-chevron-down"></i></a></h4>
+                    <h4 class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-bs-toggle="collapse" data-parent="#accordion-1" href="#product-information-sheets" aria-expanded="false" aria-controls="9523657"><i class=""></i>PRODUCT INFORMATION SHEETS <i class="fa fa-chevron-down"></i></a></h4>
                   </div>
                   <div id="product-information-sheets" class="panel-collapse collapse" role="tabpanel" aria-labelledby="accordiontab" aria-expanded="false" style="height: 0px;">
                     <div class="panel-body c-font-18">
@@ -504,7 +504,7 @@
                 {% if node.norproduct_applicationnote|length > 0 %}
                 <div class="panel">
                   <div class="panel-heading" role="tab" id="accordiontab">
-                    <h4 class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-toggle="collapse" data-parent="#accordion-1" href="#application-notes" aria-expanded="false" aria-controls="9523657"><i class=""></i>APPLICATION NOTES <i class="fa fa-chevron-down"></i></a></h4>
+                    <h4 class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-bs-toggle="collapse" data-parent="#accordion-1" href="#application-notes" aria-expanded="false" aria-controls="9523657"><i class=""></i>APPLICATION NOTES <i class="fa fa-chevron-down"></i></a></h4>
                   </div>
                   <div id="application-notes" class="panel-collapse collapse" role="tabpanel" aria-labelledby="accordiontab" aria-expanded="false" style="height: 0px;">
                     <div class="panel-body c-font-18">
@@ -519,7 +519,7 @@
                 {% if node.norproduct_msds|length > 0 %}
                 <div class="panel">
                   <div class="panel-heading" role="tab" id="accordiontab">
-                    <h4 class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-toggle="collapse" data-parent="#accordion-1" href="#safety-data-sheets" aria-expanded="false" aria-controls="9523657"><i class=""></i>SAFETY DATA SHEETS <i class="fa fa-chevron-down"></i></a></h4>
+                    <h4 class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-bs-toggle="collapse" data-parent="#accordion-1" href="#safety-data-sheets" aria-expanded="false" aria-controls="9523657"><i class=""></i>SAFETY DATA SHEETS <i class="fa fa-chevron-down"></i></a></h4>
                   </div>
                   <div id="safety-data-sheets" class="panel-collapse collapse" role="tabpanel" aria-labelledby="accordiontab" aria-expanded="false" style="height: 0px;">
                     <div class="panel-body c-font-18">
@@ -534,7 +534,7 @@
                 {% if node.norproduct_poster|length > 0 %}
                 <div class="panel">
                   <div class="panel-heading" role="tab" id="accordiontab">
-                    <h4 class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-toggle="collapse" data-parent="#accordion-1" href="#posters" aria-expanded="false" aria-controls="9523657"><i class=""></i>POSTERS <i class="fa fa-chevron-down"></i></a></h4>
+                    <h4 class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-bs-toggle="collapse" data-parent="#accordion-1" href="#posters" aria-expanded="false" aria-controls="9523657"><i class=""></i>POSTERS <i class="fa fa-chevron-down"></i></a></h4>
                   </div>
                   <div id="posters" class="panel-collapse collapse" role="tabpanel" aria-labelledby="accordiontab" aria-expanded="false" style="height: 0px;">
                     <div class="panel-body c-font-18">
@@ -549,7 +549,7 @@
                 {% if node.norproduct_product_flyer|length > 0 %}
                 <div class="panel">
                   <div class="panel-heading" role="tab" id="accordiontab">
-                    <h4 class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-toggle="collapse" data-parent="#accordion-1" href="#product-flyers" aria-expanded="false" aria-controls="9523657"><i class=""></i>FLYERS <i class="fa fa-chevron-down"></i></a></h4>
+                    <h4 class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-bs-toggle="collapse" data-parent="#accordion-1" href="#product-flyers" aria-expanded="false" aria-controls="9523657"><i class=""></i>FLYERS <i class="fa fa-chevron-down"></i></a></h4>
                   </div>
                   <div id="product-flyers" class="panel-collapse collapse" role="tabpanel" aria-labelledby="accordiontab" aria-expanded="false" style="height: 0px;">
                     <div class="panel-body c-font-18">
@@ -564,7 +564,7 @@
                 {% if node.field_related_blogs|length > 0 %}
                 <div class="panel">
                   <div class="panel-heading" role="tab" id="accordiontab">
-                    <h4 class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-toggle="collapse" data-parent="#accordion-1" href="#related-blogs" aria-expanded="false" aria-controls="9523657"><i class=""></i>RELATED BLOGS <i class="fa fa-chevron-down"></i></a></h4>
+                    <h4 class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-bs-toggle="collapse" data-parent="#accordion-1" href="#related-blogs" aria-expanded="false" aria-controls="9523657"><i class=""></i>RELATED BLOGS <i class="fa fa-chevron-down"></i></a></h4>
                   </div>
                   <div id="related-blogs" class="panel-collapse collapse" role="tabpanel" aria-labelledby="accordiontab" aria-expanded="false" style="height: 0px;">
                     <div class="panel-body c-font-18">
@@ -641,7 +641,7 @@
                     <ol class="carousel-indicators">
                       {% for product in node.field_related_products %}
                         {% if (loop.index0 == 0) or (loop.index0 % 3 == 0) %} 
-                          <li data-target="#Carouselprod" data-slide-to='{{loop.index0 / 3}}' class={% if loop.first == true %}"active"{% endif %}></li>
+                          <li data-bs-target="#Carouselprod" data-bs-slide-to='{{loop.index0 / 3}}' class={% if loop.first == true %}"active"{% endif %}></li>
                         {% endif %}
                       {% endfor %}
                     </ol>

@@ -58,14 +58,14 @@
           <div{{ item.attributes.addClass('field__item') }}>{{ item.content }}</div>
         {% endfor %}
       </div> #}
-      <div{{ attributes.addClass(classes, 'field__items', 'carousel', 'slide', 'carousel-fade1', 'prodcarimg', 'dexp_carousel', 'active') }} id="norproduct-imagekit-carousel">
+      <div{{ attributes.addClass(classes, 'field__items', 'carousel', 'slide', 'carousel-fade1', 'prodcarimg', 'dexp_carousel', 'active') }} id="norproduct-imagekit-carousel" data-ride="carousel">
       {# <div id="norproduct-imagekit-carousel" class="row carousel slide carousel-fade1 prodcarimg dexp_carousel active" data-ride="" keyboard=""> #}
         <div class="carousel-inner">
           {% if items|length > 0 %}
             {% for kit_image in items %}
             {% set a  = kit_image.content['#item'].entity.fileuri|split(".") %}
-            {% if a|last == "jpg" or a|last == "png" or a|last == "gif" or a|last == "jpeg" or a|last == "svg" %}
-              <div class="field__item item {% if loop.index0 == 0 %}active {% endif %}zoom-disabled">
+            {% if a[1] == "jpg" or a[1] == "png" or a[1] == "gif" or a[1] == "jpeg" or a[1] == "svg" %}
+              <div class="field__item carousel-item {% if loop.index0 == 0 %}active {% endif %}zoom-disabled">
                 <div class="image-box prod-car-img">
                   <img {% if loop.index0 == 0 %} fetchpriority="high" loading="eager" {% endif %} typeof="foaf:Image" src={{ kit_image.content['#item'].entity.fileuri | image_style('norproduct_imagekit') }} alt="{{ kit_image.content['#item'].alt }}">
                 </div>
@@ -74,7 +74,7 @@
 
               {% set b = kit_image.content['#item'].entity.fileuri|slice(9,length) %}
               {% set c = "/sites/default/files/" ~ b %}
-              <div class="field__item item {% if loop.index0 == 0 %}active {% endif %}zoom-disabled">
+              <div class="field__item carousel-item {% if loop.index0 == 0 %}active {% endif %}zoom-disabled">
                 <div class="prod-car-img">
                   <video preload="none" poster="/sites/default/files/images/product_images/video_poster.png" controls>
                       <source src={{ c }} type="video/mp4">
@@ -101,11 +101,11 @@
               {% set a  = kit_image.content['#item'].entity.fileuri|split(".") %}
               {% if a[1] == "jpg" or a[1] == "png" or a[1] == "gif" or a[1] == "jpeg" or a[1] == "svg" %}     
                 <!-- Controls -->
-                <li data-target="#norproduct-imagekit-carousel" data-slide-to="{{loop.index0}}" class="{% if loop.index0 == 0 %}active{% endif %}">
+                <li data-bs-target="#norproduct-imagekit-carousel" data-bs-slide-to="{{loop.index0}}" class="{% if loop.index0 == 0 %}active{% endif %}">
                   <img typeof="foaf:Image" src={{ kit_image.content['#item'].entity.fileuri | image_style('thumbnail') }} alt="{{ kit_image.content['#item'].alt }}">
                 </li>
                 {% else %}
-                <li data-target="#norproduct-imagekit-carousel" data-slide-to="{{loop.index0}}" class="{% if loop.index0 == 0 %}active{% endif %}">
+                <li data-bs-target="#norproduct-imagekit-carousel" data-bs-slide-to="{{loop.index0}}" class="{% if loop.index0 == 0 %}active{% endif %}">
                   <img typeof="foaf:Image" src="/sites/default/files/images/product_images/unboxing-img.png" alt="{{ kit_image.content['#item'].alt }}">
                 </li>
             {% endif %}
