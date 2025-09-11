@@ -92,7 +92,7 @@ class PublicRelationsForm extends FormBase
       '#upload_validators' => [
         'file_validate_extensions' => [' png jpeg jpg pdf'],
       ],
-      '#upload_location' => 'temporary://public_relations',
+      '#upload_location' => 'public://public_relations',
     ];
 
     $form['google_recaptcha'] = [
@@ -121,7 +121,6 @@ class PublicRelationsForm extends FormBase
 
     $first_name = $form_state->getValue('public_fname');
     $last_name = $form_state->getValue('public_lname');
-    $attachment = $form_state->getValue('public_attachment');
 
     if (empty($first_name) || strlen($first_name) < 2) {
       $form_state->setErrorByName('public_fname', $this->t('Please enter your first name.'));
@@ -139,9 +138,7 @@ class PublicRelationsForm extends FormBase
         $form_state->setErrorByName('public_lname', $this->t('Last name should not contain first name for 6 or more characters.'));
     }
 
-    if($attachment){
-      $form_state->set('file_id', $form_state->getValue('public_attachment')[0]); // save temp file fid
-    }
+
 
     if (isset($_POST['g-recaptcha-response']) && $_POST['g-recaptcha-response'] != '') {
       $captcha_response = $_POST['g-recaptcha-response'];
@@ -216,7 +213,7 @@ class PublicRelationsForm extends FormBase
 
     $moved_file = null;
     $email_dir_name = nor_forms_email_to_directory_name($email);
-    $fid = $form_state->get('file_id') ?? $form_state->getValue('public_attachment')[0];
+    $fid = $form_state->getValue('public_attachment')[0] ?? NULL;
     if($fid){
       $file = File::load($fid);
       $permanent_uri = 'private://public_relations/' .$email_dir_name . '/' . date('Y-m-d'); // uses email and date to store the files. E.g. liam.howes@norgenbiotek.com submitting on May 23 2025 saves to: private://public_relations/liam_howes_norgenbiotek_com_4901bb87/2025-05-23

@@ -1,5 +1,5 @@
 name: Urine Preservation Login Form
 description: gate the special urine preservation page
 type: module
-core_version_requirement: ^8.8 || ^9 || ^10
+core_version_requirement: ^8.8 || ^9 || ^10 || ^11
 package: Norgen Biotek

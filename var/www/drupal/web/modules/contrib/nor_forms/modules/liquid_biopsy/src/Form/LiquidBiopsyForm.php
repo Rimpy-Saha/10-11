@@ -241,17 +241,17 @@ class LiquidBiopsyForm extends FormBase
 
 
     $output = '<p>Hello,</p>
-    <p>A customer has accessed the "Liquid Biopsy: Solutions For Early Cancer Detection and NIPT" Booklet.</p>
+    <p>A customer submitted their request for Liquid Biopsy Form.</p>
     <p>Last name: ' . $last_name . '<br>First name: ' . $first_name . '<br>Email: ' . $email . '<br>First name: ' . $company . '<br>Country: ' . $country_name . ' <br>Subscribe to Mailing: ' . $mailing_text;
 
     $time = time();
 
     if ($form_state->hasAnyErrors()) {
     } else {
-      $subject = '[Contact form] - Liquid Biopsy Booklet' . date("F j, Y, g:i a", $time);
+      $subject = '[Contact form] - Liquid Biopsy ' . date("F j, Y, g:i a", $time);
       // $recipient_email = 'sowmya.movva@norgenbiotek.com';
-      $recipient_email = 'info@norgenbiotek.com, sabah.butt@norgenbiotek.com';// real addresses
-      //$recipient_email = 'liam.howes@norgenbiotek.com';
+      //$recipient_email = 'info@norgenbiotek.com, sebastian.szopa@norgenbiotek.com, sabah.butt@norgenbiotek.com';// real addresses
+      $recipient_email = 'liam.howes@norgenbiotek.com';
       //$recipient_email = 'huraira.khan@norgenbiotek.com';
 
       nor_forms_email_redirect($output, $recipient_email, $subject);

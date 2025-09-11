@@ -1,7 +1,23 @@
 (function($) {
   Drupal.behaviors.accountIssuesForm = {
     attach: function(context, settings) {
-      var $form = $('#account-issues-form', '#business-opportunities-form', '#contact-distributor-form', '#conference-inquiries-form', '#file-complaint-form', '#web-invoice-form', '#job-application-form', '#newsletter-subscription-form', 'order-status-form', '#product-issues-form', '#public-relations-form', '#web-return-form', '#service-consultation-form', '#service-issues-form', '#sponsorship-inquiry-form', '#technical-support-form', '#website-issues-form', context);
+      var $form = $('#account-issues-form', 
+        '#business-opportunities-form', 
+        '#contact-distributor-form', 
+        '#conference-inquiries-form', 
+        '#file-complaint-form', 
+        '#web-invoice-form', 
+        '#job-application-form', 
+        '#newsletter-subscription-form', 
+        'order-status-form', 
+        '#product-issues-form', 
+        '#public-relations-form', 
+        '#web-return-form', 
+        '#service-consultation-form', 
+        '#service-issues-form', 
+        '#sponsorship-inquiry-form', 
+        '#technical-support-form', 
+        '#website-issues-form', context);
       
 
       if ($form.length) {
@@ -16,7 +32,7 @@
         grecaptcha.ready(function() {
           // Execute reCAPTCHA with the correct site key
           captchaWidget = grecaptcha.render('edit-google-recaptcha', {
-            'sitekey': '6Lcr4u0pAAAAAGj32knXkUzuHAXzj3CoAhtbJ1t5',
+            'sitekey': '6LdaZr8rAAAAAOA67_n-dU1azqe4-CGRbfBrETVJ',
             'callback': function(response) {
               captchaResponse = response;
               console.log('reCAPTCHA token set:', captchaResponse);
@@ -62,10 +78,10 @@
       }
     }
   };
-  window.renderCaptcha = function(form_selector) { // function we can call to render the captcha as needed
-    var recaptchaElement = document.querySelector(form_selector+' .g-recaptcha');
+  window.renderCaptcha = function() { // function we can call to render the captcha as needed
+    var recaptchaElement = document.querySelector('.g-recaptcha');
     captchaWidget = grecaptcha.render(recaptchaElement, {
-      'sitekey': '6Lcr4u0pAAAAAGj32knXkUzuHAXzj3CoAhtbJ1t5',
+      'sitekey': '6LdaR74rAAAAAMzYz3lQ6YnxPU0c1E0-NyeiTVFy',
       'callback': function(response) {
         captchaResponse = response;
       }
@@ -73,6 +89,50 @@
   }
 })(jQuery);
 
+//THIS IS  BLOCK
+
+// (function($) {
+//   Drupal.behaviors.accountIssuesForm = {
+//     attach: function(context, settings) {
+//       var $form = $('#account-issues-form', context);
+
+//       if ($form.length) {
+//         // Ensure there's a hidden input for the token
+//         if ($('#g-recaptcha-response').length === 0) {
+//           $('<input>').attr({
+//             type: 'hidden',
+//             id: 'g-recaptcha-response',
+//             name: 'g-recaptcha-response'
+//           }).appendTo($form);
+//         }
+
+//         $form.on('submit', function(event) {
+//           event.preventDefault(); // prevent normal submit
+
+//           grecaptcha.ready(function() {
+//             grecaptcha.execute('6LdaZr8rAAAAAOA67_n-dU1azqe4-CGRbfBrETVJ', {action: 'account_issues_form'}).then(function(token) {
+//               $('#g-recaptcha-response').val(token);
+
+//               // now submit the form via Ajax
+//               $.ajax({
+//                 url: $form.attr('action'),
+//                 method: 'POST',
+//                 data: $form.serialize(),
+//                 success: function(response) {
+//                   console.log('Form submitted successfully:', response);
+//                 },
+//                 error: function(xhr, status, error) {
+//                   console.error('Form submission error:', error);
+//                 }
+//               });
+//             });
+//           });
+//         });
+//       }
+//     }
+//   };
+// })(jQuery);
+// THIS IS A SECOND BLOCK
 
 // (function($) {
 //   Drupal.behaviors.multiFormsRecaptcha = {

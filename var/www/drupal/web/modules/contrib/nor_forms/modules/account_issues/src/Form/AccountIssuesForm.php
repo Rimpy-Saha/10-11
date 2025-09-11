@@ -94,13 +94,12 @@ class AccountIssuesForm extends FormBase
       '#upload_validators' => [
         'file_validate_extensions' => [' png jpeg jpg pdf'],
       ],
-      /* '#upload_location' => 'public://account_issues', */
-      '#upload_location' => 'temporary://account_issues',
+      '#upload_location' => 'public://account_issues',
     ];
 
     $form['google_recaptcha'] = [
       '#type'=> 'fieldset',
-      '#description' => '<div class="g-recaptcha" data-sitekey="6Lcr4u0pAAAAAGj32knXkUzuHAXzj3CoAhtbJ1t5"></div>',
+      '#description' => '<div class="g-recaptcha" data-sitekey="6LdaZr8rAAAAAOA67_n-dU1azqe4-CGRbfBrETVJ"></div>',
     ];
 
     $form['actions']['submit'] = [
@@ -123,7 +122,6 @@ class AccountIssuesForm extends FormBase
 
     $first_name = $form_state->getValue('account_fname');
     $last_name = $form_state->getValue('account_lname');
-    $attachment = $form_state->getValue('account_attachment');
 
     if (empty($first_name) || strlen($first_name) < 2) {
       $form_state->setErrorByName('account_fname', $this->t('Please enter your first name.'));
@@ -137,10 +135,6 @@ class AccountIssuesForm extends FormBase
     }
     if ($first_name && $last_name && strlen($last_name) >= 6 && strpos($last_name, $first_name) !== false) {
       $form_state->setErrorByName('account_lname', $this->t('Last name should not contain first name for 6 or more characters.'));
-    }
-
-    if($attachment){
-      $form_state->set('file_id', $form_state->getValue('account_attachment')[0]); // save temp file fid
     }
 
     if (isset($_POST['g-recaptcha-response']) && $_POST['g-recaptcha-response'] != '') {
@@ -168,7 +162,7 @@ class AccountIssuesForm extends FormBase
         die('CURL is not installed!');
     }
   
-    $url_get = 'https://www.google.com/recaptcha/api/siteverify?secret=6Lcr4u0pAAAAAKDDRrTBlbkrV3ClMD9hz-z8DCfZ&response=' . $response . '&remoteip=' . $remote_ip;
+    $url_get = 'https://www.google.com/recaptcha/api/siteverify?secret=6LdaZr8rAAAAADda2IFR6KTrVKtRhpMKV7URZDKB&response=' . $response . '&remoteip=' . $remote_ip;
   
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url_get);
@@ -212,7 +206,7 @@ class AccountIssuesForm extends FormBase
 
     $moved_file = null;
     $email_dir_name = nor_forms_email_to_directory_name($email);
-    $fid = $form_state->get('file_id') ?? $form_state->getValue('account_attachment')[0];
+    $fid = $form_state->getValue('account_attachment')[0] ?? NULL;
     if($fid){
       $file = File::load($fid);
       $permanent_uri = 'private://account_issues/' .$email_dir_name . '/' . date('Y-m-d'); // uses email and date to store the files. E.g. liam.howes@norgenbiotek.com submitting on May 23 2025 saves to: private://account_issues/liam_howes_norgenbiotek_com_4901bb87/2025-05-23
@@ -265,7 +259,7 @@ class AccountIssuesForm extends FormBase
     if ($form_state->hasAnyErrors()) {
     } else {
       $subject = '[Contact form] - Account Issues ' . date("F j, Y, g:i a", $time);
-      $recipient_email = 'info@norgenbiotek.com,it@norgenbiotek.com,webteam@norgenbiotek.com';// real addresses
+      $recipient_email = 'info@norgenbiotek.com,it@norgenbiotek.com,sabah.butt@norgenbiotek.com,liam.howes@norgenbiotek.com,andrii.omelchuk@norgenbiotek.com';// real addresses
       //$recipient_email = 'liam.howes@norgenbiotek.com';
       // $recipient_email = 'sowmya.movva@norgenbiotek.com';
       if ($moved_file) {

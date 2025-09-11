@@ -67,7 +67,7 @@ class JobApplicationNodeForm extends FormBase
         'file_validate_extensions' => ['pdf docx'], //remove brackets
       ],
       '#description' => $this->t('Allowed file extensions: pdf, doc'),
-      '#upload_location' => 'temporary://job_applications',
+      '#upload_location' => 'public://job_applications',
     ];
 
     $form['account_cv'] = [
@@ -77,7 +77,7 @@ class JobApplicationNodeForm extends FormBase
         'file_validate_extensions' => ['pdf docx'],
       ],
       '#description' => $this->t('Allowed extensions: pdf, doc'),
-      '#upload_location' => 'temporary://job_applications',
+      '#upload_location' => 'public://job_applications',
     ];
 
     $form['job_title'] = [
@@ -124,8 +124,6 @@ class JobApplicationNodeForm extends FormBase
 
     $first_name = $form_state->getValue('job_fname');
     $last_name = $form_state->getValue('job_lname');
-    $attachment = $form_state->getValue('account_attachment');
-    $attachment2 = $form_state->getValue('account_cv');
 
     if (empty($first_name) || strlen($first_name) < 2) {
       $form_state->setErrorByName('job_fname', $this->t('Please enter your first name.'));
@@ -140,13 +138,6 @@ class JobApplicationNodeForm extends FormBase
     }
     if ($first_name && $last_name && strlen($last_name) >= 6 && strpos($last_name, $first_name) !== false) {
       $form_state->setErrorByName('job_lname', $this->t('Last name should not contain first name for 6 or more characters.'));
-    }
-
-    if($attachment){
-      $form_state->set('file_id', $form_state->getValue('account_attachment')[0]); // save temp file fid
-    }
-    if($attachment2){
-      $form_state->set('file_id2', $form_state->getValue('account_cv')[0]); // save temp file fid
     }
 
     if (isset($_POST['g-recaptcha-response']) && $_POST['g-recaptcha-response'] != '') {
@@ -240,16 +231,9 @@ class JobApplicationNodeForm extends FormBase
     $date = date("Ymd");
     $form_name = $this->t('Job Application');
 
-    $fid = $form_state->get('file_id') ?? $form_state->getValue('account_attachment')[0];
-    if($fid){
-      $file = File::load($fid);
-    }
-    $fid2 = $form_state->get('file_id2') ?? $form_state->getValue('account_cv')[0];
-    if($fid2){
-      $file2 = File::load($fid2);
-    }
+
     // ---- Move files from temporary directory to permanent, private directory
-    /* $resume_file = $cv_file = null;
+    $resume_file = $cv_file = null;
 
     $email_dir_name = nor_forms_email_to_directory_name($email);
 
@@ -273,7 +257,7 @@ class JobApplicationNodeForm extends FormBase
     }
     $resume_fid = $cv_fid = null;
     if($resume_file) $resume_fid = $resume_file->id() ?? null;
-    if($cv_file) $cv_fid = $cv_file->id() ?? null; */
+    if($cv_file) $cv_fid = $cv_file->id() ?? null;
     // ---- End of moving files code
 
 
@@ -286,8 +270,8 @@ class JobApplicationNodeForm extends FormBase
     }
 
     $query = \Drupal::database()->insert('forms_to_zoho');
-    $query->fields(['created_on', 'first_name', 'last_name', 'email', 'record', 'timestamp', 'form_name', 'phone','job_title','job_nid']); //wrong syntax here breaks entire submit function 
-    $query->values([$date, $first_name, $last_name, $email, '', time(), $form_name, $phone, $job_title, $job_nid]);
+    $query->fields(['created_on', 'first_name', 'last_name', 'email', 'record', 'timestamp', 'form_name', 'phone','job_title','job_nid','doc_fid','doc2_fid']); //wrong syntax here breaks entire submit function 
+    $query->values([$date, $first_name, $last_name, $email, '', time(), $form_name, $phone, $job_title, $job_nid, $resume_fid, $cv_fid]);
     $query->execute();
 
     /* Don't need Zoho because these people aren't leads */
@@ -319,7 +303,7 @@ class JobApplicationNodeForm extends FormBase
       //$recipient_email = 'liam.howes@norgenbiotek.com';
       // $recipient_email = 'IT@norgenbiotek.com';
 
-      $files = [$file, $file2];
+      $files = [$resume_file, $cv_file];
       nor_forms_job_application($output, $recipient_email, $files, $subject);
     }
   }

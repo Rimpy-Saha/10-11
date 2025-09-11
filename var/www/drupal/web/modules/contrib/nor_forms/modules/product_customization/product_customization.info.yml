@@ -1,5 +1,5 @@
 name: Product Customization Form
 description: Custom module for Product Customization Form
 type: module
-core_version_requirement: ^8.8 || ^9 || ^10
+core_version_requirement: ^8.8 || ^9 || ^10 || ^11
 package: Norgen Biotek

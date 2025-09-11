@@ -3,24 +3,24 @@
 namespace Drupal\nor_forms\Plugin\EntityReferenceSelection;
 
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Entity\Attribute\EntityReferenceSelection;
+use Drupal\Core\Entity\Plugin\EntityReferenceSelection\DefaultSelection;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\commerce_product\Plugin\EntityReferenceSelection\ProductVariationSelection;
 
 
 /**
  * Provides a Nor autocomplete selection plugin for product variations.
  *
- * 
- * 
- * @EntityReferenceSelection(
- *   id = "nor_product_autocomplete",
- *   label = @Translation("nor_product_autocomplete"), 
- *   entity_types = {"commerce_product_variation"},
- *   group = "nor_product_autocomplete",
- *   weight = 0,
- *   deriver = "Drupal\Core\Entity\Plugin\Derivative\DefaultSelectionDeriver"
- * )
  */
-
+#[EntityReferenceSelection(
+  id: 'nor_product_autocomplete',
+  label: new TranslatableMarkup('nor_product_autocomplete'),
+  group: 'nor_product_autocomplete',
+  weight: 0,
+  entity_types: ['commerce_product_variation'],
+  deriver: "Drupal\Core\Entity\Plugin\Derivative\DefaultSelectionDeriver",
+)]
 class NorProductAutocomplete extends ProductVariationSelection {
 
   
@@ -43,9 +43,9 @@ class NorProductAutocomplete extends ProductVariationSelection {
       $entities = $this->entityTypeManager->getStorage('commerce_product_variation')->loadMultiple($result);
       /** @var \Drupal\commerce_product\Entity\ProductVariationInterface $entity */
       foreach ($entities as $entity_id => $entity) {
-        if(is_null($entity->getProductId())) continue; // no parent product, skip it
+        if(is_null($entity->getProductId())) continue;  // no parent product, skip it
         $parent_product = \Drupal::entityTypeManager()->getStorage('commerce_product')->load($entity->getProductId());
-        if($entity->isActive() && $parent_product && $parent_product->get('type')->first()->get('target_id')->getValue()=='norproduct') // new way to filter out international products: check parent product type
+        if($entity->isPublished() && $parent_product && $parent_product->get('type')->first()->get('target_id')->getValue()=='norproduct') // new way to filter out international products: check parent product type
         {
           $bundle = $entity->bundle();
           $options[$bundle][$entity_id] = Html::escape($entity->getSku() . ': ' . $this->entityRepository->getTranslationFromContext($entity)->label());
