@@ -1,5 +1,5 @@
 sample_request.samplerequest_form:
-  path: "sample-request-form"
+  path: "/sample-request-form"
   defaults:
     _form: '\Drupal\sample_request\Form\SampleRequestForm'
     _title: "Sample Request Form"

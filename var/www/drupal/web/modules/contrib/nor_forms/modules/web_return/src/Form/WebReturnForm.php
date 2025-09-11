@@ -137,7 +137,7 @@ class webreturnForm extends FormBase
         'callback' => '::submitCallback',
         'event' => 'click',
 
-        'method' => 'append', 'effect' => 'fade',
+        
       ]
     ];
 

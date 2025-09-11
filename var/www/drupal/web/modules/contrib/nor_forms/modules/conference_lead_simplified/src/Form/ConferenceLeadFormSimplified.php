@@ -136,7 +136,7 @@ class ConferenceLeadFormSimplified extends FormBase
       '#ajax' => [
         'callback' => '::submitCallback',
         'event' => 'click',
-        'method' => 'append', 'effect' => 'fade',
+        
       ]
     ];
 

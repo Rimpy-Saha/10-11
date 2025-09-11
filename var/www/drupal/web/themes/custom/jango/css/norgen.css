@@ -117,8 +117,9 @@ form textarea{
   margin-left: 0px;
 }
 
-a {
-  color: #004897;
+html a {
+  /* color: #004897; */
+  color: #0063cc; /* norgen primary blue, 10% lighter */
   text-decoration: none; 
 }
 a:hover, a:focus {
@@ -556,10 +557,10 @@ lite-youtube {
   height: 100%;
   color: #000;
 }
-
+#norproduct-image-description-carousel .carousel-control-next,
+#norproduct-image-specification-carousel-mobile .carousel-control-next,
 #norproduct-image-description-carousel .carousel-control-prev,
-#norproduct-image-specification-carousel-mobile .carousel-control-prev {
-  right: 0;
+#norproduct-image-specification-carousel-mobile .carousel-control-prev{
   border-top-right-radius: 32px;
   border-bottom-right-radius: 32px;
   display: flex;
@@ -567,17 +568,7 @@ lite-youtube {
   justify-content: center;
 }
 
-#norproduct-image-description-carousel .carousel-control-next,
-#norproduct-image-specification-carousel-mobile .carousel-control-next {
-  left: 0;
-  border-top-left-radius: 32px;
-  border-bottom-left-radius: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.carousel-control-prev:focus, .carousel-control-next:focus, {
+.carousel-control-prev:focus, .carousel-control-next:focus{
   outline: 5px auto -webkit-focus-ring-color;
 }
 
@@ -735,8 +726,8 @@ div.fig-caption {
   height: 90%;
 }
 
-#norproduct-image-description-carousel.fullscreen .item.norproduct,
-#norproduct-image-specification-carousel-mobile.fullscreen .item.norproduct {
+#norproduct-image-description-carousel.fullscreen .carousel-item.norproduct,
+#norproduct-image-specification-carousel-mobile.fullscreen .carousel-item.norproduct {
   width: 100%;
   height: 100%;
 }
@@ -756,8 +747,8 @@ div.fig-caption {
   display: block;
 }
 
-#norproduct-image-description-carousel.fullscreen .item div.fig-caption,
-#norproduct-image-specification-carousel-mobile.fullscreen .item div.fig-caption {
+#norproduct-image-description-carousel.fullscreen .carousel-item div.fig-caption,
+#norproduct-image-specification-carousel-mobile.fullscreen .carousel-item div.fig-caption {
   visibility: visible;
   overflow: auto;
   opacity: 1;
@@ -812,9 +803,9 @@ div.fig-caption {
   }
 }
 
-.carousel-inner>.item>img,
-.carousel-inner>.item>picture,
-.carousel-inner>.item>picture>img {
+.carousel-inner>.carousel-item>img,
+.carousel-inner>.carousel-item>picture,
+.carousel-inner>.carousel-item>picture>img {
   animation: animate 20s alternate infinite ease-in-out;
   width: 100%;
   height: 650px;
@@ -956,6 +947,16 @@ div.fig-caption {
 }
 
 /********* Header / Navigation Menu *********/
+.nav > li > a{
+  padding:10px 15px;
+  display:inline-block;
+}
+.nav-tabs-justified, .nav-tabs.nav-justified{
+  border-bottom:0px;
+}
+.c-shop-product-tab-1 .nav.nav-justified{
+  padding: 0 0 0 0;
+}
 header .c-navbar nav.c-mega-menu{
 	margin:-15px;
 }
@@ -1356,7 +1357,7 @@ header > .c-topbar > .container > .c-top-menu{
   margin-top: 5px;
 }
 
-.c-content-event-post-card-1-slider .item {
+.c-content-event-post-card-1-slider .carousel-item {
   /*background-image: url(/themes/custom/jango_sub/Norgen_lies-3.png);
     background-position: center;
     background-size: cover;
@@ -2906,70 +2907,71 @@ header > .c-topbar > .container > .c-top-menu{
   border-radius: 36px;
   color: white;
 }
-.btn:hover, .btn:focus, .btn.focus{
+.btn:hover, .btn:focus, .btn.focus,
+.btn.btn:hover, .btn.btn:focus, .btn.btn.focus{
   color:inherit;
 }
 
-.btn-services:hover,
-.btn-services:focus,
-.btn-services:active,
-.btn-ncov:hover,
-.btn-ncov:focus,
-.btn-ncov:active,
-.btn-saliva:hover,
-.btn-saliva:focus,
-.btn-saliva:active,
-.btn-protein:hover,
-.btn-protein:focus,
-.btn-protein:active,
-.btn-rna:hover,
-.btn-rna:focus,
-.btn-rna:active,
-.btn-expert:hover,
-.btn-expert:focus,
-.btn-expert:active,
-.btn-stan:hover,
-.btn-stan:focus,
-.btn-stan:active,
-.btn-lab:hover,
-.btn-lab:focus,
-.btn-lab:active,
-.btn-reagent:hover,
-.btn-reagent:focus,
-.btn-reagent:active,
-.btn-miRNA:hover,
-.btn-miRNA:focus,
-.btn-miRNA:active,
-.btn-micro:hover,
-.btn-micro:focus,
-.btn-micro:active,
-.btn-plasma:hover,
-.btn-plasma:focus,
-.btn-plasma:active,
-.btn-multi:hover,
-.btn-multi:focus,
-.btn-multi:active,
-.btn-exo:hover,
-.btn-exo:focus,
-.btn-exo:active,
-.btn-ngs:hover,
-.btn-ngs:focus,
-.btn-ngs:active,
-.btn-urine:hover,
-.btn-urine:focus,
-.btn-urine:active,
-.btn-swab:hover,
-.btn-swab:focus,
-.btn-swab:active,
-.btn-stool:hover,
-.btn-stool:focus,
-.btn-stool:active,
-.btn-extraclean:hover,
-.btn-extraclean:focus,
-.btn-extraclean:active,
-.btn-contact:hover,
-.btn-contact:active,
-.btn-contact:focus {
+.btn-services:hover, .btn.btn-services:hover,
+.btn-services:focus, .btn.btn-services:focus,
+.btn-services:active, .btn.btn-services:active,
+.btn-ncov:hover, .btn.btn-ncov:hover,
+.btn-ncov:focus, .btn.btn-ncov:focus,
+.btn-ncov:active, .btn.btn-ncov:active,
+.btn-saliva:hover, .btn.btn-saliva:hover,
+.btn-saliva:focus, .btn.btn-saliva:focus,
+.btn-saliva:active, .btn.btn-saliva:active,
+.btn-protein:hover, .btn.btn-protein:hover,
+.btn-protein:focus, .btn.btn-protein:focus,
+.btn-protein:active, .btn.btn-protein:active,
+.btn-rna:hover, .btn.btn-rna:hover,
+.btn-rna:focus, .btn.btn-rna:focus,
+.btn-rna:active, .btn.btn-rna:active,
+.btn-expert:hover, .btn.btn-expert:hover,
+.btn-expert:focus, .btn.btn-expert:focus,
+.btn-expert:active, .btn.btn-expert:active,
+.btn-stan:hover, .btn.btn-stan:hover,
+.btn-stan:focus, .btn.btn-stan:focus,
+.btn-stan:active, .btn.btn-stan:active,
+.btn-lab:hover, .btn.btn-lab:hover,
+.btn-lab:focus, .btn.btn-lab:focus,
+.btn-lab:active, .btn.btn-lab:active,
+.btn-reagent:hover, .btn.btn-reagent:hover,
+.btn-reagent:focus, .btn.btn-reagent:focus,
+.btn-reagent:active, .btn.btn-reagent:active,
+.btn-miRNA:hover, .btn.btn-miRNA:hover,
+.btn-miRNA:focus, .btn.btn-miRNA:focus,
+.btn-miRNA:active, .btn.btn-miRNA:active,
+.btn-micro:hover, .btn.btn-micro:hover,
+.btn-micro:focus, .btn.btn-micro:focus,
+.btn-micro:active, .btn.btn-micro:active,
+.btn-plasma:hover, .btn.btn-plasma:hover,
+.btn-plasma:focus, .btn.btn-plasma:focus,
+.btn-plasma:active, .btn.btn-plasma:active,
+.btn-multi:hover, .btn.btn-multi:hover,
+.btn-multi:focus, .btn.btn-multi:focus,
+.btn-multi:active, .btn.btn-multi:active,
+.btn-exo:hover, .btn.btn-exo:hover,
+.btn-exo:focus, .btn.btn-exo:focus,
+.btn-exo:active, .btn.btn-exo:active,
+.btn-ngs:hover, .btn.btn-ngs:hover,
+.btn-ngs:focus, .btn.btn-ngs:focus,
+.btn-ngs:active, .btn.btn-ngs:active,
+.btn-urine:hover, .btn.btn-urine:hover,
+.btn-urine:focus, .btn.btn-urine:focus,
+.btn-urine:active, .btn.btn-urine:active,
+.btn-swab:hover, .btn.btn-swab:hover,
+.btn-swab:focus, .btn.btn-swab:focus,
+.btn-swab:active, .btn.btn-swab:active,
+.btn-stool:hover, .btn.btn-stool:hover,
+.btn-stool:focus, .btn.btn-stool:focus,
+.btn-stool:active, .btn.btn-stool:active,
+.btn-extraclean:hover, .btn.btn-extraclean:hover,
+.btn-extraclean:focus, .btn.btn-extraclean:focus,
+.btn-extraclean:active, .btn.btn-extraclean:active,
+.btn-contact:hover, .btn.btn-contact:hover,
+.btn-contact:active, .btn.btn-contact:active,
+.btn-contact:focus, .btn.btn-contact:focus {
   opacity: 0.8;
   color: white;
 }
@@ -2980,6 +2982,12 @@ header > .c-topbar > .container > .c-top-menu{
 .btn-link:hover,
 .btn-link:focus,
 .btn-link:active,
+.btn.btn-primary:hover,
+.btn.btn-primary:focus,
+.btn.btn-primary:active,
+.btn.btn-link:hover,
+.btn.btn-link:focus,
+.btn.btn-link:active,
 .form-submit:hover,
 .form-submit:focus,
 .form-submit:active {
@@ -2991,6 +2999,10 @@ header > .c-topbar > .container > .c-top-menu{
 .btn-primary:focus,
 .btn-primary:active,
 .btn-primary.active,
+.btn.btn-primary:hover,
+.btn.btn-primary:focus,
+.btn.btn-primary:active,
+.btn.btn-primary.active,
 .open .dropdown-toggle.btn-primary {
   color: #fff;
   background-color: #3276b1;
@@ -2999,119 +3011,128 @@ header > .c-topbar > .container > .c-top-menu{
 
 .btn.btn-primary,
 .btn.btn-link,
-.btn.form-submit {
+.btn.form-submit,
+.btn.btn.btn-primary,
+.btn.btn.btn-link,
+.btn.btn.form-submit {
   background-color: #004897;
   border-color: #004897;
   opacity: 1;
   color: #fff;
 }
 
-.btn-swab {
+.btn-swab, .btn.btn-swab {
   border-color: #6cbde7;
   background-color: #6cbde7;
   color: white;
 }
 
-.btn-swab:hover {
+.btn-swab:hover, .btn.btn-swab:hover {
   transform: scale(1.05);
   color: white;
 }
 
-.btn-warning {
+.btn-warning, .btn.btn-warning {
   border-radius: 36px;
   background-color: #fbbf13;
 }
 
-.btn-warning:hover {
+.btn-warning:hover, .btn.btn-warning:hover {
   color: white
 }
 
 .btn-cov19,
-.btn-cov19:hover {
+.btn-cov19:hover,
+.btn.btn-cov19,
+.btn.btn-cov19:hover {
   background: #719b9d;
   border-color: #719b9d;
   font-size: 18px;
 }
 
-.feature-btn {
+.feature-btn, .btn.feature-btn {
   margin: 10px;
 }
 
-.btn-rna {
+.btn-rna, .btn.btn-rna {
   border-color: #BE1E2D;
   background-color: #BE1E2D;
 }
 
-.btn-extraclean {
+.btn-extraclean, .btn.btn-extraclean {
   border-color: #8E1F1F;
   background-color: #8E1F1F;
 }
 
-.btn-multi {
+.btn-multi, .btn.btn-multi {
   background-color: #662d91;
   border-color: #662d91;
 }
 
 .btn-exo,
-.btn-saliva {
+.btn-saliva,
+.btn.btn-exo,
+.btn.btn-saliva {
   border-color: #6cc8c2;
   background-color: #62ccb4;
 }
 
-
-.btn-primary {
+.btn-primary, .btn.btn-primary {
   background-color: #004897;
   border-color: #004897;
 }
 
-.btn-stool {
+.btn-stool, .btn.btn-stool {
   background-color: #5f3a17;
   border-color: #5f3a17;
 }
 
-.btn-urine {
+.btn-urine, .btn.btn-urine {
   background-color: #f26722;
   border-color: #f26722;
 }
 
-.btn-lab {
+.btn-lab, .btn.btn-lab {
   border-color: #9f9f9f;
   background-color: #9f9f9f;
 }
 
-.btn-micro {
+.btn-micro, .btn.btn-micro {
   border-color: #e69937;
   background-color: #e69937;
 }
 
-.btn-reagent {
+.btn-reagent, .btn.btn-reagent {
   border-color: #3ac25b;
   background-color: #3ac25b;
 }
 
-.btn-stan {
+.btn-stan, .btn.btn-stan {
   border-color: #c6769f;
   background-color: #c6769f;
 }
 
-.btn-protein {
+.btn-protein, .btn.btn-protein {
   border-color: #62ad2a;
   background-color: #62ad2a;
 }
 
-.btn-ngs {
+.btn-ngs, .btn.btn-ngs {
   border-color: #9092a9;
   background-color: #9092a9;
 }
 
 .btn-srna,
-.btn-srna:hover {
+.btn-srna:hover,
+.btn.btn-srna,
+.btn.btn-srna:hover  {
   background: #3874b6;
   border-color: #3874b6;
   font-size: 18px;
 }
 
-.btn-consult, .btn-consult:hover {
+.btn-consult, .btn-consult:hover,
+.btn.btn-consult, .btn.btn-consult:hover {
   background: #e2b461 !important;
   border-color: #e2b461 !important;
   font-size: 18px;
@@ -3286,6 +3307,9 @@ h2,
 
 
 /********* Sticky Submenu ********/
+.sticky{
+  position:sticky;
+}
 .sticky-submenu {
   z-index: 100;
   padding: 15px 50px 50px;
@@ -4288,7 +4312,6 @@ a:not([class*="btn"]):hover {
     .row .container-sm, .row .container {
         max-width: 540px;
     }
-    .c-navbar > .container-sm, .c-navbar > .container { max-width: 100%; }
 }
 @media (min-width: 768px) {
     .row .container-md, .row .container-sm, .row .container {
@@ -4325,7 +4348,6 @@ a:not([class*="btn"]):hover {
     display: block;
     padding: 10px 15px;
 }
-.form-group { margin-bottom: 15px; }
 
 
 #Carouselprod div.prodRow { float:left;} 
@@ -5135,3 +5157,14 @@ ol.carousel-indicators { list-style: none; }
 
 .glyphicon-menu-up:before {
   content: "\e260"; }
+
+
+.carousel-control-prev-icon.dark {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0'/%3e%3c/svg%3e");
+}
+.carousel-control-next-icon.dark {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708'/%3e%3c/svg%3e");
+}
+.carousel-indicators.dark [data-bs-target]{
+  background-color:var(--norgen-primary-blue-dark);
+}

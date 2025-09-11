@@ -11,9 +11,8 @@ var LayoutBrand = function () {
 		//main function to initiate the module
 		init: function () {
 			$('body').on('click', '.c-hor-nav-toggler', function () {
-				var target = $(this).data('bs-target');
+				var target = $(this).data('target');
 				$(target).toggleClass("c-shown");
-				$(target).toggleClass("navbar-expand");
 			});
 		}
 
@@ -500,7 +499,7 @@ var LayoutThemeSettings = function () {
 // END: Handle Theme Settings
 
 // BEGIN: OwlCarousel
-/*var ContentOwlcarousel = function () {
+var ContentOwlcarousel = function () {
 
   var _initInstances = function () {
     $("[data-slider='owl'] .owl-carousel").each(function () {
@@ -557,7 +556,7 @@ var LayoutThemeSettings = function () {
     }
 
   };
-}();*/
+}();
 // END: OwlCarousel
 
 // BEGIN: ContentCubeLatestPortfolio
@@ -862,7 +861,7 @@ $(document).ready(function () {
   LayoutProgressBar.init();
 
   // init plugin wrappers
-  //ContentOwlcarousel.init();
+  ContentOwlcarousel.init();
   ContentCubeLatestPortfolio.init();
   ContentCounterUp.init();
   ContentFancybox.init();

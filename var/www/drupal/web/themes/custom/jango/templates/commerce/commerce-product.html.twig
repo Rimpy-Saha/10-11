@@ -227,8 +227,7 @@
     }
   
   
-    .sticky-top {
-      position: sticky;
+    .sticky {
       top: 130px;
     }
   
@@ -347,12 +346,13 @@
       left: 0%;
       bottom: 0%;
       width:100%;
+      justify-content:left;
     }
   
     .olProd .carousel-indicators li {
       display: inline-block;
       text-indent: 0px;
-      border: none;
+      border: 2px solid transparent;
       background: none;
       width: 100px;
       height: 67px;
@@ -434,7 +434,7 @@
     }
   
     @media (max-width:991px) {
-      .sticky-top {
+      .sticky {
         top: auto;
         position: static;
       }
@@ -616,33 +616,23 @@
       position:initial;
     }
   }
-  .lyo-flex{
-    display: flex;
-    align-items: center;
-    background: #2E69A6;
-    width: fit-content;
-    padding: 10px 30px;
-    border-top-right-radius: 15px;
-    border-bottom-right-radius: 15px;
-  }
     .lyo-grid{
-    display:grid;
-    grid-template-columns:2fr 1fr;
-    align-items: center;
-    background: #2E69A6;
-    width: fit-content;
-    padding: 10px 30px;
-    border-top-right-radius: 15px;
-    border-bottom-right-radius: 15px;
+    display: flex;
+      align-items: center;
+      background: #2E69A6;
+      width: fit-content;
+      padding: 10px 30px;
+      border-top-right-radius: 15px;
+      border-bottom-right-radius: 15px;
   }
-  .lyo-grid h2, .lyo-flex h2{
+  .lyo-grid h2{
     color:white;
     font-size:35px;
     margin-bottom:0px;
     margin-top:0;
     font-weight: 700;
   }
-  .lyo-grid p, .lyo-flex p{
+  .lyo-grid p{
     color:white;
     margin-bottom:0;
   }
@@ -880,8 +870,7 @@
   }
   #total-rna-automation-form-overlay > .total-rna-automation-form-wrapper,
   #magbead-promo-info-overlay > .magbead-promo-info-wrapper,
-  #sample-request-form-overlay > .sample-request-form-wrapper,
-  #product-customization-form-overlay > .product-customization-form-wrapper{
+  #sample-request-form-overlay > .sample-request-form-wrapper{
     background-color:white;
     max-width:900px;
     max-height:95%;
@@ -901,9 +890,7 @@
   #magbead-promo-info-overlay > .magbead-promo-info-wrapper .disclaimer{
     font-size:12px;
   }
-  .automation-script-cta{
-    margin-bottom:15px;
-  }
+
   form.total-rna-automation-scripts .form-item-rna-mailing{
     margin-bottom:5px;
   }
@@ -953,271 +940,7 @@
     grid-column: 1 / 3;
   }
   /* End Gated Automation Scripts */
-
-  /* Product Customization Styling*/
-  #product-customization-form-overlay{
-    display:none;
-    width:100%;
-    height:100vh;
-    left:0;
-    top:0;
-    position:fixed;
-    background-color:rgba(0,0,0,0.5);
-    z-index:999999;
-  }
-  #product-customization-form-overlay.active{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-  #product-customization-form-overlay > .product-customization-form-wrapper{
-    width:930px;
-    max-width:100%;
-  }
-
-  fieldset.customization-form-grid > .fieldset-wrapper{
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    grid-column-gap:20px;
-  }
-  .product-customization-form .form-group > .form-group{
-    margin-bottom:0px;
-  }
-  fieldset.customization-form-grid > .fieldset-wrapper > div:last-child,
-  fieldset.customization-form-grid > .fieldset-wrapper > div:nth-last-child(2){
-    grid-column: 1 / 3;
-  }
-
-  @media only screen and (max-width:600px){
-    fieldset.customization-form-grid > .fieldset-wrapper{
-      grid-template-columns: 1fr;
-    }
-    fieldset.customization-form-grid > .fieldset-wrapper > div:last-child,
-    fieldset.customization-form-grid > .fieldset-wrapper > div:nth-last-child(2){
-      grid-column: 1 / 2;
-    }
-  }
-
-  .testimonial-card {
-    position: relative;
-    max-width: 95%;
-    background: #fff;
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    font-size: 15px;
-    line-height: 1.6;
-    color: #444;
-    margin-bottom:15px;
-  }
-
-  .testimonial-text p {
-    margin: 0;
-  }
-
-  .testimonial-text a {
-    color: #3366cc;
-    text-decoration: underline;
-  }
-
-  .testimonial-avatar {
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    border: 3px solid #fff;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  }
-
-  /* End of Product Customization Styling*/
-
-  .ce-pos{
-    margin-bottom: 15px;
-  }
-
-/* End of Product Customization Styling*/
-{% if ngs_popup %}
-/* NGS Popup */
-#ngs-popup{
-  position: fixed;
-  visibility:visible;
-  opacity:100%;
-  right: -1px;
-  top: 0px;
-  bottom: 0px;
-  margin: auto;
-  height: fit-content;
-  border-radius: 20px 0px 0px 20px;
-  max-width: 360px;
-  padding: 20px;
-  background-image: linear-gradient(#ffffffd1, #fffffffa), url(/sites/default/files/images/Asset%204.png), linear-gradient(white, white);
-  background-position: center;
-  box-shadow: 0px 0px 10px 0px #f0f0f0;
-  border: 1px solid var(--norgen-primary-blue);
-  z-index:50;
-  transition: opacity 0.5s, right 0.5s, visibility 0s 0s;
-}
-#ngs-popup.closed{
-  visibility:hidden;
-  opacity:0%;
-  right:-361px;
-  transition: opacity 0.5s, right 0.5s, visibility 0s 0.5s;
-}
-
-#ngs-popup .title{
-  margin-top:-10px;
-}
-#ngs-popup .flex{
-  display: inline-flex;
-  width: 100%;
-  gap: 5px;
-  margin-bottom:15px;
-}
-#ngs-popup .flex > a{
-  flex-grow: 1;
-  flex-basis: 0;
-}
-#ngs-popup .flex > a > div{
-  display:flex;
-  flex-direction:column;
-  align-items: center;
-  flex-grow: 1;
-  flex-basis: 0;
-}
-#ngs-popup .flex img{
-  width:50px;
-}
-#ngs-popup .flex > a > div > div.center{
-  font-size:16px;
-}
-/* End of NGS Popup */
-{% endif %}
-
-.product-page-content .c-shop-product-tab-1 .nav{
-  width: fit-content;
-  margin: auto;
-  padding: 0px 0px;
-}
-@media (min-width: 768px) {
-  .product-page-content .nav-justified > li, .nav-tabs.nav-justified > li{
-    display:inline-block;
-    width:auto;
-  }
-}
-
-/* Kostia's Custom Styling for New Stool Product Page Design */
-.table-container {
-  margin-bottom: 100px;
-}
-.responsive-table { 
-  width: 100%; 
-  border-collapse: collapse; 
-  margin: 20px 0; 
-  font-size: 18px; 
-  text-align: left; 
-} 
-.responsive-table th, 
-.responsive-table td { 
-  padding: 12px 15px; 
-  border: 1px solid #ddd; 
-} 
-.responsive-table th { 
-  background-color: #E5ECF4; 
-} 
-.cat-number a { 
-  color: #004897; 
-  text-decoration: none; 
-} 
-.cat-number a:hover { 
-  text-decoration: underline; 
-}
-.table > tbody > tr:nth-of-type(odd) {
-  background-color: #fbfcfd;
-}
-/* body { 
-  margin: 0; 
-  padding: 0; 
-}  */
-.container1 {
-  display: flex; 
-  flex-wrap: wrap;
-  justify-content: space-between; 
-  align-items: flex-start; 
-  margin-bottom: 20px; 
-} 
-.column { 
-  flex-basis: 48%; 
-  padding: 10px; 
-  box-sizing: border-box; 
-} 
-.title { 
-  font-weight: bold; 
-  margin-bottom: 20px; 
-} 
-/* img { 
-max-width: 100%; 
-height: auto; 
-margin-bottom: 10px; 
-}  */
-.icon { 
-  width: 64px; 
-  height: 64px; 
-  display: block; 
-  text-align: center; 
-  margin-bottom: 10px; 
-}
-.imgs { 
-  max-width: 100%; 
-} 
-.key-benefit-container1 { 
-  background-color: #EBF0F7; 
-  padding: 40px 40px; 
-  border-radius: 5px; 
-  margin-top: 5%; 
-  margin-bottom: 5%; 
-  position: relative; 
-  overflow: hidden; 
-} 
-.key-benefit-container1 p {
-  line-height: 1.3;
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
-.full-width { 
-  width: 100%; 
-} 
-.bounceInLeft {
-  animation-name: bounceInLeft;
-}
-.key-benefit-container1 ol {
-  font-size: 22px; 
-  color: #5c6873; 
-}
-.key-benefit-container1::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url('/themes/custom/jango/img/stool_basket_img.png'); 
-  background-size: cover;
-  background-position: center;
-  opacity: 0.3; 
-  z-index: 0; 
-}
-@media screen and (max-width: 565px) {
-  table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
-}
-/* END Kostia's Custom Styling for New Stool Product Page Design */
-</style>
+  </style>
   
   {# Check if FAQs exist for any of the variations #}
   {% set faq_exists = false %}
@@ -1255,107 +978,90 @@ margin-bottom: 10px;
     </div>
     {% endif %}
 
-    {% if product_customization %}
-    <div id="product-customization-form-overlay" class="fixed">
-      <div class="product-customization-form-wrapper">
-        <button onclick="toggleProductCustomizationForm()" style="float:right;background:none;border:none;font-size:40px;line-height:1;position:absolute;top:0;right:0;">×</button>
-        {{ product_customization }}
-      </div>
-    </div>
-    {% endif %}
-
     <div>
       <div class="c-shop-product-details-2">
         <div class="row">
-          <div class="col-md-6 sticky-top">
-            <div id="mobile-title" class="c-content-title-1 mobile">
-              <h1 class="product-title c-font-uppercase c-font-bold">{{ product.title }}</h1>
-            </div>
-            <div id="mobile-summary-line" class="field-name-field-product-summary-line mobile" style="clear:both;">
-              {% if '/product/' in url %}
-              {{ node.field_product_summary_line.0.value|raw }}
-              <hr>
-              {% else %}
-              {{ node_international.field_product_summary_line_fr.0.value|raw }}
-              <hr>
-              {% endif %}
-            </div>
-            <div style="position:relative;">
-              {{ product.variation_flag_wish_list }}
-              {{ product.variation_field_product_image }}
-            </div>
-  
-  
-            <div class="product-uses-wrapper">
-              <hr class="mobile">
-              {% for product_use in node.norproduct_use %}
-                {{product_use.value|raw}}
-              {% endfor %}
-
-              {{ product.variation_field_not_for_sale_in }}
-
-              {% if node.field_health_canada_approved.0.value == 1 or node.field_ce_marked_image.0.value == 1 %}
-              <div class="ce-pos">
-                {% if node.field_health_canada_approved.0.value == 1 %}
-                <div>
-                  <img src="/sites/default/files/norproduct/Maple_Leaf.svg" style="height:36px;max-width:none;"
-                    alt="red maple leaf" title="Health Canada Approved">
-                </div>
-                {% endif %}
-                {% if node.field_ce_marked_image.0.value == 1 %}
-                <div>
-                  <img src="/sites/default/files/norproduct/European_Conformity_logo.svg"
-                    style="height:36px;max-width:none;" alt="CE logo" title="CE Marked Product">
-                </div>
+          <div class="col-lg-6">
+            <div class="sticky">
+              <div id="mobile-title" class="c-content-title-1 mobile">
+                <h1 class="product-title c-font-uppercase c-font-bold">{{ product.title }}</h1>
+              </div>
+              <div id="mobile-summary-line" class="field-name-field-product-summary-line mobile" style="clear:both;">
+                {% if '/product/' in url %}
+                {{ node.field_product_summary_line.0.value|raw }}
+                <hr>
+                {% else %}
+                {{ node_international.field_product_summary_line_fr.0.value|raw }}
+                <hr>
                 {% endif %}
               </div>
-              {% endif %}
-
-              {% if product_customization %}
-                <button onclick ="toggleProductCustomizationForm()" class = "btn btn-primary c-font-uppercase c-font-bold" style = "border: 1px solid var(--norgen-primary-blue);background-color: white;color: var(--norgen-primary-blue);margin-bottom:10px;"><i class="fa fa-cogs"></i>Customize Product</button>
-              {% endif %}
-
-              {% if node.field_testimonial.0.value != null %}
-              <div class="desktop">
-                <hr style="width:calc(100% - 30px);margin:auto;margin-top:30px;">
-                {{ node.field_testimonial.0.value|raw }}
+              <div style="position:relative;">
+                {{ product.variation_flag_wish_list }}
+                {{ product.variation_field_product_image }}
               </div>
-              {% endif %}
+    
+              {#
+              <hr style="width:calc(100% - 30px);margin:auto;margin-top:30px;">
+              {{ node.field_testimonial.0.value|raw }} #}
+    
+              <hr style="width:calc(100% - 30px);margin:auto;margin-top:30px;">
+              <div class="product-uses-wrapper">
+                <hr class="mobile" style="margin-top:3em;">
+                {% for product_use in node.norproduct_use %}
+                  {{product_use.value|raw}}
+                {% endfor %}
 
-              {# {{ product.variation_field_show_automation_scripts }} #}
-            </div>
-            {# <div class="bioz">
-              {{ bioz_badge_html|raw }}
-            </div> #}
-            {% if node.field_extraclean_version_link.0.value != null %}
-              <a href={{node.field_extraclean_version_link.0.value|raw}} style="color:white;">
-                <div style="display:flex;align-items: center;background: #8E1F1F;width: fit-content;padding:10px 15px;border-top-right-radius: 12px;border-bottom-right-radius: 12px;gap:20px;margin-bottom:20px;">
-                  <div style="border-right: 5px solid white;padding: 0px 20px 0px 0px;">
-                    <img src="https://norgenbiotek.com/sites/default/files/images/extraclean-campaign/Extra%20Clean_Logo_Colour_White.png" style="z-index:-1;width:225px;">
-                  </div>
+                {{ product.variation_field_not_for_sale_in }}
+
+                {% if node.field_health_canada_approved.0.value == 1 or node.field_ce_marked_image.0.value == 1 %}
+                <div class="ce-pos">
+                  {% if node.field_health_canada_approved.0.value == 1 %}
                   <div>
-                    <h2 class="heading-3" style="color:white;line-height:1.2;font-weight:700;font-size:21px;">Version Available <a href={{node.field_extraclean_version_link.0.value|raw}} style="color:white;text-decoration:underline;">Here</a>.</h2>
+                    <img src="/sites/default/files/norproduct/Maple_Leaf.svg" style="height:36px;max-width:none;"
+                      alt="red maple leaf" title="Health Canada Approved">
                   </div>
+                  {% endif %}
+                  {% if node.field_ce_marked_image.0.value == 1 %}
+                  <div>
+                    <img src="/sites/default/files/norproduct/European_Conformity_logo.svg"
+                      style="height:36px;max-width:none;" alt="CE logo" title="CE Marked Product">
+                  </div>
+                  {% endif %}
                 </div>
-              </a>
-            {% endif %}
-            {% if node.field_lyophilized_versionlink.0.value != null %}
-              <a href={{node.field_lyophilized_versionlink.0.value|raw}} style="color:white;">
-                <div class="lyo-flex">
-                  <div class="side1">
-                    <h2>Lyophilized</h2>
-                    <p>Version Available Here</p>
+                {% endif %}
+                {{ product.variation_field_show_automation_scripts }}
+              </div>
+              {# <div class="bioz">
+                {{ bioz_badge_html|raw }}
+              </div> #}
+              {% if node.field_extraclean_version_link.0.value != null %}
+                <a href={{node.field_extraclean_version_link.0.value|raw}} style="color:white;">
+                  <div style="display:flex;align-items: center;background: #8E1F1F;width: fit-content;padding:10px 15px;border-top-right-radius: 12px;border-bottom-right-radius: 12px;gap:20px;margin-bottom:20px;">
+                    <div style="border-right: 5px solid white;padding: 0px 20px 0px 0px;">
+                      <img src="https://norgenbiotek.com/sites/default/files/images/extraclean-campaign/Extra%20Clean_Logo_Colour_White.png" style="z-index:-1;width:225px;">
+                    </div>
+                    <div>
+                      <h2 class="heading-3" style="color:white;line-height:1.2;font-weight:700;font-size:21px;">Version Available <a href={{node.field_extraclean_version_link.0.value|raw}} style="color:white;text-decoration:underline;">Here</a>.</h2>
+                    </div>
                   </div>
-                  <div class="side2">
-                    {# <p>Save on Shipping</p> #}
-                    <p>Same performance, reduced price</p>
+                </a>
+              {% endif %}
+              {% if node.field_lyophilized_versionlink.0.value != null %}
+                <a href={{node.field_lyophilized_versionlink.0.value|raw}} style="color:white;">
+                  <div class="lyo-grid">
+                    <div class="side1">
+                      <h2>Lyophilized</h2>
+                      <p>Version Available Here</p>
+                    </div>
+                    <div class="side2">
+                      <p>Save on Shipping</p>
+                    </div>
                   </div>
-                </div>
-              </a>
-            {% endif %}
-  
+                </a>
+              {% endif %}
+            </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-lg-6">
             <div class="c-product-meta">
               <div id="desktop-title" class="c-content-title-1 desktop">
                 <h3 class="c-font-uppercase c-font-bold">{{ product.title }}</h3>
@@ -1374,8 +1080,7 @@ margin-bottom: 10px;
                   <div class="lyo-grid">
                       <div class="side1">
                         <h2>Lyophilized</h2>
-                        {# <p>Save on Shipping</p> #}
-                        <p>Same performance, reduced price</p>
+                        <p>Save on Shipping</p>
                       </div>
                       <div class="side2">
                         <p>Taqman PCR Detection Kits</p>
@@ -1450,7 +1155,7 @@ margin-bottom: 10px;
               {% endif %}
   
               <div class="product_variation_sku_wrapper">
-                <div class="label">SKU</div><span class="notranslate">{{product.variation_sku}}</span>
+                <div class="d-inline c-font-bold">SKU</div><span class="notranslate">{{product.variation_sku}}</span>
               </div>
               
               {{ product.variations }}
@@ -1543,7 +1248,7 @@ margin-bottom: 10px;
       <!-- End Product Content -->
       <div class="c-shop-product-tab-1 pb-0">
         <div class="nav-justified  bootstrap-nav-wrapper">
-          <ul class="nav nav-justified  nav-tabs">
+          <ul class="nav nav-justified nav-tabs gap-4">
             {% if node.body.0.value|length > 0 %}
             <li class="nav_item " id="overview-nav"><a href="#overview">{{ 'Overview'|t }}</a></li>
             {% endif %}
@@ -1625,7 +1330,7 @@ margin-bottom: 10px;
             <li class="nav_item" id="citations-nav"><a href="#citations">{{ '引文'|t }}</a></li>
             {% endif %} #}
             {# <li class="nav_item ">
-              <a href="#documentation" class="review-toggler" id="reviews" data-toggle="tab">{{ 'Reviews'|t }}</a>
+              <a href="#documentation" class="review-toggler" id="reviews" data-bs-toggle="tab">{{ 'Reviews'|t }}</a>
             </li> #}
           </ul>
   
@@ -1714,8 +1419,8 @@ margin-bottom: 10px;
                     data-wrap="false" data-interval="false">
                     <div id="carousel-slide-number"></div>
                     <button id="close-expanded-carousel" tab-index=0 class="fa fa-times"></button>
-                    <a class="carousel-control left" href="#norproduct-image-description-carousel" role="button"
-                      data-slide="prev">
+                    <a class="carousel-control-prev" href="#norproduct-image-description-carousel" role="button"
+                      data-bs-slide="prev">
                       <span class="fa fa-2x fa-chevron-left" aria-hidden="true"></span>
                       <span class="sr-only">Previous</span>
                     </a>
@@ -1726,7 +1431,7 @@ margin-bottom: 10px;
                         {% if loop.index0 == 0 %}
                         {% set active = 'active' %}
                         {% endif %}
-                        <div class='item norproduct {{ active }}'>
+                        <div class='carousel-item norproduct {{ active }}'>
                           <div class="item-wrapper">
                             <button class="norproduct-carousel-btn-wrapper">
                               <img typeof="foaf:Image" src="{{file_url(fig_image.entity.fileuri)}}"
@@ -1745,7 +1450,7 @@ margin-bottom: 10px;
                         <div class="blur-edges left"></div>
                         <ol class="carousel-indicators norproduct">
                           {% for fig_image in node.norproduct_image %}
-                          <li data-target="#norproduct-image-description-carousel" data-slide-to={{loop.index0}} {% if
+                          <li data-bs-target="#norproduct-image-description-carousel" data-bs-slide-to={{loop.index0}} {% if
                             loop.index0==0 %} class="active" tab-index="0" {% endif %}>
                             <button style="background-color:transparent;border:none;" aria-label="Data Selector">
                               <img src="{{file_url(fig_image.entity.fileuri)}}" alt="{{fig_image.value.alt}}"
@@ -1758,8 +1463,8 @@ margin-bottom: 10px;
                       </div>
                     </div>
   
-                    <a class="carousel-control right" href="#norproduct-image-description-carousel" role="button"
-                      data-slide="next">
+                    <a class="carousel-control-next" href="#norproduct-image-description-carousel" role="button"
+                      data-bs-slide="next">
                       <span class="fa fa-2x fa-chevron-right" aria-hidden="true"></span>
                       <span class="sr-only">Next</span>
                     </a>
@@ -1788,8 +1493,8 @@ margin-bottom: 10px;
                     data-wrap="false" data-interval="false">
                     <div id="carousel-slide-number"></div>
                     <button id="close-expanded-carousel" tab-index=0 class="fa fa-times"></button>
-                    <a class="carousel-control left" href="#norproduct-image-description-carousel" role="button"
-                      data-slide="prev">
+                    <a class="carousel-control-prev" href="#norproduct-image-description-carousel" role="button"
+                      data-bs-slide="prev">
                       <span class="fa fa-2x fa-chevron-left" aria-hidden="true"></span>
                       <span class="sr-only">Previous</span>
                     </a>
@@ -1800,7 +1505,7 @@ margin-bottom: 10px;
                         {% if loop.index0 == 0 %}
                         {% set active = 'active' %}
                         {% endif %}
-                        <div class='item norproduct {{ active }}'>
+                        <div class='carousel-item norproduct {{ active }}'>
                           <div class="item-wrapper">
                             <button class="norproduct-carousel-btn-wrapper">
                               <img typeof="foaf:Image" src="{{file_url(fig_image.entity.fileuri)}}" 
@@ -1819,7 +1524,7 @@ margin-bottom: 10px;
                         <div class="blur-edges left"></div>
                         <ol class="carousel-indicators norproduct">
                           {% for fig_image in node_international.field_applications_image %}
-                          <li data-target="#norproduct-image-description-carousel" data-slide-to={{loop.index0}} {% if
+                          <li data-bs-target="#norproduct-image-description-carousel" data-bs-slide-to={{loop.index0}} {% if
                             loop.index0==0 %} class="active" tab-index="0" {% endif %}>
                             <button style="background-color:transparent;border:none;" aria-label="Data Selector">
                               <img src={{ "#{file_url(fig_image.entity.fileuri)}" }} alt={{ "#{fig_image.value.alt}" }}
@@ -1832,8 +1537,8 @@ margin-bottom: 10px;
                       </div>
                     </div>
   
-                    <a class="carousel-control right" href="#norproduct-image-description-carousel" role="button"
-                      data-slide="next">
+                    <a class="carousel-control-next" href="#norproduct-image-description-carousel" role="button"
+                      data-bs-slide="next">
                       <span class="fa fa-2x fa-chevron-right" aria-hidden="true"></span>
                       <span class="sr-only">Next</span>
                     </a>
@@ -1873,7 +1578,7 @@ margin-bottom: 10px;
                     {% if node.norproduct_protocol|length > 0 %}
                     <div class="panel">
                       <div class="panel-heading" role="tab" id="accordiontab">
-                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-bs-toggle="collapse"
                             data-parent="#accordion-1" href="#protocols" aria-expanded="false"
                             aria-controls="2595394">PROTOCOLS <i class="fa fa-chevron-down"></i></a></h3>
                       </div>
@@ -1898,7 +1603,7 @@ margin-bottom: 10px;
                     {% if node.norproduct_shortprotocol|length > 0 %}
                     <div class="panel">
                       <div class="panel-heading" role="tab" id="accordiontab">
-                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-bs-toggle="collapse"
                             data-parent="#accordion-1" href="#short-protocols" aria-expanded="false"
                             aria-controls="9523657">SHORT PROTOCOLS <i class="fa fa-chevron-down"></i></a>
                         </3>
@@ -1924,7 +1629,7 @@ margin-bottom: 10px;
                     {% if node.norproduct_supplementaryprotocol|length > 0 %}
                     <div class="panel">
                       <div class="panel-heading" role="tab" id="accordiontab">
-                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-bs-toggle="collapse"
                             data-parent="#accordion-1" href="#supplementary-protocols" aria-expanded="false"
                             aria-controls="824715">SUPPLEMENTARY PROTOCOLS <i
                               class="fa fa-chevron-down"></i></a></h3>
@@ -1950,7 +1655,7 @@ margin-bottom: 10px;
                     {% if node.norproduct_informationsheet|length > 0 %}
                     <div class="panel">
                       <div class="panel-heading" role="tab" id="accordiontab">
-                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-bs-toggle="collapse"
                             data-parent="#accordion-1" href="#product-information-sheets" aria-expanded="false"
                             aria-controls="9523657">PRODUCT INFORMATION SHEETS <i
                               class="fa fa-chevron-down"></i></a></h3>
@@ -1976,7 +1681,7 @@ margin-bottom: 10px;
                     {% if node.norproduct_applicationnote|length > 0 %}
                     <div class="panel">
                       <div class="panel-heading" role="tab" id="accordiontab">
-                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-bs-toggle="collapse"
                             data-parent="#accordion-1" href="#application-notes" aria-expanded="false"
                             aria-controls="9523657">APPLICATION NOTES <i
                               class="fa fa-chevron-down"></i></a></h3>
@@ -2004,7 +1709,7 @@ margin-bottom: 10px;
                     {% if node.norproduct_msds|length > 0 %}
                     <div class="panel">
                       <div class="panel-heading" role="tab" id="accordiontab">
-                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-bs-toggle="collapse"
                             data-parent="#accordion-1" href="#safety-data-sheets" aria-expanded="false"
                             aria-controls="9523657">SAFETY DATA SHEETS <i
                               class="fa fa-chevron-down"></i></a></h3>
@@ -2030,7 +1735,7 @@ margin-bottom: 10px;
                     {% if node.norproduct_poster|length > 0 %}
                     <div class="panel">
                       <div class="panel-heading" role="tab" id="accordiontab">
-                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-bs-toggle="collapse"
                             data-parent="#accordion-1" href="#posters" aria-expanded="false" aria-controls="9523657"><i
                               class=""></i>POSTERS <i class="fa fa-chevron-down"></i></a></h3>
                       </div>
@@ -2055,7 +1760,7 @@ margin-bottom: 10px;
                     {% if node.field_product_flyer|length > 0 %}
                     <div class="panel">
                       <div class="panel-heading" role="tab" id="accordiontab">
-                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-bs-toggle="collapse"
                             data-parent="#accordion-1" href="#product-flyers" aria-expanded="false"
                             aria-controls="9523657">FLYERS <i class="fa fa-chevron-down"></i></a></h3>
                       </div>
@@ -2080,7 +1785,7 @@ margin-bottom: 10px;
                     {% if node.field_related_blogs|length > 0 %}
                     <div class="panel">
                       <div class="panel-heading" role="tab" id="accordiontab">
-                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-bs-toggle="collapse"
                             data-parent="#accordion-1" href="#related-blogs" aria-expanded="false"
                             aria-controls="9523657">RELATED BLOGS <i class="fa fa-chevron-down"></i></a>
                         </h3>
@@ -2120,7 +1825,7 @@ margin-bottom: 10px;
                     {% if node_international.field_protocols |length > 0 %}
                     <div class="panel">
                       <div class="panel-heading" role="tab" id="accordiontab">
-                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-bs-toggle="collapse"
                             data-parent="#accordion-1" href="#protocols" aria-expanded="false"
                             aria-controls="2595394">PROTOCOLS <i class="fa fa-chevron-down"></i></a></h3>
                       </div>
@@ -2146,7 +1851,7 @@ margin-bottom: 10px;
                     {% if node_international.field_supplementary_protocols|length > 0 %}
                     <div class="panel">
                       <div class="panel-heading" role="tab" id="accordiontab">
-                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-bs-toggle="collapse"
                             data-parent="#accordion-1" href="#supplementary-protocols" aria-expanded="false"
                             aria-controls="824715">SUPPLEMENTARY PROTOCOLS <i
                               class="fa fa-chevron-down"></i></a></h3>
@@ -2172,7 +1877,7 @@ margin-bottom: 10px;
                     {% if node_international.field_product_information_sheets|length > 0 %}
                     <div class="panel">
                       <div class="panel-heading" role="tab" id="accordiontab">
-                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-bs-toggle="collapse"
                             data-parent="#accordion-1" href="#product-information-sheets" aria-expanded="false"
                             aria-controls="9523657">PRODUCT INFORMATION SHEETS <i
                               class="fa fa-chevron-down"></i></a></h3>
@@ -2198,7 +1903,7 @@ margin-bottom: 10px;
                     {% if node_international.field_application_notes_fr|length > 0 %}
                     <div class="panel">
                       <div class="panel-heading" role="tab" id="accordiontab">
-                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-bs-toggle="collapse"
                             data-parent="#accordion-1" href="#application-notes" aria-expanded="false"
                             aria-controls="9523657">APPLICATION NOTES <i
                               class="fa fa-chevron-down"></i></a></h3>
@@ -2225,7 +1930,7 @@ margin-bottom: 10px;
                      {% if node_international.field_safety_data_sheets|length > 0 %}
                     <div class="panel">
                       <div class="panel-heading" role="tab" id="accordiontab">
-                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-bs-toggle="collapse"
                             data-parent="#accordion-1" href="#safety-data-sheets" aria-expanded="false"
                             aria-controls="9523657">SAFETY DATA SHEETS <i
                               class="fa fa-chevron-down"></i></a></h3>
@@ -2251,7 +1956,7 @@ margin-bottom: 10px;
                     {% if node_international.field_posters_fr|length > 0 %}
                     <div class="panel">
                       <div class="panel-heading" role="tab" id="accordiontab">
-                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-bs-toggle="collapse"
                             data-parent="#accordion-1" href="#posters" aria-expanded="false" aria-controls="9523657"><i
                               class=""></i>POSTERS <i class="fa fa-chevron-down"></i></a></h3>
                       </div>
@@ -2276,7 +1981,7 @@ margin-bottom: 10px;
                     {% if node_international.field_product_flyer_fr|length > 0 %}
                     <div class="panel">
                       <div class="panel-heading" role="tab" id="accordiontab">
-                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-toggle="collapse"
+                        <h3 class="panel-title"><a class="c-font-bold collapsed" data-bs-toggle="collapse"
                             data-parent="#accordion-1" href="#product-flyers" aria-expanded="false"
                             aria-controls="9523657">FLYERS <i class="fa fa-chevron-down"></i></a></h3>
                       </div>
@@ -2340,7 +2045,7 @@ margin-bottom: 10px;
                                 <div class="panel" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
                                   <div class="panel-heading" role="tab" id="accordiontab">
                                     <h4 
-                                      class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-toggle="collapse"
+                                      class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-bs-toggle="collapse"
                                       data-parent="#accordion-{{variation.entity.sku.value}}" href="#variation{{loop.parent.loop.index}}question{{loop.index}}" aria-expanded="false" aria-controls="9523657"><i
                                       class=""></i><span itemprop="name">{{ faq.value.question }}</span> <i class="fa fa-chevron-down"></i></a>
                                     </h4>
@@ -2370,7 +2075,7 @@ margin-bottom: 10px;
                                   <div class="panel" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
                                     <div class="panel-heading" role="tab" id="accordiontab">
                                       <h4 
-                                        class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-toggle="collapse"
+                                        class="panel-title"><a class="c-font-bold c-font-19 collapsed" data-bs-toggle="collapse"
                                         data-parent="#accordion-{{variation.entity.sku.value}}" href="#variation{{loop.parent.loop.index}}question{{loop.index}}" aria-expanded="false" aria-controls="9523657"><i
                                         class=""></i><span itemprop="name">{{ faq.question }}</span> <i class="fa fa-chevron-down"></i></a>
                                       </h4>
@@ -2501,7 +2206,7 @@ margin-bottom: 10px;
                       <ol class="carousel-indicators">
                         {% for product in node.field_related_products %}
                         {% if (loop.index0 == 0) or (loop.index0 % 3 == 0) %}
-                        <li data-target="#Carouselprod" data-slide-to='{{loop.index0 / 3}}' class={% if loop.first==true
+                        <li data-bs-target="#Carouselprod" data-bs-slide-to='{{loop.index0 / 3}}' class={% if loop.first==true
                           %}"active"{% endif %}></li>
                         {% endif %}
                         {% endfor %}
@@ -2511,12 +2216,11 @@ margin-bottom: 10px;
                         {% for product in node.field_related_products %}
                         {% if (loop.index0 == 0) or (loop.index0 % 3 == 0) %} {# one carousel slide for every three
                         products #}
-                        <div class='item {% if loop.index0 == 0 %}active{% endif %}'>
+                        <div class='carousel-item {% if loop.index0 == 0 %}active{% endif %}'>
                           {% endif %}
                           <div class="col-md-12 col-lg-4 col-sm-8 prodRow">
-                            <div class="carousel-item">
-                              <a class="related-products-product-page related-products-product1"
-                                href='{{ related_products_aliases[loop.index0].product_page_alias}}'>
+                            <div class="item">
+                              <a class="related-products-product-page related-products-product1" href='{{ related_products_aliases[loop.index0].product_page_alias}}'>
                                 <img src="{{ file_url(product.entity.field_product_image.entity.uri.value) }}" alt="{{ related_products_aliases[loop.index0].alt }}">
                                 <h4>{{ product.entity.title.value }}</h4>
                               </a>
@@ -2547,67 +2251,7 @@ margin-bottom: 10px;
       </div>
     </div>
   
-    {# NGS promo popup #}
-    {% if ngs_popup %}
-      <script>
-      
-        function closeNGSPopup(){
-          const popup = document.querySelector('#ngs-popup');
-          if(popup){
-            popup.classList.add('closed');
-            // user consented to cookies but the cookie doesn't exist
-            if(Drupal.eu_cookie_compliance.hasAgreed() && document.cookie.indexOf('hideNGSpopup=')==-1){
-              document.cookie = "hideNGSpopup=true;max-age=" + 60 * 60 * 24 * 2; // set cookie - expires in 2 days
-            }
-          }
-        }
-        document.addEventListener('DOMContentLoaded', function(){
-          const popup = document.querySelector('#ngs-popup');
-          if(popup){
-            setTimeout(() => { 
-              if(Drupal.eu_cookie_compliance.hasAgreed()){ // user has consented to cookies
-                if(document.cookie.indexOf('hideNGSpopup=')==-1){ // cookie to hide popup doesn't exist
-                  console.log(document.cookie);
-                  popup.classList.remove('closed'); // show popup
-                }
-              }
-              else{
-                popup.classList.remove('closed'); // no cookies, show popup every time
-              }
-            }, 2000);
-          }
-        });
-        
-      </script>
-      <div id="ngs-popup" class="center closed">
-        <button onclick="closeNGSPopup()" style="float:right;background:none;border:none;font-size:40px;line-height:1;position:absolute;top:0;right:0;">×</button>
-        <h2 class="title center"><strong>NGS Services</strong></h2>
-        <div class="flex">
-          <a href="/services/small-rna-sequencing">
-            <div>
-              <img class="service-img" src="/sites/default/files/images/icons/Small%20RNA_Blue.svg" alt="icon" data-nopreview="true" data-ignore-preview="true">
-              <div class="center">Small RNA</div>
-            </div>
-          </a>
-          <a href="/services/rna-sequencing">
-            <div>
-              <img class="service-img" src="/sites/default/files/images/icons/RNA%20SEQ_Red.svg" alt="icon" data-nopreview="true" data-ignore-preview="true">
-              <div class="center">RNA</div>
-            </div>
-          </a>
-          <a href="/services/ngs-16s-rrna-microbiome-sequencing">
-            <div>
-              <img class="service-img" src="/sites/default/files/images/icons/Metagenomics.svg" alt="icon" data-nopreview="true" data-ignore-preview="true">
-              <div class="center">Metagenomics</div>
-            </div>
-          </a>
-        </div>
-        <p><b>Free trials available</b> for Small RNA and RNA sequencing projects!</p>
-        <a href="/content/service-consultation-request?utm_source=next-generation-sequencing&amp;utm_medium=internal_link&amp;utm_campaign=service_inquiry" class="btn btn-primary" style="margin-right:5px;">Book Consultation</a>
-        <a href="/services/next-generation-sequencing?utm_source=ngs-popup&amp;utm_medium=internal_link" class="">Learn More</a>
-      </div>
-    {% endif %}
-    {# End NGS promo popup #}
+  
 
     {% if default_variation == 75500 or default_variation == 25720 %}
     
@@ -2678,7 +2322,7 @@ margin-bottom: 10px;
           <div class="panel-group" id="magbead-dnase-bundle-info-accord" role="tablist">
             <div class="panel">
               <div class="panel-heading" role="tab" id="accordiontab">
-                <h3 class="panel-title"><a class="c-font-bold collapsed disclaimer" data-toggle="collapse" data-parent="#magbead-dnase-bundle-info-accord" href="#magbead-dnase-bundle-info-terms" aria-expanded="false" aria-controls="2595394" style="border-radius: 10px 10px 0px 0px;background-color:var(--norgen-grey-light);padding:10px;">Terms &amp; Conditions <i class="fa fa-chevron-down" style="font-size:12px;"></i></a></h3>
+                <h3 class="panel-title"><a class="c-font-bold collapsed disclaimer" data-bs-toggle="collapse" data-parent="#magbead-dnase-bundle-info-accord" href="#magbead-dnase-bundle-info-terms" aria-expanded="false" aria-controls="2595394" style="border-radius: 10px 10px 0px 0px;background-color:var(--norgen-grey-light);padding:10px;">Terms &amp; Conditions <i class="fa fa-chevron-down" style="font-size:12px;"></i></a></h3>
               </div>
               <div id="magbead-dnase-bundle-info-terms" class="panel-collapse collapse" role="tabpanel" aria-labelledby="accordiontab" aria-expanded="false" style="">
                 <div class="panel-body c-font-12" style="border-radius:0px 0px 10px 10px;padding:10px;background-color:var(--norgen-grey-light);border-top:none;">
@@ -2740,27 +2384,6 @@ margin-bottom: 10px;
     </script>
     {% endif %}
     {# End Sample Request #}
-
-    {# Product Customization Request #}
-    {% if product_customization %}
-    <script>
-      function toggleProductCustomizationForm(){
-        let customization_form_wrapper = document.getElementById('product-customization-form-overlay');
-        document.documentElement.classList.toggle('scroll-lock');
-        if(customization_form_wrapper) customization_form_wrapper.classList.toggle('active');
-      }
-
-      let customization_form_wrapper = document.getElementById('product-customization-form-overlay');
-      if(customization_form_wrapper){
-        customization_form_wrapper.addEventListener('click', function(e){
-          if(e.target === this){
-            toggleProductCustomizationForm();
-          }
-        });
-      }
-    </script>
-    {% endif %}
-    {# Product Customization Request #}
     
     {% if total_rna_automation_scripts %}
     <script>

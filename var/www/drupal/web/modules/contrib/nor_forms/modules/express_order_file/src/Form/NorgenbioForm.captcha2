@@ -251,7 +251,7 @@ class NorgenbioForm extends FormBase {
       '#button_type' => 'primary',
       '#ajax' => ['callback' => '::submitForm',
         'event' => 'click',
-        'method' => 'append', 'effect' => 'fade',]
+        ]
     ];
 
     $form['#suffix'] = '</div>';

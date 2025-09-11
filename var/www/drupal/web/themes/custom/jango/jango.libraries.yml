@@ -70,11 +70,6 @@ nor_review:
       css/cart-checkout/review_cart.css: {}
 ## End New Checkout ##
 
-nor_publications_or_citations_all_results:
-  css:
-    theme:
-      css/views/publications_or_citations/all_results.css: {}
-
 status-messages-close:
   version: 1.x
   js:

@@ -26,7 +26,7 @@ class ExpressOrderFormFile extends FormBase {
 
   public function buildForm(array $form, FormStateInterface $form_state) {
 
-    $form['#prefix'] = '<div id="norgen_form-container" class="norgen_form-container col-sm-12 col-lg-6">';
+    $form['#prefix'] = '<div id="norgen_form-container" class="norgen_form-container">';
 
     $form['title'] = [
       'type' => 'item',
@@ -71,7 +71,7 @@ class ExpressOrderFormFile extends FormBase {
       '#validate' => ['::validateSubmit'],
       '#ajax' => ['callback' => '::submitAjaxForm',
         'event' => 'click',
-        'method' => 'append', 'effect' => 'fade',]
+        ]
     ];
 
 

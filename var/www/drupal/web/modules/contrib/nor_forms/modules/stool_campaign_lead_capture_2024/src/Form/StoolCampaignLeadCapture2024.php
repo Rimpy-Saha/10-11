@@ -103,7 +103,7 @@ class StoolCampaignLeadCapture2024 extends FormBase
       '#ajax' => [
         'callback' => '::submitCallback',
         'event' => 'click',
-        'method' => 'append', 'effect' => 'fade',
+        
       ]
     ];
 

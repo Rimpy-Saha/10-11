@@ -103,7 +103,7 @@ class ContactDistributorForm extends FormBase {
       '#ajax' => [
         'callback' => '::submitCallback',
         'event' => 'click',
-        'method' => 'append', 'effect' => 'fade',
+        
       ],
       '#attributes' => [
         'style' => 'display: block; margin: 0 auto;'

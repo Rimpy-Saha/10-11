@@ -727,17 +727,17 @@ color:#5C6873;
 
 
 /* rules fore keyboard */
-/* .btn {
+.btn {
 outline: 2px solid blue !important;
 -webkit-transition: all 0.2s ease-out;
 -moz-transition: all 0.2s ease-out;
 -o-transition: all 0.2s ease-out;
 transition: all 0.2s ease-out;
-} */
+}
 
-/* a:focus, a:hover, a:active {
+a:focus, a:hover, a:active {
 outline: 2px solid #007bff !important;
-} */
+}
 
 input:focus, textarea:focus, select:focus {
 outline: 2px solid grey ;}

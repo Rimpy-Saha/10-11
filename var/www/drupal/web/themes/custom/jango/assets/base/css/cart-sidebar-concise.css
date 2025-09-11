@@ -33,7 +33,7 @@ ul.search-nav{
 }
 
 #cart-sidebar-desktop-header .views-view-responsive-grid::-webkit-scrollbar-thumb {
-    background-color: #636363; /* Scrollbar color */
+    background-color: #4d5763; /* Scrollbar color */
     border-radius: 14px; /* Optional: round the corners */
 }
 

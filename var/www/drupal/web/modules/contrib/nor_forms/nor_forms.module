@@ -53,7 +53,7 @@ function nor_forms_form_alter(&$form, $form_state, $form_id) {
   if ($form_id === 'user_pass' || $form_id === 'user_register_form') {
     
     $form['google_recaptcha'] = [
-      '#markup' => '<div class="g-recaptcha" data-sitekey="6LdaZr8rAAAAAOA67_n-dU1azqe4-CGRbfBrETVJ"></div>',
+      '#markup' => '<div class="g-recaptcha" data-sitekey="6Lcr4u0pAAAAAGj32knXkUzuHAXzj3CoAhtbJ1t5"></div>',
       '#weight' => 50, 
     ];
     
@@ -127,7 +127,8 @@ function nor_forms_user_pass_form_validate(&$form, FormStateInterface $form_stat
     $captcha_response = $_POST['g-recaptcha-response'];
     $remote_ip = $_SERVER['REMOTE_ADDR'];
 
-  
+    
+
     $result = nor_forms_verifyGoogleRecaptcha($captcha_response, $remote_ip);
 
     $data = json_decode($result, true);
@@ -150,7 +151,7 @@ function nor_forms_verifyGoogleRecaptcha($response, $remote_ip) {
       die('CURL is not installed!');
   }
 
-  $url_get = 'https://www.google.com/recaptcha/api/siteverify?secret=6LdaZr8rAAAAADda2IFR6KTrVKtRhpMKV7URZDKB&response=' . $response . '&remoteip=' . $remote_ip;
+  $url_get = 'https://www.google.com/recaptcha/api/siteverify?secret=6Lcr4u0pAAAAAKDDRrTBlbkrV3ClMD9hz-z8DCfZ&response=' . $response . '&remoteip=' . $remote_ip;
 
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_URL, $url_get);

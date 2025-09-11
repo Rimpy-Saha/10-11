@@ -1,0 +1,112 @@
+{# 
+  Template for displaying a vertical cart sidebar.
+  Each cart item will be displayed in a vertical format.
+#}
+<p>Previous template execustdfted: {{ previous_template }}</p>
+    <div class="cart-sidebar">
+      {# <h2 class="cart-title">Your Cart</h2> #}
+      
+      {# Iterate through each row in the cart #}
+      {# {% for row in view.result %} #}
+        <div class="cart-item">
+          {# Render the product name #}
+          <div class="cart-item__product">
+            <span class="{{ fields.purchased_entity.wrapper_attributes.class }}">
+              {# <strong class="cart-item__label">{{ fields.purchased_entity.label }}{{ fields.purchased_entity.label_suffix }}</strong> #}
+              <span class="cart-item__content_item">{{ fields.purchased_entity.content }}</span>
+            </span>
+          </div>
+    
+          {# Render the edit quantity field #}
+          <div class="cart-item__quantity">
+            <span class="{{ fields.edit_quantity.wrapper_attributes.class }}">
+              <strong class="cart-item__label">{{ fields.edit_quantity.label }}{{ fields.edit_quantity.label_suffix }}</strong>
+              <span class="cart-item__content">{{ fields.edit_quantity.content }}</span>
+            </span>
+          </div>
+    
+          {# Render the unit price field #}
+          <div class="cart-item__price">
+            <span class="{{ fields.unit_price__number.wrapper_attributes.class }}">
+              <strong class="cart-item__label">{{ fields.unit_price__number.label }}{{ fields.unit_price__number.label_suffix }}</strong>
+              <span class="cart-item__content">{{ fields.unit_price__number.content }}</span>
+            </span>
+          </div>
+    
+          {# Render the remove button #}
+          <div class="cart-item__remove">
+            <span class="{{ fields.remove_button.wrapper_attributes.class }}">
+              {# <strong class="cart-item__label">{{ fields.remove_button.label }}{{ fields.remove_button.label_suffix }}</strong> #}
+              <span class="cart-item__content_remove">{{ fields.remove_button.content }}</span>
+            </span>
+          </div>
+        </div>
+      {# {% endfor %} #}
+    </div>
+    
+    <style>
+      .cart-sidebar {
+        padding: 20px;
+        background-color: #f8f8f8;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        /*max-width: 300px;  Adjust the width as needed */
+      }
+    
+      .cart-title {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+      }
+    
+      .cart-item {
+        padding: 10px;
+        line-height: 19px;
+        border-bottom: 1px solid #ddd;
+      }
+    
+      .cart-item:last-child {
+        border-bottom: none;
+      }
+    
+      .cart-item__product,
+      .cart-item__quantity,
+      .cart-item__price {
+        display: block;
+        margin-bottom: 15px; /* Increased spacing for clarity */
+      }
+    
+      .cart-item__label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px; /* Space between label and content */
+      }
+    
+      .cart-item__content{
+        display: block;
+        padding-left: 10px; /* Indent content for better separation */
+      }
+    
+      .cart-item__quantity input {
+        width: 50px;
+        text-align: center;
+      }
+    
+      .cart-item__remove {
+        display: block;
+      }
+    
+      .cart-item__remove button {
+        background: none;
+        border: none;
+        color: #d9534f;
+        cursor: pointer;
+      }
+    
+      .cart-item__remove button:hover {
+        text-decoration: underline;
+      }
+      .views-field-edit-quantity{
+        
+      }
+    </style>
+    

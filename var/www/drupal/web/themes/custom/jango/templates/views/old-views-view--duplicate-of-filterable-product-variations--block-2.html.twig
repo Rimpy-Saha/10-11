@@ -1,0 +1,172 @@
+<style>
+    .views-exposed-form .bef-exposed-form .form{
+        width:fit-content;
+    }
+    .js-form-wrapper .form-wrapper{
+        width:fit-content;
+    }
+    .webform-container-inline div{
+        display: block !important;
+    }
+    .rimpy {
+        display: grid;
+        padding:0 10px;
+        grid-template-areas: 
+            "views-exposed-form views-view-responsive-grid"
+            "views-exposed-form pagers";
+        gap: 10px; /* Optional: Add some space between the grid items */
+    }
+
+    {# .box1  #}
+    .views-exposed-form
+    {
+        grid-area: views-exposed-form;
+        /* background-color: #dddddd78; */
+        border: 0.7px solid #ddd;
+        border-radius: 20px;
+        padding: 10px;
+    }
+
+     #block_2_block_placing .views-view-responsive-grid {
+        grid-area: views-view-responsive-grid;
+        background-color: #fff;
+        padding: 20px;
+    }
+    #block_2_block_placing .views-view-responsive-grid__item{
+        border: 0.7px solid #ddd;
+        border-radius:20px;
+        padding: 12px;
+    }
+    .views-field-field-product-image >.field-content >img{
+        border-radius: 20px 0px 0px;
+        padding: 12px 0;
+        border-bottom: 0.5px solid #be1e2d; 
+    }
+    .title-rimpy-2{
+    padding:10px 0;
+    }
+    .view-title-rimpy{
+        font-size: large;
+        font-weight: 600;
+        
+    }
+    .view-sku-rimpy{
+        font-size: medium;
+        font-weight: 600;
+        padding:3px 0;
+    }
+    .view-format-rimpy{
+        font-size: medium;
+        font-weight: 600;
+        padding:3px 0;
+    }
+    .view-size-rimpy{
+        font-size: medium;
+        font-weight: 600;
+        padding:3px 0;
+    }
+    .view-price-rimpy{
+        font-size: medium;
+        font-weight: 600;
+        padding:3px 0;
+    }
+    .view-body-rimpy{
+        font-size: small;
+        font-weight: 100;
+        padding:10px 0;
+    }
+
+
+    .pagers {
+        grid-area: pagers;    
+    }
+    .pagers {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 10px;
+        border-radius: 5px; /* Rounded corners for a professional look */
+    }
+
+    .pager__items {
+        display: flex;
+        list-style: none; /* Remove bullet points */
+        padding: 0;
+        margin: 0;
+    }
+
+    .pager__item {
+        margin: 0 5px; /* Space between pager items */
+    }
+
+    .pager__item a {
+        display: inline-block;
+        padding: 8px 12px;
+        color: #fff; /* White text color */
+        text-decoration: none; /* Remove underline from links */
+        background-color: #003366; /* Dark blue background for pager items */
+        border-radius: 3px; /* Rounded corners for pager items */
+    }
+
+    .pager__item a:hover,
+    .pager__item.is-active a {
+        background-color: #004080; /* Slightly lighter blue on hover and for active page */
+    }
+
+    .pager__item--next a,
+    .pager__item--last a {
+        font-weight: bold; /* Bold text for navigation arrows */
+    }
+
+    .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0;
+    }
+
+    .views-exposed-form .form-item label {
+        font-weight: 100;
+        font-size:medium;
+
+    }
+</style>
+
+
+{{dump(exposed['Format'])}}
+
+
+  {{ exposed }}
+  {{ rows }}
+   {{ pager }}
+<div class="custom-filter-wrapper">
+  {# Render the exposed filters in hidden divs #}
+  <div class="hidden-filters">
+    {% for key, filter in exposed.filters %}
+      <div class="filter-data" data-filter-name="{{ filter.label }}" data-filter-id="{{ filter.id }}">
+        {# Render all filter options as hidden elements #}
+        {% for option in filter.options %}
+          <div class="filter-option" data-value="{{ option.value }}" data-count="{{ option.count }}">{{ option.label }}</div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+
+  {# Placeholder for JavaScript to build the custom filter UI #}
+  <div id="custom-filter-ui"></div>
+
+  {# Render the actual product rows #}
+  <div id="product-list">
+    {% for row in rows %}
+      <div class="product-row" data-product-id="{{ row.product_id }}" data-filter-values="{{ row.filter_values | json_encode }}">
+        {{ row.content }}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+

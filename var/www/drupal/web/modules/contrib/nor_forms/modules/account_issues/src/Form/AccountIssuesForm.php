@@ -99,7 +99,7 @@ class AccountIssuesForm extends FormBase
 
     $form['google_recaptcha'] = [
       '#type'=> 'fieldset',
-      '#description' => '<div class="g-recaptcha" data-sitekey="6LdaZr8rAAAAAOA67_n-dU1azqe4-CGRbfBrETVJ"></div>',
+      '#description' => '<div class="g-recaptcha" data-sitekey="6Lcr4u0pAAAAAGj32knXkUzuHAXzj3CoAhtbJ1t5"></div>',
     ];
 
     $form['actions']['submit'] = [
@@ -110,7 +110,7 @@ class AccountIssuesForm extends FormBase
       '#ajax' => [
         'callback' => '::submitCallback',
         'event' => 'click',
-        'method' => 'append', 'effect' => 'fade',
+        
       ]
     ];
 
@@ -162,7 +162,7 @@ class AccountIssuesForm extends FormBase
         die('CURL is not installed!');
     }
   
-    $url_get = 'https://www.google.com/recaptcha/api/siteverify?secret=6LdaZr8rAAAAADda2IFR6KTrVKtRhpMKV7URZDKB&response=' . $response . '&remoteip=' . $remote_ip;
+    $url_get = 'https://www.google.com/recaptcha/api/siteverify?secret=6Lcr4u0pAAAAAKDDRrTBlbkrV3ClMD9hz-z8DCfZ&response=' . $response . '&remoteip=' . $remote_ip;
   
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url_get);

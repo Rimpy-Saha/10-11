@@ -1,0 +1,201 @@
+{#  Migrate 5
+  Template for displaying a vertical cart sidebar.
+  Each cart item will be displayed in a vertical format.
+#}
+{# <p>Previous template execute: {{ previous_template }}</p> #}
+{# {{dump(fields.quantity.handler)}} #}
+{# {{ fields.quantity.content|striptags }} #}
+
+
+<div class="cart-sidebar">
+  {# <h2 class="cart-title">Your Cart</h2> #}
+
+  {# Iterate through each row in the cart #}
+  {# {% for row in view.result %} #}
+  <div class="cart-item">
+    {# Image #}
+    <div class="cart-item__image">
+      <span class="{{ fields.field_product_image.wrapper_attributes.class }}">
+        <span class="cart-item__content_item">{{ fields.field_product_image.content }}</span>
+      </span>
+    </div>
+
+    {# Product details and controls #}
+    <div class="cart-item__details_name">
+      {# Unit Title #}
+      <div class="cart-item__title">
+        <span class="{{ fields.title.wrapper_attributes.class }}">
+          <span class="cart-item__content">{{ fields.title.content }}</span>
+        </span>
+      </div> 
+
+      {# SKU #}
+      <div class="cart-item__sku">
+        <span class="{{ fields.sku.wrapper_attributes.class }}">
+          <span class="cart-item__content">{{ fields.sku.content }}</span>
+        </span>
+      </div>
+
+      {# Unit Price #}
+      <div class="cart-item__price">
+        <span class="{{ fields.unit_price__number.wrapper_attributes.class }}">
+          <span class="cart-item__content">{{ fields.unit_price__number.content }}</span>
+        </span>
+      </div>
+
+     
+
+      {# Edit Quantity and Remove Button #}
+      <div class="cart-item__quantity-remove">
+        {# <div class="cart-item__quantity">
+          <span class="{{ fields.edit_quantity.wrapper_attributes.class }}">
+            <span class="cart-item__content">{{ fields.edit_quantity.content }}</span>
+          </span>
+        </div> #}
+        <div class="cart-item__quantity">
+          <span class="{{ fields.edit_quantity.wrapper_attributes.class }} visually-hidden">
+            <span class="cart-item__content">{{ fields.edit_quantity.content }}</span>
+          </span>
+          <div class="custom-quantity">
+            <button type="button" class="quantity-decrease">-</button>
+            <input type="number" class="custom-quantity-input" value="{{ fields.quantity.content|striptags|trim|number_format(0, '.', '') }}" min="0" max="999999999" step="1">
+            <button type="button" class="quantity-increase">+</button>
+          </div>
+        </div>
+
+
+        <div class="cart-item__remove">
+          {# Original Remove Button (Hidden) #}
+          <span class="{{ fields.remove_button.wrapper_attributes.class }}" style = 'display:none!important'>
+            <span class="cart-item__content_remove">{{ fields.remove_button.content }}</span>
+          </span>
+
+          {# SVG Remove Button #}
+          <button class="cart-item__svg-remove">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#004893" class="bi bi-trash" viewBox="0 0 16 16">
+              <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+              <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+            </svg>
+          </button>
+        </div>
+
+
+      </div>
+
+       <div class="cart-item__total_price">
+        <span class="{{ fields.total_price__number.wrapper_attributes.class }}">
+          <span class="cart-item__content">Total: {{ fields.total_price__number.content }}</span>
+        </span>
+      </div>
+
+
+    </div>
+    {# Product details and controls #}
+    <div class="cart-item__details">
+      {# Unit Title #}
+      {# <div class="cart-item__title">
+        <span class="{{ fields.title.wrapper_attributes.class }}">
+          <span class="cart-item__content">{{ fields.title.content }}</span>
+        </span>
+      </div> #}
+
+      {# SKU #}
+      {# <div class="cart-item__sku">
+        <span class="{{ fields.sku.wrapper_attributes.class }}">
+          <span class="cart-item__content">SKU {{ fields.sku.content }}</span>
+        </span>
+      </div> #}
+
+      
+      
+
+      {# TOtal Price #}
+      {#<div class="cart-item__total_price">
+        <span class="{{ fields.total_price__number.wrapper_attributes.class }}">
+          <span class="cart-item__content">{{ fields.total_price__number.content }}</span>
+        </span>
+      </div>#}
+
+      
+    </div>
+  </div>
+  {# {% endfor %} #}
+</div>
+
+<style>
+  {# .cart-sidebar {
+    padding: 4px;
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: 5px;
+  }
+  .cart-item__details_name{
+    line-height:1;
+  }
+  .cart-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .cart-item:last-child {
+    border-bottom: none;
+  }
+
+  .cart-item__image {
+    flex: 0 0 120px; /* Larger image width */
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .cart-item__details {
+    width: 100%;
+    text-align: center;
+    line-height:1;
+  }
+
+  .cart-item__price {
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+
+  .cart-item__quantity-remove {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .cart-item__quantity {
+    margin-right: 10px;
+  }
+
+  .cart-item__quantity input {
+    width: 50px;
+    text-align: center;
+  }
+
+  .cart-item__remove {
+    position: relative;
+  }
+
+  .cart-item__svg-remove {
+    background: none;
+    border: none;
+    cursor: pointer;
+  } #}
+</style>
+
+<script>
+  {# document.querySelectorAll('.cart-item__svg-remove').forEach(function (button) {
+    button.addEventListener('click', function () {
+      // Find the original remove button in the same cart item and trigger a click
+      this.closest('.cart-item').querySelector('.delete-order-item').click();
+    });
+  }); #}
+</script>
+
+    

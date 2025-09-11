@@ -1,0 +1,91 @@
+<style>
+.cart-sidebar {
+  padding: 20px;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  width: 300px;
+  overflow-y: scroll;
+}
+
+.cart-sidebar h3 {
+  font-size: 1.5em;
+  margin-bottom: 15px;
+}
+
+.cart-items {
+  margin-bottom: 20px;
+}
+
+.cart-item {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+.cart-item-purchased-entity,
+.cart-item-unit-price,
+.cart-item-quantity,
+.cart-item-remove-button,
+.cart-item-total-price {
+  margin-bottom: 5px;
+}
+
+.cart-item-remove-button button {
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.cart-item-remove-button button:hover {
+  background-color: #c82333;
+}
+
+.cart-sidebar-total {
+  font-weight: bold;
+  font-size: 1.2em;
+  text-align: right;
+}
+
+</style>
+<script id='rim_form'>var test_rim = {{ view.field }};console.log({{ row | json_encode | raw}});</script>
+
+
+<div class="cart-sidebar">
+  <h3>Your Cart</h3>
+  <div class="cart-items">
+    {% for row in view.result %}
+    {# Render each cart item #}
+    {{ dump(fields ) }}
+    <div class="cart-item">
+        <div class="cart-item__purchased-entity">
+        {{ row.field_purchased_entity.content }}
+        </div>
+        <div class="cart-item__unit-price">
+        {{ row['unit_price__number'].content }}
+        </div>
+        <div class="cart-item__quantity">
+        {{ row['edit_quantity'].content }}
+        </div>
+        <div class="cart-item__remove">
+        {{ row['remove_button'].content }}
+        </div>
+        <div class="cart-item__total-price">
+        {{ row['total_price__number'].content }}
+        </div>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="cart-sidebar-total">
+    <!-- Add your total price or additional details here -->
+  </div>
+</div>
